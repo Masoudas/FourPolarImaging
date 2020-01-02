@@ -13,7 +13,6 @@ public class ConstellationFileSet implements IConstellationFileSet {
     private Hashtable<String, File> fileSet = new Hashtable<String, File>();
     private int channelNo;
 
-    
     public ConstellationFileSet(File pol0_45_90_135, int channelNo){
         fileSet.put("Pol0_45_90_135", pol0_45_90_135);
         
@@ -61,22 +60,6 @@ public class ConstellationFileSet implements IConstellationFileSet {
     @Override
     public int getChannel() {
         return channelNo;
-    }
-
-    public static void main(String[] args) {
-        File root = new File("../root");
-        File pol0 = new File(root, "pol0.tiff");
-        File pol45 = new File(root, "pol45.tiff");
-        File pol90 = new File(root, "pol90.tiff");
-        File pol135 = new File(root, "pol135.tiff");
-
-        ConstellationFileSet fileSet = new ConstellationFileSet(pol0, pol45, pol90, pol135, 1);
-
-        System.out.println(fileSet.getNameExtract());
-        System.out.println(fileSet.getLabels());
-        System.out.println();
-
-        
     }
 
     
