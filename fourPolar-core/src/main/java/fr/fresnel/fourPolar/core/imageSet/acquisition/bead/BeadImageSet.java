@@ -1,6 +1,6 @@
-package fr.fresnel.fourPolar.core.imageSet.Acquisition.bead;
+package fr.fresnel.fourPolar.core.imageSet.acquisition.bead;
 
-import fr.fresnel.fourPolar.core.imageSet.Acquisition.IConstellationFileSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.IConstellationFileSet;
 
 /**
  * Defines the bead image set, which accompanies the sample image set.
