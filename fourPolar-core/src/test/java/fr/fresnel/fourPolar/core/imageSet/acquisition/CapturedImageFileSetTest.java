@@ -10,7 +10,7 @@ import org.junit.Test;
 /**
  * Unit test for simple App.
  */
-public class ConstellationFileSetTest
+public class CapturedImageFileSetTest
 {
     File root = new File("/root");
         
@@ -22,9 +22,9 @@ public class ConstellationFileSetTest
         File pol90 = new File(root, "pol90.tiff");
         File pol135 = new File(root, "pol135.tiff");
     
-        ConstellationFileSet fileSet = new ConstellationFileSet(pol0, pol45, pol90, pol135);
+        CapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
         
-        assertTrue( fileSet.getNameExtract().equals("pol0") );
+        assertTrue( fileSet.getSetName().equals("pol0") );
     }
 
     @Test
@@ -32,9 +32,9 @@ public class ConstellationFileSetTest
     {
         File pol = new File(root, "pol.tiff");
     
-        ConstellationFileSet fileSet = new ConstellationFileSet(pol);
+        CapturedImageFileSet fileSet = new CapturedImageFileSet(pol);
         
-        assertTrue( fileSet.getNameExtract().equals("pol") );
+        assertTrue( fileSet.getSetName().equals("pol") );
     }
 
     @Test
@@ -46,9 +46,9 @@ public class ConstellationFileSetTest
         File root2 = new File("/root2");
         File pol2 = new File(root2, "pol.tiff");
     
-        ConstellationFileSet fileSet1 = new ConstellationFileSet(pol1);
+        CapturedImageFileSet fileSet1 = new CapturedImageFileSet(pol1);
     
-        ConstellationFileSet fileSet2 = new ConstellationFileSet(pol2);
+        CapturedImageFileSet fileSet2 = new CapturedImageFileSet(pol2);
         
         assertTrue( fileSet1.equals(fileSet2) );
     }

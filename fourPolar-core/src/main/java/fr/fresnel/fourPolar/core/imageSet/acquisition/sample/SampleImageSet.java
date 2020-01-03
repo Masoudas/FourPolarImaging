@@ -1,30 +1,25 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition.sample;
 
 import java.util.ArrayList;
-import java.util.DuplicateFormatFlagsException;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
-import fr.fresnel.fourPolar.core.imageSet.acquisition.IConstellationFileSet;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.PolarizationConstellation;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 
 /**
  * Encapsulates the sample image set files as provided by the user.
  */
 public class SampleImageSet {
-    private ArrayList<HashSet<IConstellationFileSet>> fileSuperSet;
+    private ArrayList<HashSet<ICapturedImageFileSet>> fileSuperSet;
 
-    /**
-     * 
-     * @param nChannel      : (> 1) Number of distinct wavelengths of the system
-     */
-    public SampleImageSet(int nChannel) {
-        fileSuperSet = new ArrayList<HashSet<IConstellationFileSet>>(nChannel);
-        
-        for (int channel = 0; channel < nChannel; channel++) {
-            fileSuperSet.add(channel, new HashSet<IConstellationFileSet>());
+    public SampleImageSet(FourPolarImagingSetup imagingSetup) {
+        fileSuperSet = new ArrayList<HashSet<ICapturedImageFileSet>>(imagingSetup.getnChannel());
+
+        for (int channel = 0; channel < imagingSetup.getnChannel(); channel++) {
+            fileSuperSet.add(channel, new HashSet<ICapturedImageFileSet>());
         }
     }
 
@@ -35,7 +30,7 @@ public class SampleImageSet {
      * @param fileSet
      * @return
      */
-    public void addImage(int channel, IConstellationFileSet fileSet) throws KeyAlreadyExistsException {
+    public void addImage(int channel, ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
         if (fileSuperSet.get(channel - 1).contains(fileSet))
             throw new KeyAlreadyExistsException("The given fileSet already exists for this channel.");
 
@@ -48,7 +43,7 @@ public class SampleImageSet {
      * @param fileSet
      * @return
      */
-    public void removeImage(int channel, IConstellationFileSet fileSet) throws IllegalArgumentException {
+    public void removeImage(int channel, ICapturedImageFileSet fileSet) throws IllegalArgumentException {
         if (!fileSuperSet.get(channel - 1).contains(fileSet))
             throw new IllegalArgumentException("The given file set does not exist.");
 
@@ -61,25 +56,8 @@ public class SampleImageSet {
      * @param channel
      * @return
      */
-    public Set<IConstellationFileSet> getChannelImages(int channel) {
-        return (Set<IConstellationFileSet>) fileSuperSet.get(channel - 1).clone();
+    public Set<ICapturedImageFileSet> getChannelImages(int channel) {
+        return (Set<ICapturedImageFileSet>) fileSuperSet.get(channel - 1).clone();
     }
-
-    // /**
-    // * Returns the file set of polarization images corresponding to this
-    // constellation set.
-    // * @param fileSet
-    // * @return
-    // */
-    // public IPolarizationsFileSet getPolarizationsFileSet(IConstellationFileSet
-    // fileSet);
-
-    // /**
-    // * Returns the file set of four polar images corresponding to a polarization
-    // image set.
-    // * @param fileSet
-    // * @return
-    // */
-    // public IFourPolarFileSet getFourPolarFileSet(IConstellationFileSet fileSet);
 
 }

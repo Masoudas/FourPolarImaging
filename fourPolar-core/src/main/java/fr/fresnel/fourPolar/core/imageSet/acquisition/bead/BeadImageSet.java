@@ -1,31 +1,25 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition.bead;
 
-import fr.fresnel.fourPolar.core.imageSet.acquisition.IConstellationFileSet;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.PolarizationConstellation;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 
 /**
  * Defines the bead image set, which accompanies the sample image set.
  * Each channel must contain a separate bead image set, which is stored
- * as a {@link ConstellationFileSet}. 
+ * as a {@link CapturedImageFileSet}. 
  */
-
-
 public class BeadImageSet {
-    private IConstellationFileSet[] imageFileSet = null;
+    private ICapturedImageFileSet[] imageFileSet = null;
 
-    /**
-     * 
-     * @param nChannel : (> 1) Number of distinct wavelengths of the system
-     */
-    public BeadImageSet(int nChannel){
-        this.imageFileSet = new IConstellationFileSet[nChannel];
+    public BeadImageSet(FourPolarImagingSetup imagingSetup){
+        this.imageFileSet = new ICapturedImageFileSet[imagingSetup.getnChannel()];
     }
 
-    public void setChannelImage(IConstellationFileSet fileSet, int channelNo) {                
+    public void setChannelImage(int channelNo, ICapturedImageFileSet fileSet) {                
         imageFileSet[channelNo - 1] = fileSet;
     }
 
-    public IConstellationFileSet getChannelImage(int channelNo) {
+    public ICapturedImageFileSet getChannelImage(int channelNo) {
         return imageFileSet[channelNo];
     }
     

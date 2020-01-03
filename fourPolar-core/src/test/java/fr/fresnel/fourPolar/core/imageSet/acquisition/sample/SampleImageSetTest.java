@@ -8,7 +8,9 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 
 import org.junit.Test;
 
-import fr.fresnel.fourPolar.core.imageSet.acquisition.ConstellationFileSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
+import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 
 /**
@@ -22,9 +24,10 @@ public class SampleImageSetTest {
     File pol90 = new File(root, "pol90.tiff");
     File pol135 = new File(root, "pol135.tiff");
 
-    ConstellationFileSet fileSet = new ConstellationFileSet(pol0, pol45, pol90, pol135);
+    CapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
+    FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.Four);
 
-    SampleImageSet sampleSet = new SampleImageSet(2);
+    SampleImageSet sampleSet = new SampleImageSet(imagingSetup);
 
     public SampleImageSetTest(){
         sampleSet.addImage(1, fileSet);
@@ -56,7 +59,7 @@ public class SampleImageSetTest {
         File pol90 = new File(root, "qpol90.tiff");
         File pol135 = new File(root, "qpol135.tiff");
 
-        ConstellationFileSet fileSet = new ConstellationFileSet(pol0, pol45, pol90, pol135);
+        CapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
         
         try {
             sampleSet.removeImage(1, fileSet);
