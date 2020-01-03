@@ -22,7 +22,7 @@ public class ConstellationFileSetTest
         File pol90 = new File(root, "pol90.tiff");
         File pol135 = new File(root, "pol135.tiff");
     
-        ConstellationFileSet fileSet = new ConstellationFileSet(pol0, pol45, pol90, pol135, 1);
+        ConstellationFileSet fileSet = new ConstellationFileSet(pol0, pol45, pol90, pol135);
         
         assertTrue( fileSet.getNameExtract().equals("pol0") );
     }
@@ -32,9 +32,25 @@ public class ConstellationFileSetTest
     {
         File pol = new File(root, "pol.tiff");
     
-        ConstellationFileSet fileSet = new ConstellationFileSet(pol, 1);
+        ConstellationFileSet fileSet = new ConstellationFileSet(pol);
         
         assertTrue( fileSet.getNameExtract().equals("pol") );
+    }
+
+    @Test
+    public void equal_SameNameExtract_ReturnsObjectsEqual()
+    {
+
+        File pol1 = new File(root, "pol.tiff");
+        
+        File root2 = new File("/root2");
+        File pol2 = new File(root2, "pol.tiff");
+    
+        ConstellationFileSet fileSet1 = new ConstellationFileSet(pol1);
+    
+        ConstellationFileSet fileSet2 = new ConstellationFileSet(pol2);
+        
+        assertTrue( fileSet1.equals(fileSet2) );
     }
 
 }

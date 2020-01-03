@@ -3,6 +3,8 @@ package fr.fresnel.fourPolar.core.imageSet.acquisition;
 import java.io.File;
 import java.util.Set;
 
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.PolarizationConstellation;
+
 /**
  * An interface for accessing the image files provided in the original constellation format.
  */
@@ -27,10 +29,4 @@ public interface IConstellationFileSet {
      * @return
      */
     public String getNameExtract();
-
-    /**
-     * Returns the corresponding channel no.
-     * @return
-     */
-    public int getChannel(); 
 }

@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition.bead;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.IConstellationFileSet;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.PolarizationConstellation;
 
 /**
  * Defines the bead image set, which accompanies the sample image set.
@@ -12,16 +13,19 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.IConstellationFileSet;
 public class BeadImageSet {
     private IConstellationFileSet[] imageFileSet = null;
 
-
-    public BeadImageSet(int nChannels){
-        this.imageFileSet = new IConstellationFileSet[nChannels];
+    /**
+     * 
+     * @param nChannel : (> 1) Number of distinct wavelengths of the system
+     */
+    public BeadImageSet(int nChannel){
+        this.imageFileSet = new IConstellationFileSet[nChannel];
     }
 
-    public void setChannelBeadImage(IConstellationFileSet fileSet, int channelNo) {        
+    public void setChannelImage(IConstellationFileSet fileSet, int channelNo) {                
         imageFileSet[channelNo - 1] = fileSet;
     }
 
-    public IConstellationFileSet getChannelBeadImage(int channelNo) {
+    public IConstellationFileSet getChannelImage(int channelNo) {
         return imageFileSet[channelNo];
     }
     
