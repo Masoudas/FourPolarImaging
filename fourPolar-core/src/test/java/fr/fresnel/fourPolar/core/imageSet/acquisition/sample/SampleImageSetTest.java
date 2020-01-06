@@ -50,7 +50,7 @@ public class SampleImageSetTest {
         assertTrue(sampleSet.getChannelImages(1).size() == 0);
         
     }
-
+ 
     @Test
     public void removeImage_nonExistentfileSet_ShouldThrowException()
     {
