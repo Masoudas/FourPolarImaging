@@ -15,6 +15,7 @@ import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
  */
 public class SampleImageSet {
     private ArrayList<Hashtable<String, ICapturedImageFileSet>> fileSuperSet;
+    private FourPolarImagingSetup imagingSetup;
 
     public SampleImageSet(FourPolarImagingSetup imagingSetup) {
         fileSuperSet = new ArrayList<Hashtable<String, ICapturedImageFileSet>>(imagingSetup.getnChannel());
@@ -22,6 +23,8 @@ public class SampleImageSet {
         for (int channel = 0; channel < imagingSetup.getnChannel(); channel++) {
             fileSuperSet.add(channel, new Hashtable<String, ICapturedImageFileSet>());
         }
+
+        this.imagingSetup = imagingSetup;
     }
 
     /**
@@ -31,7 +34,10 @@ public class SampleImageSet {
      * @param fileSet
      * @return
      */
-    public void addImage(int channel, ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
+    public void addImage(int channel, ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException, IllegalArgumentException {
+        if (fileSet.getnCameras() != this.imagingSetup.getCameras())
+            throw new IllegalArgumentException("The captured file set corresponds to different number of cameras");
+
         if (fileSuperSet.get(channel - 1).containsKey(fileSet.getSetName()))
             throw new KeyAlreadyExistsException("The given file set already exists for this channel");
         
@@ -52,7 +58,7 @@ public class SampleImageSet {
     }
 
     /**
-     * Returns the images of a channel as a set (a clone of the actuall set).
+     * Returns the images of a channel as a set as of {@link ICapturedImageFileSet}.
      * 
      * @param channel
      * @return

@@ -10,6 +10,11 @@ public class FourPolarImagingSetup {
     private int nChannel;
     private Cameras cameras;
     
+    /**
+     * 
+     * @param nChannel : Number of channels
+     * @param cameras : Number of cameras
+     */
     public FourPolarImagingSetup(int nChannel, Cameras cameras){
         this.nChannel = nChannel;
         this.cameras = cameras;   

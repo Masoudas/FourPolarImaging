@@ -3,11 +3,13 @@ package fr.fresnel.fourPolar.core.imageSet.acquisition;
 import java.io.File;
 import java.util.Set;
 
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+
 
 /**
  * An interface for accessing the image files provided in the original constellation format.
  */
-public interface ICapturedImageFileSet {
+public interface ICapturedImageFileSet  {
     /**
      * Returns the labels of the constellation.
      * For 2*2 constellation, the string is Pol0_45_90_135.
@@ -28,5 +30,19 @@ public interface ICapturedImageFileSet {
      * @return
      */
     public String getSetName();
+
+    /**
+     * Returns the number of cameras corresponding to this file set.
+     * @return
+     */
+    public Cameras getnCameras();
+
+
+    @Override
+    public boolean equals(Object obj);
+
+    @Override
+    public int hashCode();
+	
 
 }
