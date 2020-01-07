@@ -16,14 +16,14 @@ public class FilterCapturedImage implements FilenameFilter {
     String polLabel;
 
     public FilterCapturedImage(String polLabel, String channelLabel, String extension){
-        this.extension = extension;
+        this.extension = extension.toLowerCase();
         this.channelLabel = channelLabel;
         this.polLabel = polLabel;
     }
 
     @Override
     public boolean accept(File dir, String name) {
-        if (!name.endsWith("." + this.extension))
+        if (!name.toLowerCase().endsWith("." + this.extension))
             return false;
         
         if (this.channelLabel != null && !Pattern.compile(this.channelLabel).matcher(name).find())

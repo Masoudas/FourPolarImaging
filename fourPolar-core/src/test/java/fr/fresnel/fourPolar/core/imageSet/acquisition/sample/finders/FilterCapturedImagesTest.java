@@ -16,7 +16,7 @@ public class FilterCapturedImagesTest {
         File oneCameraRoot = new File(root, "OneCamera");
         FilterCapturedImage filterImage = new FilterCapturedImage(null, null, "tiff");
         
-        assertTrue(oneCameraRoot.listFiles(filterImage).length == 3);    
+        assertTrue(oneCameraRoot.listFiles(filterImage).length == 6);    
     }
 
     @Test
@@ -31,7 +31,7 @@ public class FilterCapturedImagesTest {
     public void testFilter_TwoCamerCase_ReturnsFourFiles() {
         File oneCameraRoot = new File(root, "TwoCamera");
         FilterCapturedImage filterImage = new FilterCapturedImage("C1", "Pol0_90", "tiff");
-                
+        
         assertTrue(oneCameraRoot.listFiles(filterImage).length == 3);
     }
 
