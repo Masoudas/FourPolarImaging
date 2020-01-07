@@ -13,9 +13,9 @@ import org.junit.Test;
 public class CapturedImageFileSetTest
 {
     File root = new File("/root");
-        
+  
     @Test
-    public void nameExtract_TwoByTwo_Returnspol0FileName()
+    public void getSetName_SameFileSet_ReturnsEqualSetName()
     {
         File pol0 = new File(root, "pol0.tiff");
         File pol45 = new File(root, "pol45.tiff");
@@ -23,12 +23,19 @@ public class CapturedImageFileSetTest
         File pol135 = new File(root, "pol135.tiff");
     
         CapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
+
+        File pol0_1 = new File(root, "pol0.tiff");
+        File pol45_1 = new File(root, "pol45.tiff");
+        File pol90_1 = new File(root, "pol90.tiff");
+        File pol135_1 = new File(root, "pol135.tiff");
+    
+        CapturedImageFileSet fileSet_1 = new CapturedImageFileSet(pol0_1, pol45_1, pol90_1, pol135_1);
         
-        assertTrue( fileSet.getSetName().equals("pol0") );
+        assertTrue( fileSet.getSetName().equals(fileSet_1.getSetName()) );
     }
 
     @Test
-    public void nameExtract_OneByOne_ReturnsFileName()
+    public void getSetName_OneByOne_ReturnsFileName()
     {
         File pol = new File(root, "pol.tiff");
     
@@ -38,7 +45,7 @@ public class CapturedImageFileSetTest
     }
 
     @Test
-    public void equal_SameNameExtract_ReturnsObjectsEqual()
+    public void equal_SameSetName_ReturnsObjectsEqual()
     {
 
         File pol1 = new File(root, "pol.tiff");

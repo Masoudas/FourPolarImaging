@@ -64,9 +64,15 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
      */
     private String defineSetName(File file) {
         byte[] hash = {0};
+        String concatenatedPaths = "";
+
+        for (String label : fileSet.keySet()) {
+            concatenatedPaths += fileSet.get(label);
+        }
+
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            hash = md.digest("inpudafesdat".getBytes(StandardCharsets.UTF_8));
+            hash = md.digest(concatenatedPaths.getBytes(StandardCharsets.UTF_8));
 
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - SampleImageSet",
+            "request": "launch",
+            "mainClass": "fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet",
+            "projectName": "fourPolar-core"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - CapturedImageFileSet",
             "request": "launch",
             "mainClass": "fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet",

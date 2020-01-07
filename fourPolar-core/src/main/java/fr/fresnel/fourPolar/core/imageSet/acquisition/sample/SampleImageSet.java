@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.core.imageSet.acquisition.sample;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Set;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
@@ -13,13 +14,13 @@ import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
  * Encapsulates the sample image set files as provided by the user.
  */
 public class SampleImageSet {
-    private ArrayList<HashSet<ICapturedImageFileSet>> fileSuperSet;
+    private ArrayList<Hashtable<String, ICapturedImageFileSet>> fileSuperSet;
 
     public SampleImageSet(FourPolarImagingSetup imagingSetup) {
-        fileSuperSet = new ArrayList<HashSet<ICapturedImageFileSet>>(imagingSetup.getnChannel());
+        fileSuperSet = new ArrayList<Hashtable<String, ICapturedImageFileSet>>(imagingSetup.getnChannel());
 
         for (int channel = 0; channel < imagingSetup.getnChannel(); channel++) {
-            fileSuperSet.add(channel, new HashSet<ICapturedImageFileSet>());
+            fileSuperSet.add(channel, new Hashtable<String, ICapturedImageFileSet>());
         }
     }
 
@@ -31,10 +32,10 @@ public class SampleImageSet {
      * @return
      */
     public void addImage(int channel, ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
-        if (fileSuperSet.get(channel - 1).contains(fileSet))
-            throw new KeyAlreadyExistsException("The given fileSet already exists for this channel.");
-
-        fileSuperSet.get(channel - 1).add(fileSet);
+        if (fileSuperSet.get(channel - 1).containsKey(fileSet.getSetName()))
+            throw new KeyAlreadyExistsException("The given file set already exists for this channel");
+        
+        fileSuperSet.get(channel - 1).put(fileSet.getSetName(), fileSet);
     }
 
     /**
@@ -43,11 +44,11 @@ public class SampleImageSet {
      * @param fileSet
      * @return
      */
-    public void removeImage(int channel, ICapturedImageFileSet fileSet) throws IllegalArgumentException {
-        if (!fileSuperSet.get(channel - 1).contains(fileSet))
-            throw new IllegalArgumentException("The given file set does not exist.");
+    public void removeImage(int channel, String setName) throws IllegalArgumentException {
+        if (!fileSuperSet.get(channel - 1).containsKey(setName))
+            throw new IllegalArgumentException("The given file set does not exist!");
 
-        fileSuperSet.get(channel - 1).remove(fileSet);
+        fileSuperSet.get(channel - 1).remove(setName);
     }
 
     /**
@@ -57,7 +58,11 @@ public class SampleImageSet {
      * @return
      */
     public Set<ICapturedImageFileSet> getChannelImages(int channel) {
-        return (Set<ICapturedImageFileSet>) fileSuperSet.get(channel - 1).clone();
-    }
+        HashSet<ICapturedImageFileSet> channelSet = new HashSet<ICapturedImageFileSet>();
+        for (String setName : fileSuperSet.get(channel - 1).keySet()){
+            channelSet.add(fileSuperSet.get(channel - 1).get(setName));
+        }
 
+        return channelSet;
+    }
 }

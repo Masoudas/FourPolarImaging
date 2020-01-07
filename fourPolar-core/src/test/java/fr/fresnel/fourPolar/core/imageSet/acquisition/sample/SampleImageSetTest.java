@@ -45,8 +45,15 @@ public class SampleImageSetTest {
 
     @Test
     public void removeImage_fileSet_ReturnsZeroLengthForChannelOne() {
-        sampleSet.removeImage(1, fileSet);
+        // Create a new file set.
+        File pol0 = new File(root, "pol0.tiff");
+        File pol45 = new File(root, "pol45.tiff");
+        File pol90 = new File(root, "pol90.tiff");
+        File pol135 = new File(root, "pol135.tiff");
+        
+        CapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
 
+        sampleSet.removeImage(1, fileSet.getSetName());
         assertTrue(sampleSet.getChannelImages(1).size() == 0);
         
     }
@@ -62,7 +69,7 @@ public class SampleImageSetTest {
         CapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
         
         try {
-            sampleSet.removeImage(1, fileSet);
+            sampleSet.removeImage(1, fileSet.getSetName());
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }

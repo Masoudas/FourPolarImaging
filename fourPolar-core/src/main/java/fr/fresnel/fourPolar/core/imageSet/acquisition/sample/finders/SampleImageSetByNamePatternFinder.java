@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
@@ -45,13 +44,11 @@ public class SampleImageSetByNamePatternFinder {
             String labelPol45, String labelPol90, String labelPol135) {
         this(sampleSet, rootFolder);        
 
-        polLabel = new String[2];
+        polLabel = new String[4];
         polLabel[0] = labelPol0;
         polLabel[1] = labelPol45;           
         polLabel[2] = labelPol90;           
         polLabel[3] = labelPol135;           
-        
-        
     }
 
     private void findChannelTiffImages(int channel, String channelLabel) {
@@ -60,11 +57,20 @@ public class SampleImageSetByNamePatternFinder {
     }
 
     private void findChannelImages(int channel, String channelLabel, String fileType) {
-        // File[] allImages = rootFolder.listFiles(new FilterCapturedImage());
-
-        
+        // right now we suppose that all images are in the root folder.
+        File[] allImages = rootFolder.listFiles();
 
     }
 
+    private File[] findChannelImagesOneCamera(int channel, String channelLabel, String fileType){
+        return rootFolder.listFiles(new FilterCapturedImage(channelLabel, null, fileType));
+    }
 
+
+    private File[] findChannelImagesTwoCamera(int channel, String channelLabel, String fileType){
+        File[] imagesPol0_90 = rootFolder.listFiles(new FilterCapturedImage(channelLabel, null, fileType));
+        File[] imagesPol45_135 = rootFolder.listFiles(new FilterCapturedImage(channelLabel, null, fileType));
+
+        
+    }
 }
