@@ -4,27 +4,26 @@ import java.io.File;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
-import fr.fresnel.fourPolar.io.image.IImageChecker;
 
 class FourCameraChannelImageFinder implements IChannelImageFinder {
 
     @Override
-    public void find(File rootFolder, SampleImageSet sampleSet, int channel, String channelLabel, String[] polLabel,
-            IImageChecker imageChecker) {
-        File[] imagesPol0 = rootFolder
-                .listFiles(new FilterCapturedImage(polLabel[0], channelLabel, imageChecker.getExtension()));
+    public void find(SampleImageSetByNamePatternFinder sampleSetFinder, SampleImageSet sampleImageSet, int channel, String channelLabel) {
+        String[] polLabel = sampleSetFinder.getPolLabel();
+        File[] imagesPol0 = sampleSetFinder.getRootFolder()
+                .listFiles(new FilterCapturedImage(polLabel[0], channelLabel, sampleSetFinder.getImageChecker().getExtension()));
 
         File[] polFiles = new File[4];
         for (File imagePol0 : imagesPol0) {
-            if (!imageChecker.checkCompatible(imagePol0))
+            if (!sampleSetFinder.getImageChecker().checkCompatible(imagePol0))
                 continue;
 
             polFiles[0] = imagePol0;
             for (int i = 1; i < polLabel.length; i++) {
                 FilterPolarizationFile filterFile = new FilterPolarizationFile(imagePol0, polLabel[0], polLabel[i]);
-                File[] candidates = rootFolder.listFiles(filterFile);
+                File[] candidates = sampleSetFinder.getRootFolder().listFiles(filterFile);
 
-                if (candidates.length != 1 || !imageChecker.checkCompatible(imagePol0))
+                if (candidates.length != 1 || !sampleSetFinder.getImageChecker().checkCompatible(imagePol0))
                     break;
 
                 polFiles[i] = candidates[0];
@@ -32,7 +31,7 @@ class FourCameraChannelImageFinder implements IChannelImageFinder {
 
             CapturedImageFileSet fileSet = new CapturedImageFileSet(polFiles[0], polFiles[1], polFiles[2], polFiles[3]);
             try {
-                sampleSet.addImage(channel, fileSet);
+                sampleImageSet.addImage(channel, fileSet);
             } catch (Exception e) {
                 System.out.println(e);
             }

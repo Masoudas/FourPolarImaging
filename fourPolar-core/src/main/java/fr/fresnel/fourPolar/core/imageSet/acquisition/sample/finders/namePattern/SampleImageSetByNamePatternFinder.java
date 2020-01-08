@@ -2,10 +2,8 @@ package fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePatter
 
 import java.io.File;
 
-import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.io.image.IImageChecker;
-import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
 
 /**
  * Using this class, we can find the images of the sample set on the given root
@@ -23,8 +21,8 @@ import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
 public class SampleImageSetByNamePatternFinder {
     private String polLabel[] = null;
     private File rootFolder = null;
-    private SampleImageSet sampleSet = null;
     private IChannelImageFinder channelImageFinder = null;
+    private IImageChecker imageChecker = null;
 
     /**
      * Used for finding the images in case of single camera.
@@ -32,9 +30,9 @@ public class SampleImageSetByNamePatternFinder {
      * @param sampleSet  :
      * @param rootFolder :
      */
-    public SampleImageSetByNamePatternFinder(SampleImageSet sampleSet, File rootFolder) {
+    public SampleImageSetByNamePatternFinder(File rootFolder, IImageChecker imageChecker) {
         this.rootFolder = rootFolder;
-        this.sampleSet = sampleSet;
+        this.imageChecker = imageChecker;
 
         this.channelImageFinder = new OneCameraChannelImageFinder();
     }
@@ -47,10 +45,9 @@ public class SampleImageSetByNamePatternFinder {
      * @param labelPol0_90
      * @param labelPol45_135
      */
-    public SampleImageSetByNamePatternFinder(SampleImageSet sampleSet, File rootFolder, String labelPol0_90,
-            String labelPol45_135) {
-        this.rootFolder = rootFolder;
-        this.sampleSet = sampleSet;
+    public SampleImageSetByNamePatternFinder(File rootFolder, IImageChecker imageChecker,
+            String labelPol0_90, String labelPol45_135) {
+        this(rootFolder, imageChecker);
 
         polLabel = new String[2];
         polLabel[0] = labelPol0_90;
@@ -69,11 +66,10 @@ public class SampleImageSetByNamePatternFinder {
      * @param labelPol90
      * @param labelPol135
      */
-    public SampleImageSetByNamePatternFinder(SampleImageSet sampleSet, File rootFolder, String labelPol0,
-            String labelPol45, String labelPol90, String labelPol135) {
-        this.rootFolder = rootFolder;
-        this.sampleSet = sampleSet;
-
+    public SampleImageSetByNamePatternFinder(File rootFolder, IImageChecker imageChecker,
+            String labelPol0, String labelPol45, String labelPol90, String labelPol135) {
+        this(rootFolder, imageChecker);
+        
         polLabel = new String[4];
         polLabel[0] = labelPol0;
         polLabel[1] = labelPol45;
@@ -83,8 +79,30 @@ public class SampleImageSetByNamePatternFinder {
         this.channelImageFinder = new FourCameraChannelImageFinder();
     }
 
-    public void findChannelImages(int channel, String channelLabel, IImageChecker imageChecker) {
-        this.channelImageFinder.find(rootFolder, sampleSet, channel, channelLabel, polLabel, imageChecker);
+    public void findChannelImages(SampleImageSet sampleImageSet, int channel, String channelLabel) {
+        this.channelImageFinder.find(this, sampleImageSet, channel, channelLabel);
     }
+
+    /**
+     * @return the imageChecker
+     */
+    public IImageChecker getImageChecker() {
+        return imageChecker;
+    }
+
+    /**
+     * @return the polLabel
+     */
+    public String[] getPolLabel() {
+        return polLabel;
+    }
+
+    /**
+     * @return the rootFolder
+     */
+    public File getRootFolder() {
+        return rootFolder;
+    }
+
 
 }

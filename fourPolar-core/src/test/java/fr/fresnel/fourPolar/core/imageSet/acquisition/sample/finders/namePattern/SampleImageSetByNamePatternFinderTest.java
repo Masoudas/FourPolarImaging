@@ -22,10 +22,10 @@ public class SampleImageSetByNamePatternFinderTest {
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
 
-        SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(sampleImageSet, rootOneCamera);
+        SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootOneCamera, new TiffImageChecker());
 
-        finder.findChannelImages(1, "C1", new TiffImageChecker()); 
-        finder.findChannelImages(2, "C2", new TiffImageChecker());
+        finder.findChannelImages(sampleImageSet, 1, "C1"); 
+        finder.findChannelImages(sampleImageSet, 2, "C2");
 
         // Generate sets to see if found
         ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C1.tif"));
@@ -50,10 +50,10 @@ public class SampleImageSetByNamePatternFinderTest {
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
 
-        SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(sampleImageSet, rootTwoCamera,
-                "Pol0_90", "Pol45_135");
+        SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootTwoCamera,
+                new TiffImageChecker(), "Pol0_90", "Pol45_135");
 
-        finder.findChannelImages(1, null, new TiffImageChecker());
+        finder.findChannelImages(sampleImageSet, 1, null);
 
         // Generate sets to see if found
         ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img1_C1_Pol0_90.tif"),
@@ -77,10 +77,10 @@ public class SampleImageSetByNamePatternFinderTest {
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
 
-        SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(sampleImageSet, rootFourCamera,
-                "Pol0", "Pol45", "Pol90", "Pol135");
+        SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootFourCamera,
+                new TiffImageChecker(), "Pol0", "Pol45", "Pol90", "Pol135");
 
-        finder.findChannelImages(1, null, new TiffImageChecker());
+        finder.findChannelImages(sampleImageSet, 1, null);
 
         // Generate sets to see if found
         ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootFourCamera, "Img1_C1_Pol0.tif"),
