@@ -8,7 +8,7 @@ import java.io.FilenameFilter;
  * This filter ensures that only tiff images in the root folder are considered.
  */
 
-public class FilterPolarizationFile implements FilenameFilter {
+class FilterPolarizationFile implements FilenameFilter {
     String newFileName;
     File originalFile;
 

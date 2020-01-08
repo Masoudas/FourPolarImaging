@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * This filter ensures that only tiff images in the root folder are considered.
  */
 
-public class FilterCapturedImage implements FilenameFilter {
+class FilterCapturedImage implements FilenameFilter {
     String extension;
     String channelLabel;
     String polLabel;

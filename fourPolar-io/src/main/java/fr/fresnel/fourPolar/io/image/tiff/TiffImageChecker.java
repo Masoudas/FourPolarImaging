@@ -15,5 +15,10 @@ public class TiffImageChecker implements IImageChecker {
         return true;
     }
 
+    @Override
+    public String getExtension() {
+        return "tif";
+    }
+
     
 }

@@ -10,10 +10,11 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
 
 public class SampleImageSetByNamePatternFinderTest {
     File root = new File(
-            "/home/masoud/Documents/four-polar/fourPolar-core/src/test/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/TestFiles/");
+            "/home/masoud/Documents/four-polar/fourPolar-core/src/test/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/TestFiles/");
 
     @Test
     public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel() {
@@ -23,15 +24,15 @@ public class SampleImageSetByNamePatternFinderTest {
 
         SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(sampleImageSet, rootOneCamera);
 
-        finder.findChannelTiffImages(1, "C1");
-        finder.findChannelTiffImages(2, "C2");
+        finder.findChannelImages(1, "C1", new TiffImageChecker()); 
+        finder.findChannelImages(2, "C2", new TiffImageChecker());
 
         // Generate sets to see if found
-        ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C1.tiff"));
-        ICapturedImageFileSet Img2_C1 = new CapturedImageFileSet(new File(rootOneCamera, "Img2_C1.tiff"));
+        ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C1.tif"));
+        ICapturedImageFileSet Img2_C1 = new CapturedImageFileSet(new File(rootOneCamera, "Img2_C1.tif"));
 
-        ICapturedImageFileSet Img1_C2 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C2.tiff"));
-        ICapturedImageFileSet Img2_C2 = new CapturedImageFileSet(new File(rootOneCamera, "Img2_C2.tiff"));
+        ICapturedImageFileSet Img1_C2 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C2.tif"));
+        ICapturedImageFileSet Img2_C2 = new CapturedImageFileSet(new File(rootOneCamera, "Img2_C2.tif"));
 
         boolean contains_Img1_C1 = sampleImageSet.getChannelImages(1).contains(Img1_C1);
         boolean contains_Img2_C1 = sampleImageSet.getChannelImages(1).contains(Img2_C1);
@@ -52,15 +53,15 @@ public class SampleImageSetByNamePatternFinderTest {
         SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(sampleImageSet, rootTwoCamera,
                 "Pol0_90", "Pol45_135");
 
-        finder.findChannelTiffImages(1, null);
+        finder.findChannelImages(1, null, new TiffImageChecker());
 
         // Generate sets to see if found
-        ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img1_C1_Pol0_90.tiff"),
-                new File(rootTwoCamera, "Img1_C1_Pol45_135.tiff"));
-        ICapturedImageFileSet Img2_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img2_C1_Pol0_90.tiff"),
-                new File(rootTwoCamera, "Img2_C1_Pol45_135.tiff"));
-        ICapturedImageFileSet Img3_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img3_C1_Pol0_90.tiff"),
-                new File(rootTwoCamera, "Img3_C1_Pol45_135.tiff"));
+        ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img1_C1_Pol0_90.tif"),
+                new File(rootTwoCamera, "Img1_C1_Pol45_135.tif"));
+        ICapturedImageFileSet Img2_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img2_C1_Pol0_90.tif"),
+                new File(rootTwoCamera, "Img2_C1_Pol45_135.tif"));
+        ICapturedImageFileSet Img3_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img3_C1_Pol0_90.tif"),
+                new File(rootTwoCamera, "Img3_C1_Pol45_135.tif"));
 
         boolean contains_Img1_C1 = sampleImageSet.getChannelImages(1).contains(Img1_C1);
         boolean contains_Img2_C1 = sampleImageSet.getChannelImages(1).contains(Img2_C1);
@@ -79,18 +80,18 @@ public class SampleImageSetByNamePatternFinderTest {
         SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(sampleImageSet, rootFourCamera,
                 "Pol0", "Pol45", "Pol90", "Pol135");
 
-        finder.findChannelTiffImages(1, null);
+        finder.findChannelImages(1, null, new TiffImageChecker());
 
         // Generate sets to see if found
-        ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootFourCamera, "Img1_C1_Pol0.tiff"),
-                new File(rootFourCamera, "Img1_C1_Pol45.tiff"), new File(rootFourCamera, "Img1_C1_Pol90.tiff"),
-                new File(rootFourCamera, "Img1_C1_Pol135.tiff"));
-        ICapturedImageFileSet Img2_C1 = new CapturedImageFileSet(new File(rootFourCamera, "Img2_C1_Pol0.tiff"),
-                new File(rootFourCamera, "Img2_C1_Pol45.tiff"), new File(rootFourCamera, "Img2_C1_Pol90.tiff"),
-                new File(rootFourCamera, "Img2_C1_Pol135.tiff"));
-        ICapturedImageFileSet Img3_C1 = new CapturedImageFileSet(new File(rootFourCamera, "Img3_C1_Pol0.tiff"),
-                new File(rootFourCamera, "Img3_C1_Pol45.tiff"), new File(rootFourCamera, "Img3_C1_Pol90.tiff"),
-                new File(rootFourCamera, "Img3_C1_Pol135.tiff"));
+        ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootFourCamera, "Img1_C1_Pol0.tif"),
+                new File(rootFourCamera, "Img1_C1_Pol45.tif"), new File(rootFourCamera, "Img1_C1_Pol90.tif"),
+                new File(rootFourCamera, "Img1_C1_Pol135.tif"));
+        ICapturedImageFileSet Img2_C1 = new CapturedImageFileSet(new File(rootFourCamera, "Img2_C1_Pol0.tif"),
+                new File(rootFourCamera, "Img2_C1_Pol45.tif"), new File(rootFourCamera, "Img2_C1_Pol90.tif"),
+                new File(rootFourCamera, "Img2_C1_Pol135.tif"));
+        ICapturedImageFileSet Img3_C1 = new CapturedImageFileSet(new File(rootFourCamera, "Img3_C1_Pol0.tif"),
+                new File(rootFourCamera, "Img3_C1_Pol45.tif"), new File(rootFourCamera, "Img3_C1_Pol90.tif"),
+                new File(rootFourCamera, "Img3_C1_Pol135.tif"));
 
         boolean contains_Img1_C1 = sampleImageSet.getChannelImages(1).contains(Img1_C1);
         boolean contains_Img2_C1 = sampleImageSet.getChannelImages(1).contains(Img2_C1);
