@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders;
+package fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern;
 
 import static org.junit.Assert.assertTrue;
 

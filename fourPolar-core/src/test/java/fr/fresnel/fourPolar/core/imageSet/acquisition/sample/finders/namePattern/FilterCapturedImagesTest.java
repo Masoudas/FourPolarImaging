@@ -1,8 +1,6 @@
-package fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders;
+package fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern;
 
 import org.junit.Test;
-
-import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.FilterCapturedImage;
 
 import static org.junit.Assert.assertTrue;
 

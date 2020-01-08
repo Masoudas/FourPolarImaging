@@ -1,8 +1,7 @@
-package fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders;
+package fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
  
 
