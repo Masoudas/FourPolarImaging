@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
 
 public class SampleImageSetByNamePatternFinderTest {
     File root = new File(
-            "/home/masoud/Documents/four-polar/fourPolar-core/src/test/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/TestFiles/");
+            "fourPolar-core/src/test/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/TestFiles/");
 
     @Test
     public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel() {
