@@ -4,8 +4,7 @@ import java.io.File;
 import java.nio.file.Paths;
 
 /**
- * This class generates the paths we need to store or read data, using the path
- * to the root folder.
+ * This class generates the paths we need to store or read data.
  */
 public class PathFactory {
     /**
