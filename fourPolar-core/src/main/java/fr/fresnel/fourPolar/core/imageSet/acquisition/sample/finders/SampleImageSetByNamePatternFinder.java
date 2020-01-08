@@ -4,6 +4,9 @@ import java.io.File;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
+import fr.fresnel.fourPolar.io.image.IImageChecker;
+import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
+
 
 /**
  * Using this class, we can find the images of the sample set on the given root
@@ -76,27 +79,28 @@ public class SampleImageSetByNamePatternFinder {
     }
 
     public void findChannelTiffImages(int channel, String channelLabel) {
-        findChannelImages(channel, channelLabel, "tiff");
+        findChannelImages(channel, channelLabel, "tiff", new TiffImageChecker());
     }
 
-    private void findChannelImages(int channel, String channelLabel, String fileType) {
+    private void findChannelImages(int channel, String channelLabel, String fileType, IImageChecker imageChecker) {
         if (this.polLabel == null)
-            findChannelImages_OneCamera(channel, channelLabel, fileType);
+            findChannelImages_OneCamera(channel, channelLabel, fileType, imageChecker);
 
         else if (this.polLabel.length == 2)
-            findChannelImages_TwoCamera(channel, channelLabel, fileType);
+            findChannelImages_TwoCamera(channel, channelLabel, fileType, imageChecker);
 
         else if (this.polLabel.length == 4)
-            findChannelImages_FourCamera(channel, channelLabel, fileType);
-
+            findChannelImages_FourCamera(channel, channelLabel, fileType, imageChecker);
     }
 
-    private void findChannelImages_OneCamera(int channel, String channelLabel, String fileType) {
+    private void findChannelImages_OneCamera(int channel, String channelLabel, String fileType, IImageChecker imageChecker) {
         File[] imagesPol0_45_90_135 = rootFolder.listFiles(new FilterCapturedImage(channelLabel, null, fileType));
 
         for (File imagePol0_45_90_135 : imagesPol0_45_90_135) {
-            CapturedImageFileSet fileSet = new CapturedImageFileSet(imagePol0_45_90_135);
+            if (!imageChecker.checkCompatible(imagePol0_45_90_135))
+                continue;
 
+            CapturedImageFileSet fileSet = new CapturedImageFileSet(imagePol0_45_90_135);
             try {
                 sampleSet.addImage(channel, fileSet);
             } catch (Exception e) {
@@ -105,45 +109,45 @@ public class SampleImageSetByNamePatternFinder {
         }
     }
 
-    private void findChannelImages_TwoCamera(int channel, String channelLabel, String fileType) {
+    private void findChannelImages_TwoCamera(int channel, String channelLabel, String fileType, IImageChecker imageChecker) {
         File[] imagesPol0_90 = rootFolder.listFiles(new FilterCapturedImage(channelLabel, polLabel[0], fileType));
 
         for (File imagePol0_90 : imagesPol0_90) {
             FilterPolarizationFile filterFile = new FilterPolarizationFile(imagePol0_90, polLabel[0], polLabel[1]);
             File[] candidatesPol45_135 = rootFolder.listFiles(filterFile);
 
-            if (candidatesPol45_135.length == 1) {
-                CapturedImageFileSet fileSet = new CapturedImageFileSet(imagePol0_90, candidatesPol45_135[0]);
+            if (candidatesPol45_135.length != 1) 
+                continue;
 
-                try {
-                    sampleSet.addImage(channel, fileSet);
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-
+            CapturedImageFileSet fileSet = new CapturedImageFileSet(imagePol0_90, candidatesPol45_135[0]);
+            try {
+                sampleSet.addImage(channel, fileSet);
+            } catch (Exception e) {
+                System.out.println(e);
             }
-
         }
     }
 
-    private void findChannelImages_FourCamera(int channel, String channelLabel, String fileType) {
+    private void findChannelImages_FourCamera(int channel, String channelLabel, String fileType, IImageChecker imageChecker) {
         File[] imagesPol0 = rootFolder.listFiles(new FilterCapturedImage(channelLabel, polLabel[0], fileType));
 
         File[] polFiles = new File[4];
         for (File imagePol0 : imagesPol0) {
+            if (!imageChecker.checkCompatible(imagePol0))
+                continue;
+
             polFiles[0] = imagePol0;
             for (int i = 1; i < this.polLabel.length; i++) {
                 FilterPolarizationFile filterFile = new FilterPolarizationFile(imagePol0, polLabel[0], polLabel[i]);
                 File[] candidates = rootFolder.listFiles(filterFile);
 
-                if (candidates.length != 1)
+                if (candidates.length != 1 || !imageChecker.checkCompatible(imagePol0))
                     break;
-
+                
                 polFiles[i] = candidates[0];
             }
 
             CapturedImageFileSet fileSet = new CapturedImageFileSet(polFiles[0], polFiles[1], polFiles[2], polFiles[3]);
-
             try {
                 sampleSet.addImage(channel, fileSet);
             } catch (Exception e) {
@@ -153,9 +157,4 @@ public class SampleImageSetByNamePatternFinder {
         }
 
     }
-
-    private boolean check() {
-        
-    }
-
 }
