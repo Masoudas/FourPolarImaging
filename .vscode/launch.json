@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - PathFactory",
+            "request": "launch",
+            "mainClass": "fr.fresnel.fourPolar.io.PathFactory",
+            "projectName": "fourPolar-io"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - FilterPolarizationFile",
             "request": "launch",
             "mainClass": "fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.FilterPolarizationFile",
