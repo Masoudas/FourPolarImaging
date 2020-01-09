@@ -14,6 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.io.image.IImageChecker;
+import fr.fresnel.fourPolar.io.imageSet.acquisition.sample.TemplateExcelFileGenerator;
 
 /**
  * This class is used for finding the images of the sample set from an excel
@@ -21,17 +22,18 @@ import fr.fresnel.fourPolar.io.image.IImageChecker;
  */
 public class SampleImageSetByExcelFileFinder {
     private IImageChecker imageChecker = null;
+    private File rootFolder;
 
     public SampleImageSetByExcelFileFinder(IImageChecker imageChecker, File rootFolder) {
         this.imageChecker = imageChecker;
+        this.rootFolder = rootFolder;
 
     }
 
     /**
      * Read the excel file provided and adds the images to the sample set.
      * <p>
-     * The excel file has the same format as provided in the resources/sampleSet of the io project.
-     * This implies that each row "starting from fourth" must contain a set of corresponding files.
+     * The excel file must have the same format as provided by {@link TemplateExcelFileGenerator}
      * @param sampleImageSet : Sample image set to be filled.
      * @param channel : Channel number.
      * @param channelFile : The path to the corresponding excel file.
@@ -41,7 +43,9 @@ public class SampleImageSetByExcelFileFinder {
         try (XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(channelFile))){
             Sheet sheet = workbook.getSheetAt(0);
 
-            int nColumns = sheet.getRow(3).getLastCellNum();
+            int titleRow = TemplateExcelFileGenerator.getTitleRow();
+            int nColumns = sheet.getRow(titleRow).getLastCellNum();
+            
             if (nColumns != 1 && nColumns !=2 && nColumns != 4)
                 throw new IOException("The excel file does not have the required format.");
             
@@ -62,7 +66,7 @@ public class SampleImageSetByExcelFileFinder {
         File[ ] files = new File[nColumns];
         for (int cellCtr = 0; cellCtr < nColumns; cellCtr++){
             Cell cell = row.getCell(cellCtr);
-            files[cellCtr] = new File(cell.getStringCellValue());
+            files[cellCtr] = new File(this.rootFolder, cell.getStringCellValue());
         }
 
         return files;
@@ -70,7 +74,7 @@ public class SampleImageSetByExcelFileFinder {
 
     private boolean imagesExistAndCompatible(File[] files) {
         for (File file : files){
-            if (file.exists() && imageChecker.checkCompatible(file))
+            if (!file.exists() || !imageChecker.checkCompatible(file))
                 return false;
         }
         return true;
