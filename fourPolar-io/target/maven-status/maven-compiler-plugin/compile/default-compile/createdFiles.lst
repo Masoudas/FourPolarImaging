@@ -1,0 +1,12 @@
+fr/fresnel/fourPolar/io/PathFactory.class
+fr/fresnel/fourPolar/io/image/tiff/TiffImageChecker.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/FourCameraChannelImageFinder.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/excel/TemplateExcelFileGenerator.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/SampleImageSetByNamePatternFinder.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/excel/SampleImageSetByExcelFileFinder.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/OneCameraChannelImageFinder.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/CapturedImageFileSet.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/IChannelImageFinder.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/TwoCameraChannelImageFinder.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/FilterPolarizationFile.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/FilterCapturedImage.class

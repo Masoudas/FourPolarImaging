@@ -1,3 +1,12 @@
+/home/masoud/Documents/four-polar/fourPolar-io/src/main/java/fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/excel/TemplateExcelFileGenerator.java
+/home/masoud/Documents/four-polar/fourPolar-io/src/main/java/fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/excel/SampleImageSetByExcelFileFinder.java
+/home/masoud/Documents/four-polar/fourPolar-io/src/main/java/fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/OneCameraChannelImageFinder.java
 /home/masoud/Documents/four-polar/fourPolar-io/src/main/java/fr/fresnel/fourPolar/io/PathFactory.java
+/home/masoud/Documents/four-polar/fourPolar-io/src/main/java/fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/SampleImageSetByNamePatternFinder.java
+/home/masoud/Documents/four-polar/fourPolar-io/src/main/java/fr/fresnel/fourPolar/io/imageSet/acquisition/CapturedImageFileSet.java
 /home/masoud/Documents/four-polar/fourPolar-io/src/main/java/fr/fresnel/fourPolar/io/image/tiff/TiffImageChecker.java
-/home/masoud/Documents/four-polar/fourPolar-io/src/main/java/fr/fresnel/fourPolar/io/image/IImageChecker.java
+/home/masoud/Documents/four-polar/fourPolar-io/src/main/java/fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/IChannelImageFinder.java
+/home/masoud/Documents/four-polar/fourPolar-io/src/main/java/fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/FilterPolarizationFile.java
+/home/masoud/Documents/four-polar/fourPolar-io/src/main/java/fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/FilterCapturedImage.java
+/home/masoud/Documents/four-polar/fourPolar-io/src/main/java/fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/FourCameraChannelImageFinder.java
+/home/masoud/Documents/four-polar/fourPolar-io/src/main/java/fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/TwoCameraChannelImageFinder.java

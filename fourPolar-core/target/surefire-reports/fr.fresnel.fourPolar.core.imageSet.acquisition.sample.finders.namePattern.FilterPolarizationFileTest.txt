@@ -1,8 +1,0 @@
--------------------------------------------------------------------------------
-Test set: fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.FilterPolarizationFileTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.003 s <<< FAILURE! - in fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.FilterPolarizationFileTest
-list_FilterPol90_ReturnsImg1_C1_Pol90(fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.FilterPolarizationFileTest)  Time elapsed: 0.003 s  <<< ERROR!
-java.lang.NullPointerException
-	at fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.FilterPolarizationFileTest.list_FilterPol90_ReturnsImg1_C1_Pol90(FilterPolarizationFileTest.java:19)
-

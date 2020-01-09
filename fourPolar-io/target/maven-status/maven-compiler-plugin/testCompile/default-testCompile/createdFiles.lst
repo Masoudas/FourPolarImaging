@@ -1,1 +1,6 @@
-fr/fresnel/fourPolar/io/AppTest.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/SampleImageSetTest.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/FilterCapturedImagesTest.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/excel/SampleImageSetByExcelFileFinderTest.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/CapturedImageFileSetTest.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/SampleImageSetByNamePatternFinderTest.class
+fr/fresnel/fourPolar/io/imageSet/acquisition/sample/finders/namePattern/FilterPolarizationFileTest.class

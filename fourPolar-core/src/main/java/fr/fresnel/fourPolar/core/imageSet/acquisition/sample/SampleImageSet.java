@@ -23,7 +23,7 @@ public class SampleImageSet {
         for (int channel = 0; channel < imagingSetup.getnChannel(); channel++) {
             fileSuperSet.add(channel, new Hashtable<String, ICapturedImageFileSet>());
         }
-
+ 
         this.imagingSetup = imagingSetup;
     }
 
