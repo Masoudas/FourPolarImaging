@@ -3,6 +3,13 @@ package fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.excel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Iterator;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
@@ -17,27 +24,48 @@ public class SampleImageSetByExcelFileFinder {
 
     public SampleImageSetByExcelFileFinder(IImageChecker imageChecker, File rootFolder) {
         this.imageChecker = imageChecker;
+
     }
 
-    public void findChannelImages(SampleImageSet sampleImageSet, int channel, File channelFile)
-            throws FileNotFoundException {
-        FileInputStream inputStream = new FileInputStream(channelFile);
+    /**
+     * Read the excel file provided and adds the images to the sample set.
+     * <p>
+     * The excel file has the same format as provided in the resources/sampleSet of the io project.
+     * This implies that each row "starting from fourth" must contain a set of corresponding files.
+     * @param sampleImageSet : Sample image set to be filled.
+     * @param channel : Channel number.
+     * @param channelFile : The path to the corresponding excel file.
+     * @throws IOException
+     */
+    public void findChannelImages(SampleImageSet sampleImageSet, int channel, File channelFile) throws IOException {
+        try (XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(channelFile))){
+            Sheet sheet = workbook.getSheetAt(0);
 
-        // raise exception for number of columns
-        int nColumns;
-        File[ ] files = new File[nColumns];
-        
-        for (String str : row) {
-            for (int ctr = 0; ctr < nColumns; ctr++){
-                files[ctr] = new File(pathname);
-            }
+            int nColumns = sheet.getRow(3).getLastCellNum();
+            if (nColumns != 1 && nColumns !=2 && nColumns != 4)
+                throw new IOException("The excel file does not have the required format.");
             
-            if (this.imagesExistAndCompatible(files))
-            {
-                CapturedImageFileSet fileSet = this.createFileSet(files);
-                sampleImageSet.addImage(channel, fileSet);
-            }                
+            for (int rowCtr = 4; rowCtr <= sheet.getLastRowNum(); rowCtr++) {
+                Row row = sheet.getRow(rowCtr);    
+                File[] files = createFiles(nColumns, row);
+                
+                if (this.imagesExistAndCompatible(files))
+                {
+                    CapturedImageFileSet fileSet = this.createFileSet(files);
+                    sampleImageSet.addImage(channel, fileSet);
+                }                
+            }    
+        } 
+    }
+
+    private File[ ] createFiles(int nColumns, Row row) {
+        File[ ] files = new File[nColumns];
+        for (int cellCtr = 0; cellCtr < nColumns; cellCtr++){
+            Cell cell = row.getCell(cellCtr);
+            files[cellCtr] = new File(cell.getStringCellValue());
         }
+
+        return files;
     }
 
     private boolean imagesExistAndCompatible(File[] files) {
@@ -55,7 +83,6 @@ public class SampleImageSetByExcelFileFinder {
             return new CapturedImageFileSet(files[0], files[1]); 
         else 
             return new CapturedImageFileSet(files[0], files[1], files[2], files[3]);  
-
     }
 
 }

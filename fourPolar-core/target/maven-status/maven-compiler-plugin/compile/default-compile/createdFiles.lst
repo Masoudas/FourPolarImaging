@@ -1,0 +1,13 @@
+fr/fresnel/fourPolar/core/imagingSetup/imageFormation/Cameras.class
+fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/OneCameraChannelImageFinder.class
+fr/fresnel/fourPolar/core/imageSet/acquisition/sample/SampleImageSet.class
+fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/FilterPolarizationFile.class
+fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/FourCameraChannelImageFinder.class
+fr/fresnel/fourPolar/core/imageSet/acquisition/bead/BeadImageSet.class
+fr/fresnel/fourPolar/core/imagingSetup/FourPolarImagingSetup.class
+fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/IChannelImageFinder.class
+fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/SampleImageSetByNamePatternFinder.class
+fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/FilterCapturedImage.class
+fr/fresnel/fourPolar/core/imageSet/acquisition/CapturedImageFileSet.class
+fr/fresnel/fourPolar/core/imageSet/acquisition/ICapturedImageFileSet.class
+fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/TwoCameraChannelImageFinder.class

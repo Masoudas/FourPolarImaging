@@ -27,6 +27,8 @@ public class SampleImageSetByNamePatternFinderTest {
         finder.findChannelImages(sampleImageSet, 1, "C1"); 
         finder.findChannelImages(sampleImageSet, 2, "C2");
 
+        System.out.println(sampleImageSet.getChannelImages(1).size());
+
         // Generate sets to see if found
         ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C1.tif"));
         ICapturedImageFileSet Img2_C1 = new CapturedImageFileSet(new File(rootOneCamera, "Img2_C1.tif"));

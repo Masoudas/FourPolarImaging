@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.FilterCapturedImagesTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.002 s <<< FAILURE! - in fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.FilterCapturedImagesTest
+testFilter_TwoCamerCase_ReturnsFourFiles(fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.FilterCapturedImagesTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.NullPointerException
+	at fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.FilterCapturedImagesTest.testFilter_TwoCamerCase_ReturnsFourFiles(FilterCapturedImagesTest.java:25)
+
+testFilter_FourCamerCase_ReturnsFourFiles(fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.FilterCapturedImagesTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.NullPointerException
+	at fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.FilterCapturedImagesTest.testFilter_FourCamerCase_ReturnsFourFiles(FilterCapturedImagesTest.java:33)
+
+testFilter_OneCameraCase_ReturnsTwoFiles(fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.FilterCapturedImagesTest)  Time elapsed: 0.001 s  <<< ERROR!
+java.lang.NullPointerException
+	at fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.FilterCapturedImagesTest.testFilter_OneCameraCase_ReturnsTwoFiles(FilterCapturedImagesTest.java:17)
+

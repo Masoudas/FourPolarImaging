@@ -1,0 +1,5 @@
+/home/masoud/Documents/four-polar/fourPolar-core/src/test/java/fr/fresnel/fourPolar/core/imageSet/acquisition/CapturedImageFileSetTest.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/test/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/SampleImageSetTest.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/test/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/FilterPolarizationFileTest.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/test/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/FilterCapturedImagesTest.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/test/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/SampleImageSetByNamePatternFinderTest.java

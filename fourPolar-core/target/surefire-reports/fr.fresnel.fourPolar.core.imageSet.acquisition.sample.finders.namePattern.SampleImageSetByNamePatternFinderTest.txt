@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.SampleImageSetByNamePatternFinderTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.001 s <<< FAILURE! - in fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.SampleImageSetByNamePatternFinderTest
+findChannelImages_FourCamera_ReturnsThreeCapturedSets(fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.SampleImageSetByNamePatternFinderTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.NullPointerException
+	at fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.SampleImageSetByNamePatternFinderTest.findChannelImages_FourCamera_ReturnsThreeCapturedSets(SampleImageSetByNamePatternFinderTest.java:86)
+
+findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel(fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.SampleImageSetByNamePatternFinderTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.NullPointerException
+	at fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.SampleImageSetByNamePatternFinderTest.findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel(SampleImageSetByNamePatternFinderTest.java:28)
+
+findChannelImages_TwoCamera_ReturnsThreeCapturedSets(fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.SampleImageSetByNamePatternFinderTest)  Time elapsed: 0 s  <<< ERROR!
+java.lang.NullPointerException
+	at fr.fresnel.fourPolar.core.imageSet.acquisition.sample.finders.namePattern.SampleImageSetByNamePatternFinderTest.findChannelImages_TwoCamera_ReturnsThreeCapturedSets(SampleImageSetByNamePatternFinderTest.java:59)
+

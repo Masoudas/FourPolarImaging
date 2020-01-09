@@ -1,0 +1,14 @@
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/IChannelImageFinder.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imageSet/acquisition/bead/BeadImageSet.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imagingSetup/FourPolarImagingSetup.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/SampleImageSet.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/SampleImageSetByNamePatternFinder.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/TwoCameraChannelImageFinder.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/OneCameraChannelImageFinder.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/FilterCapturedImage.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/FourCameraChannelImageFinder.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imageSet/acquisition/CapturedImageFileSet.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/namePattern/FilterPolarizationFile.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imageSet/acquisition/sample/finders/excel/SampleImageSetByExcelFileFinder.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imageSet/acquisition/ICapturedImageFileSet.java
+/home/masoud/Documents/four-polar/fourPolar-core/src/main/java/fr/fresnel/fourPolar/core/imagingSetup/imageFormation/Cameras.java

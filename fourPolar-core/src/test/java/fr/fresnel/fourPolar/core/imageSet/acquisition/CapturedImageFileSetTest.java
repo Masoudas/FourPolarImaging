@@ -35,22 +35,11 @@ public class CapturedImageFileSetTest
     }
 
     @Test
-    public void getSetName_OneByOne_ReturnsFileName()
-    {
-        File pol = new File(root, "pol.tiff");
-    
-        CapturedImageFileSet fileSet = new CapturedImageFileSet(pol);
-        
-        assertTrue( fileSet.getSetName().equals("pol") );
-    }
-
-    @Test
     public void equal_SameSetName_ReturnsObjectsEqual()
     {
-
         File pol1 = new File(root, "pol.tiff");
         
-        File root2 = new File("/root2");
+        File root2 = new File("/root");
         File pol2 = new File(root2, "pol.tiff");
     
         CapturedImageFileSet fileSet1 = new CapturedImageFileSet(pol1);
