@@ -71,4 +71,11 @@ public class SampleImageSet {
 
         return channelSet;
     }
+
+    /**
+     * @return the imagingSetup
+     */
+    public FourPolarImagingSetup getImagingSetup() {
+        return imagingSetup;
+    }
 }
