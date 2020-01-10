@@ -11,6 +11,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.io.imageSet.acquisition.CapturedImageFileSet;
+import fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.excel.TemplateExcelFileGenerator;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
 
 
@@ -47,7 +48,7 @@ public class SampleImageSetByExcelFileFinder {
             if (nColumns != 1 && nColumns !=2 && nColumns != 4)
                 throw new IOException("The excel file does not have the required format.");
             
-            for (int rowCtr = 4; rowCtr <= sheet.getLastRowNum(); rowCtr++) {
+            for (int rowCtr = titleRow + 1; rowCtr <= sheet.getLastRowNum(); rowCtr++) {
                 Row row = sheet.getRow(rowCtr);    
                 File[] files = createFiles(nColumns, row);
                 

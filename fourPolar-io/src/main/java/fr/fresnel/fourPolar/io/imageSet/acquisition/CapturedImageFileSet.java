@@ -26,10 +26,12 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
      * @param pol0_45_90_135
      */
     public CapturedImageFileSet(File pol0_45_90_135) {
-        fileSet.put("Pol0_45_90_135", pol0_45_90_135);
+        cameras = Cameras.One;
+
+        String[] labels = Cameras.getLabels(cameras);
+        fileSet.put(labels[0], pol0_45_90_135);
 
         setName = defineSetName(pol0_45_90_135);
-        cameras = Cameras.One;
     }
 
     /**
@@ -39,8 +41,10 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
      * @param pol45_135
      */
     public CapturedImageFileSet(File pol0_90, File pol45_135) {
-        fileSet.put("Pol0_90", pol0_90);
-        fileSet.put("Pol45_135", pol45_135);
+        String[] labels = Cameras.getLabels(cameras);
+
+        fileSet.put(labels[0], pol0_90);
+        fileSet.put(labels[1], pol45_135);
 
         setName = defineSetName(pol0_90);
         cameras = Cameras.Two;
@@ -55,10 +59,12 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
      * @param pol135
      */
     public CapturedImageFileSet(File pol0, File pol45, File pol90, File pol135) {
-        fileSet.put("Pol0", pol0);
-        fileSet.put("Pol45", pol45);
-        fileSet.put("Pol90", pol90);
-        fileSet.put("Pol135", pol135);
+        String[] labels = Cameras.getLabels(cameras);
+
+        fileSet.put(labels[0], pol0);
+        fileSet.put(labels[1], pol45);
+        fileSet.put(labels[2], pol90);
+        fileSet.put(labels[3], pol135);
 
         setName = defineSetName(pol0);
         cameras = Cameras.Four;
@@ -98,9 +104,9 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
             return false;
 
         ICapturedImageFileSet fileSet = (ICapturedImageFileSet) obj;
-        Set<String> labels = fileSet.getLabels();
+        String[] labels = Cameras.getLabels(cameras);
 
-        if (labels.size() != this.fileSet.size())
+        if (labels.length != this.fileSet.size())
             return false;
 
         for (String label : labels) {
@@ -110,11 +116,6 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
         }
 
         return true;
-    }
-
-    @Override
-    public Set<String> getLabels() {
-        return fileSet.keySet();
     }
 
     @Override

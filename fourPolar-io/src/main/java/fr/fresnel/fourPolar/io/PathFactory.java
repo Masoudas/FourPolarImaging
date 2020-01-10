@@ -15,4 +15,8 @@ public class PathFactory {
     public static File getFolder_0_Params(File rootFolder) {
         return new File(rootFolder, Paths.get("4Polar", "0_Params").toString());
     }
+
+    public static File getFolder_sampleImagesTemplateExcelFiles(File rootFolder) {
+        return new File(rootFolder.getAbsolutePath());
+    }
 }
