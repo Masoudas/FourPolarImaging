@@ -18,7 +18,7 @@ import fr.fresnel.fourPolar.io.PathFactory;
  * sample set images.
  */
 public class TemplateExcelFileGenerator {
-    private static int titleRow = 3;
+    private static int titleRow = 4;
 
     private Cameras camera;
     private File folder;
@@ -28,9 +28,10 @@ public class TemplateExcelFileGenerator {
         this.camera = camera;
         this.folder = PathFactory.getFolder_sampleImagesTemplateExcelFiles(rootFolder);
 
-        comments = new String[2];
+        comments = new String[3];
         comments[0] = "Put the path to images of the channel in this file";
-        comments[1] = "The path must be the remaining path after the root folder";
+        comments[1] = "The path must be the remaining path after the root folder, which is:";
+        comments[2] = rootFolder.getAbsolutePath();
     }
 
     /**
@@ -61,7 +62,6 @@ public class TemplateExcelFileGenerator {
             this.writeTitleRow(sheet);
 
             workBook.write(stream);
-            workBook.close();
             return true;
         }
     }
@@ -88,7 +88,7 @@ public class TemplateExcelFileGenerator {
 
     private void writeTitleRow(Sheet sheet) {
         String[] labels = Cameras.getLabels(camera);
-        Row row = sheet.createRow(getTitleRow());
+        Row row = sheet.createRow(getTitleRowIndex());
 
         for (int i = 0; i < labels.length; i++) {
             row.createCell(i).setCellValue(labels[i]);
@@ -102,7 +102,7 @@ public class TemplateExcelFileGenerator {
      * 
      * @return row number
      */
-    public static int getTitleRow() {
+    public static int getTitleRowIndex() {
         return titleRow;
     }
 

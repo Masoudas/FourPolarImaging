@@ -42,7 +42,7 @@ public class SampleImageSetByExcelFileFinder {
         try (XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(channelFile))){
             Sheet sheet = workbook.getSheetAt(0);
 
-            int titleRow = TemplateExcelFileGenerator.getTitleRow();
+            int titleRow = TemplateExcelFileGenerator.getTitleRowIndex();
             int nColumns = sheet.getRow(titleRow).getLastCellNum();
             
             if (nColumns != 1 && nColumns !=2 && nColumns != 4)
