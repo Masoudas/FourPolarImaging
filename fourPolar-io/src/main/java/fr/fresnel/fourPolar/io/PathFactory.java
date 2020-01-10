@@ -11,22 +11,47 @@ public class PathFactory {
     private static String folder_params = "0_Folder";   // Keeps the data about setup, files etc.
 
     /**
-     * Returns the path to the 0_Params folder.
+     * Returns the path to the {@folder_params} folder, and makes sure that the folder is created.
      * @param rootFolder
      * @return
      */
-    public void create_4Polar_Folder(File rootFolder) {
-        new File(rootFolder, root).mkdir();
+    public static File getFolder_4Polar(File rootFolder) {
+        File fourPolar = new File(rootFolder, root);
+        fourPolar.mkdir();
+        return fourPolar;
     }
 
+
+    /**
+     * Returns the path to the {@folder_params} folder, and makes sure that the folder is created.
+     * <p>
+     * This folder contains all the basic parameters.
+     * @param rootFolder
+     * @return
+     */
     public static File getFolder_0_Params(File rootFolder) {
-        File file = new File(rootFolder, Paths.get(root, folder_params).toString());
-        file.mkdirs();
-        return file;
+        File zero_Params = new File(rootFolder, Paths.get(root, folder_params).toString());
+        zero_Params.mkdirs();
+        return zero_Params;
     }
 
+    /**
+     * Creates and returns the folder that would contain the template excel files for the user to provide sample images.
+     * @param rootFolder
+     * @return
+     */
     public static File getFolder_sampleImagesTemplateExcelFiles(File rootFolder) {
         return new File(rootFolder.getAbsolutePath());
+    }
+
+    /**
+     * Creates and returns the folder that would contain the sample set excel files.
+     * @param rootFolder
+     */
+    public static File getFolder_SampleSet(File rootFolder) {
+        File SampleSet = Paths.get(getFolder_0_Params(rootFolder).getAbsolutePath(), "Sample").toFile();
+        SampleSet.mkdirs();
+        return SampleSet;
     }
 
 }
