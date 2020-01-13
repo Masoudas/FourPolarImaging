@@ -24,9 +24,15 @@ public class TemplateExcelFileGenerator {
     private File folder;
     private String[] comments = null;
 
+    /**
+     * Default constructor. Generate a template excel file, for defining the
+     * sample set images.
+     * @param camera
+     * @param rootFolder
+     */
     public TemplateExcelFileGenerator(Cameras camera, File rootFolder) {
         this.camera = camera;
-        this.folder = PathFactory.getFolder_sampleImagesTemplateExcelFiles(rootFolder);
+        this.folder = this._getFolder(rootFolder);
 
         comments = new String[4];
         comments[0] = "Put the path to the images of the channel under the corresponding column.";
@@ -67,6 +73,15 @@ public class TemplateExcelFileGenerator {
             workBook.write(stream);
             return true;
         }
+    }
+
+    /**
+     * Creates and returns the folder that would contain the template excel files.
+     * @param rootFolder
+     * @return
+     */
+    private File _getFolder(File rootFolder) {
+        return new File(rootFolder.getAbsolutePath());
     }
 
     private File getFileName(int channel) {

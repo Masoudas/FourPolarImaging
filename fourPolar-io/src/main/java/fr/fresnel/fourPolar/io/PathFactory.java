@@ -35,14 +35,4 @@ public class PathFactory {
         return zero_Params;
     }
 
-    /**
-     * Creates and returns the folder that would contain the template excel files for the user to provide sample images.
-     * @param rootFolder
-     * @return
-     */
-    public static File getFolder_sampleImagesTemplateExcelFiles(File rootFolder) {
-        return new File(rootFolder.getAbsolutePath());
-    }
-
-
 }
