@@ -29,4 +29,19 @@ public enum Cameras {
         return labels;
     }
 
+    public static int getNImages(Cameras camera) {
+        if (camera == One)
+        {
+            return 1;
+        }
+        else if (camera == Two)
+        {
+            return 2;
+        }
+        else 
+        {
+            return 4;
+        }
+    }
+
 }

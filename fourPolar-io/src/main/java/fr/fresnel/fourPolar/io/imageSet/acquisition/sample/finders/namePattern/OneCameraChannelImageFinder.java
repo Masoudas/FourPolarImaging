@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern;
 
 import java.io.File;
 
-import fr.fresnel.fourPolar.io.imageSet.acquisition.CapturedImageFileSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 
 class OneCameraChannelImageFinder implements IChannelImageFinder {

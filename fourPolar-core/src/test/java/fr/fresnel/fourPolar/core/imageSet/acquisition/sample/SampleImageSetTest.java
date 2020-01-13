@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.imageSet.acquisition.sample;
+package fr.fresnel.fourPolar.core.imageSet.acquisition.sample;
 
 import static org.junit.Assert.assertTrue;
 
@@ -8,7 +8,7 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 
 import org.junit.Test;
 
-import fr.fresnel.fourPolar.io.imageSet.acquisition.CapturedImageFileSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;

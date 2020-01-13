@@ -16,7 +16,7 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
  * sample set images.
  */
 public class TemplateExcelFileGenerator {
-    private static int titleRow;
+    private static int titleRow = 5;
 
     private Cameras camera;
     private File folder;
@@ -32,13 +32,12 @@ public class TemplateExcelFileGenerator {
         this.camera = camera;
         this.folder = this._getFolder(rootFolder);
 
-        comments = new String[4];
+        comments = new String[titleRow - 1];    // Don't touch this. Change the titleRow!
         comments[0] = "Put the path to the images of the channel under the corresponding column.";
         comments[1] = "The path must be the remaining path after the root folder, which is:";
         comments[2] = rootFolder.getAbsolutePath();
         comments[3] = "The files in each row must correspond to different polarizations of same sample.";
 
-        titleRow = comments.length + 1;
     }
 
     /**

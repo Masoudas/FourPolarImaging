@@ -1,13 +1,14 @@
 package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.excel;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.junit.Test;
 
-import fr.fresnel.fourPolar.io.imageSet.acquisition.CapturedImageFileSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
@@ -109,6 +110,22 @@ public class SampleImageSetByExcelFileFinderTest {
         boolean contains_Img3_C1 = sampleImageSet.getChannelImages(1).contains(Img3_C1);
 
         assertTrue(contains_Img1_C1 && contains_Img2_C1 && contains_Img3_C1);
+    }
+
+    @Test
+    public void findChannelImage_WrongNFilesInExcel_RaisesIOException() {
+        File rootOneCamera = new File(SampleImageSetByExcelFileFinderTest.class.getResource("OneCamera").getPath());
+        File wrongOneCameraExcel = new File(
+            SampleImageSetByExcelFileFinderTest.class.getResource("WrongTemplateOneCamera-Channel1.xlsx").getPath());
+
+        FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
+        SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
+
+        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker(),
+                rootOneCamera);
+        IOException exception = assertThrows(IOException.class, () -> {finder.findChannelImages(sampleImageSet, 1, wrongOneCameraExcel);});
+
+        System.out.println(exception.getMessage());
     }
 
 }

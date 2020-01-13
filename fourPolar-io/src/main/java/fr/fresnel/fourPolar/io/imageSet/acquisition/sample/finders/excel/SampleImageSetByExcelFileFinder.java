@@ -10,7 +10,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
-import fr.fresnel.fourPolar.io.imageSet.acquisition.CapturedImageFileSet;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.excel.TemplateExcelFileGenerator;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
 
@@ -37,20 +38,17 @@ public class SampleImageSetByExcelFileFinder {
      * @param channel : Channel number.
      * @param channelFile : The path to the corresponding excel file.
      * @throws IOException
-     */
+     */ 
     public void findChannelImages(SampleImageSet sampleImageSet, int channel, File channelFile) throws IOException {
         try (XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(channelFile))){
             Sheet sheet = workbook.getSheetAt(0);
 
             int titleRow = TemplateExcelFileGenerator.getTitleRowIndex();
-            int nColumns = sheet.getRow(titleRow).getLastCellNum();
-            
-            if (nColumns != 1 && nColumns !=2 && nColumns != 4)
-                throw new IOException("The excel file does not have the required format.");
-            
+            int nImages = Cameras.getNImages(sampleImageSet.getImagingSetup().getCameras());
+                        
             for (int rowCtr = titleRow + 1; rowCtr <= sheet.getLastRowNum(); rowCtr++) {
                 Row row = sheet.getRow(rowCtr);    
-                File[] files = createFiles(nColumns, row);
+                File[] files = createFiles(nImages, row);
                 
                 if (this.imagesExistAndCompatible(files))
                 {
@@ -61,7 +59,22 @@ public class SampleImageSetByExcelFileFinder {
         } 
     }
 
-    private File[ ] createFiles(int nColumns, Row row) {
+    /**
+     * Create the files based on the strings in the row.
+     * 
+     * @param nColumns
+     * @param row
+     * @return
+     * @throws IOException
+     */
+    private File[] createFiles(int nImages, Row row) throws IOException {
+        short nColumns = row.getLastCellNum();
+        if (nColumns != nImages)
+        {
+            int actualRow = row.getRowNum() + 1;
+            throw new IOException("The excel file does not have " + nImages + " column(s) at the " + actualRow + "-th row");
+        }
+
         File[ ] files = new File[nColumns];
         for (int cellCtr = 0; cellCtr < nColumns; cellCtr++){
             Cell cell = row.getCell(cellCtr);
@@ -71,6 +84,11 @@ public class SampleImageSetByExcelFileFinder {
         return files;
     }
 
+    /**
+     * Check the file exists and is compatible with our format.
+     * @param files
+     * @return
+     */
     private boolean imagesExistAndCompatible(File[] files) {
         for (File file : files){
             if (!file.exists() || !imageChecker.checkCompatible(file))

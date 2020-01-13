@@ -103,7 +103,7 @@ public class SampleImageSetWriter {
 
     /**
      * Write the title row, the first row of the excel file using the labels of
-     * {@link Cameras}
+     * {@link Cameras}.
      * 
      * @param sheet
      */
@@ -132,9 +132,5 @@ public class SampleImageSetWriter {
         for (++column; column <= this.labels.length;) {
             row.createCell(column).setCellValue(fileSet.getFile(labels[column - 1]).getAbsolutePath());
         }
-    }
-
-    public static void main(String[] args) {
-        SampleImageSetWriter writer = new SampleImageSetWriter(sampleSet, rootFolder)
     }
 }

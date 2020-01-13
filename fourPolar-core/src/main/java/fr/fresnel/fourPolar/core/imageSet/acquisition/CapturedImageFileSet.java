@@ -1,8 +1,6 @@
-package fr.fresnel.fourPolar.io.imageSet.acquisition;
+package fr.fresnel.fourPolar.core.imageSet.acquisition;
 
-import java.util.Base64;
 import java.util.Hashtable;
-import java.util.Set;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
@@ -41,13 +39,13 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
      * @param pol45_135
      */
     public CapturedImageFileSet(File pol0_90, File pol45_135) {
+        cameras = Cameras.Two;
         String[] labels = Cameras.getLabels(cameras);
 
         fileSet.put(labels[0], pol0_90);
         fileSet.put(labels[1], pol45_135);
 
         setName = defineSetName(pol0_90);
-        cameras = Cameras.Two;
     }
 
     /**
@@ -59,6 +57,7 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
      * @param pol135
      */
     public CapturedImageFileSet(File pol0, File pol45, File pol90, File pol135) {
+        cameras = Cameras.Four;
         String[] labels = Cameras.getLabels(cameras);
 
         fileSet.put(labels[0], pol0);
@@ -67,7 +66,7 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
         fileSet.put(labels[3], pol135);
 
         setName = defineSetName(pol0);
-        cameras = Cameras.Four;
+        
     }
 
     /**

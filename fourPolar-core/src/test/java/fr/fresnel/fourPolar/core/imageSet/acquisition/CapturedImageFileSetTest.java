@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.imageSet.acquisition;
+package fr.fresnel.fourPolar.core.imageSet.acquisition;
 
 import static org.junit.Assert.assertTrue;
 
