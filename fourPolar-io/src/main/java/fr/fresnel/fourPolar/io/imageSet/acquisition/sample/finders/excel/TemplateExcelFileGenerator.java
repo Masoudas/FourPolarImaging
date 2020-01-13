@@ -29,7 +29,7 @@ public class TemplateExcelFileGenerator {
         this.folder = PathFactory.getFolder_sampleImagesTemplateExcelFiles(rootFolder);
 
         comments = new String[4];
-        comments[0] = "Put the path to the images under the corresponding column.";
+        comments[0] = "Put the path to the images of the channel under the corresponding column.";
         comments[1] = "The path must be the remaining path after the root folder, which is:";
         comments[2] = rootFolder.getAbsolutePath();
         comments[3] = "The files in each row must correspond to different polarizations of same sample.";
@@ -53,7 +53,7 @@ public class TemplateExcelFileGenerator {
     public boolean createChannelFile(int channel) throws IOException{
         File outputFile = this.getFileName(channel);
         
-        if (!outputFile.isFile() & !outputFile.createNewFile())
+        if (!outputFile.createNewFile())
             return false;
 
         try (FileOutputStream stream = new FileOutputStream(outputFile))
