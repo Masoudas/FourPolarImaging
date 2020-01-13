@@ -44,14 +44,5 @@ public class PathFactory {
         return new File(rootFolder.getAbsolutePath());
     }
 
-    /**
-     * Creates and returns the folder that would contain the sample set excel files.
-     * @param rootFolder
-     */
-    public static File getFolder_SampleSet(File rootFolder) {
-        File SampleSet = Paths.get(getFolder_0_Params(rootFolder).getAbsolutePath(), "Sample").toFile();
-        SampleSet.mkdirs();
-        return SampleSet;
-    }
 
 }
