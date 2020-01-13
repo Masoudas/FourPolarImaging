@@ -1,6 +1,0 @@
-fr/fresnel/fourPolar/core/imagingSetup/imageFormation/Cameras.class
-fr/fresnel/fourPolar/core/imageSet/acquisition/ICapturedImageChecker.class
-fr/fresnel/fourPolar/core/imagingSetup/FourPolarImagingSetup.class
-fr/fresnel/fourPolar/core/imageSet/acquisition/ICapturedImageFileSet.class
-fr/fresnel/fourPolar/core/imageSet/acquisition/sample/SampleImageSet.class
-fr/fresnel/fourPolar/core/imageSet/acquisition/bead/BeadImageSet.class
