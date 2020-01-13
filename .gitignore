@@ -1,0 +1,11 @@
+fourPolar-core/target
+fourPolar-io/target
+fourPolar-math/target
+
+
+*.xlsx
+*.xlsx
+*.xlsx
+
+/.setting
+/.vscode
