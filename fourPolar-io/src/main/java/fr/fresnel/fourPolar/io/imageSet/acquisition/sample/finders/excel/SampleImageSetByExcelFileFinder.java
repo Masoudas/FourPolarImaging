@@ -22,12 +22,9 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
  */
 public class SampleImageSetByExcelFileFinder {
     private ICapturedImageChecker imageChecker = null;
-    private File rootFolder;
 
-    public SampleImageSetByExcelFileFinder(ICapturedImageChecker imageChecker, File rootFolder) {
+    public SampleImageSetByExcelFileFinder(ICapturedImageChecker imageChecker) {
         this.imageChecker = imageChecker;
-        this.rootFolder = rootFolder;
-
     }
 
     /**

@@ -25,8 +25,7 @@ public class SampleImageSetByExcelFileFinderTest {
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
 
-        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker(),
-                rootOneCamera);
+        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
 
         finder.findChannelImages(sampleImageSet, 1, oneCameraChannel1Excel);
         finder.findChannelImages(sampleImageSet, 2, oneCameraChannel2Excel);
@@ -60,8 +59,7 @@ public class SampleImageSetByExcelFileFinderTest {
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
 
-        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker(),
-            rootTwoCamera);
+        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
 
         finder.findChannelImages(sampleImageSet, 1, twoCameraExcel);
 
@@ -89,8 +87,7 @@ public class SampleImageSetByExcelFileFinderTest {
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
 
-        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker(),
-                rootFourCamera);
+        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
         finder.findChannelImages(sampleImageSet, 1, fourCameraExcel);
 
         // Generate sets to see if found
@@ -121,8 +118,7 @@ public class SampleImageSetByExcelFileFinderTest {
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
 
-        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker(),
-                rootOneCamera);
+        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
         IOException exception = assertThrows(IOException.class, () -> {finder.findChannelImages(sampleImageSet, 1, wrongOneCameraExcel);});
 
         System.out.println(exception.getMessage());

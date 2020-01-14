@@ -8,8 +8,6 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import java.io.File;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
