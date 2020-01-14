@@ -19,10 +19,8 @@ public class SampleImageSetByExcelFileFinderTest {
     @Test
     public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel() throws IOException {
         File rootOneCamera = new File(SampleImageSetByExcelFileFinderTest.class.getResource("OneCamera").getPath());
-        File oneCameraChannel1Excel = new File(
-                SampleImageSetByExcelFileFinderTest.class.getResource("TemplateOneCamera-Channel1.xlsx").getPath());
-        File oneCameraChannel2Excel = new File(
-                SampleImageSetByExcelFileFinderTest.class.getResource("TemplateOneCamera-Channel2.xlsx").getPath());
+        File oneCameraChannel1Excel = new File(rootOneCamera, "TemplateOneCamera-Channel1.xlsx");
+        File oneCameraChannel2Excel = new File(rootOneCamera, "TemplateOneCamera-Channel2.xlsx");
 
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
@@ -38,25 +36,26 @@ public class SampleImageSetByExcelFileFinderTest {
         // Generate sets to see if found
         ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C1.tif"));
         ICapturedImageFileSet Img2_C1 = new CapturedImageFileSet(new File(rootOneCamera, "Img2_C1.tif"));
+        System.out.println(new File(rootOneCamera, "Img2_C1.tif").exists());
 
         ICapturedImageFileSet Img1_C2 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C2.tif"));
         ICapturedImageFileSet Img2_C2 = new CapturedImageFileSet(new File(rootOneCamera, "Img2_C2.tif"));
 
-        boolean contains_Img1_C1 = sampleImageSet.getChannelImages(1).contains(Img1_C1);
-        boolean contains_Img2_C1 = sampleImageSet.getChannelImages(1).contains(Img2_C1);
+        SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup);
+        actualSampleImageSet.addImage(1, Img1_C1);
+        actualSampleImageSet.addImage(1, Img2_C1);
+        actualSampleImageSet.addImage(2, Img1_C2);
+        actualSampleImageSet.addImage(2, Img2_C2);
 
-        boolean contains_Img1_C2 = sampleImageSet.getChannelImages(2).contains(Img1_C2);
-        boolean contains_Img2_C2 = sampleImageSet.getChannelImages(2).contains(Img2_C2);
-
-        assertTrue(contains_Img1_C1 && contains_Img1_C2 && contains_Img2_C1 && contains_Img2_C2);
+        assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1)) &&
+                actualSampleImageSet.getChannelImages(2).equals(sampleImageSet.getChannelImages(2)));
     }
 
     @Test
     public void findChannelImages_TwoCamera_ReturnsThreeCapturedSets() throws IOException {
         File rootTwoCamera = new File(SampleImageSetByExcelFileFinderTest.class.getResource("TwoCamera").getPath());
 
-        File twoCameraExcel = new File(
-            SampleImageSetByExcelFileFinderTest.class.getResource("TemplateTwoCamera.xlsx").getPath());
+        File twoCameraExcel = new File(rootTwoCamera, "TemplateTwoCamera.xlsx");
 
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
@@ -74,18 +73,18 @@ public class SampleImageSetByExcelFileFinderTest {
         ICapturedImageFileSet Img3_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img3_C1_Pol0_90.tif"),
                 new File(rootTwoCamera, "Img3_C1_Pol45_135.tif"));
 
-        boolean contains_Img1_C1 = sampleImageSet.getChannelImages(1).contains(Img1_C1);
-        boolean contains_Img2_C1 = sampleImageSet.getChannelImages(1).contains(Img2_C1);
-        boolean contains_Img3_C1 = sampleImageSet.getChannelImages(1).contains(Img3_C1);
-
-        assertTrue(contains_Img1_C1 && contains_Img2_C1 && contains_Img3_C1);
+        SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup);
+        actualSampleImageSet.addImage(1, Img1_C1);
+        actualSampleImageSet.addImage(1, Img2_C1);
+        actualSampleImageSet.addImage(1, Img3_C1);
+        assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1)));
     }
 
     @Test
     public void findChannelImages_FourCamera_ReturnsThreeCapturedSets() throws IOException {
         File rootFourCamera = new File(SampleImageSetByExcelFileFinderTest.class.getResource("FourCamera").getPath());
         File fourCameraExcel = new File(
-            SampleImageSetByExcelFileFinderTest.class.getResource("TemplateFourCamera.xlsx").getPath());
+            rootFourCamera, "TemplateFourCamera.xlsx");
 
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
@@ -105,11 +104,12 @@ public class SampleImageSetByExcelFileFinderTest {
                 new File(rootFourCamera, "Img3_C1_Pol45.tif"), new File(rootFourCamera, "Img3_C1_Pol90.tif"),
                 new File(rootFourCamera, "Img3_C1_Pol135.tif"));
 
-        boolean contains_Img1_C1 = sampleImageSet.getChannelImages(1).contains(Img1_C1);
-        boolean contains_Img2_C1 = sampleImageSet.getChannelImages(1).contains(Img2_C1);
-        boolean contains_Img3_C1 = sampleImageSet.getChannelImages(1).contains(Img3_C1);
-
-        assertTrue(contains_Img1_C1 && contains_Img2_C1 && contains_Img3_C1);
+        SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup);
+        actualSampleImageSet.addImage(1, Img1_C1);
+        actualSampleImageSet.addImage(1, Img2_C1);
+        actualSampleImageSet.addImage(1, Img3_C1);
+        
+        assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1)));
     }
 
     @Test

@@ -10,7 +10,7 @@ class OneCameraChannelImageFinder implements IChannelImageFinder {
     public void find(SampleImageSetByNamePatternFinder sampleSetFinder, SampleImageSet sampleImageSet, int channel, String channelLabel) {
         File[] imagesPol0_45_90_135 = sampleSetFinder.getRootFolder()
                 .listFiles(new FilterCapturedImage(null, channelLabel, sampleSetFinder.getImageChecker().getExtension()));
-
+        
         for (File imagePol0_45_90_135 : imagesPol0_45_90_135) {
             if (!sampleSetFinder.getImageChecker().checkCompatible(imagePol0_45_90_135))
                 continue;

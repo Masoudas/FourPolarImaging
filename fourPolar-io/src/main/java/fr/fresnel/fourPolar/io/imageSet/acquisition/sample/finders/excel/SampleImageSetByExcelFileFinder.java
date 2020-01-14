@@ -78,7 +78,7 @@ public class SampleImageSetByExcelFileFinder {
         File[ ] files = new File[nColumns];
         for (int cellCtr = 0; cellCtr < nColumns; cellCtr++){
             Cell cell = row.getCell(cellCtr);
-            files[cellCtr] = new File(this.rootFolder, cell.getStringCellValue());
+            files[cellCtr] = new File(cell.getStringCellValue());
         }
 
         return files;
