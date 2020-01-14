@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarizations;
 /**
  * Models the field of view of the bead images of a particular channel.
  */
-public class FieldOfView implements IFieldOfView {
+class FieldOfView implements IFieldOfView {
     HashMap<Polarizations, Rectangle> fov = new HashMap<Polarizations, Rectangle>(4);
 
     public FieldOfView(Rectangle pol0, Rectangle pol45, Rectangle pol90, Rectangle pol135){
