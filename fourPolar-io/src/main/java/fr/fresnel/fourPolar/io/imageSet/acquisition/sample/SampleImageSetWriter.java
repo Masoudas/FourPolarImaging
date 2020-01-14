@@ -24,7 +24,27 @@ import fr.fresnel.fourPolar.io.PathFactory;
 public class SampleImageSetWriter {
     private File _sampleSetFolder;
     private String[] labels;
-    SampleImageSet sampleSet;
+    private SampleImageSet sampleSet;
+
+    /**
+     * Returns the folder where the SampleImageSet would be written.
+     * @param rootFolder
+     * @return
+     */
+    public static File getSampleSetFolder(File rootFolder) {
+        File zero_params_folder = PathFactory.getFolder_0_Params(rootFolder);
+        return Paths.get(zero_params_folder.getAbsolutePath(), "Sample").toFile();
+    }
+
+    /**
+     * Returns the name of the excel file corresponding to the channel.
+     * 
+     * @param channel
+     * @return
+     */
+    public static String getChannelFileName(int channel) {
+        return "Channel" + channel + ".xlsx";
+    }
 
     /**
      * Used for writing the SampleImageSet to disk. The image files are written as
@@ -52,13 +72,13 @@ public class SampleImageSetWriter {
      * @throws FileNotFoundException
      */
     public void write() throws IOException, FileNotFoundException {
-        for (int channel = 0; channel < this.sampleSet.getImagingSetup().getnChannel(); channel++) {
+        for (int channel = 1; channel <= this.sampleSet.getImagingSetup().getnChannel(); channel++) {
             this.writeChannel(channel);
         }
     }
 
     private void writeChannel(int channel) throws IOException, FileNotFoundException {
-        File channelFile = this.getChannelFile(channel);
+        File channelFile = new File(this._sampleSetFolder, getChannelFileName(channel));
         channelFile.createNewFile();
 
         try (FileOutputStream fStream = new FileOutputStream(channelFile)) {
@@ -75,6 +95,7 @@ public class SampleImageSetWriter {
             }
 
             workbook.write(fStream);
+            workbook.close();
         }
     }
 
@@ -84,23 +105,10 @@ public class SampleImageSetWriter {
      * @param rootFolder
      */
     private File _createFolder_SampleSet(File rootFolder) {
-        File SampleSetFolder = Paths.get(PathFactory.getFolder_0_Params(rootFolder).getAbsolutePath(), "Sample")
-                .toFile();
-        SampleSetFolder.mkdirs();
-        return SampleSetFolder;
+        File sampleSetFolder = getSampleSetFolder(rootFolder);
+        sampleSetFolder.mkdirs();
+        return sampleSetFolder;
     }
-
-    /**
-     * Create the excel file of the channel.
-     * 
-     * @param channel
-     * @return
-     */
-    private File getChannelFile(int channel) {
-        String fileName = "Channel" + channel + ".xlsx";
-        return new File(this._sampleSetFolder, fileName);
-    }
-
     /**
      * Write the title row, the first row of the excel file using the labels of
      * {@link Cameras}.
@@ -110,10 +118,8 @@ public class SampleImageSetWriter {
     private void writeTitleRow(Sheet sheet) {
         Row firstRow = sheet.createRow(0);
 
-        int column = 0;
-        firstRow.createCell(column).setCellValue("Set Name");
-        for (++column; column < this.labels.length;) {
-            firstRow.createCell(column).setCellValue(labels[column - 1]);
+        for (int column = 0; column < this.labels.length; column++) {
+            firstRow.createCell(column).setCellValue(labels[column]);
         }
     }
 
@@ -127,10 +133,9 @@ public class SampleImageSetWriter {
     private void writeImageSet(Sheet sheet, int rowIndex, ICapturedImageFileSet fileSet) {
         Row row = sheet.createRow(rowIndex);
 
-        int column = 0;
-        row.createCell(column).setCellValue(fileSet.getSetName());
-        for (++column; column <= this.labels.length;) {
-            row.createCell(column).setCellValue(fileSet.getFile(labels[column - 1]).getAbsolutePath());
+        
+        for (int column = 0; column < this.labels.length; column++) {
+            row.createCell(column).setCellValue(fileSet.getFile(labels[column]).getAbsolutePath());
         }
     }
 }
