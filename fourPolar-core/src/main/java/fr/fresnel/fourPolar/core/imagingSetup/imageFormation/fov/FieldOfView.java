@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 
 import fr.fresnel.fourPolar.core.physics.polarization.Polarizations;
 
@@ -8,7 +8,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarizations;
  * Models the field of view of the bead images of a particular channel.
  */
 class FieldOfView implements IFieldOfView {
-    HashMap<Polarizations, Rectangle> fov = new HashMap<Polarizations, Rectangle>(4);
+    Hashtable<Polarizations, Rectangle> fov = new Hashtable<Polarizations, Rectangle>(4);
 
     public FieldOfView(Rectangle pol0, Rectangle pol45, Rectangle pol90, Rectangle pol135){
         fov.put(Polarizations.pol0, pol0);
@@ -18,7 +18,7 @@ class FieldOfView implements IFieldOfView {
     }
 
     @Override
-    public Rectangle get(Polarizations pol) {
+    public Rectangle getFoV(Polarizations pol) {
         return fov.get(pol);
     }
     
