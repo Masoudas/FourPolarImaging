@@ -111,7 +111,6 @@ public class SampleImageSetByExcelFileFinderTest {
 
     @Test
     public void findChannelImage_WrongNFilesInExcel_RaisesIOException() {
-        File rootOneCamera = new File(SampleImageSetByExcelFileFinderTest.class.getResource("OneCamera").getPath());
         File wrongOneCameraExcel = new File(
             SampleImageSetByExcelFileFinderTest.class.getResource("WrongTemplateOneCamera-Channel1.xlsx").getPath());
 

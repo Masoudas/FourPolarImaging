@@ -83,9 +83,4 @@ public class SampleImageSetReaderWriterTest {
         assertTrue(newSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1)));
     }
 
-    @Test
-    public void read() {
-            
-    }
-
 }
