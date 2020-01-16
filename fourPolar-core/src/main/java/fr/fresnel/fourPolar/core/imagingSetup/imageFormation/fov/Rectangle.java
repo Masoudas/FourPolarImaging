@@ -4,13 +4,14 @@ package fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov;
  * A rectangle. Used for indicating the field of view of the bead image.
  */
 public class Rectangle {
-    private int[] _bottom = new int[2];
+    private int _xtop;
+    private int _ytop;
     private int _width;
     private int _height;
 
-    public Rectangle(int x_bottom, int y_bottom, int width, int height) {
-        this._bottom[0] = x_bottom;
-        this._bottom[1] = y_bottom;
+    public Rectangle(int xtop, int ytop, int width, int height) {
+        this._xtop = xtop;
+        this._ytop = ytop;
 
         this._height = height;
         this._width = width;
@@ -18,24 +19,31 @@ public class Rectangle {
     }
 
     /**
-     * @return the _bottom
+     * @return the xTop
      */
-    public int[] get_bottom() {
-        return _bottom;
+    public int getxTop() {
+        return this._xtop;
     }
 
     /**
-     * @return the _height
+     * @return the xTop
      */
-    public int get_height() {
-        return _height;
+    public int getyTop() {
+        return this._ytop;
     }
 
     /**
-     * @return the _width
+     * @return the height
      */
-    public int get_width() {
-        return _width;
+    public int getHeight() {
+        return this._height;
+    }
+
+    /**
+     * @return the width
+     */
+    public int getWidth() {
+        return this._width;
     }
 
 }
