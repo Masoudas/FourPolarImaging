@@ -27,7 +27,7 @@ public class FourPolarImagingSetupFromYaml {
         FourPolarImagingSetupJSONAdaptor adaptor = new FourPolarImagingSetupJSONAdaptor();
         
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        mapper.readValue(destFile, adaptor.getClass());
+        adaptor = mapper.readValue(destFile, adaptor.getClass());
 
         return adaptor.fromYaml();
     }
