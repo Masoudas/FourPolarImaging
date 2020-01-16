@@ -15,6 +15,7 @@ public class PropagationChannel implements IPropagationChannel {
     /**
      * Represents the propagation channels of the imaging system. Each channel
      * corresponds to one wavelength.
+     * 
      * @param wavelength
      * @param calibFactPol0
      * @param calibFactPol45
@@ -24,7 +25,7 @@ public class PropagationChannel implements IPropagationChannel {
     public PropagationChannel(
         double wavelength, double calibFactPol0, double calibFactPol45, double calibFactPol90, double calibFactPol135){
         this._wavelength = wavelength;
-        
+
         this._calibFact.put(Polarizations.pol0, calibFactPol0);
         this._calibFact.put(Polarizations.pol45, calibFactPol45);
         this._calibFact.put(Polarizations.pol90, calibFactPol90);
