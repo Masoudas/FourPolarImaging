@@ -83,13 +83,13 @@ public class FourPolarImagingSetup {
      * @param propagationChannel : propagation channel data
      */
     public void setPropagationChannel(int channel, IPropagationChannel propagationChannel) {
-        this._pChannel[channel] = propagationChannel;
+        this._pChannel[channel-1] = propagationChannel;
     }
 
     /**
      * @return the _pChannel
      */
     public IPropagationChannel getPropagationChannel(int channel) {
-        return this._pChannel[channel];
+        return this._pChannel[channel-1];
     }
 }
