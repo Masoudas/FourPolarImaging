@@ -26,7 +26,7 @@ public class FourPolarImagingSetupToYaml {
     }
 
     public void write() throws JsonGenerationException, JsonMappingException, IOException {
-        File destFile = new File(getDestinationFolder(this._rootFolder), this._getFileName());
+        File destFile = new File(getDestinationFolder(this._rootFolder), getFileName());
 
         FourPolarImagingSetupJSONAdaptor adaptor = new FourPolarImagingSetupJSONAdaptor();
         adaptor.toYaml(this._imagingSetup);
@@ -41,7 +41,7 @@ public class FourPolarImagingSetupToYaml {
         return PathFactory.getFolder_0_Params(rootFolder);
     }
 
-    private String _getFileName() {
+    public static String getFileName() {
         return "ImagingSetup.yaml";
     }
 }
