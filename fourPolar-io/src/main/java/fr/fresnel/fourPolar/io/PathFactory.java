@@ -8,7 +8,7 @@ import java.nio.file.Paths;
  */
 public class PathFactory {
     private static String root = "4Polar";  // Root of where we start to put files.
-    private static String folder_params = "0_Folder";   // Keeps the data about setup, files etc.
+    private static String folder_params = "0_Params";   // Keeps the data about setup, files etc.
 
     /**
      * Returns the path to the {@folder_params} folder, and makes sure that the folder is created.
