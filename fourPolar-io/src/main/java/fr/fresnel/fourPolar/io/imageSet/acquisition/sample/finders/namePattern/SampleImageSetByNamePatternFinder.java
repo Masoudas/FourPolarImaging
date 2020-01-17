@@ -4,7 +4,9 @@ import java.io.File;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.NoImageFoundOnRoot;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.WrongSampleSetFinderUsed;
 
 /**
  * Using this class, we can find the images of the sample set on the given root
@@ -24,6 +26,7 @@ public class SampleImageSetByNamePatternFinder {
     private File rootFolder = null;
     private IChannelImageFinder channelImageFinder = null;
     private ICapturedImageChecker imageChecker = null;
+    private Cameras _camera;
 
     /**
      * Used for finding the images in case of single camera.
@@ -34,6 +37,7 @@ public class SampleImageSetByNamePatternFinder {
     public SampleImageSetByNamePatternFinder(File rootFolder, ICapturedImageChecker imageChecker) {
         this.rootFolder = rootFolder;
         this.imageChecker = imageChecker;
+        this._camera = Cameras.One;
 
         this.channelImageFinder = new OneCameraChannelImageFinder();
     }
@@ -49,6 +53,7 @@ public class SampleImageSetByNamePatternFinder {
     public SampleImageSetByNamePatternFinder(File rootFolder, ICapturedImageChecker imageChecker, String labelPol0_90,
             String labelPol45_135) {
         this(rootFolder, imageChecker);
+        this._camera = Cameras.Two;
 
         polLabel = new String[2];
         polLabel[0] = labelPol0_90;
@@ -70,6 +75,7 @@ public class SampleImageSetByNamePatternFinder {
     public SampleImageSetByNamePatternFinder(File rootFolder, ICapturedImageChecker imageChecker, String labelPol0,
             String labelPol45, String labelPol90, String labelPol135) {
         this(rootFolder, imageChecker);
+        this._camera = Cameras.Four;
 
         polLabel = new String[4];
         polLabel[0] = labelPol0;
@@ -81,7 +87,10 @@ public class SampleImageSetByNamePatternFinder {
     }
 
     public void findChannelImages(SampleImageSet sampleImageSet, int channel, String channelLabel)
-            throws NoImageFoundOnRoot {
+            throws NoImageFoundOnRoot, WrongSampleSetFinderUsed {
+        if (sampleImageSet.getImagingSetup().getCameras() != this._camera){
+            throw new WrongSampleSetFinderUsed("Use class constructor for " + this._camera.toString() + " cameras");
+        }
         this.channelImageFinder.find(this, sampleImageSet, channel, channelLabel);
     }
 

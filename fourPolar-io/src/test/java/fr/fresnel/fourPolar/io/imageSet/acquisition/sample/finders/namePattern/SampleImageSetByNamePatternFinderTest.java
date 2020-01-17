@@ -79,7 +79,7 @@ public class SampleImageSetByNamePatternFinderTest {
                 new TiffImageChecker(), "Pol0", "Pol45", "Pol90", "Pol135");
 
         finder.findChannelImages(sampleImageSet, 1, null);
-
+ 
         // Generate sets to see if found
         ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootFourCamera, "Img1_C1_Pol0.tif"),
                 new File(rootFourCamera, "Img1_C1_Pol45.tif"), new File(rootFourCamera, "Img1_C1_Pol90.tif"),
