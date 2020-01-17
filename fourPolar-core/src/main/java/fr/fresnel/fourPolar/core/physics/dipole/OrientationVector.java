@@ -16,7 +16,7 @@ public class OrientationVector implements IOrientationVector {
      * @param delta : delta angle in radian.
      * @param eta : eta angle in radian.
      */
-    public OrientationVector(float rho, float delta, float eta){
+    public OrientationVector(float rho, float delta, float eta) throws OrientationAngleOutOfRange{
         _checkAngle(OrientationAngle.rho, rho);
         this._angle.put(OrientationAngle.rho, rho);
         
@@ -37,7 +37,7 @@ public class OrientationVector implements IOrientationVector {
         return (float)Math.toDegrees(this.getAngle(angle));
     }
 
-    private void _checkAngle(OrientationAngle angle, float value){
+    private void _checkAngle(OrientationAngle angle, float value) throws OrientationAngleOutOfRange{
         if (value < 0 || value > Math.PI){
             throw new OrientationAngleOutOfRange(angle.toString() + "is out of range");
         }
