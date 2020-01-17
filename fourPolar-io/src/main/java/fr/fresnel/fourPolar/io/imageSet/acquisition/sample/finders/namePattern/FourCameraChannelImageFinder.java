@@ -4,14 +4,20 @@ import java.io.File;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.NoImageFoundOnRoot;
 
 class FourCameraChannelImageFinder implements IChannelImageFinder {
 
     @Override
-    public void find(SampleImageSetByNamePatternFinder sampleSetFinder, SampleImageSet sampleImageSet, int channel, String channelLabel) {
+    public void find(SampleImageSetByNamePatternFinder sampleSetFinder, SampleImageSet sampleImageSet, int channel, String channelLabel) 
+        throws NoImageFoundOnRoot {
         String[] polLabel = sampleSetFinder.getPolLabel();
         File[] imagesPol0 = sampleSetFinder.getRootFolder()
                 .listFiles(new FilterCapturedImage(polLabel[0], channelLabel, sampleSetFinder.getImageChecker().getExtension()));
+
+        if (imagesPol0.length == 0){
+            throw new NoImageFoundOnRoot("No images found for channel " + channel);
+        }
 
         File[] polFiles = new File[4];
         for (File imagePol0 : imagesPol0) {
@@ -36,6 +42,10 @@ class FourCameraChannelImageFinder implements IChannelImageFinder {
                 System.out.println(e);
             }
 
+        }
+
+        if (sampleImageSet.getChannelImages(channel).isEmpty()){
+            throw new NoImageFoundOnRoot("No images found for channel " + channel);
         }
 
     }
