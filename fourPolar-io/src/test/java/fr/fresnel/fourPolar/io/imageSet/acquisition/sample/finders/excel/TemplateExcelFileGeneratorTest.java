@@ -15,20 +15,21 @@ public class TemplateExcelFileGeneratorTest {
 
     @Before
     public void getRoot() {
-        this.rootFolder = new File(TemplateExcelFileGeneratorTest.class.getResource("").getPath());
+        this.rootFolder = new File(TemplateExcelFileGeneratorTest.class.getResource("").getPath(),
+                "/TemplateExcelFileGeneratorTestMaterial");
+        this.rootFolder.mkdir();
     }
 
     @Test
-    public void create_OneCameraChannel1_CreatesThefileInTheResourceFolder() throws IOException {
+    public void create_OneCameraChannel1_CreatesThefileInTheResourceTestMaterialFolder() throws IOException {
         TemplateExcelFileGenerator fileGenerator = new TemplateExcelFileGenerator(Cameras.One, this.rootFolder);
 
         // If no exceptions are caught, the file has been created.
         assertTrue(fileGenerator.createChannelFile(1));
     }
 
-
     @Test
-    public void create_TwoCameraChannel2_CreatesThefileInTheResourceFolder() throws IOException {
+    public void create_TwoCameraChannel2_CreatesThefileInTheResourceTestMaterialFolder() throws IOException {
         TemplateExcelFileGenerator fileGenerator = new TemplateExcelFileGenerator(Cameras.Two, this.rootFolder);
 
         // If no exceptions are caught, the file has been created.
@@ -36,7 +37,7 @@ public class TemplateExcelFileGeneratorTest {
     }
 
     @Test
-    public void create_FourCameraChannel3_CreatesThefileInTheResourceFolder() throws IOException {
+    public void create_FourCameraChannel3_CreatesThefileInTheResourceTestMaterialFolder() throws IOException {
         TemplateExcelFileGenerator fileGenerator = new TemplateExcelFileGenerator(Cameras.Four, this.rootFolder);
 
         // If no exceptions are caught, the file has been created.

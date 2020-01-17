@@ -16,54 +16,64 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
  * sample set images.
  */
 public class TemplateExcelFileGenerator {
-    private static int titleRow = 3; // This is the actuall title row in excel file, minus 1.
-
     private Cameras camera;
     private File folder;
-    private String[] comments = null;
+    private String[] comments_examplePage = null;
+    private String[] comments_filePage = null;
+    private int _nCommentColumns;
 
     /**
-     * Default constructor. Generate a template excel file, for defining the
-     * sample set images.
+     * Default constructor. Generate a template excel file, for defining the sample
+     * set images. The second page is the example page.
+     * 
      * @param camera
      * @param rootFolder
      */
     public TemplateExcelFileGenerator(Cameras camera, File rootFolder) {
         this.camera = camera;
         this.folder = this._getFolder(rootFolder);
+        this._nCommentColumns = 8;
 
-        comments = new String[titleRow - 1];    // Don't touch this. Change the titleRow!
-        comments[0] = "Put the COMPLETE path to the images of the channel under the corresponding column.";
-        comments[1] = "The files in each row must correspond to different polarizations of same sample.";
+        comments_examplePage = new String[4];
+        comments_examplePage[0] = "This page serves as an example of how to fill this excel file.";
+        comments_examplePage[1] = "Put the COMPLETE path to the images of the channel in this file.";
+        comments_examplePage[2] = "The files in each row must correspond to different polarizations of same sample.";
+        comments_examplePage[3] = "Ensure that the title row is always present before all file names, otherwise the files would not be detected.";
 
+        comments_filePage = new String[1];
+        comments_filePage[0] = "Refer to the next sheet on instructions for filling this excel file";
     }
 
     /**
-     * To create a template file from scratch, where each string would be written in
-     * four cells of the first rows.
-     * 
-     * @param camera
+     * To create a template file from scratch. The second page would the example page.
+     * @param camera : Number of columns
+     * @param rootFolder : Root folder 
+     * @param comments_examplePage : Comments that would be put on top of the example page.
+     * @param nCommentColumns : Number of columns the comments would occupy.
      */
-    public TemplateExcelFileGenerator(Cameras camera, File rootFolder, String... comments) {
+    public TemplateExcelFileGenerator(Cameras camera, File rootFolder, String[] comments_examplePage, int nCommentColumns) {
         this(camera, rootFolder);
-        titleRow = comments.length;
-
-        this.comments = comments;
+        this.comments_examplePage = comments_examplePage;
+        this._nCommentColumns = nCommentColumns;
     }
 
-    public boolean createChannelFile(int channel) throws IOException{
+    public boolean createChannelFile(int channel) throws IOException {
         File outputFile = this.getFileName(channel);
-        
+
+        outputFile.delete();
         if (!outputFile.createNewFile())
             return false;
 
-        try (FileOutputStream stream = new FileOutputStream(outputFile))
-        {
+        try (FileOutputStream stream = new FileOutputStream(outputFile)) {
             XSSFWorkbook workBook = new XSSFWorkbook();
-            Sheet sheet = workBook.createSheet();
+            Sheet sheet1 = workBook.createSheet("FileList");
+            this.writeComments(sheet1, this.comments_filePage);
+            this.writeRow(sheet1, Cameras.getLabels(camera), this.comments_filePage.length + 1);
 
-            this.writeComments(sheet);
-            this.writeTitleRow(sheet);
+            Sheet sheet2 = workBook.createSheet("ExamplePage");
+            this.writeComments(sheet2, this.comments_examplePage);
+            this.writeRow(sheet2, Cameras.getLabels(camera), this.comments_examplePage.length + 1);
+            this.writeRow(sheet2, this._getExampleFileNames(), this.comments_examplePage.length + 2);
 
             workBook.write(stream);
             workBook.close();
@@ -73,6 +83,7 @@ public class TemplateExcelFileGenerator {
 
     /**
      * Creates and returns the folder that would contain the template excel files.
+     * 
      * @param rootFolder
      * @return
      */
@@ -86,23 +97,31 @@ public class TemplateExcelFileGenerator {
     }
 
     /**
-     * Writes comments to the excel file.
+     * Writes comments to the excel file, and specify how many columns they should
+     * occupy. Each comment would be written in one row.
      * 
      * @param sheet
+     * @param comments
      */
-    private void writeComments(Sheet sheet) {
+    private void writeComments(Sheet sheet, String[] comments) {
         for (int ctr = 0; ctr < comments.length; ctr++) {
             Row row = sheet.createRow(ctr);
-            for (int cellctr = 0; cellctr < 6; cellctr++) row.createCell(cellctr);
-            
+            for (int cellctr = 0; cellctr < this._nCommentColumns; cellctr++)
+                row.createCell(cellctr);
+
             row.getCell(0).setCellValue(comments[ctr]);
-            sheet.addMergedRegion(new CellRangeAddress(ctr, ctr, 0, 5));
+            sheet.addMergedRegion(new CellRangeAddress(ctr, ctr, 0, this._nCommentColumns - 1));
         }
     }
 
-    private void writeTitleRow(Sheet sheet) {
-        String[] labels = Cameras.getLabels(camera);
-        Row row = sheet.createRow(getTitleRowIndex());
+    /**
+     * Writes an array of strings into a row
+     * 
+     * @param sheet
+     * @param labels
+     */
+    private void writeRow(Sheet sheet, String[] labels, int rownum) {
+        Row row = sheet.createRow(rownum);
 
         for (int i = 0; i < labels.length; i++) {
             row.createCell(i).setCellValue(labels[i]);
@@ -112,12 +131,22 @@ public class TemplateExcelFileGenerator {
     }
 
     /**
-     * Returns the row in the excel files that defines the labels.
+     * Returns example file names for each camera case.
      * 
-     * @return row number
+     * @return
      */
-    public static int getTitleRowIndex() {
-        return titleRow;
+    private String[] _getExampleFileNames() {
+        if (Cameras.One == this.camera) {
+            String[] fileName = { "C:\\rootFolder\\Img_Pol0_45_90_135,tif" };
+            return fileName;
+        } else if (Cameras.Two == this.camera) {
+            String[] fileName = { "C:\\rootFolder\\Img_Pol0_90", "C:\\rootFolder\\Img_Pol45_135,tif" };
+            return fileName;
+        } else {
+            String[] fileName = { "C:\\rootFolder\\Img_Pol0.tif", "C:\\rootFolder\\Img_Pol45.tif", "C:\\rootFolder\\Img_Pol90.tif",
+                    "C:\\rootFolder\\Img_Pol135.tif" };
+            return fileName;
+        }
     }
 
 }
