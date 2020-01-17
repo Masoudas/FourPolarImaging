@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
@@ -13,12 +14,24 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.ExcelIncorrentRow;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.MissingExcelTitleRow;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.TemplateSampleSetExcelNotFound;
 import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
 
 public class SampleImageSetByExcelFileFinderTest {
+    private File root;
+
+    @Before
+    public void setRoot() {
+        this.root = new File(SampleImageSetByExcelFileFinderTest.class
+                .getResource("SampleImageSetByExcelFileFinderTestMaterial").getPath());
+    }
+
     @Test
-    public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel() throws IOException {
-        File rootOneCamera = new File(SampleImageSetByExcelFileFinderTest.class.getResource("OneCamera").getPath());
+    public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel()
+            throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow {
+        File rootOneCamera = new File(root, "OneCamera");
         File oneCameraChannel1Excel = new File(rootOneCamera, "TemplateOneCamera-Channel1.xlsx");
         File oneCameraChannel2Excel = new File(rootOneCamera, "TemplateOneCamera-Channel2.xlsx");
 
@@ -46,14 +59,14 @@ public class SampleImageSetByExcelFileFinderTest {
         actualSampleImageSet.addImage(2, Img1_C2);
         actualSampleImageSet.addImage(2, Img2_C2);
 
-        assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1)) &&
-                actualSampleImageSet.getChannelImages(2).equals(sampleImageSet.getChannelImages(2)));
+        assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1))
+                && actualSampleImageSet.getChannelImages(2).equals(sampleImageSet.getChannelImages(2)));
     }
 
     @Test
-    public void findChannelImages_TwoCamera_ReturnsThreeCapturedSets() throws IOException {
-        File rootTwoCamera = new File(SampleImageSetByExcelFileFinderTest.class.getResource("TwoCamera").getPath());
-
+    public void findChannelImages_TwoCamera_ReturnsThreeCapturedSets()
+            throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow {
+        File rootTwoCamera = new File(root, "TwoCamera");
         File twoCameraExcel = new File(rootTwoCamera, "TemplateTwoCamera.xlsx");
 
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
@@ -79,10 +92,10 @@ public class SampleImageSetByExcelFileFinderTest {
     }
 
     @Test
-    public void findChannelImages_FourCamera_ReturnsThreeCapturedSets() throws IOException {
-        File rootFourCamera = new File(SampleImageSetByExcelFileFinderTest.class.getResource("FourCamera").getPath());
-        File fourCameraExcel = new File(
-            rootFourCamera, "TemplateFourCamera.xlsx");
+    public void findChannelImages_FourCamera_ReturnsThreeCapturedSets()
+            throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow {
+        File rootFourCamera = new File(root, "FourCamera");
+        File fourCameraExcel = new File(rootFourCamera, "TemplateFourCamera.xlsx");
 
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
@@ -105,20 +118,36 @@ public class SampleImageSetByExcelFileFinderTest {
         actualSampleImageSet.addImage(1, Img1_C1);
         actualSampleImageSet.addImage(1, Img2_C1);
         actualSampleImageSet.addImage(1, Img3_C1);
-        
+
         assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1)));
     }
 
     @Test
-    public void findChannelImage_WrongNFilesInExcel_RaisesIOException() {
-        File wrongOneCameraExcel = new File(
-            SampleImageSetByExcelFileFinderTest.class.getResource("WrongTemplateOneCamera-Channel1.xlsx").getPath());
+    public void findChannelImage_WrongNFilesInExcel_RaisesExcelIncorrentRow() {
+        File wrongOneCameraExcel = new File(root, "WrongTemplateOneCamera-Channel1.xlsx");
 
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
 
         SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
-        IOException exception = assertThrows(IOException.class, () -> {finder.findChannelImages(sampleImageSet, 1, wrongOneCameraExcel);});
+        ExcelIncorrentRow exception = assertThrows(ExcelIncorrentRow.class, () -> {
+            finder.findChannelImages(sampleImageSet, 1, wrongOneCameraExcel);
+        });
+
+        System.out.println(exception.getMessage());
+    }
+
+    @Test
+    public void findChannelImage_NoTitleRow_RaisesMissingExcelTitleRow() {
+        File wrongOneCameraExcel = new File(root, "MissingTitleTemplateOneCamera-Channel1.xlsx");
+
+        FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
+        SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
+
+        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
+        MissingExcelTitleRow exception = assertThrows(MissingExcelTitleRow.class, () -> {
+            finder.findChannelImages(sampleImageSet, 1, wrongOneCameraExcel);
+        });
 
         System.out.println(exception.getMessage());
     }

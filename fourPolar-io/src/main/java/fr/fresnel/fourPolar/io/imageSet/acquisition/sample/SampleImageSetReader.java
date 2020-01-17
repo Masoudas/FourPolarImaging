@@ -14,6 +14,9 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.SampleImageNotFound;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.SampleSetExcelNotFound;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.ExcelIncorrentRow;
 
 /**
  * Using this class, we can read the SampleImageSet class from the disk. In
@@ -38,7 +41,14 @@ public class SampleImageSetReader {
         this._sampleSetFolder = SampleImageSetWriter.getSampleSetFolder(rootFolder);
     }
 
-    public SampleImageSet read() throws IOException {
+    /**
+     * Read and return the sample image set from the disk.
+     * @return
+     * @throws SampleImageNotFound
+     * @throws ExcelIncorrentRow
+     * @throws SampleSetExcelNotFound
+     */
+    public SampleImageSet read() throws SampleImageNotFound, ExcelIncorrentRow, SampleSetExcelNotFound {
         this._sampleImageSet = new SampleImageSet(this._imagingSetup);
         for (int channel = 1; channel <= this._imagingSetup.getnChannel(); channel++) {
             this.readChannel(channel);
@@ -52,7 +62,7 @@ public class SampleImageSetReader {
      * 
      * @throws FileNotFoundException
      */
-    private void readChannel(int channel) throws IOException {
+    private void readChannel(int channel) throws SampleImageNotFound, ExcelIncorrentRow, SampleSetExcelNotFound {
         File channelFile = new File(this._sampleSetFolder, SampleImageSetWriter.getChannelFileName(channel));
 
         try (FileInputStream fStream = new FileInputStream(channelFile)) {
@@ -66,6 +76,8 @@ public class SampleImageSetReader {
             }
             workbook.close();
 
+        } catch (IOException e) {
+            throw new SampleSetExcelNotFound("File not found for channel " + channel);
         }
     }
 
@@ -74,15 +86,16 @@ public class SampleImageSetReader {
      * 
      * @param row
      * @return
-     * @throws IOException
+     * @throws ExcelIncorrentRow
+     * @throws SampleImageNotFound
      */
-    private File[] createFiles(Row row) throws IOException {
+    private File[] createFiles(Row row) throws SampleImageNotFound, ExcelIncorrentRow {
         short nColumns = row.getLastCellNum();
         int nImages = Cameras.getNImages(this._imagingSetup.getCameras());
 
         if (nColumns != nImages) {
             int actualRow = row.getRowNum() + 1;
-            throw new IOException(
+            throw new ExcelIncorrentRow(
                     "The excel file does not have " + nImages + " column(s) at the " + actualRow + "-th row");
         }
 
@@ -92,11 +105,9 @@ public class SampleImageSetReader {
             files[cellCtr] = new File(cell.getStringCellValue());
 
             if (!files[cellCtr].exists()) {
-                throw new IOException(files[cellCtr].getPath() + " does not exist on the root.");
+                throw new SampleImageNotFound(files[cellCtr]);
             }
-
         }
-
         return files;
     }
 

@@ -12,7 +12,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
-import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.IncorrectSampleSetTemplateExcelFormat;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.ExcelIncorrentRow;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.MissingExcelTitleRow;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.TemplateSampleSetExcelNotFound;
 import fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.excel.TemplateExcelFileGenerator;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
@@ -37,11 +38,11 @@ public class SampleImageSetByExcelFileFinder {
      * @param sampleImageSet : Sample image set to be filled.
      * @param channel        : Channel number.
      * @param channelFile    : The path to the corresponding excel file.
-     * @throws IOException
      * @throws IncorrectSampleSetExcelFormat
+     * @throws TemplateSampleSetExcelNotFound
      */
     public void findChannelImages(SampleImageSet sampleImageSet, int channel, File channelFile)
-            throws TemplateSampleSetExcelNotFound, IncorrectSampleSetTemplateExcelFormat {
+            throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow {
         try (XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(channelFile))) {
             Sheet sheet = workbook.getSheetAt(0);
 
@@ -58,7 +59,7 @@ public class SampleImageSetByExcelFileFinder {
                 }
             }
         } catch (IOException e){
-            throw new IncorrectSampleSetTemplateExcelFormat("The template file does not exist or corrupted.");
+            throw new TemplateSampleSetExcelNotFound("The template file does not exist or corrupted.");
 
         }
     }
@@ -71,11 +72,11 @@ public class SampleImageSetByExcelFileFinder {
      * @return
      * @throws IOException
      */
-    private File[] createFiles(int nImages, Row row) throws IncorrectSampleSetTemplateExcelFormat {
+    private File[] createFiles(int nImages, Row row) throws ExcelIncorrentRow {
         short nColumns = row.getLastCellNum();
         if (nColumns != nImages) {
             int actualRow = row.getRowNum() + 1;
-            throw new IncorrectSampleSetTemplateExcelFormat(
+            throw new ExcelIncorrentRow(
                     "The excel file does not have " + nImages + " column(s) at the " + actualRow + "-th row");
         }
 
@@ -111,18 +112,18 @@ public class SampleImageSetByExcelFileFinder {
             return new CapturedImageFileSet(files[0], files[1], files[2], files[3]);
     }
 
-    private int _findTitleRow(Sheet sheet, Cameras camera) throws IncorrectSampleSetTemplateExcelFormat{
+    private int _findTitleRow(Sheet sheet, Cameras camera) throws MissingExcelTitleRow{
         String[] titleRow = Cameras.getLabels(camera);
         int result = -1;
         for (int rowNum = 0; rowNum < sheet.getLastRowNum() & result < 0; rowNum++) {
             Row row = sheet.getRow(rowNum);
-            if (this._checkColumnAgainsStrings(camera, titleRow, row)) {
+            if (row != null && this._checkColumnAgainsStrings(camera, titleRow, row)) {
                 result = rowNum;
             }
         }
 
         if (result < 0) {
-            throw new IncorrectSampleSetTemplateExcelFormat("The title row was not found in the excel file.");
+            throw new MissingExcelTitleRow("The title row was not found in the excel file.");
         }
 
         return result;
@@ -139,7 +140,8 @@ public class SampleImageSetByExcelFileFinder {
     private boolean _checkColumnAgainsStrings(Cameras camera, String[] titleRow, Row row) {
         boolean result = true;
         for (int columnNum = 0; columnNum < Cameras.getNImages(camera) && result == true; columnNum++) {
-            if (!titleRow[columnNum].equals(row.getCell(columnNum).getStringCellValue())) {
+            String cellText = row.getCell(columnNum).getStringCellValue();
+            if (!titleRow[columnNum].equals(cellText)) {
                 result = false;
             }
         }

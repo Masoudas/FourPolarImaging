@@ -15,6 +15,8 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.PathFactory;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.CorruptSampleSetExcel;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.SampleSetExcelNotFound;
 
 /**
  * Used for writing the SampleImageSet to disk. The image files are written as
@@ -28,6 +30,7 @@ public class SampleImageSetWriter {
 
     /**
      * Returns the folder where the SampleImageSet would be written.
+     * 
      * @param rootFolder
      * @return
      */
@@ -71,15 +74,19 @@ public class SampleImageSetWriter {
      * @throws IOException
      * @throws FileNotFoundException
      */
-    public void write() throws IOException, FileNotFoundException {
+    public void write() throws IOException, CorruptSampleSetExcel {
         for (int channel = 1; channel <= this.sampleSet.getImagingSetup().getnChannel(); channel++) {
             this.writeChannel(channel);
         }
     }
 
-    private void writeChannel(int channel) throws IOException, FileNotFoundException {
+    private void writeChannel(int channel) throws IOException, CorruptSampleSetExcel {
         File channelFile = new File(this._sampleSetFolder, getChannelFileName(channel));
-        channelFile.createNewFile();
+        try {
+            channelFile.createNewFile();
+        } catch (IOException e) {
+            throw new IOException("Could not create the excel file for sample set.");
+        }
 
         try (FileOutputStream fStream = new FileOutputStream(channelFile)) {
             XSSFWorkbook workbook = new XSSFWorkbook();
@@ -96,7 +103,12 @@ public class SampleImageSetWriter {
 
             workbook.write(fStream);
             workbook.close();
+        } catch (FileNotFoundException e) {
+            throw new IOException("");
+        } catch (IOException e) {
+            throw new CorruptSampleSetExcel("");
         }
+
     }
 
     /**
@@ -109,6 +121,7 @@ public class SampleImageSetWriter {
         sampleSetFolder.mkdirs();
         return sampleSetFolder;
     }
+
     /**
      * Write the title row, the first row of the excel file using the labels of
      * {@link Cameras}.
@@ -133,7 +146,6 @@ public class SampleImageSetWriter {
     private void writeImageSet(Sheet sheet, int rowIndex, ICapturedImageFileSet fileSet) {
         Row row = sheet.createRow(rowIndex);
 
-        
         for (int column = 0; column < this.labels.length; column++) {
             row.createCell(column).setCellValue(fileSet.getFile(labels[column]).getAbsolutePath());
         }
