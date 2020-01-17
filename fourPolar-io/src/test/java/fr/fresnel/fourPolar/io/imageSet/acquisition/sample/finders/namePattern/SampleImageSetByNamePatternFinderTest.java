@@ -10,11 +10,12 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.NoImageFoundOnRoot;
 import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
 
 public class SampleImageSetByNamePatternFinderTest {
-    @Test
-    public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel() {
+        @Test
+        public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel() throws NoImageFoundOnRoot {
         File rootOneCamera = new File(SampleImageSetByNamePatternFinderTest.class.getResource("OneCamera").getPath());
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
@@ -23,8 +24,6 @@ public class SampleImageSetByNamePatternFinderTest {
 
         finder.findChannelImages(sampleImageSet, 1, "C1"); 
         finder.findChannelImages(sampleImageSet, 2, "C2");
-
-        System.out.println(sampleImageSet.getChannelImages(1).size());
 
         // Generate sets to see if found
         ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C1.tif"));
@@ -43,7 +42,7 @@ public class SampleImageSetByNamePatternFinderTest {
     }
 
     @Test
-    public void findChannelImages_TwoCamera_ReturnsThreeCapturedSets() {
+    public void findChannelImages_TwoCamera_ReturnsThreeCapturedSets() throws NoImageFoundOnRoot {
         File rootTwoCamera = new File(SampleImageSetByNamePatternFinderTest.class.getResource("TwoCamera").getPath());
 
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
@@ -70,7 +69,7 @@ public class SampleImageSetByNamePatternFinderTest {
     }
 
     @Test
-    public void findChannelImages_FourCamera_ReturnsThreeCapturedSets() {
+    public void findChannelImages_FourCamera_ReturnsThreeCapturedSets() throws NoImageFoundOnRoot {
         File rootFourCamera = new File(SampleImageSetByNamePatternFinderTest.class.getResource("FourCamera").getPath());
 
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);

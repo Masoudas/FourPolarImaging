@@ -4,7 +4,7 @@ import java.io.File;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
-
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.NoImageFoundOnRoot;
 
 /**
  * Using this class, we can find the images of the sample set on the given root
@@ -46,8 +46,8 @@ public class SampleImageSetByNamePatternFinder {
      * @param labelPol0_90
      * @param labelPol45_135
      */
-    public SampleImageSetByNamePatternFinder(File rootFolder, ICapturedImageChecker imageChecker,
-            String labelPol0_90, String labelPol45_135) {
+    public SampleImageSetByNamePatternFinder(File rootFolder, ICapturedImageChecker imageChecker, String labelPol0_90,
+            String labelPol45_135) {
         this(rootFolder, imageChecker);
 
         polLabel = new String[2];
@@ -67,10 +67,10 @@ public class SampleImageSetByNamePatternFinder {
      * @param labelPol90
      * @param labelPol135
      */
-    public SampleImageSetByNamePatternFinder(File rootFolder, ICapturedImageChecker imageChecker,
-            String labelPol0, String labelPol45, String labelPol90, String labelPol135) {
+    public SampleImageSetByNamePatternFinder(File rootFolder, ICapturedImageChecker imageChecker, String labelPol0,
+            String labelPol45, String labelPol90, String labelPol135) {
         this(rootFolder, imageChecker);
-        
+
         polLabel = new String[4];
         polLabel[0] = labelPol0;
         polLabel[1] = labelPol45;
@@ -80,7 +80,8 @@ public class SampleImageSetByNamePatternFinder {
         this.channelImageFinder = new FourCameraChannelImageFinder();
     }
 
-    public void findChannelImages(SampleImageSet sampleImageSet, int channel, String channelLabel) {
+    public void findChannelImages(SampleImageSet sampleImageSet, int channel, String channelLabel)
+            throws NoImageFoundOnRoot {
         this.channelImageFinder.find(this, sampleImageSet, channel, channelLabel);
     }
 
