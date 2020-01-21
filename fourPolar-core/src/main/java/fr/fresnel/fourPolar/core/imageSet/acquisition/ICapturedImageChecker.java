@@ -1,6 +1,9 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition;
 
 import java.io.File;
+import java.io.IOException;
+
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
 
 /**
  * Used for checking that a captured image file has the desired format,
@@ -13,11 +16,13 @@ public interface ICapturedImageChecker {
      */
     public String getExtension();
     
-        /**
+    /**
      * Checks compatibility and returns a boolean.
      * @param imagePath
      * @return
+     * @throws IOException
+     * @throws CorruptCapturedImage
      */
-    public boolean checkCompatible(File imagePath);
+    public boolean checkCompatible(File imagePath) throws IOException, CorruptCapturedImage;
 
 }
