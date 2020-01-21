@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.Rectangle;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarizations;
 
 /**

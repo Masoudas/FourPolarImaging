@@ -1,13 +1,12 @@
 package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.excel;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
@@ -20,9 +19,9 @@ import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.ex
 import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
 
 public class SampleImageSetByExcelFileFinderTest {
-    private File root;
+        private File root;
 
-    @Before
+    @BeforeAll
     public void setRoot() {
         this.root = new File(SampleImageSetByExcelFileFinderTest.class
                 .getResource("SampleImageSetByExcelFileFinderTestMaterial").getPath());

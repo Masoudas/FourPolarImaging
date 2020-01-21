@@ -1,9 +1,10 @@
 package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;

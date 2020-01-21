@@ -1,19 +1,19 @@
 package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.excel;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 public class TemplateExcelFileGeneratorTest {
     File rootFolder;
 
-    @Before
+    @BeforeAll
     public void getRoot() {
         this.rootFolder = new File(TemplateExcelFileGeneratorTest.class.getResource("").getPath(),
                 "/TemplateExcelFileGeneratorTestMaterial");

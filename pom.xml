@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -21,13 +21,61 @@
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
+  <repositories>
+    <repository>
+      <id>scijava.public</id>
+      <url>https://maven.scijava.org/content/groups/public</url>
+    </repository>
+  </repositories>
+
   <dependencies>
+    <!-- ImgLib2 dependencies -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <groupId>net.imglib2</groupId>
+      <artifactId>imglib2</artifactId>
+      <version>5.8.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>net.imglib2</groupId>
+      <artifactId>imglib2-ij</artifactId>
+      <version>2.0.0-beta-45</version>
+    </dependency>
+
+    <!-- SCFIO dependency -->
+    <dependency>
+      <groupId>io.scif</groupId>
+      <artifactId>scifio</artifactId>
+      <version>0.9.5-SNAPSHOT</version>
+    </dependency>
+
+    <!-- Test dependencies -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>5.6.0-RC1</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.6.0-RC1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-engine</artifactId>
+      <version>1.6.0</version>
+    </dependency> -->
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.6.0</version>
+    </dependency>
+
   </dependencies>
 
   <build>

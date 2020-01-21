@@ -1,12 +1,12 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition.sample;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;

@@ -1,10 +1,10 @@
 package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern;
-        
-import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.*;
+
+import org.junit.jupiter.api.Test;
 
 public class FilterCapturedImagesTest {
 

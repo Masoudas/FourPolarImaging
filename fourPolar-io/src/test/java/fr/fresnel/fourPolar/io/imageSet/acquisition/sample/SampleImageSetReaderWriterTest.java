@@ -1,11 +1,12 @@
 package fr.fresnel.fourPolar.io.imageSet.acquisition.sample;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
@@ -22,7 +23,7 @@ import fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern.S
 public class SampleImageSetReaderWriterTest {
         private File root;
 
-        @Before
+        @BeforeAll
         public void setRoot() {
                 this.root = new File(SampleImageSetReaderWriterTest.class.getResource("").getPath(),
                                 "SampleImageSetReaderWriterTestMaterial");
