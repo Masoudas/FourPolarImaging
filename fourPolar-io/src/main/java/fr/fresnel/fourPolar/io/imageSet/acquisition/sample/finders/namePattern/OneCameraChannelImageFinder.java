@@ -34,6 +34,11 @@ class OneCameraChannelImageFinder implements IChannelImageFinder {
                 this._rejectedImages.add(e.getRejectedImage());
             }
         }
+
+        if (sampleImageSet.getChannelImages(channel).isEmpty()) {
+            throw new NoImageFoundOnRoot("No images found for channel " + channel);
+        }
+
         return this._rejectedImages;
     }
 
