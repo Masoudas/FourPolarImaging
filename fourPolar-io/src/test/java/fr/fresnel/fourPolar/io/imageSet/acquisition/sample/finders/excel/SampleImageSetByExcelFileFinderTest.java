@@ -4,12 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
@@ -22,9 +24,9 @@ public class SampleImageSetByExcelFileFinderTest {
     static private File root;
 
     @BeforeAll
-    public void setRoot() {
+    private static void setRoot() {
         root = new File(SampleImageSetByExcelFileFinderTest.class
-                .getResource("SampleImageSetByExcelFileFinderTestMaterial").getPath());
+                .getResource("SampleImageSetByExcelFileFinder").getPath());
     }
 
     @Test
@@ -39,8 +41,8 @@ public class SampleImageSetByExcelFileFinderTest {
 
         SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
 
-        finder.findChannelImages(sampleImageSet, 1, oneCameraChannel1Excel);
-        finder.findChannelImages(sampleImageSet, 2, oneCameraChannel2Excel);
+        List<RejectedCapturedImage> chan1 = finder.findChannelImages(sampleImageSet, 1, oneCameraChannel1Excel);
+        List<RejectedCapturedImage> chan2 = finder.findChannelImages(sampleImageSet, 2, oneCameraChannel2Excel);
 
         System.out.println(sampleImageSet.getChannelImages(1).size());
 
@@ -58,8 +60,10 @@ public class SampleImageSetByExcelFileFinderTest {
         actualSampleImageSet.addImage(2, Img1_C2);
         actualSampleImageSet.addImage(2, Img2_C2);
 
+
         assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1))
-                && actualSampleImageSet.getChannelImages(2).equals(sampleImageSet.getChannelImages(2)));
+                && actualSampleImageSet.getChannelImages(2).equals(sampleImageSet.getChannelImages(2))
+                && chan1.size() == 3 && chan2.size() == 3);
     }
 
     @Test
