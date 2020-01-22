@@ -16,18 +16,16 @@ public interface ICapturedImageChecker {
     public String getExtension();
     
     /**
-     * Checks compatibility and returns a boolean.
+     * Checks compatibility and throws exception. Checks include (but not limited to):
+     * 1- Extension is correct
+     * 2- File exists
+     * 3- File is readable
+     * 4- Content satisfies constraints.
+     * 
      * @param imagePath
      * @return
      * @throws CorruptCapturedImage
      */
-    public boolean checkCompatible(File imagePath) throws CorruptCapturedImage;
-
-    /**
-     * Returns a message of incompatibility as string;
-     * @return
-     */
-    public String getIncompatibilityMessage();
-    
+    public void checkCompatible(File imagePath) throws CorruptCapturedImage;    
 
 }

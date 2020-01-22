@@ -16,6 +16,11 @@ import io.scif.SCIFIO;
  * criteria.
  */
 public class TiffImageChecker implements ICapturedImageChecker {
+    public static String notExist = "The file does not exist or cannot be accessed.";
+    public static String not16bit = "The given tiff is not 16 bit.";
+    public static String badExtension = "The given file is not tiff.";
+    public static String corruptContent =  "File IO issue or Corrupt tiff content.";
+    public static String formatError = "Format rendition error in SCIFIO package.";
 
     /**
      * Makes sure that the provided file is tif, and has bit depth of at least 16
@@ -25,33 +30,33 @@ public class TiffImageChecker implements ICapturedImageChecker {
      * @throws CorruptCapturedImage
      */
     @Override
-    public boolean checkCompatible(File image) throws CorruptCapturedImage {
-        if (!this._checkExtension(image.getName())) {
-            return false;
+    public void checkCompatible(File image) throws CorruptCapturedImage {
+        try {
+            if (!image.isFile()){
+                throw new CorruptCapturedImage(notExist);
+            }                 
+        } catch (SecurityException e) {
+            throw new CorruptCapturedImage(notExist);
         }
+        
+        this._checkExtension(image.getName());
 
         try {
-            if (this._bitDepthAbove16(image)) {
-                return true;
-            } else {
-                return false;
-            }
+            this._bitDepthAbove16(image);
         } catch (IOException e) {
-            throw new CorruptCapturedImage("File IO issue or Corrupt image content", e);
+            throw new CorruptCapturedImage(corruptContent, e);
         } catch (FormatException e) {
-            throw new CorruptCapturedImage("Format rendition error", e);
+            throw new CorruptCapturedImage(formatError, e);
         }
     }
 
-    private boolean _checkExtension(String fileName) {
+    private void _checkExtension(String fileName) throws CorruptCapturedImage {
         int index = fileName.lastIndexOf('.');
         String extension = index > 0 ? fileName.substring(index + 1) : null;
 
         if (extension == null || !extension.equals(this.getExtension())) {
-            return false;
-        } else {
-            return true;
-        }
+            throw new CorruptCapturedImage(badExtension);
+        } 
     }
 
     /**
@@ -62,7 +67,7 @@ public class TiffImageChecker implements ICapturedImageChecker {
      * @throws IOException
      * @throws FormatException
      */
-    private boolean _bitDepthAbove16(File image) throws FormatException, IOException {
+    private void _bitDepthAbove16(File image) throws FormatException, IOException, CorruptCapturedImage {
         final SCIFIO scifio = new SCIFIO();
         final Reader reader = scifio.initializer().initializeReader(image.getAbsolutePath());
         final Metadata meta = reader.getMetadata();
@@ -70,21 +75,13 @@ public class TiffImageChecker implements ICapturedImageChecker {
         final ImageMetadata iMeta = meta.get(0);
 
         if (iMeta.getBitsPerPixel() < 16) {
-            return false;
-        } else {
-            return true;
-        }
-
+            throw new CorruptCapturedImage(not16bit);
+        } 
     }
 
     @Override
     public String getExtension() {
         return "tif";
-    }
-
-    @Override
-    public String getIncompatibilityMessage() {
-        return "The given tiff image does not have compatible format.";
     }
 
 }
