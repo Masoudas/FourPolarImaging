@@ -14,7 +14,7 @@ public class RejectedCapturedImage {
      * @param image
      * @param reason
      */
-    public void set(File image, String reason) {
+    public RejectedCapturedImage(File image, String reason) {
         this._image = image;
         this._reason = reason;
     }

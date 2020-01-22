@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import io.scif.FormatException;
 import io.scif.ImageMetadata;
 import io.scif.Metadata;
@@ -33,29 +34,29 @@ public class TiffImageChecker implements ICapturedImageChecker {
     public void checkCompatible(File image) throws CorruptCapturedImage {
         try {
             if (!image.isFile()){
-                throw new CorruptCapturedImage(notExist);
+                throw new CorruptCapturedImage(new RejectedCapturedImage(image, notExist));
             }                 
         } catch (SecurityException e) {
-            throw new CorruptCapturedImage(notExist);
+            throw new CorruptCapturedImage(new RejectedCapturedImage(image, notExist));
         }
         
-        this._checkExtension(image.getName());
+        this._checkExtension(image);
 
         try {
             this._bitDepthAbove16(image);
         } catch (IOException e) {
-            throw new CorruptCapturedImage(corruptContent, e);
+            throw new CorruptCapturedImage(new RejectedCapturedImage(image, corruptContent));
         } catch (FormatException e) {
-            throw new CorruptCapturedImage(formatError, e);
+            throw new CorruptCapturedImage(new RejectedCapturedImage(image, formatError));
         }
     }
 
-    private void _checkExtension(String fileName) throws CorruptCapturedImage {
-        int index = fileName.lastIndexOf('.');
-        String extension = index > 0 ? fileName.substring(index + 1) : null;
+    private void _checkExtension(File image) throws CorruptCapturedImage {
+        int index = image.getName().lastIndexOf('.');
+        String extension = index > 0 ? image.getName().substring(index + 1) : null;
 
         if (extension == null || !extension.equals(this.getExtension())) {
-            throw new CorruptCapturedImage(badExtension);
+            throw new CorruptCapturedImage(new RejectedCapturedImage(image, badExtension));
         } 
     }
 
@@ -75,7 +76,7 @@ public class TiffImageChecker implements ICapturedImageChecker {
         final ImageMetadata iMeta = meta.get(0);
 
         if (iMeta.getBitsPerPixel() < 16) {
-            throw new CorruptCapturedImage(not16bit);
+            throw new CorruptCapturedImage(new RejectedCapturedImage(image, not16bit));
         } 
     }
 
