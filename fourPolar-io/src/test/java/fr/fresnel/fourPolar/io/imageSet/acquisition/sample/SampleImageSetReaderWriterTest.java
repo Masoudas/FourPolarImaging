@@ -9,13 +9,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.CorruptSampleSetExcel;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.SampleSetExcelNotFound;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.ExcelIncorrentRow;
-import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
 import fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern.SampleImageSetByNamePatternFinder;
 
 /**
@@ -27,7 +27,7 @@ public class SampleImageSetReaderWriterTest {
         @BeforeAll
         static void setRoot() {
                 root = new File(SampleImageSetReaderWriterTest.class.getResource("").getPath(),
-                                "SampleImageSetReaderWriterTestMaterial");
+                                "SampleImageSetReaderWriter");
         }
 
         @Test
@@ -36,7 +36,7 @@ public class SampleImageSetReaderWriterTest {
                         CorruptCapturedImage {
                 File rootOneCamera = new File(root, "OneCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
+                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new DummyTiffChecker());
 
                 SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootOneCamera);
 
@@ -58,7 +58,7 @@ public class SampleImageSetReaderWriterTest {
                         ExcelIncorrentRow, SampleSetExcelNotFound, CorruptCapturedImage {
                 File rootTwoCamera = new File(root, "TwoCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
+                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new DummyTiffChecker());
 
                 SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootTwoCamera,
                                 "Pol0_90", "Pol45_135");
@@ -79,7 +79,7 @@ public class SampleImageSetReaderWriterTest {
                         ExcelIncorrentRow, SampleSetExcelNotFound, CorruptCapturedImage {
                 File rootFourCamera = new File(root, "FourCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
+                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new DummyTiffChecker());
 
                 SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootFourCamera, "Pol0",
                                 "Pol45", "Pol90", "Pol135");
@@ -95,4 +95,18 @@ public class SampleImageSetReaderWriterTest {
                 assertTrue(newSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1)));
         }
 
+}
+
+class DummyTiffChecker implements ICapturedImageChecker {
+
+        @Override
+        public String getExtension() {
+                return "tif";
+        }
+
+        @Override
+        public void checkCompatible(File imagePath) throws CorruptCapturedImage {
+        }
+
+        
 }
