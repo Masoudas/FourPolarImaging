@@ -6,9 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.util.List;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
@@ -21,25 +24,26 @@ import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.ex
 import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
 
 public class SampleImageSetByExcelFileFinderTest {
-    static private File root;
+        static private File root;
 
-    @BeforeAll
-    private static void setRoot() {
-        root = new File(SampleImageSetByExcelFileFinderTest.class
-                .getResource("SampleImageSetByExcelFileFinder").getPath());
-    }
+        @BeforeAll
+        private static void setRoot() {
+                root = new File(SampleImageSetByExcelFileFinderTest.class.getResource("SampleImageSetByExcelFileFinder")
+                                .getPath());
+        }
 
-    @Test
-    public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel()
-            throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow {
+        @Test
+        public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel()
+                        throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow,
+                        CorruptCapturedImage {
         File rootOneCamera = new File(root, "OneCamera");
         File oneCameraChannel1Excel = new File(rootOneCamera, "TemplateOneCamera-Channel1.xlsx");
         File oneCameraChannel2Excel = new File(rootOneCamera, "TemplateOneCamera-Channel2.xlsx");
 
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
-        SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
+        SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
 
-        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
+        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder();
 
         List<RejectedCapturedImage> rejectedChan1 = finder.findChannelImages(sampleImageSet, 1, oneCameraChannel1Excel);
         List<RejectedCapturedImage> rejectedChan2 = finder.findChannelImages(sampleImageSet, 2, oneCameraChannel2Excel);
@@ -52,7 +56,7 @@ public class SampleImageSetByExcelFileFinderTest {
         ICapturedImageFileSet Img1_C2 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C2.tif"));
         ICapturedImageFileSet Img2_C2 = new CapturedImageFileSet(new File(rootOneCamera, "Img2_C2.tif"));
 
-        SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup);
+        SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
         actualSampleImageSet.addImage(1, Img1_C1);
         actualSampleImageSet.addImage(1, Img2_C1);
         actualSampleImageSet.addImage(2, Img1_C2);
@@ -66,14 +70,15 @@ public class SampleImageSetByExcelFileFinderTest {
 
     @Test
     public void findChannelImages_TwoCamera_ReturnsThreeCapturedSets()
-            throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow {
+            throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow,
+                        KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
         File rootTwoCamera = new File(root, "TwoCamera");
         File twoCameraExcel = new File(rootTwoCamera, "TemplateTwoCamera.xlsx");
 
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
-        SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
+        SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
 
-        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
+        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder();
 
         List<RejectedCapturedImage> rejectedChan1 = finder.findChannelImages(sampleImageSet, 1, twoCameraExcel);
 
@@ -85,7 +90,7 @@ public class SampleImageSetByExcelFileFinderTest {
         ICapturedImageFileSet Img3_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img3_C1_Pol0_90.tif"),
                 new File(rootTwoCamera, "Img3_C1_Pol45_135.tif"));
 
-        SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup);
+        SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
         actualSampleImageSet.addImage(1, Img1_C1);
         actualSampleImageSet.addImage(1, Img2_C1);
         actualSampleImageSet.addImage(1, Img3_C1);
@@ -95,14 +100,15 @@ public class SampleImageSetByExcelFileFinderTest {
 
     @Test
     public void findChannelImages_FourCamera_ReturnsThreeCapturedSets()
-            throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow {
+            throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow,
+                CorruptCapturedImage {
         File rootFourCamera = new File(root, "FourCamera");
         File fourCameraExcel = new File(rootFourCamera, "TemplateFourCamera.xlsx");
 
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
-        SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
+        SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
 
-        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
+        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder();
         List<RejectedCapturedImage> rejectedChan1 = finder.findChannelImages(sampleImageSet, 1, fourCameraExcel);
 
         // Generate sets to see if found
@@ -116,7 +122,7 @@ public class SampleImageSetByExcelFileFinderTest {
                 new File(rootFourCamera, "Img3_C1_Pol45.tif"), new File(rootFourCamera, "Img3_C1_Pol90.tif"),
                 new File(rootFourCamera, "Img3_C1_Pol135.tif"));
 
-        SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup);
+        SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
         actualSampleImageSet.addImage(1, Img1_C1);
         actualSampleImageSet.addImage(1, Img2_C1);
         actualSampleImageSet.addImage(1, Img3_C1);
@@ -130,9 +136,9 @@ public class SampleImageSetByExcelFileFinderTest {
         File wrongOneCameraExcel = new File(root, "WrongTemplateOneCamera-Channel1.xlsx");
 
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
-        SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
+        SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
 
-        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
+        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder();
         ExcelIncorrentRow exception = assertThrows(ExcelIncorrentRow.class, () -> {
             finder.findChannelImages(sampleImageSet, 1, wrongOneCameraExcel);
         });
@@ -145,9 +151,9 @@ public class SampleImageSetByExcelFileFinderTest {
         File wrongOneCameraExcel = new File(root, "MissingTitleTemplateOneCamera-Channel1.xlsx");
 
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
-        SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
+        SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
 
-        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
+        SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder();
         MissingExcelTitleRow exception = assertThrows(MissingExcelTitleRow.class, () -> {
             finder.findChannelImages(sampleImageSet, 1, wrongOneCameraExcel);
         });

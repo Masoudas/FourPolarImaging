@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
@@ -31,13 +32,13 @@ public class SampleImageSetReaderWriterTest {
 
         @Test
         public void writeThenRead_OneCamera_ReturnsTheSameSampleSet()
-                        throws IOException, CorruptSampleSetExcel, ExcelIncorrentRow, SampleSetExcelNotFound {
+                        throws IOException, CorruptSampleSetExcel, ExcelIncorrentRow, SampleSetExcelNotFound,
+                        CorruptCapturedImage {
                 File rootOneCamera = new File(root, "OneCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
+                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
 
-                SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootOneCamera,
-                                new TiffImageChecker());
+                SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootOneCamera);
 
                 finder.findChannelImages(sampleImageSet, 1, "C1");
                 finder.findChannelImages(sampleImageSet, 2, "C2");
@@ -53,14 +54,14 @@ public class SampleImageSetReaderWriterTest {
         }
 
         @Test
-        public void writeThenRead_TwoCamera_ReturnsTheSameSampleSet()
-                        throws IOException, CorruptSampleSetExcel, ExcelIncorrentRow, SampleSetExcelNotFound {
+        public void writeThenRead_TwoCamera_ReturnsTheSameSampleSet() throws IOException, CorruptSampleSetExcel,
+                        ExcelIncorrentRow, SampleSetExcelNotFound, CorruptCapturedImage {
                 File rootTwoCamera = new File(root, "TwoCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
+                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
 
-                SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(
-                        rootTwoCamera, new TiffImageChecker(), "Pol0_90", "Pol45_135");
+                SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootTwoCamera,
+                                "Pol0_90", "Pol45_135");
 
                 finder.findChannelImages(sampleImageSet, 1, "C1");
 
@@ -74,14 +75,14 @@ public class SampleImageSetReaderWriterTest {
         }
 
         @Test
-        public void writeThenRead_FourCamera_ReturnsTheSameSampleSet()
-                        throws IOException, CorruptSampleSetExcel, ExcelIncorrentRow, SampleSetExcelNotFound {
+        public void writeThenRead_FourCamera_ReturnsTheSameSampleSet() throws IOException, CorruptSampleSetExcel,
+                        ExcelIncorrentRow, SampleSetExcelNotFound, CorruptCapturedImage {
                 File rootFourCamera = new File(root, "FourCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
+                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
 
-                SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(
-                        rootFourCamera, new TiffImageChecker(), "Pol0", "Pol45", "Pol90", "Pol135");
+                SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootFourCamera, "Pol0",
+                                "Pol45", "Pol90", "Pol135");
 
                 finder.findChannelImages(sampleImageSet, 1, "C1");
 
