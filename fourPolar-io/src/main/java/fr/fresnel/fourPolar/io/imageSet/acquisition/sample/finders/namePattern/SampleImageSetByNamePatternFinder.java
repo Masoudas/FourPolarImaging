@@ -95,7 +95,8 @@ public class SampleImageSetByNamePatternFinder {
         if (sampleImageSet.getImagingSetup().getCameras() != this._camera){
             throw new WrongSampleSetFinder("Use class constructor for " + this._camera.toString() + " cameras");
         }
-        this.channelImageFinder.find(this, sampleImageSet, channel, channelLabel);
+
+        return this.channelImageFinder.find(this, sampleImageSet, channel, channelLabel);
     }
 
     /**
