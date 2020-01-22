@@ -33,7 +33,7 @@ public class TiffImageChecker implements ICapturedImageChecker {
     @Override
     public void checkCompatible(File image) throws CorruptCapturedImage {
         try {
-            if (!image.isFile()){
+            if (!image.exists()){
                 throw new CorruptCapturedImage(new RejectedCapturedImage(image, notExist));
             }                 
         } catch (SecurityException e) {

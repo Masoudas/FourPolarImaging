@@ -5,11 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
@@ -43,13 +46,16 @@ public class SampleImageSetReader {
 
     /**
      * Read and return the sample image set from the disk.
+     * 
      * @return
      * @throws SampleImageNotFound
      * @throws ExcelIncorrentRow
      * @throws SampleSetExcelNotFound
+     * @throws CorruptCapturedImage
      */
-    public SampleImageSet read() throws SampleImageNotFound, ExcelIncorrentRow, SampleSetExcelNotFound {
-        this._sampleImageSet = new SampleImageSet(this._imagingSetup);
+    public SampleImageSet read() throws SampleImageNotFound, ExcelIncorrentRow, SampleSetExcelNotFound,
+            CorruptCapturedImage {
+        this._sampleImageSet = new SampleImageSet(this._imagingSetup, new CapturedImageExists());
         for (int channel = 1; channel <= this._imagingSetup.getnChannel(); channel++) {
             this.readChannel(channel);
         }
@@ -58,11 +64,15 @@ public class SampleImageSetReader {
     }
 
     /**
-     * Reads each particular channel and puts it
+     * Reads each particular channel and puts it in the sample image set.
      * 
+     * @throws CorruptCapturedImage
+     * @throws IllegalArgumentException
+     * @throws KeyAlreadyExistsException
      * @throws FileNotFoundException
      */
-    private void readChannel(int channel) throws SampleImageNotFound, ExcelIncorrentRow, SampleSetExcelNotFound {
+    private void readChannel(int channel) throws SampleImageNotFound, ExcelIncorrentRow, SampleSetExcelNotFound,
+            KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
         File channelFile = new File(this._sampleSetFolder, SampleImageSetWriter.getChannelFileName(channel));
 
         try (FileInputStream fStream = new FileInputStream(channelFile)) {
