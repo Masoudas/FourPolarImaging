@@ -18,7 +18,7 @@ class OneCameraChannelImageFinder implements IChannelImageFinder {
 
 
         File[] imagesPol0_45_90_135 = sampleSetFinder.getRootFolder().listFiles(
-                new FilterCapturedImage(null, channelLabel, sampleSetFinder.getImageChecker().getExtension()));
+                new FilterCapturedImage(null, channelLabel, sampleImageSet.getCapturedImageChecker().getExtension()));
 
         if (imagesPol0_45_90_135.length == 0) {
             throw new NoImageFoundOnRoot("No images found for channel " + channel);
@@ -27,14 +27,11 @@ class OneCameraChannelImageFinder implements IChannelImageFinder {
         this._rejectedImages = new ArrayList<RejectedCapturedImage>();
         for (File imagePol0_45_90_135 : imagesPol0_45_90_135) {
             try {
-                sampleSetFinder.getImageChecker().checkCompatible(imagePol0_45_90_135);
                 CapturedImageFileSet fileSet = new CapturedImageFileSet(imagePol0_45_90_135);
                 sampleImageSet.addImage(channel, fileSet);
 
             } catch (CorruptCapturedImage e) {
-                RejectedCapturedImage rImage = new RejectedCapturedImage();
-                rImage.set(imagePol0_45_90_135, e.getMessage());
-                this._rejectedImages.add(rImage);
+                this._rejectedImages.add(e.getRejectedImage());
             }
         }
         return this._rejectedImages;

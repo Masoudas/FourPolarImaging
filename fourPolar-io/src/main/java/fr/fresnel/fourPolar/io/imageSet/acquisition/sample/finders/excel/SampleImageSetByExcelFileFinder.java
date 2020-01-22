@@ -27,8 +27,6 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
  * file, which is dedicated to one channel.
  */
 public class SampleImageSetByExcelFileFinder {
-    private ICapturedImageChecker imageChecker = null;
-
     /**
      * This class is used for finding the images of the sample set from an excel
      * file, which is dedicated to one channel.
@@ -36,8 +34,7 @@ public class SampleImageSetByExcelFileFinder {
      * @param imageChecker The image checker for the corresponding file format we
      *                     seek to find.
      */
-    public SampleImageSetByExcelFileFinder(ICapturedImageChecker imageChecker) {
-        this.imageChecker = imageChecker;
+    public SampleImageSetByExcelFileFinder() {
     }
 
     /**
@@ -67,27 +64,18 @@ public class SampleImageSetByExcelFileFinder {
                 Row row = sheet.getRow(rowCtr);
                 File[] files = createFiles(nImages, row);
 
-                int fileCtr = -1;
                 try {
-                    while (++fileCtr < nImages) {
-                        imageChecker.checkCompatible(files[fileCtr]);
-                    }
-
-                    if (fileCtr == nImages) {
                         CapturedImageFileSet fileSet = this.createFileSet(files);
                         sampleImageSet.addImage(channel, fileSet);
-                    }
                 } catch (CorruptCapturedImage e) {
-                    RejectedCapturedImage rCapturedImage = new RejectedCapturedImage();
-                    rCapturedImage.set(files[fileCtr], e.getMessage());
-                    rejectedImages.add(rCapturedImage);
+                    rejectedImages.add(e.getRejectedImage());
                 }
             }
 
             return rejectedImages;
+
         } catch (IOException e) {
             throw new TemplateSampleSetExcelNotFound("The template file does not exist or corrupted.");
-
         }
     }
 

@@ -90,4 +90,12 @@ public class SampleImageSet {
     public FourPolarImagingSetup getImagingSetup() {
         return imagingSetup;
     }
+
+    /**
+     * Returns the associated image checker.
+     * @return
+     */
+    public ICapturedImageChecker getCapturedImageChecker(){
+        return _imageChecker;
+    }
 }

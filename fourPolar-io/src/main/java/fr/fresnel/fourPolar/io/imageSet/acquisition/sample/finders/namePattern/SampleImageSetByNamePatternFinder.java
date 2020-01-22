@@ -28,7 +28,6 @@ public class SampleImageSetByNamePatternFinder {
     private String polLabel[] = null;
     private File rootFolder = null;
     private IChannelImageFinder channelImageFinder = null;
-    private ICapturedImageChecker imageChecker = null;
     private Cameras _camera;
     private Hashtable<File, String> _rejectedImages;
 
@@ -38,9 +37,8 @@ public class SampleImageSetByNamePatternFinder {
      * @param sampleSet  :
      * @param rootFolder :
      */
-    public SampleImageSetByNamePatternFinder(File rootFolder, ICapturedImageChecker imageChecker) {
+    public SampleImageSetByNamePatternFinder(File rootFolder) {
         this.rootFolder = rootFolder;
-        this.imageChecker = imageChecker;
         this._camera = Cameras.One;
 
         this.channelImageFinder = new OneCameraChannelImageFinder();
@@ -54,9 +52,8 @@ public class SampleImageSetByNamePatternFinder {
      * @param labelPol0_90
      * @param labelPol45_135
      */
-    public SampleImageSetByNamePatternFinder(File rootFolder, ICapturedImageChecker imageChecker, String labelPol0_90,
-            String labelPol45_135) {
-        this(rootFolder, imageChecker);
+    public SampleImageSetByNamePatternFinder(File rootFolder, String labelPol0_90, String labelPol45_135) {
+        this(rootFolder);
         this._camera = Cameras.Two;
 
         polLabel = new String[2];
@@ -76,9 +73,9 @@ public class SampleImageSetByNamePatternFinder {
      * @param labelPol90
      * @param labelPol135
      */
-    public SampleImageSetByNamePatternFinder(File rootFolder, ICapturedImageChecker imageChecker, String labelPol0,
-            String labelPol45, String labelPol90, String labelPol135) {
-        this(rootFolder, imageChecker);
+    public SampleImageSetByNamePatternFinder(File rootFolder, String labelPol0, String labelPol45, String labelPol90,
+            String labelPol135) {
+        this(rootFolder);
         this._camera = Cameras.Four;
 
         polLabel = new String[4];
@@ -90,20 +87,13 @@ public class SampleImageSetByNamePatternFinder {
         this.channelImageFinder = new FourCameraChannelImageFinder();
     }
 
-    public List<RejectedCapturedImage> findChannelImages(SampleImageSet sampleImageSet, int channel, String channelLabel)
-            throws NoImageFoundOnRoot, WrongSampleSetFinder {
-        if (sampleImageSet.getImagingSetup().getCameras() != this._camera){
+    public List<RejectedCapturedImage> findChannelImages(SampleImageSet sampleImageSet, int channel,
+            String channelLabel) throws NoImageFoundOnRoot, WrongSampleSetFinder {
+        if (sampleImageSet.getImagingSetup().getCameras() != this._camera) {
             throw new WrongSampleSetFinder("Use class constructor for " + this._camera.toString() + " cameras");
         }
 
         return this.channelImageFinder.find(this, sampleImageSet, channel, channelLabel);
-    }
-
-    /**
-     * @return the imageChecker
-     */
-    public ICapturedImageChecker getImageChecker() {
-        return imageChecker;
     }
 
     /**
@@ -121,8 +111,9 @@ public class SampleImageSetByNamePatternFinder {
     }
 
     /**
-     * Returns the rejected images as a disctionary, where the keys are the rejected files and the value
-     * is the reason.
+     * Returns the rejected images as a disctionary, where the keys are the rejected
+     * files and the value is the reason.
+     * 
      * @return the rejected images
      */
     public Hashtable<File, String> getRejectedImages() {

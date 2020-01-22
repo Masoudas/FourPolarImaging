@@ -18,8 +18,8 @@ class TwoCameraChannelImageFinder implements IChannelImageFinder {
             SampleImageSet sampleImageSet, int channel, String channelLabel) throws NoImageFoundOnRoot {
         String[] polLabel = sampleSetFinder.getPolLabel();
 
-        File[] imagesPol0_90 = sampleSetFinder.getRootFolder().listFiles(
-                new FilterCapturedImage(polLabel[0], channelLabel, sampleSetFinder.getImageChecker().getExtension()));
+        File[] imagesPol0_90 = sampleSetFinder.getRootFolder().listFiles(new FilterCapturedImage(polLabel[0],
+                channelLabel, sampleImageSet.getCapturedImageChecker().getExtension()));
 
         if (imagesPol0_90.length == 0) {
             throw new NoImageFoundOnRoot("No images found for channel " + channel);
@@ -31,22 +31,14 @@ class TwoCameraChannelImageFinder implements IChannelImageFinder {
             File[] candidatesPol45_135 = sampleSetFinder.getRootFolder().listFiles(filterFile);
 
             if (candidatesPol45_135.length != 1) {
-                this._addRejectedImage(imagePol0_90, "Other polarization images could no be detected.");
+                this._rejectedImages.add(
+                        new RejectedCapturedImage(imagePol0_90, "Other polarization images could no be detected."));
             } else {
-                File[] polFiles = { imagePol0_90, candidatesPol45_135[0] };
-
-                int fileCtr = -1;
                 try {
-                    while (++fileCtr < polFiles.length) {
-                        sampleSetFinder.getImageChecker().checkCompatible(polFiles[fileCtr]);
-                    }
-
-                    if (fileCtr == polFiles.length) {
-                        CapturedImageFileSet fileSet = new CapturedImageFileSet(polFiles[0], polFiles[1]);
-                        sampleImageSet.addImage(channel, fileSet);
-                    }
+                    CapturedImageFileSet fileSet = new CapturedImageFileSet(imagePol0_90, candidatesPol45_135[0]);
+                    sampleImageSet.addImage(channel, fileSet);
                 } catch (CorruptCapturedImage e) {
-                    this._addRejectedImage(polFiles[fileCtr], e.getMessage());
+                    this._rejectedImages.add(e.getRejectedImage());
                 }
             }
         }
@@ -56,12 +48,6 @@ class TwoCameraChannelImageFinder implements IChannelImageFinder {
         }
 
         return this._rejectedImages;
-    }
-
-    private void _addRejectedImage(File imageFile, String reason) {
-        RejectedCapturedImage rImage = new RejectedCapturedImage();
-        rImage.set(imageFile, reason);
-        this._rejectedImages.add(rImage);
     }
 
 }
