@@ -2,12 +2,14 @@ package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern;
 
 import java.io.File;
 import java.util.Hashtable;
+import java.util.List;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.NoImageFoundOnRoot;
-import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.WrongSampleSetFinderUsed;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.WrongSampleSetFinder;
 
 /**
  * Using this class, we can find the images of the sample set on the given root
@@ -88,10 +90,10 @@ public class SampleImageSetByNamePatternFinder {
         this.channelImageFinder = new FourCameraChannelImageFinder();
     }
 
-    public void findChannelImages(SampleImageSet sampleImageSet, int channel, String channelLabel)
-            throws NoImageFoundOnRoot, WrongSampleSetFinderUsed {
+    public List<RejectedCapturedImage> findChannelImages(SampleImageSet sampleImageSet, int channel, String channelLabel)
+            throws NoImageFoundOnRoot, WrongSampleSetFinder {
         if (sampleImageSet.getImagingSetup().getCameras() != this._camera){
-            throw new WrongSampleSetFinderUsed("Use class constructor for " + this._camera.toString() + " cameras");
+            throw new WrongSampleSetFinder("Use class constructor for " + this._camera.toString() + " cameras");
         }
         this.channelImageFinder.find(this, sampleImageSet, channel, channelLabel);
     }
