@@ -25,23 +25,22 @@ public class TiffImageChecker implements ICapturedImageChecker {
      * @throws CorruptCapturedImage
      */
     @Override
-    public boolean checkCompatible(File image) throws CorruptCapturedImage, IOException {
-        if (this._checkExtension(image.getName())) {
+    public boolean checkCompatible(File image) throws CorruptCapturedImage {
+        if (!this._checkExtension(image.getName())) {
             return false;
         }
 
         try {
-            if (this._bitDepthAbove16(image)){
+            if (this._bitDepthAbove16(image)) {
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
-        } catch(IOException e){
-            throw new IOException(e);
-        } catch(FormatException e){
-            throw new CorruptCapturedImage(e);
-        } 
+        } catch (IOException e) {
+            throw new CorruptCapturedImage("File IO issue or Corrupt image content", e);
+        } catch (FormatException e) {
+            throw new CorruptCapturedImage("Format rendition error", e);
+        }
     }
 
     private boolean _checkExtension(String fileName) {
@@ -64,24 +63,28 @@ public class TiffImageChecker implements ICapturedImageChecker {
      * @throws FormatException
      */
     private boolean _bitDepthAbove16(File image) throws FormatException, IOException {
-        final SCIFIO scifio = new SCIFIO();        
-        final Reader reader = scifio.initializer().initializeReader(image.getAbsolutePath());        
+        final SCIFIO scifio = new SCIFIO();
+        final Reader reader = scifio.initializer().initializeReader(image.getAbsolutePath());
         final Metadata meta = reader.getMetadata();
-        
+
         final ImageMetadata iMeta = meta.get(0);
 
-        if (iMeta.getBitsPerPixel() < 16 ){
+        if (iMeta.getBitsPerPixel() < 16) {
             return false;
-        }
-        else {
+        } else {
             return true;
-        } 
-        
+        }
+
     }
 
     @Override
     public String getExtension() {
         return "tif";
+    }
+
+    @Override
+    public String getIncompatibilityMessage() {
+        return "The given tiff image does not have compatible format.";
     }
 
 }

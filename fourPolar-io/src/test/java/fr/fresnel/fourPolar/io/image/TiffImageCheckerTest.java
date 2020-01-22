@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.io.image;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -12,22 +13,40 @@ import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedIma
 import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
 
 public class TiffImageCheckerTest {
-    private File _root;
-    private TiffImageChecker tiffChecker = new TiffImageChecker();
+    private static File _root;
+    private static TiffImageChecker tiffChecker = new TiffImageChecker();
 
     @BeforeAll
-    public void setParams() {
-        this._root = new File(TiffImageCheckerTest.class.getResource("").toString(), "TiffImageChecker");
+    static void setParams() {
+        _root = new File(TiffImageCheckerTest.class.getResource("").getPath(), "TiffImageChecker");
 
     }
 
     @Test
     public void checkCompatible_16bitTiff_ReturnsTrue() throws CorruptCapturedImage, IOException {
-        File tiffImage = new File(this._root, "16bit.tif");
+        File tiffImage = new File(_root, "16bit.tif");
 
-        assertTrue(tiffChecker.checkCompatible(tiffImage));
+        assertTrue(tiffChecker.checkCompatible(tiffImage));        
+    }
 
-        
+    @Test
+    public void checkCompatible_8bitTiff_ReturnsFalse() throws CorruptCapturedImage, IOException {
+        File tiffImage = new File(_root, "8bit.tif");
+
+        assertTrue(!tiffChecker.checkCompatible(tiffImage));
+    }
+
+    @Test
+    public void checkCompatible_corruptTiff_ThrowsCorruptCapturedImage() throws CorruptCapturedImage, IOException {
+        File image = new File(_root, "corrupt.tif");
+        assertThrows(CorruptCapturedImage.class, () -> {tiffChecker.checkCompatible(image);});
+    }
+
+    @Test
+    public void checkCompatible_otherFormat_ReturnsFalse() throws CorruptCapturedImage, IOException {
+        File tiffImage = new File(_root, "otherFormat.jpeg");
+
+        assertTrue(!tiffChecker.checkCompatible(tiffImage));
     }
 
     

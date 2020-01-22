@@ -11,8 +11,8 @@ public class CorruptCapturedImage extends Exception{
         super(message);
     }
 
-    public CorruptCapturedImage(Throwable e) {
-        super(e);
+    public CorruptCapturedImage(String message, Throwable cause) {
+        super(message, cause);
     }
     
 }

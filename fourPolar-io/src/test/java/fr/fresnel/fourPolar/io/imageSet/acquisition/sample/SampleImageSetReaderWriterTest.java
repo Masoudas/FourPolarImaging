@@ -21,18 +21,18 @@ import fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern.S
  * This test class tests the reader and writer simultaneously.
  */
 public class SampleImageSetReaderWriterTest {
-        private File root;
+        private static File root;
 
         @BeforeAll
-        public void setRoot() {
-                this.root = new File(SampleImageSetReaderWriterTest.class.getResource("").getPath(),
+        static void setRoot() {
+                root = new File(SampleImageSetReaderWriterTest.class.getResource("").getPath(),
                                 "SampleImageSetReaderWriterTestMaterial");
         }
 
         @Test
         public void writeThenRead_OneCamera_ReturnsTheSameSampleSet()
                         throws IOException, CorruptSampleSetExcel, ExcelIncorrentRow, SampleSetExcelNotFound {
-                File rootOneCamera = new File(this.root, "OneCamera");
+                File rootOneCamera = new File(root, "OneCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
 
@@ -55,7 +55,7 @@ public class SampleImageSetReaderWriterTest {
         @Test
         public void writeThenRead_TwoCamera_ReturnsTheSameSampleSet()
                         throws IOException, CorruptSampleSetExcel, ExcelIncorrentRow, SampleSetExcelNotFound {
-                File rootTwoCamera = new File(this.root, "TwoCamera");
+                File rootTwoCamera = new File(root, "TwoCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
 
@@ -76,7 +76,7 @@ public class SampleImageSetReaderWriterTest {
         @Test
         public void writeThenRead_FourCamera_ReturnsTheSameSampleSet()
                         throws IOException, CorruptSampleSetExcel, ExcelIncorrentRow, SampleSetExcelNotFound {
-                File rootFourCamera = new File(this.root, "FourCamera");
+                File rootFourCamera = new File(root, "FourCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
 

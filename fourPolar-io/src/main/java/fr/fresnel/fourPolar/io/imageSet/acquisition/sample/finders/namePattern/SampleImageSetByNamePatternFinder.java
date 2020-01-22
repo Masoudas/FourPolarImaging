@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern;
 
 import java.io.File;
+import java.util.Hashtable;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
@@ -27,6 +28,7 @@ public class SampleImageSetByNamePatternFinder {
     private IChannelImageFinder channelImageFinder = null;
     private ICapturedImageChecker imageChecker = null;
     private Cameras _camera;
+    private Hashtable<File, String> _rejectedImages;
 
     /**
      * Used for finding the images in case of single camera.
@@ -115,5 +117,12 @@ public class SampleImageSetByNamePatternFinder {
         return rootFolder;
     }
 
-
+    /**
+     * Returns the rejected images as a disctionary, where the keys are the rejected files and the value
+     * is the reason.
+     * @return the rejected images
+     */
+    public Hashtable<File, String> getRejectedImages() {
+        return _rejectedImages;
+    }
 }

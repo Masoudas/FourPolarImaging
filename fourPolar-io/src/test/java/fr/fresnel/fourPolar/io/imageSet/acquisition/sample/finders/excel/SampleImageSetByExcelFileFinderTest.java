@@ -19,11 +19,11 @@ import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.ex
 import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
 
 public class SampleImageSetByExcelFileFinderTest {
-        private File root;
+    static private File root;
 
     @BeforeAll
     public void setRoot() {
-        this.root = new File(SampleImageSetByExcelFileFinderTest.class
+        root = new File(SampleImageSetByExcelFileFinderTest.class
                 .getResource("SampleImageSetByExcelFileFinderTestMaterial").getPath());
     }
 

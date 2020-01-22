@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition;
 
 import java.io.File;
-import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
 
@@ -20,9 +19,15 @@ public interface ICapturedImageChecker {
      * Checks compatibility and returns a boolean.
      * @param imagePath
      * @return
-     * @throws IOException
      * @throws CorruptCapturedImage
      */
-    public boolean checkCompatible(File imagePath) throws IOException, CorruptCapturedImage;
+    public boolean checkCompatible(File imagePath) throws CorruptCapturedImage;
+
+    /**
+     * Returns a message of incompatibility as string;
+     * @return
+     */
+    public String getIncompatibilityMessage();
+    
 
 }
