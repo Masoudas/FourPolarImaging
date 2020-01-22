@@ -41,10 +41,8 @@ public class SampleImageSetByExcelFileFinderTest {
 
         SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
 
-        List<RejectedCapturedImage> chan1 = finder.findChannelImages(sampleImageSet, 1, oneCameraChannel1Excel);
-        List<RejectedCapturedImage> chan2 = finder.findChannelImages(sampleImageSet, 2, oneCameraChannel2Excel);
-
-        System.out.println(sampleImageSet.getChannelImages(1).size());
+        List<RejectedCapturedImage> rejectedChan1 = finder.findChannelImages(sampleImageSet, 1, oneCameraChannel1Excel);
+        List<RejectedCapturedImage> rejectedChan2 = finder.findChannelImages(sampleImageSet, 2, oneCameraChannel2Excel);
 
         // Generate sets to see if found
         ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C1.tif"));
@@ -63,7 +61,7 @@ public class SampleImageSetByExcelFileFinderTest {
 
         assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1))
                 && actualSampleImageSet.getChannelImages(2).equals(sampleImageSet.getChannelImages(2))
-                && chan1.size() == 3 && chan2.size() == 3);
+                && rejectedChan1.size() == 2 && rejectedChan2.size() == 2);
     }
 
     @Test
@@ -77,7 +75,7 @@ public class SampleImageSetByExcelFileFinderTest {
 
         SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
 
-        finder.findChannelImages(sampleImageSet, 1, twoCameraExcel);
+        List<RejectedCapturedImage> rejectedChan1 = finder.findChannelImages(sampleImageSet, 1, twoCameraExcel);
 
         // Generate sets to see if found
         ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img1_C1_Pol0_90.tif"),
@@ -91,7 +89,8 @@ public class SampleImageSetByExcelFileFinderTest {
         actualSampleImageSet.addImage(1, Img1_C1);
         actualSampleImageSet.addImage(1, Img2_C1);
         actualSampleImageSet.addImage(1, Img3_C1);
-        assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1)));
+        assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1))
+                && rejectedChan1.size() == 3);
     }
 
     @Test
@@ -104,7 +103,7 @@ public class SampleImageSetByExcelFileFinderTest {
         SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup);
 
         SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder(new TiffImageChecker());
-        finder.findChannelImages(sampleImageSet, 1, fourCameraExcel);
+        List<RejectedCapturedImage> rejectedChan1 = finder.findChannelImages(sampleImageSet, 1, fourCameraExcel);
 
         // Generate sets to see if found
         ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootFourCamera, "Img1_C1_Pol0.tif"),
@@ -122,7 +121,8 @@ public class SampleImageSetByExcelFileFinderTest {
         actualSampleImageSet.addImage(1, Img2_C1);
         actualSampleImageSet.addImage(1, Img3_C1);
 
-        assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1)));
+        assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1))
+                && rejectedChan1.size() == 3);
     }
 
     @Test

@@ -69,14 +69,10 @@ public class SampleImageSetByExcelFileFinder {
                 Row row = sheet.getRow(rowCtr);
                 File[] files = createFiles(nImages, row);
 
-                int fileCtr = 0;
+                int fileCtr = -1;
                 try {
-                    while (fileCtr++ < nImages) {
-                        if (!this.imageExistAndCompatible(files[fileCtr])) {
-                            RejectedCapturedImage rCapturedImage = new RejectedCapturedImage();
-                            rCapturedImage.set(files[fileCtr], this.imageChecker.getIncompatibilityMessage());
-                            rejectedImages.add(rCapturedImage);
-                        }
+                    while (++fileCtr < nImages) {
+                        imageChecker.checkCompatible(files[fileCtr]);
                     }
 
                     if (fileCtr == nImages) {
@@ -120,21 +116,6 @@ public class SampleImageSetByExcelFileFinder {
         }
 
         return files;
-    }
-
-    /**
-     * Check the file exists and is compatible with our format.
-     * 
-     * @param files
-     * @return
-     * @throws CorruptCapturedImage
-     */
-    private boolean imageExistAndCompatible(File file) throws CorruptCapturedImage {
-        if (!file.exists() || !imageChecker.checkCompatible(file)) {
-            return false;
-        }
-
-        return true;
     }
 
     private CapturedImageFileSet createFileSet(File[] files) {
