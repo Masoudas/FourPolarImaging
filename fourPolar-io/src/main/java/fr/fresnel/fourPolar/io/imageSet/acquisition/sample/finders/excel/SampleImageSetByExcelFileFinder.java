@@ -3,7 +3,9 @@ package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.excel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,6 +22,7 @@ import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.ex
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.TemplateSampleSetExcelNotFound;
 import fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.excel.TemplateExcelFileGenerator;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 
 /**
  * This class is used for finding the images of the sample set from an excel
@@ -50,11 +53,12 @@ public class SampleImageSetByExcelFileFinder {
      * @param channelFile    : The path to the corresponding excel file.
      * @throws IncorrectSampleSetExcelFormat
      * @throws TemplateSampleSetExcelNotFound
-     * @return RejectedSampleImages
+     * @return List of rejected of rejected images.
      */
-    public RejectedSampleImages findChannelImages(SampleImageSet sampleImageSet, int channel, File channelFile)
+    public List<RejectedCapturedImage> findChannelImages(SampleImageSet sampleImageSet, int channel, File channelFile)
             throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow {
-        RejectedSampleImages rejectedImages = new RejectedSampleImages();
+        ArrayList<RejectedCapturedImage> rejectedImages = new ArrayList<RejectedCapturedImage>();
+
         try (XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(channelFile))) {
             Sheet sheet = workbook.getSheetAt(0);
 
@@ -69,7 +73,9 @@ public class SampleImageSetByExcelFileFinder {
                 try {
                     while (fileCtr++ < nImages) {
                         if (!this.imageExistAndCompatible(files[fileCtr])) {
-                            rejectedImages.addImage(files[fileCtr], this.imageChecker.getIncompatibilityMessage());
+                            RejectedCapturedImage rCapturedImage = new RejectedCapturedImage();
+                            rCapturedImage.set(files[fileCtr], this.imageChecker.getIncompatibilityMessage());
+                            rejectedImages.add(rCapturedImage);
                         }
                     }
 
@@ -78,7 +84,9 @@ public class SampleImageSetByExcelFileFinder {
                         sampleImageSet.addImage(channel, fileSet);
                     }
                 } catch (CorruptCapturedImage e) {
-                    rejectedImages.addImage(e.getMessage(), files[fileCtr]);
+                    RejectedCapturedImage rCapturedImage = new RejectedCapturedImage();
+                    rCapturedImage.set(files[fileCtr], e.getMessage());
+                    rejectedImages.add(rCapturedImage);
                 }
             }
 
