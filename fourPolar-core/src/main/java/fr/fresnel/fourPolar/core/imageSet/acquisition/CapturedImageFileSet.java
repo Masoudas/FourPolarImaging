@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition;
 
+import java.util.Arrays;
 import java.util.Hashtable;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
@@ -18,6 +19,7 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
     private String setName = "";
     private Hashtable<String, File> fileSet = new Hashtable<String, File>();
     private Cameras cameras;
+
     /**
      * Used for the case when only one camera is present.
      * 
@@ -66,7 +68,7 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
         fileSet.put(labels[3], pol135);
 
         setName = defineSetName(pol0);
-        
+
     }
 
     /**
@@ -135,5 +137,15 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
     @Override
     public Cameras getnCameras() {
         return this.cameras;
+    }
+
+    @Override
+    public boolean hasLabel(String label) {
+        String[] labels = Cameras.getLabels(cameras);
+        if (!Arrays.stream(labels).anyMatch(label::equals)) {
+            return false;
+        }
+
+        return true;
     }
 }

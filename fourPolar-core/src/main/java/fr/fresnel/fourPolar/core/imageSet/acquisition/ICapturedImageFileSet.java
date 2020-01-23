@@ -27,6 +27,12 @@ public interface ICapturedImageFileSet  {
      */
     public Cameras getnCameras();
 
+    /**
+     * Checks whether the given label is in the file set labels.
+     * @return
+     */
+    public boolean hasLabel(String label);
+
 
     @Override
     public boolean equals(Object obj);
