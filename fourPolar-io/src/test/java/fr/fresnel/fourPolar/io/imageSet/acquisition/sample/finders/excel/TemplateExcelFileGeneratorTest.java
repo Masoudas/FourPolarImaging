@@ -14,7 +14,7 @@ public class TemplateExcelFileGeneratorTest {
     static File rootFolder;
 
     @BeforeAll
-    public void getRoot() {
+    public static void getRoot() {
         rootFolder = new File(TemplateExcelFileGeneratorTest.class.getResource("").getPath(),
                 "/TemplateExcelFileGeneratorTestMaterial");
         rootFolder.mkdir();

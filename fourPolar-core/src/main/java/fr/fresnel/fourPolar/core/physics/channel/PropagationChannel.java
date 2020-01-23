@@ -53,7 +53,7 @@ public class PropagationChannel implements IPropagationChannel {
 
         if (wavelength < lowerWavelength || wavelength > upperWavelength){
             throw new WavelengthOutOfRange("The wavelength is not in the working range of the FourPolar setup");
-        }
+        } 
         
     }
 

@@ -137,10 +137,10 @@ public class TemplateExcelFileGenerator {
      */
     private String[] _getExampleFileNames() {
         if (Cameras.One == this.camera) {
-            String[] fileName = { "C:\\rootFolder\\Img_Pol0_45_90_135,tif" };
+            String[] fileName = { "C:\\rootFolder\\Img_Pol0_45_90_135.tif" };
             return fileName;
         } else if (Cameras.Two == this.camera) {
-            String[] fileName = { "C:\\rootFolder\\Img_Pol0_90", "C:\\rootFolder\\Img_Pol45_135,tif" };
+            String[] fileName = { "C:\\rootFolder\\Img_Pol0_90.tif", "C:\\rootFolder\\Img_Pol45_135.tif" };
             return fileName;
         } else {
             String[] fileName = { "C:\\rootFolder\\Img_Pol0.tif", "C:\\rootFolder\\Img_Pol45.tif", "C:\\rootFolder\\Img_Pol90.tif",

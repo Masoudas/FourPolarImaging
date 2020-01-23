@@ -23,9 +23,9 @@ import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
 public class FourPolarImagingSetupToYamlTest {
 
     @Test
-    public void write_WriteOneCameraOneChannel_FileGeneratedinResourceFolder()
+    public void write_WriteOneCameraThreeChannel_FileGeneratedinResourceFolder()
             throws JsonGenerationException, JsonMappingException, IOException {
-        FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
+        FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
 
         Rectangle rect0 = new Rectangle(1, 1, 128, 128);
         Rectangle rect45 = new Rectangle(128, 1, 128, 128);
@@ -38,8 +38,9 @@ public class FourPolarImagingSetupToYamlTest {
         INumericalAperture na = new NumericalAperture(1.45, 5.65, 3.4342, 1.3434);
         imagingSetup.setNumericalAperture(na);
 
-        PropagationChannel prop = new PropagationChannel(1, 1.45, 1.54, 1.34, 3.11);
+        PropagationChannel prop = new PropagationChannel(2e-9, 1.45, 1.54, 1.34, 3.11);
         imagingSetup.setPropagationChannel(1, prop);
+        imagingSetup.setPropagationChannel(2, prop);
 
         File rootFolder = new File(FourPolarImagingSetupToYamlTest.class.getResource("").getPath());
         FourPolarImagingSetupToYaml writer = new FourPolarImagingSetupToYaml(imagingSetup, rootFolder);
