@@ -11,15 +11,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
-import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
+import fr.fresnel.fourPolar.io.image.tiff.TiffCapturedImageChecker;
 
-public class TiffImageCheckerTest {
+public class TiffCapturedImageCheckerTest {
     private static File _root;
-    private static TiffImageChecker tiffChecker = new TiffImageChecker();
+    private static TiffCapturedImageChecker tiffChecker = new TiffCapturedImageChecker();
 
     @BeforeAll
     static void setParams() {
-        _root = new File(TiffImageCheckerTest.class.getResource("").getPath(), "TiffImageChecker");
+        _root = new File(TiffCapturedImageCheckerTest.class.getResource("").getPath(), "TiffCapturedImageChecker");
 
     }
 
@@ -39,7 +39,7 @@ public class TiffImageCheckerTest {
             tiffChecker.checkCompatible(tiffImage);
         });
 
-        assertTrue(TiffImageChecker.not16bit.equals(exception.getMessage()));
+        assertTrue(TiffCapturedImageChecker.not16bit.equals(exception.getMessage()));
 
     }
 
@@ -50,7 +50,7 @@ public class TiffImageCheckerTest {
             tiffChecker.checkCompatible(image);
         });
 
-        assertTrue(TiffImageChecker.corruptContent.equals(exception.getMessage()));
+        assertTrue(TiffCapturedImageChecker.corruptContent.equals(exception.getMessage()));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class TiffImageCheckerTest {
             tiffChecker.checkCompatible(jpegImage);
         });
 
-        assertTrue(TiffImageChecker.badExtension.equals(exception.getMessage()));
+        assertTrue(TiffCapturedImageChecker.badExtension.equals(exception.getMessage()));
     }
 
     @Test
@@ -72,7 +72,7 @@ public class TiffImageCheckerTest {
             tiffChecker.checkCompatible(nonExistent);
         });
 
-        assertTrue(TiffImageChecker.notExist.equals(exception.getMessage()));
+        assertTrue(TiffCapturedImageChecker.notExist.equals(exception.getMessage()));
     }
 
 }

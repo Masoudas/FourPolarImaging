@@ -16,7 +16,7 @@ import io.scif.SCIFIO;
  * A class for checking the compatibility of a tiff image with the software
  * criteria.
  */
-public class TiffImageChecker implements ICapturedImageChecker {
+public class TiffCapturedImageChecker implements ICapturedImageChecker {
     public static String notExist = "The file does not exist or cannot be accessed.";
     public static String not16bit = "The given tiff is not 16 bit.";
     public static String badExtension = "The given file is not tiff.";

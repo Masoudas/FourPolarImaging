@@ -10,7 +10,7 @@ import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedIma
 public interface ICapturedImageChecker {
     /**
      * Returns the image extension type for which the interface is implemented.
-     * The extension should not contain dot (see for example {@link} TiffImageChecker).
+     * The extension should not contain dot (see for example {@link} TiffCapturedImageChecker).
      * @return
      */
     public String getExtension();

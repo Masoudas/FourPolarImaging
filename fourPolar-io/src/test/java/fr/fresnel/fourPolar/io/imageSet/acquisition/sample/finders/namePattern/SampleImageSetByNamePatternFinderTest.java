@@ -18,7 +18,7 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.NoImageFoundOnRoot;
-import fr.fresnel.fourPolar.io.image.tiff.TiffImageChecker;
+import fr.fresnel.fourPolar.io.image.tiff.TiffCapturedImageChecker;
 
 public class SampleImageSetByNamePatternFinderTest {
         private static File root;
@@ -34,7 +34,7 @@ public class SampleImageSetByNamePatternFinderTest {
                         CorruptCapturedImage {
                 File rootOneCamera = new File(root, "OneCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
+                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
 
                 SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootOneCamera);
 
@@ -48,7 +48,7 @@ public class SampleImageSetByNamePatternFinderTest {
                 ICapturedImageFileSet Img1_C2 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C2.tif"));
                 ICapturedImageFileSet Img2_C2 = new CapturedImageFileSet(new File(rootOneCamera, "Img2_C2.tif"));
 
-                SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
+                SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
                 actualSampleImageSet.addImage(1, Img1_C1);
                 actualSampleImageSet.addImage(1, Img2_C1);
                 actualSampleImageSet.addImage(2, Img1_C2);
@@ -66,7 +66,7 @@ public class SampleImageSetByNamePatternFinderTest {
                 File rootTwoCamera = new File(root, "TwoCamera");
 
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
+                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
 
                 SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootTwoCamera,
                                 "Pol0_90", "Pol45_135");
@@ -81,7 +81,7 @@ public class SampleImageSetByNamePatternFinderTest {
                 ICapturedImageFileSet Img3_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img3_C1_Pol0_90.tif"),
                                 new File(rootTwoCamera, "Img3_C1_Pol45_135.tif"));
 
-                SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
+                SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
                 actualSampleImageSet.addImage(1, Img1_C1);
                 actualSampleImageSet.addImage(1, Img2_C1);
                 actualSampleImageSet.addImage(1, Img3_C1);
@@ -95,7 +95,7 @@ public class SampleImageSetByNamePatternFinderTest {
                 File rootFourCamera = new File(root, "FourCamera");
 
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
+                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
 
                 SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootFourCamera, "Pol0",
                                 "Pol45", "Pol90", "Pol135");
@@ -116,7 +116,7 @@ public class SampleImageSetByNamePatternFinderTest {
                                 new File(rootFourCamera, "Img3_C1_Pol90.tif"),
                                 new File(rootFourCamera, "Img3_C1_Pol135.tif"));
 
-                SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
+                SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
                 actualSampleImageSet.addImage(1, Img1_C1);
                 actualSampleImageSet.addImage(1, Img2_C1);
                 actualSampleImageSet.addImage(1, Img3_C1);
@@ -129,7 +129,7 @@ public class SampleImageSetByNamePatternFinderTest {
                 File rootFourCamera = new File(root, "IncompleteFourCamera");
 
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffImageChecker());
+                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
 
                 SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootFourCamera, "Pol0",
                                 "Pol45", "Pol90", "Pol135");
