@@ -28,7 +28,7 @@ public class CapturedImage implements ICapturedImage {
     public CapturedImage(ICapturedImageFileSet fileSet, String fileLabel, Img<UnsignedShortType> img) {
         this._fileSet = fileSet;
         
-        _checkfileLabel(fileSet);
+        _checkfileLabel(fileSet, fileLabel);
         this._fileLabel = fileLabel;
 
         if (img == null){
@@ -37,10 +37,9 @@ public class CapturedImage implements ICapturedImage {
         this._img = img;
     }
 
-    private void _checkfileLabel(ICapturedImageFileSet fileSet) throws IllegalArgumentException{
-        String[] labels = Cameras.getLabels(fileSet.getnCameras());
-        if (!Arrays.stream(labels).anyMatch("fileLabel"::equals)){
-            throw new IllegalArgumentException("The given file label is not in the fileSet.");
+    private void _checkfileLabel(ICapturedImageFileSet fileSet, String fileLabel) throws IllegalArgumentException{
+        if (!fileSet.hasLabel(fileLabel)){
+            throw new IllegalArgumentException("The given file label is not in the file set.");
         }
     }
 
