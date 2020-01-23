@@ -11,6 +11,7 @@ import io.scif.ImageMetadata;
 import io.scif.Metadata;
 import io.scif.Reader;
 import io.scif.SCIFIO;
+import io.scif.util.FormatTools;
 
 /**
  * A class for checking the compatibility of a tiff image with the software
@@ -18,7 +19,8 @@ import io.scif.SCIFIO;
  */
 public class TiffCapturedImageChecker implements ICapturedImageChecker {
     public static String notExist = "The file does not exist or cannot be accessed.";
-    public static String not16bit = "The given tiff is not 16 bit.";
+    public static String lowBitDepth = "Bit depth < 16. The image should not be used.";
+    public static String notUnsignedShort = "Chanage format to unsigned 16 bit.";
     public static String badExtension = "The given file is not tiff.";
     public static String corruptContent =  "File IO issue or Corrupt tiff content.";
     public static String formatError = "Format rendition error in SCIFIO package.";
@@ -76,8 +78,15 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
         final ImageMetadata iMeta = meta.get(0);
 
         if (iMeta.getBitsPerPixel() < 16) {
-            throw new CorruptCapturedImage(new RejectedCapturedImage(image, not16bit));
-        } 
+            throw new CorruptCapturedImage(new RejectedCapturedImage(image, lowBitDepth));
+        }
+
+        if (iMeta.getPixelType() != FormatTools.UINT16){
+            throw new CorruptCapturedImage(new RejectedCapturedImage(image, notUnsignedShort));
+        }
+        
+        reader.close();
+        scifio.context().dispose();
     }
 
     @Override
