@@ -39,7 +39,7 @@ public class TiffCapturedImageCheckerTest {
             tiffChecker.checkCompatible(tiffImage);
         });
 
-        assertTrue(TiffCapturedImageChecker.not16bit.equals(exception.getMessage()));
+        assertTrue(TiffCapturedImageChecker.lowBitDepth.equals(exception.getRejectedImage().getReason()));
 
     }
 
@@ -50,7 +50,7 @@ public class TiffCapturedImageCheckerTest {
             tiffChecker.checkCompatible(image);
         });
 
-        assertTrue(TiffCapturedImageChecker.corruptContent.equals(exception.getMessage()));
+        assertTrue(TiffCapturedImageChecker.corruptContent.equals(exception.getRejectedImage().getReason()));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class TiffCapturedImageCheckerTest {
             tiffChecker.checkCompatible(jpegImage);
         });
 
-        assertTrue(TiffCapturedImageChecker.badExtension.equals(exception.getMessage()));
+        assertTrue(TiffCapturedImageChecker.badExtension.equals(exception.getRejectedImage().getReason()));
     }
 
     @Test
@@ -72,7 +72,7 @@ public class TiffCapturedImageCheckerTest {
             tiffChecker.checkCompatible(nonExistent);
         });
 
-        assertTrue(TiffCapturedImageChecker.notExist.equals(exception.getMessage()));
+        assertTrue(TiffCapturedImageChecker.notExist.equals(exception.getRejectedImage().getReason()));
     }
 
 }
