@@ -4,12 +4,10 @@ import java.security.KeyException;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 /**
  * Defines the bead image set, which accompanies the sample image set. Each
@@ -37,7 +35,7 @@ public class BeadImageSet extends AcquisitionSet {
     @Override
     protected void _addImage(int channel, ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
         if (imageFileSet[channel - 1] != null) {
-            throw new KeyAlreadyExistsException("A bead image has already been define for channel " + channel);
+            throw new KeyAlreadyExistsException("A bead image is already defined for channel " + channel);
         }
 
         imageFileSet[channel - 1] = fileSet;

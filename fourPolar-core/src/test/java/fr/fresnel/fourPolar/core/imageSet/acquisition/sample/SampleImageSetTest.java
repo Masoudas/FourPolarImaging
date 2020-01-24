@@ -3,13 +3,13 @@ package fr.fresnel.fourPolar.core.imageSet.acquisition.sample;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.security.KeyException;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
@@ -23,51 +23,35 @@ public class SampleImageSetTest {
     File pol90 = new File(root, "pol90.tiff");
     File pol135 = new File(root, "pol135.tiff");
 
-    CapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
     FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.Four);
 
     SampleImageSet sampleSet = new SampleImageSet(imagingSetup, new DummyImageChecker());
 
-    public SampleImageSetTest() throws CorruptCapturedImage {
-        sampleSet.addImage(1, fileSet);
-        sampleSet.addImage(2, fileSet);
+    public SampleImageSetTest()
+            throws CorruptCapturedImage, KeyAlreadyExistsException, IllegalArgumentException, KeyException {
+        sampleSet.addImage(1, pol0, pol45, pol90, pol135);
+        sampleSet.addImage(2, pol0, pol45, pol90, pol135);
     }
 
     @Test
-    public void addImage_DuplicateImage_ShouldThrowException() throws IllegalArgumentException, CorruptCapturedImage {
+    public void addImage_DuplicateImage_ShouldThrowException() throws IllegalArgumentException, CorruptCapturedImage, KeyException {
         try {
-            sampleSet.addImage(1, fileSet);
+            sampleSet.addImage(1, pol0, pol45, pol90, pol135);
         } catch (KeyAlreadyExistsException e) {
             assertTrue(true);
         }
     }
 
     @Test
-    public void removeImage_fileSet_ReturnsZeroLengthForChannelOne() {
-        // Create a new file set.
-        File pol0 = new File(root, "pol0.tiff");
-        File pol45 = new File(root, "pol45.tiff");
-        File pol90 = new File(root, "pol90.tiff");
-        File pol135 = new File(root, "pol135.tiff");
-
-        CapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
-
-        sampleSet.removeImage(1, fileSet.getSetName());
+    public void removeImage_fileSet_ReturnsZeroLengthForChannelOne() throws IllegalArgumentException, KeyException {
+        sampleSet.removeImage(1, sampleSet.getChannelImages(1).get(0).getSetName());
         assertTrue(sampleSet.getChannelImages(1).size() == 0);
-
     }
 
     @Test
-    public void removeImage_nonExistentfileSet_ShouldThrowException() {
-        File pol0 = new File(root, "qpol0.tiff");
-        File pol45 = new File(root, "qpol45.tiff");
-        File pol90 = new File(root, "qpol90.tiff");
-        File pol135 = new File(root, "qpol135.tiff");
-
-        CapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
-
+    public void removeImage_nonExistentfileSet_ShouldThrowException() throws KeyException {
         try {
-            sampleSet.removeImage(1, fileSet.getSetName());
+            sampleSet.removeImage(1, "wrongSetName");
         } catch (IllegalArgumentException e) {
             assertTrue(true);
         }

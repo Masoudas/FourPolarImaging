@@ -30,11 +30,11 @@ public class SampleImageSet extends AcquisitionSet {
     }
 
     @Override
-    public void removeImage(int channel, String setName) throws IllegalArgumentException, KeyException {
+    public void removeImage(int channel, String setName) throws KeyException {
         this._checkChannel(channel);
         
         if (!fileSuperSet.get(channel - 1).containsKey(setName))
-            throw new IllegalArgumentException("The given file set does not exist!");
+            throw new KeyException("The given file set does not exist!");
                   
         fileSuperSet.get(channel - 1).remove(setName);
     }
