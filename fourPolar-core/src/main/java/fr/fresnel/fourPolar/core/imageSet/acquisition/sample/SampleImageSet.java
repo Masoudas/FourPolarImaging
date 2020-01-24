@@ -1,101 +1,71 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition.sample;
 
+import java.security.KeyException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 /**
  * Encapsulates the sample image set files as provided by the user.
  */
-public class SampleImageSet {
+public class SampleImageSet extends AcquisitionSet {
     private ArrayList<Hashtable<String, ICapturedImageFileSet>> fileSuperSet;
-    private FourPolarImagingSetup imagingSetup;
-    private ICapturedImageChecker _imageChecker;
 
     public SampleImageSet(FourPolarImagingSetup imagingSetup, ICapturedImageChecker imageChecker) {
+        super(imagingSetup, imageChecker);
         fileSuperSet = new ArrayList<Hashtable<String, ICapturedImageFileSet>>(imagingSetup.getnChannel());
 
         for (int channel = 0; channel < imagingSetup.getnChannel(); channel++) {
             fileSuperSet.add(channel, new Hashtable<String, ICapturedImageFileSet>());
         }
-
-        this.imagingSetup = imagingSetup;
-        this._imageChecker = imageChecker;
-
     }
 
-    /**
-     * Adds the given image fileSet to the channel if the name extract does not
-     * already exist, otherwise returns Exception.
-     * 
-     * @param fileSet
-     * @return
-     * @throws CorruptCapturedImage
-     */
-    public void addImage(int channel, ICapturedImageFileSet fileSet)
-            throws KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
-        if (fileSet.getnCameras() != this.imagingSetup.getCameras())
-            throw new IllegalArgumentException("The captured file set corresponds to different number of cameras");
-
-        if (fileSuperSet.get(channel - 1).containsKey(fileSet.getSetName()))
-            throw new KeyAlreadyExistsException("The given file set already exists for this channel");
+    @Override
+    public void removeImage(int channel, String setName) throws IllegalArgumentException, KeyException {
+        this._checkChannel(channel);
         
-        for (String label : Cameras.getLabels(this.imagingSetup.getCameras())) {
-            this._imageChecker.checkCompatible(fileSet.getFile(label));    
-        }
-        
-        fileSuperSet.get(channel - 1).put(fileSet.getSetName(), fileSet);
-    }
-
-    /**
-     * Removes an image file set from the channel.
-     * 
-     * @param fileSet
-     * @return
-     */
-    public void removeImage(int channel, String setName) throws IllegalArgumentException {
         if (!fileSuperSet.get(channel - 1).containsKey(setName))
             throw new IllegalArgumentException("The given file set does not exist!");
-
+                  
         fileSuperSet.get(channel - 1).remove(setName);
     }
 
     /**
      * Returns the images of a channel as a set as of {@link ICapturedImageFileSet}.
-     * 
      * @param channel
-     * @return
+     * @return : All images of this channel as an array list.
+     * @throws KeyException : In case channel number is zero or greater than number of channels.
      */
-    public Set<ICapturedImageFileSet> getChannelImages(int channel) {
-        HashSet<ICapturedImageFileSet> channelSet = new HashSet<ICapturedImageFileSet>();
-        for (String setName : fileSuperSet.get(channel - 1).keySet()){
-            channelSet.add(fileSuperSet.get(channel - 1).get(setName));
-        }
-
-        return channelSet;
+    public List<ICapturedImageFileSet> getChannelImages(int channel) throws KeyException {
+        this._checkChannel(channel);
+        
+        return new ArrayList<ICapturedImageFileSet>(fileSuperSet.get(channel - 1).values());
     }
 
-    /**
-     * @return the imagingSetup
-     */
-    public FourPolarImagingSetup getImagingSetup() {
-        return imagingSetup;
+    @Override
+    protected void _addImage(int channel, ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
+        if (fileSuperSet.get(channel - 1).containsKey(fileSet.getSetName()))
+            throw new KeyAlreadyExistsException("The given file set already exists for this channel");
+
+        fileSuperSet.get(channel - 1).put(fileSet.getSetName(), fileSet);
+
     }
 
-    /**
-     * Returns the associated image checker.
-     * @return
-     */
-    public ICapturedImageChecker getCapturedImageChecker(){
-        return _imageChecker;
+    @Override
+    public ICapturedImageFileSet getImage(int channel, String setName) throws KeyException {
+        this._checkChannel(channel);
+
+        if (!fileSuperSet.get(channel - 1).containsKey(setName))
+            throw new KeyAlreadyExistsException("The given file set already exists for this channel");
+        return null;
     }
 }

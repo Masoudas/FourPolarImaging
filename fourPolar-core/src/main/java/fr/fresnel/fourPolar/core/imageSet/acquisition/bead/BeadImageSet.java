@@ -1,6 +1,11 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition.bead;
 
+import java.security.KeyException;
+
+import javax.management.openmbean.KeyAlreadyExistsException;
+
 import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
@@ -11,26 +16,48 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
  * channel must contain a separate bead image set, which is stored as a
  * {@link CapturedImageFileSet}.
  */
-public class BeadImageSet {
+public class BeadImageSet extends AcquisitionSet {
     private ICapturedImageFileSet[] imageFileSet = null;
-    private ICapturedImageChecker _imageChecker;
-    private FourPolarImagingSetup _imagingSetup;
 
+    /**
+     *
+     * Defines the bead image set, which accompanies the sample image set. Each
+     * channel must contain a separate bead image set, which is stored as a
+     * {@link CapturedImageFileSet}.
+     * 
+     * @param imagingSetup
+     * @param imageChecker
+     */
     public BeadImageSet(FourPolarImagingSetup imagingSetup, ICapturedImageChecker imageChecker) {
+        super(imagingSetup, imageChecker);
+
         this.imageFileSet = new ICapturedImageFileSet[imagingSetup.getnChannel()];
-        this._imagingSetup = imagingSetup;
     }
 
-    public void setChannelImage(int channelNo, ICapturedImageFileSet fileSet) throws CorruptCapturedImage {
-        for (String label : Cameras.getLabels(this._imagingSetup.getCameras())) {
-            this._imageChecker.checkCompatible(fileSet.getFile(label));    
+    @Override
+    protected void _addImage(int channel, ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
+        if (imageFileSet[channel - 1] != null) {
+            throw new KeyAlreadyExistsException("A bead image has already been define for channel " + channel);
         }
-        
-        imageFileSet[channelNo - 1] = fileSet;
+
+        imageFileSet[channel - 1] = fileSet;
     }
 
-    public ICapturedImageFileSet getChannelImage(int channelNo) {
-        return imageFileSet[channelNo];
+    @Override
+    public ICapturedImageFileSet getImage(int channel, String setName) throws KeyException {
+        this._checkChannel(channel);
+        return imageFileSet[channel];
     }
-    
+
+    /**
+     * This method only requires the channel number to function.
+     */
+    @Override
+    public void removeImage(int channel, String setName) throws KeyException {
+        this._checkChannel(channel);
+
+        imageFileSet[channel - 1] = null;
+
+    }
+
 }
