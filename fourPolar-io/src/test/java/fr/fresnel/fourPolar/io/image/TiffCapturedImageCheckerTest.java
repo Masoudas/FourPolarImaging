@@ -28,7 +28,7 @@ public class TiffCapturedImageCheckerTest {
         File tiffImage = new File(_root, "16bit.tif");
         assertDoesNotThrow(() -> {
             tiffChecker.checkCompatible(tiffImage);
-        }, "No exceptions thrown.");
+        });
     }
 
     @Test
