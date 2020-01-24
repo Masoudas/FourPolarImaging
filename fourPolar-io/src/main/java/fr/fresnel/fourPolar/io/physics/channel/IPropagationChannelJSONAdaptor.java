@@ -8,17 +8,22 @@ import fr.fresnel.fourPolar.core.physics.channel.PropagationChannel;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarizations;
 
 /**
- * This class is used as an adaptor of {@link IPropagationChannel} to
- * JSON.
+ * This class is used as an adaptor of {@link IPropagationChannel} to JSON.
  */
 @JsonPropertyOrder({ "Channel Number", "Wavelength", "Calib-Factor Pol0", "Calib-Factor Pol45", "Calib-Factor Pol90",
         "Calib-Factor Pol135" })
 public class IPropagationChannelJSONAdaptor {
+    /**
+     * This is the scale used for writing the wavelength.
+     * The json description must change accordingly.
+     */
+    private double _wavelengthScale = 1e-9;
+    @JsonProperty("Wavelength (nm)")
+    private double _wavelength;
+
     @JsonProperty("Channel Number")
     private int _channalNumber;
 
-    @JsonProperty("Wavelength")
-    private double _wavelength;
 
     @JsonProperty("Calib-Factor Pol0")
     private double _pol0;
@@ -48,16 +53,23 @@ public class IPropagationChannelJSONAdaptor {
     }
 
     /**
-     * Returns the content of the JSON as a proper interface.
+     * Returns the content of the JSON as a proper interface
+     * Note that when wavelength is read, it is scaled to go back to meter.
+     * 
      * @return
      */
     public IPropagationChannel fromJSON() {
-        return new PropagationChannel(
-            this._wavelength, this._pol0, this._pol45, this._pol90, this._pol135);
+        return new PropagationChannel(this._wavelength * _wavelengthScale, this._pol0, this._pol45, this._pol90, this._pol135);
     }
 
+    /**
+     * When wave length is read from the original propagation channel, it's devided
+     * by 1e-9 to be written in nano meter unit.
+     * 
+     * @param channel
+     */
     private void setWaveLength(IPropagationChannel channel) {
-        _wavelength = channel.getWavelength();
+        _wavelength = channel.getWavelength() / _wavelengthScale;
     }
 
     private void setPol0(IPropagationChannel channel) {
