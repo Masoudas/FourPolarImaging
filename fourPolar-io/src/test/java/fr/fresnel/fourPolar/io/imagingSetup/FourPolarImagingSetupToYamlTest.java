@@ -18,7 +18,7 @@ import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
 
 /**
  * Note that in all the test, the files are created in the 4POLAR subfolder of
- * the root.
+ * the root. 
  */
 public class FourPolarImagingSetupToYamlTest {
 
@@ -38,7 +38,7 @@ public class FourPolarImagingSetupToYamlTest {
         INumericalAperture na = new NumericalAperture(1.45, 5.65, 3.4342, 1.3434);
         imagingSetup.setNumericalAperture(na);
 
-        PropagationChannel prop = new PropagationChannel(2e-9, 1.45, 1.54, 1.34, 3.11);
+        PropagationChannel prop = new PropagationChannel(1e-9, 1.45, 1.54, 1.34, 3.11);
         imagingSetup.setPropagationChannel(1, prop);
         imagingSetup.setPropagationChannel(2, prop);
 

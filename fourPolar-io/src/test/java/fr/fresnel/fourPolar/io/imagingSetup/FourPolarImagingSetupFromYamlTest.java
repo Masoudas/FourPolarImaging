@@ -42,7 +42,7 @@ public class FourPolarImagingSetupFromYamlTest {
         INumericalAperture na = new NumericalAperture(1.45, 5.65, 3.4342, 1.3434);
         imagingSetup.setNumericalAperture(na);
 
-        PropagationChannel prop = new PropagationChannel(1, 1.45, 1.54, 1.34, 3.11);
+        PropagationChannel prop = new PropagationChannel(1e-9, 1.45, 1.54, 1.34, 3.11);
         imagingSetup.setPropagationChannel(1, prop);
 
         File rootFolder = new File(FourPolarImagingSetupToYamlTest.class.getResource("").getPath());
