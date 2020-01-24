@@ -48,11 +48,8 @@ public class PropagationChannel implements IPropagationChannel {
     }
 
     private void _checkWavelength(double wavelength) throws WavelengthOutOfRange{
-        double lowerWavelength = 1e-9;
-        double upperWavelength = 10e-9;
-
-        if (wavelength < lowerWavelength || wavelength > upperWavelength){
-            throw new WavelengthOutOfRange("The wavelength is not in the working range of the FourPolar setup");
+        if (wavelength <= 0){
+            throw new WavelengthOutOfRange("Wavelength should be a positive value");
         } 
         
     }
