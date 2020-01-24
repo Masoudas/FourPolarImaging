@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.core.image.captured;
 
-import java.io.File;
-
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
@@ -29,8 +27,9 @@ public interface ICapturedImage {
 
     /**
      * Get the actual image as an unsigned short.
+     * 
      * @return
      */
     public Img<UnsignedShortType> getImage();
-    
+
 }

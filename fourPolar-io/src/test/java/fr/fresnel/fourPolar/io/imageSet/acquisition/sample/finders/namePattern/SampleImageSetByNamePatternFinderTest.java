@@ -11,8 +11,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
@@ -30,8 +28,8 @@ public class SampleImageSetByNamePatternFinderTest {
         }
 
         @Test
-        public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel() throws NoImageFoundOnRoot,
-                        CorruptCapturedImage {
+        public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel()
+                        throws NoImageFoundOnRoot, CorruptCapturedImage {
                 File rootOneCamera = new File(root, "OneCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
@@ -41,18 +39,11 @@ public class SampleImageSetByNamePatternFinderTest {
                 List<RejectedCapturedImage> rejectedChan1 = finder.findChannelImages(sampleImageSet, 1, "C1");
                 List<RejectedCapturedImage> rejectedChan2 = finder.findChannelImages(sampleImageSet, 2, "C2");
 
-                // Generate sets to see if found
-                ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C1.tif"));
-                ICapturedImageFileSet Img2_C1 = new CapturedImageFileSet(new File(rootOneCamera, "Img2_C1.tif"));
-
-                ICapturedImageFileSet Img1_C2 = new CapturedImageFileSet(new File(rootOneCamera, "Img1_C2.tif"));
-                ICapturedImageFileSet Img2_C2 = new CapturedImageFileSet(new File(rootOneCamera, "Img2_C2.tif"));
-
                 SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
-                actualSampleImageSet.addImage(1, Img1_C1);
-                actualSampleImageSet.addImage(1, Img2_C1);
-                actualSampleImageSet.addImage(2, Img1_C2);
-                actualSampleImageSet.addImage(2, Img2_C2);
+                actualSampleImageSet.addImage(1, new File(rootOneCamera, "Img1_C1.tif"));
+                actualSampleImageSet.addImage(1, new File(rootOneCamera, "Img2_C1.tif"));
+                actualSampleImageSet.addImage(2, new File(rootOneCamera, "Img1_C2.tif"));
+                actualSampleImageSet.addImage(2, new File(rootOneCamera, "Img2_C2.tif"));
 
                 assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1))
                                 && actualSampleImageSet.getChannelImages(2).equals(sampleImageSet.getChannelImages(2))
@@ -74,17 +65,13 @@ public class SampleImageSetByNamePatternFinderTest {
                 List<RejectedCapturedImage> rejectedChan1 = finder.findChannelImages(sampleImageSet, 1, null);
 
                 // Generate sets to see if found
-                ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img1_C1_Pol0_90.tif"),
-                                new File(rootTwoCamera, "Img1_C1_Pol45_135.tif"));
-                ICapturedImageFileSet Img2_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img2_C1_Pol0_90.tif"),
-                                new File(rootTwoCamera, "Img2_C1_Pol45_135.tif"));
-                ICapturedImageFileSet Img3_C1 = new CapturedImageFileSet(new File(rootTwoCamera, "Img3_C1_Pol0_90.tif"),
-                                new File(rootTwoCamera, "Img3_C1_Pol45_135.tif"));
-
                 SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
-                actualSampleImageSet.addImage(1, Img1_C1);
-                actualSampleImageSet.addImage(1, Img2_C1);
-                actualSampleImageSet.addImage(1, Img3_C1);
+                actualSampleImageSet.addImage(1, new File(rootTwoCamera, "Img1_C1_Pol0_90.tif"),
+                                new File(rootTwoCamera, "Img1_C1_Pol45_135.tif"));
+                actualSampleImageSet.addImage(1, new File(rootTwoCamera, "Img2_C1_Pol0_90.tif"),
+                                new File(rootTwoCamera, "Img2_C1_Pol45_135.tif"));
+                actualSampleImageSet.addImage(1, new File(rootTwoCamera, "Img3_C1_Pol0_90.tif"),
+                                new File(rootTwoCamera, "Img3_C1_Pol45_135.tif"));
                 assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1))
                                 && rejectedChan1.size() == 3);
         }
@@ -103,23 +90,19 @@ public class SampleImageSetByNamePatternFinderTest {
                 List<RejectedCapturedImage> rejectedChan1 = finder.findChannelImages(sampleImageSet, 1, null);
 
                 // Generate sets to see if found
-                ICapturedImageFileSet Img1_C1 = new CapturedImageFileSet(new File(rootFourCamera, "Img1_C1_Pol0.tif"),
+                SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
+                actualSampleImageSet.addImage(1, new File(rootFourCamera, "Img1_C1_Pol0.tif"),
                                 new File(rootFourCamera, "Img1_C1_Pol45.tif"),
                                 new File(rootFourCamera, "Img1_C1_Pol90.tif"),
                                 new File(rootFourCamera, "Img1_C1_Pol135.tif"));
-                ICapturedImageFileSet Img2_C1 = new CapturedImageFileSet(new File(rootFourCamera, "Img2_C1_Pol0.tif"),
+                actualSampleImageSet.addImage(1, new File(rootFourCamera, "Img2_C1_Pol0.tif"),
                                 new File(rootFourCamera, "Img2_C1_Pol45.tif"),
                                 new File(rootFourCamera, "Img2_C1_Pol90.tif"),
                                 new File(rootFourCamera, "Img2_C1_Pol135.tif"));
-                ICapturedImageFileSet Img3_C1 = new CapturedImageFileSet(new File(rootFourCamera, "Img3_C1_Pol0.tif"),
+                actualSampleImageSet.addImage(1, new File(rootFourCamera, "Img3_C1_Pol0.tif"),
                                 new File(rootFourCamera, "Img3_C1_Pol45.tif"),
                                 new File(rootFourCamera, "Img3_C1_Pol90.tif"),
                                 new File(rootFourCamera, "Img3_C1_Pol135.tif"));
-
-                SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
-                actualSampleImageSet.addImage(1, Img1_C1);
-                actualSampleImageSet.addImage(1, Img2_C1);
-                actualSampleImageSet.addImage(1, Img3_C1);
                 assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1))
                                 && rejectedChan1.size() == 3);
         }

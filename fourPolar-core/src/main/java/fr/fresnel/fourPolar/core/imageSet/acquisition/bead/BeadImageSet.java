@@ -43,7 +43,6 @@ public class BeadImageSet extends AcquisitionSet {
 
     @Override
     public ICapturedImageFileSet getImage(int channel, String setName) throws KeyException {
-        this._checkChannel(channel);
         return imageFileSet[channel];
     }
 
@@ -51,9 +50,7 @@ public class BeadImageSet extends AcquisitionSet {
      * This method only requires the channel number to function.
      */
     @Override
-    public void removeImage(int channel, String setName) throws KeyException {
-        this._checkChannel(channel);
-
+    public void removeImage(int channel, String setName) {
         imageFileSet[channel - 1] = null;
 
     }

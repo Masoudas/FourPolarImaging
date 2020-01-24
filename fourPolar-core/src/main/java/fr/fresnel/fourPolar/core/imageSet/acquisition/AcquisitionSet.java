@@ -34,9 +34,7 @@ public abstract class AcquisitionSet {
      * @throws CorruptCapturedImage      : In case at least one image is corrupt.
      */
     public void addImage(int channel, File pol0_45_90_135)
-            throws KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage, KeyException {
-        this._checkChannel(channel);
-
+            throws KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
         if (this._imagingSetup.getCameras() != Cameras.One) {
             throw new IllegalArgumentException(
                     "Use addImage method for " + this._imagingSetup.getCameras() + " cameras");
@@ -59,9 +57,7 @@ public abstract class AcquisitionSet {
      * @throws CorruptCapturedImage      : In case at least one image is corrupt.
      */
     public void addImage(int channel, File pol0_90, File pol45_135)
-            throws KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage, KeyException {
-        this._checkChannel(channel);
-        
+            throws KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
         if (this._imagingSetup.getCameras() != Cameras.Two) {
             throw new IllegalArgumentException(
                     "Use addImage method for " + this._imagingSetup.getCameras() + " cameras");
@@ -88,9 +84,7 @@ public abstract class AcquisitionSet {
      * @throws CorruptCapturedImage      : In case at least one image is corrupt.
      */
     public void addImage(int channel, File pol0, File pol45, File pol90, File pol135)
-            throws KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage, KeyException {
-        this._checkChannel(channel);
-
+            throws KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
         if (this._imagingSetup.getCameras() != Cameras.Two) {
             throw new IllegalArgumentException(
                     "Use addImage method for " + this._imagingSetup.getCameras() + " cameras");
@@ -123,9 +117,8 @@ public abstract class AcquisitionSet {
      * Remove an image using channel number and set name.
      * @param channel
      * @param setName
-     * @throws KeyException : In case the given channel or setName does not exist.
      */
-    public abstract void removeImage(int channel, String setName) throws KeyException;
+    public abstract void removeImage(int channel, String setName);
 
     /**
      * @return the imagingSetup
@@ -141,12 +134,6 @@ public abstract class AcquisitionSet {
      */
     public ICapturedImageChecker getCapturedImageChecker() {
         return _imageChecker;
-    }
-
-    protected void _checkChannel(int channel) throws KeyException {
-        if (channel == 0 || channel > this._imagingSetup.getnChannel()) {
-            throw new KeyException("Channel " + channel + " does not exist.");
-        }        
     }
 
 }

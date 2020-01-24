@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.NoImageFoundOnRoot;
@@ -17,7 +16,7 @@ class FourCameraChannelImageFinder implements IChannelImageFinder {
     public List<RejectedCapturedImage> find(SampleImageSetByNamePatternFinder sampleSetFinder,
             SampleImageSet sampleImageSet, int channel, String channelLabel) throws NoImageFoundOnRoot {
         String[] polLabel = sampleSetFinder.getPolLabel();
-        
+
         File[] imagesPol0 = sampleSetFinder.getRootFolder().listFiles(new FilterCapturedImage(polLabel[0], channelLabel,
                 sampleImageSet.getCapturedImageChecker().getExtension()));
 
@@ -48,10 +47,7 @@ class FourCameraChannelImageFinder implements IChannelImageFinder {
 
             if (polCtr == 4) {
                 try {
-                    CapturedImageFileSet fileSet = new CapturedImageFileSet(polFiles[0], polFiles[1], polFiles[2],
-                            polFiles[3]);
-                    sampleImageSet.addImage(channel, fileSet);
-
+                    sampleImageSet.addImage(channel, polFiles[0], polFiles[1], polFiles[2], polFiles[3]);
                 } catch (CorruptCapturedImage e) {
                     this._rejectedImages.add(e.getRejectedImage());
                 }

@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.core.image.captured;
 
-import java.util.Arrays;
-
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import net.imglib2.img.Img;
@@ -27,18 +25,18 @@ public class CapturedImage implements ICapturedImage {
      */
     public CapturedImage(ICapturedImageFileSet fileSet, String fileLabel, Img<UnsignedShortType> img) {
         this._fileSet = fileSet;
-        
+
         _checkfileLabel(fileSet, fileLabel);
         this._fileLabel = fileLabel;
 
-        if (img == null){
+        if (img == null) {
             throw new IllegalArgumentException("Captured image cannot be instantiated with an empty image.");
         }
         this._img = img;
     }
 
-    private void _checkfileLabel(ICapturedImageFileSet fileSet, String fileLabel) throws IllegalArgumentException{
-        if (!fileSet.hasLabel(fileLabel)){
+    private void _checkfileLabel(ICapturedImageFileSet fileSet, String fileLabel) throws IllegalArgumentException {
+        if (!fileSet.hasLabel(fileLabel)) {
             throw new IllegalArgumentException("The given file label is not in the file set.");
         }
     }

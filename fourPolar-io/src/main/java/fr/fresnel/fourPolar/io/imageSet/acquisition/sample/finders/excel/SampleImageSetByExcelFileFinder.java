@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -14,7 +16,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.ExcelIncorrentRow;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.MissingExcelTitleRow;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.TemplateSampleSetExcelNotFound;
@@ -64,10 +65,12 @@ public class SampleImageSetByExcelFileFinder {
                 File[] files = createFiles(nImages, row);
 
                 try {
-                        CapturedImageFileSet fileSet = this.createFileSet(files);
-                        sampleImageSet.addImage(channel, fileSet);
+                    this._addImage(sampleImageSet, channel, files);
                 } catch (CorruptCapturedImage e) {
                     rejectedImages.add(e.getRejectedImage());
+                } catch (KeyAlreadyExistsException e) {
+                    RejectedCapturedImage rCapturedImage = new RejectedCapturedImage(files[0], "Duplicate file set");
+                    rejectedImages.add(rCapturedImage);
                 }
             }
 
@@ -103,13 +106,19 @@ public class SampleImageSetByExcelFileFinder {
         return files;
     }
 
-    private CapturedImageFileSet createFileSet(File[] files) {
-        if (files.length == 1)
-            return new CapturedImageFileSet(files[0]);
-        else if (files.length == 2)
-            return new CapturedImageFileSet(files[0], files[1]);
-        else
-            return new CapturedImageFileSet(files[0], files[1], files[2], files[3]);
+    private void _addImage(SampleImageSet sampleImageSet, int channel, File[] files)
+            throws CorruptCapturedImage, KeyAlreadyExistsException {
+        try {
+            if (files.length == 1)
+                sampleImageSet.addImage(channel, files[0]);
+            else if (files.length == 2)
+                sampleImageSet.addImage(channel, files[0], files[1]);
+            else
+                sampleImageSet.addImage(channel, files[0], files[1], files[2], files[3]);
+
+        } catch (IllegalArgumentException e) {
+        }
+
     }
 
     private int _findTitleRow(Sheet sheet, Cameras camera) throws MissingExcelTitleRow {

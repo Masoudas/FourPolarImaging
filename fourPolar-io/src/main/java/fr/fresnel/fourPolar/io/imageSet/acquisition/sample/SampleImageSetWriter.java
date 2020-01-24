@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Set;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -94,7 +94,7 @@ public class SampleImageSetWriter {
             this.writeTitleRow(sheet);
 
             int rowIndex = 1;
-            Set<ICapturedImageFileSet> channelImages = this.sampleSet.getChannelImages(channel);
+            List<ICapturedImageFileSet> channelImages = this.sampleSet.getChannelImages(channel);
             for (ICapturedImageFileSet fileSet : channelImages) {
                 this.writeImageSet(sheet, rowIndex, fileSet);
                 rowIndex++;

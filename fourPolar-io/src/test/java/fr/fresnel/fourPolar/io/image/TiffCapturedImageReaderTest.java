@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.io.image;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
 import java.security.KeyException;
@@ -32,15 +30,16 @@ public class TiffCapturedImageReaderTest {
     public void read_16bitTiff_ShouldShowImage()
             throws IllegalArgumentException, IOException, InterruptedException, KeyException, CorruptCapturedImage {
         final File pol0_45_90_135 = new File(_testResource, "16bit.tif");
-        
+
         FourPolarImagingSetup setup = new FourPolarImagingSetup(1, Cameras.One);
         final SampleImageSet sImageSet = new SampleImageSet(setup, new TiffCapturedImageChecker());
         sImageSet.addImage(1, pol0_45_90_135);
-        
+
         final TiffCapturedImageReader imgReader = new TiffCapturedImageReader();
 
-        final ICapturedImage capturedImage = imgReader.read(sImageSet.getChannelImages(1).get(0), Cameras.getLabels(Cameras.One)[0]);
-        
+        final ICapturedImage capturedImage = imgReader.read(sImageSet.getChannelImages(1).get(0),
+                Cameras.getLabels(Cameras.One)[0]);
+
         ImageJFunctions.show(capturedImage.getImage());
         TimeUnit.SECONDS.sleep(10);
 

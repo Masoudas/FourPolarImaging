@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.NoImageFoundOnRoot;
@@ -35,8 +34,7 @@ class TwoCameraChannelImageFinder implements IChannelImageFinder {
                         new RejectedCapturedImage(imagePol0_90, "Other polarization images could no be detected."));
             } else {
                 try {
-                    CapturedImageFileSet fileSet = new CapturedImageFileSet(imagePol0_90, candidatesPol45_135[0]);
-                    sampleImageSet.addImage(channel, fileSet);
+                    sampleImageSet.addImage(channel, imagePol0_90, candidatesPol45_135[0]);
                 } catch (CorruptCapturedImage e) {
                     this._rejectedImages.add(e.getRejectedImage());
                 }
@@ -49,5 +47,4 @@ class TwoCameraChannelImageFinder implements IChannelImageFinder {
 
         return this._rejectedImages;
     }
-
 }

@@ -14,7 +14,7 @@ import io.scif.SCIFIO;
 import io.scif.util.FormatTools;
 
 import org.scijava.io.location.FileLocation;
-import org.scijava.io.location.Location;
+
 
 /**
  * A class for checking the compatibility of a tiff image with the software

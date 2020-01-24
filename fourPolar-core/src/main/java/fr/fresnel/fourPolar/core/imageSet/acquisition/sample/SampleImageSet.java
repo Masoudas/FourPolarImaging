@@ -2,10 +2,8 @@ package fr.fresnel.fourPolar.core.imageSet.acquisition.sample;
 
 import java.security.KeyException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Set;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
@@ -30,24 +28,19 @@ public class SampleImageSet extends AcquisitionSet {
     }
 
     @Override
-    public void removeImage(int channel, String setName) throws KeyException {
-        this._checkChannel(channel);
-        
-        if (!fileSuperSet.get(channel - 1).containsKey(setName))
-            throw new KeyException("The given file set does not exist!");
-                  
+    public void removeImage(int channel, String setName) {
         fileSuperSet.get(channel - 1).remove(setName);
     }
 
     /**
      * Returns the images of a channel as a set as of {@link ICapturedImageFileSet}.
+     * 
      * @param channel
      * @return : All images of this channel as an array list.
-     * @throws KeyException : In case channel number is zero or greater than number of channels.
+     * @throws KeyException : In case channel number is zero or greater than number
+     *                      of channels.
      */
-    public List<ICapturedImageFileSet> getChannelImages(int channel) throws KeyException {
-        this._checkChannel(channel);
-        
+    public List<ICapturedImageFileSet> getChannelImages(int channel) {
         return new ArrayList<ICapturedImageFileSet>(fileSuperSet.get(channel - 1).values());
     }
 
@@ -62,8 +55,6 @@ public class SampleImageSet extends AcquisitionSet {
 
     @Override
     public ICapturedImageFileSet getImage(int channel, String setName) throws KeyException {
-        this._checkChannel(channel);
-
         if (!fileSuperSet.get(channel - 1).containsKey(setName))
             throw new KeyAlreadyExistsException("The given file set already exists for this channel");
         return null;
