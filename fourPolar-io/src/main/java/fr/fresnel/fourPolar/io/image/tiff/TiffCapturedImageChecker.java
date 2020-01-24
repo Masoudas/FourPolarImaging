@@ -13,6 +13,9 @@ import io.scif.Reader;
 import io.scif.SCIFIO;
 import io.scif.util.FormatTools;
 
+import org.scijava.io.location.FileLocation;
+import org.scijava.io.location.Location;
+
 /**
  * A class for checking the compatibility of a tiff image with the software
  * criteria.
@@ -72,7 +75,8 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
      */
     private void _bitDepthAbove16(File image) throws FormatException, IOException, CorruptCapturedImage {
         final SCIFIO scifio = new SCIFIO();
-        final Reader reader = scifio.initializer().initializeReader(image.getAbsolutePath());
+        final FileLocation fileLocation = new FileLocation(image);
+        final Reader reader = scifio.initializer().initializeReader(fileLocation);
         final Metadata meta = reader.getMetadata();
 
         final ImageMetadata iMeta = meta.get(0);
