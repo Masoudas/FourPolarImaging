@@ -85,7 +85,7 @@ public abstract class AcquisitionSet {
      */
     public void addImage(int channel, File pol0, File pol45, File pol90, File pol135)
             throws KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
-        if (this._imagingSetup.getCameras() != Cameras.Two) {
+        if (this._imagingSetup.getCameras() != Cameras.Four) {
             throw new IllegalArgumentException(
                     "Use addImage method for " + this._imagingSetup.getCameras() + " cameras");
         }
