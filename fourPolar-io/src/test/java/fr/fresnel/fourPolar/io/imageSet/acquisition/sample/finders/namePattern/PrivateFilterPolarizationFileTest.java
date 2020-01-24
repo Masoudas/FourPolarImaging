@@ -6,13 +6,14 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-
-public class FilterPolarizationFileTest {
+public class PrivateFilterPolarizationFileTest {
+    private static File _root = new File(
+            PrivateFilterPolarizationFileTest.class.getResource("FilterPolarizationFile").getPath());
 
     @Test    
     public void list_FilterPol90_ReturnsImg1_C1_Pol90() {
         // Start with the Pol0 file
-        File root = new File(FilterCapturedImagesTest.class.getResource("FourCamera").getPath());
+        File root = new File(_root, "FourCamera");
         File pol0File = new File(root, "Img1_C1_Pol0.tif");
 
         FilterPolarizationFile filter = new FilterPolarizationFile(pol0File, "Pol0", "Pol90");

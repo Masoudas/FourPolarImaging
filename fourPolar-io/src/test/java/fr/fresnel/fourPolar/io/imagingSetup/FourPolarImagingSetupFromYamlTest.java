@@ -57,11 +57,11 @@ public class FourPolarImagingSetupFromYamlTest {
         Rectangle diskRect90 = diskImagingSetup.getFieldOfView().getFoV(Polarizations.pol90);        
         Rectangle diskRect135 = diskImagingSetup.getFieldOfView().getFoV(Polarizations.pol135);        
         INumericalAperture diskNA = diskImagingSetup.getNumericalAperture();
-        IPropagationChannel diskProp = diskImagingSetup.getPropagationChannel(1);
+        IPropagationChannel channel = diskImagingSetup.getPropagationChannel(1);
 
         assertTrue( checkRectangle(diskRect0, rect0) && checkRectangle(diskRect45, rect45) &&
             checkRectangle(diskRect90, rect90) && checkRectangle(diskRect135, rect135) &&
-            checkNA(diskNA, na) && checkChannel(diskProp, prop) );
+            checkNA(diskNA, na) && checkChannel(channel, prop) );
 
     }
 
