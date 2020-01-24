@@ -34,30 +34,10 @@ public class TemplateExcelFileGenerator {
         this.folder = this._getFolder(rootFolder);
         this._nCommentColumns = 8;
 
-        comments_examplePage = new String[4];
-        comments_examplePage[0] = "This page serves as an example of how to fill this excel file.";
-        comments_examplePage[1] = "Put the COMPLETE path to the images of the channel in this file.";
-        comments_examplePage[2] = "The files in each row must correspond to different polarizations of same sample.";
-        comments_examplePage[3] = "Ensure that the title row is always present before all file names, otherwise the files would not be detected.";
-
-        comments_filePage = new String[1];
-        comments_filePage[0] = "Refer to the next sheet on instructions for filling this excel file";
-    }
-
-    /**
-     * To create a template file from scratch. The second page would the example page.
-     * @param camera : Number of columns
-     * @param rootFolder : Root folder 
-     * @param comments_examplePage : Comments that would be put on top of the example page.
-     * @param nCommentColumns : Number of columns the comments would occupy.
-     */
-    public TemplateExcelFileGenerator(Cameras camera, File rootFolder, String[] comments_examplePage, int nCommentColumns) {
-        this(camera, rootFolder);
-        this.comments_examplePage = comments_examplePage;
-        this._nCommentColumns = nCommentColumns;
     }
 
     public boolean createChannelFile(int channel) throws IOException {
+        _generateComments(channel);
         File outputFile = this.getFileName(channel);
 
         outputFile.delete();
@@ -94,6 +74,16 @@ public class TemplateExcelFileGenerator {
     private File getFileName(int channel) {
         String fileName = "SampleImages_Channel" + channel + ".xlsx";
         return new File(this.folder, fileName);
+    }
+
+    private void _generateComments(int channel) {
+        comments_examplePage = new String[3];
+        comments_examplePage[0] = "This page serves as an example of how to fill this excel file.";
+        comments_examplePage[1] = "Put the COMPLETE path to the images of channel " + channel + " in each row.";
+        comments_examplePage[2] = "Ensure that the title row is always present before all file names, otherwise the files would not be detected.";
+
+        comments_filePage = new String[1];
+        comments_filePage[0] = "Refer to the next sheet on instructions for filling this excel file";
     }
 
     /**
