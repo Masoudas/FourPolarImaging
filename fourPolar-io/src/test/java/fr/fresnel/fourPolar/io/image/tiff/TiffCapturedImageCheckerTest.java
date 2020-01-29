@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
-import fr.fresnel.fourPolar.io.image.tiff.TiffCapturedImageChecker;
+import fr.fresnel.fourPolar.io.image.tiff.grayscale.TiffCapturedImageChecker;
 
 public class TiffCapturedImageCheckerTest {
     private static File _root;

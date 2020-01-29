@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
 import fr.fresnel.fourPolar.core.physics.channel.PropagationChannel;
-import fr.fresnel.fourPolar.core.physics.polarization.Polarizations;
+import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
  * This class is used as an adaptor of {@link IPropagationChannel} to JSON.
@@ -73,19 +73,19 @@ public class IPropagationChannelJSONAdaptor {
     }
 
     private void setPol0(IPropagationChannel channel) {
-        _pol0 = channel.getCalibrationFactor(Polarizations.pol0);
+        _pol0 = channel.getCalibrationFactor(Polarization.pol0);
     }
 
     private void setPol45(IPropagationChannel channel) {
-        _pol45 = channel.getCalibrationFactor(Polarizations.pol45);
+        _pol45 = channel.getCalibrationFactor(Polarization.pol45);
     }
 
     private void setPol90(IPropagationChannel channel) {
-        _pol90 = channel.getCalibrationFactor(Polarizations.pol90);
+        _pol90 = channel.getCalibrationFactor(Polarization.pol90);
     }
 
     private void setPol135(IPropagationChannel channel) {
-        _pol135 = channel.getCalibrationFactor(Polarizations.pol135);
+        _pol135 = channel.getCalibrationFactor(Polarization.pol135);
     }
 
     private void setnChannel(int channelNumber) {

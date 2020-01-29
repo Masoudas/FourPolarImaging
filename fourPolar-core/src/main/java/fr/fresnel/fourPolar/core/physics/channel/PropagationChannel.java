@@ -4,7 +4,7 @@ import java.util.Hashtable;
 
 import fr.fresnel.fourPolar.core.exceptions.physics.channel.CalibrationFactorOutOfRange;
 import fr.fresnel.fourPolar.core.exceptions.physics.channel.WavelengthOutOfRange;
-import fr.fresnel.fourPolar.core.physics.polarization.Polarizations;
+import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
  * Represents the propagation channels of the imaging system. Each channel
@@ -12,7 +12,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarizations;
  */
 public class PropagationChannel implements IPropagationChannel {
     private double _wavelength;
-    private Hashtable<Polarizations, Double> _calibFact = new Hashtable<Polarizations, Double>(4);
+    private Hashtable<Polarization, Double> _calibFact = new Hashtable<Polarization, Double>(4);
 
     /**
      * Represents the propagation channels of the imaging system. Each channel
@@ -31,10 +31,10 @@ public class PropagationChannel implements IPropagationChannel {
         this._wavelength = wavelength;
 
         this._checkCalibrationFactor(calibFactPol0, calibFactPol45, calibFactPol90, calibFactPol135);
-        this._calibFact.put(Polarizations.pol0, calibFactPol0);
-        this._calibFact.put(Polarizations.pol45, calibFactPol45);
-        this._calibFact.put(Polarizations.pol90, calibFactPol90);
-        this._calibFact.put(Polarizations.pol135, calibFactPol135);
+        this._calibFact.put(Polarization.pol0, calibFactPol0);
+        this._calibFact.put(Polarization.pol45, calibFactPol45);
+        this._calibFact.put(Polarization.pol90, calibFactPol90);
+        this._calibFact.put(Polarization.pol135, calibFactPol135);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class PropagationChannel implements IPropagationChannel {
     }
 
     @Override
-    public double getCalibrationFactor(Polarizations pol) {
+    public double getCalibrationFactor(Polarization pol) {
         return this._calibFact.get(pol);
     }
 

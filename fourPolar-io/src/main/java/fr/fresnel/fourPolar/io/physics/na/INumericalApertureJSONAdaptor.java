@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
-import fr.fresnel.fourPolar.core.physics.polarization.Polarizations;
+import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
  * This class is used as an adaptor of {@link INumericalAperture} adaptor to yaml.
@@ -44,19 +44,19 @@ public class INumericalApertureJSONAdaptor {
     }
 
     private void _setPol0(INumericalAperture na) {
-        _pol0 = na.getNA(Polarizations.pol0);
+        _pol0 = na.getNA(Polarization.pol0);
     }
 
     private void _setPol45(INumericalAperture na) {
-        _pol45 = na.getNA(Polarizations.pol45);
+        _pol45 = na.getNA(Polarization.pol45);
     }
 
     private void _setPol90(INumericalAperture na) {
-        _pol90 = na.getNA(Polarizations.pol90);
+        _pol90 = na.getNA(Polarization.pol90);
     }
     
     private void _setPol135(INumericalAperture na) {
-        _pol135 = na.getNA(Polarizations.pol135);
+        _pol135 = na.getNA(Polarization.pol135);
     }
 
 }

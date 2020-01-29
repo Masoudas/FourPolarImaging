@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
-import fr.fresnel.fourPolar.core.physics.polarization.Polarizations;
+import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
  * This class is used as an adaptor of {@link IFieldOfView} to JSON.
@@ -48,22 +48,22 @@ public class IFieldOfViewJSONAdaptor {
 
     private void _setPol0(IFieldOfView fov) {
         _pol0 = new RectangleJSONAdaptor();
-        _pol0.toYaml(fov.getFoV(Polarizations.pol0));
+        _pol0.toYaml(fov.getFoV(Polarization.pol0));
     }
 
     private void _setPol45(IFieldOfView fov) {
         _pol45 = new RectangleJSONAdaptor();
-        _pol45.toYaml(fov.getFoV(Polarizations.pol45));
+        _pol45.toYaml(fov.getFoV(Polarization.pol45));
     }
 
     private void _setPol90(IFieldOfView fov) {
         _pol90 = new RectangleJSONAdaptor();
-        _pol90.toYaml(fov.getFoV(Polarizations.pol90));
+        _pol90.toYaml(fov.getFoV(Polarization.pol90));
     }
 
     private void _setPol135(IFieldOfView fov) {
         _pol135 = new RectangleJSONAdaptor();
-        _pol135.toYaml(fov.getFoV(Polarizations.pol135));
+        _pol135.toYaml(fov.getFoV(Polarization.pol135));
     }
 
 }

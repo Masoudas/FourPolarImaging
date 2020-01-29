@@ -18,7 +18,7 @@ import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
 import fr.fresnel.fourPolar.core.physics.channel.PropagationChannel;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
-import fr.fresnel.fourPolar.core.physics.polarization.Polarizations;
+import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
  * Note that in all the test, the files are created in the 4POLAR subfolder of
@@ -52,10 +52,10 @@ public class FourPolarImagingSetupFromYamlTest {
         FourPolarImagingSetupFromYaml reader = new FourPolarImagingSetupFromYaml(rootFolder);
         FourPolarImagingSetup diskImagingSetup = reader.read();
 
-        Rectangle diskRect0 = diskImagingSetup.getFieldOfView().getFoV(Polarizations.pol0);        
-        Rectangle diskRect45 = diskImagingSetup.getFieldOfView().getFoV(Polarizations.pol45);        
-        Rectangle diskRect90 = diskImagingSetup.getFieldOfView().getFoV(Polarizations.pol90);        
-        Rectangle diskRect135 = diskImagingSetup.getFieldOfView().getFoV(Polarizations.pol135);        
+        Rectangle diskRect0 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol0);        
+        Rectangle diskRect45 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol45);        
+        Rectangle diskRect90 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol90);        
+        Rectangle diskRect135 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol135);        
         INumericalAperture diskNA = diskImagingSetup.getNumericalAperture();
         IPropagationChannel channel = diskImagingSetup.getPropagationChannel(1);
 
@@ -71,18 +71,18 @@ public class FourPolarImagingSetupFromYamlTest {
     }
 
     private boolean checkNA(INumericalAperture na1, INumericalAperture na2) {
-        return na1.getNA(Polarizations.pol0) == na2.getNA(Polarizations.pol0) &&
-            na1.getNA(Polarizations.pol45) == na2.getNA(Polarizations.pol45) &&
-            na1.getNA(Polarizations.pol90) == na2.getNA(Polarizations.pol90) &&
-            na1.getNA(Polarizations.pol135) == na2.getNA(Polarizations.pol135);
+        return na1.getNA(Polarization.pol0) == na2.getNA(Polarization.pol0) &&
+            na1.getNA(Polarization.pol45) == na2.getNA(Polarization.pol45) &&
+            na1.getNA(Polarization.pol90) == na2.getNA(Polarization.pol90) &&
+            na1.getNA(Polarization.pol135) == na2.getNA(Polarization.pol135);
     }
 
     private boolean checkChannel(IPropagationChannel channel1, IPropagationChannel channel2) {
         return channel1.getWavelength() == channel2.getWavelength() &&
-            channel1.getCalibrationFactor(Polarizations.pol0) == channel2.getCalibrationFactor(Polarizations.pol0) &&
-            channel1.getCalibrationFactor(Polarizations.pol45) == channel2.getCalibrationFactor(Polarizations.pol45) &&
-            channel1.getCalibrationFactor(Polarizations.pol90) == channel2.getCalibrationFactor(Polarizations.pol90) &&
-            channel1.getCalibrationFactor(Polarizations.pol135) == channel2.getCalibrationFactor(Polarizations.pol135);
+            channel1.getCalibrationFactor(Polarization.pol0) == channel2.getCalibrationFactor(Polarization.pol0) &&
+            channel1.getCalibrationFactor(Polarization.pol45) == channel2.getCalibrationFactor(Polarization.pol45) &&
+            channel1.getCalibrationFactor(Polarization.pol90) == channel2.getCalibrationFactor(Polarization.pol90) &&
+            channel1.getCalibrationFactor(Polarization.pol135) == channel2.getCalibrationFactor(Polarization.pol135);
         
     }
 }

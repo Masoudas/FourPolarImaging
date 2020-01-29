@@ -16,7 +16,7 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.NoImageFoundOnRoot;
-import fr.fresnel.fourPolar.io.image.tiff.TiffCapturedImageChecker;
+import fr.fresnel.fourPolar.io.image.tiff.grayscale.TiffCapturedImageChecker;
 
 public class SampleImageSetByNamePatternFinderTest {
         private static File root;
