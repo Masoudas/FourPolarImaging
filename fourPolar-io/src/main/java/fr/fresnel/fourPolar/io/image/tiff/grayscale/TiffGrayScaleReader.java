@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import io.scif.FormatException;
 import io.scif.Reader;
-import io.scif.SCIFIO;
 import io.scif.config.SCIFIOConfig;
 import io.scif.formats.TIFFFormat;
 import io.scif.img.ImgOpener;
@@ -58,7 +57,7 @@ class TiffGrayScaleReader<T extends RealType<T> & NativeType<T>> {
     public Img<T> read(File file) throws IOException {
         _reader.setSource(file.getAbsolutePath(), this._config);
         final Img<T> img = this._imgOpener.openImgs(_reader, this._type, this._config).get(0);
-
+        
         return img;
     }
 
