@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.image;
+package fr.fresnel.fourPolar.io.image.tiff;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -20,7 +20,6 @@ public class TiffCapturedImageCheckerTest {
     @BeforeAll
     static void setParams() {
         _root = new File(TiffCapturedImageCheckerTest.class.getResource("").getPath(), "TiffCapturedImageChecker");
-
     }
 
     @Test

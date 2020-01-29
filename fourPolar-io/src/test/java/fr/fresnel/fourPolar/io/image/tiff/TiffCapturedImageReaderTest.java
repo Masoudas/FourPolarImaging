@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.image;
+package fr.fresnel.fourPolar.io.image.tiff;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.image.tiff.TiffCapturedImageChecker;
-import fr.fresnel.fourPolar.io.image.tiff.TiffCapturedImageReader;
+import fr.fresnel.fourPolar.io.image.tiff.grayscale.TiffCapturedImageReader;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 
 public class TiffCapturedImageReaderTest {

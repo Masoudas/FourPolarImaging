@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.image.tiff;
+package fr.fresnel.fourPolar.io.image.tiff.grayscale;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,6 @@ import io.scif.Reader;
 import io.scif.SCIFIO;
 import io.scif.util.FormatTools;
 
-import org.scijava.io.location.FileLocation;
 
 
 /**
@@ -75,8 +74,7 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
      */
     private void _bitDepthAbove16(File image) throws FormatException, IOException, CorruptCapturedImage {
         final SCIFIO scifio = new SCIFIO();
-        final FileLocation fileLocation = new FileLocation(image);
-        final Reader reader = scifio.initializer().initializeReader(fileLocation);
+        final Reader reader = scifio.initializer().initializeReader(image.getAbsolutePath());
         final Metadata meta = reader.getMetadata();
 
         final ImageMetadata iMeta = meta.get(0);
