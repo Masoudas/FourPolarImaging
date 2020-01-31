@@ -18,7 +18,7 @@ public interface IOpticalPropagation {
      * @param polarization
      * @return
      */
-    public double getPropagationFactor(DipoleSquaredComponent direction, Polarization polarization);
+    public double getPropagationFactor(DipoleSquaredComponent component, Polarization polarization);
 
     /**
      * Sets the propagation coefficient, from the given dipole direction to the
@@ -29,6 +29,6 @@ public interface IOpticalPropagation {
      * @param polarization
      * @param factor
      */
-    public void setPropagationFactor(DipoleSquaredComponent direction, Polarization polarization, double factor);
+    public void setPropagationFactor(DipoleSquaredComponent component, Polarization polarization, double factor);
 
 }
