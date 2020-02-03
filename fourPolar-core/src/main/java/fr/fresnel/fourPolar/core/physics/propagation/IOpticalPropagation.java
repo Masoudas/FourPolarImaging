@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.physics.propagation;
 
+import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
@@ -9,6 +10,12 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  * on the {@link DipoleSquaredComponent} and {@link Polarization}.
  */
 public interface IOpticalPropagation {
+    /**
+     * Returns the propagation channel that corresponds to this optical propagation.
+     * @return
+     */
+    public IPropagationChannel getPropagationChannel();
+    
     /**
      * Returns the propagation coefficient from the given dipole direction to the
      * given polarization intensity. See {@link DipoleSquaredComponent} and

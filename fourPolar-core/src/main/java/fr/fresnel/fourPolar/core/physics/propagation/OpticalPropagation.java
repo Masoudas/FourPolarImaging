@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.core.physics.propagation;
 
 import java.util.Hashtable;
 
+import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
@@ -9,11 +10,13 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  * This class models the optical propagation as a matrix. Access to the the
  * propagation factors happen via the {@link IOpticalPropagation}.
  */
-public class OpticalPropagationMatrix implements IOpticalPropagation {
+public class OpticalPropagation implements IOpticalPropagation {
     final private Hashtable<String, Double> _propagationFactors;
+    final private IPropagationChannel _channel;
 
-    public OpticalPropagationMatrix() {
+    public OpticalPropagation(IPropagationChannel channel) {
         _propagationFactors = new Hashtable<String, Double>(16);
+        this._channel = channel;
     }
 
     @Override
@@ -24,6 +27,11 @@ public class OpticalPropagationMatrix implements IOpticalPropagation {
     @Override
     public void setPropagationFactor(DipoleSquaredComponent direction, Polarization polarization, double factor) {
         _propagationFactors.put(direction.toString() + polarization.toString(), factor);
+    }
+
+    @Override
+    public IPropagationChannel getPropagationChannel() {
+        return _channel;
     }
 
 
