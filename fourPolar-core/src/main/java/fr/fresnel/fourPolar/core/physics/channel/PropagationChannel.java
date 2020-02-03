@@ -24,9 +24,8 @@ public class PropagationChannel implements IPropagationChannel {
      * @param calibFactPol90
      * @param calibFactPol135
      */
-    public PropagationChannel(
-        double wavelength, double calibFactPol0, double calibFactPol45, double calibFactPol90, double calibFactPol135) throws
-        WavelengthOutOfRange, CalibrationFactorOutOfRange{
+    public PropagationChannel(double wavelength, double calibFactPol0, double calibFactPol45, double calibFactPol90,
+            double calibFactPol135) throws WavelengthOutOfRange, CalibrationFactorOutOfRange {
         this._checkWavelength(wavelength);
         this._wavelength = wavelength;
 
@@ -47,19 +46,29 @@ public class PropagationChannel implements IPropagationChannel {
         return this._calibFact.get(pol);
     }
 
-    private void _checkWavelength(double wavelength) throws WavelengthOutOfRange{
-        if (wavelength <= 0){
+    private void _checkWavelength(double wavelength) throws WavelengthOutOfRange {
+        if (wavelength <= 0) {
             throw new WavelengthOutOfRange("Wavelength should be a positive value");
-        } 
-        
+        }
+
     }
 
-    private void _checkCalibrationFactor(double calibFactPol0, double calibFactPol45, double calibFactPol90, double calibFactPol135) 
-    throws CalibrationFactorOutOfRange{
-        if (calibFactPol0 < 0 || calibFactPol45 < 0 || calibFactPol90 < 0 || calibFactPol135 < 0){
+    private void _checkCalibrationFactor(double calibFactPol0, double calibFactPol45, double calibFactPol90,
+            double calibFactPol135) throws CalibrationFactorOutOfRange {
+        if (calibFactPol0 < 0 || calibFactPol45 < 0 || calibFactPol90 < 0 || calibFactPol135 < 0) {
             throw new CalibrationFactorOutOfRange("Negative calibration factors are not allowed");
         }
-        
+
+    }
+
+    @Override
+    public boolean equals(IPropagationChannel channel) {
+        return channel.getWavelength() == this.getWavelength()
+                && channel.getCalibrationFactor(Polarization.pol0) == this.getCalibrationFactor(Polarization.pol0)
+                && channel.getCalibrationFactor(Polarization.pol45) == this.getCalibrationFactor(Polarization.pol45)
+                && channel.getCalibrationFactor(Polarization.pol90) == this.getCalibrationFactor(Polarization.pol90)
+                && channel.getCalibrationFactor(Polarization.pol135) == this.getCalibrationFactor(Polarization.pol135);
+
     }
 
 }
