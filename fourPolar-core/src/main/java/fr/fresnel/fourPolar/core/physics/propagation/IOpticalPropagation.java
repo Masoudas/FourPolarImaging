@@ -15,6 +15,12 @@ public interface IOpticalPropagation {
      * @return
      */
     public IPropagationChannel getPropagationChannel();
+
+    /**
+     * Set the propagation channel that corresponds to this optical propagation.
+     * @return
+     */
+    public void setPropagationChannel(IPropagationChannel channel);
     
     /**
      * Returns the propagation coefficient from the given dipole direction to the

@@ -12,11 +12,10 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  */
 public class OpticalPropagation implements IOpticalPropagation {
     final private Hashtable<String, Double> _propagationFactors;
-    final private IPropagationChannel _channel;
+    private IPropagationChannel _channel;
 
-    public OpticalPropagation(IPropagationChannel channel) {
+    public OpticalPropagation() {
         _propagationFactors = new Hashtable<String, Double>(16);
-        this._channel = channel;
     }
 
     @Override
@@ -34,5 +33,9 @@ public class OpticalPropagation implements IOpticalPropagation {
         return _channel;
     }
 
+    @Override
+    public void setPropagationChannel(IPropagationChannel channel) {
+        this._channel = channel;
+    }
 
 }
