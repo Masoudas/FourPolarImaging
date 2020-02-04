@@ -21,10 +21,6 @@ public class IPropagationChannelJSONAdaptor {
     @JsonProperty("Wavelength (nm)")
     private double _wavelength;
 
-    @JsonProperty("Channel Number")
-    private int _channalNumber;
-
-
     @JsonProperty("Calib-Factor Pol0")
     private double _pol0;
 
@@ -40,15 +36,13 @@ public class IPropagationChannelJSONAdaptor {
     /**
      * Allows this class to be written as a JSon object.
      * 
-     * @param channelNumber
      * @param channel
      */
-    public void toJSON(int channelNumber, IPropagationChannel channel) {
+    public void toJSON(IPropagationChannel channel) {
         setPol0(channel);
         setPol45(channel);
         setPol90(channel);
         setPol135(channel);
-        setnChannel(channelNumber);
         setWaveLength(channel);
     }
 
@@ -86,10 +80,6 @@ public class IPropagationChannelJSONAdaptor {
 
     private void setPol135(IPropagationChannel channel) {
         _pol135 = channel.getCalibrationFactor(Polarization.pol135);
-    }
-
-    private void setnChannel(int channelNumber) {
-        _channalNumber = channelNumber;
     }
 
 }

@@ -15,7 +15,7 @@ import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
  * through the io class of the database. The JSON field of this class is direcly
  * filled with the io class.
  */
-class OpticalPropagationJSONDataBase implements IOpticalPropagationDatabase {
+class OpticalPropagationJSONDatabase implements IOpticalPropagationDatabase {
     @JsonProperty
     private ArrayList<IOpticalPropagationJSONAdaptor> _adaptorList;
 
