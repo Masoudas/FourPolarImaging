@@ -14,7 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
-import fr.fresnel.fourPolar.io.PathFactory;
+import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.CorruptSampleSetExcel;
 
 /**
@@ -34,7 +34,7 @@ public class SampleImageSetWriter {
      * @return
      */
     public static File getSampleSetFolder(File rootFolder) {
-        File zero_params_folder = PathFactory.getFolder_0_Params(rootFolder);
+        File zero_params_folder = PathFactoryOfProject.getFolder_0_Params(rootFolder);
         return Paths.get(zero_params_folder.getAbsolutePath(), "Sample").toFile();
     }
 

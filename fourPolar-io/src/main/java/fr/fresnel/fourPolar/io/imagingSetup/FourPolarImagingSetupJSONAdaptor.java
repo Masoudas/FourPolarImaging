@@ -1,5 +1,8 @@
 package fr.fresnel.fourPolar.io.imagingSetup;
 
+import java.util.Hashtable;
+import java.util.TreeMap;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -21,7 +24,7 @@ class FourPolarImagingSetupJSONAdaptor {
     private INumericalApertureJSONAdaptor _naAdaptor;
 
     @JsonProperty("Channels")
-    private IPropagationChannelJSONAdaptor[] _channelAdaptor;
+    private TreeMap<String, IPropagationChannelJSONAdaptor> _channelAdaptor;
 
     @JsonProperty("Number Of Cameras")
     private Cameras _cameras;
@@ -34,17 +37,16 @@ class FourPolarImagingSetupJSONAdaptor {
     }
 
     public FourPolarImagingSetup fromYaml() {
-        FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(
-            this._channelAdaptor.length, this._cameras);
+        FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(this._channelAdaptor.size(), this._cameras);
 
-        imagingSetup.setFieldOfView(this._fovAdaptor.fromJSON());    
+        imagingSetup.setFieldOfView(this._fovAdaptor.fromJSON());
         imagingSetup.setNumericalAperture(this._naAdaptor.fromJSON());
-        
-        for (int channel = 1; channel <= this._channelAdaptor.length; channel++) {            
-            imagingSetup.setPropagationChannel(channel, this._channelAdaptor[channel-1].fromJSON());    
+
+        for (int channel = 1; channel <= this._channelAdaptor.size(); channel++) {
+            imagingSetup.setPropagationChannel(channel, this._channelAdaptor.get("Channel " + channel).fromJSON());
         }
- 
-        return imagingSetup;       
+
+        return imagingSetup;
     }
 
     private void _setFieldOfViewAdaptor(FourPolarImagingSetup imagingSetup) {
@@ -59,13 +61,14 @@ class FourPolarImagingSetupJSONAdaptor {
 
     private void _setChannels(FourPolarImagingSetup imagingSetup) {
         int nchannel = imagingSetup.getnChannel();
-        this._channelAdaptor = new IPropagationChannelJSONAdaptor[nchannel];
+        this._channelAdaptor = new TreeMap<String, IPropagationChannelJSONAdaptor>();
 
         for (int channel = 1; channel <= nchannel; channel++) {
-            this._channelAdaptor[channel - 1] = new IPropagationChannelJSONAdaptor();
-            this._channelAdaptor[channel - 1].toJSON(channel, imagingSetup.getPropagationChannel(channel));
-        }
+            IPropagationChannelJSONAdaptor adaptor = new IPropagationChannelJSONAdaptor();
+            adaptor.toJSON(imagingSetup.getPropagationChannel(channel));
 
+            this._channelAdaptor.put("Channel " + channel, adaptor);
+        }
     }
 
     private void _setNCameras(FourPolarImagingSetup imagingSetup) {

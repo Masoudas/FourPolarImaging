@@ -11,7 +11,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
-import fr.fresnel.fourPolar.io.PathFactory;
+import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 
 /**
  * This class is used for writing the fourPolar imaging setup to disk.
@@ -38,7 +38,7 @@ public class FourPolarImagingSetupToYaml {
     }
 
     public static File getDestinationFolder(File rootFolder) {
-        return PathFactory.getFolder_0_Params(rootFolder);
+        return PathFactoryOfProject.getFolder_0_Params(rootFolder);
     }
 
     public static String getFileName() {
