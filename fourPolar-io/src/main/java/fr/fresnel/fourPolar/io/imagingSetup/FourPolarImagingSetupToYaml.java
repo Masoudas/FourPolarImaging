@@ -3,8 +3,6 @@ package fr.fresnel.fourPolar.io.imagingSetup;
 import java.io.File;
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -25,7 +23,7 @@ public class FourPolarImagingSetupToYaml {
         this._rootFolder = rootFolder;
     }
 
-    public void write() throws JsonGenerationException, JsonMappingException, IOException {
+    public void write() throws IOException {
         File destFile = new File(getDestinationFolder(this._rootFolder), getFileName());
 
         FourPolarImagingSetupJSONAdaptor adaptor = new FourPolarImagingSetupJSONAdaptor();

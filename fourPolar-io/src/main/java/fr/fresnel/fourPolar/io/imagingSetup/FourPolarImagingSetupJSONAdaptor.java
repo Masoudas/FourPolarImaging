@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.io.imagingSetup;
 
-import java.util.Hashtable;
 import java.util.TreeMap;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

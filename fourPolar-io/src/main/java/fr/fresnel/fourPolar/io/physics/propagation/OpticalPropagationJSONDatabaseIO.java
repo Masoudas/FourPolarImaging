@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +31,7 @@ public class OpticalPropagationJSONDatabaseIO {
      * @throws IOException
      */
     public void write(IOpticalPropagationDatabase database)
-            throws JsonGenerationException, JsonMappingException, IOException {
+            throws IOException {
         if (!(database instanceof OpticalPropagationJSONDatabase)) {
             throw new IOException(
                     "The given database is not a JSON database, hence cannot be serialized with this class");
