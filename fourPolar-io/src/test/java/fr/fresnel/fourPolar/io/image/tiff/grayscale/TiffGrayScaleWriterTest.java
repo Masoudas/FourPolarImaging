@@ -8,18 +8,13 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.scijava.io.location.FileLocation;
 
 import io.scif.FormatException;
 import io.scif.Metadata;
 import io.scif.Reader;
 import io.scif.SCIFIO;
-import io.scif.img.ImgSaver;
-import io.scif.img.SCIFIOImgPlus;
 import net.imglib2.img.Img;
-import net.imglib2.img.array.ArrayImg;
 import net.imglib2.img.array.ArrayImgFactory;
-import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
 
