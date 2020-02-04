@@ -1,13 +1,8 @@
 package fr.fresnel.fourPolar.io.physics.propagation;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDatabase;
 import fr.fresnel.fourPolar.core.fourPolar.IOpticalPropagationDatabase;
@@ -24,6 +19,7 @@ class OpticalPropagationJSONDataBase implements IOpticalPropagationDatabase {
     @JsonProperty
     private ArrayList<IOpticalPropagationJSONAdaptor> _adaptorList;
 
+    @Override
     public IOpticalPropagation search(IPropagationChannel channel) throws PropagationChannelNotInDatabase {
         int adaptorCtr = 0;
         while (adaptorCtr < _adaptorList.size()
