@@ -20,6 +20,10 @@ class OpticalPropagationJSONDatabase implements IOpticalPropagationDatabase {
     @JsonProperty
     private ArrayList<IOpticalPropagationJSONAdaptor> _adaptorList;
 
+    public OpticalPropagationJSONDatabase() {
+        _adaptorList = new ArrayList<IOpticalPropagationJSONAdaptor>();
+    }
+
     @Override
     public IOpticalPropagation search(IPropagationChannel channel) throws PropagationChannelNotInDatabase {
         int adaptorCtr = 0;
