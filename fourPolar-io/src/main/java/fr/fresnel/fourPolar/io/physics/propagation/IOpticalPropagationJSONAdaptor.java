@@ -12,55 +12,55 @@ import fr.fresnel.fourPolar.io.physics.channel.IPropagationChannelJSONAdaptor;
  * This class adapts the {@link IOpticalPropagation} interface to JSON.
  */
 public class IOpticalPropagationJSONAdaptor {
-    @JsonProperty("Dipole-squared XX to pol0")
+    @JsonProperty("XX_0-factor")
     private double _xx_0;
 
-    @JsonProperty("Dipole-squared YY to pol0")
+    @JsonProperty("YY_0-factor")
     private double _yy_0;
 
-    @JsonProperty("Dipole-squared ZZ to pol0")
+    @JsonProperty("ZZ_0-factor")
     private double _zz_0;
 
-    @JsonProperty("Dipole-squared XY to pol0")
+    @JsonProperty("XY_0-factor")
     private double _xy_0;
 
-    @JsonProperty("Dipole-squared XX to pol90")
+    @JsonProperty("XX_90-factor")
     private double _xx_90;
 
-    @JsonProperty("Dipole-squared YY to pol90")
+    @JsonProperty("YY_90-factor")
     private double _yy_90;
 
-    @JsonProperty("Dipole-squared ZZ to pol90")
+    @JsonProperty("ZZ_90-factor")
     private double _zz_90;
 
-    @JsonProperty("Dipole-squared XY to pol90")
+    @JsonProperty("XY_90-factor")
     private double _xy_90;
 
-    @JsonProperty("Dipole-squared XX to pol45")
+    @JsonProperty("XX_45-factor")
     private double _xx_45;
 
-    @JsonProperty("Dipole-squared YY to pol45")
+    @JsonProperty("YY_45-factor")
     private double _yy_45;
 
-    @JsonProperty("Dipole-squared ZZ to pol45")
+    @JsonProperty("ZZ_45-factor")
     private double _zz_45;
 
-    @JsonProperty("Dipole-squared XY to pol45")
+    @JsonProperty("XY_45-factor")
     private double _xy_45;
 
-    @JsonProperty("Dipole-squared XX to pol135")
+    @JsonProperty("XX_135-factor")
     private double _xx_135;
 
-    @JsonProperty("Dipole-squared YY to pol135")
+    @JsonProperty("YY_135-factor")
     private double _yy_135;
 
-    @JsonProperty("Dipole-squared ZZ to pol135")
+    @JsonProperty("ZZ_135-factor")
     private double _zz_135;
 
-    @JsonProperty("Dipole-squared XY to pol135")
+    @JsonProperty("XY_135-factor")
     private double _xy_135;
 
-    @JsonProperty("Propagation Channel")
+    @JsonProperty("PropagationChannel")
     private IPropagationChannelJSONAdaptor _channelAdaptor;
 
     public IOpticalPropagationJSONAdaptor() {

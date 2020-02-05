@@ -6,7 +6,7 @@ import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDatabase;
-import fr.fresnel.fourPolar.core.fourPolar.propagationDb.IOpticalPropagationDatabase;
+import fr.fresnel.fourPolar.core.fourPolar.opticalProp.IOpticalPropagationDB;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.io.PathFactoryOfProject;
@@ -17,7 +17,7 @@ import fr.fresnel.fourPolar.io.PathFactoryOfProject;
  */
 public class OpticalPropagationToJSON {
 
-    public void write(File rootFolder, FourPolarImagingSetup setup, IOpticalPropagationDatabase database)
+    public void write(File rootFolder, FourPolarImagingSetup setup, IOpticalPropagationDB database)
             throws PropagationChannelNotInDatabase, IOException {
         ObjectMapper mapper = new ObjectMapper();
         for (int channel = 0; channel < setup.getnChannel(); channel++) {
@@ -37,8 +37,8 @@ public class OpticalPropagationToJSON {
      * @param database
      * @throws PropagationChannelNotInDatabase
      */
-    private IOpticalPropagationJSONAdaptor getJSONAdaptor(FourPolarImagingSetup setup,
-            IOpticalPropagationDatabase database, int channel) throws PropagationChannelNotInDatabase {
+    private IOpticalPropagationJSONAdaptor getJSONAdaptor(FourPolarImagingSetup setup, IOpticalPropagationDB database,
+            int channel) throws PropagationChannelNotInDatabase {
         IOpticalPropagation optProp = database.search(setup.getPropagationChannel(channel));
 
         IOpticalPropagationJSONAdaptor jsonAdaptor = new IOpticalPropagationJSONAdaptor();
@@ -49,7 +49,8 @@ public class OpticalPropagationToJSON {
     }
 
     private File getFilePath(File rootFolder, int channel) {
-        return new File(PathFactoryOfProject.getFolder_0_Params(rootFolder), "OpticalPropagation_Channel" + channel + ".json");
+        return new File(PathFactoryOfProject.getFolder_0_Params(rootFolder),
+                "OpticalPropagation_Channel" + channel + ".json");
 
     }
 
