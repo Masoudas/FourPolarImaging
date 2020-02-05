@@ -10,27 +10,27 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 /**
  * This class is used as an adaptor of {@link IPropagationChannel} to JSON.
  */
-@JsonPropertyOrder({ "Channel Number", "Wavelength", "Calib-Factor Pol0", "Calib-Factor Pol45", "Calib-Factor Pol90",
-        "Calib-Factor Pol135" })
+@JsonPropertyOrder({ "Wavelength-nanometer", "CalibFactor-Pol0", "CalibFactor-Pol45", "CalibFactor-Pol90",
+        "CalibFactor-Pol135" })
 public class IPropagationChannelJSONAdaptor {
     /**
      * This is the scale used for writing the wavelength.
      * The json description must change accordingly.
      */
     private double _wavelengthScale = 1e-9;
-    @JsonProperty("Wavelength (nm)")
+    @JsonProperty("Wavelength-nanometer")
     private double _wavelength;
 
-    @JsonProperty("Calib-Factor Pol0")
+    @JsonProperty("CalibFactor-Pol0")
     private double _pol0;
 
-    @JsonProperty("Calib-Factor Pol45")
+    @JsonProperty("CalibFactor-Pol45")
     private double _pol45;
 
-    @JsonProperty("Calib-Factor Pol90")
+    @JsonProperty("CalibFactor-Pol90")
     private double _pol90;
 
-    @JsonProperty("Calib-Factor Pol135")
+    @JsonProperty("CalibFactor-Pol135")
     private double _pol135;
 
     /**
