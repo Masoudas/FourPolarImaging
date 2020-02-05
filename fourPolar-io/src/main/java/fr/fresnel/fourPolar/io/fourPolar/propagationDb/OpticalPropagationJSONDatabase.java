@@ -1,13 +1,14 @@
-package fr.fresnel.fourPolar.io.physics.propagation;
+package fr.fresnel.fourPolar.io.fourPolar.propagationDb;
 
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDatabase;
-import fr.fresnel.fourPolar.core.fourPolar.IOpticalPropagationDatabase;
+import fr.fresnel.fourPolar.core.fourPolar.propagationDb.IOpticalPropagationDatabase;
 import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
+import fr.fresnel.fourPolar.io.physics.propagation.IOpticalPropagationJSONAdaptor;
 
 /**
  * This database is a json implementation of

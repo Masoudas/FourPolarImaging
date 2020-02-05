@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.fourPolar;
+package fr.fresnel.fourPolar.core.fourPolar.propagationDb;
 
 import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDatabase;
 import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
@@ -6,7 +6,6 @@ import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 
 /**
  * This interface is used for accessing the optical propagation database.
- * 
  */
 public interface IOpticalPropagationDatabase {
     /**

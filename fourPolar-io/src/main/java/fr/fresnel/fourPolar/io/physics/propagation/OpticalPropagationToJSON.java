@@ -6,7 +6,7 @@ import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDatabase;
-import fr.fresnel.fourPolar.core.fourPolar.IOpticalPropagationDatabase;
+import fr.fresnel.fourPolar.core.fourPolar.propagationDb.IOpticalPropagationDatabase;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.io.PathFactoryOfProject;

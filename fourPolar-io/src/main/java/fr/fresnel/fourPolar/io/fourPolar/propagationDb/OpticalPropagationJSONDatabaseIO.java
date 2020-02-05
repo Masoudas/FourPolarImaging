@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.physics.propagation;
+package fr.fresnel.fourPolar.io.fourPolar.propagationDb;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fr.fresnel.fourPolar.core.fourPolar.IOpticalPropagationDatabase;
+import fr.fresnel.fourPolar.core.fourPolar.propagationDb.IOpticalPropagationDatabase;
 import fr.fresnel.fourPolar.io.PathFactoryOfGlobalInfo;
 
 /**

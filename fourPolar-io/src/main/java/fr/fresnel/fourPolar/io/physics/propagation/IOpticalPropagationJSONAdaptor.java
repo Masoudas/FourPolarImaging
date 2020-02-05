@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.io.physics.channel.IPropagationChannelJSONAdaptor;
 /**
  * This class adapts the {@link IOpticalPropagation} interface to JSON.
  */
-class IOpticalPropagationJSONAdaptor {
+public class IOpticalPropagationJSONAdaptor {
     @JsonProperty("Dipole-squared XX to pol0")
     private double _xx_0;
 
