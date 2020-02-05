@@ -10,6 +10,7 @@ import java.nio.file.StandardCopyOption;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import fr.fresnel.fourPolar.core.fourPolar.propagationDb.IOpticalPropagationDatabase;
 import fr.fresnel.fourPolar.io.PathFactoryOfGlobalInfo;
@@ -26,8 +27,6 @@ public class OpticalPropagationJSONDatabaseIO {
      * (4PolarSoftware/Data).
      * 
      * @param path
-     * @throws JsonGenerationException
-     * @throws JsonMappingException
      * @throws IOException
      */
     public void write(IOpticalPropagationDatabase database)
@@ -44,6 +43,7 @@ public class OpticalPropagationJSONDatabaseIO {
         }
 
         ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
         mapper.writeValue(getPath(), jsonDatabase);
     }
 
