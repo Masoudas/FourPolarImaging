@@ -13,9 +13,9 @@ import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 
 /**
  * Using this class, we write the {@link IOpticalPropagation} of each channel to
- * the project folder for the user as JSON.
+ * the project folder for the user as Yaml.
  */
-public class OpticalPropagationToJSON {
+public class OpticalPropagationToYaml {
 
     public void write(File rootFolder, FourPolarImagingSetup setup, IOpticalPropagationDB database)
             throws PropagationChannelNotInDatabase, IOException {
@@ -48,10 +48,16 @@ public class OpticalPropagationToJSON {
 
     }
 
+    private String _getFileName(int channel) {
+        return "OpticalPropagation_Channel" + channel + ".yaml";
+    }
+
     private File getFilePath(File rootFolder, int channel) {
         return new File(PathFactoryOfProject.getFolder_0_Params(rootFolder),
-                "OpticalPropagation_Channel" + channel + ".json");
+                _getFileName(channel));
 
     }
+
+
 
 }
