@@ -43,15 +43,21 @@ public class XMLOpticalPropagationDBIO {
             path.delete();
         }
 
-        // ObjectMapper mapper = new ObjectMapper(new XMLFactory);
-        // XmlMapper mapper = new XmlMapper();
+        ObjectMapper mapper = _getXMLMapper();
+        mapper.writeValue(getPath(), xmlDatabase);
+    }
 
+    /**
+     * Creates the xml mapper object.
+     * @return
+     */
+    private ObjectMapper _getXMLMapper() {
         JacksonXmlModule xmlModule = new JacksonXmlModule();
         xmlModule.setDefaultUseWrapper(false);
 
         ObjectMapper mapper = new XmlMapper(xmlModule);
         mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        mapper.writeValue(getPath(), xmlDatabase);
+        return mapper;
     }
 
     /**
@@ -92,7 +98,7 @@ public class XMLOpticalPropagationDBIO {
         try {
             Files.copy(originalDB, copyDB, StandardCopyOption.COPY_ATTRIBUTES);
         } catch (IOException e) {
-            throw new IOException("Unable to copy the optical propagation db to the global info.");
+            throw new IOException("Unable to copy the optical propagation db to the global info folder.");
         }
 
     }
