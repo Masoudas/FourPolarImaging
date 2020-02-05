@@ -7,19 +7,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * This class generates the paths we need to write the global (project independent) information 
- * of the software (including user setting, databases and so forth).
+ * This class generates the paths we need to write the global (project
+ * independent) information of the software (including user setting, databases
+ * and so forth).
  * 
  */
 public class PathFactoryOfGlobalInfo {
     private static File folder_softwarePrivateRoot = setFolder_softwarePrivateDataRoot(); // This is the private
-                                                                                              // root on the home
-                                                                                              // folder, where we keep
-                                                                                              // setting information.
-                                                                                              // The final folder is
-                                                                                              // called 4PolarSoftware
-                                                                                              // or .4PolarSoftware
-
+                                                                                          // root on the home
+                                                                                          // folder, where we keep
+                                                                                          // setting information.
+                                                                                          // The final folder is
+                                                                                          // called 4PolarSoftware
+                                                                                          // or .4PolarSoftware
 
     /**
      * This method is used for creating the private folder in the home folder, which
@@ -56,7 +56,11 @@ public class PathFactoryOfGlobalInfo {
      * Returns the path to the Data folder in the hidden home folder.
      */
     public static File getFolder_Data() {
-        return new File(folder_softwarePrivateRoot, "Data");
+        File folder = new File(folder_softwarePrivateRoot, "Data");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        return folder;
     }
 
 }
