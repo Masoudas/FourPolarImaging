@@ -14,6 +14,12 @@ import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
 
 public class XMLOpticalPropagationDBIOTest {
     @Test
+    public void read_OriginalDataBase_WritesOriginalDataBaseInTheHidden4PolarSoftwareFolder() throws IOException {
+        XMLOpticalPropagationDBIO dbIO = new XMLOpticalPropagationDBIO();
+        dbIO.read();
+        
+    }
+    @Test
     public void write_DataBaseWithTwoPropagations_WritesInTheHidden4PolarSoftwareFolder() throws IOException {
         PropagationChannel channel1 = new PropagationChannel(1e-9, 1, 2, 3, 4);
         IOpticalPropagation propagation1 = createOpticalPropagation(channel1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,

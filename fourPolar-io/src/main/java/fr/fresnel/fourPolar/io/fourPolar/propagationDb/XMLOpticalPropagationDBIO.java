@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -20,6 +19,7 @@ import fr.fresnel.fourPolar.io.PathFactoryOfGlobalInfo;
  * {@link IOpticalPropagationDB}
  */
 public class XMLOpticalPropagationDBIO {
+    private static String folderName = "OpticalPropagation";
     private static String dbDiskName = "OpticalPropagationDB.xml";
 
     /**
@@ -73,15 +73,22 @@ public class XMLOpticalPropagationDBIO {
             _copyOriginalDatabase();
         }
 
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(path.getAbsolutePath(), XMLOpticalPropagationDB.class);
+        ObjectMapper mapper = _getXMLMapper();
+        return mapper.readValue(path, XMLOpticalPropagationDB.class);
     }
 
     /**
      * Returns the complete path to the database.
      */
     private File getPath() {
-        return new File(PathFactoryOfGlobalInfo.getFolder_Data(), dbDiskName);
+        Path path = Paths.get(PathFactoryOfGlobalInfo.getFolder_Data().getAbsolutePath(), folderName, dbDiskName);
+        File pathAsFile = path.toFile();
+
+        if (!pathAsFile.getParentFile().exists()){
+            pathAsFile.getParentFile().mkdirs();
+        }
+
+        return pathAsFile;
     }
 
     /**
@@ -92,11 +99,11 @@ public class XMLOpticalPropagationDBIO {
      */
     private void _copyOriginalDatabase() throws IOException {
         Path originalDB = Paths
-                .get(XMLOpticalPropagationDB.class.getResource(dbDiskName).toString());
+                .get(XMLOpticalPropagationDB.class.getResource(dbDiskName).getPath());
 
         Path copyDB = Paths.get(getPath().getAbsolutePath());
         try {
-            Files.copy(originalDB, copyDB, StandardCopyOption.COPY_ATTRIBUTES);
+            Files.copy(originalDB, copyDB);
         } catch (IOException e) {
             throw new IOException("Unable to copy the optical propagation db to the global info folder.");
         }
