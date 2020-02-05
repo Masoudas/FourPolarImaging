@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
-public class OpticalPropagationMatrixTest {
+public class OpticalPropagationTest {
     @Test
     public void setMethod_MatrixOfRandomNumbers_ShouldReturnSameMatrix() {
-        OpticalPropagationMatrix matrix = new OpticalPropagationMatrix();
+        OpticalPropagation matrix = new OpticalPropagation();
 
         matrix.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0, 0);
         matrix.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol90, 7);
