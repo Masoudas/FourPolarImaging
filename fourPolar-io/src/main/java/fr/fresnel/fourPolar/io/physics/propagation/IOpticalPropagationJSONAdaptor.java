@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.io.physics.propagation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
@@ -11,56 +12,57 @@ import fr.fresnel.fourPolar.io.physics.channel.IPropagationChannelJSONAdaptor;
 /**
  * This class adapts the {@link IOpticalPropagation} interface to JSON.
  */
+@JsonPropertyOrder(IOpticalPropagationJSONLabels.channel)
 public class IOpticalPropagationJSONAdaptor {
-    @JsonProperty("XX_0-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.xx_0)
     private double _xx_0;
 
-    @JsonProperty("YY_0-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.yy_0)
     private double _yy_0;
 
-    @JsonProperty("ZZ_0-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.zz_0)
     private double _zz_0;
 
-    @JsonProperty("XY_0-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.xy_0)
     private double _xy_0;
 
-    @JsonProperty("XX_90-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.xx_90)
     private double _xx_90;
 
-    @JsonProperty("YY_90-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.yy_90)
     private double _yy_90;
 
-    @JsonProperty("ZZ_90-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.zz_90)
     private double _zz_90;
 
-    @JsonProperty("XY_90-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.xy_90)
     private double _xy_90;
 
-    @JsonProperty("XX_45-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.xx_45)
     private double _xx_45;
 
-    @JsonProperty("YY_45-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.yy_45)
     private double _yy_45;
 
-    @JsonProperty("ZZ_45-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.zz_45)
     private double _zz_45;
 
-    @JsonProperty("XY_45-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.xy_45)
     private double _xy_45;
 
-    @JsonProperty("XX_135-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.xx_135)
     private double _xx_135;
 
-    @JsonProperty("YY_135-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.yy_135)
     private double _yy_135;
 
-    @JsonProperty("ZZ_135-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.zz_135)
     private double _zz_135;
 
-    @JsonProperty("XY_135-factor")
+    @JsonProperty(IOpticalPropagationJSONLabels.xy_135)
     private double _xy_135;
 
-    @JsonProperty("PropagationChannel")
+    @JsonProperty(IOpticalPropagationJSONLabels.channel)
     private IPropagationChannelJSONAdaptor _channelAdaptor;
 
     public IOpticalPropagationJSONAdaptor() {

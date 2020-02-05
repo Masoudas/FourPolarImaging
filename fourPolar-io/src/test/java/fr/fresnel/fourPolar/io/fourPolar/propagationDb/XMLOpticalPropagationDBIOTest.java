@@ -11,11 +11,10 @@ import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
-import fr.fresnel.fourPolar.io.PathFactoryOfGlobalInfo;
 
 public class XMLOpticalPropagationDBIOTest {
     @Test
-    public void write_DataBaseWithTwoPropagations_WritesInTheHiddenConfigInfoFolder() throws IOException {
+    public void write_DataBaseWithTwoPropagations_WritesInTheHidden4PolarSoftwareFolder() throws IOException {
         PropagationChannel channel1 = new PropagationChannel(1e-9, 1, 2, 3, 4);
         IOpticalPropagation propagation1 = createOpticalPropagation(channel1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
                 14, 15, 16);
@@ -29,10 +28,6 @@ public class XMLOpticalPropagationDBIOTest {
         db.add(channel2, propagation2);
 
         XMLOpticalPropagationDBIO dbIO = new XMLOpticalPropagationDBIO();
-        
-        File path = new File(PathFactoryOfGlobalInfo.getFolder_Data(), "OpticalPropagationDB.json");
-        path.createNewFile();
-
         dbIO.write(db);
 
     }
