@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 
 import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDatabase;
 import fr.fresnel.fourPolar.core.fourPolar.opticalProp.IOpticalPropagationDB;
@@ -19,8 +22,8 @@ public class OpticalPropagationToYaml {
 
     public void write(File rootFolder, FourPolarImagingSetup setup, IOpticalPropagationDB database)
             throws PropagationChannelNotInDatabase, IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        for (int channel = 0; channel < setup.getnChannel(); channel++) {
+        ObjectMapper mapper = getYamlMapper();
+        for (int channel = 1; channel <= setup.getnChannel(); channel++) {
             IOpticalPropagationJSONAdaptor adaptor = getJSONAdaptor(setup, database, channel);
 
             File path = getFilePath(rootFolder, channel);
@@ -28,6 +31,16 @@ public class OpticalPropagationToYaml {
             mapper.writeValue(path, adaptor);
         }
 
+    }
+
+    /**
+     * Set the yaml mapper.
+     * @return
+     */
+    private ObjectMapper getYamlMapper() {
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory().disable(Feature.WRITE_DOC_START_MARKER));
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        return mapper;
     }
 
     /**
