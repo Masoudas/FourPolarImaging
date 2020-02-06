@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.physics.propagation;
 
+import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
@@ -31,7 +32,7 @@ public interface IOpticalPropagation {
      * @param polarization
      * @return
      */
-    public double getPropagationFactor(DipoleSquaredComponent component, Polarization polarization);
+    public double getPropagationFactor(DipoleSquaredComponent component, Polarization polarization) throws PropagationFactorNotFound;
 
     /**
      * Sets the propagation coefficient, from the given dipole direction to the
@@ -43,5 +44,14 @@ public interface IOpticalPropagation {
      * @param factor
      */
     public void setPropagationFactor(DipoleSquaredComponent component, Polarization polarization, double factor);
+    
+    /**
+     * Returns the inverse propagation factor from the given {@link Polarization} to the given
+     * {@link DipoleSquaredComponent}
+     * 
+     * @param polarization
+     * @param component
+     */
+    public double getInverseFactor(Polarization polarization, DipoleSquaredComponent component);
 
 }
