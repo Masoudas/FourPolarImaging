@@ -7,9 +7,19 @@ package fr.fresnel.fourPolar.core.exceptions.fourPolar;
  */
 public class PropagationChannelNotInDatabase extends Exception{
     private static final long serialVersionUID = 4234549789843L;
+    private final String _message;
+
+    public PropagationChannelNotInDatabase() {
+        _message = "No optical propagation is defined for the given propagation channel in the database.";
+    }
+
+    public PropagationChannelNotInDatabase(String message) {
+        _message = message;
+    }
+
 
     @Override
     public String getMessage() {
-        return "No optical propagation is defined for the given propagation channel in the database";
+        return _message;
     }
 }
