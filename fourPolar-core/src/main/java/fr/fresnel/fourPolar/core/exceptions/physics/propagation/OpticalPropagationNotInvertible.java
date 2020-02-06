@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.fourPolar.propagation.exceptions.fourPolar.propagation;
+package fr.fresnel.fourPolar.core.exceptions.physics.propagation;
 
 /**
  * Thrown when a calculated optical propagation does not have inverse.
