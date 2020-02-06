@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.io.physics.propagation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
@@ -206,67 +207,131 @@ public class IOpticalPropagationJSONAdaptor {
     }
 
     private void _setPropFactorXXtoPol0(IOpticalPropagation opticalPropagation) {
-        _xx_0 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0);
+        try {
+            _xx_0 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorYYtoPol0(IOpticalPropagation opticalPropagation) {
-        _yy_0 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol0);
+        try {
+            _yy_0 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol0);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorZZtoPol0(IOpticalPropagation opticalPropagation) {
-        _zz_0 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol0);
+        try {
+            _zz_0 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol0);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorXYtoPol0(IOpticalPropagation opticalPropagation) {
-        _xy_0 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol0);
+        try {
+            _xy_0 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol0);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorXXtoPol90(IOpticalPropagation opticalPropagation) {
-        _xx_90 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol90);
+        try {
+            _xx_90 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol90);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorYYtoPol90(IOpticalPropagation opticalPropagation) {
-        _yy_90 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol90);
+        try {
+            _yy_90 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol90);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorZZtoPol90(IOpticalPropagation opticalPropagation) {
-        _zz_90 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol90);
+        try {
+            _zz_90 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol90);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorXYtoPol90(IOpticalPropagation opticalPropagation) {
-        _xy_90 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol90);
+        try {
+            _xy_90 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol90);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorXXtoPol45(IOpticalPropagation opticalPropagation) {
-        _xx_45 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol45);
+        try {
+            _xx_45 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol45);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorYYtoPol45(IOpticalPropagation opticalPropagation) {
-        _yy_45 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol45);
+        try {
+            _yy_45 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol45);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorZZtoPol45(IOpticalPropagation opticalPropagation) {
-        _zz_45 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol45);
+        try {
+            _zz_45 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol45);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorXYtoPol45(IOpticalPropagation opticalPropagation) {
-        _xy_45 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol45);
+        try {
+            _xy_45 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol45);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorXXtoPol135(IOpticalPropagation opticalPropagation) {
-        _xx_135 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol135);
+        try {
+            _xx_135 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol135);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorYYtoPol135(IOpticalPropagation opticalPropagation) {
-        _yy_135 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135);
+        try {
+            _yy_135 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorZZtoPol135(IOpticalPropagation opticalPropagation) {
-        _zz_135 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135);
+        try {
+            _zz_135 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
     private void _setPropFactorXYtoPol135(IOpticalPropagation opticalPropagation) {
-        _xy_135 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135);
+        try {
+            _xy_135 = opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135);
+        } catch (PropagationFactorNotFound e) {
+            // Exception never caught
+        }
     }
 
 }

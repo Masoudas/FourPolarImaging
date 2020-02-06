@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDatabase;
+import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
 import fr.fresnel.fourPolar.core.physics.channel.PropagationChannel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
@@ -15,8 +16,9 @@ import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
 
 public class XMLOpticalPropagationDBTest {
 
-    @Test
-    public void search_DatabaseWithTwoPropagations_ReturnsThePropagation() throws PropagationChannelNotInDatabase {
+        @Test
+        public void search_DatabaseWithTwoPropagations_ReturnsThePropagation()
+                        throws PropagationChannelNotInDatabase, PropagationFactorNotFound {
         PropagationChannel channel1 = new PropagationChannel(1e-9, 1, 2, 3, 4);
         IOpticalPropagation propagation1 = createOpticalPropagation(channel1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
                 14, 15, 16);
