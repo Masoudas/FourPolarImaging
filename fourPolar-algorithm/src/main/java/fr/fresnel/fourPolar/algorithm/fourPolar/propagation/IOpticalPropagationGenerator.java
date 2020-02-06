@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.algorithm.fourPolar.propagation;
 
-import fr.fresnel.fourPolar.algorithm.fourPolar.propagation.exceptions.fourPolar.propagation.CannotComputePropagationFactor;
-import fr.fresnel.fourPolar.algorithm.fourPolar.propagation.exceptions.fourPolar.propagation.OpticalPropagationNotInvertible;
+import fr.fresnel.fourPolar.algorithm.fourPolar.exceptions.fourPolar.propagation.CannotComputePropagationFactor;
+import fr.fresnel.fourPolar.algorithm.fourPolar.exceptions.fourPolar.propagation.OpticalPropagationNotInvertible;
 import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 

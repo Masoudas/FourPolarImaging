@@ -13,16 +13,18 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 public interface IOpticalPropagation {
     /**
      * Returns the propagation channel that corresponds to this optical propagation.
+     * 
      * @return
      */
     public IPropagationChannel getPropagationChannel();
 
     /**
      * Set the propagation channel that corresponds to this optical propagation.
+     * 
      * @return
      */
     public void setPropagationChannel(IPropagationChannel channel);
-    
+
     /**
      * Returns the propagation coefficient from the given dipole direction to the
      * given polarization intensity. See {@link DipoleSquaredComponent} and
@@ -32,7 +34,8 @@ public interface IOpticalPropagation {
      * @param polarization
      * @return
      */
-    public double getPropagationFactor(DipoleSquaredComponent component, Polarization polarization) throws PropagationFactorNotFound;
+    public double getPropagationFactor(DipoleSquaredComponent component, Polarization polarization)
+            throws PropagationFactorNotFound;
 
     /**
      * Sets the propagation coefficient, from the given dipole direction to the
@@ -44,14 +47,5 @@ public interface IOpticalPropagation {
      * @param factor
      */
     public void setPropagationFactor(DipoleSquaredComponent component, Polarization polarization, double factor);
-    
-    /**
-     * Returns the inverse propagation factor from the given {@link Polarization} to the given
-     * {@link DipoleSquaredComponent}
-     * 
-     * @param polarization
-     * @param component
-     */
-    public double getInverseFactor(Polarization polarization, DipoleSquaredComponent component);
 
 }
