@@ -1,8 +1,12 @@
 package fr.fresnel.fourPolar.io.physics.channel;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import fr.fresnel.fourPolar.core.exceptions.physics.channel.CalibrationFactorOutOfRange;
+import fr.fresnel.fourPolar.core.exceptions.physics.channel.WavelengthOutOfRange;
 import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
 import fr.fresnel.fourPolar.core.physics.channel.PropagationChannel;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
@@ -14,24 +18,24 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
         "CalibFactor-Pol135" })
 public class IPropagationChannelJSONAdaptor {
     /**
-     * This is the scale used for writing the wavelength.
-     * The json description must change accordingly.
+     * This is the scale used for writing the wavelength. The json description must
+     * change accordingly.
      */
     private double _wavelengthScale = 1e-9;
     @JsonProperty("Wavelength-nanometer")
-    private double _wavelength;
+    private Double _wavelength;
 
     @JsonProperty("CalibFactor-Pol0")
-    private double _pol0;
+    private Double _pol0;
 
     @JsonProperty("CalibFactor-Pol45")
-    private double _pol45;
+    private Double _pol45;
 
     @JsonProperty("CalibFactor-Pol90")
-    private double _pol90;
+    private Double _pol90;
 
     @JsonProperty("CalibFactor-Pol135")
-    private double _pol135;
+    private Double _pol135;
 
     /**
      * Allows this class to be written as a JSon object.
@@ -47,13 +51,17 @@ public class IPropagationChannelJSONAdaptor {
     }
 
     /**
-     * Returns the content of the JSON as a proper interface
-     * Note that when wavelength is read, it is scaled to go back to meter.
+     * Returns the content of the JSON as a proper interface Note that when
+     * wavelength is read, it is scaled to go back to meter.
      * 
      * @return
+     * @throws IOException
+     * @throws CalibrationFactorOutOfRange
+     * @throws WavelengthOutOfRange
      */
-    public IPropagationChannel fromJSON() {
-        return new PropagationChannel(this._wavelength * _wavelengthScale, this._pol0, this._pol45, this._pol90, this._pol135);
+    public IPropagationChannel fromJSON() throws IOException {
+        return new PropagationChannel(_getWaveLength(), _getPol0(), _getPol45(), _getPol90(),
+                _getPol135());
     }
 
     /**
@@ -80,6 +88,45 @@ public class IPropagationChannelJSONAdaptor {
 
     private void setPol135(IPropagationChannel channel) {
         _pol135 = channel.getCalibrationFactor(Polarization.pol135);
+    }
+
+    private double _getWaveLength() throws IOException {
+        if (_wavelength == null) {
+            throw new IOException("Wavelength was not found for the channel");
+        }
+        return _wavelength * _wavelengthScale;
+    }
+
+    private double _getPol0() throws IOException {
+        if (_wavelength == null) {
+            throw new IOException(_CalibFactNotExistMessage(Polarization.pol0));
+        }
+        return _pol0;
+    }
+
+    private double _getPol45() throws IOException {
+        if (_wavelength == null) {
+            throw new IOException(_CalibFactNotExistMessage(Polarization.pol45));
+        }
+        return _pol45;
+    }
+
+    private double _getPol90() throws IOException {
+        if (_wavelength == null) {
+            throw new IOException(_CalibFactNotExistMessage(Polarization.pol90));
+        }
+        return _pol90;
+    }
+
+    private double _getPol135() throws IOException {
+        if (_wavelength == null) {
+            throw new IOException(_CalibFactNotExistMessage(Polarization.pol135));
+        }
+        return _pol135;
+    }
+
+    private String _CalibFactNotExistMessage(Polarization polarization) {
+        return "Calibration factor was not found for " + polarization;
     }
 
 }

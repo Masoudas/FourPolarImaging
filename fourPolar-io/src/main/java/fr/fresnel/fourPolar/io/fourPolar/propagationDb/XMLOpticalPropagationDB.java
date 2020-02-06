@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.io.fourPolar.propagationDb;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -29,16 +30,27 @@ class XMLOpticalPropagationDB implements IOpticalPropagationDB {
     @Override
     public IOpticalPropagation search(IPropagationChannel channel) throws PropagationChannelNotInDatabase {
         int adaptorCtr = 0;
-        while (adaptorCtr < _adaptorList.size()
-                && !_adaptorList.get(adaptorCtr).fromJSON().getPropagationChannel().equals(channel)) {
-            adaptorCtr++;
+        try {
+            while (adaptorCtr < _adaptorList.size()
+                    && !_adaptorList.get(adaptorCtr).fromJSON().getPropagationChannel().equals(channel)) {
+                adaptorCtr++;
+            }
+        } catch (IOException e) {
+            throw new PropagationChannelNotInDatabase(e.getMessage());
         }
 
         if (adaptorCtr == _adaptorList.size()) {
             throw new PropagationChannelNotInDatabase();
-        } else {
-            return _adaptorList.get(adaptorCtr).fromJSON();
-        }
+        } else
+            try {
+                {
+                    return _adaptorList.get(adaptorCtr).fromJSON();
+                }
+            } catch (IOException e) {
+                // It's not caught!
+                e.printStackTrace();
+                return null;
+            }
     }
 
     @Override

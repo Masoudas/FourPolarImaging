@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.io.physics.propagation;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -16,52 +18,52 @@ import fr.fresnel.fourPolar.io.physics.channel.IPropagationChannelJSONAdaptor;
 @JsonPropertyOrder(IOpticalPropagationJSONLabels.channel)
 public class IOpticalPropagationJSONAdaptor {
     @JsonProperty(IOpticalPropagationJSONLabels.xx_0)
-    private double _xx_0;
+    private Double _xx_0;
 
     @JsonProperty(IOpticalPropagationJSONLabels.yy_0)
-    private double _yy_0;
+    private Double _yy_0;
 
     @JsonProperty(IOpticalPropagationJSONLabels.zz_0)
-    private double _zz_0;
+    private Double _zz_0;
 
     @JsonProperty(IOpticalPropagationJSONLabels.xy_0)
-    private double _xy_0;
+    private Double _xy_0;
 
     @JsonProperty(IOpticalPropagationJSONLabels.xx_90)
-    private double _xx_90;
+    private Double _xx_90;
 
     @JsonProperty(IOpticalPropagationJSONLabels.yy_90)
-    private double _yy_90;
+    private Double _yy_90;
 
     @JsonProperty(IOpticalPropagationJSONLabels.zz_90)
-    private double _zz_90;
+    private Double _zz_90;
 
     @JsonProperty(IOpticalPropagationJSONLabels.xy_90)
-    private double _xy_90;
+    private Double _xy_90;
 
     @JsonProperty(IOpticalPropagationJSONLabels.xx_45)
-    private double _xx_45;
+    private Double _xx_45;
 
     @JsonProperty(IOpticalPropagationJSONLabels.yy_45)
-    private double _yy_45;
+    private Double _yy_45;
 
     @JsonProperty(IOpticalPropagationJSONLabels.zz_45)
-    private double _zz_45;
+    private Double _zz_45;
 
     @JsonProperty(IOpticalPropagationJSONLabels.xy_45)
-    private double _xy_45;
+    private Double _xy_45;
 
     @JsonProperty(IOpticalPropagationJSONLabels.xx_135)
-    private double _xx_135;
+    private Double _xx_135;
 
     @JsonProperty(IOpticalPropagationJSONLabels.yy_135)
-    private double _yy_135;
+    private Double _yy_135;
 
     @JsonProperty(IOpticalPropagationJSONLabels.zz_135)
-    private double _zz_135;
+    private Double _zz_135;
 
     @JsonProperty(IOpticalPropagationJSONLabels.xy_135)
-    private double _xy_135;
+    private Double _xy_135;
 
     @JsonProperty(IOpticalPropagationJSONLabels.channel)
     private IPropagationChannelJSONAdaptor _channelAdaptor;
@@ -75,8 +77,9 @@ public class IOpticalPropagationJSONAdaptor {
      * {@link IOpticalPropagation}.
      * 
      * @return
+     * @throws IOException
      */
-    public IOpticalPropagation fromJSON() {
+    public IOpticalPropagation fromJSON() throws IOException {
         OpticalPropagation opticalPropagation = new OpticalPropagation();
 
         _getPropFactorXXtoPol0(opticalPropagation);
@@ -134,71 +137,119 @@ public class IOpticalPropagationJSONAdaptor {
         _setPropagationChannel(opticalPropagation);
     }
 
-    private void _getPropFactorXXtoPol0(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorXXtoPol0(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_xx_0 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.XX, Polarization.pol0));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0, _xx_0);
     }
 
-    private void _getPropFactorYYtoPol0(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorYYtoPol0(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_yy_0 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.YY, Polarization.pol0));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol0, _yy_0);
     }
 
-    private void _getPropFactorZZtoPol0(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorZZtoPol0(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_zz_0 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.ZZ, Polarization.pol0));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol0, _zz_0);
     }
 
-    private void _getPropFactorXYtoPol0(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorXYtoPol0(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_xy_0 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.XY, Polarization.pol0));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol0, _xy_0);
     }
 
-    private void _getPropFactorXXtoPol90(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorXXtoPol90(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_xx_90 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.XX, Polarization.pol90));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol90, _xx_90);
     }
 
-    private void _getPropFactorYYtoPol90(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorYYtoPol90(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_yy_90 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.YY, Polarization.pol90));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol90, _yy_90);
     }
 
-    private void _getPropFactorZZtoPol90(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorZZtoPol90(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_zz_90 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.ZZ, Polarization.pol90));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol90, _zz_90);
     }
 
-    private void _getPropFactorXYtoPol90(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorXYtoPol90(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_xy_90 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.XY, Polarization.pol90));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol90, _xy_90);
     }
 
-    private void _getPropFactorXXtoPol45(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorXXtoPol45(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_xx_45 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.XX, Polarization.pol45));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol45, _xx_45);
     }
 
-    private void _getPropFactorYYtoPol45(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorYYtoPol45(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_yy_45 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.YY, Polarization.pol45));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol45, _yy_45);
     }
 
-    private void _getPropFactorZZtoPol45(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorZZtoPol45(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_zz_45 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.ZZ, Polarization.pol45));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol45, _zz_45);
     }
 
-    private void _getPropFactorXYtoPol45(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorXYtoPol45(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_xy_45 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.XY, Polarization.pol45));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol45, _xy_45);
     }
 
-    private void _getPropFactorXXtoPol135(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorXXtoPol135(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_xx_135 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.XX, Polarization.pol135));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol135, _xx_135);
     }
 
-    private void _getPropFactorYYtoPol135(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorYYtoPol135(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_yy_135 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.YY, Polarization.pol135));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135, _yy_135);
     }
 
-    private void _getPropFactorZZtoPol135(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorZZtoPol135(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_zz_135 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.ZZ, Polarization.pol135));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135, _zz_135);
     }
 
-    private void _getPropFactorXYtoPol135(IOpticalPropagation opticalPropagation) {
+    private void _getPropFactorXYtoPol135(IOpticalPropagation opticalPropagation) throws IOException{
+        if (_xy_135 == null){
+            throw new IOException(_getFactorNotExistsMessage(DipoleSquaredComponent.XY, Polarization.pol135));
+        }
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135, _xy_135);
     }
 
-    private void _getPropagationChannel(IOpticalPropagation opticalPropagation) {
+    private void _getPropagationChannel(IOpticalPropagation opticalPropagation) throws IOException{
         opticalPropagation.setPropagationChannel(_channelAdaptor.fromJSON());
     }
 
@@ -333,5 +384,10 @@ public class IOpticalPropagationJSONAdaptor {
             // Exception never caught
         }
     }
+
+    private String _getFactorNotExistsMessage(DipoleSquaredComponent component, Polarization pol){
+        return "Propagation factor from Dipole squared " + component + " to polarization " + pol + " does not exist!";
+    }
+
 
 }

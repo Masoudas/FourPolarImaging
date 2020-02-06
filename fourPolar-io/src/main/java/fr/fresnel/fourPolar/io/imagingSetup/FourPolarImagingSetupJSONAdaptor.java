@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.io.imagingSetup;
 
+import java.io.IOException;
 import java.util.TreeMap;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,7 +36,7 @@ class FourPolarImagingSetupJSONAdaptor {
         _setNCameras(imagingSetup);
     }
 
-    public FourPolarImagingSetup fromYaml() {
+    public FourPolarImagingSetup fromYaml() throws IOException {
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(this._channelAdaptor.size(), this._cameras);
 
         imagingSetup.setFieldOfView(this._fovAdaptor.fromJSON());

@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.io.fourPolar.propagationDb;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
