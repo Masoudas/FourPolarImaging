@@ -8,22 +8,18 @@
   </parent>
 
   <groupId>fr.fresnel.fourPolar</groupId>
-  <artifactId>fourPolar-math</artifactId>
-  <version>1.0</version>
-  <packaging>jar</packaging>
+  <artifactId>fourPolar-algorithm</artifactId>
+  <version>1.0.0</version>
 
-  <name>Four Polar Imaging Project</name>
 
 
   <dependencies>
-    <!-- Test dependencies -->
+    <!-- Dependency on the core module -->
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>5.6.0-RC1</version>
-      <scope>test</scope>
+      <groupId>fr.fresnel.fourPolar</groupId>
+      <artifactId>fourPolar-core</artifactId>
+      <version>${project.version}</version>
     </dependency>
-
   </dependencies>
 
 </project>
