@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.algorithm.fourPolar.inversePropagation;
 
+import java.util.Hashtable;
+
 import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
@@ -10,14 +12,27 @@ import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
  * forming the matrix presentation of propagation.
  */
 public class MatrixBasedInverseOpticalPropagationCalculator implements IInverseOpticalPropagationCalculator {
-    private final IOpticalPropagation _op;
+    private final IOpticalPropagation _opticalProp;
+    private Hashtable<String, Double> _ipropFact;
 
-    public MatrixBasedInverseOpticalPropagationCalculator(IOpticalPropagation opticalPropagation) {
-        _op = opticalPropagation;
+    public MatrixBasedInverseOpticalPropagationCalculator(IOpticalPropagation opticalPropagation)
+            throws PropagationFactorNotFound {
+        _opticalProp = opticalPropagation;
+        _ipropFact = new Hashtable<String, Double>(16);
+
+        _calculateInverseFactors();
+    }
+
+    @Override
+    public double getInverseFactor(Polarization polarization, DipoleSquaredComponent component) {
+        return _ipropFact.get(polarization.toString() + component.toString());
     }
 
     private void _calculateInverseFactors() throws PropagationFactorNotFound {
-        double[][] matrixForm = _getMatrixForm();
+        double[][] matrixForm = _toMatrixForm();
+
+
+        _fromMatrixForm(matrixForm);
 
     }
 
@@ -29,38 +44,59 @@ public class MatrixBasedInverseOpticalPropagationCalculator implements IInverseO
      * @return
      * @throws PropagationFactorNotFound
      */
-    private double[][] _getMatrixForm() throws PropagationFactorNotFound {
-        double[][] propagationMatrix = new double[4][4];
+    private double[][] _toMatrixForm() throws PropagationFactorNotFound {
+        double[][] matrixForm = new double[4][4];
 
-        propagationMatrix[0][0] = getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0);
-        propagationMatrix[0][1] = getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol0);
-        propagationMatrix[0][2] = getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol0);
-        propagationMatrix[0][3] = getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol0);
+        matrixForm[0][0] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0);
+        matrixForm[0][1] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol0);
+        matrixForm[0][2] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol0);
+        matrixForm[0][3] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol0);
 
-        propagationMatrix[1][0] = getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol90);
-        propagationMatrix[1][1] = getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol90);
-        propagationMatrix[1][2] = getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol90);
-        propagationMatrix[1][3] = getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol90);
+        matrixForm[1][0] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol90);
+        matrixForm[1][1] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol90);
+        matrixForm[1][2] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol90);
+        matrixForm[1][3] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol90);
 
-        propagationMatrix[2][0] = getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol45);
-        propagationMatrix[2][1] = getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol45);
-        propagationMatrix[2][2] = getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol45);
-        propagationMatrix[2][3] = getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol45);
+        matrixForm[2][0] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol45);
+        matrixForm[2][1] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol45);
+        matrixForm[2][2] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol45);
+        matrixForm[2][3] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol45);
 
-        propagationMatrix[3][0] = getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol135);
-        propagationMatrix[3][1] = getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135);
-        propagationMatrix[3][2] = getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135);
-        propagationMatrix[3][3] = getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135);
+        matrixForm[3][0] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol135);
+        matrixForm[3][1] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135);
+        matrixForm[3][2] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135);
+        matrixForm[3][3] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135);
 
-        return propagationMatrix;
+        return matrixForm;
 
     }
 
-    @Override
-    public double getInverseFactor(Polarization polarization, DipoleSquaredComponent component) {
-        // TODO Auto-generated method stub
-        return 0;
+    private void _fromMatrixForm(double[][] matrixForm) {
+        _setInverseFactor(DipoleSquaredComponent.XX, Polarization.pol0, matrixForm[0][0]);
+        _setInverseFactor(DipoleSquaredComponent.YY, Polarization.pol0, matrixForm[0][1]);
+        _setInverseFactor(DipoleSquaredComponent.ZZ, Polarization.pol0, matrixForm[0][2]);
+        _setInverseFactor(DipoleSquaredComponent.XY, Polarization.pol0, matrixForm[0][3]);
+
+        _setInverseFactor(DipoleSquaredComponent.XX, Polarization.pol90, matrixForm[1][0]);
+        _setInverseFactor(DipoleSquaredComponent.YY, Polarization.pol90, matrixForm[1][1]);
+        _setInverseFactor(DipoleSquaredComponent.ZZ, Polarization.pol90, matrixForm[1][2]);
+        _setInverseFactor(DipoleSquaredComponent.XY, Polarization.pol90, matrixForm[1][3]);
+
+        _setInverseFactor(DipoleSquaredComponent.XX, Polarization.pol45, matrixForm[2][0]);
+        _setInverseFactor(DipoleSquaredComponent.YY, Polarization.pol45, matrixForm[2][1]);
+        _setInverseFactor(DipoleSquaredComponent.ZZ, Polarization.pol45, matrixForm[2][2]);
+        _setInverseFactor(DipoleSquaredComponent.XY, Polarization.pol45, matrixForm[2][3]);
+
+        _setInverseFactor(DipoleSquaredComponent.XX, Polarization.pol135, matrixForm[3][0]);
+        _setInverseFactor(DipoleSquaredComponent.YY, Polarization.pol135, matrixForm[3][1]);
+        _setInverseFactor(DipoleSquaredComponent.ZZ, Polarization.pol135, matrixForm[3][2]);
+        _setInverseFactor(DipoleSquaredComponent.XY, Polarization.pol135, matrixForm[3][3]);
+
+
     }
 
+    private void _setInverseFactor(DipoleSquaredComponent component, Polarization polarization, double factor) {
+        _ipropFact.put(polarization.toString() + component.toString(), factor);
+    }
 
 }
