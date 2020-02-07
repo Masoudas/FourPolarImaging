@@ -6,11 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
+import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
+import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
 import fr.fresnel.fourPolar.io.physics.channel.IPropagationChannelJSONAdaptor;
+import fr.fresnel.fourPolar.io.physics.na.INumericalApertureJSONAdaptor;
 
 /**
  * This class adapts the {@link IOpticalPropagation} interface to JSON.
@@ -68,8 +71,13 @@ public class IOpticalPropagationJSONAdaptor {
     @JsonProperty(IOpticalPropagationJSONLabels.channel)
     private IPropagationChannelJSONAdaptor _channelAdaptor;
 
+    @JsonProperty(IOpticalPropagationJSONLabels.na)
+    private INumericalApertureJSONAdaptor _naAdaptor;
+
+
     public IOpticalPropagationJSONAdaptor() {
         _channelAdaptor = new IPropagationChannelJSONAdaptor();
+        _naAdaptor = new INumericalApertureJSONAdaptor();
     }
 
     /**
@@ -80,7 +88,10 @@ public class IOpticalPropagationJSONAdaptor {
      * @throws IOException
      */
     public IOpticalPropagation fromJSON() throws IOException {
-        OpticalPropagation opticalPropagation = new OpticalPropagation();
+        IPropagationChannel channel = _getPropagationChannel();
+        INumericalAperture na = _getNumericalAperture();
+
+        OpticalPropagation opticalPropagation = new OpticalPropagation(channel, na);
 
         _getPropFactorXXtoPol0(opticalPropagation);
         _getPropFactorYYtoPol0(opticalPropagation);
@@ -101,8 +112,6 @@ public class IOpticalPropagationJSONAdaptor {
         _getPropFactorYYtoPol135(opticalPropagation);
         _getPropFactorZZtoPol135(opticalPropagation);
         _getPropFactorXYtoPol135(opticalPropagation);
-
-        _getPropagationChannel(opticalPropagation);
 
         return opticalPropagation;
     }
@@ -135,6 +144,7 @@ public class IOpticalPropagationJSONAdaptor {
         _setPropFactorXYtoPol135(opticalPropagation);
 
         _setPropagationChannel(opticalPropagation);
+        _setNumericalAperture(opticalPropagation);
     }
 
     private void _getPropFactorXXtoPol0(IOpticalPropagation opticalPropagation) throws IOException{
@@ -249,8 +259,8 @@ public class IOpticalPropagationJSONAdaptor {
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135, _xy_135);
     }
 
-    private void _getPropagationChannel(IOpticalPropagation opticalPropagation) throws IOException{
-        opticalPropagation.setPropagationChannel(_channelAdaptor.fromJSON());
+    private IPropagationChannel _getPropagationChannel() throws IOException{
+        return _channelAdaptor.fromJSON();
     }
 
     private void _setPropagationChannel(IOpticalPropagation opticalPropagation) {
@@ -383,6 +393,15 @@ public class IOpticalPropagationJSONAdaptor {
         } catch (PropagationFactorNotFound e) {
             // Exception never caught
         }
+    }
+
+    private INumericalAperture _getNumericalAperture() throws IOException {
+        return _naAdaptor.fromJSON();
+    }
+
+
+    private void _setNumericalAperture(IOpticalPropagation opticalPropagation) {
+        _naAdaptor.toJSON(opticalPropagation.getNumericalAperture());
     }
 
     private String _getFactorNotExistsMessage(DipoleSquaredComponent component, Polarization pol){
