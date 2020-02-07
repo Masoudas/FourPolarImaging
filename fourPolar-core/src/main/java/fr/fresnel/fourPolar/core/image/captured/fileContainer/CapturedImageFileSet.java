@@ -1,9 +1,8 @@
-package fr.fresnel.fourPolar.core.imageSet.acquisition;
+package fr.fresnel.fourPolar.core.image.captured.fileContainer;
 
 import java.util.Arrays;
 import java.util.Hashtable;
 
-import fr.fresnel.fourPolar.core.imageSet.acquisition.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 import java.io.File;
