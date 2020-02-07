@@ -6,6 +6,8 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.image.captured.fileContainer.CapturedImageFileSet;
+
 
 /**
  * Unit test for simple App.
