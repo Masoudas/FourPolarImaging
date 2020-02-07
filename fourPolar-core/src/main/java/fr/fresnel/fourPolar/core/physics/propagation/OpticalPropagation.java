@@ -4,6 +4,7 @@ import java.util.Hashtable;
 
 import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
+import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
@@ -12,9 +13,12 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  */
 public class OpticalPropagation implements IOpticalPropagation {
     final private Hashtable<String, Double> _propagationFactors;
-    private IPropagationChannel _channel;
+    final private IPropagationChannel _channel;
+    final private INumericalAperture _na;
 
-    public OpticalPropagation() {
+    public OpticalPropagation(IPropagationChannel channel, INumericalAperture na) {
+        _channel = channel;
+        _na = na;
         _propagationFactors = new Hashtable<String, Double>(16);
     }
 
@@ -34,8 +38,9 @@ public class OpticalPropagation implements IOpticalPropagation {
     }
 
     @Override
-    public void setPropagationChannel(IPropagationChannel channel) {
-        this._channel = channel;
+    public INumericalAperture getNumericalAperture() {
+        return _na;
     }
+
 
 }

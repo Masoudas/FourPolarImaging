@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.core.physics.propagation;
 import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
+import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
@@ -19,11 +20,10 @@ public interface IOpticalPropagation {
     public IPropagationChannel getPropagationChannel();
 
     /**
-     * Set the propagation channel that corresponds to this optical propagation.
-     * 
+     * Get the numerical aperture that corresponds to this optical propagation.
      * @return
      */
-    public void setPropagationChannel(IPropagationChannel channel);
+    public INumericalAperture getNumericalAperture();
 
     /**
      * Returns the propagation coefficient from the given dipole direction to the
