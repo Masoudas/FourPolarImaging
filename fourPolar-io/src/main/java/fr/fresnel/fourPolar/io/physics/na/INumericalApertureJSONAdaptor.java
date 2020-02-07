@@ -5,7 +5,6 @@ import java.io.IOException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import fr.fresnel.fourPolar.core.exceptions.physics.na.NumericalApertureOutOfRange;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
