@@ -14,8 +14,8 @@ import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.Rectangle;
-import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
-import fr.fresnel.fourPolar.core.physics.channel.PropagationChannel;
+import fr.fresnel.fourPolar.core.physics.channel.IChannel;
+import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
@@ -42,8 +42,8 @@ public class FourPolarImagingSetupFromYamlTest {
         INumericalAperture na = new NumericalAperture(1.45, 5.65, 3.4342, 1.3434);
         imagingSetup.setNumericalAperture(na);
 
-        PropagationChannel prop = new PropagationChannel(1e-9, 1.45, 1.54, 1.34, 3.11);
-        imagingSetup.setPropagationChannel(1, prop);
+        Channel prop = new Channel(1e-9, 1.45, 1.54, 1.34, 3.11);
+        imagingSetup.setChannel(1, prop);
 
         File rootFolder = new File(FourPolarImagingSetupToYamlTest.class.getResource("").getPath());
         FourPolarImagingSetupToYaml writer = new FourPolarImagingSetupToYaml(imagingSetup, rootFolder);
@@ -57,7 +57,7 @@ public class FourPolarImagingSetupFromYamlTest {
         Rectangle diskRect90 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol90);        
         Rectangle diskRect135 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol135);        
         INumericalAperture diskNA = diskImagingSetup.getNumericalAperture();
-        IPropagationChannel channel = diskImagingSetup.getPropagationChannel(1);
+        IChannel channel = diskImagingSetup.getChannel(1);
 
         assertTrue( checkRectangle(diskRect0, rect0) && checkRectangle(diskRect45, rect45) &&
             checkRectangle(diskRect90, rect90) && checkRectangle(diskRect135, rect135) &&
@@ -77,7 +77,7 @@ public class FourPolarImagingSetupFromYamlTest {
             na1.getNA(Polarization.pol135) == na2.getNA(Polarization.pol135);
     }
 
-    private boolean checkChannel(IPropagationChannel channel1, IPropagationChannel channel2) {
+    private boolean checkChannel(IChannel channel1, IChannel channel2) {
         return channel1.getWavelength() == channel2.getWavelength() &&
             channel1.getCalibrationFactor(Polarization.pol0) == channel2.getCalibrationFactor(Polarization.pol0) &&
             channel1.getCalibrationFactor(Polarization.pol45) == channel2.getCalibrationFactor(Polarization.pol45) &&

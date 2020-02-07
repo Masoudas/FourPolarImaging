@@ -52,7 +52,7 @@ public class OpticalPropagationToYaml {
      */
     private IOpticalPropagationJSONAdaptor getJSONAdaptor(FourPolarImagingSetup setup, IOpticalPropagationDB database,
             int channel) throws PropagationChannelNotInDatabase {
-        IOpticalPropagation optProp = database.search(setup.getPropagationChannel(channel));
+        IOpticalPropagation optProp = database.search(setup.getChannel(channel));
 
         IOpticalPropagationJSONAdaptor jsonAdaptor = new IOpticalPropagationJSONAdaptor();
         jsonAdaptor.toJSON(optProp);

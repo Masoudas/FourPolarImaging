@@ -33,7 +33,7 @@ class IOpticalPropagationJSONLabels {
 
     public final static String xy_135 = "XY_135-factor";
 
-    public final static String channel = "PropagationChannel";
+    public final static String channel = "Channel";
 
     public final static String na = "NumericalAperutre";
 }

@@ -9,8 +9,8 @@ import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDat
 import fr.fresnel.fourPolar.core.fourPolar.opticalProp.IOpticalPropagationDB;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
-import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
-import fr.fresnel.fourPolar.core.physics.channel.PropagationChannel;
+import fr.fresnel.fourPolar.core.physics.channel.IChannel;
+import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
@@ -23,19 +23,19 @@ public class OpticalPropagationToYamlTest {
     @Test
     public void write_AddNewPropagationsToDB_WritesNewPropagationsInTheResourceFolder()
             throws IOException, PropagationChannelNotInDatabase {
-        PropagationChannel channel1 = new PropagationChannel(1e-9, 1, 2, 3, 4);
+        Channel channel1 = new Channel(1e-9, 1, 2, 3, 4);
         NumericalAperture na1 = new NumericalAperture(5, 6, 7, 8);
         IOpticalPropagation propagation1 = createOpticalPropagation(channel1, na1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
                 14, 15, 16);
 
-        PropagationChannel channel2 = new PropagationChannel(10e-9, 5, 6, 7, 8);
+        Channel channel2 = new Channel(10e-9, 5, 6, 7, 8);
         NumericalAperture na2 = new NumericalAperture(5, 6, 7, 8);
         IOpticalPropagation propagation2 = createOpticalPropagation(channel2, na2, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
                 0.9, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16);
 
         FourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.One);
-        setup.setPropagationChannel(1, channel1);
-        setup.setPropagationChannel(2, channel2);
+        setup.setChannel(1, channel1);
+        setup.setChannel(2, channel2);
 
         XMLOpticalPropagationDBIO dbIO = new XMLOpticalPropagationDBIO();
         IOpticalPropagationDB db = dbIO.read();
@@ -51,7 +51,7 @@ public class OpticalPropagationToYamlTest {
 
     }
 
-    private IOpticalPropagation createOpticalPropagation(IPropagationChannel channel, INumericalAperture na,
+    private IOpticalPropagation createOpticalPropagation(IChannel channel, INumericalAperture na,
             double xx_0, double xx_45, double xx_90, double xx_135, double yy_0, double yy_45, double yy_90,
             double yy_135, double zz_0, double zz_45, double zz_90, double zz_135, double xy_0, double xy_45,
             double xy_90, double xy_135) {

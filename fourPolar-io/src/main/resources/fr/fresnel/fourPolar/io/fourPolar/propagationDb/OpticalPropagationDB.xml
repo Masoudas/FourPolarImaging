@@ -3,13 +3,13 @@
 
 <XMLOpticalPropagationDB>
   <OpticalPropagation>
-    <PropagationChannel>
+    <Channel>
       <Wavelength-nanometer>1.0</Wavelength-nanometer>
       <CalibFactor-Pol0>1.0</CalibFactor-Pol0>
       <CalibFactor-Pol45>2.0</CalibFactor-Pol45>
       <CalibFactor-Pol90>3.0</CalibFactor-Pol90>
       <CalibFactor-Pol135>4.0</CalibFactor-Pol135>
-    </PropagationChannel>
+    </Channel>
     <XX_0-factor>1.0</XX_0-factor>
     <YY_0-factor>5.0</YY_0-factor>
     <ZZ_0-factor>9.0</ZZ_0-factor>

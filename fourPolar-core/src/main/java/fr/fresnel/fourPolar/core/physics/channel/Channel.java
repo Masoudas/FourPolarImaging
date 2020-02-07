@@ -10,7 +10,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  * Represents the propagation channels of the imaging system. Each channel
  * corresponds to one wavelength.
  */
-public class PropagationChannel implements IPropagationChannel {
+public class Channel implements IChannel {
     private double _wavelength;
     private Hashtable<Polarization, Double> _calibFact = new Hashtable<Polarization, Double>(4);
 
@@ -24,7 +24,7 @@ public class PropagationChannel implements IPropagationChannel {
      * @param calibFactPol90
      * @param calibFactPol135
      */
-    public PropagationChannel(double wavelength, double calibFactPol0, double calibFactPol45, double calibFactPol90,
+    public Channel(double wavelength, double calibFactPol0, double calibFactPol45, double calibFactPol90,
             double calibFactPol135) throws WavelengthOutOfRange, CalibrationFactorOutOfRange {
         this._checkWavelength(wavelength);
         this._wavelength = wavelength;
@@ -62,7 +62,7 @@ public class PropagationChannel implements IPropagationChannel {
     }
 
     @Override
-    public boolean equals(IPropagationChannel channel) {
+    public boolean equals(IChannel channel) {
         return channel.getWavelength() == this.getWavelength()
                 && channel.getCalibrationFactor(Polarization.pol0) == this.getCalibrationFactor(Polarization.pol0)
                 && channel.getCalibrationFactor(Polarization.pol45) == this.getCalibrationFactor(Polarization.pol45)

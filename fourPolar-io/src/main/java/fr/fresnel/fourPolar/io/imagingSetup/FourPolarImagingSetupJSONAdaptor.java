@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.imagingSetup.imageFormation.fov.IFieldOfViewJSONAdaptor;
-import fr.fresnel.fourPolar.io.physics.channel.IPropagationChannelJSONAdaptor;
+import fr.fresnel.fourPolar.io.physics.channel.IChannelJSONAdaptor;
 import fr.fresnel.fourPolar.io.physics.na.INumericalApertureJSONAdaptor;
 
 /**
@@ -24,7 +24,7 @@ class FourPolarImagingSetupJSONAdaptor {
     private INumericalApertureJSONAdaptor _naAdaptor;
 
     @JsonProperty("Channels")
-    private TreeMap<String, IPropagationChannelJSONAdaptor> _channelAdaptor;
+    private TreeMap<String, IChannelJSONAdaptor> _channelAdaptor;
 
     @JsonProperty("Number Of Cameras")
     private Cameras _cameras;
@@ -43,7 +43,7 @@ class FourPolarImagingSetupJSONAdaptor {
         imagingSetup.setNumericalAperture(this._naAdaptor.fromJSON());
 
         for (int channel = 1; channel <= this._channelAdaptor.size(); channel++) {
-            imagingSetup.setPropagationChannel(channel, this._channelAdaptor.get("Channel " + channel).fromJSON());
+            imagingSetup.setChannel(channel, this._channelAdaptor.get("Channel " + channel).fromJSON());
         }
 
         return imagingSetup;
@@ -61,11 +61,11 @@ class FourPolarImagingSetupJSONAdaptor {
 
     private void _setChannels(FourPolarImagingSetup imagingSetup) {
         int nchannel = imagingSetup.getnChannel();
-        this._channelAdaptor = new TreeMap<String, IPropagationChannelJSONAdaptor>();
+        this._channelAdaptor = new TreeMap<String, IChannelJSONAdaptor>();
 
         for (int channel = 1; channel <= nchannel; channel++) {
-            IPropagationChannelJSONAdaptor adaptor = new IPropagationChannelJSONAdaptor();
-            adaptor.toJSON(imagingSetup.getPropagationChannel(channel));
+            IChannelJSONAdaptor adaptor = new IChannelJSONAdaptor();
+            adaptor.toJSON(imagingSetup.getChannel(channel));
 
             this._channelAdaptor.put("Channel " + channel, adaptor);
         }

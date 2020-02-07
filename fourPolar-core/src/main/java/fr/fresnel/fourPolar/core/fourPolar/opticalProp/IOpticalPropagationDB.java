@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.fourPolar.opticalProp;
 
 import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDatabase;
-import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
+import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 
 /**
@@ -14,7 +14,7 @@ public interface IOpticalPropagationDB {
      * @param channel
      * @param opticalPropagation
      */
-    public void add(IPropagationChannel channel, IOpticalPropagation opticalPropagation);
+    public void add(IChannel channel, IOpticalPropagation opticalPropagation);
 
     /**
      * Looks for the optical propagation corresponding to the given channel.
@@ -25,6 +25,6 @@ public interface IOpticalPropagationDB {
      *                                         propagation for this propagation
      *                                         channel.
      */
-    public IOpticalPropagation search(IPropagationChannel channel) throws PropagationChannelNotInDatabase;
+    public IOpticalPropagation search(IChannel channel) throws PropagationChannelNotInDatabase;
 
 }

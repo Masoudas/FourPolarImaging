@@ -6,7 +6,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  * The interface for accessing the information of different propagation
  * channels.
  */
-public interface IPropagationChannel {
+public interface IChannel {
     /**
      * @return the wavelength in meter.
      */
@@ -26,6 +26,6 @@ public interface IPropagationChannel {
      * @param channel
      * @return
      */
-    boolean equals(IPropagationChannel channel);
+    boolean equals(IChannel channel);
 
 }

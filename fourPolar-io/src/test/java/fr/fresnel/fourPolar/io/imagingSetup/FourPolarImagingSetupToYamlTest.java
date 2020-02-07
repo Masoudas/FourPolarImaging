@@ -12,7 +12,7 @@ import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.Rectangle;
-import fr.fresnel.fourPolar.core.physics.channel.PropagationChannel;
+import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
 
@@ -38,9 +38,9 @@ public class FourPolarImagingSetupToYamlTest {
         INumericalAperture na = new NumericalAperture(1.45, 5.65, 3.4342, 1.3434);
         imagingSetup.setNumericalAperture(na);
 
-        PropagationChannel prop = new PropagationChannel(1e-9, 1.45, 1.54, 1.34, 3.11);
-        imagingSetup.setPropagationChannel(1, prop);
-        imagingSetup.setPropagationChannel(2, prop);
+        Channel prop = new Channel(1e-9, 1.45, 1.54, 1.34, 3.11);
+        imagingSetup.setChannel(1, prop);
+        imagingSetup.setChannel(2, prop);
 
         File rootFolder = new File(FourPolarImagingSetupToYamlTest.class.getResource("").getPath());
         FourPolarImagingSetupToYaml writer = new FourPolarImagingSetupToYaml(imagingSetup, rootFolder);

@@ -7,16 +7,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import fr.fresnel.fourPolar.core.exceptions.physics.channel.CalibrationFactorOutOfRange;
 import fr.fresnel.fourPolar.core.exceptions.physics.channel.WavelengthOutOfRange;
-import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
-import fr.fresnel.fourPolar.core.physics.channel.PropagationChannel;
+import fr.fresnel.fourPolar.core.physics.channel.IChannel;
+import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
- * This class is used as an adaptor of {@link IPropagationChannel} to JSON.
+ * This class is used as an adaptor of {@link IChannel} to JSON.
  */
 @JsonPropertyOrder({ "Wavelength-nanometer", "CalibFactor-Pol0", "CalibFactor-Pol45", "CalibFactor-Pol90",
         "CalibFactor-Pol135" })
-public class IPropagationChannelJSONAdaptor {
+public class IChannelJSONAdaptor {
     /**
      * This is the scale used for writing the wavelength. The json description must
      * change accordingly.
@@ -42,7 +42,7 @@ public class IPropagationChannelJSONAdaptor {
      * 
      * @param channel
      */
-    public void toJSON(IPropagationChannel channel) {
+    public void toJSON(IChannel channel) {
         setPol0(channel);
         setPol45(channel);
         setPol90(channel);
@@ -59,8 +59,8 @@ public class IPropagationChannelJSONAdaptor {
      * @throws CalibrationFactorOutOfRange
      * @throws WavelengthOutOfRange
      */
-    public IPropagationChannel fromJSON() throws IOException {
-        return new PropagationChannel(_getWaveLength(), _getPol0(), _getPol45(), _getPol90(),
+    public IChannel fromJSON() throws IOException {
+        return new Channel(_getWaveLength(), _getPol0(), _getPol45(), _getPol90(),
                 _getPol135());
     }
 
@@ -70,23 +70,23 @@ public class IPropagationChannelJSONAdaptor {
      * 
      * @param channel
      */
-    private void setWaveLength(IPropagationChannel channel) {
+    private void setWaveLength(IChannel channel) {
         _wavelength = channel.getWavelength() / _wavelengthScale;
     }
 
-    private void setPol0(IPropagationChannel channel) {
+    private void setPol0(IChannel channel) {
         _pol0 = channel.getCalibrationFactor(Polarization.pol0);
     }
 
-    private void setPol45(IPropagationChannel channel) {
+    private void setPol45(IChannel channel) {
         _pol45 = channel.getCalibrationFactor(Polarization.pol45);
     }
 
-    private void setPol90(IPropagationChannel channel) {
+    private void setPol90(IChannel channel) {
         _pol90 = channel.getCalibrationFactor(Polarization.pol90);
     }
 
-    private void setPol135(IPropagationChannel channel) {
+    private void setPol135(IChannel channel) {
         _pol135 = channel.getCalibrationFactor(Polarization.pol135);
     }
 

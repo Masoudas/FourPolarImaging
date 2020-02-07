@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.core.imagingSetup;
 
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
-import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
+import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 
 /**
@@ -13,7 +13,7 @@ public class FourPolarImagingSetup {
     private int _nChannel;
     private Cameras _cameras;
     private IFieldOfView _fov = null;
-    private IPropagationChannel[] _pChannel;
+    private IChannel[] _pChannel;
     private INumericalAperture _numAperture;
 
     /**
@@ -27,7 +27,7 @@ public class FourPolarImagingSetup {
         this._nChannel = nChannel;
         this._cameras = cameras;
 
-        this._pChannel = new IPropagationChannel[nChannel];
+        this._pChannel = new IChannel[nChannel];
     }
 
     /**
@@ -82,14 +82,14 @@ public class FourPolarImagingSetup {
      * @param channel            : channel number
      * @param propagationChannel : propagation channel data
      */
-    public void setPropagationChannel(int channel, IPropagationChannel propagationChannel) {
+    public void setChannel(int channel, IChannel propagationChannel) {
         this._pChannel[channel-1] = propagationChannel;
     }
 
     /**
      * @return the _pChannel
      */
-    public IPropagationChannel getPropagationChannel(int channel) {
+    public IChannel getChannel(int channel) {
         return this._pChannel[channel-1];
     }
 }

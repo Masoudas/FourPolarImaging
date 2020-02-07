@@ -8,7 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 
 import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDatabase;
 import fr.fresnel.fourPolar.core.fourPolar.opticalProp.IOpticalPropagationDB;
-import fr.fresnel.fourPolar.core.physics.channel.IPropagationChannel;
+import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.io.physics.propagation.IOpticalPropagationJSONAdaptor;
 
@@ -28,11 +28,11 @@ class XMLOpticalPropagationDB implements IOpticalPropagationDB {
     }
 
     @Override
-    public IOpticalPropagation search(IPropagationChannel channel) throws PropagationChannelNotInDatabase {
+    public IOpticalPropagation search(IChannel channel) throws PropagationChannelNotInDatabase {
         int adaptorCtr = 0;
         try {
             while (adaptorCtr < _adaptorList.size()
-                    && !_adaptorList.get(adaptorCtr).fromJSON().getPropagationChannel().equals(channel)) {
+                    && !_adaptorList.get(adaptorCtr).fromJSON().getChannel().equals(channel)) {
                 adaptorCtr++;
             }
         } catch (IOException e) {
@@ -54,7 +54,7 @@ class XMLOpticalPropagationDB implements IOpticalPropagationDB {
     }
 
     @Override
-    public void add(IPropagationChannel channel, IOpticalPropagation opticalPropagation) {
+    public void add(IChannel channel, IOpticalPropagation opticalPropagation) {
         IOpticalPropagationJSONAdaptor adaptor = new IOpticalPropagationJSONAdaptor();
         adaptor.toJSON(opticalPropagation);
         _adaptorList.add(adaptor);
