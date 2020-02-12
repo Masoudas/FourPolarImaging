@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 
-import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDatabase;
-import fr.fresnel.fourPolar.core.fourPolar.opticalProp.IOpticalPropagationDB;
+import fr.fresnel.fourPolar.core.exceptions.fourPolar.opticalPropagation.PropagationChannelNotInDatabase;
+import fr.fresnel.fourPolar.core.fourPolar.opticalPropagation.IOpticalPropagationDB;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.io.PathFactoryOfProject;

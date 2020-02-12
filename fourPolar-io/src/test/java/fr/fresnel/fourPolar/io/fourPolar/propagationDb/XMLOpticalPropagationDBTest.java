@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDatabase;
+import fr.fresnel.fourPolar.core.exceptions.fourPolar.opticalPropagation.PropagationChannelNotInDatabase;
 import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;

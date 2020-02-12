@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import fr.fresnel.fourPolar.core.fourPolar.opticalProp.IOpticalPropagationDB;
+import fr.fresnel.fourPolar.core.fourPolar.opticalPropagation.IOpticalPropagationDB;
 import fr.fresnel.fourPolar.io.PathFactoryOfGlobalInfo;
 
 /**

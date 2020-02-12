@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 
-import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDatabase;
-import fr.fresnel.fourPolar.core.fourPolar.opticalProp.IOpticalPropagationDB;
+import fr.fresnel.fourPolar.core.exceptions.fourPolar.opticalPropagation.PropagationChannelNotInDatabase;
+import fr.fresnel.fourPolar.core.fourPolar.opticalPropagation.IOpticalPropagationDB;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.io.physics.propagation.IOpticalPropagationJSONAdaptor;

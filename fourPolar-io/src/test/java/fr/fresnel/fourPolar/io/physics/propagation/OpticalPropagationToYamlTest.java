@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.exceptions.fourPolar.PropagationChannelNotInDatabase;
-import fr.fresnel.fourPolar.core.fourPolar.opticalProp.IOpticalPropagationDB;
+import fr.fresnel.fourPolar.core.exceptions.fourPolar.opticalPropagation.PropagationChannelNotInDatabase;
+import fr.fresnel.fourPolar.core.fourPolar.opticalPropagation.IOpticalPropagationDB;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
