@@ -37,5 +37,13 @@ public class NumericalAperture implements INumericalAperture {
             throw new NumericalApertureOutOfRange("Negative values are not accepted");
         }
     }
+
+    @Override
+    public boolean equals(INumericalAperture na) {
+        return this.getNA(Polarization.pol0) == na.getNA(Polarization.pol0)
+            && this.getNA(Polarization.pol45) == na.getNA(Polarization.pol45)
+            && this.getNA(Polarization.pol90) == na.getNA(Polarization.pol90)
+            && this.getNA(Polarization.pol135) == na.getNA(Polarization.pol135);
+    }
     
 }
