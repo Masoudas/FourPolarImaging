@@ -8,10 +8,10 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 
 /**
  * This is a checker class, which only checks whether the image exists or not.
- * This checker ensures that when sample set is read the second time, all the
- * images still exist.
+ * This checker ensures that a given captured image exists when using the image
+ * for future applications.
  */
-class CapturedImageExists implements ICapturedImageChecker {
+class CapturedImageExistsChecker implements ICapturedImageChecker {
     private static String notExists = "The captured image has been removed.";
 
     @Override
@@ -21,10 +21,9 @@ class CapturedImageExists implements ICapturedImageChecker {
 
     @Override
     public void checkCompatible(File imagePath) throws IncompatibleCapturedImage {
-        if (!imagePath.exists()){
+        if (!imagePath.exists()) {
             throw new IncompatibleCapturedImage(new RejectedCapturedImage(imagePath, notExists));
         }
     }
 
-    
 }
