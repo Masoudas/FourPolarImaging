@@ -49,7 +49,6 @@ class XMLOpticalPropagationDB implements IOpticalPropagationDB {
                 }
             } catch (IOException e) {
                 // It's not caught!
-                e.printStackTrace();
                 return null;
             }
     }
