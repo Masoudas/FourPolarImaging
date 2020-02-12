@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.io.image.tiff.grayscale;
 import java.io.File;
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import io.scif.FormatException;

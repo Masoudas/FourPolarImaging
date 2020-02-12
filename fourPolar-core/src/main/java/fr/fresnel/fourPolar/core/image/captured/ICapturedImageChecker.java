@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.core.image.captured;
 
 import java.io.File;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 
 /**
  * Used for checking that a captured image file has the desired format,

@@ -5,7 +5,7 @@ import java.security.KeyException;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.fileContainer.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;

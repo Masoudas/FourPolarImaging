@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.io.image.tiff.grayscale.TiffGrayScaleReader;
 import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;

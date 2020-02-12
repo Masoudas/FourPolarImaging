@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.exceptions.image.acquisition;
+package fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 
