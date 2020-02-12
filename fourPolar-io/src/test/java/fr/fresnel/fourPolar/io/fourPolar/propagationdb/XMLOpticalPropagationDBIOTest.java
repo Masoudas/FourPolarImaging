@@ -1,12 +1,9 @@
-package fr.fresnel.fourPolar.io.fourPolar.propagationDb;
+package fr.fresnel.fourPolar.io.fourPolar.propagationdb;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.exceptions.fourPolar.opticalPropagation.PropagationChannelNotInDatabase;
-import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
@@ -16,54 +13,32 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
 
-public class XMLOpticalPropagationDBTest {
-
-        @Test
-        public void search_DatabaseWithTwoPropagations_ReturnsThePropagation()
-                        throws PropagationChannelNotInDatabase, PropagationFactorNotFound {
-        Channel channel1 = new Channel(1e-9, 1, 2, 3, 4);
-        NumericalAperture na1 = new NumericalAperture(5, 6, 7, 8);
-        IOpticalPropagation propagation1 = createOpticalPropagation(channel1, na1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
-                14, 15, 16);
-
-        Channel channel2 = new Channel(10e-9, 5, 6, 7, 8);
-        NumericalAperture na2 = new NumericalAperture(5, 6, 7, 8);
-        IOpticalPropagation propagation2 = createOpticalPropagation(channel2, na2, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
-                0.9, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16);
-
-        XMLOpticalPropagationDB db = new XMLOpticalPropagationDB();
-        db.add(channel1, propagation1);
-        db.add(channel2, propagation2);
-
-        IOpticalPropagation propDb = db.search(channel1);
-
-        // Checking one factor is sufficient
-        assertTrue(propDb.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0) == propagation1
-                .getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0));
+public class XMLOpticalPropagationDBIOTest {
+    @Test
+    public void read_OriginalDataBase_WritesOriginalDataBaseInTheHidden4PolarSoftwareFolder() throws IOException {
+        XMLOpticalPropagationDBIO dbIO = new XMLOpticalPropagationDBIO();
+        dbIO.read();
 
     }
 
     @Test
-    public void search_NonExistentPropagation_ThrowsException() throws PropagationChannelNotInDatabase {
+    public void write_DataBaseWithTwoPropagations_WritesInTheHidden4PolarSoftwareFolder() throws IOException {
         Channel channel1 = new Channel(1e-9, 1, 2, 3, 4);
         NumericalAperture na1 = new NumericalAperture(5, 6, 7, 8);
-        IOpticalPropagation propagation1 = createOpticalPropagation(channel1, na1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
-                14, 15, 16);
+        IOpticalPropagation propagation1 = createOpticalPropagation(channel1, na1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+                12, 13, 14, 15, 16);
 
         Channel channel2 = new Channel(10e-9, 5, 6, 7, 8);
         NumericalAperture na2 = new NumericalAperture(5, 6, 7, 8);
-        IOpticalPropagation propagation2 = createOpticalPropagation(channel2, na2, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
-                0.9, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16);
+        IOpticalPropagation propagation2 = createOpticalPropagation(channel2, na2, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7,
+                0.8, 0.9, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16);
 
         XMLOpticalPropagationDB db = new XMLOpticalPropagationDB();
         db.add(channel1, propagation1);
         db.add(channel2, propagation2);
 
-        Channel nonExistentChannel = new Channel(100e-9, 5, 6, 7, 8);
-
-        assertThrows(PropagationChannelNotInDatabase.class, () -> {
-            db.search(nonExistentChannel);
-        });
+        XMLOpticalPropagationDBIO dbIO = new XMLOpticalPropagationDBIO();
+        dbIO.write(db);
 
     }
 
@@ -94,4 +69,5 @@ public class XMLOpticalPropagationDBTest {
 
         return opticalPropagation;
     }
+
 }

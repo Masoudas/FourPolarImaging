@@ -1,6 +1,6 @@
-package fr.fresnel.fourPolar.core.fourPolar.opticalPropagation;
+package fr.fresnel.fourPolar.core.fourPolar.propagationdb; 
 
-import fr.fresnel.fourPolar.core.exceptions.fourPolar.opticalPropagation.PropagationChannelNotInDatabase;
+import fr.fresnel.fourPolar.core.exceptions.fourPolar.propagationdb.PropagationChannelNotInDatabase;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 

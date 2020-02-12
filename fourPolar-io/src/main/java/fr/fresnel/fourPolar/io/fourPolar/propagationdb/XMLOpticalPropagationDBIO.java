@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.fourPolar.propagationDb;
+package fr.fresnel.fourPolar.io.fourPolar.propagationdb;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import fr.fresnel.fourPolar.core.fourPolar.opticalPropagation.IOpticalPropagationDB;
+import fr.fresnel.fourPolar.core.fourPolar.propagationdb.IOpticalPropagationDB;
 import fr.fresnel.fourPolar.io.PathFactoryOfGlobalInfo;
 
 /**

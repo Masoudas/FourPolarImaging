@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.exceptions.fourPolar.opticalPropagation;
+package fr.fresnel.fourPolar.core.exceptions.fourPolar.propagationdb;
 
 /**
  * The exception that is thrown in case there's no {@link OpticalPropagation} is

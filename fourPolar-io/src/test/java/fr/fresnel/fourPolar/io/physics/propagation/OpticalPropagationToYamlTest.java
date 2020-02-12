@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.fourPolar.opticalPropagation.PropagationChannelNotInDatabase;
-import fr.fresnel.fourPolar.core.fourPolar.opticalPropagation.IOpticalPropagationDB;
+import fr.fresnel.fourPolar.core.fourPolar.propagationdb.IOpticalPropagationDB;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
@@ -17,7 +17,7 @@ import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
-import fr.fresnel.fourPolar.io.fourPolar.propagationDb.XMLOpticalPropagationDBIO;
+import fr.fresnel.fourPolar.io.fourPolar.propagationdb.XMLOpticalPropagationDBIO;
 
 public class OpticalPropagationToYamlTest {
     @Test
