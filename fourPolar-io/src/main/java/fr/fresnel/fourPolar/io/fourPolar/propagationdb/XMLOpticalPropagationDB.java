@@ -1,14 +1,15 @@
 package fr.fresnel.fourPolar.io.fourPolar.propagationdb;
 
 import java.io.IOException;
-import java.util.ArrayList; 
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 
-import fr.fresnel.fourPolar.core.exceptions.fourPolar.opticalPropagation.PropagationChannelNotInDatabase;
+import fr.fresnel.fourPolar.core.exceptions.fourPolar.propagationdb.PropagationChannelNotInDatabase;
 import fr.fresnel.fourPolar.core.fourPolar.propagationdb.IOpticalPropagationDB;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
+import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.io.physics.propagation.IOpticalPropagationJSONAdaptor;
 
@@ -28,11 +29,11 @@ class XMLOpticalPropagationDB implements IOpticalPropagationDB {
     }
 
     @Override
-    public IOpticalPropagation search(IChannel channel) throws PropagationChannelNotInDatabase {
+    public IOpticalPropagation search(IChannel channel, INumericalAperture na) throws PropagationChannelNotInDatabase {
         int adaptorCtr = 0;
         try {
             while (adaptorCtr < _adaptorList.size()
-                    && !_adaptorList.get(adaptorCtr).fromJSON().getChannel().equals(channel)) {
+                    && !_isChannelEqual(channel, adaptorCtr) && !_isNumericalApertureEqual(na, adaptorCtr)) {
                 adaptorCtr++;
             }
         } catch (IOException e) {
@@ -53,8 +54,17 @@ class XMLOpticalPropagationDB implements IOpticalPropagationDB {
             }
     }
 
+    private boolean _isChannelEqual(IChannel channel, int adaptorCtr) throws IOException {
+        return _adaptorList.get(adaptorCtr).fromJSON().getChannel().equals(channel);
+    }
+
+    private boolean _isNumericalApertureEqual(INumericalAperture na, int adaptorCtr) throws IOException {
+        return _adaptorList.get(adaptorCtr).fromJSON().getNumericalAperture().equals(na);
+        
+    }
+
     @Override
-    public void add(IChannel channel, IOpticalPropagation opticalPropagation) {
+    public void add(IOpticalPropagation opticalPropagation) {
         IOpticalPropagationJSONAdaptor adaptor = new IOpticalPropagationJSONAdaptor();
         adaptor.toJSON(opticalPropagation);
         _adaptorList.add(adaptor);
