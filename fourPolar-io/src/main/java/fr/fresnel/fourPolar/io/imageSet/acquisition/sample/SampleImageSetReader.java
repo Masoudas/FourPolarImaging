@@ -12,7 +12,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
@@ -50,10 +50,10 @@ public class SampleImageSetReader {
      * @throws SampleImageNotFound
      * @throws ExcelIncorrentRow
      * @throws SampleSetExcelNotFound
-     * @throws CorruptCapturedImage
+     * @throws IncompatibleCapturedImage
      */
     public SampleImageSet read()
-            throws SampleImageNotFound, ExcelIncorrentRow, SampleSetExcelNotFound, CorruptCapturedImage {
+            throws SampleImageNotFound, ExcelIncorrentRow, SampleSetExcelNotFound, IncompatibleCapturedImage {
         this._sampleImageSet = new SampleImageSet(this._imagingSetup, new CapturedImageExists());
         for (int channel = 1; channel <= this._imagingSetup.getnChannel(); channel++) {
             this.readChannel(channel);
@@ -65,13 +65,13 @@ public class SampleImageSetReader {
     /**
      * Reads each particular channel and puts it in the sample image set.
      * 
-     * @throws CorruptCapturedImage
+     * @throws IncompatibleCapturedImage
      * @throws IllegalArgumentException
      * @throws KeyAlreadyExistsException
      * @throws FileNotFoundException
      */
     private void readChannel(int channel) throws SampleImageNotFound, ExcelIncorrentRow, SampleSetExcelNotFound,
-            KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
+            KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
         File channelFile = new File(this._sampleSetFolder, SampleImageSetWriter.getChannelFileName(channel));
 
         try (FileInputStream fStream = new FileInputStream(channelFile)) {
@@ -120,7 +120,7 @@ public class SampleImageSetReader {
     }
 
     private void _addImage(SampleImageSet sampleImageSet, int channel, File[] files)
-            throws CorruptCapturedImage, KeyAlreadyExistsException {
+            throws IncompatibleCapturedImage, KeyAlreadyExistsException {
         try {
             if (files.length == 1)
                 sampleImageSet.addImage(channel, files[0]);

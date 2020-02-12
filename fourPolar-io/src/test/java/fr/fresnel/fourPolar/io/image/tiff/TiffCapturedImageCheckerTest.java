@@ -10,7 +10,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.io.image.tiff.grayscale.TiffCapturedImageChecker;
 
 public class TiffCapturedImageCheckerTest {
@@ -23,7 +23,7 @@ public class TiffCapturedImageCheckerTest {
     }
 
     @Test
-    public void checkCompatible_16bitTiff_ThrowsNoException() throws CorruptCapturedImage {
+    public void checkCompatible_16bitTiff_ThrowsNoException() throws IncompatibleCapturedImage {
         File tiffImage = new File(_root, "16bit.tif");
         assertDoesNotThrow(() -> {
             tiffChecker.checkCompatible(tiffImage);
@@ -31,10 +31,10 @@ public class TiffCapturedImageCheckerTest {
     }
 
     @Test
-    public void checkCompatible_8bitTiff_ThrowsCorruptCapturedImage() throws CorruptCapturedImage {
+    public void checkCompatible_8bitTiff_ThrowsIncompatibleCapturedImage() throws IncompatibleCapturedImage {
         File tiffImage = new File(_root, "8bit.tif");
 
-        CorruptCapturedImage exception = assertThrows(CorruptCapturedImage.class, () -> {
+        IncompatibleCapturedImage exception = assertThrows(IncompatibleCapturedImage.class, () -> {
             tiffChecker.checkCompatible(tiffImage);
         });
 
@@ -43,9 +43,9 @@ public class TiffCapturedImageCheckerTest {
     }
 
     @Test
-    public void checkCompatible_corruptTiff_ThrowsCorruptCapturedImage() throws CorruptCapturedImage {
+    public void checkCompatible_corruptTiff_ThrowsIncompatibleCapturedImage() throws IncompatibleCapturedImage {
         File image = new File(_root, "corrupt.tif");
-        CorruptCapturedImage exception = assertThrows(CorruptCapturedImage.class, () -> {
+        IncompatibleCapturedImage exception = assertThrows(IncompatibleCapturedImage.class, () -> {
             tiffChecker.checkCompatible(image);
         });
 
@@ -53,10 +53,10 @@ public class TiffCapturedImageCheckerTest {
     }
 
     @Test
-    public void checkCompatible_otherFormat_ThrowsCorruptCapturedImage() throws CorruptCapturedImage, IOException {
+    public void checkCompatible_otherFormat_ThrowsIncompatibleCapturedImage() throws IncompatibleCapturedImage, IOException {
         File jpegImage = new File(_root, "otherFormat.jpeg");
 
-        CorruptCapturedImage exception = assertThrows(CorruptCapturedImage.class, () -> {
+        IncompatibleCapturedImage exception = assertThrows(IncompatibleCapturedImage.class, () -> {
             tiffChecker.checkCompatible(jpegImage);
         });
 
@@ -64,10 +64,10 @@ public class TiffCapturedImageCheckerTest {
     }
 
     @Test
-    public void checkCompatible_nonExistent_ThrowsCorruptCapturedImage() throws CorruptCapturedImage, IOException {
+    public void checkCompatible_nonExistent_ThrowsIncompatibleCapturedImage() throws IncompatibleCapturedImage, IOException {
         File nonExistent = new File(_root, "ThisFileDoesNotExist.jpeg");
 
-        CorruptCapturedImage exception = assertThrows(CorruptCapturedImage.class, () -> {
+        IncompatibleCapturedImage exception = assertThrows(IncompatibleCapturedImage.class, () -> {
             tiffChecker.checkCompatible(nonExistent);
         });
 

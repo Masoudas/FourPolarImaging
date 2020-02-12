@@ -15,7 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.ExcelIncorrentRow;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.MissingExcelTitleRow;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.TemplateSampleSetExcelNotFound;
@@ -66,7 +66,7 @@ public class SampleImageSetByExcelFileFinder {
 
                 try {
                     this._addImage(sampleImageSet, channel, files);
-                } catch (CorruptCapturedImage e) {
+                } catch (IncompatibleCapturedImage e) {
                     rejectedImages.add(e.getRejectedImage());
                 } catch (KeyAlreadyExistsException e) {
                     RejectedCapturedImage rCapturedImage = new RejectedCapturedImage(files[0], "Duplicate file set");
@@ -107,7 +107,7 @@ public class SampleImageSetByExcelFileFinder {
     }
 
     private void _addImage(SampleImageSet sampleImageSet, int channel, File[] files)
-            throws CorruptCapturedImage, KeyAlreadyExistsException {
+            throws IncompatibleCapturedImage, KeyAlreadyExistsException {
         try {
             if (files.length == 1)
                 sampleImageSet.addImage(channel, files[0]);

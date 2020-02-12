@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.io.image.tiff.grayscale.TiffGrayScaleReader;
 import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;
@@ -26,7 +26,7 @@ public class TiffGrayScaleReaderTest {
 
     @Test
     public void read_UShortTiff_ShouldShowImage()
-            throws IllegalArgumentException, IOException, InterruptedException, KeyException, CorruptCapturedImage {
+            throws IllegalArgumentException, IOException, InterruptedException, KeyException, IncompatibleCapturedImage {
         final File image = new File(_testResource, "UShortImage.tif");
 
         final TiffGrayScaleReader<UnsignedShortType> reader = new TiffGrayScaleReader<UnsignedShortType>(
@@ -39,7 +39,7 @@ public class TiffGrayScaleReaderTest {
 
     @Test
     public void read_FloatTiff_ShouldShowImage()
-            throws IllegalArgumentException, IOException, InterruptedException, KeyException, CorruptCapturedImage {
+            throws IllegalArgumentException, IOException, InterruptedException, KeyException, IncompatibleCapturedImage {
         final File image = new File(_testResource, "FloatImage.tif");
 
         final TiffGrayScaleReader<FloatType> reader = new TiffGrayScaleReader<FloatType>(
@@ -52,7 +52,7 @@ public class TiffGrayScaleReaderTest {
 
     @Test
     public void read_SameImageTenThousandTimes_ShouldNotRunOutOfResource()
-            throws IllegalArgumentException, IOException, InterruptedException, KeyException, CorruptCapturedImage {
+            throws IllegalArgumentException, IOException, InterruptedException, KeyException, IncompatibleCapturedImage {
         final File image = new File(_testResource, "FloatImage.tif");
         final TiffGrayScaleReader<FloatType> reader = new TiffGrayScaleReader<FloatType>(
                 new FloatType());

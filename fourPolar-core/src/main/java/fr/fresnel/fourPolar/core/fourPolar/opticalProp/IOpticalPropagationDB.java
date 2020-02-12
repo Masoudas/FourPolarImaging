@@ -14,7 +14,7 @@ public interface IOpticalPropagationDB {
      * @param channel
      * @param opticalPropagation
      */
-    public void add(IChannel channel, IOpticalPropagation opticalPropagation);
+    public void add(IChannel channel, IOpticalPropagation opticalPropagation)???;
 
     /**
      * Looks for the optical propagation corresponding to the given channel.
@@ -25,6 +25,6 @@ public interface IOpticalPropagationDB {
      *                                         propagation for this propagation
      *                                         channel.
      */
-    public IOpticalPropagation search(IChannel channel) throws PropagationChannelNotInDatabase;
+    public IOpticalPropagation search(IChannel channel) ??? throws PropagationChannelNotInDatabase;
 
 }

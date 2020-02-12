@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.core.image.captured;
 
 import java.io.File;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
 
 /**
  * Used for checking that a captured image file has the desired format,
@@ -24,8 +24,8 @@ public interface ICapturedImageChecker {
      * 
      * @param imagePath
      * @return
-     * @throws CorruptCapturedImage
+     * @throws IncompatibleCapturedImage
      */
-    public void checkCompatible(File imagePath) throws CorruptCapturedImage;    
+    public void checkCompatible(File imagePath) throws IncompatibleCapturedImage;    
 
 }

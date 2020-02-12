@@ -11,7 +11,7 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
@@ -33,7 +33,7 @@ public class SampleImageSetByExcelFileFinderTest {
         @Test
         public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel()
                         throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow,
-                        CorruptCapturedImage {
+                        IncompatibleCapturedImage {
                 File rootOneCamera = new File(root, "OneCamera");
                 File oneCameraChannel1Excel = new File(rootOneCamera, "TemplateOneCamera-Channel1.xlsx");
                 File oneCameraChannel2Excel = new File(rootOneCamera, "TemplateOneCamera-Channel2.xlsx");
@@ -62,7 +62,7 @@ public class SampleImageSetByExcelFileFinderTest {
         @Test
         public void findChannelImages_TwoCamera_ReturnsThreeCapturedSets()
                         throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow,
-                        KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
+                        KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
                 File rootTwoCamera = new File(root, "TwoCamera");
                 File twoCameraExcel = new File(rootTwoCamera, "TemplateTwoCamera.xlsx");
 
@@ -86,7 +86,7 @@ public class SampleImageSetByExcelFileFinderTest {
 
         @Test
         public void findChannelImages_FourCamera_ReturnsThreeCapturedSets() throws TemplateSampleSetExcelNotFound,
-                        MissingExcelTitleRow, ExcelIncorrentRow, CorruptCapturedImage {
+                        MissingExcelTitleRow, ExcelIncorrentRow, IncompatibleCapturedImage {
                 File rootFourCamera = new File(root, "FourCamera");
                 File fourCameraExcel = new File(rootFourCamera, "TemplateFourCamera.xlsx");
 

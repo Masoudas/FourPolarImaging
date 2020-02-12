@@ -9,7 +9,7 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
@@ -28,13 +28,13 @@ public class SampleImageSetTest {
     SampleImageSet sampleSet = new SampleImageSet(imagingSetup, new DummyImageChecker());
 
     public SampleImageSetTest()
-            throws CorruptCapturedImage, KeyAlreadyExistsException, IllegalArgumentException, KeyException {
+            throws IncompatibleCapturedImage, KeyAlreadyExistsException, IllegalArgumentException, KeyException {
         sampleSet.addImage(1, pol0, pol45, pol90, pol135);
         sampleSet.addImage(2, pol0, pol45, pol90, pol135);
     }
 
     @Test
-    public void addImage_DuplicateImage_ShouldThrowException() throws IllegalArgumentException, CorruptCapturedImage, KeyException {
+    public void addImage_DuplicateImage_ShouldThrowException() throws IllegalArgumentException, IncompatibleCapturedImage, KeyException {
         try {
             sampleSet.addImage(1, pol0, pol45, pol90, pol135);
         } catch (KeyAlreadyExistsException e) {
@@ -68,7 +68,7 @@ class DummyImageChecker implements ICapturedImageChecker {
     }
 
     @Override
-    public void checkCompatible(File imagePath) throws CorruptCapturedImage {
+    public void checkCompatible(File imagePath) throws IncompatibleCapturedImage {
 
     }
 

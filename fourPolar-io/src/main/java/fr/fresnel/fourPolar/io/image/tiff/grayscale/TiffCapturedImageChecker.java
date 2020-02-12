@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.io.image.tiff.grayscale;
 import java.io.File;
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import io.scif.FormatException;
@@ -32,16 +32,16 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
      * bits.
      * 
      * @throws IOException
-     * @throws CorruptCapturedImage
+     * @throws IncompatibleCapturedImage
      */
     @Override
-    public void checkCompatible(File image) throws CorruptCapturedImage {
+    public void checkCompatible(File image) throws IncompatibleCapturedImage {
         try {
             if (!image.exists()){
-                throw new CorruptCapturedImage(new RejectedCapturedImage(image, notExist));
+                throw new IncompatibleCapturedImage(new RejectedCapturedImage(image, notExist));
             }                 
         } catch (SecurityException e) {
-            throw new CorruptCapturedImage(new RejectedCapturedImage(image, notExist));
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image, notExist));
         }
         
         this._checkExtension(image);
@@ -49,18 +49,18 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
         try {
             this._bitDepthAbove16(image);
         } catch (IOException e) {
-            throw new CorruptCapturedImage(new RejectedCapturedImage(image, corruptContent));
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image, corruptContent));
         } catch (FormatException e) {
-            throw new CorruptCapturedImage(new RejectedCapturedImage(image, formatError));
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image, formatError));
         }
     }
 
-    private void _checkExtension(File image) throws CorruptCapturedImage {
+    private void _checkExtension(File image) throws IncompatibleCapturedImage {
         int index = image.getName().lastIndexOf('.');
         String extension = index > 0 ? image.getName().substring(index + 1) : null;
 
         if (extension == null || !extension.equals(this.getExtension())) {
-            throw new CorruptCapturedImage(new RejectedCapturedImage(image, badExtension));
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image, badExtension));
         } 
     }
 
@@ -72,7 +72,7 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
      * @throws IOException
      * @throws FormatException
      */
-    private void _bitDepthAbove16(File image) throws FormatException, IOException, CorruptCapturedImage {
+    private void _bitDepthAbove16(File image) throws FormatException, IOException, IncompatibleCapturedImage {
         final SCIFIO scifio = new SCIFIO();
         final Reader reader = scifio.initializer().initializeReader(image.getAbsolutePath());
         final Metadata meta = reader.getMetadata();
@@ -80,11 +80,11 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
         final ImageMetadata iMeta = meta.get(0);
 
         if (iMeta.getBitsPerPixel() < 16) {
-            throw new CorruptCapturedImage(new RejectedCapturedImage(image, lowBitDepth));
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image, lowBitDepth));
         }
 
         if (iMeta.getPixelType() != FormatTools.UINT16){
-            throw new CorruptCapturedImage(new RejectedCapturedImage(image, notUnsignedShort));
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image, notUnsignedShort));
         }
         
         reader.close();

@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
@@ -33,7 +33,7 @@ public class SampleImageSetReaderWriterTest {
         @Test
         public void writeThenRead_OneCamera_ReturnsTheSameSampleSet()
                         throws IOException, CorruptSampleSetExcel, ExcelIncorrentRow, SampleSetExcelNotFound,
-                        CorruptCapturedImage {
+                        IncompatibleCapturedImage {
                 File rootOneCamera = new File(root, "OneCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new DummyTiffChecker());
@@ -55,7 +55,7 @@ public class SampleImageSetReaderWriterTest {
 
         @Test
         public void writeThenRead_TwoCamera_ReturnsTheSameSampleSet() throws IOException, CorruptSampleSetExcel,
-                        ExcelIncorrentRow, SampleSetExcelNotFound, CorruptCapturedImage {
+                        ExcelIncorrentRow, SampleSetExcelNotFound, IncompatibleCapturedImage {
                 File rootTwoCamera = new File(root, "TwoCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new DummyTiffChecker());
@@ -76,7 +76,7 @@ public class SampleImageSetReaderWriterTest {
 
         @Test
         public void writeThenRead_FourCamera_ReturnsTheSameSampleSet() throws IOException, CorruptSampleSetExcel,
-                        ExcelIncorrentRow, SampleSetExcelNotFound, CorruptCapturedImage {
+                        ExcelIncorrentRow, SampleSetExcelNotFound, IncompatibleCapturedImage {
                 File rootFourCamera = new File(root, "FourCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new DummyTiffChecker());
@@ -105,7 +105,7 @@ class DummyTiffChecker implements ICapturedImageChecker {
         }
 
         @Override
-        public void checkCompatible(File imagePath) throws CorruptCapturedImage {
+        public void checkCompatible(File imagePath) throws IncompatibleCapturedImage {
         }
 
         

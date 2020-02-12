@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.NoImageFoundOnRoot;
@@ -48,7 +48,7 @@ class FourCameraChannelImageFinder implements IChannelImageFinder {
             if (polCtr == 4) {
                 try {
                     sampleImageSet.addImage(channel, polFiles[0], polFiles[1], polFiles[2], polFiles[3]);
-                } catch (CorruptCapturedImage e) {
+                } catch (IncompatibleCapturedImage e) {
                     this._rejectedImages.add(e.getRejectedImage());
                 }
             }

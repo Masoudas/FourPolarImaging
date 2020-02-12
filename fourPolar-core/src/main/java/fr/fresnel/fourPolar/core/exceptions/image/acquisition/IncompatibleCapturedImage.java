@@ -8,12 +8,12 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
  * {@link RejectedCapturedImage}.
  * 
  */
-public class CorruptCapturedImage extends Exception{
+public class IncompatibleCapturedImage extends Exception{
     private static final long serialVersionUID = 53687232131008L;
 
     private RejectedCapturedImage _rejectedImage;
     
-    public CorruptCapturedImage(RejectedCapturedImage rejectedImage) {
+    public IncompatibleCapturedImage(RejectedCapturedImage rejectedImage) {
         this._rejectedImage = rejectedImage;    
     }
 

@@ -5,7 +5,7 @@ import java.security.KeyException;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.fileContainer.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
@@ -34,10 +34,10 @@ public abstract class AcquisitionSet {
      *                                   added.
      * @throws IllegalArgumentException  : In case the wrong addImage method is
      *                                   used.
-     * @throws CorruptCapturedImage      : In case at least one image is corrupt.
+     * @throws IncompatibleCapturedImage      : In case at least one image is corrupt.
      */
     public void addImage(int channel, File pol0_45_90_135)
-            throws KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
+            throws KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
         if (this._imagingSetup.getCameras() != Cameras.One) {
             throw new IllegalArgumentException(
                     "Use addImage method for " + this._imagingSetup.getCameras() + " cameras");
@@ -57,10 +57,10 @@ public abstract class AcquisitionSet {
      *                                   added.
      * @throws IllegalArgumentException  : In case the wrong addImage method is
      *                                   used.
-     * @throws CorruptCapturedImage      : In case at least one image is corrupt.
+     * @throws IncompatibleCapturedImage      : In case at least one image is corrupt.
      */
     public void addImage(int channel, File pol0_90, File pol45_135)
-            throws KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
+            throws KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
         if (this._imagingSetup.getCameras() != Cameras.Two) {
             throw new IllegalArgumentException(
                     "Use addImage method for " + this._imagingSetup.getCameras() + " cameras");
@@ -84,10 +84,10 @@ public abstract class AcquisitionSet {
      *                                   added.
      * @throws IllegalArgumentException  : In case the wrong addImage method is
      *                                   used.
-     * @throws CorruptCapturedImage      : In case at least one image is corrupt.
+     * @throws IncompatibleCapturedImage      : In case at least one image is corrupt.
      */
     public void addImage(int channel, File pol0, File pol45, File pol90, File pol135)
-            throws KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
+            throws KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
         if (this._imagingSetup.getCameras() != Cameras.Four) {
             throw new IllegalArgumentException(
                     "Use addImage method for " + this._imagingSetup.getCameras() + " cameras");

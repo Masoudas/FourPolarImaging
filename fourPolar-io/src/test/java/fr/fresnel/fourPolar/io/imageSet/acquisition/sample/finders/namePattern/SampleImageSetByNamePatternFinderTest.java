@@ -10,7 +10,7 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.exceptions.image.acquisition.CorruptCapturedImage;
+import fr.fresnel.fourPolar.core.exceptions.image.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
@@ -29,7 +29,7 @@ public class SampleImageSetByNamePatternFinderTest {
 
         @Test
         public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel()
-                        throws NoImageFoundOnRoot, CorruptCapturedImage {
+                        throws NoImageFoundOnRoot, IncompatibleCapturedImage {
                 File rootOneCamera = new File(root, "OneCamera");
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
@@ -53,7 +53,7 @@ public class SampleImageSetByNamePatternFinderTest {
 
         @Test
         public void findChannelImages_TwoCamera_ReturnsThreeCapturedSets() throws NoImageFoundOnRoot,
-                        KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
+                        KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
                 File rootTwoCamera = new File(root, "TwoCamera");
 
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
@@ -78,7 +78,7 @@ public class SampleImageSetByNamePatternFinderTest {
 
         @Test
         public void findChannelImages_FourCamera_ReturnsThreeCapturedSets() throws NoImageFoundOnRoot,
-                        KeyAlreadyExistsException, IllegalArgumentException, CorruptCapturedImage {
+                        KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
                 File rootFourCamera = new File(root, "FourCamera");
 
                 FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
