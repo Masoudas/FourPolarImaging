@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 
-import fr.fresnel.fourPolar.core.exceptions.fourPolar.opticalPropagation.PropagationChannelNotInDatabase;
+import fr.fresnel.fourPolar.core.exceptions.fourPolar.propagationdb.PropagationChannelNotInDatabase;
 import fr.fresnel.fourPolar.core.fourPolar.propagationdb.IOpticalPropagationDB;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
@@ -44,7 +44,7 @@ public class OpticalPropagationToYaml {
     }
 
     /**
-     * Returns the JSON adaptor for each optical propagation of the setup.
+     * Returns the JSON adaptor for the given channel of the setup.
      * 
      * @param setup
      * @param database
@@ -52,7 +52,7 @@ public class OpticalPropagationToYaml {
      */
     private IOpticalPropagationJSONAdaptor getJSONAdaptor(FourPolarImagingSetup setup, IOpticalPropagationDB database,
             int channel) throws PropagationChannelNotInDatabase {
-        IOpticalPropagation optProp = database.search(setup.getChannel(channel));
+        IOpticalPropagation optProp = database.search(setup.getChannel(channel), setup.getNumericalAperture());
 
         IOpticalPropagationJSONAdaptor jsonAdaptor = new IOpticalPropagationJSONAdaptor();
         jsonAdaptor.toJSON(optProp);

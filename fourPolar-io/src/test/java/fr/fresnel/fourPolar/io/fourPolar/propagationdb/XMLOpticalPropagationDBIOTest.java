@@ -34,8 +34,8 @@ public class XMLOpticalPropagationDBIOTest {
                 0.8, 0.9, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16);
 
         XMLOpticalPropagationDB db = new XMLOpticalPropagationDB();
-        db.add(channel1, propagation1);
-        db.add(channel2, propagation2);
+        db.add(propagation1);
+        db.add(propagation2);
 
         XMLOpticalPropagationDBIO dbIO = new XMLOpticalPropagationDBIO();
         dbIO.write(db);

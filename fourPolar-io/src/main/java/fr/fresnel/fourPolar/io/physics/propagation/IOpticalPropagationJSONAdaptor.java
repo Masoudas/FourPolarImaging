@@ -18,7 +18,7 @@ import fr.fresnel.fourPolar.io.physics.na.INumericalApertureJSONAdaptor;
 /**
  * This class adapts the {@link IOpticalPropagation} interface to JSON.
  */
-@JsonPropertyOrder(IOpticalPropagationJSONLabels.channel)
+@JsonPropertyOrder({IOpticalPropagationJSONLabels.channel, IOpticalPropagationJSONLabels.na})
 public class IOpticalPropagationJSONAdaptor {
     @JsonProperty(IOpticalPropagationJSONLabels.xx_0)
     private Double _xx_0;

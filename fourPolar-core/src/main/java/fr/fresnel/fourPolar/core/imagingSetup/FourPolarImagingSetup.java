@@ -70,7 +70,7 @@ public class FourPolarImagingSetup {
     }
 
     /**
-     * @return the _numAperture
+     * @return the numerical Aperture
      */
     public INumericalAperture getNumericalAperture() {
         return this._numAperture;
