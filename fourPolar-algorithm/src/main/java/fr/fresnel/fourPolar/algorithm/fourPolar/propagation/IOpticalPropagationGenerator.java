@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.algorithm.fourPolar.propagation;
 import fr.fresnel.fourPolar.algorithm.fourPolar.exceptions.fourPolar.propagation.CannotComputePropagationFactor;
 import fr.fresnel.fourPolar.algorithm.fourPolar.exceptions.fourPolar.propagation.OpticalPropagationNotInvertible;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
+import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 
 /**
@@ -18,7 +19,7 @@ public interface IOpticalPropagationGenerator {
      * @throws CannotComputePropagationFactor
      * @throws OpticalPropagationNotInvertible
      */
-    public IOpticalPropagation generate(IChannel channel)
+    public IOpticalPropagation generate(IChannel channel, INumericalAperture na)
             throws CannotComputePropagationFactor, OpticalPropagationNotInvertible;
 
 } 
