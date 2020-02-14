@@ -2,6 +2,10 @@ package fr.fresnel.fourPolar.algorithm.fourPolar.inversePropagation;
 
 import java.util.Hashtable;
 
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
+
 import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
@@ -9,7 +13,7 @@ import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 
 /**
  * This class is used for calculating the inverse propagation factors, by
- * forming the matrix presentation of propagation.
+ * forming the matrix representation of optical propagation.
  */
 public class MatrixBasedInverseOpticalPropagationCalculator implements IInverseOpticalPropagationCalculator {
     private final IOpticalPropagation _opticalProp;
@@ -28,12 +32,18 @@ public class MatrixBasedInverseOpticalPropagationCalculator implements IInverseO
         return _ipropFact.get(polarization.toString() + component.toString());
     }
 
+    /**
+     * Calculates the inverse propagation factors by converting to the matrix format
+     * and calculating the inverse matrix.
+     * 
+     * @throws PropagationFactorNotFound
+     */
     private void _calculateInverseFactors() throws PropagationFactorNotFound {
         double[][] matrixForm = _toMatrixForm();
 
+        double[][] inversePropMatrix = _calculateMatrixInverse(matrixForm);
 
-        _fromMatrixForm(matrixForm);
-
+        _fromMatrixForm(inversePropMatrix);
     }
 
     /**
@@ -66,33 +76,44 @@ public class MatrixBasedInverseOpticalPropagationCalculator implements IInverseO
         matrixForm[3][1] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135);
         matrixForm[3][2] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135);
         matrixForm[3][3] = _opticalProp.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135);
-
+        
         return matrixForm;
 
     }
 
+    /**
+     * Calculates the inverse of the matrix.
+     * @param matrix
+     * @return
+     */
+    private double[][] _calculateMatrixInverse(double[][] matrix) {
+        RealMatrix rmat = new Array2DRowRealMatrix(matrix);
+
+        return MatrixUtils.inverse(rmat).getData();
+    }
+
     private void _fromMatrixForm(double[][] matrixForm) {
         _setInverseFactor(DipoleSquaredComponent.XX, Polarization.pol0, matrixForm[0][0]);
-        _setInverseFactor(DipoleSquaredComponent.YY, Polarization.pol0, matrixForm[0][1]);
-        _setInverseFactor(DipoleSquaredComponent.ZZ, Polarization.pol0, matrixForm[0][2]);
-        _setInverseFactor(DipoleSquaredComponent.XY, Polarization.pol0, matrixForm[0][3]);
+        _setInverseFactor(DipoleSquaredComponent.XX, Polarization.pol90, matrixForm[0][1]);
+        _setInverseFactor(DipoleSquaredComponent.XX, Polarization.pol45, matrixForm[0][2]);
+        _setInverseFactor(DipoleSquaredComponent.XX, Polarization.pol135, matrixForm[0][3]);
 
-        _setInverseFactor(DipoleSquaredComponent.XX, Polarization.pol90, matrixForm[1][0]);
+        _setInverseFactor(DipoleSquaredComponent.YY, Polarization.pol0, matrixForm[1][0]);
         _setInverseFactor(DipoleSquaredComponent.YY, Polarization.pol90, matrixForm[1][1]);
-        _setInverseFactor(DipoleSquaredComponent.ZZ, Polarization.pol90, matrixForm[1][2]);
-        _setInverseFactor(DipoleSquaredComponent.XY, Polarization.pol90, matrixForm[1][3]);
-
-        _setInverseFactor(DipoleSquaredComponent.XX, Polarization.pol45, matrixForm[2][0]);
-        _setInverseFactor(DipoleSquaredComponent.YY, Polarization.pol45, matrixForm[2][1]);
+        _setInverseFactor(DipoleSquaredComponent.YY, Polarization.pol45, matrixForm[1][2]);
+        _setInverseFactor(DipoleSquaredComponent.YY, Polarization.pol135, matrixForm[1][3]);
+        
+        
+        _setInverseFactor(DipoleSquaredComponent.ZZ, Polarization.pol0, matrixForm[2][0]);
+        _setInverseFactor(DipoleSquaredComponent.ZZ, Polarization.pol90, matrixForm[2][1]);
         _setInverseFactor(DipoleSquaredComponent.ZZ, Polarization.pol45, matrixForm[2][2]);
-        _setInverseFactor(DipoleSquaredComponent.XY, Polarization.pol45, matrixForm[2][3]);
-
-        _setInverseFactor(DipoleSquaredComponent.XX, Polarization.pol135, matrixForm[3][0]);
-        _setInverseFactor(DipoleSquaredComponent.YY, Polarization.pol135, matrixForm[3][1]);
-        _setInverseFactor(DipoleSquaredComponent.ZZ, Polarization.pol135, matrixForm[3][2]);
+        _setInverseFactor(DipoleSquaredComponent.ZZ, Polarization.pol135, matrixForm[2][3]);
+        
+        
+        _setInverseFactor(DipoleSquaredComponent.XY, Polarization.pol0, matrixForm[3][0]);
+        _setInverseFactor(DipoleSquaredComponent.XY, Polarization.pol90, matrixForm[3][1]);
+        _setInverseFactor(DipoleSquaredComponent.XY, Polarization.pol45, matrixForm[3][2]);
         _setInverseFactor(DipoleSquaredComponent.XY, Polarization.pol135, matrixForm[3][3]);
-
-
     }
 
     private void _setInverseFactor(DipoleSquaredComponent component, Polarization polarization, double factor) {
