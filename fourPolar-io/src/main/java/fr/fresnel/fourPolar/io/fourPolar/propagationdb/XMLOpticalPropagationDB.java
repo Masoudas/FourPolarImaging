@@ -33,7 +33,7 @@ class XMLOpticalPropagationDB implements IOpticalPropagationDB {
         int adaptorCtr = 0;
         try {
             while (adaptorCtr < _adaptorList.size()
-                    && !_isChannelEqual(channel, adaptorCtr) && !_isNumericalApertureEqual(na, adaptorCtr)) {
+                    && !(_isChannelEqual(channel, adaptorCtr) && _isNumericalApertureEqual(na, adaptorCtr))) {
                 adaptorCtr++;
             }
         } catch (IOException e) {
