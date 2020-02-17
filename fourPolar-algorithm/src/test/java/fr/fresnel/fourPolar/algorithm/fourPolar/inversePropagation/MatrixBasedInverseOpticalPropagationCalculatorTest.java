@@ -47,6 +47,7 @@ public class MatrixBasedInverseOpticalPropagationCalculatorTest {
         MatrixBasedInverseOpticalPropagationCalculator inverseCalculator = new MatrixBasedInverseOpticalPropagationCalculator(
             opticalPropagation);
 
+        // Brasselet-Curcio matrix results.    
         double ixx_0 = 0.092;
         double ixx_45 = 0.419;
         double ixx_90 = -0.167;
@@ -79,9 +80,9 @@ public class MatrixBasedInverseOpticalPropagationCalculatorTest {
             ixy_0 == Precision.round(inverseCalculator.getInverseFactor(Polarization.pol0, DipoleSquaredComponent.XY), 3) &&
             ixy_45 == Precision.round(inverseCalculator.getInverseFactor(Polarization.pol45, DipoleSquaredComponent.XY), 3) &&
             ixy_90 == Precision.round(inverseCalculator.getInverseFactor(Polarization.pol90, DipoleSquaredComponent.XY), 3) &&
-            ixy_135 == Precision.round(inverseCalculator.getInverseFactor(Polarization.pol135, DipoleSquaredComponent.XY), 3));
-
-        
+            ixy_135 == Precision.round(inverseCalculator.getInverseFactor(Polarization.pol135, DipoleSquaredComponent.XY), 3));        
     }
+
+    
 
 }
