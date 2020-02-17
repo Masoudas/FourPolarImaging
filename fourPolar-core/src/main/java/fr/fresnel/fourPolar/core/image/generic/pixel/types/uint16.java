@@ -1,18 +1,18 @@
-package fr.fresnel.fourPolar.core.image.generic.pixel;
+package fr.fresnel.fourPolar.core.image.generic.pixel.types;
 
 /**
  * This class models a pixel of unsigned short type, whose range is from 0 to
  * 2^16-1. Note that summation results in saturation rather than overflow,
- * meaning that of the summation results in a value greater than 2^16-1, it will
+ * meaning that if the summation results in a value greater than 2^16-1, it will
  * be rounded to 2^16-1,
  */
-public class UnsignedShortPixel {
+public class uint16 {
     public static int MIN_VAL = 0;
     public static int MAX_VAL = 65535;
 
     private int _pixel = 0;
 
-    public UnsignedShortPixel(int value) {
+    public uint16(int value) {
         this.set(value);
     }
 
@@ -36,7 +36,7 @@ public class UnsignedShortPixel {
      * 
      * @param pixel
      */
-    public void sum(UnsignedShortPixel pixel) {
+    public void sum(uint16 pixel) {
         this.set(pixel.get() + this.get());
     }
 
@@ -45,7 +45,7 @@ public class UnsignedShortPixel {
      * 
      * @param pixel
      */
-    public void subtract(UnsignedShortPixel pixel) {
+    public void subtract(uint16 pixel) {
         this.set(this.get() - pixel.get());
     }
 
