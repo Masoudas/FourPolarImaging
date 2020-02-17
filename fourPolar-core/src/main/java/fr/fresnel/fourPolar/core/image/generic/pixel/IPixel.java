@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.image.generic;
+package fr.fresnel.fourPolar.core.image.generic.pixel;
 
 /**
  * An interface that models the pixels of an image.

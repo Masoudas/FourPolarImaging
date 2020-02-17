@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.image.generic;
+package fr.fresnel.fourPolar.core.image.generic.pixel;
 
 /**
  * Represents the pixel entity, and implements the {@link IPixel}.
