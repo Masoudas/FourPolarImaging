@@ -25,23 +25,23 @@ public class MatrixBasedInverseOpticalPropagationCalculatorTest {
         OpticalPropagation opticalPropagation = new OpticalPropagation(channel, na);
 
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0, 4.423);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol45, 0.551);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol90, 0.818);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol135, 0.818);
-
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol0, 0.551);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol45, 4.423);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol90, 0.818);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135, 0.818);
-
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol0, 3.406);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol45, 3.406);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol90, 0.304);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135, 0.304);
-
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol0, 0);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol45, 0);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol90, 1.617);
+                
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol90, 0.551);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol90, 4.423);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol90, 3.406);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol90, 0);
+
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol45, 0.818);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol45, 0.818);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol45, 0.304);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol45, 1.617);
+
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol135, 0.818);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135, 0.818);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135, 0.304);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135, -1.617);
 
         MatrixBasedInverseOpticalPropagationCalculator inverseCalculator = new MatrixBasedInverseOpticalPropagationCalculator(
@@ -49,16 +49,16 @@ public class MatrixBasedInverseOpticalPropagationCalculatorTest {
 
         double ixx_0 = 0.092;
         double ixx_45 = 0.419;
-        double ixx_90 = -0.166;
+        double ixx_90 = -0.167;
         double ixx_135 = 0.419;
-        double iyy_0 = -0.166; 
+        double iyy_0 = -0.167; 
         double iyy_45 = 0.419;
         double iyy_90 = 0.092;
         double iyy_135 = 0.419;
         double izz_0 = 0.201;
-        double izz_45 = -0.612;
+        double izz_45 = -0.613;
         double izz_90 = 0.201;
-        double izz_135 = -0.612; 
+        double izz_135 = -0.613; 
         double ixy_0 = 0;
         double ixy_45 = 0.309;
         double ixy_90 = 0;
