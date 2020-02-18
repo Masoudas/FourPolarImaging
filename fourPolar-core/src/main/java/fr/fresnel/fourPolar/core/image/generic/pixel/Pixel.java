@@ -8,13 +8,12 @@ public class Pixel<T> implements IPixel<T> {
 
     /**
      * Represents the pixel entity, and implements the {@link IPixel}.
-     * @param location
+     * 
      * @param value
      */
-    public Pixel(long[] location, T value) {
+    public Pixel(T value) {
         this._value = value;
     }
-
 
     @Override
     public T value() {
