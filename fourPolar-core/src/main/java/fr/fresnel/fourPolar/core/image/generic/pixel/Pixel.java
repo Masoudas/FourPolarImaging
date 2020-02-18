@@ -5,7 +5,6 @@ package fr.fresnel.fourPolar.core.image.generic.pixel;
  */
 public class Pixel<T> implements IPixel<T> {
     T _value;
-    long[] _location;
 
     /**
      * Represents the pixel entity, and implements the {@link IPixel}.
@@ -13,14 +12,9 @@ public class Pixel<T> implements IPixel<T> {
      * @param value
      */
     public Pixel(long[] location, T value) {
-        this._location = location;
         this._value = value;
     }
 
-    @Override
-    public long[] localize() {
-        return _location;
-    }
 
     @Override
     public T value() {
