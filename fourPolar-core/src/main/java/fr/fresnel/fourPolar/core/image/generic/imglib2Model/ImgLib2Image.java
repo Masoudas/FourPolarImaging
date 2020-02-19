@@ -25,13 +25,6 @@ import net.imglib2.type.NativeType;
  * @param <V>
  */
 class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Image<U>, Img<V> {
-    /**
-     * This is the threshold for the number of pixels, after which we opt for a cell
-     * image rather than an array image. This is roughly 256MB for an image of type
-     * float.
-     */
-    private static long _staticImageThr = 256 * 256 * 1024;
-
     private final Img<V> _img;
 
     private final TypeConverter<V> _tConverter;
@@ -47,20 +40,6 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
     public ImgLib2Image(final Img<V> img, V v) throws ConverterNotFound {
         this._img = img;
         this._tConverter = TypeConverterFactory.create(v);
-    }
-
-    /**
-     * @param factory is the image factory of ImgLib2.
-     * @param dim     is the desired dimension of the image.
-     * @param v       is the data type of ImgLib2.
-     * @throws ConverterNotFound is thrown in case conversion to our data types is
-     *                           not supported.
-     */
-    public ImgLib2Image(final ImgFactory<V> factory, long[] dim, V v) throws ConverterNotFound {
-        this._tConverter = TypeConverterFactory.create(v);
-
-        this._img = factory.create(dim);
-
     }
 
     @Override
