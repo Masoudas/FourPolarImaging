@@ -1,8 +1,8 @@
 package fr.fresnel.fourPolar.core.image.captured;
 
 import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
-import net.imglib2.img.Img;
-import net.imglib2.type.numeric.integer.UnsignedShortType;
+import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.uint16;
 
 /**
  * An interface for accessing the captured image. It is assumed that the
@@ -26,10 +26,10 @@ public interface ICapturedImage {
     public String getLabel();
 
     /**
-     * Get the actual image as an unsigned short.
+     * Get the actual image as a uint16 image.
      * 
      * @return
      */
-    public Img<UnsignedShortType> getImage();
+    public Image<uint16> getImage();
 
 }
