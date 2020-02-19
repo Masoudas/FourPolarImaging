@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.core.image.generic;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
 
 public interface Image<T extends PixelType> {
     /**
@@ -24,5 +25,12 @@ public interface Image<T extends PixelType> {
      * @return
      */
     public IPixelRandomAccess getRandomAccess();
+
+
+    /**
+     * Returns the pixel type associated with this image.
+     * @return
+     */
+    public Type getPixelType();
 
 }

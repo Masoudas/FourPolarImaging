@@ -9,6 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imglib2Model.types.TypeConverter;
 import fr.fresnel.fourPolar.core.image.generic.imglib2Model.types.TypeConverterFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
 import net.imglib2.Cursor;
 import net.imglib2.Interval;
 import net.imglib2.RandomAccess;
@@ -29,17 +30,21 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
 
     private final TypeConverter<V> _tConverter;
 
+    private final U _pixelType;
+
     /**
      * This constructor is works as a wrapper from ImgLib2 type to our type.
      * 
-     * @param img is the ImgLib2 interface.
-     * @param type   is the data type of ImgLib2.
+     * @param img       is the ImgLib2 interface.
+     * @param type      is the data type of ImgLib2.
+     * @param pixelType is the pixel type associated with the {@code Image}.
      * @throws ConverterNotFound is thrown in case conversion to our data types is
      *                           not supported.
      */
-    public ImgLib2Image(final Img<V> img, V type) throws ConverterNotFound {
+    public ImgLib2Image(final Img<V> img, V type, U pixelType) throws ConverterNotFound {
         this._img = img;
         this._tConverter = TypeConverterFactory.create(type);
+        this._pixelType = pixelType;
     }
 
     @Override
@@ -123,6 +128,11 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
     @Override
     public IPixelCursor getCursor() {
         return new ImgLib2PixelCursor<V>(this._img.cursor(), this.numDimensions(), this._tConverter);
+    }
+
+    @Override
+    public Type getPixelType() {
+        return _pixelType.getType();
     }
 
 }
