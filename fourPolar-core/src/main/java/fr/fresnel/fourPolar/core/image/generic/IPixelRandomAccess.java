@@ -12,9 +12,9 @@ public interface IPixelRandomAccess {
      * Sets the iterator position to the position specified. If position is out of
      * range, the iterator position is not set.
      * 
-     * @param location
+     * @param position
      */
-    public void setlocation(long[] location);
+    public void setPosition(long[] position);
 
     /**
      * Sets the pixel associated with the position.
