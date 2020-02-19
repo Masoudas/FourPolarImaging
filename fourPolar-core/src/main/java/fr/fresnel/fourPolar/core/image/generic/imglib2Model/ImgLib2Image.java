@@ -122,7 +122,7 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
 
     @Override
     public IPixelRandomAccess getRandomAccess() {
-        return null;
+        return new ImgLib2RandomAccess<V>(this._img.randomAccess(), this._tConverter);
     }
 
     private long _getNPixels(long[] dim) {
