@@ -33,11 +33,11 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
      * This constructor is works as a wrapper from ImgLib2 type to our type.
      * 
      * @param img is the ImgLib2 interface.
-     * @param v   is the data type of ImgLib2.
+     * @param type   is the data type of ImgLib2.
      * @throws ConverterNotFound is thrown in case conversion to our data types is
      *                           not supported.
      */
-    public ImgLib2Image(final Img<V> img, V v) throws ConverterNotFound {
+    public ImgLib2Image(final Img<V> img, V type) throws ConverterNotFound {
         this._img = img;
         this._tConverter = TypeConverterFactory.create(v);
     }
