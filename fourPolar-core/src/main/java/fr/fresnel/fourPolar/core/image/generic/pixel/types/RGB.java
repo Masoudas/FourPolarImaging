@@ -47,8 +47,8 @@ public class RGB extends PixelType {
     }
 
     @Override
-    public Types getType() {
-        return Types.RGB;
+    public Type getType() {
+        return Type.RGB;
     }
 
 }

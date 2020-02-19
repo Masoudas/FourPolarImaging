@@ -8,5 +8,5 @@ public abstract class PixelType {
      * Returns the type of the pixel
      * @return
      */
-    public abstract Types getType();
+    public abstract Type getType();
 }

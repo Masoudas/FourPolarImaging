@@ -49,8 +49,8 @@ public class float32 extends PixelType {
     }
 
     @Override
-    public Types getType() {
-        return Types.FLOAT32;
+    public Type getType() {
+        return Type.FLOAT32;
     }
 
 }

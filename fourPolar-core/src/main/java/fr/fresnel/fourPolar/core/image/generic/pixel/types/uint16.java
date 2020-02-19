@@ -50,8 +50,8 @@ public class uint16 extends PixelType {
     }
 
     @Override
-    public Types getType() {
-        return Types.UINT16;
+    public Type getType() {
+        return Type.UINT16;
     }
 
 }
