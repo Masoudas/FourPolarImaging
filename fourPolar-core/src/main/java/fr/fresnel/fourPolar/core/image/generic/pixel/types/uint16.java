@@ -51,7 +51,7 @@ public class uint16 extends PixelType {
 
     @Override
     public Type getType() {
-        return Type.UINT16;
+        return Type.UINT_16;
     }
 
 }

@@ -68,7 +68,7 @@ public class RGB16 extends PixelType {
 
     @Override
     public Type getType() {
-        return Type.RGB;
+        return Type.RGB_16;
     }
 
 }

@@ -1,5 +1,5 @@
 package fr.fresnel.fourPolar.core.image.generic.pixel.types;
 
 public enum Type{
-    FLOAT32, RGB, UINT16;
+    FLOAT_32, RGB_16, UINT_16;
 }
