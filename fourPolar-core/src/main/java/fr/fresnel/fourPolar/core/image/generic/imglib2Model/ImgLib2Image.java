@@ -18,6 +18,12 @@ import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.img.cell.CellImgFactory;
 import net.imglib2.type.NativeType;
 
+/**
+ * Implementation of {@code Image} for the ImgLib2 image.
+ * 
+ * @param <U>
+ * @param <V>
+ */
 class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Image<U>, Img<V> {
     /**
      * This is the threshold for the number of pixels, after which we opt for a cell
@@ -30,21 +36,31 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
 
     private final TypeConverter<V> _tConverter;
 
-
+    /**
+     * This constructor is works as a wrapper from ImgLib2 type to our type.
+     * 
+     * @param img is the ImgLib2 interface.
+     * @param v   is the data type of ImgLib2.
+     * @throws ConverterNotFound is thrown in case conversion to our data types is
+     *                           not supported.
+     */
     public ImgLib2Image(final Img<V> img, V v) throws ConverterNotFound {
         this._img = img;
         this._tConverter = TypeConverterFactory.create(v);
     }
 
-    public ImgLib2Image(final long[] dim, V v) throws ConverterNotFound {
+    /**
+     * @param factory is the image factory of ImgLib2.
+     * @param dim     is the desired dimension of the image.
+     * @param v       is the data type of ImgLib2.
+     * @throws ConverterNotFound is thrown in case conversion to our data types is
+     *                           not supported.
+     */
+    public ImgLib2Image(final ImgFactory<V> factory, long[] dim, V v) throws ConverterNotFound {
         this._tConverter = TypeConverterFactory.create(v);
-        long nPixels = _getNPixels(dim);
 
-        if (nPixels < _staticImageThr) {
-            _img = new ArrayImgFactory<V>(v).create(dim);
-        } else {
-            _img = new CellImgFactory<V>(v).create(dim);
-        }
+        this._img = factory.create(dim);
+
     }
 
     @Override
@@ -123,15 +139,6 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
     @Override
     public IPixelRandomAccess getRandomAccess() {
         return new ImgLib2RandomAccess<V>(this._img.randomAccess(), this._tConverter);
-    }
-
-    private long _getNPixels(long[] dim) {
-        long nPixels = 1;
-        for (long size : dim) {
-            nPixels = nPixels * size;
-        }
-
-        return nPixels;
     }
 
     @Override
