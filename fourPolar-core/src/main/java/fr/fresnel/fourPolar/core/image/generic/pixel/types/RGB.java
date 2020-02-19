@@ -4,7 +4,7 @@ package fr.fresnel.fourPolar.core.image.generic.pixel.types;
  * This class models the RGB pixel values. Each one of R, G and B is stored as a
  * {@link uint16} class.
  */
-public class RGB {
+public class RGB extends PixelType {
     private uint16 _r;
     private uint16 _g;
     private uint16 _b;
@@ -44,6 +44,11 @@ public class RGB {
      */
     public int getB() {
         return _b.get();
+    }
+
+    @Override
+    public Types getType() {
+        return Types.RGB;
     }
 
 }

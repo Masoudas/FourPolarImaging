@@ -4,7 +4,7 @@ package fr.fresnel.fourPolar.core.image.generic.pixel.types;
  * This class models a pixel of float type. It's in principle a wrapper for the
  * Float type of java. 
  */
-public class float32 {
+public class float32 extends PixelType {
     /**
      * Min value of the {@code Float} type, given for convenience. 
      */
@@ -46,6 +46,11 @@ public class float32 {
      */
     public void subtract(uint16 pixel) {
         this.set(this.get() - pixel.get());
+    }
+
+    @Override
+    public Types getType() {
+        return Types.FLOAT32;
     }
 
 }
