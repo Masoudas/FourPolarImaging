@@ -20,8 +20,8 @@ import net.imglib2.type.NativeType;
 /**
  * Implementation of {@code Image} for the ImgLib2 image.
  * 
- * @param <U>
- * @param <V>
+ * @param <U> is our pixel data type.
+ * @param <V> is the ImgLib2 data type.
  */
 class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Image<U>, Img<V> {
     private final Img<V> _img;

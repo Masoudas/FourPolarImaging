@@ -12,6 +12,12 @@ import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
 
+/**
+ * A concrete factory to generate instances of images that comply with the {@code Image}
+ * using ImgLib2.
+ * 
+ * @param <T>
+ */
 public class ImgLib2ImageFactory<T extends PixelType> implements ImageFactory<T> {
     /**
      * This is the threshold for the number of pixels, after which we opt for a cell
@@ -21,6 +27,12 @@ public class ImgLib2ImageFactory<T extends PixelType> implements ImageFactory<T>
     private static long _cellImgThr = 256 * 256 * 1024;
     private Image<T> _image;
 
+    /**
+     * Create an empty image with the given type and dimension.
+     * 
+     * @param dim is the image dimension.
+     * @param pixelType is the associated pixel type.
+     */
     public ImgLib2ImageFactory(long[] dim, T pixelType) {
         switch (pixelType.getType()) {
             case UINT_16:
@@ -60,13 +72,12 @@ public class ImgLib2ImageFactory<T extends PixelType> implements ImageFactory<T>
         }
     }
 
-    public <V extends NativeType<V>> ImgLib2ImageFactory(Img<V> img, V imgLib2Type)
-            throws ConverterNotFound {
+    public <V extends NativeType<V>> ImgLib2ImageFactory(Img<V> img, V imgLib2Type) throws ConverterNotFound {
         this._image = new ImgLib2Image<T, V>(img, imgLib2Type);
     }
 
     /**
-     * Returns the proper image factory for the given dimension.
+     * Creates the proper image for the given dimensionality.
      * 
      * @param <T>
      * @param dim
@@ -84,9 +95,9 @@ public class ImgLib2ImageFactory<T extends PixelType> implements ImageFactory<T>
     }
 
     /**
-     * Calculate the number of pixels.
+     * Calculate the number of pixels associated with the image.
      * 
-     * @param dim
+     * @param dim is the dimension of the image.
      * @return
      */
     private static long _getNPixels(long[] dim) {

@@ -18,6 +18,12 @@ class ImgLib2RandomAccess<T extends NativeType<T>> implements IPixelRandomAccess
     final private RandomAccess<T> _rAccess;
     final private TypeConverter<T> _tConverter;
 
+    /**
+     * Implementation of {@code IPixelRandomAccess} for the ImgLib2 image.
+     * 
+     * @param randomAccess is the RandomAccess class of ImgLib2.
+     * @param converter is the converter between ImgLib2 data types and our data types.
+     */
     public ImgLib2RandomAccess(final RandomAccess<T> randomAccess, final TypeConverter<T> converter) {
         _rAccess = randomAccess;
         _tConverter = converter;
