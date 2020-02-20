@@ -10,6 +10,6 @@ public class ConverterNotFound extends Exception{
 
     @Override
     public String getMessage() {
-        return "There's no data type converter from the given ImgLib2 data type to our data types.";
+        return "No suitable converter was found for this type.";
     }
 }
