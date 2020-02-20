@@ -19,7 +19,7 @@ public class TypeConverterFactory {
      * @return
      * @throws ConverterNotFound
      */
-    public static <T extends NativeType<T>> TypeConverter<T> create(T type) throws ConverterNotFound {
+    public static <T extends NativeType<T>> TypeConverter<T> getConverter(T type) throws ConverterNotFound {
         TypeConverter<T> converter = null;
 
         if (type instanceof FloatType) {
