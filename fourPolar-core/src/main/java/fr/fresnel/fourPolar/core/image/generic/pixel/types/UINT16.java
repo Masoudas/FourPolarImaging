@@ -12,6 +12,17 @@ public class UINT16 extends PixelType {
 
     private int _pixel = 0;
 
+    /**
+     * Construct the type and set it to zero.
+     */
+    public UINT16() {
+        this.set(0);
+    }
+
+    /**
+     * Construct the type and set it to the specified value.
+     * @param value
+     */
     public UINT16(int value) {
         this.set(value);
     }

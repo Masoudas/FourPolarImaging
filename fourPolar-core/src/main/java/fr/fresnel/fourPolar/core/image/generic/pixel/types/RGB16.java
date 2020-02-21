@@ -9,6 +9,19 @@ public class RGB16 extends PixelType {
     private int _g;
     private int _b;
 
+    /**
+     * Constructs the type with all values set to zero.
+     */
+    public RGB16() {
+        this.set(0, 0, 0);
+    }
+    
+    /**
+     * Constructs the type with specified values.
+     * @param r
+     * @param g
+     * @param b
+     */
     public RGB16(int r, int g, int b) {
         this.set(r, g, b);
     }

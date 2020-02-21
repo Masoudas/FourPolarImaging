@@ -17,6 +17,17 @@ public class Float32 extends PixelType {
 
     private Float _pixel = 0f;
 
+    /**
+     * Creates the type, and sets the value to zero. 
+     */
+    public Float32() {
+        this.set(0f);
+    }
+
+    /**
+     * Construct with the specified value
+     * @param value is the desired value.
+     */
     public Float32(Float value) {
         this.set(value);
     }
