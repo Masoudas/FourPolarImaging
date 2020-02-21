@@ -7,9 +7,10 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
  */
 public interface ImageFactory<T extends PixelType> {
     /**
-     * Create the {@code Image} instance.
+     * Create an image, with the given dimensions and type.
+     * 
      * @return
      */
-    public Image<T> create();
-    
+    public Image<T> create(long[] dim, T pixelType);
+
 }
