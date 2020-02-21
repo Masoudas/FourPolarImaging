@@ -1,8 +1,8 @@
-package fr.fresnel.fourPolar.core.image.generic.imglib2Model;
+package fr.fresnel.fourPolar.core.image.generic.imgLib2Model;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.types.ConverterNotFound;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
-import fr.fresnel.fourPolar.core.image.generic.imglib2Model.types.TypeConverter;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;

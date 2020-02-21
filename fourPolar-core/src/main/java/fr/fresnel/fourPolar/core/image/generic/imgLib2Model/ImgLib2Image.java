@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.image.generic.imglib2Model;
+package fr.fresnel.fourPolar.core.image.generic.imgLib2Model;
 
 import java.util.Iterator;
 
@@ -6,8 +6,8 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.types.Con
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.imglib2Model.types.TypeConverter;
-import fr.fresnel.fourPolar.core.image.generic.imglib2Model.types.TypeConverterFactory;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverterFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
 import net.imglib2.Cursor;

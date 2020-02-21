@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.imglib2Model.ImgLib2ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import io.scif.FormatException;

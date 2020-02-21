@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.types.ConverterNotFound;
-import fr.fresnel.fourPolar.core.image.generic.imglib2Model.types.TypeConverter;
-import fr.fresnel.fourPolar.core.image.generic.imglib2Model.types.TypeConverterFactory;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverterFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;

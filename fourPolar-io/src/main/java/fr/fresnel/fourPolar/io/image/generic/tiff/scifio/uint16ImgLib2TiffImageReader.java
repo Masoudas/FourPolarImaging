@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.types.ConverterNotFound;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.imglib2Model.ImgLib2ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.integer.UnsignedShortType;

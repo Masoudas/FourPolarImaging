@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.io.image.generic.tiff;
 
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.imglib2Model.ImgLib2ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
