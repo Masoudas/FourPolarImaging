@@ -5,7 +5,7 @@ import net.imglib2.type.NativeType;
 
 /**
  * The interface to convert our pixel data types to ImgLib2 data types and back.
- * @param <U>
+ * @param <U> is a {@code NativeType} 
  */
 public interface TypeConverter<U extends NativeType<U>> {
     /**
