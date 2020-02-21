@@ -6,15 +6,15 @@ import java.io.IOException;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imglib2Model.ImageToImgLib2Converter;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.float32;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 
 /**
  * Class for writing grayscale tiffs to disk.
  * 
  * @param <T> extends {@ RealType}.
  */
-public class float32ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<float32> {
-    final private float32 _pixelType = new float32(0f);  
+public class float32ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<Float32> {
+    final private Float32 _pixelType = new Float32(0f);  
 
     /**
      * Close all resources when done reading all the files.
@@ -25,7 +25,7 @@ public class float32ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<fl
     }
 
     @Override
-    public void write(File path, Image<float32> image) throws IOException {
+    public void write(File path, Image<Float32> image) throws IOException {
         if (path.exists()) {
             path.delete();
         }
@@ -35,7 +35,7 @@ public class float32ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<fl
     }
  
     @Override
-    public void write(File path, IMetadata metadata, Image<float32> tiff) throws IOException {
+    public void write(File path, IMetadata metadata, Image<Float32> tiff) throws IOException {
         /**
          * We are probably going to need to define a Dataplane object for each plane of
          * the image to be written, then populate it with img object plane, and finally

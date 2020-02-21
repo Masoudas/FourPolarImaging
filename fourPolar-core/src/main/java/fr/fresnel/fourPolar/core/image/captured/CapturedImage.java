@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.core.image.captured;
 
 import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.uint16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 /**
@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 public class CapturedImage implements ICapturedImage {
     private ICapturedImageFileSet _fileSet;
     private String _fileLabel;
-    private Image<uint16> _img;
+    private Image<UINT16> _img;
 
     /**
      * This class holds a captured image as an unsigned short.
@@ -23,7 +23,7 @@ public class CapturedImage implements ICapturedImage {
      * 
      * @throws IllegalArgumentException
      */
-    public CapturedImage(ICapturedImageFileSet fileSet, String fileLabel, Image<uint16> img) {
+    public CapturedImage(ICapturedImageFileSet fileSet, String fileLabel, Image<UINT16> img) {
         this._fileSet = fileSet;
 
         _checkfileLabel(fileSet, fileLabel);
@@ -61,7 +61,7 @@ public class CapturedImage implements ICapturedImage {
      * Returns the image.
      */
     @Override
-    public Image<uint16> getImage() {
+    public Image<UINT16> getImage() {
         return _img;
     }
 }

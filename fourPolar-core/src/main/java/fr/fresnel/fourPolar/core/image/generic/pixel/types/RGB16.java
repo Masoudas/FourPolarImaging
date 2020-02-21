@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.core.image.generic.pixel.types;
 
 /**
  * This class models the RGB pixel values. Each one of R, G and B is stored as a
- * {@link uint16} class.
+ * {@link UINT16} class.
  */
 public class RGB16 extends PixelType {
     private int _r;
@@ -20,17 +20,17 @@ public class RGB16 extends PixelType {
     }
 
     /**
-     * Limits the range of color to the range specified by {@code uint16}
+     * Limits the range of color to the range specified by {@code UINT16}
      * 
      * @param color
      * @return
      */
     private int _limitColorRange(int color) {
         int compressedColor = 0;
-        if (color < uint16.MIN_VAL) {
+        if (color < UINT16.MIN_VAL) {
             compressedColor = 0;
-        } else if (color > uint16.MAX_VAL) {
-            compressedColor = uint16.MAX_VAL;
+        } else if (color > UINT16.MAX_VAL) {
+            compressedColor = UINT16.MAX_VAL;
         } else {
             compressedColor = color;
         }

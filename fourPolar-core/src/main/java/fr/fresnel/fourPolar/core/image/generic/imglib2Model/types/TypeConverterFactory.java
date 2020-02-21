@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.core.image.generic.imglib2Model.types;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.types.ConverterNotFound;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.float32;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;

@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.image.generic.imglib2Model.types;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.uint16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 
@@ -12,12 +12,12 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
 class UnsignedShortTypeConverter implements TypeConverter<UnsignedShortType> {
     @Override
     public PixelType getPixel(UnsignedShortType type) {
-        return new uint16(type.get());
+        return new UINT16(type.get());
     }
 
     @Override
     public void setNativeType(PixelType pixel, UnsignedShortType type) {
-        uint16 pixelVal = (uint16)pixel;
+        UINT16 pixelVal = (UINT16)pixel;
         type.set(pixelVal.get());
     }
 }

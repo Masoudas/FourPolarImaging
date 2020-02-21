@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.image.generic.imglib2Model.types;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.float32;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import net.imglib2.type.numeric.real.FloatType;
 
 /**
@@ -12,12 +12,12 @@ class FloatTypeConverter implements TypeConverter<FloatType> {
     @Override
     public PixelType getPixel(FloatType type) {
         FloatType value = (FloatType) type;
-        return new float32(value.get());
+        return new Float32(value.get());
     }
 
     @Override
     public void setNativeType(PixelType pixel, FloatType type) {
-        float32 value = (float32)pixel;
+        Float32 value = (Float32)pixel;
         type.set(value.get());
     }
 }

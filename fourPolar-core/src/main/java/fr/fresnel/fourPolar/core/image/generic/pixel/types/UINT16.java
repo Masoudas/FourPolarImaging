@@ -6,13 +6,13 @@ package fr.fresnel.fourPolar.core.image.generic.pixel.types;
  * meaning that if the summation results in a value greater than 2^16-1, it will
  * be rounded to 2^16-1,
  */
-public class uint16 extends PixelType {
+public class UINT16 extends PixelType {
     public static int MIN_VAL = 0;
     public static int MAX_VAL = 65535;
 
     private int _pixel = 0;
 
-    public uint16(int value) {
+    public UINT16(int value) {
         this.set(value);
     }
 
@@ -36,7 +36,7 @@ public class uint16 extends PixelType {
      * 
      * @param pixel
      */
-    public void sum(uint16 pixel) {
+    public void sum(UINT16 pixel) {
         this.set(pixel.get() + this.get());
     }
 
@@ -45,7 +45,7 @@ public class uint16 extends PixelType {
      * 
      * @param pixel
      */
-    public void subtract(uint16 pixel) {
+    public void subtract(UINT16 pixel) {
         this.set(this.get() - pixel.get());
     }
 

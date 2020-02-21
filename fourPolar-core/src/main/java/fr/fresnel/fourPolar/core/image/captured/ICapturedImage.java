@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.core.image.captured;
 
 import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.uint16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 /**
  * An interface for accessing the captured image. It is assumed that the
@@ -26,10 +26,10 @@ public interface ICapturedImage {
     public String getLabel();
 
     /**
-     * Get the actual image as a uint16 image.
+     * Get the actual image as a UINT16 image.
      * 
      * @return
      */
-    public Image<uint16> getImage();
+    public Image<UINT16> getImage();
 
 }

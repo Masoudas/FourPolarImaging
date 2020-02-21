@@ -6,15 +6,15 @@ import java.io.IOException;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imglib2Model.ImageToImgLib2Converter;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.uint16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 /**
  * Class for writing grayscale tiffs to disk.
  * 
  * @param <T> extends {@ RealType}.
  */
-public class uint16ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<uint16> {
-    final private uint16 _pixelType = new uint16(0);  
+public class uint16ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<UINT16> {
+    final private UINT16 _pixelType = new UINT16(0);  
 
     /**
      * Close all resources when done reading all the files.
@@ -25,7 +25,7 @@ public class uint16ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<uin
     }
 
     @Override
-    public void write(File path, Image<uint16> image) throws IOException {
+    public void write(File path, Image<UINT16> image) throws IOException {
         if (path.exists()) {
             path.delete();
         }
@@ -35,7 +35,7 @@ public class uint16ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<uin
     }
 
     @Override
-    public void write(File path, IMetadata metadata, Image<uint16> tiff) throws IOException {
+    public void write(File path, IMetadata metadata, Image<UINT16> tiff) throws IOException {
         /**
          * We are probably going to need to define a Dataplane object for each plane of
          * the image to be written, then populate it with img object plane, and finally

@@ -2,8 +2,8 @@ package fr.fresnel.fourPolar.core.image.generic.imglib2Model;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.float32;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.uint16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.ARGBType;
@@ -15,14 +15,14 @@ import net.imglib2.type.numeric.real.FloatType;
  */
 public class ImageToImgLib2Converter {
     /**
-     * This method transforms {@code Image} of type uint16 to {@code Img} of type
+     * This method transforms {@code Image} of type UINT16 to {@code Img} of type
      * UnsignedShortType.
      * 
      * @param image is the {@code Image} instance. 
      * @param pixelType is the pixel type associated with the image.
      * @return
      */
-    public static Img<UnsignedShortType> getImg(Image<uint16> image, uint16 pixelType) {
+    public static Img<UnsignedShortType> getImg(Image<UINT16> image, UINT16 pixelType) {
         Img<UnsignedShortType> img = null;
 
         if (image instanceof ImgLib2Image) {
@@ -33,14 +33,14 @@ public class ImageToImgLib2Converter {
     }
 
     /**
-     * This method transforms {@code Image} of type float32 to {@code Img} of type
+     * This method transforms {@code Image} of type Float32 to {@code Img} of type
      * FloatType.
      * 
      * @param image is the {@code Image} instance. 
      * @param pixelType is the pixel type associated with the image.
      * @return
      */
-    public static Img<FloatType> getImg(Image<float32> image, float32 pixelType) {
+    public static Img<FloatType> getImg(Image<Float32> image, Float32 pixelType) {
         Img<FloatType> img = null;
 
         if (image instanceof ImgLib2Image) {
