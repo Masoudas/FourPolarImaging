@@ -18,7 +18,7 @@ public class TypeConverterFactory {
      * 
      * @param <T> is a data type of ImgLib2.
      * @param type is an instance of the data type we wish to convert.
-     * @return
+     * @return the proper converter for the given ImgLib2 type.
      * @throws ConverterNotFound
      */
     public static <T extends NativeType<T>> TypeConverter<T> getConverter(T type) throws ConverterNotFound {
