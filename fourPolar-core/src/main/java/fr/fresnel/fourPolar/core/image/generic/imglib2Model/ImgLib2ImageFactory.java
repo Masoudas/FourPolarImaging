@@ -16,7 +16,7 @@ import net.imglib2.type.numeric.real.FloatType;
  * A concrete factory to generate instances of images that comply with the {@code Image}
  * using ImgLib2.
  * 
- * @param <T>
+ * @param <T> is the desired pixel type.
  */
 public class ImgLib2ImageFactory<T extends PixelType> implements ImageFactory<T> {
     /**
