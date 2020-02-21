@@ -25,15 +25,11 @@ public class ImgLib2ImageFactory<T extends PixelType> implements ImageFactory<T>
      * float.
      */
     private static long _cellImgThr = 256 * 256 * 1024;
-    private Image<T> _image;
 
-    /**
-     * Create an empty image with the given type and dimension.
-     * 
-     * @param dim is the image dimension.
-     * @param pixelType is the associated pixel type.
-     */
-    public ImgLib2ImageFactory(long[] dim, T pixelType) {
+    @Override
+    public Image<T> create(long[] dim, T pixelType) {
+        Image<T> _image = null;
+
         switch (pixelType.getType()) {
             case UINT_16:
                 try {
@@ -70,10 +66,19 @@ public class ImgLib2ImageFactory<T extends PixelType> implements ImageFactory<T>
             default:
                 break;
         }
+
+        return _image;
     }
 
-    public <V extends NativeType<V>> ImgLib2ImageFactory(Img<V> img, V imgLib2Type) throws ConverterNotFound {
-        this._image = new ImgLib2Image<T, V>(img, imgLib2Type);
+    /**
+     * Used for creating an {@code Image} from an existing ImgLib2 image.
+     * @param <V>
+     * @param img
+     * @param imgLib2Type
+     * @throws ConverterNotFound
+     */
+    public <V extends NativeType<V>> Image<T> create(Img<V> img, V imgLib2Type) throws ConverterNotFound {
+        return new ImgLib2Image<T, V>(img, imgLib2Type);
     }
 
     /**
@@ -84,13 +89,13 @@ public class ImgLib2ImageFactory<T extends PixelType> implements ImageFactory<T>
      * @param t
      * @return
      */
-    private static <T extends NativeType<T>> Img<T> _chooseImgFactory(long[] dim, T t) {
+    private <U extends NativeType<U>> Img<U> _chooseImgFactory(long[] dim, U t) {
         long nPixels = _getNPixels(dim);
 
         if (nPixels < _cellImgThr) {
-            return new ArrayImgFactory<T>(t).create(dim);
+            return new ArrayImgFactory<U>(t).create(dim);
         } else {
-            return new CellImgFactory<T>(t).create(dim);
+            return new CellImgFactory<U>(t).create(dim);
         }
     }
 
@@ -100,18 +105,13 @@ public class ImgLib2ImageFactory<T extends PixelType> implements ImageFactory<T>
      * @param dim is the dimension of the image.
      * @return
      */
-    private static long _getNPixels(long[] dim) {
+    private  long _getNPixels(long[] dim) {
         long nPixels = 1;
         for (long size : dim) {
             nPixels = nPixels * size;
         }
 
         return nPixels;
-    }
-
-    @Override
-    public Image<T> create() {
-        return this._image;
     }
 
 }
