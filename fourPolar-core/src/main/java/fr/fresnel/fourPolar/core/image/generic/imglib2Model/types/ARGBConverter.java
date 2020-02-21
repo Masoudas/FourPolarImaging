@@ -18,7 +18,7 @@ class ARGBConverter implements TypeConverter<ARGBType> {
         int blue = ARGBType.blue(index);
         int green = ARGBType.green(index);
 
-        return new RGB16(red, blue, green);
+        return new RGB16(red, green, blue);
     }
 
     @Override
