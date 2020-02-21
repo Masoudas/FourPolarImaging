@@ -132,4 +132,9 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
         return _pixelType;
     }
 
+    @Override
+    public String toString() {
+       return _img.toString();
+    }
+
 }
