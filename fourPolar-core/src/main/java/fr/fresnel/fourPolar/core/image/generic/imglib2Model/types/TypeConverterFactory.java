@@ -39,35 +39,4 @@ public class TypeConverterFactory {
 
         return converter;
     }
-
-    /**
-     * Returns the suitable converter based on the given {@code PixelType}.
-     * 
-     * @param <T> is a native type of ImgLib2.
-     * @param pixelType is the {@ PixelType} for which we seek to find a converter.
-     * @return an instance of {@code TypeConverter} 
-     * @throws ConverterNotFound in case the given type has no suitable converter.
-     */
-    public static <T extends NativeType<T>> TypeConverter<T> getConverter(PixelType pixelType) throws ConverterNotFound {
-        TypeConverter<T> converter = null;
-
-        switch (pixelType.getType()) {
-            case FLOAT_32:
-                converter = (TypeConverter<T>) new FloatTypeConverter();    
-                break;
-
-            case UINT_16:
-                converter = (TypeConverter<T>) new UnsignedShortTypeConverter();
-                break;
-
-            case RGB_16:
-                converter = (TypeConverter<T>) new ARGBConverter();
-                break;                
-        
-            default:
-                throw new ConverterNotFound();
-        }
-        
-        return converter;
-    }
 }
