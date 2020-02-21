@@ -11,7 +11,7 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
  */
 class UnsignedShortTypeConverter implements TypeConverter<UnsignedShortType> {
     @Override
-    public PixelType getPixel(UnsignedShortType type) {
+    public PixelType getPixelType(UnsignedShortType type) {
         return new UINT16(type.get());
     }
 

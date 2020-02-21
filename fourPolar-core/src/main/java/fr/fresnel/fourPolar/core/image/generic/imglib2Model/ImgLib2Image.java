@@ -41,7 +41,7 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
     public ImgLib2Image(final Img<V> img, V type) throws ConverterNotFound {
         this._img = img;
         this._tConverter = TypeConverterFactory.getConverter(type);
-        this._pixelType = _tConverter.getPixel(type).getType();
+        this._pixelType = _tConverter.getPixelType(type).getType();
     }
 
     @Override

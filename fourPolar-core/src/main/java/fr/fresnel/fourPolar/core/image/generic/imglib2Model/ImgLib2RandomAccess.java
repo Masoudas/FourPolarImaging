@@ -41,7 +41,7 @@ class ImgLib2RandomAccess<T extends NativeType<T>> implements IPixelRandomAccess
 
     @Override
     public IPixel<PixelType> getPixel() {
-        PixelType pixel = this._tConverter.getPixel(this._rAccess.get());
+        PixelType pixel = this._tConverter.getPixelType(this._rAccess.get());
         return new Pixel<PixelType>(pixel);
     }
 

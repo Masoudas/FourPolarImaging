@@ -19,8 +19,8 @@ public class UnsignedShortTypeConverterTest {
 
         TypeConverter<UnsignedShortType> converter = TypeConverterFactory.getConverter(new UnsignedShortType());
 
-        UINT16 val1Uint16 = (UINT16)converter.getPixel(val1);
-        UINT16 val2Uint16 = (UINT16)converter.getPixel(val2);
+        UINT16 val1Uint16 = (UINT16)converter.getPixelType(val1);
+        UINT16 val2Uint16 = (UINT16)converter.getPixelType(val2);
 
         assertTrue(val1Uint16.get() == val1.get() && val2Uint16.get() == val2.get());
     }

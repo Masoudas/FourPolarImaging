@@ -10,7 +10,7 @@ import net.imglib2.type.numeric.real.FloatType;
  */
 class FloatTypeConverter implements TypeConverter<FloatType> {
     @Override
-    public PixelType getPixel(FloatType type) {
+    public PixelType getPixelType(FloatType type) {
         FloatType value = (FloatType) type;
         return new Float32(value.get());
     }

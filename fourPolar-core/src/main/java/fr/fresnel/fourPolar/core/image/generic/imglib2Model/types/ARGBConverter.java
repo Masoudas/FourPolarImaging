@@ -10,7 +10,7 @@ import net.imglib2.type.numeric.ARGBType;
  */
 class ARGBConverter implements TypeConverter<ARGBType> {
     @Override
-    public PixelType getPixel(ARGBType type) {
+    public PixelType getPixelType(ARGBType type) {
         ARGBType value = (ARGBType)type;
         
         int index = value.get();

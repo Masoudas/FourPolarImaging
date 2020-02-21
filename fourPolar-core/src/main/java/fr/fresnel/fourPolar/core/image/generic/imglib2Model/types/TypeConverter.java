@@ -11,7 +11,7 @@ public interface TypeConverter<U extends NativeType<U>> {
     /**
      * Converts the given data type of ImgLib2 to the proper type of our own.
      */
-    public PixelType getPixel(U type);
+    public PixelType getPixelType(U type);
 
     /**
      * Assigns the given pixel type value to the proper type of ImgLib2.

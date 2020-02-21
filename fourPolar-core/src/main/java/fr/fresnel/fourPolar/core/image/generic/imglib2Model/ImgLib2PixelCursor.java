@@ -40,7 +40,7 @@ class ImgLib2PixelCursor<T extends NativeType<T>> implements IPixelCursor {
 
     @Override
     public IPixel<PixelType> next() {
-        PixelType pixelValue = _tConverter.getPixel(this._cursor.next());
+        PixelType pixelValue = _tConverter.getPixelType(this._cursor.next());
         return new Pixel<PixelType>(pixelValue);
     }
 
