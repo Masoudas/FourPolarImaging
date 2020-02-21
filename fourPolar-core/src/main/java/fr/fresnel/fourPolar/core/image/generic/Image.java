@@ -9,7 +9,7 @@ public interface Image<T extends PixelType> {
      * 
      * @return
      */
-    public long[] getDims();
+    public long[] getDimensions();
 
     /**
      * Returns the interface for iterating over the pixels of an image in an ordered

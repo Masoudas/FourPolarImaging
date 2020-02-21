@@ -110,7 +110,7 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
     }
 
     @Override
-    public long[] getDims() {
+    public long[] getDimensions() {
         long[] dim = new long[this._img.numDimensions()];
 
         this._img.dimensions(dim);
