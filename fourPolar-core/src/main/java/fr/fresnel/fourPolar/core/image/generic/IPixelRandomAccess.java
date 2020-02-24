@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
  * Using this interface, we can randomly access a location inside the image, and
  * set the value for that pixel.
  */
-public interface IPixelRandomAccess {
+public interface IPixelRandomAccess<U extends PixelType> {
     /**
      * Sets the iterator position to the position specified. If position is out of
      * range, the iterator position is not set.
@@ -21,12 +21,12 @@ public interface IPixelRandomAccess {
      * 
      * @param pixel is the pixel at this location
      */
-    public void setPixel(IPixel<PixelType> pixel);
+    public void setPixel(IPixel<U> pixel);
 
     /**
      * Returns the pixel associated with the position.
      * 
      * @param pixel is the pixel at this location
      */
-    public IPixel<PixelType> getPixel();
+    public IPixel<U> getPixel();
 }

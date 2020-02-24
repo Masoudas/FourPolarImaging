@@ -24,7 +24,7 @@ public interface Image<T extends PixelType> {
      * 
      * @return
      */
-    public IPixelRandomAccess getRandomAccess();
+    public IPixelRandomAccess<T> getRandomAccess();
 
 
     /**

@@ -11,10 +11,12 @@ import net.imglib2.type.NativeType;
 /**
  * Implementation of {@code IPixelRandomAccess} for the ImgLib2 image.
  * 
+ * @param <T> extens {@link PixelType}.
  * @param <T> is the generic native type of ImgLib2. Note that only a handful of
  *            datatypes are supported. See {@code TypeConverterFactory} .
+ * 
  */
-class ImgLib2PixelRandomAccess<T extends NativeType<T>> implements IPixelRandomAccess {
+class ImgLib2PixelRandomAccess<U extends PixelType, T extends NativeType<T>> implements IPixelRandomAccess<U> {
     final private RandomAccess<T> _rAccess;
     final private TypeConverter<T> _tConverter;
 
@@ -35,14 +37,14 @@ class ImgLib2PixelRandomAccess<T extends NativeType<T>> implements IPixelRandomA
     }
 
     @Override
-    public void setPixel(IPixel<PixelType> pixel) {
+    public void setPixel(IPixel<U> pixel) {
         this._tConverter.setNativeType(pixel.value(), this._rAccess.get());
     }
 
     @Override
-    public IPixel<PixelType> getPixel() {
+    public IPixel<U> getPixel() {
         PixelType pixel = this._tConverter.getPixelType(this._rAccess.get());
-        return new Pixel<PixelType>(pixel);
+        return new Pixel<U>((U)pixel);
     }
 
 }
