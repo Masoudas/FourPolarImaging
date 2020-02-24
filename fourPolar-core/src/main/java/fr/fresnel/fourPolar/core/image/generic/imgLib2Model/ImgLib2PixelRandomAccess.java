@@ -14,7 +14,7 @@ import net.imglib2.type.NativeType;
  * @param <T> is the generic native type of ImgLib2. Note that only a handful of
  *            datatypes are supported. See {@code TypeConverterFactory} .
  */
-class ImgLib2RandomAccess<T extends NativeType<T>> implements IPixelRandomAccess {
+class ImgLib2PixelRandomAccess<T extends NativeType<T>> implements IPixelRandomAccess {
     final private RandomAccess<T> _rAccess;
     final private TypeConverter<T> _tConverter;
 
@@ -24,7 +24,7 @@ class ImgLib2RandomAccess<T extends NativeType<T>> implements IPixelRandomAccess
      * @param randomAccess is the RandomAccess class of ImgLib2.
      * @param converter is the converter between ImgLib2 data types and our data types.
      */
-    public ImgLib2RandomAccess(final RandomAccess<T> randomAccess, final TypeConverter<T> converter) {
+    public ImgLib2PixelRandomAccess(final RandomAccess<T> randomAccess, final TypeConverter<T> converter) {
         _rAccess = randomAccess;
         _tConverter = converter;
     }
