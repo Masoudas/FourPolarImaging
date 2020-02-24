@@ -16,7 +16,7 @@ import net.imglib2.type.NativeType;
  *            datatypes are supported. See {@code TypeConverterFactory} .
  * 
  */
-class ImgLib2PixelCursor<T extends NativeType<T>> implements IPixelCursor {
+class ImgLib2PixelCursor<U extends PixelType, T extends NativeType<T>> implements IPixelCursor<U> {
     final private Cursor<T> _cursor;
     private long[] _position;
     final private TypeConverter<T> _tConverter;
@@ -39,19 +39,20 @@ class ImgLib2PixelCursor<T extends NativeType<T>> implements IPixelCursor {
     }
 
     @Override
-    public IPixel<PixelType> next() {
+    public IPixel<U> next() {
         PixelType pixelValue = _tConverter.getPixelType(this._cursor.next());
-        return new Pixel<PixelType>(pixelValue);
+        return new Pixel<U>((U)pixelValue);
     }
 
     @Override
     public long[] localize() {
+        this._position = this._position.clone();
         this._cursor.localize(this._position);
         return this._position;
     }
 
     @Override
-    public void setPixel(IPixel<PixelType> pixel) {
+    public void setPixel(IPixel<U> pixel) {
         _tConverter.setNativeType(pixel.value(), this._cursor.get());
     }
 

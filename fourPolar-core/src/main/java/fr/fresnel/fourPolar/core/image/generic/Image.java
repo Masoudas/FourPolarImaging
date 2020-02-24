@@ -17,7 +17,7 @@ public interface Image<T extends PixelType> {
      * 
      * @return
      */
-    public IPixelCursor getCursor();
+    public IPixelCursor<T> getCursor();
 
     /**
      * Returns the interface for randomly accessing the pixels of an image.

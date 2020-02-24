@@ -123,8 +123,8 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
     }
 
     @Override
-    public IPixelCursor getCursor() {
-        return new ImgLib2PixelCursor<V>(this._img.cursor(), this.numDimensions(), this._tConverter);
+    public IPixelCursor<U> getCursor() {
+        return new ImgLib2PixelCursor<U, V>(this._img.cursor(), this.numDimensions(), this._tConverter);
     }
 
     @Override
