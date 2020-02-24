@@ -22,13 +22,13 @@ public abstract class GrayScaleImgLib2TiffReader<T extends PixelType> implements
     final protected SCIFIOConfig _config;
     protected Reader _reader;
     final protected ImgOpener _imgOpener;
-    final protected ImgLib2ImageFactory<T> _imgFactory;
+    final protected ImgLib2ImageFactory _imgFactory;
 
     /**
      * An abstract class for reading grayscale tiff images using the SCIFIO library.
      * 
      */
-    public GrayScaleImgLib2TiffReader(ImgLib2ImageFactory<T> factory) {
+    public GrayScaleImgLib2TiffReader(ImgLib2ImageFactory factory) {
         this._config = _setSCFIOConfig();
         this._imgOpener = new ImgOpener();
         this._imgFactory = factory;
