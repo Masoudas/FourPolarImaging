@@ -1,11 +1,11 @@
-package fr.fresnel.fourPolar.io.image.tiff.grayscale;
+package fr.fresnel.fourPolar.io.image.captured.tiff;
 
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.captured.CapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
-import fr.fresnel.fourPolar.io.image.ICapturedImageReader;
+import fr.fresnel.fourPolar.io.image.captured.ICapturedImageReader;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 

@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.image;
+package fr.fresnel.fourPolar.io.image.captured;
 
 import java.io.IOException;
 
