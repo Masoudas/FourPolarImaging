@@ -18,7 +18,7 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.util.Fraction;
 
-public class UnsignedShortTypeConverterTest {
+public class TypeConverterFactoryTest {
 
     @Test
     public void getPixel_UnsignedShortType_WrapsValueInUINT16() throws ConverterNotFound {
