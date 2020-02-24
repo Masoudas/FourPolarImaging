@@ -19,7 +19,6 @@ import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCap
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.ExcelIncorrentRow;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.MissingExcelTitleRow;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.TemplateSampleSetExcelNotFound;
-import fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.excel.TemplateExcelFileGenerator;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 
 /**
