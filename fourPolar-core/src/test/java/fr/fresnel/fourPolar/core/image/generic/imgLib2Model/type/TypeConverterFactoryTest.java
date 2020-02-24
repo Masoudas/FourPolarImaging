@@ -123,7 +123,7 @@ public class TypeConverterFactoryTest {
 
     @Test
     public void getConverter_BogusNativeType_ThrowsConverterNotFound() {
-        assertThrows(ConverterNotFound.class, ()->{TypeConverter<?> converter = TypeConverterFactory.getConverter(new BogusType());});
+        assertThrows(ConverterNotFound.class, ()->{TypeConverterFactory.getConverter(new BogusType());});
 
     }
 

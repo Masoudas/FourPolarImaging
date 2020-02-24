@@ -70,7 +70,7 @@ public class ImgLib2ImageTest {
         ByteType type = new ByteType();
         Img<ByteType> img = new ArrayImgFactory<ByteType>(type).create(dimensions);
 
-        assertThrows(ConverterNotFound.class, ()->{ImgLib2Image<?, ByteType> image = new ImgLib2Image<>(img, type);});
+        assertThrows(ConverterNotFound.class, ()->{new ImgLib2Image<>(img, type);});
     }
 
 }
