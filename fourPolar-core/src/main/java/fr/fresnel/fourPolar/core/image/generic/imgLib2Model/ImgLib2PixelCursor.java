@@ -56,4 +56,10 @@ class ImgLib2PixelCursor<U extends PixelType, T extends NativeType<T>> implement
         _tConverter.setNativeType(pixel.value(), this._cursor.get());
     }
 
+    @Override
+    public void reset() {
+        this._cursor.reset();
+
+    }
+
 }
