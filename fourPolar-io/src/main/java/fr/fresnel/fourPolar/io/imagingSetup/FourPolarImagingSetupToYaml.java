@@ -9,7 +9,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
-import fr.fresnel.fourPolar.io.PathFactoryOfProject;
+import fr.fresnel.fourPolar.core.PathFactoryOfProject;
 
 /**
  * This class is used for writing the fourPolar imaging setup to disk.
