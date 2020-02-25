@@ -5,23 +5,29 @@ import java.io.IOException;
 import fr.fresnel.fourPolar.core.image.captured.CapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageReader;
-import net.imglib2.img.Img;
-import net.imglib2.type.numeric.integer.UnsignedShortType;
+import fr.fresnel.fourPolar.io.image.generic.ImageReader;
+import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
 
 /**
  * Used for reading a (16 bit tiff) captured images. An instance of this object
  * is enough to read several images.
  */
 public class TiffCapturedImageReader implements ICapturedImageReader {
-    final private TiffGrayScaleReader<UnsignedShortType> _reader;
+    final private ImageReader<UINT16> _reader;
 
     /**
      * Used for reading a (16 bit tiff) captured images. An instance of this object
      * is enough to read several images.
+     * 
+     * @throws NoReaderFoundForImage
      */
-    public TiffCapturedImageReader() {
-        _reader = new TiffGrayScaleReader<UnsignedShortType>(new UnsignedShortType());
+    public TiffCapturedImageReader(ImageFactory factory) throws NoReaderFoundForImage {
+        _reader = TiffImageReaderFactory.getReader(factory, new UINT16());
     }
 
     @Override
@@ -29,7 +35,7 @@ public class TiffCapturedImageReader implements ICapturedImageReader {
             throws IllegalArgumentException, IOException {
         _checkFileLabel(fileSet, fileLabel);
 
-        Img<UnsignedShortType> img = _reader.read(fileSet.getFile(fileLabel));
+        Image<UINT16> img = _reader.read(fileSet.getFile(fileLabel));
 
         return new CapturedImage(fileSet, fileLabel, img);
     }
