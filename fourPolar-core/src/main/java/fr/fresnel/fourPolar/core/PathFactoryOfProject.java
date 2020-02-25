@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io;
+package fr.fresnel.fourPolar.core;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -60,7 +60,13 @@ public class PathFactoryOfProject {
      * @return
      */
     public static File getFolder_PolarizationImages(File rootFolder) {
-        return new File(rootFolder, _folder_polarizationImages);
+        File path = new File(getFolder_4Polar(rootFolder).getAbsolutePath(), _folder_polarizationImages);
+
+        if (!path.exists()) {
+            path.mkdirs();
+        }
+
+        return path;
     }
 
 }
