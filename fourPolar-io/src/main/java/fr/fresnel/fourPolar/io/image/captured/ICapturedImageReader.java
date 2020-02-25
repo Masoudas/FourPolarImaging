@@ -10,7 +10,8 @@ import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFile
  */
 public interface ICapturedImageReader {
     /**
-     * Read an image of the file set labeled by fileLabel;
+     * Read an image of the file set labeled by fileLabel. Several images can
+     * be read with the same interface.
      * 
      * @param fileSet
      * @param fileLabel The file label of the image to be read. Should be from
