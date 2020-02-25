@@ -36,7 +36,7 @@ public class FourPolarImagingSetupToYaml {
     }
 
     public static File getDestinationFolder(File rootFolder) {
-        return PathFactoryOfProject.getFolder_0_Params(rootFolder);
+        return PathFactoryOfProject.getFolder_Params(rootFolder);
     }
 
     public static String getFileName() {

@@ -34,7 +34,7 @@ public class SampleImageSetWriter {
      * @return
      */
     public static File getSampleSetFolder(File rootFolder) {
-        File zero_params_folder = PathFactoryOfProject.getFolder_0_Params(rootFolder);
+        File zero_params_folder = PathFactoryOfProject.getFolder_Params(rootFolder);
         return Paths.get(zero_params_folder.getAbsolutePath(), "Sample").toFile();
     }
 

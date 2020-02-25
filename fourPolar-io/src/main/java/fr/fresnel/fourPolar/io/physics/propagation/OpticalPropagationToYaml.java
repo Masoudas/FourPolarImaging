@@ -66,7 +66,7 @@ public class OpticalPropagationToYaml {
     }
 
     private File getFilePath(File rootFolder, int channel) {
-        return new File(PathFactoryOfProject.getFolder_0_Params(rootFolder),
+        return new File(PathFactoryOfProject.getFolder_Params(rootFolder),
                 _getFileName(channel));
 
     }
