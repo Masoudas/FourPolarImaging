@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.image.tiff.grayscale;
+package fr.fresnel.fourPolar.io.image.generic.tiff.scifio;
 
 import java.io.File;
 import java.io.IOException;

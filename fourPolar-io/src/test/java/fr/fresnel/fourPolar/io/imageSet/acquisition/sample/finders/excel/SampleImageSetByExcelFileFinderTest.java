@@ -19,7 +19,6 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.ExcelIncorrentRow;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.MissingExcelTitleRow;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.TemplateSampleSetExcelNotFound;
-import fr.fresnel.fourPolar.io.image.tiff.grayscale.TiffCapturedImageChecker;
 
 public class SampleImageSetByExcelFileFinderTest {
         static private File root;

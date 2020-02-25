@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.image.tiff;
+package fr.fresnel.fourPolar.io.image.captured;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
-import fr.fresnel.fourPolar.io.image.tiff.grayscale.TiffCapturedImageChecker;
+import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageChecker;
 
 public class TiffCapturedImageCheckerTest {
     private static File _root;
