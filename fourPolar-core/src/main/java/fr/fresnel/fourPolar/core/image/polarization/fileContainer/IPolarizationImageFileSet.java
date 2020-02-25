@@ -22,5 +22,5 @@ public interface IPolarizationImageFileSet {
      * 
      * @return
      */
-    public String getNameExtract();
+    public String getSetName();
 }
