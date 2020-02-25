@@ -5,6 +5,6 @@ package fr.fresnel.fourPolar.core.dataset.polarization;
  * to the underlying {@link IPolarizationImage} implementation
  */
 public class PolarizationsIntensitySet {
-    final private IPolarizationImage
+    final private IPolarizationImage 
 
 }
