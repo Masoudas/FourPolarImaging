@@ -10,8 +10,8 @@ import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFile
  */
 public interface ICapturedImageReader {
     /**
-     * Read an image of the file set labeled by fileLabel. Several images can
-     * be read with the same interface.
+     * Read an image of the file set labeled by fileLabel. Several images can be
+     * read with the same interface.
      * 
      * @param fileSet
      * @param fileLabel The file label of the image to be read. Should be from
@@ -23,4 +23,12 @@ public interface ICapturedImageReader {
      */
     public ICapturedImage read(ICapturedImageFileSet fileSet, String fileLabel)
             throws IllegalArgumentException, IOException;
+
+    /**
+     * Close any resources associated with the Reader.
+     * 
+     * @throws IOException
+     */
+    public void close() throws IOException;
+
 }
