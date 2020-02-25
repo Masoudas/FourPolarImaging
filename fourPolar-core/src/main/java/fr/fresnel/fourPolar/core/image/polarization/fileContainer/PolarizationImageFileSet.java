@@ -42,9 +42,8 @@ public class PolarizationImageFileSet implements IPolarizationImageFileSet {
                 break;
 
             case Four:
-                this._setFileNames(
-                    setParentFolder, fileSet.getFile(labels[0]), fileSet.getFile(labels[1]),
-                    fileSet.getFile(labels[1]), fileSet.getFile(labels[2]));
+                this._setFileNames(setParentFolder, fileSet.getFile(labels[0]), fileSet.getFile(labels[1]),
+                        fileSet.getFile(labels[2]), fileSet.getFile(labels[3]));
                 break;
 
             default:
@@ -108,8 +107,8 @@ public class PolarizationImageFileSet implements IPolarizationImageFileSet {
      */
     private void _setFileNames(File setParentFolder, File pol0_90, File pol45_135) {
         this._pol0File = new File(setParentFolder, this._addLabelToFileName(pol0_90, _pol0Label));
-        this._pol45File = new File(setParentFolder, this._addLabelToFileName(pol0_90, _pol45Label));
-        this._pol90File = new File(setParentFolder, this._addLabelToFileName(pol45_135, _pol90Label));
+        this._pol45File = new File(setParentFolder, this._addLabelToFileName(pol45_135, _pol45Label));
+        this._pol90File = new File(setParentFolder, this._addLabelToFileName(pol0_90, _pol90Label));
         this._pol135File = new File(setParentFolder, this._addLabelToFileName(pol45_135, _pol135Label));
     }
 
@@ -129,13 +128,31 @@ public class PolarizationImageFileSet implements IPolarizationImageFileSet {
         this._pol135File = new File(setParentFolder, pol135.getName());
     }
 
+    /**
+     * This method adds the given label to file name, right before the file
+     * extension name.
+     * 
+     * @param file
+     * @param label
+     * @return
+     */
     private String _addLabelToFileName(File file, String label) {
         int index = file.getName().lastIndexOf(".");
-        return file.getName().subSequence(0, index - 1) + label + file.getName().substring(index);
+        return file.getName().subSequence(0, index) + label + file.getName().substring(index);
     }
 
+    /**
+     * This method forms the parent folder for this set with the formula root +
+     * 4Polar + polarizationImages + setName
+     * 
+     * @param rootFolder
+     * @param channel
+     * @param setName
+     * @return
+     */
     private File _formSetParentFolder(File rootFolder, int channel, String setName) {
-        Path path = Paths.get(PathFactoryOfProject.getFolder_PolarizationImages(rootFolder).getAbsolutePath(), "Channel" + channel, setName);
+        Path path = Paths.get(PathFactoryOfProject.getFolder_PolarizationImages(rootFolder).getAbsolutePath(),
+                "Channel" + channel, setName);
         return path.toFile();
     }
 }
