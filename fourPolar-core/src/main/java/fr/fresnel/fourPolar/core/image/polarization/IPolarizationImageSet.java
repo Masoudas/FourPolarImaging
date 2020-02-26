@@ -15,7 +15,7 @@ public interface IPolarizationImageSet {
      * @param pol
      * @return
      */
-    public IPolarizationImage getImage(Polarization pol);
+    public IPolarizationImage getPolarizationImage(Polarization pol);
 
     /**
      * Returns the file set corresponding to this image set.

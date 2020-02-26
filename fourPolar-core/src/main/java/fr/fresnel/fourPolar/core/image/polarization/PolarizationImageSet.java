@@ -33,7 +33,7 @@ public class PolarizationImageSet implements IPolarizationImageSet{
     }
 
     @Override
-    public IPolarizationImage getImage(Polarization pol) {
+    public IPolarizationImage getPolarizationImage(Polarization pol) {
         IPolarizationImage image = null;
         
         switch (pol) {
