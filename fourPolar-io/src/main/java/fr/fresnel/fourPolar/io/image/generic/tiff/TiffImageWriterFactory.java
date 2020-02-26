@@ -6,9 +6,9 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.float32ImgLib2TiffImageWriter;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.uint16ImgLib2TiffImageWriter;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.UINT16ImgLib2TiffImageWriter;
 import net.imglib2.img.Img;
-
+ 
 /**
  * A factory to get a proper writer for the given implementation of
  * {@code Image}.
@@ -26,7 +26,7 @@ public class TiffImageWriterFactory {
         ImageWriter<T> writer;
 
         if (image instanceof Img && pixelType.getType() == Type.UINT_16){
-            writer = (ImageWriter<T>)new uint16ImgLib2TiffImageWriter();
+            writer = (ImageWriter<T>)new UINT16ImgLib2TiffImageWriter();
         }
         else if (image instanceof Img && pixelType.getType() == Type.FLOAT_32){
             writer = (ImageWriter<T>)new float32ImgLib2TiffImageWriter();

@@ -13,7 +13,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
  * 
  * @param <T> extends {@ RealType}.
  */
-public class uint16ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<UINT16> {
+public class UINT16ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<UINT16> {
     final private UINT16 _pixelType = new UINT16(0);  
 
     /**
