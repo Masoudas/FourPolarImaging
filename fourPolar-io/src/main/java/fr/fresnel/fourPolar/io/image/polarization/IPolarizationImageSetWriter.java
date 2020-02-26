@@ -13,4 +13,9 @@ public interface IPolarizationImageSetWriter {
      */
     public void write(IPolarizationImageSet imageSet);
     
+    /**
+     * Close all resources associated with this writer.
+     */
+    public void close();
+    
 }
