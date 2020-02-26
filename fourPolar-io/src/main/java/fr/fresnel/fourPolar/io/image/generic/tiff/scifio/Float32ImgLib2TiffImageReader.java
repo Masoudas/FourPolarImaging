@@ -12,10 +12,10 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
 /**
  * This class reads a 16 bit unsigned image using SCIFIO library.
  */
-public class float32ImgLib2TiffImageReader extends GrayScaleImgLib2TiffReader<Float32> {
+public class Float32ImgLib2TiffImageReader extends GrayScaleImgLib2TiffReader<Float32> {
     final private UnsignedShortType imgLib2Type = new UnsignedShortType();
 
-    public float32ImgLib2TiffImageReader(ImgLib2ImageFactory factory) {
+    public Float32ImgLib2TiffImageReader(ImgLib2ImageFactory factory) {
         super(factory);
     }
 
