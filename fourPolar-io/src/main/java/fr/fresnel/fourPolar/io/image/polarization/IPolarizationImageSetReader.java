@@ -19,6 +19,6 @@ public interface IPolarizationImageSetReader {
     /**
      * Close all resources associated with this reader.
      */
-    public void close();
+    public void close() throws IOException;
     
 }

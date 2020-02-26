@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.io.image.polarization;
 
+import java.io.IOException;
+
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 
 /**
@@ -11,11 +13,11 @@ public interface IPolarizationImageSetWriter {
      * Writes the image set to the destinations inherent in the {@link IPolarizationImageSet}.
      * @param imageSet
      */
-    public void write(IPolarizationImageSet imageSet);
+    public void write(IPolarizationImageSet imageSet) throws IOException;
     
     /**
      * Close all resources associated with this writer.
      */
-    public void close();
+    public void close() throws IOException;
     
 }
