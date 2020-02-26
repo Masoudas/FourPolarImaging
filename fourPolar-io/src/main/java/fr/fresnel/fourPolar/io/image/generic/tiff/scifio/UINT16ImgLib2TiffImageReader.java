@@ -24,10 +24,7 @@ public class UINT16ImgLib2TiffImageReader extends GrayScaleImgLib2TiffReader<UIN
         this._reader.setSource(path.getAbsolutePath(), this._config);
         final Img<UnsignedShortType> img = this._imgOpener.openImgs(_reader, imgLib2Type, this._config).get(0);
 
-        Image<UINT16> image = null;
-        this._imgFactory.create(img, imgLib2Type);
-
-        return image;
+        return this._imgFactory.create(img, imgLib2Type);
     }
 
     @Override
