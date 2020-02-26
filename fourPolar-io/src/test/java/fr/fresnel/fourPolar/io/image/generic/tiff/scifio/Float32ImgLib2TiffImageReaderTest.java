@@ -9,10 +9,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
+import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
-import net.imglib2.type.numeric.real.FloatType;
 
 public class Float32ImgLib2TiffImageReaderTest {
     private static File _testResource;
@@ -23,39 +25,25 @@ public class Float32ImgLib2TiffImageReaderTest {
     }
 
     @Test
-    public void read_UShortTiff_ShouldShowImage()
-            throws IllegalArgumentException, IOException, InterruptedException, KeyException, IncompatibleCapturedImage {
-        final File image = new File(_testResource, "UINT16.tif");
-
-        final UINT16ImgLib2TiffImageReader reader = new UINT16ImgLib2TiffImageReader(
-                new UnsignedShortType());
-        Img<UnsignedShortType> img = reader.read(image);
-        ImageJFunctions.show(img);
+    public void read_UINT16Image_ShouldShowImage()
+            throws IOException, InterruptedException {
+        File path = new File(_testResource, "UINT16Image.tif");   
+        UINT16ImgLib2TiffImageReader reader = new UINT16ImgLib2TiffImageReader(new ImgLib2ImageFactory());
+        Image<UINT16> img = reader.read(path);
+        
+        ImageJFunctions.show((Img<UnsignedShortType>)img);
         TimeUnit.SECONDS.sleep(10);
                 
     }
 
     @Test
-    public void read_FloatTiff_ShouldShowImage()
-            throws IllegalArgumentException, IOException, InterruptedException, KeyException, IncompatibleCapturedImage {
-        final File image = new File(_testResource, "FloatImage.tif");
-
-        final TiffGrayScaleReader<FloatType> reader = new TiffGrayScaleReader<FloatType>(
-                new FloatType());
-        Img<FloatType> img = reader.read(image);
-        ImageJFunctions.show(img);
-        TimeUnit.SECONDS.sleep(10);
-
-    }
-
-    @Test
     public void read_SameImageTenThousandTimes_ShouldNotRunOutOfResource()
             throws IllegalArgumentException, IOException, InterruptedException, KeyException, IncompatibleCapturedImage {
-        final File image = new File(_testResource, "FloatImage.tif");
-        final TiffGrayScaleReader<FloatType> reader = new TiffGrayScaleReader<FloatType>(
-                new FloatType());
+        File path = new File(_testResource, "UINT16Image.tif");   
+        UINT16ImgLib2TiffImageReader reader = new UINT16ImgLib2TiffImageReader(new ImgLib2ImageFactory());
+        
         for (int i = 0; i < 10000; i++) {
-            reader.read(image);
+            reader.read(path);
         }
         
         reader.close();
