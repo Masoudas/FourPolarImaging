@@ -12,8 +12,9 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
+import fr.fresnel.fourPolar.core.PathFactoryOfGlobalInfo;
 import fr.fresnel.fourPolar.core.fourPolar.propagationdb.IOpticalPropagationDB;
-import fr.fresnel.fourPolar.io.PathFactoryOfGlobalInfo;
+
 
 /**
  * This class is responsible for reading and writing the JSON implementation of
