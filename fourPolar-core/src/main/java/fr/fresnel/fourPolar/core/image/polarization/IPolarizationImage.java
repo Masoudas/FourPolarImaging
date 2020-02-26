@@ -2,19 +2,12 @@ package fr.fresnel.fourPolar.core.image.polarization;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.image.polarization.fileContainer.IPolarizationImageFileSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
  * An interface for proper access to a polarization image.
  */
 public interface IPolarizationImage {
-    /**
-     * Returns the fileset associated with this polarization image.
-     * @return
-     */
-    public IPolarizationImageFileSet getFileSet();
-
     /**
      * Returns the polarization of this image.
      * @return
