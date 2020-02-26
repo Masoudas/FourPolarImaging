@@ -16,13 +16,13 @@ public class PolarizationImageSet implements IPolarizationImageSet{
     final private IPolarizationImageFileSet _fileSet;
 
     public PolarizationImageSet(
-        IPolarizationImageFileSet filSet, IPolarizationImage pol0,
+        IPolarizationImageFileSet fileSet, IPolarizationImage pol0,
         IPolarizationImage pol45, IPolarizationImage pol90, IPolarizationImage pol135) {
         this._pol0 = pol0;
         this._pol45 = pol45;
         this._pol90 = pol90;
         this._pol135 = pol135;
-        this._fileSet = filSet;
+        this._fileSet = fileSet;
     }
 
     @Override
