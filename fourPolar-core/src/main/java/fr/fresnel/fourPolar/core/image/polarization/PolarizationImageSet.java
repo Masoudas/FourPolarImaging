@@ -8,11 +8,12 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  * A concrete implementation of the {@link IPolarizationsIntensitySet}. In this implementation,
  * we assume that the underlying intensity set is represented by an intensity image.
  */
-public class PolarizationImageSet {
+public class PolarizationImageSet implements IPolarizationImageSet{
     final private IPolarizationImage _pol0;
     final private IPolarizationImage _pol45;
     final private IPolarizationImage _pol90;
     final private IPolarizationImage _pol135;
+    final private IPolarizationImageFileSet _fileSet;
 
     public PolarizationImageSet(
         IPolarizationImageFileSet filSet, IPolarizationImage pol0,
@@ -21,14 +22,17 @@ public class PolarizationImageSet {
         this._pol45 = pol45;
         this._pol90 = pol90;
         this._pol135 = pol135;
+        this._fileSet = filSet;
     }
 
+    @Override
     public IPolarizationsIntensityIterator getCursor() {
         return new PolarizationsIntensityIterator(
             _pol0.getImage().getCursor(), _pol45.getImage().getCursor(),
             _pol90.getImage().getCursor(), _pol135.getImage().getCursor());
     }
 
+    @Override
     public IPolarizationImage getImage(Polarization pol) {
         IPolarizationImage image = null;
         
@@ -54,6 +58,11 @@ public class PolarizationImageSet {
         }
 
         return image;
+    }
+
+    @Override
+    public IPolarizationImageFileSet getFileSet() {
+        return this._fileSet;
     }
 
 }
