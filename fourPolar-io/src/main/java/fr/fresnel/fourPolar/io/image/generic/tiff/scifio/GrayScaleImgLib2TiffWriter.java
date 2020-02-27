@@ -28,7 +28,7 @@ public abstract class GrayScaleImgLib2TiffWriter<T extends PixelType> implements
      * This constructor creates the save once, which can be used as many times as
      * desired for saving different images of the same time.
      */
-    public GrayScaleImgLib2TiffWriter() {
+    GrayScaleImgLib2TiffWriter() {
         this._saver = new ImgSaver();
         this._config = this._setSCFIOConfig();
 
