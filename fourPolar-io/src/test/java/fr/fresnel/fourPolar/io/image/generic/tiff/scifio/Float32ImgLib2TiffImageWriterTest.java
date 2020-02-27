@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
-import io.scif.FormatException;
 
 public class Float32ImgLib2TiffImageWriterTest {
     private static long[] _dim = {10, 10};
@@ -35,9 +34,8 @@ public class Float32ImgLib2TiffImageWriterTest {
         Image<Float32> diskImage = new Float32ImgLib2TiffImageReader(_factory).read(destination);
 
         assertTrue(
-            diskImage.getDimensions()[0] == _dim[0] && 
-            diskImage.getDimensions()[1] == _dim[1] && 
-            diskImage.getDimensions()[2] == _dim[2]
+            diskImage.getDimensions()[0] == _dim[0] &&
+            diskImage.getDimensions()[1] == _dim[1]
         );
     }
 
@@ -57,14 +55,13 @@ public class Float32ImgLib2TiffImageWriterTest {
 
         assertTrue(
             diskImage.getDimensions()[0] == _dim[0] && 
-            diskImage.getDimensions()[1] == _dim[1] && 
-            diskImage.getDimensions()[2] == _dim[2]
+            diskImage.getDimensions()[1] == _dim[1]
         );
 
     }
 
     @Test
-    public void write_WriteUShortImageWithMetadata_DiskImageHasSameDimensions() throws IOException, FormatException {
+    public void write_WriteUShortImageWithMetadata_DiskImageHasSameDimensions() throws IOException {
 
     }
 
