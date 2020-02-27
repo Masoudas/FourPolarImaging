@@ -8,13 +8,13 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;
-import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 public class UINT16ImgLib2TiffImageReaderTest {
     private static File _testResource;
@@ -26,12 +26,12 @@ public class UINT16ImgLib2TiffImageReaderTest {
 
     @Test
     public void read_UINT16Image_ShouldShowImage()
-            throws IOException, InterruptedException {
+            throws IOException, InterruptedException, ConverterToImgLib2NotFound {
         File path = new File(_testResource, "UINT16Image.tif");   
         UINT16ImgLib2TiffImageReader reader = new UINT16ImgLib2TiffImageReader(new ImgLib2ImageFactory());
         Image<UINT16> img = reader.read(path);
         
-        ImageJFunctions.show((Img<UnsignedShortType>)img);
+        ImageJFunctions.show(ImageToImgLib2Converter.getImg(img, new UINT16()));
         TimeUnit.SECONDS.sleep(10);
                 
     }

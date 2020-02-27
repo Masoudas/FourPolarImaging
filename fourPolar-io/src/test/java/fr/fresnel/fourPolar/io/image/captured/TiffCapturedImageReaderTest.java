@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
@@ -32,7 +33,7 @@ public class TiffCapturedImageReaderTest {
 
     @Test
     public void read_16bitTiff_ShouldShowImage() throws IllegalArgumentException, IOException, InterruptedException,
-            KeyException, IncompatibleCapturedImage, NoReaderFoundForImage {
+            KeyException, IncompatibleCapturedImage, NoReaderFoundForImage, ConverterToImgLib2NotFound {
         final File pol0_45_90_135 = new File(_testResource, "16bit.tif");
 
         FourPolarImagingSetup setup = new FourPolarImagingSetup(1, Cameras.One);

@@ -8,13 +8,13 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
-import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;
-import net.imglib2.type.numeric.real.FloatType;
 
 public class Float32ImgLib2TiffImageReaderTest {
     private static File _testResource;
@@ -25,14 +25,14 @@ public class Float32ImgLib2TiffImageReaderTest {
     }
 
     @Test
-    public void read_Float32Image_ShouldShowImage() throws IOException, InterruptedException {
+    public void read_Float32Image_ShouldShowImage()
+            throws IOException, InterruptedException, ConverterToImgLib2NotFound {
         File path = new File(_testResource, "Float32Image.tif");
         Float32ImgLib2TiffImageReader reader = new Float32ImgLib2TiffImageReader(new ImgLib2ImageFactory());
         Image<Float32> img = reader.read(path);
 
-        ImageJFunctions.show((Img<FloatType>) img);
+        ImageJFunctions.show(ImageToImgLib2Converter.getImg(img, new Float32()));
         TimeUnit.SECONDS.sleep(10);
-
     }
 
     @Test
