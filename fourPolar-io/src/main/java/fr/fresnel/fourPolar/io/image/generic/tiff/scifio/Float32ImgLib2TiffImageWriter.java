@@ -8,16 +8,13 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
-import io.scif.img.ImgIOException;
-import net.imglib2.exception.IncompatibleTypeException;
 
 /**
  * Class for writing grayscale tiffs to disk.
  * 
- * @param <T> extends {@ RealType}.
  */
 public class Float32ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<Float32> {
-    final private Float32 _pixelType = new Float32(0f);
+    final private Float32 _pixelType = new Float32();
 
     @Override
     public void write(File path, Image<Float32> image) throws IOException {

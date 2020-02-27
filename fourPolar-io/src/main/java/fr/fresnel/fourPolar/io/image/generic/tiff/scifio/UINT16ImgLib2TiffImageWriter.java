@@ -17,7 +17,7 @@ import net.imglib2.exception.IncompatibleTypeException;
  * @param <T> extends {@ RealType}.
  */
 public class UINT16ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<UINT16> {
-    final private UINT16 _pixelType = new UINT16(0);
+    final private UINT16 _pixelType = new UINT16();
 
     @Override
     public void write(File path, Image<UINT16> image) throws IOException {
