@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.core.image.generic.imgLib2Model;
 
-import java.util.Iterator;
-
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.types.ConverterNotFound;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
@@ -10,11 +8,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverterFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
-import net.imglib2.Cursor;
-import net.imglib2.Interval;
-import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
-import net.imglib2.img.ImgFactory;
 import net.imglib2.type.NativeType;
 
 /**
@@ -23,7 +17,7 @@ import net.imglib2.type.NativeType;
  * @param <U> is our pixel data type.
  * @param <V> is the ImgLib2 data type.
  */
-class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Image<U> {
+public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Image<U> {
     private final Img<V> _img;
 
     private final TypeConverter<V> _tConverter;
@@ -38,12 +32,11 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
      * @throws ConverterNotFound is thrown in case conversion to our data types is
      *                           not supported.
      */
-    public ImgLib2Image(final Img<V> img, V type) throws ConverterNotFound {
+    ImgLib2Image(final Img<V> img, V type) throws ConverterNotFound {
         this._img = img;
         this._tConverter = TypeConverterFactory.getConverter(type);
         this._pixelType = _tConverter.getPixelType(type).getType();
     }
-
 
     @Override
     public long[] getDimensions() {
