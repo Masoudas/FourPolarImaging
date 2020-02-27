@@ -11,16 +11,18 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
 
 /**
- * Using this class, we can convert an {@code Image} interface to a {@code Img} interface.
+ * Using this class, we can convert an {@code Image} interface to a {@code Img}
+ * interface.
  */
 public class ImageToImgLib2Converter {
     /**
      * This method transforms {@code Image} of type UINT16 to {@code Img} of type
      * UnsignedShortType.
      * 
-     * @param image is the {@code Image} instance. 
+     * @param image     is the {@code Image} instance.
      * @param pixelType is the pixel type associated with the image.
-     * @return
+     * @return the {@link Img} interface, which is the basic image interface of
+     *         ImgLib2.
      */
     public static Img<UnsignedShortType> getImg(Image<UINT16> image, UINT16 pixelType) {
         Img<UnsignedShortType> img = null;
@@ -36,9 +38,10 @@ public class ImageToImgLib2Converter {
      * This method transforms {@code Image} of type Float32 to {@code Img} of type
      * FloatType.
      * 
-     * @param image is the {@code Image} instance. 
+     * @param image     is the {@code Image} instance.
      * @param pixelType is the pixel type associated with the image.
-     * @return
+     * @return the {@link Img} interface, which is the basic image interface of
+     *         ImgLib2.
      */
     public static Img<FloatType> getImg(Image<Float32> image, Float32 pixelType) {
         Img<FloatType> img = null;
@@ -54,9 +57,10 @@ public class ImageToImgLib2Converter {
      * This method transforms {@code Image} of type RGB16 to {@code Img} of type
      * ARGBType.
      * 
-     * @param image is the {@code Image} instance. 
+     * @param image     is the {@code Image} instance.
      * @param pixelType is the pixel type associated with the image.
-     * @return
+     * @return the {@link Img} interface, which is the basic image interface of
+     *         ImgLib2.
      */
     public static Img<ARGBType> getImg(Image<RGB16> image, RGB16 pixelType) {
         Img<ARGBType> img = null;
