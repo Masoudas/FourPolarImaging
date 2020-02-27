@@ -23,7 +23,7 @@ import net.imglib2.type.NativeType;
  * @param <U> is our pixel data type.
  * @param <V> is the ImgLib2 data type.
  */
-class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Image<U>, Img<V> {
+class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Image<U> {
     private final Img<V> _img;
 
     private final TypeConverter<V> _tConverter;
@@ -44,70 +44,6 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
         this._pixelType = _tConverter.getPixelType(type).getType();
     }
 
-    @Override
-    public RandomAccess<V> randomAccess() {
-        return this._img.randomAccess();
-    }
-
-    @Override
-    public RandomAccess<V> randomAccess(Interval interval) {
-        return this._img.randomAccess(interval);
-    }
-
-    @Override
-    public int numDimensions() {
-        return this._img.numDimensions();
-    }
-
-    @Override
-    public long min(int d) {
-        return this._img.min(d);
-    }
-
-    @Override
-    public long max(int d) {
-        return this._img.max(d);
-    }
-
-    @Override
-    public Cursor<V> cursor() {
-        return this._img.cursor();
-    }
-
-    @Override
-    public Cursor<V> localizingCursor() {
-        return this._img.localizingCursor();
-    }
-
-    @Override
-    public long size() {
-        return this._img.size();
-    }
-
-    @Override
-    public V firstElement() {
-        return this._img.firstElement();
-    }
-
-    @Override
-    public Object iterationOrder() {
-        return this._img.iterationOrder();
-    }
-
-    @Override
-    public Iterator<V> iterator() {
-        return this._img.iterator();
-    }
-
-    @Override
-    public ImgFactory<V> factory() {
-        return _img.factory();
-    }
-
-    @Override
-    public Img<V> copy() {
-        return this._img.copy();
-    }
 
     @Override
     public long[] getDimensions() {
@@ -124,7 +60,7 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
 
     @Override
     public IPixelCursor<U> getCursor() {
-        return new ImgLib2PixelCursor<U, V>(this._img.cursor(), this.numDimensions(), this._tConverter);
+        return new ImgLib2PixelCursor<U, V>(this._img.cursor(), this._img.numDimensions(), this._tConverter);
     }
 
     @Override
@@ -135,6 +71,13 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
     @Override
     public String toString() {
        return _img.toString();
+    }
+
+    /**
+     * This method returns the {@link Img} interface associated with this implementation.
+     */
+    public Img<V> getImg() {
+        return this._img;
     }
 
 }
