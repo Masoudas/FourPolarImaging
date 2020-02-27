@@ -19,14 +19,6 @@ import net.imglib2.exception.IncompatibleTypeException;
 public class UINT16ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<UINT16> {
     final private UINT16 _pixelType = new UINT16(0);
 
-    /**
-     * Close all resources when done reading all the files.
-     */
-    @Override
-    public void close() {
-        this._saver.context().dispose();
-    }
-
     @Override
     public void write(File path, Image<UINT16> image) throws IOException {
         if (path.exists()) {

@@ -27,10 +27,4 @@ public class UINT16ImgLib2TiffImageReader extends GrayScaleImgLib2TiffReader<UIN
         return this._imgFactory.create(img, imgLib2Type);
     }
 
-    @Override
-    public void close() throws IOException {
-        this._reader.close();
-
-    }
-
 }

@@ -27,10 +27,5 @@ public class Float32ImgLib2TiffImageReader extends GrayScaleImgLib2TiffReader<Fl
         return this._imgFactory.create(img, imgLib2Type);
     }
 
-    @Override
-    public void close() throws IOException {
-        this._reader.close();
-
-    }
 
 }

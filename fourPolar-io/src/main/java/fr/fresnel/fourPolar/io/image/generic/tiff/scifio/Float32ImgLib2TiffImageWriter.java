@@ -19,14 +19,6 @@ import net.imglib2.exception.IncompatibleTypeException;
 public class Float32ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<Float32> {
     final private Float32 _pixelType = new Float32(0f);
 
-    /**
-     * Close all resources when done reading all the files.
-     */
-    @Override
-    public void close() {
-        this._saver.context().dispose();
-    }
-
     @Override
     public void write(File path, Image<Float32> image) throws IOException {
         if (path.exists()) {
