@@ -13,7 +13,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
  * 
  * @param <T> extends {@ RealType}.
  */
-public class float32ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<Float32> {
+public class Float32ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<Float32> {
     final private Float32 _pixelType = new Float32(0f);  
 
     /**
