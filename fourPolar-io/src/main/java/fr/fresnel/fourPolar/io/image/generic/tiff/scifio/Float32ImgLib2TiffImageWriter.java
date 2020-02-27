@@ -3,10 +3,13 @@ package fr.fresnel.fourPolar.io.image.generic.tiff.scifio;
 import java.io.File;
 import java.io.IOException;
 
+import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
+import io.scif.img.ImgIOException;
+import net.imglib2.exception.IncompatibleTypeException;
 
 /**
  * Class for writing grayscale tiffs to disk.
@@ -14,7 +17,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
  * @param <T> extends {@ RealType}.
  */
 public class Float32ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<Float32> {
-    final private Float32 _pixelType = new Float32(0f);  
+    final private Float32 _pixelType = new Float32(0f);
 
     /**
      * Close all resources when done reading all the files.
@@ -30,7 +33,13 @@ public class Float32ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<Fl
             path.delete();
         }
 
-        this._saver.saveImg(path.getAbsolutePath(), ImageToImgLib2Converter.getImg(image, this._pixelType), this._config);
+        try {
+            this._saver.saveImg(path.getAbsolutePath(), ImageToImgLib2Converter.getImg(image, this._pixelType),
+                    this._config);
+        } catch (ConverterToImgLib2NotFound e) {
+            // This exception potentially should not be caught, if we use the same Image 
+            // type, and especially if converter has been implemented.
+        }
 
     }
  
