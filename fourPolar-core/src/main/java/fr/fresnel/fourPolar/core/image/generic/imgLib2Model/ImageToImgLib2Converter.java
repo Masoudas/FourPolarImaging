@@ -28,7 +28,8 @@ public class ImageToImgLib2Converter {
         Img<UnsignedShortType> img = null;
 
         if (image instanceof ImgLib2Image) {
-            img = (Img<UnsignedShortType>) (image);
+            ImgLib2Image<UINT16, UnsignedShortType> implementation = (ImgLib2Image<UINT16, UnsignedShortType>)image;
+            img = implementation.getImg();
         }
 
         return img;
@@ -47,7 +48,8 @@ public class ImageToImgLib2Converter {
         Img<FloatType> img = null;
 
         if (image instanceof ImgLib2Image) {
-            img = (Img<FloatType>) (image);
+            ImgLib2Image<Float32, FloatType> implementation = (ImgLib2Image<Float32, FloatType>)image;
+            img = implementation.getImg();
         }
 
         return img;
@@ -66,7 +68,8 @@ public class ImageToImgLib2Converter {
         Img<ARGBType> img = null;
 
         if (image instanceof ImgLib2Image) {
-            img = (Img<ARGBType>) (image);
+            ImgLib2Image<RGB16, ARGBType> implementation = (ImgLib2Image<RGB16, ARGBType>)image;
+            img = implementation.getImg();
         }
 
         return img;
