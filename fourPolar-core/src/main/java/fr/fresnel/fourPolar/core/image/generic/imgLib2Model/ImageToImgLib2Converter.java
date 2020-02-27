@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.image.generic.imgLib2Model;
 
+import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
@@ -23,13 +24,17 @@ public class ImageToImgLib2Converter {
      * @param pixelType is the pixel type associated with the image.
      * @return the {@link Img} interface, which is the basic image interface of
      *         ImgLib2.
+     * @throws ConverterToImgLib2NotFound
      */
-    public static Img<UnsignedShortType> getImg(Image<UINT16> image, UINT16 pixelType) {
+    public static Img<UnsignedShortType> getImg(Image<UINT16> image, UINT16 pixelType)
+            throws ConverterToImgLib2NotFound {
         Img<UnsignedShortType> img = null;
 
         if (image instanceof ImgLib2Image) {
-            ImgLib2Image<UINT16, UnsignedShortType> implementation = (ImgLib2Image<UINT16, UnsignedShortType>)image;
+            ImgLib2Image<UINT16, UnsignedShortType> implementation = (ImgLib2Image<UINT16, UnsignedShortType>) image;
             img = implementation.getImg();
+        } else {
+            throw new ConverterToImgLib2NotFound();
         }
 
         return img;
@@ -43,13 +48,16 @@ public class ImageToImgLib2Converter {
      * @param pixelType is the pixel type associated with the image.
      * @return the {@link Img} interface, which is the basic image interface of
      *         ImgLib2.
+     * @throws ConverterToImgLib2NotFound
      */
-    public static Img<FloatType> getImg(Image<Float32> image, Float32 pixelType) {
+    public static Img<FloatType> getImg(Image<Float32> image, Float32 pixelType) throws ConverterToImgLib2NotFound {
         Img<FloatType> img = null;
 
         if (image instanceof ImgLib2Image) {
-            ImgLib2Image<Float32, FloatType> implementation = (ImgLib2Image<Float32, FloatType>)image;
+            ImgLib2Image<Float32, FloatType> implementation = (ImgLib2Image<Float32, FloatType>) image;
             img = implementation.getImg();
+        } else {
+            throw new ConverterToImgLib2NotFound();
         }
 
         return img;
@@ -64,12 +72,14 @@ public class ImageToImgLib2Converter {
      * @return the {@link Img} interface, which is the basic image interface of
      *         ImgLib2.
      */
-    public static Img<ARGBType> getImg(Image<RGB16> image, RGB16 pixelType) {
+    public static Img<ARGBType> getImg(Image<RGB16> image, RGB16 pixelType) throws ConverterToImgLib2NotFound {
         Img<ARGBType> img = null;
 
         if (image instanceof ImgLib2Image) {
-            ImgLib2Image<RGB16, ARGBType> implementation = (ImgLib2Image<RGB16, ARGBType>)image;
+            ImgLib2Image<RGB16, ARGBType> implementation = (ImgLib2Image<RGB16, ARGBType>) image;
             img = implementation.getImg();
+        } else {
+            throw new ConverterToImgLib2NotFound();
         }
 
         return img;
