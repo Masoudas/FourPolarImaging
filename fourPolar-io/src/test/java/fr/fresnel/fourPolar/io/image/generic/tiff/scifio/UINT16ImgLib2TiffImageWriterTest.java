@@ -10,29 +10,30 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import io.scif.FormatException;
 
-public class Float32ImgLib2TiffImageWriterTest {
+public class UINT16ImgLib2TiffImageWriterTest {
     private static long[] _dim = {10, 10};
     private static File _root;
     private static ImgLib2ImageFactory _factory = new ImgLib2ImageFactory();
 
     @BeforeAll
     private static void setRoot() {
-        _root = new File(Float32ImgLib2TiffImageWriterTest.class.getResource("Writers").getPath());
+        _root = new File(UINT16ImgLib2TiffImageWriterTest.class.getResource("Writers").getPath());
     }
 
     @Test
-    public void write_Float32Image_DiskImageHasSameDimensions() throws IOException {
-        File destination = new File(_root, "Float32Image.tif");
+    public void write_UINT16Image_DiskImageHasSameDimensions() throws IOException {
+        File destination = new File(_root, "UINT16Image.tif");
 
-        Image<Float32> image = _factory.create(_dim, new Float32());
-        Float32ImgLib2TiffImageWriter writer = new Float32ImgLib2TiffImageWriter();
+        Image<UINT16> image = _factory.create(_dim, new UINT16());
+        UINT16ImgLib2TiffImageWriter writer = new UINT16ImgLib2TiffImageWriter();
         writer.write(destination, image);
         writer.close();
 
-        Image<Float32> diskImage = new Float32ImgLib2TiffImageReader(_factory).read(destination);
+        
+        Image<UINT16> diskImage = new UINT16ImgLib2TiffImageReader(_factory).read(destination);
 
         assertTrue(
             diskImage.getDimensions()[0] == _dim[0] && 
@@ -43,17 +44,16 @@ public class Float32ImgLib2TiffImageWriterTest {
 
     @Test
     public void write_WriteMultipleFiles_DiskImageHasSameDimensions() throws IOException {
-        Image<Float32> image = _factory.create(_dim, new Float32());
-        Float32ImgLib2TiffImageWriter writer = new Float32ImgLib2TiffImageWriter();
-        File destination = new File(_root, "Float32Image.tif");
+        Image<UINT16> image = _factory.create(_dim, new UINT16());
+        UINT16ImgLib2TiffImageWriter writer = new UINT16ImgLib2TiffImageWriter();
+        File destination = new File(_root, "UINT16Image.tif");
 
         for (int i = 0; i < 10000; i++) {
-            
             writer.write(destination, image);
         }
         writer.close();
 
-        Image<Float32> diskImage = new Float32ImgLib2TiffImageReader(_factory).read(destination);
+        Image<UINT16> diskImage = new UINT16ImgLib2TiffImageReader(_factory).read(destination);
 
         assertTrue(
             diskImage.getDimensions()[0] == _dim[0] && 

@@ -57,10 +57,6 @@ public abstract class GrayScaleImgLib2TiffWriter<T extends PixelType> implements
     private SCIFIOConfig _setSCFIOConfig() {
         // For the time being, we use the very basic config.
         SCIFIOConfig config = new SCIFIOConfig();
-        config.imgSaverSetWriteRGB(false);
-        config.writerSetSequential(true);
-        config.writerSetFramesPerSecond(100);
-        config.checkerSetOpen(false);
         return config;
     }
 
