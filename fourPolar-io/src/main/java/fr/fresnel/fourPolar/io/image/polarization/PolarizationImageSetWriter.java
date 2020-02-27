@@ -9,9 +9,10 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 
 /**
- * A concrete implementation of the {@link IPolarizationImageSetWriter}.
+ * A concrete implementation of the {@link IPolarizationImageSetWriter}, which can be used
+ * to write an instance of {@link PolarizationImageSet} to disk.
  */
-class PolarizationImageSetWriter implements IPolarizationImageSetWriter {
+public class PolarizationImageSetWriter implements IPolarizationImageSetWriter {
     final private ImageWriter<UINT16> _writer;
 
     /**

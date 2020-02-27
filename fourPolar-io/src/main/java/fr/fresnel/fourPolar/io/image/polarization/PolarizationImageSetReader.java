@@ -14,9 +14,10 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 
 /**
- * A concrete implementation of the {@link IPolarizationImageSetReader}.
+ * A concrete implementation of the {@link IPolarizationImageSetReader}, which can be used
+ * to read an instance of {@link PolarizationImageSet} from disk.
  */
-class PolarizationImageSetReader implements IPolarizationImageSetReader {
+public class PolarizationImageSetReader implements IPolarizationImageSetReader {
     final private ImageReader<UINT16> _reader;
 
     public PolarizationImageSetReader(ImageReader<UINT16> reader) {
