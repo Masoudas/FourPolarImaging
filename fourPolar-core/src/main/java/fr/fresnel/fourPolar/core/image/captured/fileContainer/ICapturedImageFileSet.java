@@ -39,6 +39,10 @@ public interface ICapturedImageFileSet  {
 
     @Override
     public int hashCode();
-	
 
+    /**
+     * Returns the channel number that corresponds to this file set.
+     * @return
+     */
+    public int getChannel();
 }

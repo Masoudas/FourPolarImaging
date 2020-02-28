@@ -16,30 +16,35 @@ import java.security.NoSuchAlgorithmException;
  */
 public class CapturedImageFileSet implements ICapturedImageFileSet {
     private String setName = "";
-    private Hashtable<String, File> fileSet = new Hashtable<String, File>();
-    private Cameras cameras;
+    final private Hashtable<String, File> fileSet = new Hashtable<String, File>();
+    final private Cameras cameras;
+    final private int _channel;
+
 
     /**
      * Used for the case when only one camera is present.
      * 
-     * @param pol0_45_90_135
+     * @param channel is the channel number.
+     * @param pol0_45_90_135 is the captured image file that has all four polarizations.
      */
-    public CapturedImageFileSet(File pol0_45_90_135) {
+    public CapturedImageFileSet(int channel, File pol0_45_90_135) {
         cameras = Cameras.One;
 
         String[] labels = Cameras.getLabels(cameras);
         fileSet.put(labels[0], pol0_45_90_135);
 
         setName = defineSetName(pol0_45_90_135);
+        _channel = channel;
     }
 
     /**
      * Used when two cameras are present.
      * 
-     * @param pol0_90
-     * @param pol45_135
+     * @param channel is the channel number.
+     * @param pol0_90 is the captured image file that has polarizations 0 and 90.
+     * @param pol45_135 is the captured image file that has polarizations 45 and 135.
      */
-    public CapturedImageFileSet(File pol0_90, File pol45_135) {
+    public CapturedImageFileSet(int channel, File pol0_90, File pol45_135) {
         cameras = Cameras.Two;
         String[] labels = Cameras.getLabels(cameras);
 
@@ -47,17 +52,19 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
         fileSet.put(labels[1], pol45_135);
 
         setName = defineSetName(pol0_90);
+        _channel = channel;
     }
 
     /**
      * Used when four cameras are present.
      * 
-     * @param pol0
-     * @param pol45
-     * @param pol90
-     * @param pol135
+     * @param channel is the channel number.
+     * @param pol0 is the captured image file that has polarization 0.
+     * @param pol45 is the captured image file that has polarization 45.
+     * @param pol90 is the captured image file that has polarization 90.
+     * @param pol135 is the captured image file that has polarization 135.
      */
-    public CapturedImageFileSet(File pol0, File pol45, File pol90, File pol135) {
+    public CapturedImageFileSet(int channel, File pol0, File pol45, File pol90, File pol135) {
         cameras = Cameras.Four;
         String[] labels = Cameras.getLabels(cameras);
 
@@ -67,7 +74,7 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
         fileSet.put(labels[3], pol135);
 
         setName = defineSetName(pol0);
-
+        _channel = channel;
     }
 
     /**
@@ -147,4 +154,10 @@ public class CapturedImageFileSet implements ICapturedImageFileSet {
 
         return true;
     }
+
+    @Override
+    public int getChannel() {
+        return this._channel;
+    }
+
 }
