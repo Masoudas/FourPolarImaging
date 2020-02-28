@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.image.polarization;
 
 import fr.fresnel.fourPolar.core.fourPolar.IPolarizationsIntensityIterator;
-import fr.fresnel.fourPolar.core.image.polarization.fileContainer.IPolarizationImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
@@ -13,10 +13,10 @@ public class PolarizationImageSet implements IPolarizationImageSet{
     final private IPolarizationImage _pol45;
     final private IPolarizationImage _pol90;
     final private IPolarizationImage _pol135;
-    final private IPolarizationImageFileSet _fileSet;
+    final private ICapturedImageFileSet _fileSet;
 
     public PolarizationImageSet(
-        IPolarizationImageFileSet fileSet, IPolarizationImage pol0,
+        ICapturedImageFileSet fileSet, IPolarizationImage pol0,
         IPolarizationImage pol45, IPolarizationImage pol90, IPolarizationImage pol135) {
         this._pol0 = pol0;
         this._pol45 = pol45;
@@ -61,7 +61,7 @@ public class PolarizationImageSet implements IPolarizationImageSet{
     }
 
     @Override
-    public IPolarizationImageFileSet getFileSet() {
+    public ICapturedImageFileSet getFileSet() {
         return this._fileSet;
     }
 
