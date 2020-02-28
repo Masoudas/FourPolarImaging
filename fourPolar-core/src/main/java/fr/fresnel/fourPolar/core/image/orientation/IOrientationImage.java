@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.image.orientation;
 
+import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
 import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 
@@ -21,4 +22,10 @@ public interface IOrientationImage {
      * @return
      */
     public ICapturedImageFileSet getCapturedSet();
+
+    /**
+     * Return the implementation of {@link IOrientationVectorIterator} for the orientation image.
+     * @return
+     */
+    public IOrientationVectorIterator getOrientationVectorIterator();
 }
