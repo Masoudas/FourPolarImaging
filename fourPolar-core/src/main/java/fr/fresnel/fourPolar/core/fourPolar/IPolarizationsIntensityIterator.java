@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.fourPolar.propagationdb;
+package fr.fresnel.fourPolar.core.fourPolar;
 
 import java.util.Iterator;
 
