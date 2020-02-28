@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.core.image.orientation;
 
-import fr.fresnel.fourPolar.core.image.orientation.fileContainer.IOrientationImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 
 /**
@@ -17,9 +17,8 @@ public interface IOrientationImage {
     public IAngleImage getAngleImage(OrientationAngle angle);
 
     /**
-     * Returns the {@link IOrientationImageFileSet} that corresponds to this orientation image.
+     * Returns the {@link ICapturedImageFileSet} that this orientation image is made from.
      * @return
      */
-    public IOrientationImageFileSet getFileSet();
-
+    public ICapturedImageFileSet getCapturedSet();
 }
