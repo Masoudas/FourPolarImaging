@@ -27,8 +27,8 @@ public class PolarizationFileSetTest {
     public void getFile_OneCameraCase_CreatesFilesInCorrectPath(){
         File pol0_45_90_135 = new File(_root, "pol0_45_90_135.tif");
         
-        ICapturedImageFileSet fileSet = new CapturedImageFileSet(pol0_45_90_135);
-        IPolarizationImageFileSet pfileSet = new PolarizationImageFileSet(_root, _channel, fileSet);
+        ICapturedImageFileSet fileSet = new CapturedImageFileSet(_channel, pol0_45_90_135);
+        IPolarizationImageFileSet pfileSet = new PolarizationImageFileSet(_root, fileSet);
 
         File parentFolder = formSetParentFolder(fileSet.getSetName());
         File expected_pol0 = new File(parentFolder, "pol0_45_90_135_p0.tif");
@@ -49,7 +49,7 @@ public class PolarizationFileSetTest {
         File pol0_90 = new File(_root, "pol0_90.tif");
         File pol45_135 = new File(_root, "pol45_135.tif");
         
-        ICapturedImageFileSet fileSet = new CapturedImageFileSet(pol0_90, pol45_135);
+        ICapturedImageFileSet fileSet = new CapturedImageFileSet(_channel, pol0_90, pol45_135);
         IPolarizationImageFileSet pfileSet = new PolarizationImageFileSet(_root, _channel, fileSet);
 
         File parentFolder = formSetParentFolder(fileSet.getSetName());
@@ -73,7 +73,7 @@ public class PolarizationFileSetTest {
         File pol90 = new File(_root, "pol90.tif");
         File pol135 = new File(_root, "pol135.tif");
         
-        ICapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
+        ICapturedImageFileSet fileSet = new CapturedImageFileSet(_channel, pol0, pol45, pol90, pol135);
         IPolarizationImageFileSet pfileSet = new PolarizationImageFileSet(_root, _channel, fileSet);
 
         File parentFolder = formSetParentFolder(fileSet.getSetName());

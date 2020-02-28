@@ -24,14 +24,14 @@ public class CapturedImageFileSetTest
         File pol90 = new File(root, "pol90.tiff");
         File pol135 = new File(root, "pol135.tiff");
     
-        CapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
+        CapturedImageFileSet fileSet = new CapturedImageFileSet(1, pol0, pol45, pol90, pol135);
 
         File pol0_1 = new File(root, "pol0.tiff");
         File pol45_1 = new File(root, "pol45.tiff");
         File pol90_1 = new File(root, "pol90.tiff");
         File pol135_1 = new File(root, "pol135.tiff");
     
-        CapturedImageFileSet fileSet_1 = new CapturedImageFileSet(pol0_1, pol45_1, pol90_1, pol135_1);
+        CapturedImageFileSet fileSet_1 = new CapturedImageFileSet(1, pol0_1, pol45_1, pol90_1, pol135_1);
         
         assertTrue( fileSet.getSetName().equals(fileSet_1.getSetName()) );
     }
@@ -44,9 +44,9 @@ public class CapturedImageFileSetTest
         File root2 = new File("/root");
         File pol2 = new File(root2, "pol.tiff");
     
-        CapturedImageFileSet fileSet1 = new CapturedImageFileSet(pol1);
+        CapturedImageFileSet fileSet1 = new CapturedImageFileSet(1, pol1);
     
-        CapturedImageFileSet fileSet2 = new CapturedImageFileSet(pol2);
+        CapturedImageFileSet fileSet2 = new CapturedImageFileSet(1, pol2);
         
         assertTrue( fileSet1.equals(fileSet2) );
     }

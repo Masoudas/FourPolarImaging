@@ -44,7 +44,7 @@ public abstract class AcquisitionSet {
         }
 
         this._imageChecker.checkCompatible(pol0_45_90_135);
-        this._addImage(channel, new CapturedImageFileSet(pol0_45_90_135));
+        this._addImage(channel, new CapturedImageFileSet(channel, pol0_45_90_135));
     }
 
     /**
@@ -68,7 +68,7 @@ public abstract class AcquisitionSet {
 
         this._imageChecker.checkCompatible(pol0_90);
         this._imageChecker.checkCompatible(pol45_135);
-        this._addImage(channel, new CapturedImageFileSet(pol0_90, pol45_135));
+        this._addImage(channel, new CapturedImageFileSet(channel, pol0_90, pol45_135));
 
     }
 
@@ -97,7 +97,7 @@ public abstract class AcquisitionSet {
         this._imageChecker.checkCompatible(pol45);
         this._imageChecker.checkCompatible(pol90);
         this._imageChecker.checkCompatible(pol135);
-        this._addImage(channel, new CapturedImageFileSet(pol0, pol45, pol90, pol135));
+        this._addImage(channel, new CapturedImageFileSet(channel, pol0, pol45, pol90, pol135));
 
     }
 
