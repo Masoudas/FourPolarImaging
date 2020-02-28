@@ -5,68 +5,122 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * This class generates the paths we need to store or read data of a project.
- * 
+ * By project we imply an analysis on a cetain number of images which are taken
+ * using the same imaging setup parameters. This path factory generates all the
+ * subfolders that are needed for accessing information of the project. Compare
+ * to {@link PathFactoryOfGlobalInfo}. All these path are created once using the
+ * root folder, and every time the same path is returned.
  */
 public class PathFactoryOfProject {
-    private static String _projectRoot = "4Polar"; // Root of where we start to put files. This root is put where
-                                           // the user provides the data.
-
-    private static String _folder_params = "0_Params"; // Keeps the data about setup, files etc.
-
-    private static String _folder_polarizationImages = "2_PolarizationImages"; // The folder that would hold the polarization images.
+    /**
+     * Parent folder of all the project information. Every other subfolder is a
+     * child of this folder.
+     */
+    private static String _projectRoot = "4Polar";
+    private static File _projectRootPath = null;
 
     /**
-     * Returns the path to the {@folder_params} folder, and makes sure that the
-     * folder is created.
+     * The folder that has all the imaging setup data, image information and etc.
+     */
+    private static String _folder_params = "0_Params";
+    private static File _folder_paramsPath = null;
+
+    /**
+     * The folder that holds the polarization images of the project.
+     */
+    private static String _folder_polarizationImages = "2_PolarizationImages";
+    private static File _folder_polarizationImagesPath = null;
+
+    /**
+     * The folder that holds the orientation images of the project.
+     */
+    private static String _folder_orientationImages = "3_OrientationImages";
+    private static File _folder_orientationImagesPath = null;
+
+    /**
+     * Creates and returns the project root folder.
      * 
      * @param rootFolder
      * @return
      */
     public static File getFolder_4Polar(File rootFolder) {
-        Path path = Paths.get(rootFolder.getAbsolutePath(), _projectRoot);
-        File fourPolar = path.toFile();
-
-        if (!fourPolar.exists()) {
-            fourPolar.mkdir();
+        if (_projectRootPath != null) {
+            return _projectRootPath;
         }
 
-        return fourPolar;
+        Path path = Paths.get(rootFolder.getAbsolutePath(), _projectRoot);
+        File _projectRootPath = path.toFile();
+
+        if (!_projectRootPath.exists()) {
+            _projectRootPath.mkdir();
+        }
+
+        return _projectRootPath;
     }
 
     /**
-     * Returns the path to the {@folder_params} folder, and makes sure that the
-     * folder is created.
+     * Returns the path to the params folder, and makes sure that the folder is
+     * created.
      * <p>
-     * This folder contains all the basic parameters.
+     * The folder that has all the imaging setup data, image information and etc.
      * 
      * @param rootFolder
      * @return
      */
     public static File getFolder_Params(File rootFolder) {
-        Path path = Paths.get(getFolder_4Polar(rootFolder).getAbsolutePath(), _folder_params);
-        File zero_Params = path.toFile();
-
-        if (!zero_Params.exists()) {
-            zero_Params.mkdirs();
+        if (_folder_paramsPath != null) {
+            return _folder_paramsPath;
         }
 
-        return zero_Params;
+        Path path = Paths.get(getFolder_4Polar(rootFolder).getAbsolutePath(), _folder_params);
+        File _folder_paramsPath = path.toFile();
+
+        if (!_folder_paramsPath.exists()) {
+            _folder_paramsPath.mkdirs();
+        }
+
+        return _folder_paramsPath;
     }
 
     /**
      * Returns the folder that would contain the polarization images.
+     * 
      * @param rootFolder
      * @return
      */
     public static File getFolder_PolarizationImages(File rootFolder) {
-        File path = new File(getFolder_4Polar(rootFolder).getAbsolutePath(), _folder_polarizationImages);
-
-        if (!path.exists()) {
-            path.mkdirs();
+        if (_folder_polarizationImagesPath != null) {
+            return _folder_polarizationImagesPath;
         }
 
-        return path;
+        File _folder_polarizationImagesPath = new File(getFolder_4Polar(rootFolder).getAbsolutePath(),
+                _folder_polarizationImages);
+
+        if (!_folder_polarizationImagesPath.exists()) {
+            _folder_polarizationImagesPath.mkdirs();
+        }
+
+        return _folder_polarizationImagesPath;
+    }
+
+    /**
+     * Returns the folder that would contain the polarization images.
+     * 
+     * @param rootFolder
+     * @return
+     */
+    public static File getFolder_OrientationImages(File rootFolder) {
+        if (_folder_orientationImagesPath != null) {
+            return _folder_orientationImagesPath;
+        }
+        File _folder_orientationImagesPath = new File(getFolder_4Polar(rootFolder).getAbsolutePath(),
+                _folder_orientationImages);
+
+        if (!_folder_orientationImagesPath.exists()) {
+            _folder_orientationImagesPath.mkdirs();
+        }
+
+        return _folder_orientationImagesPath;
     }
 
 }
