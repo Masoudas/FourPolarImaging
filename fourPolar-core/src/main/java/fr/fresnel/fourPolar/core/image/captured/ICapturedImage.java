@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.core.image.captured;
 
-import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 

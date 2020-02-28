@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.captured.CapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
-import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;

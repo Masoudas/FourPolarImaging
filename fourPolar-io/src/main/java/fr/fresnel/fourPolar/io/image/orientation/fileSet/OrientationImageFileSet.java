@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import fr.fresnel.fourPolar.core.PathFactoryOfProject;
-import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 
 /**

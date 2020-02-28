@@ -9,8 +9,8 @@ import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.PathFactoryOfProject;
-import fr.fresnel.fourPolar.core.image.captured.fileContainer.CapturedImageFileSet;
-import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.fileSet.CapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 public class PolarizationFileSetTest {

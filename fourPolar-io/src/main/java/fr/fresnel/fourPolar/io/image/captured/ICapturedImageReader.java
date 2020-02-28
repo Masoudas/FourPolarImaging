@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.io.image.captured;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
-import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 
 /**
  * An interface for reading the captured image.

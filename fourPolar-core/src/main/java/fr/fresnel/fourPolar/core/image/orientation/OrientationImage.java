@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.image.orientation;
 
 import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
-import fr.fresnel.fourPolar.core.image.captured.fileContainer.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
