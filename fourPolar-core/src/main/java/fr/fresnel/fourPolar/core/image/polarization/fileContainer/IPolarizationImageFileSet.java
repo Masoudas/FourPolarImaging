@@ -18,7 +18,9 @@ public interface IPolarizationImageFileSet {
     public File getFile(Polarization pol);
 
     /**
-     * Returns the name extract as defined by the {@link ICapturedImageFileSet}.
+     * Returns the set name designated to this set of polarization images. This set
+     * name is exactly the same as the set name assigned by
+     * {@link ICapturedImageFileSet}.
      * 
      * @return
      */
