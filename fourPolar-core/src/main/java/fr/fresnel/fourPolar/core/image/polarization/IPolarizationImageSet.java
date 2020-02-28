@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.core.image.polarization;
 
-import fr.fresnel.fourPolar.core.fourPolar.propagationdb.IPolarizationsIntensityIterator;
+import fr.fresnel.fourPolar.core.fourPolar.IPolarizationsIntensityIterator;
 import fr.fresnel.fourPolar.core.image.polarization.fileContainer.IPolarizationImageFileSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
