@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.image.orientation.fileContainer;
+package fr.fresnel.fourPolar.io.image.orientation.fileSet;
 
 import java.io.File;
 
