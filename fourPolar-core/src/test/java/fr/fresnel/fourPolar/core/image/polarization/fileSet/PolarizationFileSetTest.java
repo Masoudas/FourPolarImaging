@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.image.polarization.fileContainer;
+package fr.fresnel.fourPolar.core.image.polarization.fileSet;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
