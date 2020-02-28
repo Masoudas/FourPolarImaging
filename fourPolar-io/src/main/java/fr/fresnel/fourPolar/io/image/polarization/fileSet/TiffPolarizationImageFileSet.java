@@ -23,8 +23,8 @@ public class TiffPolarizationImageFileSet implements IPolarizationImageFileSet {
     final private File _pol90File;
     final private File _pol135File;
 
-    public TiffPolarizationImageFileSet(File rootFolder, int channel, ICapturedImageFileSet fileSet) {
-        File parentFolder = this._formSetParentFolder(rootFolder, channel, fileSet.getSetName());
+    public TiffPolarizationImageFileSet(File rootFolder, ICapturedImageFileSet fileSet) {
+        File parentFolder = this._formSetParentFolder(rootFolder, fileSet.getChannel(), fileSet.getSetName());
 
         this._pol0File = new File(parentFolder, _pol0);
         this._pol45File = new File(parentFolder, _pol45);
