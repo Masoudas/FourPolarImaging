@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.image.polarization.fileSet;
+package fr.fresnel.fourPolar.io.image.polarization.fileSet;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -28,7 +28,7 @@ public class PolarizationFileSetTest {
         File pol0_45_90_135 = new File(_root, "pol0_45_90_135.tif");
         
         ICapturedImageFileSet fileSet = new CapturedImageFileSet(_channel, pol0_45_90_135);
-        IPolarizationImageFileSet pfileSet = new PolarizationImageFileSet(_root, fileSet);
+        IPolarizationImageFileSet pfileSet = new TiffPolarizationImageFileSet(_root, fileSet);
 
         File parentFolder = formSetParentFolder(fileSet.getSetName());
         File expected_pol0 = new File(parentFolder, "pol0_45_90_135_p0.tif");
@@ -50,7 +50,7 @@ public class PolarizationFileSetTest {
         File pol45_135 = new File(_root, "pol45_135.tif");
         
         ICapturedImageFileSet fileSet = new CapturedImageFileSet(_channel, pol0_90, pol45_135);
-        IPolarizationImageFileSet pfileSet = new PolarizationImageFileSet(_root, _channel, fileSet);
+        IPolarizationImageFileSet pfileSet = new TiffPolarizationImageFileSet(_root, fileSet);
 
         File parentFolder = formSetParentFolder(fileSet.getSetName());
         File expected_pol0 = new File(parentFolder, "pol0_90_p0.tif");
@@ -74,7 +74,7 @@ public class PolarizationFileSetTest {
         File pol135 = new File(_root, "pol135.tif");
         
         ICapturedImageFileSet fileSet = new CapturedImageFileSet(_channel, pol0, pol45, pol90, pol135);
-        IPolarizationImageFileSet pfileSet = new PolarizationImageFileSet(_root, _channel, fileSet);
+        IPolarizationImageFileSet pfileSet = new TiffPolarizationImageFileSet(_root, fileSet);
 
         File parentFolder = formSetParentFolder(fileSet.getSetName());
         File expected_pol0 = new File(parentFolder, "pol0.tif");
