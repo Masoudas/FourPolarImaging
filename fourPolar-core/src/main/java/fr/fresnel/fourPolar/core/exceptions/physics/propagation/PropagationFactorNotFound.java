@@ -8,7 +8,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  * undefined.
  */
 public class PropagationFactorNotFound extends Exception {
-    private static final long serialVersionUID = 8932945435935043353L;
+    private static final long serialVersionUID = 89329449821143353L;
 
     private final DipoleSquaredComponent _component;
     private final Polarization _pol;
