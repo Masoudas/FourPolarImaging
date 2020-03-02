@@ -12,7 +12,7 @@ import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
+
 
 public class MatrixBasedInverseOpticalPropagationCalculatorTest {
 

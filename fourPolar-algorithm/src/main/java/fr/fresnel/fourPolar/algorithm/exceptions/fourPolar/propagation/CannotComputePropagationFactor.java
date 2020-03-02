@@ -1,9 +1,9 @@
-package fr.fresnel.fourPolar.algorithm.fourPolar.exceptions.fourPolar.propagation;
+package fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.propagation;
 
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
-/**
+/** 
  * Exception thrown when an optical propagation factor cannot be calculated.
  */
 public class CannotComputePropagationFactor extends Exception {
