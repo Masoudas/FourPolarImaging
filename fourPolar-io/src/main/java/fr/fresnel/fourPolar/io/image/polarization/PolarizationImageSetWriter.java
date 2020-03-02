@@ -3,7 +3,6 @@ package fr.fresnel.fourPolar.io.image.polarization;
 import java.io.File;
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
