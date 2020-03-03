@@ -15,6 +15,47 @@ import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 public class OrientationToIntensityConverter implements IOrientationToIntensityConverter {
     final private IOpticalPropagation _opticalPropagation;
 
+    private double _cosHalfDelta;
+
+    private double _cosEta;
+    private double _cosSquaredEta;
+
+    private double _sinEta;
+    private double _sinSquaredEta;
+
+    private double _sinRho;
+    private double _sin2Rho;
+    private double _sinSquaredRho;
+    private double _sinFourRho;
+
+    private double _cosSquaredRho;
+    private double _cosFourRho;
+
+    private double _dipoleAmplitude_a;
+    private double _dipoleAmplitude_b;
+
+    private double _dipoleSquared_XX;
+    private double _dipoleSquared_YY;
+    private double _dipoleSquared_ZZ;
+    private double _dipoleSquared_XY;
+
+    final private double _propFactor_xx_0;
+    final private double _propFactor_yy_0;
+    final private double _propFactor_zz_0;
+    final private double _propFactor_xy_0;
+    final private double _propFactor_xx_90;
+    final private double _propFactor_yy_90;
+    final private double _propFactor_zz_90;
+    final private double _propFactor_xy_90;
+    final private double _propFactor_xx_45;
+    final private double _propFactor_yy_45;
+    final private double _propFactor_zz_45;
+    final private double _propFactor_xy_45;
+    final private double _propFactor_xx_135;
+    final private double _propFactor_yy_135;
+    final private double _propFactor_zz_135;
+    final private double _propFactor_xy_135;
+
     /**
      * This implementation uses an instance of the {@link IOpticalPropagation} to
      * convert an orientation vector to a polarizations intensity.
@@ -24,164 +65,112 @@ public class OrientationToIntensityConverter implements IOrientationToIntensityC
     public OrientationToIntensityConverter(IOpticalPropagation opticalPropagation) throws PropagationFactorNotFound {
         this._opticalPropagation = opticalPropagation;
 
-        // Run dummy methods to ensure that all propagation factors exist.
-        this._getPol0Intensity(0, 0, 0, 0);
-        this._getPol45Intensity(0, 0, 0, 0);
-        this._getPol90Intensity(0, 0, 0, 0);
-        this._getPol135Intensity(0, 0, 0, 0);
+        _propFactor_xx_0 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.XX, Polarization.pol0);
+        _propFactor_yy_0 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.YY, Polarization.pol0);
+        _propFactor_zz_0 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.ZZ, Polarization.pol0);
+        _propFactor_xy_0 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.XY, Polarization.pol0);
+        _propFactor_xx_90 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.XX, Polarization.pol90);
+        _propFactor_yy_90 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.YY, Polarization.pol90);
+        _propFactor_zz_90 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.ZZ, Polarization.pol90);
+        _propFactor_xy_90 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.XY, Polarization.pol90);
+        _propFactor_xx_45 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.XX, Polarization.pol45);
+        _propFactor_yy_45 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.YY, Polarization.pol45);
+        _propFactor_zz_45 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.ZZ, Polarization.pol45);
+        _propFactor_xy_45 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.XY, Polarization.pol45);
+        _propFactor_xx_135 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.XX, Polarization.pol135);
+        _propFactor_yy_135 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.YY, Polarization.pol135);
+        _propFactor_zz_135 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.ZZ, Polarization.pol135);
+        _propFactor_xy_135 = this._opticalPropagation.getPropagationFactor(
+            DipoleSquaredComponent.XY, Polarization.pol135);
     }
 
     @Override
     public IPolarizationsIntensity convert(IOrientationVector orientationVector) {
-        double cosHalfDelta = Math.cos(orientationVector.getAngle(OrientationAngle.delta) / 2);
+        _cosHalfDelta = Math.cos(orientationVector.getAngle(OrientationAngle.delta) / 2);
 
-        double cosEta = Math.cos(orientationVector.getAngle(OrientationAngle.eta));
-        double cosSquaredEta = cosEta * cosEta;
+        _cosEta = Math.cos(orientationVector.getAngle(OrientationAngle.eta));
+        _cosSquaredEta = _cosEta * _cosEta;
 
-        double sinEta = Math.sin(orientationVector.getAngle(OrientationAngle.eta));
-        double sinSquaredEta = sinEta * sinEta;
+        _sinEta = Math.sin(orientationVector.getAngle(OrientationAngle.eta));
+        _sinSquaredEta = _sinEta * _sinEta;
 
-        double sinRho = Math.sin(orientationVector.getAngle(OrientationAngle.eta));
-        double sin2Rho = Math.sin(2 * orientationVector.getAngle(OrientationAngle.eta));
-        double sinSquaredRho = sinRho * sinRho;
-        double sinFourRho = sinSquaredRho * sinSquaredRho;
+        _sinRho = Math.sin(orientationVector.getAngle(OrientationAngle.eta));
+        _sin2Rho = Math.sin(2 * orientationVector.getAngle(OrientationAngle.eta));
+        _sinSquaredRho = _sinRho * _sinRho;
+        _sinFourRho = _sinSquaredRho * _sinSquaredRho;
 
-        double cosSquaredRho = 1 - sinSquaredRho;
-        double cosFourRho = cosSquaredRho * cosSquaredRho;
+        _cosSquaredRho = 1 - _sinSquaredRho;
+        _cosFourRho = _cosSquaredRho * _cosSquaredRho;
 
-        double dipoleAmplitude_a = this._getDipoleAmplitude_a(cosHalfDelta);
-        double dipoleAmplitude_b = this._getDipoleAmplitude_b(cosHalfDelta);
+        _dipoleAmplitude_a = (1 - _cosHalfDelta) * (2 + _cosHalfDelta) / 6;
+        _dipoleAmplitude_b = (_cosHalfDelta * _cosHalfDelta * _cosHalfDelta - 1) / (3 * (_cosHalfDelta - 1));
 
-        double dipoleSquared_XX = this._getDipoleSquared_XX(dipoleAmplitude_a, dipoleAmplitude_b, cosSquaredEta,
-                cosSquaredRho, sinSquaredEta, sinFourRho, cosFourRho, sin2Rho);
-
-        double dipoleSquared_YY = this._getDipoleSquared_YY(dipoleAmplitude_a, dipoleAmplitude_b, cosSquaredEta,
-                sinSquaredEta, sinSquaredRho, sinFourRho, cosFourRho, sin2Rho);
-
-        double dipoleSquared_ZZ = this._getDipoleSquared_ZZ(dipoleAmplitude_a, dipoleAmplitude_b, cosSquaredEta,
-                sinSquaredEta);
-
-        double dipoleSquared_XY = this._getDipoleSquared_XY(dipoleAmplitude_a, dipoleAmplitude_b, sin2Rho,
-                sinSquaredEta);
+        this._getDipoleSquared_XX();
+        this._getDipoleSquared_YY();
+        this._getDipoleSquared_ZZ();
+        this._getDipoleSquared_XY();
 
         IPolarizationsIntensity intensity = null;
-
         try {
-            double pol0Intensity = this._getPol0Intensity(dipoleSquared_XX, dipoleSquared_YY, dipoleSquared_ZZ,
-                    dipoleSquared_XY);
-
-            double pol45Intensity = this._getPol45Intensity(dipoleSquared_XX, dipoleSquared_YY, dipoleSquared_ZZ,
-                    dipoleSquared_XY);
-
-            double pol90Intensity = this._getPol90Intensity(dipoleSquared_XX, dipoleSquared_YY, dipoleSquared_ZZ,
-                    dipoleSquared_XY);
-
-            double pol135Intensity = this._getPol135Intensity(dipoleSquared_XX, dipoleSquared_YY, dipoleSquared_ZZ,
-                    dipoleSquared_XY);
-
-            intensity = new PolarizationsIntensity(pol0Intensity, pol45Intensity, pol90Intensity, pol135Intensity);        
+            intensity = new PolarizationsIntensity(_getPol0Intensity(), _getPol45Intensity(), _getPol90Intensity(),
+                    _getPol135Intensity());
         } catch (PropagationFactorNotFound e) {
-            // This exception is never caught, because the constructor checks for it. 
+            // This exception is never caught, because the constructor checks for it.
         }
 
         return intensity;
     }
 
-    private double _getPol0Intensity(double dipoleSquared_XX, double dipoleSquared_YY, double dipoleSquared_ZZ,
-            double dipoleSquared_XY) throws PropagationFactorNotFound {
-        double pol0_xx = dipoleSquared_XX
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0);
-
-        double pol0_yy = dipoleSquared_YY
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol0);
-
-        double pol0_zz = dipoleSquared_ZZ
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol0);
-
-        double pol0_xy = dipoleSquared_XY
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol0);
-
-        return pol0_xx + pol0_yy + pol0_zz + pol0_xy;
+    private double _getPol0Intensity() throws PropagationFactorNotFound {
+        return _dipoleSquared_XX * _propFactor_xx_0 + _dipoleSquared_YY * _propFactor_yy_0
+            + _dipoleSquared_ZZ * _propFactor_zz_0 + _dipoleSquared_XY * _propFactor_xy_0;
     }
 
-    private double _getPol45Intensity(double dipoleSquared_XX, double dipoleSquared_YY, double dipoleSquared_ZZ,
-            double dipoleSquared_XY) throws PropagationFactorNotFound {
-        double pol45_xx = dipoleSquared_XX
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol45);
-
-        double pol45_yy = dipoleSquared_YY
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol45);
-
-        double pol45_zz = dipoleSquared_ZZ
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol45);
-
-        double pol45_xy = dipoleSquared_XY
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol45);
-
-        return pol45_xx + pol45_yy + pol45_zz + pol45_xy;
+    private double _getPol45Intensity() throws PropagationFactorNotFound {
+        return _dipoleSquared_XX * _propFactor_xx_45 + _dipoleSquared_YY * _propFactor_yy_45
+            + _dipoleSquared_ZZ * _propFactor_zz_45 + _dipoleSquared_XY * _propFactor_xy_45;
     }
 
-    private double _getPol90Intensity(double dipoleSquared_XX, double dipoleSquared_YY, double dipoleSquared_ZZ,
-            double dipoleSquared_XY) throws PropagationFactorNotFound {
-        double pol90_xx = dipoleSquared_XX
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol90);
-
-        double pol90_yy = dipoleSquared_YY
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol90);
-
-        double pol90_zz = dipoleSquared_ZZ
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol90);
-
-        double pol90_xy = dipoleSquared_XY
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol90);
-
-        return pol90_xx + pol90_yy + pol90_zz + pol90_xy;
+    private double _getPol90Intensity() throws PropagationFactorNotFound {
+        return _dipoleSquared_XX * _propFactor_xx_90 + _dipoleSquared_YY * _propFactor_yy_90
+            + _dipoleSquared_ZZ * _propFactor_zz_90 + _dipoleSquared_XY * _propFactor_xy_90;
     }
 
-    private double _getPol135Intensity(double dipoleSquared_XX, double dipoleSquared_YY, double dipoleSquared_ZZ,
-            double dipoleSquared_XY) throws PropagationFactorNotFound {
-        double pol135_xx = dipoleSquared_XX
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol135);
-
-        double pol135_yy = dipoleSquared_YY
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135);
-
-        double pol135_zz = dipoleSquared_ZZ
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135);
-
-        double pol135_xy = dipoleSquared_XY
-                * this._opticalPropagation.getPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135);
-
-        return pol135_xx + pol135_yy + pol135_zz + pol135_xy;
+    private double _getPol135Intensity() throws PropagationFactorNotFound {
+        return _dipoleSquared_XX * _propFactor_xx_135 + _dipoleSquared_YY * _propFactor_yy_135
+            + _dipoleSquared_ZZ * _propFactor_zz_135 + _dipoleSquared_XY * _propFactor_xy_135;
     }
 
-    private double _getDipoleAmplitude_b(double cosHalfDelta) {
-        return (cosHalfDelta * cosHalfDelta * cosHalfDelta - 1) / (3 * (cosHalfDelta - 1));
+    private double _getDipoleSquared_XX() {
+        return _dipoleAmplitude_b * ((2 * (_cosSquaredEta + 1) * _sin2Rho + _sinFourRho + _cosSquaredEta * _cosFourRho)
+            + _dipoleAmplitude_a * _sinSquaredEta * _cosSquaredRho);
     }
 
-    private double _getDipoleAmplitude_a(double cosHalfDelta) {
-        return (1 - cosHalfDelta) * (2 + cosHalfDelta) / 6;
+    private double _getDipoleSquared_YY() {
+        return _dipoleAmplitude_b * ((2 * (_cosSquaredEta + 1) * _sin2Rho + _cosFourRho + _cosSquaredEta * _sinFourRho)
+                + _dipoleAmplitude_a * _sinSquaredEta * _sinSquaredRho);
     }
 
-    private double _getDipoleSquared_XX(double dipoleAmplitude_a, double dipoleAmplitude_b, double cosSquaredEta,
-            double cosSquaredRho, double sinSquaredEta, double sinFourRho, double cosFourRho, double sin2Rho) {
-        return dipoleAmplitude_b * ((2 * (cosSquaredEta + 1) * sin2Rho + sinFourRho + cosSquaredEta * cosFourRho)
-                + dipoleAmplitude_a * sinSquaredEta * cosSquaredRho);
+    private double _getDipoleSquared_ZZ() {
+        return _dipoleAmplitude_b * _sinSquaredEta + _dipoleAmplitude_a * _cosSquaredEta;
     }
 
-    private double _getDipoleSquared_YY(double dipoleAmplitude_a, double dipoleAmplitude_b, double cosSquaredEta,
-            double sinSquaredEta, double sinSquaredRho, double sinFourRho, double cosFourRho, double sin2Rho) {
-        return dipoleAmplitude_b * ((2 * (cosSquaredEta + 1) * sin2Rho + cosFourRho + cosSquaredEta * sinFourRho)
-                + dipoleAmplitude_a * sinSquaredEta * sinSquaredRho);
-    }
-
-    private double _getDipoleSquared_ZZ(double dipoleAmplitude_a, double dipoleAmplitude_b, double cosSquaredEta,
-            double sinSquaredEta) {
-        return dipoleAmplitude_b * sinSquaredEta + dipoleAmplitude_a * cosSquaredEta;
-    }
-
-    private double _getDipoleSquared_XY(double dipoleAmplitude_a, double dipoleAmplitude_b, double sin2Rho,
-            double sinSquaredEta) {
-        return 0.5 * sin2Rho * sinSquaredEta * (dipoleAmplitude_a - dipoleAmplitude_b);
+    private double _getDipoleSquared_XY() {
+        return 0.5 * _sin2Rho * _sinSquaredEta * (_dipoleAmplitude_a - _dipoleAmplitude_b);
     }
 }
