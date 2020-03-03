@@ -11,7 +11,25 @@ import fr.fresnel.fourPolar.core.physics.propagation.IInverseOpticalPropagation;
  * A concreter implementation of the {@link IIntensityToOrientationConverter}.
  */
 public class IntensityToOrientationConverter implements IIntensityToOrientationConverter {
-    final private IInverseOpticalPropagation _inverseProp;
+    final private double _iProp_0_xx;
+    final private double _iProp_0_yy;
+    final private double _iProp_0_zz;
+    final private double _iProp_0_xy;
+
+    final private double _iProp_90_xx;
+    final private double _iProp_90_yy;
+    final private double _iProp_90_zz;
+    final private double _iProp_90_xy;
+
+    final private double _iProp_45_xx;
+    final private double _iProp_45_yy;
+    final private double _iProp_45_zz;
+    final private double _iProp_45_xy;
+
+    final private double _iProp_135_xx;
+    final private double _iProp_135_yy;
+    final private double _iProp_135_zz;
+    final private double _iProp_135_xy;
 
     /**
      * This implementation uses an instance of the
@@ -21,7 +39,25 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
      * @param inverseProp contains the inverse optical propagation factors.
      */
     public IntensityToOrientationConverter(IInverseOpticalPropagation inverseOpticalProp) {
-        this._inverseProp = inverseOpticalProp;
+        _iProp_0_xx = inverseOpticalProp.getInverseFactor(Polarization.pol0, DipoleSquaredComponent.XX);
+        _iProp_0_yy = inverseOpticalProp.getInverseFactor(Polarization.pol0, DipoleSquaredComponent.YY);
+        _iProp_0_zz = inverseOpticalProp.getInverseFactor(Polarization.pol0, DipoleSquaredComponent.ZZ);
+        _iProp_0_xy = inverseOpticalProp.getInverseFactor(Polarization.pol0, DipoleSquaredComponent.XY);
+
+        _iProp_90_xx = inverseOpticalProp.getInverseFactor(Polarization.pol90, DipoleSquaredComponent.XX);
+        _iProp_90_yy = inverseOpticalProp.getInverseFactor(Polarization.pol90, DipoleSquaredComponent.YY);
+        _iProp_90_zz = inverseOpticalProp.getInverseFactor(Polarization.pol90, DipoleSquaredComponent.ZZ);
+        _iProp_90_xy = inverseOpticalProp.getInverseFactor(Polarization.pol90, DipoleSquaredComponent.XY);
+
+        _iProp_45_xx = inverseOpticalProp.getInverseFactor(Polarization.pol45, DipoleSquaredComponent.XX);
+        _iProp_45_yy = inverseOpticalProp.getInverseFactor(Polarization.pol45, DipoleSquaredComponent.YY);
+        _iProp_45_zz = inverseOpticalProp.getInverseFactor(Polarization.pol45, DipoleSquaredComponent.ZZ);
+        _iProp_45_xy = inverseOpticalProp.getInverseFactor(Polarization.pol45, DipoleSquaredComponent.XY);
+
+        _iProp_135_xx = inverseOpticalProp.getInverseFactor(Polarization.pol135, DipoleSquaredComponent.XX);
+        _iProp_135_yy = inverseOpticalProp.getInverseFactor(Polarization.pol135, DipoleSquaredComponent.YY);
+        _iProp_135_zz = inverseOpticalProp.getInverseFactor(Polarization.pol135, DipoleSquaredComponent.ZZ);
+        _iProp_135_xy = inverseOpticalProp.getInverseFactor(Polarization.pol135, DipoleSquaredComponent.XY);
     }
 
     private float _getRho(double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff) {
@@ -47,136 +83,98 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     private float _getEta(double normalizedDipoleSquared_XY, double sumNormalizedDipoleSquared, float rho) {
         double cos2Rho = Math.cos(2 * rho);
 
-        double raw_eta = Math.abs(Math.asin(
-            Math.sqrt((2 * normalizedDipoleSquared_XY) / (cos2Rho * (3 * sumNormalizedDipoleSquared - 1)))));
+        double raw_eta = Math.abs(Math
+                .asin(Math.sqrt((2 * normalizedDipoleSquared_XY) / (cos2Rho * (3 * sumNormalizedDipoleSquared - 1)))));
 
         if (raw_eta < Math.PI / 2) {
             return (float) raw_eta;
         } else {
-            return (float) (raw_eta- Math.PI / 2);
+            return (float) (raw_eta - Math.PI / 2);
         }
     }
 
     @Override
     public IOrientationVector convert(IPolarizationsIntensity intensity) {
-        double dipoleSquared_XX = this._computeDipoleSquared_XX(intensity);
-        double dipoleSquared_YY = this._computeDipoleSquared_YY(intensity);
-        double dipoleSquared_ZZ = this._computeDipoleSquared_ZZ(intensity);
-        double dipoleSquared_XY = this._computeDipoleSquared_XY(intensity);
+        double pol0Intensity = intensity.getIntensity(Polarization.pol0);
+        double pol45Intensity = intensity.getIntensity(Polarization.pol45);
+        double pol90Intensity = intensity.getIntensity(Polarization.pol90);
+        double pol135Intensity = intensity.getIntensity(Polarization.pol135);
+        
+        double dipoleSquared_XX = this._computeDipoleSquared_XX(
+            pol0Intensity, pol45Intensity, pol90Intensity, pol135Intensity);
+        double dipoleSquared_YY = this._computeDipoleSquared_YY(
+            pol0Intensity, pol45Intensity, pol90Intensity, pol135Intensity);
+        double dipoleSquared_ZZ = this._computeDipoleSquared_ZZ(
+            pol0Intensity, pol45Intensity, pol90Intensity, pol135Intensity);
+        double dipoleSquared_XY = this._computeDipoleSquared_XY(
+            pol0Intensity, pol45Intensity, pol90Intensity, pol135Intensity);
 
-        double dipoleSquaredNormalizationFactor = this._getDipoleSquaredNormalizationFactor(
-            dipoleSquared_XX, dipoleSquared_YY, dipoleSquared_ZZ);
-        
-        double normalizedDipoleSquared_XYdiff = this._normalizedDipoleSquared_XYdiff(
-            dipoleSquared_XX, dipoleSquared_YY, dipoleSquaredNormalizationFactor);            
-        
-        double normalizedDipoleSquared_XY = this._normalizedDipoleSquared_XY(
-            dipoleSquared_XY, dipoleSquaredNormalizationFactor);
-        
-        double normalizedDipoleSquared_Z = this._normalizedDipoleSquared_Z(
-            dipoleSquared_ZZ, dipoleSquaredNormalizationFactor);
+        double dipoleSquaredNormalizationFactor = this._getDipoleSquaredNormalizationFactor(dipoleSquared_XX,
+                dipoleSquared_YY, dipoleSquared_ZZ);
 
-        double sumNormalizedDipoleSquared = this._sumNormalizedDipoleSquared(
-            normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff,
-            normalizedDipoleSquared_Z);
-        
+        double normalizedDipoleSquared_XYdiff = this._normalizedDipoleSquared_XYdiff(dipoleSquared_XX, dipoleSquared_YY,
+                dipoleSquaredNormalizationFactor);
+
+        double normalizedDipoleSquared_XY = this._normalizedDipoleSquared_XY(dipoleSquared_XY,
+                dipoleSquaredNormalizationFactor);
+
+        double normalizedDipoleSquared_Z = this._normalizedDipoleSquared_Z(dipoleSquared_ZZ,
+                dipoleSquaredNormalizationFactor);
+
+        double sumNormalizedDipoleSquared = this._sumNormalizedDipoleSquared(normalizedDipoleSquared_XY,
+                normalizedDipoleSquared_XYdiff, normalizedDipoleSquared_Z);
+
         float rho = this._getRho(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
         float delta = this._getDelta(sumNormalizedDipoleSquared);
         float eta = this._getEta(normalizedDipoleSquared_XY, sumNormalizedDipoleSquared, rho);
 
-        IOrientationVector orientationVector = new OrientationVector(
-            rho, delta, eta);
-
-        return orientationVector;
+        return new OrientationVector(rho, delta, eta);
     }
 
-    private double _computeDipoleSquared_XX(IPolarizationsIntensity intensity) {
-        double xx_0 = intensity.getIntensity(Polarization.pol0)
-            * _inverseProp.getInverseFactor(Polarization.pol0, DipoleSquaredComponent.XX);
-
-        double xx_45 = intensity.getIntensity(Polarization.pol45)
-            * _inverseProp.getInverseFactor(Polarization.pol45, DipoleSquaredComponent.XX);
-
-        double xx_90 = intensity.getIntensity(Polarization.pol90)
-            * _inverseProp.getInverseFactor(Polarization.pol90, DipoleSquaredComponent.XX);
-
-        double xx_135 = intensity.getIntensity(Polarization.pol135)
-            * _inverseProp.getInverseFactor(Polarization.pol135, DipoleSquaredComponent.XX);
-
-        return xx_0 + xx_45 + xx_90 + xx_135;
+    private double _computeDipoleSquared_XX(
+        double pol0Intensity, double pol45Intensity, double pol90Intensity, double pol135Intensity) {
+        return pol0Intensity * _iProp_0_xx + pol45Intensity * _iProp_45_xx +
+            pol90Intensity * _iProp_90_xx + pol135Intensity * _iProp_135_xx;
     }
 
-    private double _computeDipoleSquared_YY(IPolarizationsIntensity intensity) {
-        double yy_0 = intensity.getIntensity(Polarization.pol0)
-            * _inverseProp.getInverseFactor(Polarization.pol0, DipoleSquaredComponent.YY);
-
-        double yy_45 = intensity.getIntensity(Polarization.pol45)
-            * _inverseProp.getInverseFactor(Polarization.pol45, DipoleSquaredComponent.YY);
-
-        double yy_90 = intensity.getIntensity(Polarization.pol90)
-            * _inverseProp.getInverseFactor(Polarization.pol90, DipoleSquaredComponent.YY);
-
-        double yy_135 = intensity.getIntensity(Polarization.pol135)
-            * _inverseProp.getInverseFactor(Polarization.pol135, DipoleSquaredComponent.YY);
-
-        return yy_0 + yy_45 + yy_90 + yy_135;
+    private double _computeDipoleSquared_YY(
+        double pol0Intensity, double pol45Intensity, double pol90Intensity, double pol135Intensity) {
+        return pol0Intensity * _iProp_0_yy + pol45Intensity * _iProp_45_yy +
+            pol90Intensity * _iProp_90_yy + pol135Intensity * _iProp_135_yy;
     }
 
-    private double _computeDipoleSquared_ZZ(IPolarizationsIntensity intensity) {
-        double zz_0 = intensity.getIntensity(Polarization.pol0)
-            * _inverseProp.getInverseFactor(Polarization.pol0, DipoleSquaredComponent.ZZ);
-
-        double zz_45 = intensity.getIntensity(Polarization.pol45)
-            * _inverseProp.getInverseFactor(Polarization.pol45, DipoleSquaredComponent.ZZ);
-
-        double zz_90 = intensity.getIntensity(Polarization.pol90)
-            * _inverseProp.getInverseFactor(Polarization.pol90, DipoleSquaredComponent.ZZ);
-
-        double zz_135 = intensity.getIntensity(Polarization.pol135)
-            * _inverseProp.getInverseFactor(Polarization.pol135, DipoleSquaredComponent.ZZ);
-
-        return zz_0 + zz_45 + zz_90 + zz_135;
+    private double _computeDipoleSquared_ZZ(
+        double pol0Intensity, double pol45Intensity, double pol90Intensity, double pol135Intensity) {
+        return pol0Intensity * _iProp_0_zz + pol45Intensity * _iProp_45_zz +
+            pol90Intensity * _iProp_90_zz + pol135Intensity * _iProp_135_zz;
     }
 
-    private double _computeDipoleSquared_XY(IPolarizationsIntensity intensity) {
-        double xy_0 = intensity.getIntensity(Polarization.pol0)
-            * _inverseProp.getInverseFactor(Polarization.pol0, DipoleSquaredComponent.XY);
-
-        double xy_45 = intensity.getIntensity(Polarization.pol45)
-            * _inverseProp.getInverseFactor(Polarization.pol45, DipoleSquaredComponent.XY);
-
-        double xy_90 = intensity.getIntensity(Polarization.pol90)
-            * _inverseProp.getInverseFactor(Polarization.pol90, DipoleSquaredComponent.XY);
-
-        double xy_135 = intensity.getIntensity(Polarization.pol135)
-            * _inverseProp.getInverseFactor(Polarization.pol135, DipoleSquaredComponent.XY);
-
-        return xy_0 + xy_45 + xy_90 + xy_135;
+    private double _computeDipoleSquared_XY(
+        double pol0Intensity, double pol45Intensity, double pol90Intensity, double pol135Intensity) {
+        return pol0Intensity * _iProp_0_xy + pol45Intensity * _iProp_45_xy +
+            pol90Intensity * _iProp_90_xy + pol135Intensity * _iProp_135_xy;
     }
 
-    private double _getDipoleSquaredNormalizationFactor(
-        double dipoleSquared_XX, double dipoleSquared_YY, double dipoleSquared_ZZ) {
+    private double _getDipoleSquaredNormalizationFactor(double dipoleSquared_XX, double dipoleSquared_YY,
+            double dipoleSquared_ZZ) {
         return dipoleSquared_XX + dipoleSquared_YY + dipoleSquared_ZZ;
     }
 
-    private double _normalizedDipoleSquared_XYdiff(
-        double dipoleSquared_XX, double dipoleSquared_YY, double dipoleSquaredNormalizationFactor) {
+    private double _normalizedDipoleSquared_XYdiff(double dipoleSquared_XX, double dipoleSquared_YY,
+            double dipoleSquaredNormalizationFactor) {
         return (dipoleSquared_XX - dipoleSquared_YY) / dipoleSquaredNormalizationFactor;
     }
 
-    private double _normalizedDipoleSquared_XY(
-        double dipoleSquared_XY, double dipoleSquaredNormalizationFactor) {
+    private double _normalizedDipoleSquared_XY(double dipoleSquared_XY, double dipoleSquaredNormalizationFactor) {
         return 2 * dipoleSquared_XY / dipoleSquaredNormalizationFactor;
     }
 
-    private double _normalizedDipoleSquared_Z(
-        double dipoleSquared_ZZ, double dipoleSquaredNormalizationFactor) {
+    private double _normalizedDipoleSquared_Z(double dipoleSquared_ZZ, double dipoleSquaredNormalizationFactor) {
         return dipoleSquared_ZZ / dipoleSquaredNormalizationFactor;
     }
 
-    private double _sumNormalizedDipoleSquared(
-        double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff,
-        double normalizedDipoleSquared_Z) {
+    private double _sumNormalizedDipoleSquared(double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff,
+            double normalizedDipoleSquared_Z) {
         return normalizedDipoleSquared_Z
                 + Math.sqrt(Math.pow(normalizedDipoleSquared_XYdiff, 2) + Math.pow(normalizedDipoleSquared_XY, 2));
     }
