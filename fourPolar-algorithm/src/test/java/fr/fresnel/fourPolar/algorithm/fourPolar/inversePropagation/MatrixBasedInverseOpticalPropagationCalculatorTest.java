@@ -137,7 +137,7 @@ public class MatrixBasedInverseOpticalPropagationCalculatorTest {
         assertThrows(
             OpticalPropagationNotInvertible.class, ()->{inverseCalculator.getInverse(opticalPropagation);});
         
-    }
+    } 
     
     @Test
     public void getInverseFactor_IncompletePropagationMatrix_ThrowsPropagationFactorNotFound()
