@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.core.physics.propagation;
 
 import java.util.Hashtable;
 
+import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
@@ -23,8 +24,12 @@ public class OpticalPropagation implements IOpticalPropagation {
     }
 
     @Override
-    public double getPropagationFactor(DipoleSquaredComponent direction, Polarization polarization) {
-        return _propagationFactors.get(direction.toString() + polarization.toString());
+    public double getPropagationFactor(DipoleSquaredComponent component, Polarization polarization) throws PropagationFactorNotFound {
+        try {
+            return _propagationFactors.get(component.toString() + polarization.toString());
+        } catch (NullPointerException e) {
+            throw new PropagationFactorNotFound(component, polarization);
+        }
     }
 
     @Override
