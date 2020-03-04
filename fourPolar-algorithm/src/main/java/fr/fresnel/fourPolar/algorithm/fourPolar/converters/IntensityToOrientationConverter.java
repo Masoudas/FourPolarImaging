@@ -71,7 +71,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     }
 
     private float _getDelta(double sumNormalizedDipoleSquared) {
-        double raw_delta = 2 * Math.acos((Math.sqrt(12 * sumNormalizedDipoleSquared - 3)) / 2);
+        double raw_delta = 2 * Math.acos((Math.sqrt(12 * sumNormalizedDipoleSquared - 3) - 1 ) / 2);
 
         if (raw_delta >= 0) {
             return (float) raw_delta;
@@ -174,6 +174,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     private double _sumNormalizedDipoleSquared(double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff,
             double normalizedDipoleSquared_Z) {
         return normalizedDipoleSquared_Z
-                + Math.sqrt(Math.pow(normalizedDipoleSquared_XYdiff, 2) + Math.pow(normalizedDipoleSquared_XY, 2));
+                + Math.sqrt(normalizedDipoleSquared_XYdiff * normalizedDipoleSquared_XYdiff + 
+                normalizedDipoleSquared_XY * normalizedDipoleSquared_XY);
     }
 }
