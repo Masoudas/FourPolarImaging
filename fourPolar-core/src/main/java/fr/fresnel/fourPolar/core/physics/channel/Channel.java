@@ -18,11 +18,11 @@ public class Channel implements IChannel {
      * Represents the propagation channels of the imaging system. Each channel
      * corresponds to one wavelength.
      * 
-     * @param wavelength
-     * @param calibFactPol0
-     * @param calibFactPol45
-     * @param calibFactPol90
-     * @param calibFactPol135
+     * @param wavelength is the channel wavelength in meter.
+     * @param calibFactPol0 is the calibration factor of polarization 0.
+     * @param calibFactPol45 is the calibration factor of polarization 45.
+     * @param calibFactPol90 is the calibration factor of polarization 90.
+     * @param calibFactPol135 is the calibration factor of polarization 135.
      */
     public Channel(double wavelength, double calibFactPol0, double calibFactPol45, double calibFactPol90,
             double calibFactPol135) throws WavelengthOutOfRange, CalibrationFactorOutOfRange {
