@@ -39,19 +39,19 @@ public class OrientationVector implements IOrientationVector {
     }
 
     private void _checkRho(float value) throws OrientationAngleOutOfRange {
-        if (value < 0 || value > Math.PI) {
+        if (value < 0 || value > (float)Math.PI) {
             throw new OrientationAngleOutOfRange("Rho is out of range");
         }
     }
 
     private void _checkDelta(float value) throws OrientationAngleOutOfRange {
-        if (value < 0 || value > Math.PI) {
+        if (value < 0 || value > (float)Math.PI) {
             throw new OrientationAngleOutOfRange("Delta is out of range");
         }
     }
 
     private void _checkEta(float value) throws OrientationAngleOutOfRange {
-        if (value < 0 || value > Math.PI / 2) {
+        if (value < 0 || value > (float)(Math.PI / 2)) {
             throw new OrientationAngleOutOfRange("Eta is out of range");
         }
     }
