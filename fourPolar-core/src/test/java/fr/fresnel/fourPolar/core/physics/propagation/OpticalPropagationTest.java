@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
@@ -11,7 +12,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 public class OpticalPropagationTest {
     @Test
-    public void setMethod_MatrixOfRandomNumbers_ShouldReturnSameMatrix() {
+    public void setMethod_MatrixOfRandomNumbers_ShouldReturnSameMatrix() throws PropagationFactorNotFound {
         Channel channel = new Channel(1, 2, 3, 4, 5);
         NumericalAperture na = new NumericalAperture(1, 2, 3, 4);
         OpticalPropagation matrix = new OpticalPropagation(channel, na);
