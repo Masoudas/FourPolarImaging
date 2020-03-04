@@ -7,11 +7,12 @@
   <parent>
     <groupId>fr.fresnel.fourPolar</groupId>
     <artifactId>four-Polar</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
   </parent>
 
+  <groupId>fr.fresnel.fourPolar</groupId>
   <artifactId>fourPolar-core</artifactId>
-  <version>1.0</version>
+  <version>1.0.0</version>
   <packaging>jar</packaging>
 
   <name>Four Polar Imaging Project</name>
