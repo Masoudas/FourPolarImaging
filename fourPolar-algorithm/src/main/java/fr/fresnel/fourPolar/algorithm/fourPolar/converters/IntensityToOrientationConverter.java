@@ -100,14 +100,17 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         double pol90Intensity = intensity.getIntensity(Polarization.pol90);
         double pol135Intensity = intensity.getIntensity(Polarization.pol135);
         
-        double dipoleSquared_XX = this._computeDipoleSquared_XX(
-            pol0Intensity, pol45Intensity, pol90Intensity, pol135Intensity);
-        double dipoleSquared_YY = this._computeDipoleSquared_YY(
-            pol0Intensity, pol45Intensity, pol90Intensity, pol135Intensity);
-        double dipoleSquared_ZZ = this._computeDipoleSquared_ZZ(
-            pol0Intensity, pol45Intensity, pol90Intensity, pol135Intensity);
-        double dipoleSquared_XY = this._computeDipoleSquared_XY(
-            pol0Intensity, pol45Intensity, pol90Intensity, pol135Intensity);
+        double dipoleSquared_XX = pol0Intensity * _iProp_0_xx + pol45Intensity * _iProp_45_xx +
+            pol90Intensity * _iProp_90_xx + pol135Intensity * _iProp_135_xx;
+
+        double dipoleSquared_YY = pol0Intensity * _iProp_0_yy + pol45Intensity * _iProp_45_yy +
+            pol90Intensity * _iProp_90_yy + pol135Intensity * _iProp_135_yy;
+
+        double dipoleSquared_ZZ = pol0Intensity * _iProp_0_zz + pol45Intensity * _iProp_45_zz +
+        pol90Intensity * _iProp_90_zz + pol135Intensity * _iProp_135_zz;
+
+        double dipoleSquared_XY = pol0Intensity * _iProp_0_xy + pol45Intensity * _iProp_45_xy +
+        pol90Intensity * _iProp_90_xy + pol135Intensity * _iProp_135_xy;
 
         double dipoleSquaredNormalizationFactor = this._getDipoleSquaredNormalizationFactor(dipoleSquared_XX,
                 dipoleSquared_YY, dipoleSquared_ZZ);
@@ -131,30 +134,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         return new OrientationVector(rho, delta, eta);
     }
 
-    private double _computeDipoleSquared_XX(
-        double pol0Intensity, double pol45Intensity, double pol90Intensity, double pol135Intensity) {
-        return pol0Intensity * _iProp_0_xx + pol45Intensity * _iProp_45_xx +
-            pol90Intensity * _iProp_90_xx + pol135Intensity * _iProp_135_xx;
-    }
-
-    private double _computeDipoleSquared_YY(
-        double pol0Intensity, double pol45Intensity, double pol90Intensity, double pol135Intensity) {
-        return pol0Intensity * _iProp_0_yy + pol45Intensity * _iProp_45_yy +
-            pol90Intensity * _iProp_90_yy + pol135Intensity * _iProp_135_yy;
-    }
-
-    private double _computeDipoleSquared_ZZ(
-        double pol0Intensity, double pol45Intensity, double pol90Intensity, double pol135Intensity) {
-        return pol0Intensity * _iProp_0_zz + pol45Intensity * _iProp_45_zz +
-            pol90Intensity * _iProp_90_zz + pol135Intensity * _iProp_135_zz;
-    }
-
-    private double _computeDipoleSquared_XY(
-        double pol0Intensity, double pol45Intensity, double pol90Intensity, double pol135Intensity) {
-        return pol0Intensity * _iProp_0_xy + pol45Intensity * _iProp_45_xy +
-            pol90Intensity * _iProp_90_xy + pol135Intensity * _iProp_135_xy;
-    }
-
+    
     private double _getDipoleSquaredNormalizationFactor(double dipoleSquared_XX, double dipoleSquared_YY,
             double dipoleSquared_ZZ) {
         return dipoleSquared_XX + dipoleSquared_YY + dipoleSquared_ZZ;
