@@ -17,39 +17,40 @@ import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
  * intensities associated with one channel.
  * 
  */
-public class FourPolarAlgorithm {
+public class FourPolarMapper {
     final private IIntensityToOrientationConverter _converter;
 
     /**
      * @param converter is the intensity converter for one class.
      */
-    public FourPolarAlgorithm(IIntensityToOrientationConverter converter) {
+    public FourPolarMapper(IIntensityToOrientationConverter converter) {
         this._converter = converter;
     }
 
     /**
      * Iterates over the given set of intensities and puts the calculated
      * orientation vector into the orientation set via its iterator.
-     * <p>
      * 
      * @param intensityIterator   is the intensity set iterator.
      * @param orientationIterator is the orientation vector set iterator.
      */
-    public void convertIntensities(IPolarizationsIntensityIterator intensityIterator,
-            IOrientationVectorIterator orientationIterator) throws IteratorMissMatch {
+    public void map(
+        IPolarizationsIntensityIterator intensityIterator,
+        IOrientationVectorIterator orientationIterator) throws IteratorMissMatch {
         try {
             while (intensityIterator.hasNext()) {
                 IPolarizationsIntensity intensity = intensityIterator.next();
 
                 IOrientationVector orientationVector = _converter.convert(intensity);
 
+                orientationIterator.next();
                 orientationIterator.set(orientationVector);
             }
 
         } catch (NoSuchElementException e) {
             throw new IteratorMissMatch("Polarization iterator has more elements than orientation iterator.");
         }
-
+        
         if (orientationIterator.hasNext()) {
             throw new IteratorMissMatch("Orientation iterator has more elements than polarization iterator.");
         }
