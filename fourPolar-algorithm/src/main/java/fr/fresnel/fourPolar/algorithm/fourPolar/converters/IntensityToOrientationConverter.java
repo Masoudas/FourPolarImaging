@@ -82,9 +82,9 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
 
     private float _getEta(double normalizedDipoleSquared_XY, double sumNormalizedDipoleSquared, float rho) {
         double cos2Rho = Math.cos(2 * rho);
-
-        double raw_eta = Math.abs(Math
-                .asin(Math.sqrt((2 * normalizedDipoleSquared_XY) / (cos2Rho * (3 * sumNormalizedDipoleSquared - 1)))));
+        
+        double raw_eta = Math
+                .asin(Math.sqrt((2 * normalizedDipoleSquared_XY) / (cos2Rho * (3 * sumNormalizedDipoleSquared - 1))));
 
         if (raw_eta < Math.PI / 2) {
             return (float) raw_eta;
