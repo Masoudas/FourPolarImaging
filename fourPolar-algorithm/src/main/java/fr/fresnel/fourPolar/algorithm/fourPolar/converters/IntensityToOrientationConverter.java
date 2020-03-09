@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.fourPolar.converters;
 
-import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters.OrientationVectorExists;
+import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters.ImpossibleOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
@@ -96,7 +96,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     }
 
     @Override
-    public IOrientationVector convert(IPolarizationsIntensity intensity) throws OrientationVectorExists {
+    public IOrientationVector convert(IPolarizationsIntensity intensity) throws ImpossibleOrientationVector {
         // Getting intensities.
         double pol0Intensity = intensity.getIntensity(Polarization.pol0);
         double pol45Intensity = intensity.getIntensity(Polarization.pol45);
@@ -185,15 +185,15 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
 
     private double _sumNormalizedDipoleSquared(
         double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff,
-        double normalizedDipoleSquared_Z) throws OrientationVectorExists {
+        double normalizedDipoleSquared_Z) throws ImpossibleOrientationVector {
         return normalizedDipoleSquared_Z + Math.sqrt(normalizedDipoleSquared_XYdiff * normalizedDipoleSquared_XYdiff
                 + normalizedDipoleSquared_XY * normalizedDipoleSquared_XY);
     }
 
     private void _checksumNormalizedDipoleSquared(
-        double sumNormalizedDipoleSquared) throws OrientationVectorExists {
+        double sumNormalizedDipoleSquared) throws ImpossibleOrientationVector {
         if (sumNormalizedDipoleSquared > 1 || sumNormalizedDipoleSquared < 1 / 2) {
-            throw new OrientationVectorExists("Sum of normalized dipole squared cannot be in range [1/2, 1].");
+            throw new ImpossibleOrientationVector("Sum of normalized dipole squared cannot be in range [1/2, 1].");
         }
     }
 
@@ -203,10 +203,10 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
      */
     private void _checkNormalizedDipoleSquared_Z(
         double normalizedDipoleSquared_Z, double sumNormalizedDipoleSquared)
-            throws OrientationVectorExists {
+            throws ImpossibleOrientationVector {
         if (normalizedDipoleSquared_Z > sumNormalizedDipoleSquared
                 || normalizedDipoleSquared_Z < 1 - 2 * sumNormalizedDipoleSquared) {
-            throw new OrientationVectorExists("Pz is not in accepted range.");
+            throw new ImpossibleOrientationVector("Pz is not in accepted range.");
         }
 
     }

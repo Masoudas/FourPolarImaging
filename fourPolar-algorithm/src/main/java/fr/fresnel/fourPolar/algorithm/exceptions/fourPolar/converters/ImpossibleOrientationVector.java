@@ -6,11 +6,11 @@ package fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters;
  * phyisically (which would only happen due to computational issues or noise).
  */
 
-public class OrientationVectorExists extends Exception {
+public class ImpossibleOrientationVector extends Exception {
     private static final long serialVersionUID = 7423333309820445025L;
     private final String _message;
 
-    public OrientationVectorExists(String message){
+    public ImpossibleOrientationVector(String message){
         this._message = message;
     }
 
