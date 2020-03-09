@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.fourPolar.converters;
 
+import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters.OrientationVectorExists;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
@@ -9,6 +10,7 @@ import fr.fresnel.fourPolar.core.physics.propagation.IInverseOpticalPropagation;
 
 /**
  * A concreter implementation of the {@link IIntensityToOrientationConverter}.
+ * This implementation is based on the paper by Brasselet.
  */
 public class IntensityToOrientationConverter implements IIntensityToOrientationConverter {
     final private double _iProp_0_xx;
@@ -71,7 +73,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     }
 
     private float _getDelta(double sumNormalizedDipoleSquared) {
-        double raw_delta = 2 * Math.acos((Math.sqrt(12 * sumNormalizedDipoleSquared - 3) - 1 ) / 2);
+        double raw_delta = 2 * Math.acos((Math.sqrt(12 * sumNormalizedDipoleSquared - 3) - 1) / 2);
 
         if (raw_delta >= 0) {
             return (float) raw_delta;
@@ -82,7 +84,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
 
     private float _getEta(double normalizedDipoleSquared_XY, double sumNormalizedDipoleSquared, float rho) {
         double cos2Rho = Math.cos(2 * rho);
-        
+
         double raw_eta = Math
                 .asin(Math.sqrt((2 * normalizedDipoleSquared_XY) / (cos2Rho * (3 * sumNormalizedDipoleSquared - 1))));
 
@@ -94,12 +96,16 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     }
 
     @Override
-    public IOrientationVector convert(IPolarizationsIntensity intensity) {
+    public IOrientationVector convert(IPolarizationsIntensity intensity) throws OrientationVectorExists {
         // Getting intensities.
         double pol0Intensity = intensity.getIntensity(Polarization.pol0);
         double pol45Intensity = intensity.getIntensity(Polarization.pol45);
         double pol90Intensity = intensity.getIntensity(Polarization.pol90);
         double pol135Intensity = intensity.getIntensity(Polarization.pol135);
+
+        if (pol0Intensity == 0 && pol45Intensity == 0 && pol90Intensity == 0 && pol135Intensity == 0) {
+            return new OrientationVector(Float.NaN, Float.NaN, Float.NaN);
+        }
 
         // Computing dipole squared.
         double dipoleSquared_XX = this._computeDipoleSquared_XX(pol0Intensity, pol45Intensity, pol90Intensity,
@@ -111,18 +117,24 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         double dipoleSquared_XY = this._computeDipoleSquared_XY(pol0Intensity, pol45Intensity, pol90Intensity,
                 pol135Intensity);
 
-        // Computing normalized dipole squareds.
-        double normalizedDipoleSquared_XYdiff = this._normalizedDipoleSquared_XYdiff(
-            dipoleSquared_XX, dipoleSquared_YY, dipoleSquared_ZZ);
+        // Computing normalized dipole squared.
+        double normalizedDipoleSquared_XYdiff = this._normalizedDipoleSquared_XYdiff(dipoleSquared_XX, dipoleSquared_YY,
+                dipoleSquared_ZZ);
 
-        double normalizedDipoleSquared_XY = this._normalizedDipoleSquared_XY(
-            dipoleSquared_XX, dipoleSquared_YY, dipoleSquared_ZZ, dipoleSquared_XY);
+        double normalizedDipoleSquared_XY = this._normalizedDipoleSquared_XY(dipoleSquared_XX, dipoleSquared_YY,
+                dipoleSquared_ZZ, dipoleSquared_XY);
 
-        double normalizedDipoleSquared_Z = this._normalizedDipoleSquared_Z(
-            dipoleSquared_XX, dipoleSquared_YY, dipoleSquared_ZZ);
+        double normalizedDipoleSquared_Z = this._normalizedDipoleSquared_Z(dipoleSquared_XX, dipoleSquared_YY,
+                dipoleSquared_ZZ);
 
         double sumNormalizedDipoleSquared = this._sumNormalizedDipoleSquared(normalizedDipoleSquared_XY,
                 normalizedDipoleSquared_XYdiff, normalizedDipoleSquared_Z);
+
+        
+        // Check necessary conditions for angles to exist.
+        _checksumNormalizedDipoleSquared(sumNormalizedDipoleSquared);                
+        _checkNormalizedDipoleSquared_Z(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
+
 
         // Computing the angles
         float rho = this._getRho(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
@@ -171,10 +183,31 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         return dipoleSquared_ZZ / (dipoleSquared_XX + dipoleSquared_YY + dipoleSquared_ZZ);
     }
 
-    private double _sumNormalizedDipoleSquared(double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff,
-            double normalizedDipoleSquared_Z) {
-        return normalizedDipoleSquared_Z
-                + Math.sqrt(normalizedDipoleSquared_XYdiff * normalizedDipoleSquared_XYdiff + 
-                normalizedDipoleSquared_XY * normalizedDipoleSquared_XY);
+    private double _sumNormalizedDipoleSquared(
+        double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff,
+        double normalizedDipoleSquared_Z) throws OrientationVectorExists {
+        return normalizedDipoleSquared_Z + Math.sqrt(normalizedDipoleSquared_XYdiff * normalizedDipoleSquared_XYdiff
+                + normalizedDipoleSquared_XY * normalizedDipoleSquared_XY);
+    }
+
+    private void _checksumNormalizedDipoleSquared(
+        double sumNormalizedDipoleSquared) throws OrientationVectorExists {
+        if (sumNormalizedDipoleSquared > 1 || sumNormalizedDipoleSquared < 1 / 2) {
+            throw new OrientationVectorExists("Sum of normalized dipole squared cannot be in range [1/2, 1].");
+        }
+    }
+
+    /**
+     * Check normalizedDipoleSquared_Z <= sumNormalizedDipoleSquared and 
+     * normalizedDipoleSquared_Z >= 1 - 2*sumNormalizedDipoleSquared.
+     */
+    private void _checkNormalizedDipoleSquared_Z(
+        double normalizedDipoleSquared_Z, double sumNormalizedDipoleSquared)
+            throws OrientationVectorExists {
+        if (normalizedDipoleSquared_Z > sumNormalizedDipoleSquared
+                || normalizedDipoleSquared_Z < 1 - 2 * sumNormalizedDipoleSquared) {
+            throw new OrientationVectorExists("Pz is not in accepted range.");
+        }
+
     }
 }
