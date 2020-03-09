@@ -190,6 +190,9 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
                 + normalizedDipoleSquared_XY * normalizedDipoleSquared_XY);
     }
 
+    /**
+     * Check that sumNormalizedDipoleSquared is in the range 0.5 and 1.
+     */
     private void _checksumNormalizedDipoleSquared(
         double sumNormalizedDipoleSquared) throws ImpossibleOrientationVector {
         if (sumNormalizedDipoleSquared > 1 || sumNormalizedDipoleSquared < 1 / 2) {
