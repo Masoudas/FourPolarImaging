@@ -1,9 +1,14 @@
 package fr.fresnel.fourPolar.core.image.orientation;
 
+import java.util.Arrays;
+
+import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
 import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
@@ -37,11 +42,27 @@ public class OrientationImage implements IOrientationImage {
         _fileSet = fileSet;
     }
 
-    public OrientationImage(ICapturedImageFileSet fileSet, IAngleImage rho, IAngleImage delta, IAngleImage eta) {
-        _rhoImage = rho;
-        _deltaImage = delta;
-        _etaImage = eta;
+    /**
+     * This constructor creates the orientation image based on three Float32 images.
+     * If the images don't have the same dimension, an exception is raised.
+     * 
+     * @param fileSet is the file set associated with the images.
+     * @param rho     is the rho image.
+     * @param delta   is the delta image.
+     * @param eta     is the eta image.
+     * @throws CannotFormOrientationImage if the images don't have the same
+     *                                    dimension.
+     */
+    public OrientationImage(ICapturedImageFileSet fileSet, Image<Float32> rho, Image<Float32> delta, Image<Float32> eta)
+            throws CannotFormOrientationImage {
+        if (this._checkDimensionsEqual(rho, delta, eta)) {
+            throw new CannotFormOrientationImage(
+                    "Cannot create the orientation image because the given images don't have the same dimension.");
+        }
 
+        _rhoImage = new AngleImage(OrientationAngle.rho, rho);
+        _deltaImage = new AngleImage(OrientationAngle.delta, rho);
+        _etaImage = new AngleImage(OrientationAngle.eta, rho);
         _fileSet = fileSet;
     }
 
@@ -78,5 +99,9 @@ public class OrientationImage implements IOrientationImage {
         return new OrientationVectorIterator(this);
     }
 
-    
+    private boolean _checkDimensionsEqual(Image<Float32> rho, Image<Float32> delta, Image<Float32> eta) {
+        return Arrays.equals(rho.getDimensions(), delta.getDimensions())
+                && Arrays.equals(rho.getDimensions(), eta.getDimensions());
+    }
+
 }
