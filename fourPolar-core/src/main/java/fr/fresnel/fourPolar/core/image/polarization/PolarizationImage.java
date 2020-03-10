@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 /**
  * A concrete implementation of the {@link IPolarizationImage}
  */
-public class PolarizationImage implements IPolarizationImage{
+class PolarizationImage implements IPolarizationImage{
     final private Polarization _pol;
     final private Image<UINT16> _image;
 
