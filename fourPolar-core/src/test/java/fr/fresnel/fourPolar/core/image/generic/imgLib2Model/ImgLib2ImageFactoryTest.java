@@ -57,7 +57,7 @@ public class ImgLib2ImageFactoryTest {
     }
 
     @Test
-    public void createFromImgType_UnsignedShortType_CreatesUINT16ImageWithSameDimension() {
+    public void createFromImgInterface_UnsignedShortType_CreatesUINT16ImageWithSameDimension() {
         long[] dimensions = new long[] { 1, 1, 1, 1 };
         UnsignedShortType type = new UnsignedShortType();
         Img<UnsignedShortType> img = new ArrayImgFactory<UnsignedShortType>(type).create(dimensions);
@@ -67,7 +67,7 @@ public class ImgLib2ImageFactoryTest {
     }
 
     @Test
-    public void createFromImgType_FloatType_CreatesFloat32ImageWithSameDimension() {
+    public void createFromImgInterface_FloatType_CreatesFloat32ImageWithSameDimension() {
         long[] dimensions = new long[] { 1, 1, 1, 1 };
         FloatType type = new FloatType();
         Img<FloatType> img = new ArrayImgFactory<FloatType>(type).create(dimensions);
@@ -77,7 +77,7 @@ public class ImgLib2ImageFactoryTest {
     }
 
     @Test
-    public void createFromImgType_ARGBType_CreatesRGB16ImageWithSameDimension() {
+    public void createFromImgInterface_ARGBType_CreatesRGB16ImageWithSameDimension() {
         long[] dimensions = new long[] { 1, 1, 1, 1 };
         ARGBType type = new ARGBType();
         Img<ARGBType> img = new ArrayImgFactory<ARGBType>(type).create(dimensions);
