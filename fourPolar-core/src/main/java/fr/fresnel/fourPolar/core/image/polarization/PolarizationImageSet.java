@@ -32,7 +32,7 @@ public class PolarizationImageSet implements IPolarizationImageSet {
      */
     public PolarizationImageSet(ICapturedImageFileSet fileSet, Image<UINT16> pol0, Image<UINT16> pol45,
             Image<UINT16> pol90, Image<UINT16> pol135) throws CannotFormPolarizationImageSet {
-        if (!this._hasDuplicateImage(pol0, pol45, pol90, pol135)) {
+        if (this._hasDuplicateImage(pol0, pol45, pol90, pol135)) {
             throw new CannotFormPolarizationImageSet(
                     "Cannot form the polarization image set due to duplicate image for polarizations.");
         }
