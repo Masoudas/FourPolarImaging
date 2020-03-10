@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 /**
  * A concrete implementation of the {@link IAngleImage}.
  */
-public class AngleImage implements IAngleImage {
+class AngleImage implements IAngleImage {
     private final Image<Float32> _image;
     private final OrientationAngle _angle;
 
