@@ -57,7 +57,7 @@ public class OrientationImage implements IOrientationImage {
             throws CannotFormOrientationImage {
         if (this._checkDimensionsEqual(rho, delta, eta)) {
             throw new CannotFormOrientationImage(
-                    "Cannot create the orientation image because the given images don't have the same dimension.");
+                    "Cannot form the orientation image because the given images don't have the same dimension.");
         }
 
         _rhoImage = new AngleImage(OrientationAngle.rho, rho);
