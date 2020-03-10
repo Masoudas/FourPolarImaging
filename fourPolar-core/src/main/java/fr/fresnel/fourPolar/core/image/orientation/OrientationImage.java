@@ -55,7 +55,12 @@ public class OrientationImage implements IOrientationImage {
      */
     public OrientationImage(ICapturedImageFileSet fileSet, Image<Float32> rho, Image<Float32> delta, Image<Float32> eta)
             throws CannotFormOrientationImage {
-        if (this._checkDimensionsEqual(rho, delta, eta)) {
+        if (!this._hasDuplicateImage(rho, delta, eta)) {
+            throw new CannotFormOrientationImage(
+                    "Cannot form the orientation image due to duplicate image for angles.");
+        }
+        
+        if (!this._hasDimensionsEqual(rho, delta, eta)) {
             throw new CannotFormOrientationImage(
                     "Cannot form the orientation image because the given images don't have the same dimension.");
         }
@@ -99,9 +104,13 @@ public class OrientationImage implements IOrientationImage {
         return new OrientationVectorIterator(this);
     }
 
-    private boolean _checkDimensionsEqual(Image<Float32> rho, Image<Float32> delta, Image<Float32> eta) {
+    private boolean _hasDimensionsEqual(Image<Float32> rho, Image<Float32> delta, Image<Float32> eta) {
         return Arrays.equals(rho.getDimensions(), delta.getDimensions())
                 && Arrays.equals(rho.getDimensions(), eta.getDimensions());
+    }
+
+    private boolean _hasDuplicateImage(Image<Float32> rho, Image<Float32> delta, Image<Float32> eta) {
+        return rho == delta || rho == eta || delta == eta;
     }
 
 }
