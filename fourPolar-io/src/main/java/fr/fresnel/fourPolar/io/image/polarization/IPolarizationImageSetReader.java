@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.io.image.polarization;
 import java.io.File;
 import java.io.IOException;
 
+import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 
@@ -18,7 +19,8 @@ public interface IPolarizationImageSetReader {
      *                images.
      * @return the polarization image set.
      */
-    public IPolarizationImageSet read(File rootFolder, ICapturedImageFileSet fileSet) throws IOException;
+    public IPolarizationImageSet read(File rootFolder, ICapturedImageFileSet fileSet) throws IOException,
+        CannotFormPolarizationImageSet;
 
     /**
      * Close all resources associated with this reader.
