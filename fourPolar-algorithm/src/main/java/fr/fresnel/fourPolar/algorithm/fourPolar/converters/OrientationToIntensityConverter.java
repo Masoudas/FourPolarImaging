@@ -175,15 +175,15 @@ public class OrientationToIntensityConverter implements IOrientationToIntensityC
     private double _getDipoleSquared_XX(
         double dipoleAmplitude_axis1, double dipoleAmplitude_axis3, double cosSquaredEta,
         double cosSquaredRho, double sinSquaredEta, double sinFourRho, double cosFourRho, double sin2Rho) {
-        return dipoleAmplitude_axis1 * ((0.25 * (cosSquaredEta + 1) * sin2Rho * sin2Rho + 
-            sinFourRho + cosSquaredEta * cosFourRho) + dipoleAmplitude_axis3 * sinSquaredEta * cosSquaredRho);
+        return dipoleAmplitude_axis1 * (0.25 * (cosSquaredEta + 1) * sin2Rho * sin2Rho + 
+            sinFourRho + cosSquaredEta * cosFourRho) + dipoleAmplitude_axis3 * sinSquaredEta * cosSquaredRho;
     }
 
     private double _getDipoleSquared_YY(
         double dipoleAmplitude_axis1, double dipoleAmplitude_axis3, double cosSquaredEta,
         double sinSquaredEta, double sinSquaredRho, double sinFourRho, double cosFourRho, double sin2Rho) {
-        return dipoleAmplitude_axis1 * ((0.25 * (cosSquaredEta + 1) * sin2Rho * sin2Rho + 
-            cosFourRho + cosSquaredEta * sinFourRho) + dipoleAmplitude_axis3 * sinSquaredEta * sinSquaredRho);
+        return dipoleAmplitude_axis1 * (0.25 * (cosSquaredEta + 1) * sin2Rho * sin2Rho + 
+            cosFourRho + cosSquaredEta * sinFourRho) + dipoleAmplitude_axis3 * sinSquaredEta * sinSquaredRho;
     }
 
     private double _getDipoleSquared_ZZ(
