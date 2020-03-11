@@ -3,7 +3,6 @@ package fr.fresnel.fourPolar.core.image.polarization;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
