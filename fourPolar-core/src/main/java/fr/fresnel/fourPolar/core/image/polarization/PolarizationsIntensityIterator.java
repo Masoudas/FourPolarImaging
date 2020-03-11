@@ -2,10 +2,8 @@ package fr.fresnel.fourPolar.core.image.polarization;
 
 import fr.fresnel.fourPolar.core.fourPolar.IPolarizationsIntensityIterator;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
-import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
-import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.physics.polarization.PolarizationsIntensity;
 
 class PolarizationsIntensityIterator implements IPolarizationsIntensityIterator {
@@ -20,6 +18,8 @@ class PolarizationsIntensityIterator implements IPolarizationsIntensityIterator 
         this._pol45Cursor = pol45Cursor;
         this._pol90Cursor = pol90Cursor;
         this._pol135Cursor = pol135Cursor;
+        
+        this._pol0Cursor.reset();
     }
 
     @Override
