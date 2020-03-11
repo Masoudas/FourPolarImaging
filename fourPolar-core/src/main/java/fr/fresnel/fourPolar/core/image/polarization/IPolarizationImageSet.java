@@ -30,6 +30,6 @@ public interface IPolarizationImageSet {
      * 
      * @return
      */
-    public IPolarizationsIntensityIterator getCursor();
+    public IPolarizationsIntensityIterator getIterator();
 
 }

@@ -49,7 +49,7 @@ public class PolarizationImageSet implements IPolarizationImageSet {
     }
 
     @Override
-    public IPolarizationsIntensityIterator getCursor() {
+    public IPolarizationsIntensityIterator getIterator() {
         return new PolarizationsIntensityIterator(_pol0.getImage().getCursor(), _pol45.getImage().getCursor(),
                 _pol90.getImage().getCursor(), _pol135.getImage().getCursor());
     }
