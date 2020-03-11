@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import io.scif.FormatException;
 
 public class UINT16ImgLib2TiffImageWriterTest {
-    private static long[] _dim = {10, 10};
+    private static long[] _dim = {10, 10, 2};
     private static File _root;
     private static ImgLib2ImageFactory _factory = new ImgLib2ImageFactory();
 
