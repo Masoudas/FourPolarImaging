@@ -21,12 +21,13 @@ class OrientationVectorIterator implements IOrientationVectorIterator {
      * A concrete implementation of the {@link IOrientationVectorIterator} that uses
      * the cursers of {@link IAngleImage} to iterate over an orientation image.
      * 
-     * @param image 
+     * @param image
      */
-    public OrientationVectorIterator(IOrientationImage image) {
-        _rhoCursor = image.getAngleImage(OrientationAngle.rho).getImage().getCursor();
-        _deltaCursor = image.getAngleImage(OrientationAngle.delta).getImage().getCursor();
-        _etaCursor = image.getAngleImage(OrientationAngle.eta).getImage().getCursor();
+    public OrientationVectorIterator(IPixelCursor<Float32> rhoCursor, IPixelCursor<Float32> deltaCursor,
+            IPixelCursor<Float32> etaCursor) {
+        _rhoCursor = rhoCursor;
+        _deltaCursor = deltaCursor;
+        _etaCursor = etaCursor;
     }
 
     @Override

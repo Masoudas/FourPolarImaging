@@ -8,7 +8,6 @@ import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
@@ -59,7 +58,7 @@ public class OrientationImage implements IOrientationImage {
             throw new CannotFormOrientationImage(
                     "Cannot form the orientation image due to duplicate image for angles.");
         }
-        
+
         if (!this._hasDimensionsEqual(rho, delta, eta)) {
             throw new CannotFormOrientationImage(
                     "Cannot form the orientation image because the given images don't have the same dimension.");
@@ -101,7 +100,9 @@ public class OrientationImage implements IOrientationImage {
 
     @Override
     public IOrientationVectorIterator getOrientationVectorIterator() {
-        return new OrientationVectorIterator(this);
+        return new OrientationVectorIterator(
+            _rhoImage.getImage().getCursor(), _deltaImage.getImage().getCursor(),
+            _etaImage.getImage().getCursor());
     }
 
     private boolean _hasDimensionsEqual(Image<Float32> rho, Image<Float32> delta, Image<Float32> eta) {
