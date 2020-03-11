@@ -15,7 +15,7 @@ public class Float32 extends PixelType {
      */
     public static float MAX_VAL = Float.MAX_VALUE;
 
-    private Float _pixel = 0f;
+    private float _pixel = 0f;
 
     /**
      * Creates the type, and sets the value to zero. 
@@ -28,15 +28,15 @@ public class Float32 extends PixelType {
      * Construct with the specified value
      * @param value is the desired value.
      */
-    public Float32(Float value) {
+    public Float32(float value) {
         this.set(value);
     }
 
-    public void set(Float value) {
+    public void set(float value) {
         this._pixel = value;
     }
 
-    public Float get() {
+    public float get() {
         return this._pixel;
     }
 
