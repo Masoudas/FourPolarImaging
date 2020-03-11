@@ -28,13 +28,9 @@ public class PolarizationImageSetWriter implements IPolarizationImageSetWriter {
      *                 instances of {@code IPolarizationImageSet} with the same
      *                 instance.
      */
-    public PolarizationImageSetWriter(IPolarizationImageSet imageSet) {
-        try {
-            this._writer = TiffImageWriterFactory.getWriter(imageSet.getPolarizationImage(Polarization.pol0).getImage(),
-                    new UINT16());
-        } catch (NoWriterFoundForImage e) {
-            // Exception is never caught, since a writer is implemented for UINT16.
-        }
+    public PolarizationImageSetWriter(IPolarizationImageSet imageSet) throws NoWriterFoundForImage{
+        this._writer = TiffImageWriterFactory.getWriter(imageSet.getPolarizationImage(Polarization.pol0).getImage(),
+                new UINT16());
     }
 
     @Override
