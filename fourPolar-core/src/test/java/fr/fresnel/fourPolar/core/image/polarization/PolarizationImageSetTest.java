@@ -63,7 +63,7 @@ public class PolarizationImageSetTest {
     }
 
     @Test
-    public void getPolarizationImage_ImgLib2PolarizationImage_ThrowsCannotFormPolarizationImageSet()
+    public void getPolarizationImage_ImgLib2PolarizationImage_ReturnsCorrectImage()
             throws CannotFormPolarizationImageSet {
         long[] dim = { 1, 1 };
 
