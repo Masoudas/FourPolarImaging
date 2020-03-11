@@ -46,9 +46,9 @@ public class OrientationImage implements IOrientationImage {
      * If the images don't have the same dimension, an exception is raised.
      * 
      * @param fileSet is the file set associated with the images.
-     * @param rho     is the rho image.
-     * @param delta   is the delta image.
-     * @param eta     is the eta image.
+     * @param rho     is the rho angle image.
+     * @param delta   is the delta angle image.
+     * @param eta     is the eta angle image.
      * @throws CannotFormOrientationImage if the images don't have the same
      *                                    dimension.
      */
@@ -65,8 +65,8 @@ public class OrientationImage implements IOrientationImage {
         }
 
         _rhoImage = new AngleImage(OrientationAngle.rho, rho);
-        _deltaImage = new AngleImage(OrientationAngle.delta, rho);
-        _etaImage = new AngleImage(OrientationAngle.eta, rho);
+        _deltaImage = new AngleImage(OrientationAngle.delta, delta);
+        _etaImage = new AngleImage(OrientationAngle.eta, eta);
         _fileSet = fileSet;
     }
 
