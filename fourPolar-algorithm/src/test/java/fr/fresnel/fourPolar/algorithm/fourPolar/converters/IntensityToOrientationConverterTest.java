@@ -12,7 +12,6 @@ import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
-import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
 import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
@@ -26,31 +25,31 @@ public class IntensityToOrientationConverterTest {
     @BeforeAll
     public static void setInversePropagation() throws PropagationFactorNotFound, OpticalPropagationNotInvertible {
         // Channel and NA parameters are irrelevant to these tests.
-        Channel channel = new Channel(Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN);
-        NumericalAperture na = new NumericalAperture(Double.NaN, Double.NaN, Double.NaN, Double.NaN);
+        Channel channel = new Channel(520e-9, 1, 0.7, 1, 0.7);
+        NumericalAperture na = new NumericalAperture(1.45, 1.015, 1.45, 1.015);
 
         OpticalPropagation optPropagation = new OpticalPropagation(channel, na);
         InverseOpticalPropagation inverseProp = new InverseOpticalPropagation(optPropagation);
 
-        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.XX, 0.788);
-        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.YY, 0.204);
-        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.ZZ, -1.042);
+        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.XX, 0.7880897720);
+        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.YY, 0.20470751910);
+        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.ZZ, -1.0419630892);
         inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.XY, 0);
 
-        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.XX, 0.204);
-        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.YY, 0.788);
-        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.ZZ, -1.042);
+        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.XX, 0.20470751910);
+        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.YY, 0.78808977204);
+        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.ZZ, -1.0419630892);
         inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.XY, 0.0);
 
-        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.XX, -0.110);
-        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.YY, -0.110);
-        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.ZZ, 0.553);
-        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.XY, 0.168);
+        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.XX, -0.1108420459);
+        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.YY, -0.1108420459);
+        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.ZZ, 0.55323020559);
+        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.XY, 0.16834141369);
 
-        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XX, -0.110);
-        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.YY, -0.110);
-        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.ZZ, 0.553);
-        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XY, -0.168);
+        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XX, -0.11084204599);
+        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.YY, -0.11084204599);
+        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.ZZ, 0.553230205596);
+        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XY, -0.16834141369);
 
         _converter = new IntensityToOrientationConverter(inverseProp);
     }
@@ -61,7 +60,7 @@ public class IntensityToOrientationConverterTest {
 
     @Test
     public void convert_BenchMark() throws ImpossibleOrientationVector {
-        IPolarizationsIntensity intensity = new PolarizationsIntensity(3.163, 0.439, 3.163, 0.439);
+        IPolarizationsIntensity intensity = new PolarizationsIntensity(0.389827, 1.562062, 0.338139, 1.562062);
 
         IOrientationVector vector = null;
         for (int i = 0; i < 1000000; i++) {
@@ -69,8 +68,6 @@ public class IntensityToOrientationConverterTest {
         }
 
         System.out.println(vector.getAngle(OrientationAngle.eta));
-        
-
     }
 
     @Test
