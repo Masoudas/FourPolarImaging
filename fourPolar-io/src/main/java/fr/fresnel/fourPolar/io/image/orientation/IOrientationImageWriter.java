@@ -19,4 +19,10 @@ public interface IOrientationImageWriter {
      * @throws IOException thrown in case of low-level problems.
      */
     public void write(File rootFolder, ICapturedImageFileSet fileSet, IOrientationImage image) throws IOException;
+
+    /**
+     * Close all resources associated with this writer.
+     * @throws IOException
+     */
+    public void close() throws IOException;
 }

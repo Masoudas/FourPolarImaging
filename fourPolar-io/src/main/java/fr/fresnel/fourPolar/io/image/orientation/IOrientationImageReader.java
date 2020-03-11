@@ -19,4 +19,10 @@ public interface IOrientationImageReader {
      * @return
      */
     public IOrientationImage read(File rootFolder, ICapturedImageFileSet fileSet) throws IOException, CannotFormOrientationImage;
+
+    /**
+     * Close all resources associated with this reader.
+     * @throws IOException
+     */
+    public void close() throws IOException;
 }
