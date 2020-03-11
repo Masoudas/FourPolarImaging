@@ -42,12 +42,12 @@ public class UINT16 extends PixelType {
     }
 
     /**
-     * Sums the given pixel with this pixel. The result is rounded to
+     * Adds the given pixel with this pixel. The result is rounded to
      * {@value MAX_VAL} if exceeds {@value MAX_VAL}.
      * 
      * @param pixel
      */
-    public void sum(UINT16 pixel) {
+    public void add(UINT16 pixel) {
         this.set(pixel.get() + this.get());
     }
 

@@ -35,7 +35,7 @@ public class uint16Test {
         UINT16 pixel1 = new UINT16(5);
         UINT16 pixel2 = new UINT16(10);
 
-        pixel1.sum(pixel2);
+        pixel1.add(pixel2);
         assertTrue(pixel1.get() == 15);
     }
 
@@ -44,7 +44,7 @@ public class uint16Test {
         UINT16 pixel1 = new UINT16(UINT16.MAX_VAL);
         UINT16 pixel2 = new UINT16(1);
 
-        pixel1.sum(pixel2);
+        pixel1.add(pixel2);
         assertTrue(pixel1.get() == UINT16.MAX_VAL);
     }
 

@@ -107,15 +107,15 @@ public class PolarizationImageSetTest {
             pol0Cursor.next();
             pol0Cursor.setPixel(new Pixel<UINT16>(data));
 
-            data.sum(one);
+            data.add(one);
             pol45Cursor.next();
             pol45Cursor.setPixel(new Pixel<UINT16>(data));
 
-            data.sum(one);
+            data.add(one);
             pol90Cursor.next();
             pol90Cursor.setPixel(new Pixel<UINT16>(data));
 
-            data.sum(one);
+            data.add(one);
             pol135Cursor.next();
             pol135Cursor.setPixel(new Pixel<UINT16>(data));
         }

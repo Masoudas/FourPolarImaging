@@ -41,11 +41,11 @@ public class OrientationVectorIteratorTest {
             rho.next();
             rho.setPixel(pixel);
 
-            pixel.value().sum(one);
+            pixel.value().add(one);
             delta.next();
             delta.setPixel(pixel);
 
-            pixel.value().sum(one);
+            pixel.value().add(one);
             eta.next();
             eta.setPixel(pixel);
         }

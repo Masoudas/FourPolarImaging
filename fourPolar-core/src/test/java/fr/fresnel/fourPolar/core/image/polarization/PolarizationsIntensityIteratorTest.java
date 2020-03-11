@@ -41,15 +41,15 @@ public class PolarizationsIntensityIteratorTest {
             pol0Cursor.next();
             pol0Cursor.setPixel(pixel);
 
-            pixel.value().sum(one);
+            pixel.value().add(one);
             pol45Cursor.next();
             pol45Cursor.setPixel(pixel);
 
-            pixel.value().sum(one);
+            pixel.value().add(one);
             pol90Cursor.next();
             pol90Cursor.setPixel(pixel);
 
-            pixel.value().sum(one);
+            pixel.value().add(one);
             pol135Cursor.next();
             pol135Cursor.setPixel(pixel);
         }

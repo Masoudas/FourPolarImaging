@@ -41,12 +41,12 @@ public class Float32 extends PixelType {
     }
 
     /**
-     * Sums the given pixel with this pixel. The rules are the same
+     * Adds the given pixel with this pixel. The rules are the same
      * as summation of normal floats.
      * 
      * @param pixel
      */
-    public void sum(Float32 pixel) {
+    public void add(Float32 pixel) {
         this.set(pixel.get() + this.get());
     }
 

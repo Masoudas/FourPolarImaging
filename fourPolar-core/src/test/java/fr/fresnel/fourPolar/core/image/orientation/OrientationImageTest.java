@@ -92,11 +92,11 @@ public class OrientationImageTest {
             rhoCursor.next();
             rhoCursor.setPixel(pixel);
 
-            pixel.value().sum(one);
+            pixel.value().add(one);
             deltaCursor.next();
             deltaCursor.setPixel(pixel);
 
-            pixel.value().sum(one);
+            pixel.value().add(one);
             etaCursor.next();
             etaCursor.setPixel(pixel);
         }
