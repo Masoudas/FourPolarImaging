@@ -54,7 +54,7 @@ public class OrientationImage implements IOrientationImage {
      */
     public OrientationImage(ICapturedImageFileSet fileSet, Image<Float32> rho, Image<Float32> delta, Image<Float32> eta)
             throws CannotFormOrientationImage {
-        if (!this._hasDuplicateImage(rho, delta, eta)) {
+        if (this._hasDuplicateImage(rho, delta, eta)) {
             throw new CannotFormOrientationImage(
                     "Cannot form the orientation image due to duplicate image for angles.");
         }
