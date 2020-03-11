@@ -123,6 +123,10 @@ public class PolarizationImageSetTest {
         IPolarizationImageSet polSet = new PolarizationImageSet(null, pol0, pol45, pol90, pol135);
         IPolarizationsIntensityIterator iterator = polSet.getIterator();
 
+        if (!iterator.hasNext()) {
+            assertTrue(false);
+        }
+
         baseSetCursor.reset();
         boolean equals = true;
         while (iterator.hasNext()) {
@@ -135,8 +139,7 @@ public class PolarizationImageSetTest {
             equals &= data.get() == (int)intensity.getIntensity(Polarization.pol90) - 2;
             equals &= data.get() == (int)intensity.getIntensity(Polarization.pol135) - 3;
         }
-        
-        assertTrue(equals);
-        
+
+        assertTrue(equals);        
     }
 }
