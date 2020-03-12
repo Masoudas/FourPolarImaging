@@ -19,7 +19,7 @@ import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 
 public class TiffPolarizationImageSetReaderTest {
     final private static File _root = new File(TiffPolarizationImageSetReaderTest.class.getResource("").getPath(),
-            "PolarizationImageSetReader");
+            "TiffPolarizationImageSetReader");
 
     @Test
     public void read_PolarizationImageSetFromDisk_ReadImagesHaveSameDimensionAsDisk()

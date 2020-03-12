@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.io.image.polarization;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -11,11 +13,13 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSet;
+import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
+import fr.fresnel.fourPolar.io.image.polarization.fileSet.TiffPolarizationImageFileSet;
 
 public class TiffPolarizationImageSetWriterTest {
     final private static File _root = new File(TiffPolarizationImageSetReaderTest.class.getResource("").getPath(),
-            "PolarizationImageSetWriter");
+            "TiffPolarizationImageSetWriter");
 
     @Test
     public void write_ImgLib2PolarizationImage_WritesIntoTheTargetFolder()
@@ -36,5 +40,12 @@ public class TiffPolarizationImageSetWriterTest {
 
         IPolarizationImageSetWriter writer = new TiffPolarizationImageSetWriter(imageSet);
         writer.write(_root, imageSet);    
+
+        TiffPolarizationImageFileSet fSet = new TiffPolarizationImageFileSet(_root, fileSet);
+        assertTrue(
+            fSet.getFile(Polarization.pol0).exists() &&
+            fSet.getFile(Polarization.pol45).exists() &&
+            fSet.getFile(Polarization.pol90).exists() &&
+            fSet.getFile(Polarization.pol135).exists());
     }
 }
