@@ -13,6 +13,7 @@
     <module>fourPolar-core</module>
     <module>fourPolar-io</module>
     <module>fourPolar-algorithm</module>
+    <module>fourPolar-ui</module>
   </modules>
 
   <properties>
