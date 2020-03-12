@@ -18,15 +18,14 @@ import fr.fresnel.fourPolar.io.image.orientation.fileSet.TiffOrientationImageFil
 
 /**
  * A concrete implementation of {@link IOrientationImageReader} to read tiff
- * orientation image.
+ * orientation images.
  */
 public class TiffOrientationImageReader implements IOrientationImageReader {
     final private ImageReader<Float32> _reader;
 
     /**
-     * Reads the tiff orientation image and creates the {@link IOrientationImage}
-     * using the given implementation of {@link Image}. Several orientation images
-     * can be read with the initialization.
+     * Initialize the reader for the provided {@link Image} implementation. The same
+     * class can read several orientation images from the disk.
      * 
      * @param factory
      * @throws NoReaderFoundForImage

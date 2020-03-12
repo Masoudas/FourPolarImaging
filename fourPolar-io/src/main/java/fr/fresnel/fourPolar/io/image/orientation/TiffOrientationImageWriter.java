@@ -20,8 +20,8 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
     final private ImageWriter<Float32> _writer;
 
     /**
-     * Initialize the writer for the provided type of orientation image. The class
-     * can write several instances of the same interface.
+     * Initialize the writer for the provided type of orientation image. The same
+     * class can write several orientation images to the disk.
      * 
      * @param image
      * @throws NoWriterFoundForImage
