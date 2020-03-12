@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.captured.fileSet.CapturedImageFileSet;
-import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
@@ -33,7 +32,6 @@ public class TiffPolarizationImageSetReaderTest {
         TiffPolarizationImageFileSet fSet = new TiffPolarizationImageFileSet(_root, fileSet);
 
         long[] dim = { 2, 2 };
-
         Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, new UINT16());
         Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, new UINT16());
         Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, new UINT16());
