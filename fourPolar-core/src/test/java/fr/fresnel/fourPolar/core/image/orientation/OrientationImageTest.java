@@ -3,17 +3,24 @@ package fr.fresnel.fourPolar.core.image.orientation;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
+import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
 import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
+import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
+import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 
@@ -60,10 +67,9 @@ public class OrientationImageTest {
 
         OrientationImage orientationImage = new OrientationImage(null, rho, delta, eta);
 
-        assertTrue(
-            orientationImage.getAngleImage(OrientationAngle.rho).getImage() == rho &&
-            orientationImage.getAngleImage(OrientationAngle.delta).getImage() == delta &&
-            orientationImage.getAngleImage(OrientationAngle.eta).getImage() == eta);
+        assertTrue(orientationImage.getAngleImage(OrientationAngle.rho).getImage() == rho
+                && orientationImage.getAngleImage(OrientationAngle.delta).getImage() == delta
+                && orientationImage.getAngleImage(OrientationAngle.eta).getImage() == eta);
     }
 
     @Test
@@ -75,7 +81,7 @@ public class OrientationImageTest {
         Image<Float32> rho = new ImgLib2ImageFactory().create(dim, new Float32());
         Image<Float32> delta = new ImgLib2ImageFactory().create(dim, new Float32());
         Image<Float32> eta = new ImgLib2ImageFactory().create(dim, new Float32());
-        
+
         IPixelCursor<Float32> baseSetCursor = baseSet.getCursor();
         IPixelCursor<Float32> rhoCursor = rho.getCursor();
         IPixelCursor<Float32> deltaCursor = delta.getCursor();
@@ -84,7 +90,7 @@ public class OrientationImageTest {
         Random random = new Random();
         Float32 one = new Float32((float) (Math.PI / 180));
         while (baseSetCursor.hasNext()) {
-            Pixel<Float32> pixel = new Pixel<Float32>(new Float32((float)(random.nextFloat() * Math.PI / 4)));
+            Pixel<Float32> pixel = new Pixel<Float32>(new Float32((float) (random.nextFloat() * Math.PI / 4)));
 
             baseSetCursor.next();
             baseSetCursor.setPixel(pixel);
@@ -102,7 +108,7 @@ public class OrientationImageTest {
         }
 
         baseSetCursor.reset();
-        OrientationImage orientationImage = new OrientationImage(null, rho, delta, eta);        
+        OrientationImage orientationImage = new OrientationImage(null, rho, delta, eta);
 
         IOrientationVectorIterator iterator = orientationImage.getOrientationVectorIterator();
 
@@ -116,11 +122,36 @@ public class OrientationImageTest {
             Float32 angle = baseSetCursor.next().value();
 
             equals &= _checkPrecision(angle.get(), orientationVector.getAngle(OrientationAngle.rho), 1e-6f);
-            equals &= _checkPrecision(angle.get(), orientationVector.getAngle(OrientationAngle.delta) - (float)Math.PI/180, 1e-6f);
-            equals &= _checkPrecision(angle.get(), orientationVector.getAngle(OrientationAngle.eta) - (float)Math.PI/90, 1e-6f);
+            equals &= _checkPrecision(angle.get(),
+                    orientationVector.getAngle(OrientationAngle.delta) - (float) Math.PI / 180, 1e-6f);
+            equals &= _checkPrecision(angle.get(),
+                    orientationVector.getAngle(OrientationAngle.eta) - (float) Math.PI / 90, 1e-6f);
         }
 
         assertTrue(equals);
+    }
+
+    @Test
+    public void create_FromPolarizationImage_HasCorrectDimensionForAllImages() throws CannotFormPolarizationImageSet {
+        ImageFactory factory = new ImgLib2ImageFactory();
+
+        long[] dim = {2, 2, 2, 2};
+        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, new UINT16());
+        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, new UINT16());
+        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, new UINT16());
+        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, new UINT16());
+        
+        IPolarizationImageSet polImage = new PolarizationImageSet(null, pol0, pol45, pol90, pol135);
+        
+        IOrientationImage orientationImage = new OrientationImage(null, factory, polImage);
+        assertTrue(
+            Arrays.equals(
+                orientationImage.getAngleImage(OrientationAngle.rho).getImage().getDimensions(), dim) &&
+            Arrays.equals(
+                orientationImage.getAngleImage(OrientationAngle.delta).getImage().getDimensions(), dim) &&
+            Arrays.equals(
+                orientationImage.getAngleImage(OrientationAngle.eta).getImage().getDimensions(), dim));
+            
     }
 
     private static boolean _checkPrecision(float val1, float val2, float error) {
