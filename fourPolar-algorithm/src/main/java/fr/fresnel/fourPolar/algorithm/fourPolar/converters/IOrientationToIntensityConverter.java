@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.algorithm.fourPolar.converters;
 
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
-import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 
 /**
  * Interface for converting an {@link IOrientationVector} to a
@@ -15,5 +15,5 @@ public interface IOrientationToIntensityConverter {
      * @param orientationVector
      * @return
      */
-    public IPolarizationsIntensity convert(IOrientationVector orientationVector);
+    public IntensityVector convert(IOrientationVector orientationVector);
 }

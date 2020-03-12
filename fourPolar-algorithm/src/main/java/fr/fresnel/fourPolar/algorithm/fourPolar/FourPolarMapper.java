@@ -8,7 +8,7 @@ import fr.fresnel.fourPolar.algorithm.fourPolar.converters.IIntensityToOrientati
 import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
 import fr.fresnel.fourPolar.core.fourPolar.IPolarizationsIntensityIterator;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
-import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 
 /**
  * An implementation of the 4Polar algorithm, which can be used to convert an
@@ -41,7 +41,7 @@ public class FourPolarMapper {
         throws IteratorMissMatch, ImpossibleOrientationVector {
         try {
             while (intensityIterator.hasNext()) {
-                IPolarizationsIntensity intensity = intensityIterator.next();
+                IntensityVector intensity = intensityIterator.next();
 
                 IOrientationVector orientationVector = _converter.convert(intensity);
 

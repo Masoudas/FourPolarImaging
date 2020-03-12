@@ -21,7 +21,7 @@ import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.core.physics.polarization.PolarizationsIntensity;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.propagation.InverseOpticalPropagation;
 
 public class FourPolarMapperTest {
@@ -34,19 +34,19 @@ public class FourPolarMapperTest {
     @Test
     public void map_2By2PolarizationImage_MapsToCorrectOrientation()
             throws CannotFormPolarizationImageSet, IteratorMissMatch, ImpossibleOrientationVector {
-        PolarizationsIntensity intensity1 = new PolarizationsIntensity(13910.52, 32224.54, 13910.52, 32224.54);
+        IntensityVector intensity1 = new IntensityVector(13910.52, 32224.54, 13910.52, 32224.54);
         OrientationVector vector1 = new OrientationVector((float) (0f / 180f * Math.PI), (float) (180f / 180f * Math.PI),
                 (float) (0f / 180f * Math.PI));
 
-        PolarizationsIntensity intensity2 = new PolarizationsIntensity(971, 3160, 971, 3160);
+        IntensityVector intensity2 = new IntensityVector(971, 3160, 971, 3160);
         OrientationVector vector2 = new OrientationVector((float) (0f / 180f * Math.PI), (float) (90f / 180f * Math.PI),
                 (float) (0f / 180f * Math.PI));
 
-        PolarizationsIntensity intensity3 = new PolarizationsIntensity(10372.49, 15983.54, 18017.8, 15983.54);
+        IntensityVector intensity3 = new IntensityVector(10372.49, 15983.54, 18017.8, 15983.54);
         OrientationVector vector3 = new OrientationVector((float) (0f / 180f * Math.PI), (float) (180f / 180f * Math.PI),
                 (float) (45f / 180f * Math.PI));
 
-        PolarizationsIntensity intensity4 = new PolarizationsIntensity(18035, 32069, 7689, 32069);
+        IntensityVector intensity4 = new IntensityVector(18035, 32069, 7689, 32069);
         OrientationVector vector4 = new OrientationVector((float) (0f / 180f * Math.PI), (float) (90f / 180f * Math.PI),
                 (float) (45f / 180f * Math.PI));
 
@@ -113,7 +113,7 @@ public class FourPolarMapperTest {
     }
 
     private void _setIntensity(IPixelCursor<UINT16> pol0Cursor, IPixelCursor<UINT16> pol45Cursor,
-            IPixelCursor<UINT16> pol90Cursor, IPixelCursor<UINT16> pol135Cursor, PolarizationsIntensity intensity) {
+            IPixelCursor<UINT16> pol90Cursor, IPixelCursor<UINT16> pol135Cursor, IntensityVector intensity) {
         pol0Cursor.next();
         pol0Cursor.setPixel(new Pixel<UINT16>(new UINT16((int)intensity.getIntensity(Polarization.pol0))));
         pol45Cursor.next();

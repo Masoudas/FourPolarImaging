@@ -4,7 +4,7 @@ import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters.Impossible
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
-import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.physics.propagation.IInverseOpticalPropagation;
 
@@ -94,7 +94,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     }
 
     @Override
-    public IOrientationVector convert(IPolarizationsIntensity intensity) throws ImpossibleOrientationVector {
+    public IOrientationVector convert(IntensityVector intensity) throws ImpossibleOrientationVector {
         // Getting intensities.
         double pol0Intensity = intensity.getIntensity(Polarization.pol0);
         double pol45Intensity = intensity.getIntensity(Polarization.pol45);

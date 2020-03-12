@@ -13,7 +13,7 @@ import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
-import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
@@ -68,7 +68,7 @@ public class OrientationToIntensityConverterTest {
     public void convert_Rho45Delta0Eta0_Returns() {
         IOrientationVector vector = new OrientationVector((float)(180f/180f * Math.PI), (float)(90f/180f * Math.PI), 0);
 
-        IPolarizationsIntensity intensity = _converter.convert(vector);
+        IntensityVector intensity = _converter.convert(vector);
 
         assertTrue(
             _checkPrecision(intensity.getIntensity(Polarization.pol0), 1, 1e-4) &&

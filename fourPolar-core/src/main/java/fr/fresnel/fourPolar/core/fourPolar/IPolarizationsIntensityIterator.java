@@ -2,10 +2,10 @@ package fr.fresnel.fourPolar.core.fourPolar;
 
 import java.util.Iterator;
 
-import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 
 /**
- * An iterator for iterating over a set of {@link IPolarizationsIntensity}
+ * An iterator for iterating over a set of {@link IntensityVector}
  * vectors.
  * 
  * We opted not to put a setter method for this iterator for the following
@@ -22,5 +22,5 @@ import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
  * intensity would be incorrect.</li>
  * </ol>
  */
-public interface IPolarizationsIntensityIterator extends Iterator<IPolarizationsIntensity> {
+public interface IPolarizationsIntensityIterator extends Iterator<IntensityVector> {
 }

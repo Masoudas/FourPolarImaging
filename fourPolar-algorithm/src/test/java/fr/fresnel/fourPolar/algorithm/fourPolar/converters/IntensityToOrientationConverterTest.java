@@ -13,9 +13,9 @@ import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
-import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.core.physics.polarization.PolarizationsIntensity;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.propagation.InverseOpticalPropagation;
 import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
 
@@ -60,7 +60,7 @@ public class IntensityToOrientationConverterTest {
 
     @Test
     public void convert_BenchMark() throws ImpossibleOrientationVector {
-        IPolarizationsIntensity intensity = new PolarizationsIntensity(0.389827, 1.562062, 0.338139, 1.562062);
+        IntensityVector intensity = new IntensityVector(0.389827, 1.562062, 0.338139, 1.562062);
 
         IOrientationVector vector = null;
         for (int i = 0; i < 1000000; i++) {
@@ -72,11 +72,11 @@ public class IntensityToOrientationConverterTest {
 
     @Test
     public void convert_UnfeasibleIntensityVectors_ThrowsImpossibleOrientationVector() {
-        IPolarizationsIntensity vec1 = new PolarizationsIntensity(1, 0, 0, 0);
-        IPolarizationsIntensity vec2 = new PolarizationsIntensity(0, 1, 0, 0);
-        IPolarizationsIntensity vec3 = new PolarizationsIntensity(0, 0, 1, 0);
-        IPolarizationsIntensity vec4 = new PolarizationsIntensity(0, 0, 0, 1);
-        IPolarizationsIntensity vec5 = new PolarizationsIntensity(1, 0, 0, 1);
+        IntensityVector vec1 = new IntensityVector(1, 0, 0, 0);
+        IntensityVector vec2 = new IntensityVector(0, 1, 0, 0);
+        IntensityVector vec3 = new IntensityVector(0, 0, 1, 0);
+        IntensityVector vec4 = new IntensityVector(0, 0, 0, 1);
+        IntensityVector vec5 = new IntensityVector(1, 0, 0, 1);
 
         assertThrows(
             ImpossibleOrientationVector.class, ()->{_converter.convert(vec1);});

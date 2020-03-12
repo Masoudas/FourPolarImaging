@@ -4,9 +4,9 @@ import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFacto
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
-import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.core.physics.polarization.PolarizationsIntensity;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 
 /**
@@ -72,7 +72,7 @@ public class OrientationToIntensityConverter implements IOrientationToIntensityC
             DipoleSquaredComponent.XY, Polarization.pol135);    }
 
     @Override
-    public IPolarizationsIntensity convert(IOrientationVector orientationVector) {
+    public IntensityVector convert(IOrientationVector orientationVector) {
         // Angle sines and cosines.
         double cosHalfDelta = Math.cos(orientationVector.getAngle(OrientationAngle.delta) / 2);
 
@@ -108,7 +108,7 @@ public class OrientationToIntensityConverter implements IOrientationToIntensityC
                 sinSquaredEta);
 
         // Calculate polarization intensity.        
-        IPolarizationsIntensity intensity = null;
+        IntensityVector intensity = null;
         try {
             double pol0Intensity = this._getPol0Intensity(dipoleSquared_XX, dipoleSquared_YY, dipoleSquared_ZZ,
                     dipoleSquared_XY);
@@ -122,7 +122,7 @@ public class OrientationToIntensityConverter implements IOrientationToIntensityC
             double pol135Intensity = this._getPol135Intensity(dipoleSquared_XX, dipoleSquared_YY, dipoleSquared_ZZ,
                     dipoleSquared_XY);
 
-            intensity = new PolarizationsIntensity(pol0Intensity, pol45Intensity, pol90Intensity, pol135Intensity);        
+            intensity = new IntensityVector(pol0Intensity, pol45Intensity, pol90Intensity, pol135Intensity);        
         } catch (PropagationFactorNotFound e) {
             // This exception is never caught, because the constructor checks for it. 
         }

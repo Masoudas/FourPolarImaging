@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.algorithm.fourPolar.converters;
 
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters.ImpossibleOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
-import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 
 /**
  * Interface for converting an {@link IPolarizationIntensity} to a
@@ -16,5 +16,5 @@ public interface IIntensityToOrientationConverter {
      * @param orientationVector
      * @return
      */
-    public IOrientationVector convert(IPolarizationsIntensity intensity) throws ImpossibleOrientationVector;
+    public IOrientationVector convert(IntensityVector intensity) throws ImpossibleOrientationVector;
 }

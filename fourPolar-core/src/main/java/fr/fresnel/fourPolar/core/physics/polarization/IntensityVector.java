@@ -4,13 +4,13 @@ package fr.fresnel.fourPolar.core.physics.polarization;
  * Models the propagated intensity from the sample for all polarizations. Note
  * that if an intensity is negative, it will be set to zero.
  */
-public class PolarizationsIntensity implements IPolarizationsIntensity {
+public class IntensityVector {
     final private double _pol0;
     final private double _pol45;
     final private double _pol90;
     final private double _pol135;
 
-    public PolarizationsIntensity(double pol0, double pol45, double pol90, double pol135) {
+    public IntensityVector(double pol0, double pol45, double pol90, double pol135) {
         _pol0 = pol0 > 0 ? pol0 : 0;
         _pol45 = pol45 > 0 ? pol45 : 0;
         _pol90 = pol90 > 0 ? pol90 : 0;
@@ -18,7 +18,6 @@ public class PolarizationsIntensity implements IPolarizationsIntensity {
 
     }
 
-    @Override
     public double getIntensity(Polarization pol) {
         double intensity = Double.NaN;
 

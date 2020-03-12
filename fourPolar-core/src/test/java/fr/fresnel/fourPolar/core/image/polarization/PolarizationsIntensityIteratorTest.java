@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 public class PolarizationsIntensityIteratorTest {
@@ -65,7 +65,7 @@ public class PolarizationsIntensityIteratorTest {
 
         boolean equals = true;
         while (iterator.hasNext()) {
-            IPolarizationsIntensity intensity = iterator.next();
+            IntensityVector intensity = iterator.next();
             UINT16 data = baseSetCursor.next().value();
 
             equals &= data.get() == (int) intensity.getIntensity(Polarization.pol0);

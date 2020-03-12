@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class PolarizationsIntensityTest {
     @Test
     public void getIntensity_NegativeIntensities_ReturnsZero() {
-        PolarizationsIntensity intensity = new PolarizationsIntensity(-1, -1, -1, -1);
+        IntensityVector intensity = new IntensityVector(-1, -1, -1, -1);
 
         assertTrue(
             intensity.getIntensity(Polarization.pol0) == 0 &&
@@ -19,7 +19,7 @@ public class PolarizationsIntensityTest {
 
     @Test
     public void getIntensity_NonNegativeIntensities_ReturnsIntensities() {
-        PolarizationsIntensity intensity = new PolarizationsIntensity(0, 1, 2, 3);
+        IntensityVector intensity = new IntensityVector(0, 1, 2, 3);
 
         assertTrue(
             intensity.getIntensity(Polarization.pol0) == 0 &&

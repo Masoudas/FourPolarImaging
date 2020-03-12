@@ -3,8 +3,8 @@ package fr.fresnel.fourPolar.core.image.polarization;
 import fr.fresnel.fourPolar.core.fourPolar.IPolarizationsIntensityIterator;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.physics.polarization.IPolarizationsIntensity;
-import fr.fresnel.fourPolar.core.physics.polarization.PolarizationsIntensity;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
+import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 
 class PolarizationsIntensityIterator implements IPolarizationsIntensityIterator {
     final private IPixelCursor<UINT16> _pol0Cursor; 
@@ -28,13 +28,13 @@ class PolarizationsIntensityIterator implements IPolarizationsIntensityIterator 
     }
 
     @Override
-    public IPolarizationsIntensity next() {
+    public IntensityVector next() {
         double intensityPol0 = this._pol0Cursor.next().value().get();
         double intensityPol45 = this._pol45Cursor.next().value().get();
         double intensityPol90 = this._pol90Cursor.next().value().get();
         double intensityPol135 = this._pol135Cursor.next().value().get();
 
-        PolarizationsIntensity polIntensity = new PolarizationsIntensity(
+        IntensityVector polIntensity = new IntensityVector(
             intensityPol0, intensityPol45, intensityPol90, intensityPol135);
         return polIntensity;
     }
