@@ -17,8 +17,8 @@ import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 
-public class PolarizationImageSetReaderTest {
-    final private static File _root = new File(PolarizationImageSetReaderTest.class.getResource("").getPath(),
+public class TiffPolarizationImageSetReaderTest {
+    final private static File _root = new File(TiffPolarizationImageSetReaderTest.class.getResource("").getPath(),
             "PolarizationImageSetReader");
 
     @Test
@@ -30,7 +30,7 @@ public class PolarizationImageSetReaderTest {
         ICapturedImageFileSet fileSet = new CapturedImageFileSet(1, capturedImageFile);
 
         ImageFactory factory = new ImgLib2ImageFactory();
-        IPolarizationImageSetReader reader = new PolarizationImageSetReader(factory);
+        IPolarizationImageSetReader reader = new TiffPolarizationImageSetReader(factory);
         IPolarizationImageSet imageSet = reader.read(_root, fileSet);
 
         long[] dim = { 2, 2 };

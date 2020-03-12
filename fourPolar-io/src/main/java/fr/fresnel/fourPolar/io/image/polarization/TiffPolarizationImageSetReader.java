@@ -19,14 +19,20 @@ import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
 import fr.fresnel.fourPolar.io.image.polarization.fileSet.TiffPolarizationImageFileSet;
 
 /**
- * A concrete implementation of the {@link IPolarizationImageSetReader}, which
- * can be used to read an instance of {@link PolarizationImageSet} from disk.
- * In this implementation, it is assumed that the images are tiff.
+ * A concrete implementation of {@link IOrientationImageReader} to read tiff
+ * polarization images.
  */
-public class PolarizationImageSetReader implements IPolarizationImageSetReader {
+public class TiffPolarizationImageSetReader implements IPolarizationImageSetReader {
     final private ImageReader<UINT16> _reader;
 
-    public PolarizationImageSetReader(ImageFactory factory) throws NoReaderFoundForImage {
+    /**
+     * Initialize the reader for the provided {@link Image} implementation. The same
+     * class can read several polarization images from the disk.
+     * 
+     * @param factory
+     * @throws NoReaderFoundForImage
+     */
+    public TiffPolarizationImageSetReader(ImageFactory factory) throws NoReaderFoundForImage {
         this._reader = TiffImageReaderFactory.getReader(factory, new UINT16());
     }
 

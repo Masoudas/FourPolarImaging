@@ -14,21 +14,20 @@ import fr.fresnel.fourPolar.io.image.polarization.fileSet.IPolarizationImageFile
 import fr.fresnel.fourPolar.io.image.polarization.fileSet.TiffPolarizationImageFileSet;
 
 /**
- * A concrete implementation of the {@link IPolarizationImageSetWriter}. This
- * writer, writes the {@link IPolarizationImageSet} as tiff files.
+ * A concrete implementation of {@link IPolarizationImageSetWriter} to write the
+ * polarization image as tiff files.
  */
-public class PolarizationImageSetWriter implements IPolarizationImageSetWriter {
+public class TiffPolarizationImageSetWriter implements IPolarizationImageSetWriter {
     private ImageWriter<UINT16> _writer;
 
     /**
-     * A concrete implementation of the {@link IPolarizationImageSetWriter}.
-     * 
-     * @param imageSet is the imageSet we wish to write to disk. Note that once this
-     *                 class is constructed, it can be used to write different
-     *                 instances of {@code IPolarizationImageSet} with the same
-     *                 instance.
+     * Initialize the writer for the provided type of orientation image. The same
+     * class can write several orientation images to the disk.
+     *
+     * @param imageSet
+     * @throws NoWriterFoundForImage
      */
-    public PolarizationImageSetWriter(IPolarizationImageSet imageSet) throws NoWriterFoundForImage{
+    public TiffPolarizationImageSetWriter(IPolarizationImageSet imageSet) throws NoWriterFoundForImage {
         this._writer = TiffImageWriterFactory.getWriter(imageSet.getPolarizationImage(Polarization.pol0).getImage(),
                 new UINT16());
     }
@@ -49,9 +48,8 @@ public class PolarizationImageSetWriter implements IPolarizationImageSetWriter {
      * @param imageSet
      * @throws IOException
      */
-    private void _writePolarizationImage(
-        Polarization pol, IPolarizationImageFileSet polFileSet, IPolarizationImageSet imageSet) 
-        throws IOException {
+    private void _writePolarizationImage(Polarization pol, IPolarizationImageFileSet polFileSet,
+            IPolarizationImageSet imageSet) throws IOException {
         this._writer.write(polFileSet.getFile(pol), imageSet.getPolarizationImage(pol).getImage());
     }
 
@@ -63,9 +61,8 @@ public class PolarizationImageSetWriter implements IPolarizationImageSetWriter {
      * @param metadata
      * @throws IOException
      */
-    private void _writePolarizationImage(
-        Polarization pol, IPolarizationImageFileSet polFileSet, IPolarizationImageSet imageSet, 
-        IMetadata metadata) throws IOException {
+    private void _writePolarizationImage(Polarization pol, IPolarizationImageFileSet polFileSet,
+            IPolarizationImageSet imageSet, IMetadata metadata) throws IOException {
         this._writer.write(polFileSet.getFile(pol), metadata, imageSet.getPolarizationImage(pol).getImage());
     }
 

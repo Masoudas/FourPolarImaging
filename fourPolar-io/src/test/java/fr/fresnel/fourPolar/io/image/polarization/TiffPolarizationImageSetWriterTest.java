@@ -13,8 +13,8 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSet;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
 
-public class PolarizationImageSetWriterTest {
-    final private static File _root = new File(PolarizationImageSetReaderTest.class.getResource("").getPath(),
+public class TiffPolarizationImageSetWriterTest {
+    final private static File _root = new File(TiffPolarizationImageSetReaderTest.class.getResource("").getPath(),
             "PolarizationImageSetWriter");
 
     @Test
@@ -34,7 +34,7 @@ public class PolarizationImageSetWriterTest {
 
         PolarizationImageSet imageSet = new PolarizationImageSet(fileSet, pol0, pol45, pol90, pol135);
 
-        IPolarizationImageSetWriter writer = new PolarizationImageSetWriter(imageSet);
+        IPolarizationImageSetWriter writer = new TiffPolarizationImageSetWriter(imageSet);
         writer.write(_root, imageSet);    
     }
 }
