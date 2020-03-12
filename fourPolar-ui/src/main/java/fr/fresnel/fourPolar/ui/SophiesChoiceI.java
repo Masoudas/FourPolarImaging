@@ -40,14 +40,14 @@ import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
  * 
  * With this choice, the path to each polarization file is directly provided.
  */
-class ChoiceI {
+public class SophiesChoiceI {
     public static void main(String[] args)
             throws NoReaderFoundForImage, IOException, CannotFormPolarizationImageSet, PropagationFactorNotFound,
             OpticalPropagationNotInvertible, IteratorMissMatch, ImpossibleOrientationVector, NoWriterFoundForImage {
-        File pol0File = new File("");
-        File pol45File = new File("");
-        File pol90File = new File("");
-        File pol135File = new File("");
+        File pol0File = new File("/home/masoud/Documents/SampleImages/1/pol0.tif");
+        File pol45File = new File("/home/masoud/Documents/SampleImages/1/pol45.tif");
+        File pol90File = new File("/home/masoud/Documents/SampleImages/1/pol90.tif");
+        File pol135File = new File("/home/masoud/Documents/SampleImages/1/pol135.tif");
 
         ImageFactory imgFactory = new ImgLib2ImageFactory();
 
@@ -56,6 +56,7 @@ class ChoiceI {
         Image<UINT16> pol45Image = reader.read(pol45File);
         Image<UINT16> pol90Image = reader.read(pol90File);
         Image<UINT16> pol135Image = reader.read(pol135File);
+        reader.close();
 
         IPolarizationImageSet polarizationImageSet = new PolarizationImageSet(null, pol0Image, pol45Image, pol90Image,
                 pol135Image);
@@ -67,9 +68,9 @@ class ChoiceI {
         FourPolarMapper mapper = new FourPolarMapper(converter);
         mapper.map(polarizationImageSet.getIterator(), orientationImage.getOrientationVectorIterator());
 
-        File rhoFile = new File("/rho.tif");
-        File deltaFile = new File("/delta.tif");
-        File etaFile = new File("/eta.tif");
+        File rhoFile = new File("/home/masoud/Documents/SampleImages/1/rho.tif");
+        File deltaFile = new File("/home/masoud/Documents/SampleImages/1/delta.tif");
+        File etaFile = new File("/home/masoud/Documents/SampleImages/1/eta.tif");
         
         ImageWriter<Float32> writer = TiffImageWriterFactory.getWriter(
             orientationImage.getAngleImage(OrientationAngle.rho).getImage(), new Float32());
@@ -77,6 +78,7 @@ class ChoiceI {
         writer.write(rhoFile, orientationImage.getAngleImage(OrientationAngle.rho).getImage());
         writer.write(deltaFile, orientationImage.getAngleImage(OrientationAngle.delta).getImage());
         writer.write(etaFile, orientationImage.getAngleImage(OrientationAngle.eta).getImage());
+        writer.close();
 
     }
 
@@ -111,3 +113,5 @@ class ChoiceI {
     }
     
 }
+
+
