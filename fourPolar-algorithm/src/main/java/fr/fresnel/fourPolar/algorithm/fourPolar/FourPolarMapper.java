@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.algorithm.fourPolar;
 import java.util.NoSuchElementException;
 
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.IteratorMissMatch;
+import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters.ImpossibleOrientationVector;
 import fr.fresnel.fourPolar.algorithm.fourPolar.converters.IIntensityToOrientationConverter;
 import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
 import fr.fresnel.fourPolar.core.fourPolar.IPolarizationsIntensityIterator;
@@ -33,10 +34,11 @@ public class FourPolarMapper {
      * 
      * @param intensityIterator   is the intensity set iterator.
      * @param orientationIterator is the orientation vector set iterator.
+     * @throws ImpossibleOrientationVector
      */
     public void map(
-        IPolarizationsIntensityIterator intensityIterator,
-        IOrientationVectorIterator orientationIterator) throws IteratorMissMatch {
+        IPolarizationsIntensityIterator intensityIterator, IOrientationVectorIterator orientationIterator)
+        throws IteratorMissMatch, ImpossibleOrientationVector {
         try {
             while (intensityIterator.hasNext()) {
                 IPolarizationsIntensity intensity = intensityIterator.next();

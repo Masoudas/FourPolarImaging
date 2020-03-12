@@ -1,13 +1,12 @@
 package fr.fresnel.fourPolar.algorithm.fourPolar.converters;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.apache.commons.math3.util.Precision;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters.ImpossibleOrientationVector;
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.propagation.OpticalPropagationNotInvertible;
-import fr.fresnel.fourPolar.algorithm.fourPolar.inversePropagation.MatrixBasedInverseOpticalPropagationCalculator;
 import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
@@ -25,95 +24,73 @@ public class IntensityToOrientationConverterTest {
 
     @BeforeAll
     public static void setInversePropagation() throws PropagationFactorNotFound, OpticalPropagationNotInvertible {
-        Channel channel = new Channel(520, 1, 0.7, 1, 0.7);
+        // Channel and NA parameters are irrelevant to these tests.
+        Channel channel = new Channel(520e-9, 1, 0.7, 1, 0.7);
         NumericalAperture na = new NumericalAperture(1.45, 1.015, 1.45, 1.015);
 
         OpticalPropagation optPropagation = new OpticalPropagation(channel, na);
         InverseOpticalPropagation inverseProp = new InverseOpticalPropagation(optPropagation);
 
-        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.XX, 252.6443);
-        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.YY, 52.0704);
-        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.ZZ, -104.7092);
+        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.XX, 0.7880897720);
+        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.YY, 0.20470751910);
+        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.ZZ, -1.0419630892);
         inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.XY, 0);
 
-        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.XX,  52.0704);
-        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.YY,  252.6443);
-        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.ZZ,  -104.7092);
-        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.XY,  0.0);
+        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.XX, 0.20470751910);
+        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.YY, 0.78808977204);
+        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.ZZ, -1.0419630892);
+        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.XY, 0.0);
 
-        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.XX, -17.4683);
-        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.YY, -17.4683);
-        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.ZZ, 33.5233);
-        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.XY, 41.8607);
+        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.XX, -0.1108420459);
+        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.YY, -0.1108420459);
+        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.ZZ, 0.55323020559);
+        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.XY, 0.16834141369);
 
-        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XX, -17.4683);
-        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.YY, -17.4683);
-        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.ZZ, 33.5233);
-        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XY, 41.8607);
+        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XX, -0.11084204599);
+        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.YY, -0.11084204599);
+        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.ZZ, 0.553230205596);
+        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XY, -0.16834141369);
 
-        // MatrixBasedInverseOpticalPropagationCalculator inverseCalculator = new MatrixBasedInverseOpticalPropagationCalculator();
         _converter = new IntensityToOrientationConverter(inverseProp);
     }
 
     private static boolean _checkPrecision(double val1, double val2, double error) {
-        return Math.abs(val1 - val2) < error;        
+        return Math.abs(val1 - val2) < error;
     }
 
     @Test
-    public void convert_BenchMark() {
-        IPolarizationsIntensity intensity = new PolarizationsIntensity(1, 0, 0, 0);
+    public void convert_BenchMark() throws ImpossibleOrientationVector {
+        IPolarizationsIntensity intensity = new PolarizationsIntensity(0.389827, 1.562062, 0.338139, 1.562062);
 
+        IOrientationVector vector = null;
         for (int i = 0; i < 1000000; i++) {
-            _converter.convert(intensity);
+            vector = _converter.convert(intensity);
         }
 
+        System.out.println(vector.getAngle(OrientationAngle.eta));
     }
 
     @Test
-    public void convert_Pol0UnitIntensity_Rhois0Deltais0Etais0() {
-        IPolarizationsIntensity intensity = new PolarizationsIntensity(1, 0, 0, 0);
+    public void convert_UnfeasibleIntensityVectors_ThrowsImpossibleOrientationVector() {
+        IPolarizationsIntensity vec1 = new PolarizationsIntensity(1, 0, 0, 0);
+        IPolarizationsIntensity vec2 = new PolarizationsIntensity(0, 1, 0, 0);
+        IPolarizationsIntensity vec3 = new PolarizationsIntensity(0, 0, 1, 0);
+        IPolarizationsIntensity vec4 = new PolarizationsIntensity(0, 0, 0, 1);
+        IPolarizationsIntensity vec5 = new PolarizationsIntensity(1, 0, 0, 1);
 
-        IOrientationVector vector = _converter.convert(intensity);
- 
-        assertTrue(
-            vector.getAngle(OrientationAngle.rho) == 0 && vector.getAngle(OrientationAngle.delta) == 0
-            && vector.getAngle(OrientationAngle.eta) == 0);
+        assertThrows(
+            ImpossibleOrientationVector.class, ()->{_converter.convert(vec1);});
+
+        assertThrows(
+                ImpossibleOrientationVector.class, ()->{_converter.convert(vec2);});            
+        
+        assertThrows(
+            ImpossibleOrientationVector.class, ()->{_converter.convert(vec3);});
+        
+        assertThrows(
+            ImpossibleOrientationVector.class, ()->{_converter.convert(vec4);});
+
+        assertThrows(
+            ImpossibleOrientationVector.class, ()->{_converter.convert(vec5);});
     }
-
-    @Test
-    public void convert_Pol45UnitIntensity_Rhois45Deltais0Etais0() {
-        IPolarizationsIntensity intensity = new PolarizationsIntensity(0, 1, 0, 0);
-
-        IOrientationVector vector = _converter.convert(intensity);
-
-        assertTrue(
-            _checkPrecision(vector.getAngle(OrientationAngle.rho), 45d / 180d * Math.PI, 1e-4)
-            && _checkPrecision(vector.getAngle(OrientationAngle.delta), 0, 1e-4)
-            && _checkPrecision(vector.getAngle(OrientationAngle.eta), 0, 1e-4));
-    }
-
-    @Test
-    public void convert_Pol90UnitIntensity_Rhois90Deltais0Etais0() {
-        IPolarizationsIntensity intensity = new PolarizationsIntensity(0, 0, 1, 0);
-
-        IOrientationVector vector = _converter.convert(intensity);
-
-        assertTrue(
-            _checkPrecision(vector.getAngle(OrientationAngle.rho), 90d / 180d * Math.PI, 1e-4)
-            && _checkPrecision(vector.getAngle(OrientationAngle.delta), 0, 1e-4)
-            && _checkPrecision(vector.getAngle(OrientationAngle.eta), 0, 1e-4));
-    }
-
-    @Test
-    public void convert_Pol135UnitIntensity_Rhois135Deltais0Etais0() {
-        IPolarizationsIntensity intensity = new PolarizationsIntensity(0, 0, 0, 1);
-
-        IOrientationVector vector = _converter.convert(intensity);
-
-        assertTrue(
-            _checkPrecision(vector.getAngle(OrientationAngle.rho), 135d / 180d * Math.PI, 1e-4)
-            && _checkPrecision(vector.getAngle(OrientationAngle.delta), 0, 1e-4)
-            && _checkPrecision(vector.getAngle(OrientationAngle.eta), 0, 1e-4));
-    }
-
 }

@@ -11,6 +11,7 @@ import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 
 /**
  * A concreter implementation of the {@link IOrientationToIntensityConverter}.
+ * This implementation is based on the paper by Brasselet.
  */
 public class OrientationToIntensityConverter implements IOrientationToIntensityConverter {
     final private double _propFactor_xx_0;
@@ -72,6 +73,7 @@ public class OrientationToIntensityConverter implements IOrientationToIntensityC
 
     @Override
     public IPolarizationsIntensity convert(IOrientationVector orientationVector) {
+        // Angle sines and cosines.
         double cosHalfDelta = Math.cos(orientationVector.getAngle(OrientationAngle.delta) / 2);
 
         double cosEta = Math.cos(orientationVector.getAngle(OrientationAngle.eta));
@@ -88,23 +90,25 @@ public class OrientationToIntensityConverter implements IOrientationToIntensityC
         double cosSquaredRho = 1 - sinSquaredRho;
         double cosFourRho = cosSquaredRho * cosSquaredRho;
 
-        double dipoleAmplitude_a = this._getDipoleAmplitude_a(cosHalfDelta);
-        double dipoleAmplitude_b = this._getDipoleAmplitude_b(cosHalfDelta);
+        // Calculate dipole amplitude aling each axis.
+        double dipoleAmplitude_axis1 = this._getDipoleAmplitude_axes1(cosHalfDelta);
+        double dipoleAmplitude_axis3 = this._getDipoleAmplitude_axes3(cosHalfDelta);
 
-        double dipoleSquared_XX = this._getDipoleSquared_XX(dipoleAmplitude_a, dipoleAmplitude_b, cosSquaredEta,
+        // Calculate dipole squared.
+        double dipoleSquared_XX = this._getDipoleSquared_XX(dipoleAmplitude_axis1, dipoleAmplitude_axis3, cosSquaredEta,
                 cosSquaredRho, sinSquaredEta, sinFourRho, cosFourRho, sin2Rho);
 
-        double dipoleSquared_YY = this._getDipoleSquared_YY(dipoleAmplitude_a, dipoleAmplitude_b, cosSquaredEta,
+        double dipoleSquared_YY = this._getDipoleSquared_YY(dipoleAmplitude_axis1, dipoleAmplitude_axis3, cosSquaredEta,
                 sinSquaredEta, sinSquaredRho, sinFourRho, cosFourRho, sin2Rho);
 
-        double dipoleSquared_ZZ = this._getDipoleSquared_ZZ(dipoleAmplitude_a, dipoleAmplitude_b, cosSquaredEta,
+        double dipoleSquared_ZZ = this._getDipoleSquared_ZZ(dipoleAmplitude_axis1, dipoleAmplitude_axis3, cosSquaredEta,
                 sinSquaredEta);
 
-        double dipoleSquared_XY = this._getDipoleSquared_XY(dipoleAmplitude_a, dipoleAmplitude_b, sin2Rho,
+        double dipoleSquared_XY = this._getDipoleSquared_XY(dipoleAmplitude_axis1, dipoleAmplitude_axis3, sin2Rho,
                 sinSquaredEta);
 
+        // Calculate polarization intensity.        
         IPolarizationsIntensity intensity = null;
-
         try {
             double pol0Intensity = this._getPol0Intensity(dipoleSquared_XX, dipoleSquared_YY, dipoleSquared_ZZ,
                     dipoleSquared_XY);
@@ -154,33 +158,43 @@ public class OrientationToIntensityConverter implements IOrientationToIntensityC
             dipoleSquared_ZZ * _propFactor_zz_135 + dipoleSquared_XY * _propFactor_xy_135;
         }
 
-    private double _getDipoleAmplitude_b(double cosHalfDelta) {
-        return (cosHalfDelta * cosHalfDelta * cosHalfDelta - 1) / (3 * (cosHalfDelta - 1));
+    /**
+     * Returns the dipole amplitude along axises 1 & 3.
+     */
+    private double _getDipoleAmplitude_axes3(double cosHalfDelta) {
+        return (cosHalfDelta * cosHalfDelta + cosHalfDelta + 1) / 3;
     }
 
-    private double _getDipoleAmplitude_a(double cosHalfDelta) {
+    /**
+     * Returns the dipole amplitude along axis 2.
+     */
+    private double _getDipoleAmplitude_axes1(double cosHalfDelta) {
         return (1 - cosHalfDelta) * (2 + cosHalfDelta) / 6;
     }
 
-    private double _getDipoleSquared_XX(double dipoleAmplitude_a, double dipoleAmplitude_b, double cosSquaredEta,
-            double cosSquaredRho, double sinSquaredEta, double sinFourRho, double cosFourRho, double sin2Rho) {
-        return dipoleAmplitude_b * ((2 * (cosSquaredEta + 1) * sin2Rho + sinFourRho + cosSquaredEta * cosFourRho)
-                + dipoleAmplitude_a * sinSquaredEta * cosSquaredRho);
+    private double _getDipoleSquared_XX(
+        double dipoleAmplitude_axis1, double dipoleAmplitude_axis3, double cosSquaredEta,
+        double cosSquaredRho, double sinSquaredEta, double sinFourRho, double cosFourRho, double sin2Rho) {
+        return dipoleAmplitude_axis1 * (0.25 * (cosSquaredEta + 1) * sin2Rho * sin2Rho + 
+            sinFourRho + cosSquaredEta * cosFourRho) + dipoleAmplitude_axis3 * sinSquaredEta * cosSquaredRho;
     }
 
-    private double _getDipoleSquared_YY(double dipoleAmplitude_a, double dipoleAmplitude_b, double cosSquaredEta,
-            double sinSquaredEta, double sinSquaredRho, double sinFourRho, double cosFourRho, double sin2Rho) {
-        return dipoleAmplitude_b * ((2 * (cosSquaredEta + 1) * sin2Rho + cosFourRho + cosSquaredEta * sinFourRho)
-                + dipoleAmplitude_a * sinSquaredEta * sinSquaredRho);
+    private double _getDipoleSquared_YY(
+        double dipoleAmplitude_axis1, double dipoleAmplitude_axis3, double cosSquaredEta,
+        double sinSquaredEta, double sinSquaredRho, double sinFourRho, double cosFourRho, double sin2Rho) {
+        return dipoleAmplitude_axis1 * (0.25 * (cosSquaredEta + 1) * sin2Rho * sin2Rho + 
+            cosFourRho + cosSquaredEta * sinFourRho) + dipoleAmplitude_axis3 * sinSquaredEta * sinSquaredRho;
     }
 
-    private double _getDipoleSquared_ZZ(double dipoleAmplitude_a, double dipoleAmplitude_b, double cosSquaredEta,
-            double sinSquaredEta) {
-        return dipoleAmplitude_b * sinSquaredEta + dipoleAmplitude_a * cosSquaredEta;
+    private double _getDipoleSquared_ZZ(
+        double dipoleAmplitude_axis1, double dipoleAmplitude_axis3, double cosSquaredEta,
+        double sinSquaredEta) {
+        return dipoleAmplitude_axis1 * sinSquaredEta + dipoleAmplitude_axis3 * cosSquaredEta;
     }
 
-    private double _getDipoleSquared_XY(double dipoleAmplitude_a, double dipoleAmplitude_b, double sin2Rho,
-            double sinSquaredEta) {
-        return 0.5 * sin2Rho * sinSquaredEta * (dipoleAmplitude_a - dipoleAmplitude_b);
+    private double _getDipoleSquared_XY(
+        double dipoleAmplitude_axis1, double dipoleAmplitude_axis3, double sin2Rho,
+        double sinSquaredEta) {
+        return 0.5 * sin2Rho * sinSquaredEta * (dipoleAmplitude_axis3 - dipoleAmplitude_axis1);
     }
 }
