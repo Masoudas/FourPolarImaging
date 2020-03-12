@@ -11,6 +11,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSet;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
 
 public class PolarizationImageSetWriterTest {
     final private static File _root = new File(PolarizationImageSetReaderTest.class.getResource("").getPath(),
@@ -18,7 +19,7 @@ public class PolarizationImageSetWriterTest {
 
     @Test
     public void write_ImgLib2PolarizationImage_WritesIntoTheTargetFolder()
-            throws CannotFormPolarizationImageSet, IOException {
+            throws CannotFormPolarizationImageSet, IOException, NoWriterFoundForImage {
         File pol0_45_90_135_File = new File(_root, "testFile.tif");
 
         CapturedImageFileSet fileSet = new CapturedImageFileSet(

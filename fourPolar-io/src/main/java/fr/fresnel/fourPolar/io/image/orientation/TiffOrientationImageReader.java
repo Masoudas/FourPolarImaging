@@ -25,7 +25,8 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
 
     /**
      * Reads the tiff orientation image and creates the {@link IOrientationImage}
-     * using the given implementation of {@link Image}
+     * using the given implementation of {@link Image}. Several orientation images
+     * can be read with the initialization.
      * 
      * @param factory
      * @throws NoReaderFoundForImage

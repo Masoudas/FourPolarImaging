@@ -20,8 +20,11 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
     final private ImageWriter<Float32> _writer;
 
     /**
-     * @throws NoWriterFoundForImage
+     * Initialize the writer for the provided type of orientation image. The class
+     * can write several instances of the same interface.
      * 
+     * @param image
+     * @throws NoWriterFoundForImage
      */
     public TiffOrientationImageWriter(IOrientationImage image) throws NoWriterFoundForImage {
         _writer = TiffImageWriterFactory.getWriter(
@@ -29,12 +32,16 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
     }
 
     @Override
-    public void write(File rootFolder, ICapturedImageFileSet fileSet, IOrientationImage image) throws IOException {
+    public void write(
+        File rootFolder, ICapturedImageFileSet fileSet, IOrientationImage image) throws IOException {
         TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(rootFolder, fileSet);
 
-        _writer.write(oSet.getFile(OrientationAngle.rho), image.getAngleImage(OrientationAngle.rho).getImage());
-        _writer.write(oSet.getFile(OrientationAngle.delta), image.getAngleImage(OrientationAngle.delta).getImage());
-        _writer.write(oSet.getFile(OrientationAngle.eta), image.getAngleImage(OrientationAngle.eta).getImage());
+        _writer.write(
+            oSet.getFile(OrientationAngle.rho), image.getAngleImage(OrientationAngle.rho).getImage());
+        _writer.write(
+            oSet.getFile(OrientationAngle.delta), image.getAngleImage(OrientationAngle.delta).getImage());
+        _writer.write(
+            oSet.getFile(OrientationAngle.eta), image.getAngleImage(OrientationAngle.eta).getImage());
 
     }
 
@@ -43,5 +50,4 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
         _writer.close();
     }
 
-    
 }
