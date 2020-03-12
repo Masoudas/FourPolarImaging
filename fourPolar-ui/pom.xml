@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -13,4 +13,28 @@
   <packaging>jar</packaging>
 
   <name>Four Polar Imaging Project</name>
+
+  <dependencies>
+    <!-- Dependency on the core module -->
+    <dependency>
+      <groupId>fr.fresnel.fourPolar</groupId>
+      <artifactId>fourPolar-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Dependency on the io module -->
+    <dependency>
+      <groupId>fr.fresnel.fourPolar</groupId>
+      <artifactId>fourPolar-io</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Dependency on the algorithm module -->
+    <dependency>
+      <groupId>fr.fresnel.fourPolar</groupId>
+      <artifactId>fourPolar-algorithm</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+  </dependencies>
 </project>
