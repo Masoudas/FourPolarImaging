@@ -32,9 +32,8 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
     }
 
     @Override
-    public void write(
-        File rootFolder, ICapturedImageFileSet fileSet, IOrientationImage image) throws IOException {
-        TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(rootFolder, fileSet);
+    public void write(File rootFolder, IOrientationImage image) throws IOException {
+        TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(rootFolder, image.getCapturedSet());
 
         _writer.write(
             oSet.getFile(OrientationAngle.rho), image.getAngleImage(OrientationAngle.rho).getImage());
