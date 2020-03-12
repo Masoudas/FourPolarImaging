@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.IteratorMissMatch;
+import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters.ImpossibleOrientationVector;
 import fr.fresnel.fourPolar.algorithm.fourPolar.converters.IntensityToOrientationConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
 import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
@@ -25,25 +26,27 @@ import fr.fresnel.fourPolar.core.physics.propagation.InverseOpticalPropagation;
 
 public class FourPolarMapperTest {
     /**
-     * Define a number of pair of predefined intensity and orientation.
-     * Assign the intensites, calculate orientation and compare the results.
+     * Define a number of pair of predefined intensity and orientation. Assign the
+     * intensites, calculate orientation and compare the results.
+     * 
+     * @throws ImpossibleOrientationVector
      */
     @Test
     public void map_2By2PolarizationImage_MapsToCorrectOrientation()
-            throws CannotFormPolarizationImageSet, IteratorMissMatch {
-        PolarizationsIntensity intensity1 = new PolarizationsIntensity(34827.6, 15597.33, 348276, 15597.33);
-        OrientationVector vector1 = new OrientationVector((float) (0f / 180f * Math.PI), (float) (0f / 180f * Math.PI),
+            throws CannotFormPolarizationImageSet, IteratorMissMatch, ImpossibleOrientationVector {
+        PolarizationsIntensity intensity1 = new PolarizationsIntensity(13910.52, 32224.54, 13910.52, 32224.54);
+        OrientationVector vector1 = new OrientationVector((float) (0f / 180f * Math.PI), (float) (180f / 180f * Math.PI),
                 (float) (0f / 180f * Math.PI));
 
-        PolarizationsIntensity intensity2 = new PolarizationsIntensity(48594.3, 15801.47, 48594.3, 15801.47);
+        PolarizationsIntensity intensity2 = new PolarizationsIntensity(971, 3160, 971, 3160);
         OrientationVector vector2 = new OrientationVector((float) (0f / 180f * Math.PI), (float) (90f / 180f * Math.PI),
                 (float) (0f / 180f * Math.PI));
 
         PolarizationsIntensity intensity3 = new PolarizationsIntensity(10372.49, 15983.54, 18017.8, 15983.54);
-        OrientationVector vector3 = new OrientationVector((float) (0f / 180f * Math.PI), (float) (0f / 180f * Math.PI),
+        OrientationVector vector3 = new OrientationVector((float) (0f / 180f * Math.PI), (float) (180f / 180f * Math.PI),
                 (float) (45f / 180f * Math.PI));
 
-        PolarizationsIntensity intensity4 = new PolarizationsIntensity(90177.5, 16034.57, 38448.6, 16034.57);
+        PolarizationsIntensity intensity4 = new PolarizationsIntensity(18035, 32069, 7689, 32069);
         OrientationVector vector4 = new OrientationVector((float) (0f / 180f * Math.PI), (float) (90f / 180f * Math.PI),
                 (float) (45f / 180f * Math.PI));
 
@@ -99,7 +102,7 @@ public class FourPolarMapperTest {
             assertTrue(false, "Orientation image has no orientation vectors");
         }
         
-        double err = 1e-4;
+        double err = 1e-1;
         assertTrue(
             _compareAngles(iterator.next(), vector1, err) &&
             _compareAngles(iterator.next(), vector2, err) &&
