@@ -25,14 +25,14 @@ public class OrientationToIntensityConverterTest {
     private static void _setPropagationMatrix() throws PropagationFactorNotFound {
         IChannel channel = new Channel(520, 1, 0.7, 1, 0.7);
         INumericalAperture na = new NumericalAperture(1.45, 1.015, 1.45, 1.015);
-        
+
         IOpticalPropagation opticalPropagation = new OpticalPropagation(channel, na);
 
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0, 1.72622242);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol0, 0.012080463);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol0, 0.348276444);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol0, 0.0);
-                
+
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol90, 0.012080463);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol90, 1.726222425);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol90, 0.348276444);
@@ -52,7 +52,7 @@ public class OrientationToIntensityConverterTest {
     }
 
     private static boolean _checkPrecision(double val1, double val2, double error) {
-        return Math.abs(val1 - val2) < error;        
+        return Math.abs(val1 - val2) < error;
     }
 
     @Test
@@ -61,24 +61,83 @@ public class OrientationToIntensityConverterTest {
 
         for (int i = 0; i < 1000000; i++) {
             _converter.convert(vector);
-        }   
+        }
     }
 
     @Test
     public void convert_Rho45Delta0Eta0_Returns() {
-        IOrientationVector vector = new OrientationVector((float)(180f/180f * Math.PI), (float)(90f/180f * Math.PI), 0);
+        IOrientationVector vector = new OrientationVector((float) (10f / 180f * Math.PI), (float) (90f / 180f * Math.PI),
+            (float) (0f / 180f * Math.PI));
 
         IntensityVector intensity = _converter.convert(vector);
 
         assertTrue(
-            _checkPrecision(intensity.getIntensity(Polarization.pol0), 1, 1e-4) &&
-            _checkPrecision(intensity.getIntensity(Polarization.pol45), 0, 1e-4) &&
-            _checkPrecision(intensity.getIntensity(Polarization.pol90), 0, 1e-4) &&
-            _checkPrecision(intensity.getIntensity(Polarization.pol45), 0, 1e-4)
-        );
-        
+            _checkPrecision(intensity.getIntensity(Polarization.pol0), 1, 1e-4)
+            && _checkPrecision(intensity.getIntensity(Polarization.pol45), 0, 1e-4)
+            && _checkPrecision(intensity.getIntensity(Polarization.pol90), 0, 1e-4)
+            && _checkPrecision(intensity.getIntensity(Polarization.pol45), 0, 1e-4));
+
     }
 
+    @Test
+    public void convert_Delta180_ReturnsSameIntensityForAllRhoAndEta() {
+        float delta = (float) (180f / 180f * Math.PI);
+        float angleStep = (float)Math.PI/180;
 
+        IOrientationVector baseVector = new OrientationVector(0f, delta, 0f);
+        IntensityVector baseIntensity = _converter.convert(baseVector);
+
+        boolean equals = true;
+        for (float rho = 0; rho < Math.PI; rho += angleStep) {
+            for (float eta = 0; eta < Math.PI / 2; eta += angleStep) {
+                IOrientationVector vector = new OrientationVector(rho, delta, eta);
+                IntensityVector intensity = _converter.convert(vector);
+
+                equals &= 
+                    _checkPrecision(
+                        intensity.getIntensity(Polarization.pol0), baseIntensity.getIntensity(Polarization.pol0), 1e-4)
+                    && _checkPrecision(
+                        intensity.getIntensity(Polarization.pol45), baseIntensity.getIntensity(Polarization.pol45), 1e-4)
+                    && _checkPrecision(
+                        intensity.getIntensity(Polarization.pol90), baseIntensity.getIntensity(Polarization.pol90), 1e-4)
+                    && _checkPrecision(
+                        intensity.getIntensity(Polarization.pol135), baseIntensity.getIntensity(Polarization.pol135), 1e-4);
+            }
+        }
+
+        assertTrue(equals);
+    }
+
+    @Test
+    public void convert_Eta0_ForOneDeltaReturnsSameIntensityForAllRho() {
+        float eta = (float) (0f / 180f * Math.PI);
+        float angleStep = (float)Math.PI/180;
+
+        boolean equals = true;
+        for (float delta = 0; delta < Math.PI; delta += angleStep) {
+            IOrientationVector baseVector = new OrientationVector(0f, delta, eta);
+            IntensityVector baseIntensity = _converter.convert(baseVector);
+
+            for (float rho = 0; rho < Math.PI; rho += angleStep) {
+                IOrientationVector vector = new OrientationVector(rho, delta, eta);
+                IntensityVector intensity = _converter.convert(vector);
+
+                equals &= 
+                    _checkPrecision(
+                        intensity.getIntensity(Polarization.pol0), baseIntensity.getIntensity(Polarization.pol0), 1e-4)
+                    && _checkPrecision(
+                        intensity.getIntensity(Polarization.pol45), baseIntensity.getIntensity(Polarization.pol45), 1e-4)
+                    && _checkPrecision(
+                        intensity.getIntensity(Polarization.pol90), baseIntensity.getIntensity(Polarization.pol90), 1e-4)
+                    && _checkPrecision(
+                        intensity.getIntensity(Polarization.pol135), baseIntensity.getIntensity(Polarization.pol135), 1e-4);
+            }
+        }
+
+        assertTrue(equals);
+
+        
+    }
     
+
 }
