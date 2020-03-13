@@ -102,7 +102,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         double pol135Intensity = intensity.getIntensity(Polarization.pol135);
 
         if (pol0Intensity == 0 && pol45Intensity == 0 && pol90Intensity == 0 && pol135Intensity == 0) {
-            return new OrientationVector(Float.NaN, Float.NaN, Float.NaN);
+            throw new ImpossibleOrientationVector("All intensities cannot be zero simultaneously.");
         }
 
         // Computing dipole squared.
