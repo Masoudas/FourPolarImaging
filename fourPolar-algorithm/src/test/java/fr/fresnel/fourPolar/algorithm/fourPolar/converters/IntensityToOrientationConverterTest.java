@@ -60,7 +60,7 @@ public class IntensityToOrientationConverterTest {
 
     @Test
     public void convert_BenchMark() throws ImpossibleOrientationVector {
-        IntensityVector intensity = new IntensityVector(0.389827, 1.562062, 0.338139, 1.562062);
+        IntensityVector intensity = new IntensityVector(1, 1, 1, 1);
 
         IOrientationVector vector = null;
         for (int i = 0; i < 1000000; i++) {
@@ -77,12 +77,13 @@ public class IntensityToOrientationConverterTest {
         IntensityVector vec3 = new IntensityVector(0, 0, 1, 0);
         IntensityVector vec4 = new IntensityVector(0, 0, 0, 1);
         IntensityVector vec5 = new IntensityVector(1, 0, 0, 1);
+        IntensityVector vec6 = new IntensityVector(0, 0, 0, 0);
 
         assertThrows(
             ImpossibleOrientationVector.class, ()->{_converter.convert(vec1);});
 
         assertThrows(
-                ImpossibleOrientationVector.class, ()->{_converter.convert(vec2);});            
+            ImpossibleOrientationVector.class, ()->{_converter.convert(vec2);});            
         
         assertThrows(
             ImpossibleOrientationVector.class, ()->{_converter.convert(vec3);});
@@ -92,5 +93,9 @@ public class IntensityToOrientationConverterTest {
 
         assertThrows(
             ImpossibleOrientationVector.class, ()->{_converter.convert(vec5);});
+
+        assertThrows(
+            ImpossibleOrientationVector.class, ()->{_converter.convert(vec6);});
+
     }
 }
