@@ -39,4 +39,9 @@ class PolarizationsIntensityIterator implements IPolarizationsIntensityIterator 
         return polIntensity;
     }
 
+    @Override
+    public long size() {
+        return _pol0Cursor.size();
+    }
+
 }

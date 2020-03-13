@@ -61,4 +61,9 @@ class OrientationVectorIterator implements IOrientationVectorIterator {
 
     }
 
+    @Override
+    public long size() {
+        return _rhoCursor.size();
+    }
+
 }

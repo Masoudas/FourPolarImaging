@@ -20,17 +20,19 @@ class ImgLib2PixelCursor<U extends PixelType, T extends NativeType<T>> implement
     final private Cursor<T> _cursor;
     private long[] _position;
     final private TypeConverter<T> _tConverter;
+    final private long _size;
 
     /**
      * 
      * @param cursor is the cursor of the ImgLib2.
-     * @param ndim   is the
+     * @param ndim   is the dimension of the associated image.
      * @throws ConverterNotFound
      */
-    public ImgLib2PixelCursor(final Cursor<T> cursor, final int ndim, final TypeConverter<T> tConverter){
+    public ImgLib2PixelCursor(final Cursor<T> cursor, final long[] imageDim, final TypeConverter<T> tConverter) {
         this._cursor = cursor;
-        this._position = new long[ndim];
+        this._position = new long[imageDim.length];
         this._tConverter = tConverter;
+        this._size = _computeSizeOfCursor(imageDim);
     }
 
     @Override
@@ -41,7 +43,7 @@ class ImgLib2PixelCursor<U extends PixelType, T extends NativeType<T>> implement
     @Override
     public IPixel<U> next() {
         PixelType pixelValue = _tConverter.getPixelType(this._cursor.next());
-        return new Pixel<U>((U)pixelValue);
+        return new Pixel<U>((U) pixelValue);
     }
 
     @Override
@@ -60,6 +62,20 @@ class ImgLib2PixelCursor<U extends PixelType, T extends NativeType<T>> implement
     public void reset() {
         this._cursor.reset();
 
+    }
+
+    private long _computeSizeOfCursor(long[] imageDim) {
+        long size = 1;
+
+        for (long dim : imageDim) {
+            size *= dim;
+        }
+        return size;
+    }
+
+    @Override
+    public long size() {
+        return this._size;
     }
 
 }

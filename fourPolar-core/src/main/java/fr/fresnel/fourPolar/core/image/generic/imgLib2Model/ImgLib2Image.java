@@ -53,7 +53,7 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
 
     @Override
     public IPixelCursor<U> getCursor() {
-        return new ImgLib2PixelCursor<U, V>(this._img.cursor(), this._img.numDimensions(), this._tConverter);
+        return new ImgLib2PixelCursor<U, V>(this._img.cursor(), this.getDimensions(), this._tConverter);
     }
 
     @Override

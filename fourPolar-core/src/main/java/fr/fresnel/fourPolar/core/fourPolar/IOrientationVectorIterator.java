@@ -13,4 +13,10 @@ public interface IOrientationVectorIterator extends Iterator<IOrientationVector>
      * @param vector
      */
     public void set(IOrientationVector vector);
+
+    /**
+     * Returns the number of orientation vectors associated with this iterator.
+     * @return
+     */
+    public long size();
 }

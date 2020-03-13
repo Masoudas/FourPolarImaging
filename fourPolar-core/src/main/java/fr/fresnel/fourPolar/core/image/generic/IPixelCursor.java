@@ -28,4 +28,10 @@ public interface IPixelCursor<T extends PixelType> extends Iterator<IPixel<T>> {
      * Reset the cursor, that is put it to where it would be if newly created.
      */
     public void reset();
+
+    /**
+     * Returns the number of pixels associated with this iterator.
+     * @return
+     */
+    public long size();
 }
