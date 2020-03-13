@@ -21,6 +21,10 @@ public class UINT16ImgLib2TiffImageReader extends GrayScaleImgLib2TiffReader<UIN
 
     @Override
     public Image<UINT16> read(File path) throws IOException {
+        if (!path.exists()){
+            throw new IOException("The given Tiff file does not exist.");
+        }
+        
         this._reader.setSource(path.getAbsolutePath(), this._config);
         final Img<UnsignedShortType> img = this._imgOpener.openImgs(_reader, imgLib2Type, this._config).get(0);
 

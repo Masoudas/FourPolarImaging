@@ -16,6 +16,9 @@ public class RGB16ImgLib2TiffImageReader implements ImageReader<RGB16> {
     @Override
     public Image<RGB16> read(File path) throws IOException {
         // TODO Auto-generated method stub
+        if (!path.exists()){
+            throw new IOException("The given Tiff file does not exist.");
+        }
         return null;
     }
 
