@@ -1,0 +1,14 @@
+// Using code
+When writing paths, always use forward slash.
+
+
+// Git pull 
+Except for the File SophiesChoiceX.java, you should not commit any other file.
+
+Hence click on the git icon (third one on the left), then on each file except for
+SophiesChoiceX click discard. On this file, click add. Then write a commit message. Then commit.
+Then click on pull. Then solve conflicts.
+
+
+// Git push.
+First do the pull operation. Then click on push to push your code.

@@ -9,12 +9,15 @@ import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.propagation.OpticalPr
 import fr.fresnel.fourPolar.algorithm.fourPolar.FourPolarMapper;
 import fr.fresnel.fourPolar.algorithm.fourPolar.converters.IntensityToOrientationConverter;
 import fr.fresnel.fourPolar.algorithm.fourPolar.inversePropagation.MatrixBasedInverseOpticalPropagationCalculator;
+import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
 import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.OrientationImage;
@@ -32,6 +35,7 @@ import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
+import net.imglib2.img.display.imagej.ImageJFunctions;
 
 /**
  * Using this class, Sophie (AKA Boss) can construct an orientation image from a
@@ -41,13 +45,17 @@ import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
  * With this choice, the path to each polarization file is directly provided.
  */
 public class SophiesChoiceI {
-    public static void main(String[] args)
-            throws NoReaderFoundForImage, IOException, CannotFormPolarizationImageSet, PropagationFactorNotFound,
-            OpticalPropagationNotInvertible, IteratorMissMatch, ImpossibleOrientationVector, NoWriterFoundForImage {
+    public static void main(String[] args) throws NoReaderFoundForImage, IOException, CannotFormPolarizationImageSet,
+            PropagationFactorNotFound, OpticalPropagationNotInvertible, IteratorMissMatch, ImpossibleOrientationVector,
+            NoWriterFoundForImage, ConverterToImgLib2NotFound {
         File pol0File = new File("/home/masoud/Documents/SampleImages/1/pol0.tif");
         File pol45File = new File("/home/masoud/Documents/SampleImages/1/pol45.tif");
         File pol90File = new File("/home/masoud/Documents/SampleImages/1/pol90.tif");
         File pol135File = new File("/home/masoud/Documents/SampleImages/1/pol135.tif");
+
+        File rhoFile = new File("/home/masoud/Documents/SampleImages/1/rho.tif");
+        File deltaFile = new File("/home/masoud/Documents/SampleImages/1/delta.tif");
+        File etaFile = new File("/home/masoud/Documents/SampleImages/1/eta.tif");
 
         ImageFactory imgFactory = new ImgLib2ImageFactory();
 
@@ -68,17 +76,21 @@ public class SophiesChoiceI {
         FourPolarMapper mapper = new FourPolarMapper(converter);
         mapper.map(polarizationImageSet.getIterator(), orientationImage.getOrientationVectorIterator());
 
-        File rhoFile = new File("/home/masoud/Documents/SampleImages/1/rho.tif");
-        File deltaFile = new File("/home/masoud/Documents/SampleImages/1/delta.tif");
-        File etaFile = new File("/home/masoud/Documents/SampleImages/1/eta.tif");
-        
-        ImageWriter<Float32> writer = TiffImageWriterFactory.getWriter(
-            orientationImage.getAngleImage(OrientationAngle.rho).getImage(), new Float32());
-        
+        ImageWriter<Float32> writer = TiffImageWriterFactory
+                .getWriter(orientationImage.getAngleImage(OrientationAngle.rho).getImage(), new Float32());
+
         writer.write(rhoFile, orientationImage.getAngleImage(OrientationAngle.rho).getImage());
         writer.write(deltaFile, orientationImage.getAngleImage(OrientationAngle.delta).getImage());
         writer.write(etaFile, orientationImage.getAngleImage(OrientationAngle.eta).getImage());
         writer.close();
+
+        ImageJFunctions.show(ImageToImgLib2Converter
+                .getImg(orientationImage.getAngleImage(OrientationAngle.rho).getImage(), new Float32()), "Rho");
+        ImageJFunctions.show(ImageToImgLib2Converter
+                .getImg(orientationImage.getAngleImage(OrientationAngle.delta).getImage(), new Float32()), "Delta");
+        ImageJFunctions.show(ImageToImgLib2Converter
+                .getImg(orientationImage.getAngleImage(OrientationAngle.eta).getImage(), new Float32()), "Eta");
+
 
     }
 
@@ -90,7 +102,7 @@ public class SophiesChoiceI {
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol0, 0.0120);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol0, 0.3482);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol0, 0.0);
-                
+
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol90, 0.0120);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol90, 1.726);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol90, 0.348);
@@ -106,12 +118,9 @@ public class SophiesChoiceI {
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135, 1.559);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135, -2.970);
 
-        MatrixBasedInverseOpticalPropagationCalculator inverseCalculator =
-            new MatrixBasedInverseOpticalPropagationCalculator();
-        
+        MatrixBasedInverseOpticalPropagationCalculator inverseCalculator = new MatrixBasedInverseOpticalPropagationCalculator();
+
         return inverseCalculator.getInverse(opticalPropagation);
     }
-    
+
 }
-
-
