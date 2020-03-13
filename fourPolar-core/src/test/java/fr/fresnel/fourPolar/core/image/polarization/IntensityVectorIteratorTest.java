@@ -6,7 +6,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.fourPolar.IPolarizationsIntensityIterator;
+import fr.fresnel.fourPolar.core.fourPolar.IIntensityVectorIterator;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
-public class PolarizationsIntensityIteratorTest {
+public class IntensityVectorIteratorTest {
     /**
      * Create a base set of random integers. Then set the intensity for each
      * polarization to that random integer plus one. Then use the iterator and check
@@ -56,7 +56,7 @@ public class PolarizationsIntensityIteratorTest {
 
         baseSetCursor.reset(); pol0Cursor.reset(); pol45Cursor.reset(); pol90Cursor.reset(); pol135Cursor.reset();
 
-        IPolarizationsIntensityIterator iterator = new PolarizationsIntensityIterator(
+        IIntensityVectorIterator iterator = new IntensityVectorIterator(
             pol0Cursor, pol45Cursor, pol90Cursor, pol135Cursor);
 
         if (!iterator.hasNext()) {

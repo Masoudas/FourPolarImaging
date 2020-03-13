@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.core.image.polarization;
 
-import fr.fresnel.fourPolar.core.fourPolar.IPolarizationsIntensityIterator;
+import fr.fresnel.fourPolar.core.fourPolar.IIntensityVectorIterator;
 import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
@@ -25,11 +25,11 @@ public interface IPolarizationImageSet {
     public ICapturedImageFileSet getFileSet();
 
     /**
-     * Returns the implementation of {@link IPolarizationsIntensityIterator} for the
+     * Returns the implementation of {@link IIntensityVectorIterator} for the
      * given image set.
      * 
      * @return
      */
-    public IPolarizationsIntensityIterator getIterator();
+    public IIntensityVectorIterator getIterator();
 
 }

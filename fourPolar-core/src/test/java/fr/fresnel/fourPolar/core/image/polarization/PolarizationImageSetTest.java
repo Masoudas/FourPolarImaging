@@ -8,7 +8,7 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
-import fr.fresnel.fourPolar.core.fourPolar.IPolarizationsIntensityIterator;
+import fr.fresnel.fourPolar.core.fourPolar.IIntensityVectorIterator;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
@@ -121,7 +121,7 @@ public class PolarizationImageSetTest {
         }
 
         IPolarizationImageSet polSet = new PolarizationImageSet(null, pol0, pol45, pol90, pol135);
-        IPolarizationsIntensityIterator iterator = polSet.getIterator();
+        IIntensityVectorIterator iterator = polSet.getIterator();
 
         if (!iterator.hasNext()) {
             assertTrue(false);

@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.core.image.polarization;
 import java.util.Arrays;
 
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
-import fr.fresnel.fourPolar.core.fourPolar.IPolarizationsIntensityIterator;
+import fr.fresnel.fourPolar.core.fourPolar.IIntensityVectorIterator;
 import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
@@ -49,8 +49,8 @@ public class PolarizationImageSet implements IPolarizationImageSet {
     }
 
     @Override
-    public IPolarizationsIntensityIterator getIterator() {
-        return new PolarizationsIntensityIterator(_pol0.getImage().getCursor(), _pol45.getImage().getCursor(),
+    public IIntensityVectorIterator getIterator() {
+        return new IntensityVectorIterator(_pol0.getImage().getCursor(), _pol45.getImage().getCursor(),
                 _pol90.getImage().getCursor(), _pol135.getImage().getCursor());
     }
 

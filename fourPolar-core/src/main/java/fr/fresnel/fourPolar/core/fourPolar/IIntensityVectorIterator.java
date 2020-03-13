@@ -21,7 +21,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
  * intensity would be incorrect.</li>
  * </ol>
  */
-public interface IPolarizationsIntensityIterator extends Iterator<IntensityVector> {
+public interface IIntensityVectorIterator extends Iterator<IntensityVector> {
     /**
      * Returns the number of intensity vectors associated with this iterator.
      * 
