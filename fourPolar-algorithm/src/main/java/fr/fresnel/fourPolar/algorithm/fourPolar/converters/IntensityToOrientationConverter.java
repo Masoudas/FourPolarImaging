@@ -101,7 +101,10 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         double pol90Intensity = intensity.getIntensity(Polarization.pol90);
         double pol135Intensity = intensity.getIntensity(Polarization.pol135);
 
-        if (pol0Intensity == 0 && pol45Intensity == 0 && pol90Intensity == 0 && pol135Intensity == 0) {
+        // ‌If one of the intensities is zero, then the dipole amplitude lambda_3 is infinity, which is mathematically
+        // impossible. Also if all intensities are zero, then no orientation can be defined. We cath
+        // both cases simultaneously here.
+        if (pol0Intensity == 0 || pol45Intensity == 0 || pol90Intensity == 0 || pol135Intensity == 0) {
             throw new ImpossibleOrientationVector("All intensities cannot be zero simultaneously.");
         }
 
