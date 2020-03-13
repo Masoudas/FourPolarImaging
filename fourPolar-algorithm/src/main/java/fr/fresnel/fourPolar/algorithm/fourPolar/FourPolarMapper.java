@@ -39,28 +39,24 @@ public class FourPolarMapper {
      */
     public void map(IIntensityVectorIterator intensityIterator, IOrientationVectorIterator orientationIterator)
             throws IteratorMissMatch, ImpossibleOrientationVector {
-        try {
-            while (intensityIterator.hasNext()) {
-                IntensityVector intensity = intensityIterator.next();
+        if (orientationIterator.size() != intensityIterator.size()) {
+            throw new IteratorMissMatch(
+                    "Orientation and intensity iterators don't have same size. Hence," + 
+                    " orientation image does not correspond to polarization image.");
+        }
 
-                IOrientationVector orientationVector = null;
-                try {
-                    orientationVector = _converter.convert(intensity);
-                } catch (ImpossibleOrientationVector e) {
-                    orientationVector = new OrientationVector(Float.NaN, Float.NaN, Float.NaN);
-                }
+        while (intensityIterator.hasNext()) {
+            IntensityVector intensity = intensityIterator.next();
 
-                orientationIterator.next();
-                orientationIterator.set(orientationVector);
+            IOrientationVector orientationVector = null;
+            try {
+                orientationVector = _converter.convert(intensity);
+            } catch (ImpossibleOrientationVector e) {
+                orientationVector = new OrientationVector(Float.NaN, Float.NaN, Float.NaN);
             }
 
-        } catch (NoSuchElementException e) {
-            throw new IteratorMissMatch("Polarization iterator has more elements than orientation iterator.");
-        }
-
-        if (orientationIterator.hasNext()) {
-            throw new IteratorMissMatch("Orientation iterator has more elements than polarization iterator.");
-        }
+            orientationIterator.next();
+            orientationIterator.set(orientationVector);
     }
 
 }
