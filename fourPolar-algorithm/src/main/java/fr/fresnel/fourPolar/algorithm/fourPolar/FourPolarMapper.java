@@ -8,6 +8,7 @@ import fr.fresnel.fourPolar.algorithm.fourPolar.converters.IIntensityToOrientati
 import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
 import fr.fresnel.fourPolar.core.fourPolar.IPolarizationsIntensityIterator;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
+import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
 import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 
 /**
@@ -36,14 +37,18 @@ public class FourPolarMapper {
      * @param orientationIterator is the orientation vector set iterator.
      * @throws ImpossibleOrientationVector
      */
-    public void map(
-        IPolarizationsIntensityIterator intensityIterator, IOrientationVectorIterator orientationIterator)
-        throws IteratorMissMatch, ImpossibleOrientationVector {
+    public void map(IPolarizationsIntensityIterator intensityIterator, IOrientationVectorIterator orientationIterator)
+            throws IteratorMissMatch, ImpossibleOrientationVector {
         try {
             while (intensityIterator.hasNext()) {
                 IntensityVector intensity = intensityIterator.next();
 
-                IOrientationVector orientationVector = _converter.convert(intensity);
+                IOrientationVector orientationVector = null;
+                try {
+                    orientationVector = _converter.convert(intensity);
+                } catch (ImpossibleOrientationVector e) {
+                    orientationVector = new OrientationVector(Float.NaN, Float.NaN, Float.NaN);
+                }
 
                 orientationIterator.next();
                 orientationIterator.set(orientationVector);
@@ -52,7 +57,7 @@ public class FourPolarMapper {
         } catch (NoSuchElementException e) {
             throw new IteratorMissMatch("Polarization iterator has more elements than orientation iterator.");
         }
-        
+
         if (orientationIterator.hasNext()) {
             throw new IteratorMissMatch("Orientation iterator has more elements than polarization iterator.");
         }
