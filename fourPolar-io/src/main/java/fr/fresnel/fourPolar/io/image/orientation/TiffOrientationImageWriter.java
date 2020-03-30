@@ -3,7 +3,6 @@ package fr.fresnel.fourPolar.io.image.orientation;
 import java.io.File;
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;

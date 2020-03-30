@@ -18,7 +18,6 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;

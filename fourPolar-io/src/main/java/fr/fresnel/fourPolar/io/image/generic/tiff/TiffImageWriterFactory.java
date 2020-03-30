@@ -9,7 +9,6 @@ import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.Float32ImgLib2TiffImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.RGB16ImgLib2TiffImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.UINT16ImgLib2TiffImageWriter;
-import net.imglib2.img.Img;
  
 /**
  * A factory to get a proper writer for the given implementation of

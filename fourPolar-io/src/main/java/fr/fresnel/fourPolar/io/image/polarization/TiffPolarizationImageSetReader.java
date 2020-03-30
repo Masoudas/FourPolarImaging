@@ -8,7 +8,6 @@ import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSet;
 import fr.fresnel.fourPolar.io.image.polarization.fileSet.IPolarizationImageFileSet;

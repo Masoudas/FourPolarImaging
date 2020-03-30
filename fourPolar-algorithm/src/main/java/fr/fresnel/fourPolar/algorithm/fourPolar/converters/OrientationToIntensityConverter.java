@@ -6,7 +6,6 @@ import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 
 /**

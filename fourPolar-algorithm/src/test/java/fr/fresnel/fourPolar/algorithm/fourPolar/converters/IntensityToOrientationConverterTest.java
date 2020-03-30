@@ -15,7 +15,6 @@ import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
 import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.propagation.InverseOpticalPropagation;
 import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
 
