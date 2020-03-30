@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.algorithm.fourPolar;
 
-import java.util.NoSuchElementException;
-
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.IteratorMissMatch;
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters.ImpossibleOrientationVector;
 import fr.fresnel.fourPolar.algorithm.fourPolar.converters.IIntensityToOrientationConverter;
@@ -40,9 +38,8 @@ public class FourPolarMapper {
     public void map(IIntensityVectorIterator intensityIterator, IOrientationVectorIterator orientationIterator)
             throws IteratorMissMatch, ImpossibleOrientationVector {
         if (orientationIterator.size() != intensityIterator.size()) {
-            throw new IteratorMissMatch(
-                    "Orientation and intensity iterators don't have same size. Hence," + 
-                    " orientation image does not correspond to polarization image.");
+            throw new IteratorMissMatch("Orientation and intensity iterators don't have same size. Hence,"
+                    + " orientation image does not correspond to polarization image.");
         }
 
         while (intensityIterator.hasNext()) {
@@ -57,6 +54,7 @@ public class FourPolarMapper {
 
             orientationIterator.next();
             orientationIterator.set(orientationVector);
+        }
     }
 
 }
