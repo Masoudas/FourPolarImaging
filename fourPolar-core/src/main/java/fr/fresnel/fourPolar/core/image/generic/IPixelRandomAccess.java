@@ -20,13 +20,15 @@ public interface IPixelRandomAccess<U extends PixelType> {
      * Sets the pixel associated with the position.
      * 
      * @param pixel is the pixel at this location
+     * @throws ArrayIndexOutOfBoundsException in case the provided position does not exist.
      */
-    public void setPixel(IPixel<U> pixel);
+    public void setPixel(IPixel<U> pixel) throws ArrayIndexOutOfBoundsException;
 
     /**
      * Returns the pixel associated with the position.
      * 
      * @param pixel is the pixel at this location
+     * @throws ArrayIndexOutOfBoundsException in case the provided position does not exist.
      */
-    public IPixel<U> getPixel();
+    public IPixel<U> getPixel() throws ArrayIndexOutOfBoundsException;
 }
