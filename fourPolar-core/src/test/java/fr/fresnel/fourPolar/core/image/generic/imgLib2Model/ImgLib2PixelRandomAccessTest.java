@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.image.generic.imgLib2Model;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -139,5 +140,30 @@ public class ImgLib2PixelRandomAccessTest {
             pixels.get(3).getR() == 4 && pixels.get(3).getG() == 0 && pixels.get(3).getB() == 0
          );
     }
+
+    @Test
+    public void getPixel_OutOfBoundPixel_ThrowsArrayIndexOutOfBound() {
+        long[] dimensions = new long[] { 2, 2 };
+        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, new UINT16());
+
+        IPixelRandomAccess<UINT16> rAccess = image.getRandomAccess();
+
+        rAccess.setPosition(new long[]{2,2});
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->{rAccess.getPixel();});
+        
+    }
+
+    @Test
+    public void setPixel_OutOfBoundPixel_ThrowsArrayIndexOutOfBound() {
+        long[] dimensions = new long[] { 2, 2 };
+        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, new UINT16());
+
+        IPixelRandomAccess<UINT16> rAccess = image.getRandomAccess();
+
+        rAccess.setPosition(new long[]{2,2});
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->{rAccess.setPixel(new Pixel<UINT16>(new UINT16()));});
+        
+    }
+
     
 }
