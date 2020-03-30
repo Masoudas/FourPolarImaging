@@ -12,14 +12,15 @@ import fr.fresnel.fourPolar.core.util.DPoint;
  * <li>color: Representing the color of the stick (that corresponds to the value
  * of a particular orientation angle</li>
  * <li>length: This would be the x length of the stick. Note that the length
- * counts for negative and positive values of the stick. Hence a stick of
- * length 3 starts from -1 and ends in 1.</li>
+ * counts for negative and positive values of the stick. Hence a stick of length
+ * 3 starts from -1 and ends in 1.</li>
  * </ul>
  * 
  */
 public interface IAngleStick {
     /**
-     * Returns a 2D vector, corresponding to the pixel position of the stick in the plane.
+     * Returns a 2D vector, corresponding to the pixel position of the stick in the
+     * plane.
      * 
      */
     public DPoint getPosition();
@@ -35,7 +36,7 @@ public interface IAngleStick {
     public int getLength();
 
     /**
-     * Returns the slope of the stick.
+     * Returns the slope of the stick in radian.
      */
     public float getSlope();
 
@@ -45,7 +46,8 @@ public interface IAngleStick {
     public int getThickness();
 
     /**
-     * Returns the {@link IAngleStickIterator} of this stick. 
+     * Returns the {@link IAngleStickIterator} of this stick. Each time this method
+     * is called, a new instance of the iterator is returned.
      */
     public IAngleStickIterator getIterator();
 
