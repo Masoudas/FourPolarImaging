@@ -4,10 +4,10 @@ import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.Rectangle;
+import fr.fresnel.fourPolar.core.util.DRectangle;
 
 /**
- * This class is used as an adaptor of {@link Rectangle} to JSON.
+ * This class is used as an adaptor of {@link DRectangle} to JSON.
  */
 public class RectangleJSONAdaptor {
     @JsonProperty("[xTop, yTop]")
@@ -20,7 +20,7 @@ public class RectangleJSONAdaptor {
      * Allows the class to be written to JSON as an instance of this class.
      * @param rectangle
      */
-    public void toYaml(Rectangle rectangle) {
+    public void toYaml(DRectangle rectangle) {
         _setTop(rectangle);
         _setSize(rectangle);
     }
@@ -29,20 +29,20 @@ public class RectangleJSONAdaptor {
      * Returns the class from the JSON file.
      * @return
      */
-    public Rectangle fromYaml() {
+    public DRectangle fromYaml() {
         int[] top = _stringToInt(this._top);
         int[] size = _stringToInt(this._size);
 
-        return new Rectangle(top[0], top[1], size[0], size[1]);
+        return new DRectangle(top[0], top[1], size[0], size[1]);
     }
 
-    private void _setTop(Rectangle rectangle) {
-        int[] topArr = {rectangle.getxTop(), rectangle.getyTop()};
+    private void _setTop(DRectangle rectangle) {
+        int[] topArr = {rectangle.xtop, rectangle.ytop};
         _top =  Arrays.toString(topArr);
     }
 
-    private void _setSize(Rectangle rectangle) {
-        int[] topArr = {rectangle.getWidth(), rectangle.getHeight()};
+    private void _setSize(DRectangle rectangle) {
+        int[] topArr = {rectangle.width, rectangle.height};
         _size =  Arrays.toString(topArr);
     }
 

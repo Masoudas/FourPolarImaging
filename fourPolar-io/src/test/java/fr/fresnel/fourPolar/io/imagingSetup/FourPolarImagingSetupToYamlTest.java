@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.Rectangle;
+import fr.fresnel.fourPolar.core.util.DRectangle;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
@@ -27,10 +27,10 @@ public class FourPolarImagingSetupToYamlTest {
             throws JsonGenerationException, JsonMappingException, IOException {
         FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
 
-        Rectangle rect0 = new Rectangle(1, 1, 128, 128);
-        Rectangle rect45 = new Rectangle(128, 1, 128, 128);
-        Rectangle rect90 = new Rectangle(1, 128, 128, 128);
-        Rectangle rect135 = new Rectangle(128, 128, 128, 128);
+        DRectangle rect0 = new DRectangle(1, 1, 128, 128);
+        DRectangle rect45 = new DRectangle(128, 1, 128, 128);
+        DRectangle rect90 = new DRectangle(1, 128, 128, 128);
+        DRectangle rect135 = new DRectangle(128, 128, 128, 128);
 
         FieldOfView fov = new FieldOfView(rect0, rect45, rect90, rect135);
         imagingSetup.setFieldOfView(fov);
