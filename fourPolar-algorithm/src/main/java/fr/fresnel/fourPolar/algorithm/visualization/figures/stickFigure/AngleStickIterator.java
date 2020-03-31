@@ -1,10 +1,11 @@
-package fr.fresnel.fourPolar.core.visualization.figures.stickFigure;
+package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure;
 
 import java.awt.Point;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import fr.fresnel.fourPolar.core.util.DPoint;
+import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.IAngleStickIterator;
 
 /**
  * A concrete implementation of the {@link IAngleStickIterator}, which uses two
