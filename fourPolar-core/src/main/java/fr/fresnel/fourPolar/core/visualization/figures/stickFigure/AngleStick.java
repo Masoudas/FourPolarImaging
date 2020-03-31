@@ -13,7 +13,7 @@ public class AngleStick implements IAngleStick {
     private final DPoint _pose;
     private final RGB16 _color;
     private final int _len;
-    private final double _slopeAngle;
+    private final float _slopeAngle;
     private final int _thickness;
 
     /**
@@ -50,7 +50,7 @@ public class AngleStick implements IAngleStick {
     }
 
     @Override
-    public double getSlopeAngle() {
+    public float getSlopeAngle() {
         return _slopeAngle;
     }
 
@@ -78,41 +78,12 @@ public class AngleStick implements IAngleStick {
     }
 
     /**
-     * Calculate the end points of the stick.
+     * Calculate the end points of the stick, assuming the length of the stick and 
+     * knowing the angle of the stick.
      * 
      * @return start_point and end_point.
      */
     private Point[] _getEndPoints() {
-        // if (new BigDecimal(Math.PI).compareTo(new BigDecimal(this._slopeAngle)) == 0)
-        // {
-        // int aytop = this._pose.y - (this._len - 1) / 2;
-
-        // return new DPoint[] { new DPoint(this._pose.x, aytop > 0 ? aytop : 0),
-        // new DPoint(this._pose.x, this._pose.y + (this._len) / 2) };
-        // }
-
-        // if (this._len == 1) {
-        // return new DPoint[] { new DPoint(this._pose.x, this._pose.y), new
-        // DPoint(this._pose.x, this._pose.y), };
-        // }
-
-        // /// Define start point
-        // // Set x to to zero if negative, or one pixel less than length.
-        // int astart = this._pose.x - (this._len - 1) / 2;
-        // int xstart = astart > 1 ? astart : 1;
-
-        // // Set y based on slope.
-        // int ystart = (int) Math.tan(this._slopeAngle) * (xstart - this._pose.x) +
-        // this._pose.y;
-
-        // /// Define end point.
-        // // Set x to plus half the end, and y according to slope.
-        // int xend = this._pose.x + this._len / 2;
-        // int yend = (int) Math.tan(this._slopeAngle) * (xend - this._pose.x) +
-        // this._pose.y;
-
-        // return new DPoint[] { new DPoint(xstart, ystart), new DPoint(xend, yend), };
-
         double xStart = this._pose.x - Math.cos(this._slopeAngle) * ((this._len - 1) / 2);
         double yStart = this._pose.y - Math.sin(this._slopeAngle) * ((this._len - 1) / 2);
 
