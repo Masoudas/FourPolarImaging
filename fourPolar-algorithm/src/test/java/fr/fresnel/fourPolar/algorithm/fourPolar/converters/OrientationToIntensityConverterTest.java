@@ -2,6 +2,10 @@ package fr.fresnel.fourPolar.algorithm.fourPolar.converters;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -49,6 +53,14 @@ public class OrientationToIntensityConverterTest {
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135, -2.9701544558);
 
         _converter = new OrientationToIntensityConverter(opticalPropagation);
+    }
+
+    private static boolean _checkIntensityPrecision(IntensityVector vec1, IntensityVector vec2, double error) {
+        return _checkPrecision(vec1.getIntensity(Polarization.pol0), vec2.getIntensity(Polarization.pol0), error) &&
+        _checkPrecision(vec1.getIntensity(Polarization.pol45), vec2.getIntensity(Polarization.pol45), error) &&
+        _checkPrecision(vec1.getIntensity(Polarization.pol90), vec2.getIntensity(Polarization.pol90), error) &&
+        _checkPrecision(vec1.getIntensity(Polarization.pol135), vec2.getIntensity(Polarization.pol135), error);
+
     }
 
     private static boolean _checkPrecision(double val1, double val2, double error) {
@@ -136,8 +148,46 @@ public class OrientationToIntensityConverterTest {
 
         assertTrue(equals);
 
-        
     }
+
+    /**
+     * Note the orientation-intensity pairs used here are calculated using the
+     * Matlab program written by Valentina Curcio. The file is in the resource folder.
+     */
+    @Test
+    public void convert_BrasseletCurcioPrecalculatedValues_IntensityDifferenceIsLessThanAThousandth() {
+        double error = 1e-4;
+        try (InputStream stream = OrientationToIntensityConverterTest.class
+                .getResourceAsStream("IntensityOrientation.txt");) {
+            InputStreamReader iReader = new InputStreamReader(stream);
+            BufferedReader buffer = new BufferedReader(iReader); // Now this baby actually
+
+            String intensityOrientationPair = null;
+            boolean equals = true;
+            do {
+                intensityOrientationPair = buffer.readLine();
+
+                String[] values = intensityOrientationPair.split(",");
+
+                OrientationVector oVector = new OrientationVector(Float.parseFloat(values[4]),
+                Float.parseFloat(values[5]), Float.parseFloat(values[6]));
+
+                IntensityVector original = new IntensityVector(Double.parseDouble(values[0]),
+                        Double.parseDouble(values[2]), Double.parseDouble(values[1]), Double.parseDouble(values[3]));
+
+                IntensityVector calculated = _converter.convert(oVector);
+
+                equals &= _checkIntensityPrecision(original, calculated, error);
+
+            } while (intensityOrientationPair != null);
+
+            assertTrue(equals);
+
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
+
     
 
 }
