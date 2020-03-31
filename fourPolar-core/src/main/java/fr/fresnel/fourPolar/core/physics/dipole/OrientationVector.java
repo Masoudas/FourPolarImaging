@@ -11,8 +11,23 @@ public class OrientationVector implements IOrientationVector {
     final private float _eta;
 
     /**
-     * Models the orientation angles calculated using the four polar method.
-     * Note that NaN is acceptable for each angle.
+     * Maximum possible value for the rho
+     */
+    public final static float MAX_Rho = (float) Math.PI;
+
+    /**
+     * Maximum possible value for the delta
+     */
+    public final static float MAX_Delta = (float) Math.PI;
+
+    /**
+     * Maximum possible value for the delta
+     */
+    public final static float MAX_Eta = (float) Math.PI / 2;
+
+    /**
+     * Models the orientation angles calculated using the four polar method. Note
+     * that NaN is acceptable for each angle.
      * 
      * @param rho   : rho angle in radian, ranges from 0 to pi.
      * @param delta : delta angle in radian, ranges from 0 to pi.
@@ -44,11 +59,11 @@ public class OrientationVector implements IOrientationVector {
             case eta:
                 orientation = _eta;
                 break;
-        
+
             default:
                 break;
         }
-    
+
         return orientation;
     }
 
@@ -58,19 +73,19 @@ public class OrientationVector implements IOrientationVector {
     }
 
     private void _checkRho(float value) throws OrientationAngleOutOfRange {
-        if (!Float.isNaN(value) && (value < 0 || value > (float)Math.PI)) {
+        if (!Float.isNaN(value) && (value < 0 || value > MAX_Rho)) {
             throw new OrientationAngleOutOfRange("Rho is out of [0, pi] range");
         }
     }
 
     private void _checkDelta(float value) throws OrientationAngleOutOfRange {
-        if (!Float.isNaN(value) && (value < 0 || value > (float)Math.PI)) {
+        if (!Float.isNaN(value) && (value < 0 || value > MAX_Delta)) {
             throw new OrientationAngleOutOfRange("Delta is out of [0, pi] range");
         }
     }
 
     private void _checkEta(float value) throws OrientationAngleOutOfRange {
-        if (!Float.isNaN(value) && (value < 0 || value > (float)(Math.PI / 2))) {
+        if (!Float.isNaN(value) && (value < 0 || value > MAX_Eta)) {
             throw new OrientationAngleOutOfRange("Eta is out of [0, pi/2] range");
         }
     }
