@@ -12,4 +12,14 @@ public class DPoint {
         this.y = y;
 
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof DPoint)){
+            return false;
+        }
+
+        DPoint point = (DPoint)obj;
+        return point.x == this.x && point.y == this.y;
+    }
 }
