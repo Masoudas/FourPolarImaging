@@ -2,38 +2,45 @@ package fr.fresnel.fourPolar.core.visualization.figures.stickFigure;
 
 import java.awt.Point;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import fr.fresnel.fourPolar.core.util.DPoint;
-import ij.gui.Line;
 
 /**
- * A concrete implementation of the {@link IAngleStickIterator}, which uses the
- * {@link Line} of ImageJ to generate line pixels.
+ * A concrete implementation of the {@link IAngleStickIterator}, which uses two
+ * iterators, one on x < pos.x and one on x >= pos.x, and returns the
+ * correspondong {@link DPoints}.
  */
 class AngleStickIterator implements IAngleStickIterator {
-    private final Iterator<Point> _iterator;
+    private final Iterator<Point> _negativeIterator;
+    private final Iterator<Point> _positiveIterator;
 
     /**
      * Generates an iterator covering the line region.
-     * @param start is the starting point of the line.
-     * @param end is the end point of the line.
-     * @param thickNess is the thickness of the assciated line.
+     * 
+     * @param negativeLineIterator is the iterator on negative points.
+     * @param positiveLineIterator is the iterator on positive points.
      */
-    public AngleStickIterator(DPoint start, DPoint end, int thickNess) {
-        Line line = new Line(start.x, start.y, end.x, end.y);
-        line.setStrokeWidth(thickNess);
-
-        this._iterator = line.iterator();
+    public AngleStickIterator(Iterator<Point> negativeLineIterator, Iterator<Point> positiveLineIterator) {
+        this._negativeIterator = negativeLineIterator;
+        this._positiveIterator = positiveLineIterator;
     }
 
     @Override
     public boolean hasNext() {
-        return _iterator.hasNext();
+        return _negativeIterator.hasNext() || _positiveIterator.hasNext();
     }
 
     @Override
-    public DPoint next() {
-        Point point = _iterator.next();
+    public DPoint next() throws NoSuchElementException {
+        Point point;
+
+        try {
+            point = _negativeIterator.next();
+        } catch (NoSuchElementException e) {
+            point = _positiveIterator.next();
+        }
+
         return new DPoint(point.x, point.y);
     }
 }
