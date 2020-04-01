@@ -1,13 +1,15 @@
-package fr.fresnel.fourPolar.core.visualization.figures.stickFigure;
+package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.util.DPoint;
+import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.IAngleStick;
+import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.IAngleStickIterator;
 
 /**
  * A concrete implementation of {@link IAngleStick}. Note that the sticks can
  * have negative coordinates in this implementation.
  */
-public class AngleStick implements IAngleStick {
+class AngleStick implements IAngleStick {
     private final DPoint _pose;
     private final RGB16 _color;
     private final int _len;
