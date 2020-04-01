@@ -27,21 +27,29 @@ public class OrientationVector implements IOrientationVector {
 
     /**
      * Models the orientation angles calculated using the four polar method. Note
-     * that NaN is acceptable for each angle.
+     * that NaN is acceptable for each angle, and if NaN is given for one angle,
+     * all angles are set to NaN.
      * 
      * @param rho   : rho angle in radian, ranges from 0 to pi.
      * @param delta : delta angle in radian, ranges from 0 to pi.
      * @param eta   : eta angle in radian, ranges from 0 to pi/2.
      */
     public OrientationVector(float rho, float delta, float eta) throws OrientationAngleOutOfRange {
-        _checkRho(rho);
-        _rho = rho;
+        if (Float.isNaN(rho) || Float.isNaN(delta) || Float.isNaN(eta)) {
+            _rho = Float.NaN;
+            _delta = Float.NaN;
+            _eta = Float.NaN;
+        } else {
+            _checkRho(rho);
+            _rho = rho;
 
-        _checkDelta(delta);
-        _delta = delta;
+            _checkDelta(delta);
+            _delta = delta;
 
-        _checkEta(eta);
-        _eta = eta;
+            _checkEta(eta);
+            _eta = eta;
+        }
+
     }
 
     @Override
@@ -73,19 +81,19 @@ public class OrientationVector implements IOrientationVector {
     }
 
     private void _checkRho(float value) throws OrientationAngleOutOfRange {
-        if (!Float.isNaN(value) && (value < 0 || value > MAX_Rho)) {
+        if (value < 0 || value > MAX_Rho) {
             throw new OrientationAngleOutOfRange("Rho is out of [0, pi] range");
         }
     }
 
     private void _checkDelta(float value) throws OrientationAngleOutOfRange {
-        if (!Float.isNaN(value) && (value < 0 || value > MAX_Delta)) {
+        if (value < 0 || value > MAX_Delta) {
             throw new OrientationAngleOutOfRange("Delta is out of [0, pi] range");
         }
     }
 
     private void _checkEta(float value) throws OrientationAngleOutOfRange {
-        if (!Float.isNaN(value) && (value < 0 || value > MAX_Eta)) {
+        if (value < 0 || value > MAX_Eta) {
             throw new OrientationAngleOutOfRange("Eta is out of [0, pi/2] range");
         }
     }
