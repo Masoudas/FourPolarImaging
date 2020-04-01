@@ -10,13 +10,22 @@ import fr.fresnel.fourPolar.core.exceptions.physics.dipole.OrientationAngleOutOf
 
 public class OrientationVectorTest {
     @Test
-    public void getAngle_AllNaNAngles_ReturnsNanForAngles() {
-        OrientationVector vector = new OrientationVector(Float.NaN, Float.NaN, Float.NaN);
+    public void getAngle_NaNAngle_AllAngelsNan() {
+        OrientationVector vec1 = new OrientationVector(Float.NaN, 0, 0);
+        OrientationVector vec2 = new OrientationVector(0, Float.NaN, 0);
+        OrientationVector vec3 = new OrientationVector(0, 0, Float.NaN);
 
         assertTrue(
-            Float.isNaN(vector.getAngle(OrientationAngle.delta)) &&
-            Float.isNaN(vector.getAngle(OrientationAngle.rho)) &&
-            Float.isNaN(vector.getAngle(OrientationAngle.eta)));
+            Float.isNaN(vec1.getAngle(OrientationAngle.delta)) &&
+            Float.isNaN(vec1.getAngle(OrientationAngle.rho)) &&
+            Float.isNaN(vec1.getAngle(OrientationAngle.eta)) &&
+            Float.isNaN(vec2.getAngle(OrientationAngle.delta)) &&
+            Float.isNaN(vec2.getAngle(OrientationAngle.rho)) &&
+            Float.isNaN(vec2.getAngle(OrientationAngle.eta)) &&
+            Float.isNaN(vec3.getAngle(OrientationAngle.delta)) &&
+            Float.isNaN(vec3.getAngle(OrientationAngle.rho)) &&
+            Float.isNaN(vec3.getAngle(OrientationAngle.eta)));
+
     }
     
     @Test
