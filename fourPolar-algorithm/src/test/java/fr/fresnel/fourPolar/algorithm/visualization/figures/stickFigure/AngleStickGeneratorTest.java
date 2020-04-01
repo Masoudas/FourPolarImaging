@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -191,6 +192,20 @@ public class AngleStickGeneratorTest {
                 && color180.getR() == black.getR() && color180.getG() == black.getG()
                 && color180.getB() == black.getB());
 
+    }
+
+    @Test
+    public void createStick_NullAngle_RaisesAngleStickUndefined() {
+        OrientationVector vec = new OrientationVector(Float.NaN, 0, 0);
+        DPoint pose = new DPoint(50, 50);
+        int len = 10;
+        int thickness = 1;
+
+        AngleStickGenerator generator = new AngleStickGenerator(cMap);
+        assertThrows(AngleStickUndefined.class, () -> {generator.getRhoStick(vec, pose, len, thickness);});
+        assertThrows(AngleStickUndefined.class, () -> {generator.getDeltaStick(vec, pose, len, thickness);});
+        assertThrows(AngleStickUndefined.class, () -> {generator.getEtaStick(vec, pose, len, thickness);});
+        
     }
 
     private double pixelDistance(float slopeAngle, DPoint position, DPoint point) {
