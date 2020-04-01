@@ -32,8 +32,8 @@ public class AngleStickGenerator {
      * 
      * @param vec            is the orientation vector.
      * @param dipolePosition is the corresponding dipole discrete position.
-     * @param length         is the desired length of the dipole.
-     * @param thickness      is the desired thickness of the dipole.
+     * @param length         is the desired length of the dipole, and greater than equal 1.
+     * @param thickness      is the desired thickness of the dipole, and greater than equal 1.
      * @return
      */
     public IAngleStick getRhoStick(IOrientationVector vec, DPoint dipolePosition, int length, int thickness)
@@ -55,9 +55,8 @@ public class AngleStickGenerator {
      * 
      * @param vec            is the orientation vector.
      * @param dipolePosition is the corresponding dipole discrete position.
-     * @param length         is the desired length of the dipole.
-     * @param thickness      is the desired thickness of the dipole.
-     * @return
+     * @param length         is the desired length of the dipole, and greater than equal 1.
+     * @param thickness      is the desired thickness of the dipole, and greater than equal 1.     * @return
      */
     public IAngleStick getDeltaStick(IOrientationVector vec, DPoint dipolePosition, int length, int thickness)
             throws AngleStickUndefined {
@@ -79,8 +78,8 @@ public class AngleStickGenerator {
      * 
      * @param vec            is the orientation vector.
      * @param dipolePosition is the corresponding dipole discrete position.
-     * @param length         is the desired length of the dipole.
-     * @param thickness      is the desired thickness of the dipole.
+     * @param length         is the desired length of the dipole, and greater than equal 1.
+     * @param thickness      is the desired thickness of the dipole, and greater than equal 1.
      * @return
      */
     public IAngleStick getEtaStick(IOrientationVector vec, DPoint dipolePosition, int length, int thickness)
