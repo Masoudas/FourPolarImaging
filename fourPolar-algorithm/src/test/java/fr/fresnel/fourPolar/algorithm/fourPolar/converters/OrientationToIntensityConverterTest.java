@@ -77,31 +77,16 @@ public class OrientationToIntensityConverterTest {
     }
 
     @Test
-    public void convert_Rho45Delta0Eta0_Returns() {
-        IOrientationVector vector = new OrientationVector((float) (10f / 180f * Math.PI), (float) (90f / 180f * Math.PI),
-            (float) (0f / 180f * Math.PI));
-
-        IntensityVector intensity = _converter.convert(vector);
-
-        assertTrue(
-            _checkPrecision(intensity.getIntensity(Polarization.pol0), 1, 1e-4)
-            && _checkPrecision(intensity.getIntensity(Polarization.pol45), 0, 1e-4)
-            && _checkPrecision(intensity.getIntensity(Polarization.pol90), 0, 1e-4)
-            && _checkPrecision(intensity.getIntensity(Polarization.pol45), 0, 1e-4));
-
-    }
-
-    @Test
     public void convert_Delta180_ReturnsSameIntensityForAllRhoAndEta() {
-        float delta = (float) (180f / 180f * Math.PI);
+        float delta = OrientationVector.MAX_Delta;
         float angleStep = (float)Math.PI/180;
 
         IOrientationVector baseVector = new OrientationVector(0f, delta, 0f);
         IntensityVector baseIntensity = _converter.convert(baseVector);
 
         boolean equals = true;
-        for (float rho = 0; rho < Math.PI; rho += angleStep) {
-            for (float eta = 0; eta < Math.PI / 2; eta += angleStep) {
+        for (float rho = 0; rho < OrientationVector.MAX_Rho; rho += angleStep) {
+            for (float eta = 0; eta < OrientationVector.MAX_Eta; eta += angleStep) {
                 IOrientationVector vector = new OrientationVector(rho, delta, eta);
                 IntensityVector intensity = _converter.convert(vector);
 
@@ -122,15 +107,15 @@ public class OrientationToIntensityConverterTest {
 
     @Test
     public void convert_Eta0_ForOneDeltaReturnsSameIntensityForAllRho() {
-        float eta = (float) (0f / 180f * Math.PI);
+        float eta = 0f;
         float angleStep = (float)Math.PI/180;
 
         boolean equals = true;
-        for (float delta = 0; delta < Math.PI; delta += angleStep) {
+        for (float delta = 0; delta < OrientationVector.MAX_Delta; delta += angleStep) {
             IOrientationVector baseVector = new OrientationVector(0f, delta, eta);
             IntensityVector baseIntensity = _converter.convert(baseVector);
 
-            for (float rho = 0; rho < Math.PI; rho += angleStep) {
+            for (float rho = 0; rho < OrientationVector.MAX_Rho; rho += angleStep) {
                 IOrientationVector vector = new OrientationVector(rho, delta, eta);
                 IntensityVector intensity = _converter.convert(vector);
 

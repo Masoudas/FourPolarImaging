@@ -62,34 +62,50 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         _iProp_135_xy = inverseOpticalProp.getInverseFactor(Polarization.pol135, DipoleSquaredComponent.XY);
     }
 
+    /**
+     * Calculate rho using the formula. If result is positive, return original
+     * value. Otherwise, add a pi to it, to get the equivalent positive angle and
+     * then return it.
+     */
     private float _getRho(double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff) {
         double raw_Rho = 0.5 * Math.atan2(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
 
         if (raw_Rho >= 0) {
             return (float) raw_Rho;
         } else {
-            return (float) (Math.PI + raw_Rho);
+            return (float) (OrientationVector.MAX_Rho + raw_Rho);
         }
     }
 
+    /**
+     * Calculate dekta using the formula. If result is positive, return original
+     * value. Otherwise, add a pi to it, to get the equivalent positive angle and
+     * then return it.
+     */
     private float _getDelta(double sumNormalizedDipoleSquared) {
         double raw_delta = 2 * Math.acos((Math.sqrt(12 * sumNormalizedDipoleSquared - 3) - 1) / 2);
 
         if (raw_delta >= 0) {
             return (float) raw_delta;
         } else {
-            return (float) (Math.PI + raw_delta);
+            return (float) (OrientationVector.MAX_Delta + raw_delta);
         }
     }
 
+    /**
+     * Calculate eta using the formula (note that angle is always positive). If
+     * eta < PI/2, return the original value. Otherwise, because angle greater
+     * than PI/2 has same propagation as it's PI complement, return the complement
+     * value.
+     */
     private float _getEta(double normalizedDipoleSquared_Z, double sumNormalizedDipoleSquared) {
-        double raw_eta = Math
-                .asin(Math.sqrt(2 * (sumNormalizedDipoleSquared - normalizedDipoleSquared_Z) / (3 * sumNormalizedDipoleSquared - 1)));
+        double raw_eta = Math.asin(Math.sqrt(
+                2 * (sumNormalizedDipoleSquared - normalizedDipoleSquared_Z) / (3 * sumNormalizedDipoleSquared - 1)));
 
-        if (raw_eta < Math.PI / 2) {
+        if (raw_eta < OrientationVector.MAX_Eta) {
             return (float) raw_eta;
         } else {
-            return (float) (raw_eta - Math.PI / 2);
+            return (float) (raw_eta - OrientationVector.MAX_Eta);
         }
     }
 
@@ -101,8 +117,10 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         double pol90Intensity = intensity.getIntensity(Polarization.pol90);
         double pol135Intensity = intensity.getIntensity(Polarization.pol135);
 
-        // ‌If one of the intensities is zero, then the dipole amplitude lambda_3 is infinity, which is mathematically
-        // impossible. Also if all intensities are zero, then no orientation can be defined. We cath
+        // ‌If one of the intensities is zero, then the dipole amplitude lambda_3 is
+        // infinity, which is mathematically
+        // impossible. Also if all intensities are zero, then no orientation can be
+        // defined. We cath
         // both cases simultaneously here.
         if (pol0Intensity == 0 || pol45Intensity == 0 || pol90Intensity == 0 || pol135Intensity == 0) {
             throw new ImpossibleOrientationVector("All intensities cannot be zero simultaneously.");
@@ -131,9 +149,8 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         double sumNormalizedDipoleSquared = this._sumNormalizedDipoleSquared(normalizedDipoleSquared_XY,
                 normalizedDipoleSquared_XYdiff, normalizedDipoleSquared_Z);
 
-        
         // Check necessary conditions for angles to exist.
-        _checkSumNormalizedDipoleSquared(sumNormalizedDipoleSquared);                
+        _checkSumNormalizedDipoleSquared(sumNormalizedDipoleSquared);
         _checkNormalizedDipoleSquared_Z(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
 
         // Computing the angles
@@ -183,29 +200,27 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         return dipoleSquared_ZZ / (dipoleSquared_XX + dipoleSquared_YY + dipoleSquared_ZZ);
     }
 
-    private double _sumNormalizedDipoleSquared(
-        double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff,
-        double normalizedDipoleSquared_Z) throws ImpossibleOrientationVector {
-        return normalizedDipoleSquared_Z + Math.sqrt(
-            normalizedDipoleSquared_XYdiff * normalizedDipoleSquared_XYdiff + normalizedDipoleSquared_XY * normalizedDipoleSquared_XY);
+    private double _sumNormalizedDipoleSquared(double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff,
+            double normalizedDipoleSquared_Z) throws ImpossibleOrientationVector {
+        return normalizedDipoleSquared_Z + Math.sqrt(normalizedDipoleSquared_XYdiff * normalizedDipoleSquared_XYdiff
+                + normalizedDipoleSquared_XY * normalizedDipoleSquared_XY);
     }
 
     /**
      * Check that sumNormalizedDipoleSquared is in the range 0.5 and 1.
      */
-    private void _checkSumNormalizedDipoleSquared(
-        double sumNormalizedDipoleSquared) throws ImpossibleOrientationVector {
+    private void _checkSumNormalizedDipoleSquared(double sumNormalizedDipoleSquared)
+            throws ImpossibleOrientationVector {
         if (sumNormalizedDipoleSquared > 1 || sumNormalizedDipoleSquared < 1 / 2) {
             throw new ImpossibleOrientationVector("Sum of normalized dipole squared must be in range [1/2, 1].");
         }
     }
 
     /**
-     * Check normalizedDipoleSquared_Z <= sumNormalizedDipoleSquared and 
+     * Check normalizedDipoleSquared_Z <= sumNormalizedDipoleSquared and
      * normalizedDipoleSquared_Z >= 0.5(1 - sumNormalizedDipoleSquared)
      */
-    private void _checkNormalizedDipoleSquared_Z(
-        double normalizedDipoleSquared_Z, double sumNormalizedDipoleSquared)
+    private void _checkNormalizedDipoleSquared_Z(double normalizedDipoleSquared_Z, double sumNormalizedDipoleSquared)
             throws ImpossibleOrientationVector {
         if (normalizedDipoleSquared_Z > sumNormalizedDipoleSquared
                 || normalizedDipoleSquared_Z < 0.5 * (1 - sumNormalizedDipoleSquared)) {
