@@ -1,10 +1,10 @@
-package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure;
+package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.stick;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.IAngleStickIterator;
+import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStickIterator;
 import ij.gui.Line;
 
 public class IAngleStickIteratorTest {

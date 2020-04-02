@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.visualization.figures.stickFigure;
+package fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.util.DPoint;

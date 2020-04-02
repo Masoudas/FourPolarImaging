@@ -1,9 +1,9 @@
-package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure;
+package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.stick;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.util.DPoint;
-import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.IAngleStick;
-import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.IAngleStickIterator;
+import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStick;
+import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStickIterator;
 
 /**
  * A concrete implementation of {@link IAngleStick}. Note that the sticks can

@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.visualization.figures.stickFigure;
+package fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick;
 
 import java.util.Iterator;
 

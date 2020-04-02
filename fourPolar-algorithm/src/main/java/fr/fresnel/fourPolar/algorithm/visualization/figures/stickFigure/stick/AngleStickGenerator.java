@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure;
+package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.stick;
 
 import fr.fresnel.fourPolar.algorithm.exceptions.visualization.figures.stickFigure.AngleStickUndefined;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
@@ -8,8 +8,8 @@ import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
 import fr.fresnel.fourPolar.core.util.DPoint;
 import fr.fresnel.fourPolar.core.util.Point;
 import fr.fresnel.fourPolar.core.util.colorMap.ColorMap;
-import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.IAngleStick;
-import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.IAngleStickIterator;
+import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStick;
+import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStickIterator;
 import ij.gui.Line;
 
 /**

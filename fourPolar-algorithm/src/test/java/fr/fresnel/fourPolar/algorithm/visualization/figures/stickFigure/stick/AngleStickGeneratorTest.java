@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure;
+package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.stick;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
 import fr.fresnel.fourPolar.core.util.DPoint;
 import fr.fresnel.fourPolar.core.util.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.colorMap.ColorMapFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.IAngleStickIterator;
+import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStickIterator;
 
 public class AngleStickGeneratorTest {
     ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_RED);
