@@ -10,8 +10,8 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
-import fr.fresnel.fourPolar.io.image.polarization.fileSet.IPolarizationImageFileSet;
-import fr.fresnel.fourPolar.io.image.polarization.fileSet.TiffPolarizationImageFileSet;
+import fr.fresnel.fourPolar.io.image.polarization.file.IPolarizationImageFileSet;
+import fr.fresnel.fourPolar.io.image.polarization.file.TiffPolarizationImageFileSet;
 
 /**
  * A concrete implementation of {@link IPolarizationImageSetWriter} to write the

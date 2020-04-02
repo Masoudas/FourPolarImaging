@@ -9,7 +9,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
-import fr.fresnel.fourPolar.core.image.captured.fileSet.CapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
@@ -18,7 +18,7 @@ import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.Float32ImgLib2TiffImageWriter;
-import fr.fresnel.fourPolar.io.image.orientation.fileSet.TiffOrientationImageFileSet;
+import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageFileSet;
 
 public class TiffOrientationImageReaderTest {
     final private static File _root = new File(TiffOrientationImageReaderTest.class.getResource("").getPath(),

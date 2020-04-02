@@ -9,7 +9,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
-import fr.fresnel.fourPolar.core.image.captured.fileSet.CapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
@@ -18,7 +18,7 @@ import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.UINT16ImgLib2TiffImageWriter;
-import fr.fresnel.fourPolar.io.image.polarization.fileSet.TiffPolarizationImageFileSet;
+import fr.fresnel.fourPolar.io.image.polarization.file.TiffPolarizationImageFileSet;
 
 public class TiffPolarizationImageSetReaderTest {
     final private static File _root = new File(TiffPolarizationImageSetReaderTest.class.getResource("").getPath(),

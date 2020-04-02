@@ -6,7 +6,7 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.image.captured.fileSet.CapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
 
 
 /**

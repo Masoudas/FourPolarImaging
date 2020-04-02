@@ -4,18 +4,18 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
-import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSet;
-import fr.fresnel.fourPolar.io.image.polarization.fileSet.IPolarizationImageFileSet;
+import fr.fresnel.fourPolar.io.image.polarization.file.IPolarizationImageFileSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
-import fr.fresnel.fourPolar.io.image.polarization.fileSet.TiffPolarizationImageFileSet;
+import fr.fresnel.fourPolar.io.image.polarization.file.TiffPolarizationImageFileSet;
 
 /**
  * A concrete implementation of {@link IOrientationImageReader} to read tiff

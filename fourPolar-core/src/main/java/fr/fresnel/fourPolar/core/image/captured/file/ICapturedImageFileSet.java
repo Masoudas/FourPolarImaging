@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.image.captured.fileSet;
+package fr.fresnel.fourPolar.core.image.captured.file;
 
 import java.io.File;
 

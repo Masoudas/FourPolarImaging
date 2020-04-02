@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.image.polarization;
 
 import fr.fresnel.fourPolar.core.fourPolar.IIntensityVectorIterator;
-import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**

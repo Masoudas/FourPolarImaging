@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.image.polarization.fileSet;
+package fr.fresnel.fourPolar.io.image.polarization.file;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -9,8 +9,8 @@ import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.PathFactoryOfProject;
-import fr.fresnel.fourPolar.core.image.captured.fileSet.CapturedImageFileSet;
-import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 public class PolarizationFileSetTest {

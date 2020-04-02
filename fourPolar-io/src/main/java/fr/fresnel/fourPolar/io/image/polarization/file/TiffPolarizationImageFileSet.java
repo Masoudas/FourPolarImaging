@@ -1,11 +1,11 @@
-package fr.fresnel.fourPolar.io.image.polarization.fileSet;
+package fr.fresnel.fourPolar.io.image.polarization.file;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import fr.fresnel.fourPolar.core.PathFactoryOfProject;
-import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**

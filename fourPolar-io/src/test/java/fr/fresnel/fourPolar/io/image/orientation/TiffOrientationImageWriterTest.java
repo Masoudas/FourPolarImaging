@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
-import fr.fresnel.fourPolar.core.image.captured.fileSet.CapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
@@ -16,7 +16,7 @@ import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.OrientationImage;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
-import fr.fresnel.fourPolar.io.image.orientation.fileSet.TiffOrientationImageFileSet;
+import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageFileSet;
 
 public class TiffOrientationImageWriterTest {
     final private static File _root = new File(TiffOrientationImageWriterTest.class.getResource("").getPath(),

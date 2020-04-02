@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.image.polarization.fileSet;
+package fr.fresnel.fourPolar.io.image.polarization.file;
 
 import java.io.File;
 

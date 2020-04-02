@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.image.orientation;
 
 import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
-import fr.fresnel.fourPolar.core.image.captured.fileSet.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 
 /**

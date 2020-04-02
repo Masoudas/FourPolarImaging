@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
-import fr.fresnel.fourPolar.io.image.orientation.fileSet.TiffOrientationImageFileSet;
+import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageFileSet;
 
 /**
  * A concrete implementation of {@link IOrientationImageReader} to write the
