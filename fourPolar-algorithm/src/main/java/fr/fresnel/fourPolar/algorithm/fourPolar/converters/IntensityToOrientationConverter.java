@@ -38,7 +38,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
      * {@link IInverseOpticalPropagation} to convert an polarization intensity to a
      * intensity of individual polarizations.
      * 
-     * @param inverseProp contains the inverse optical propagation factors.
+     * @param inverseOpticalProp is the inverse optical propagation factors.
      */
     public IntensityToOrientationConverter(IInverseOpticalPropagation inverseOpticalProp) {
         _iProp_0_xx = inverseOpticalProp.getInverseFactor(Polarization.pol0, DipoleSquaredComponent.XX);
