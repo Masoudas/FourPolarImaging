@@ -1,7 +1,8 @@
 package fr.fresnel.fourPolar.io.image.polarization.file;
 
 import java.io.File;
-import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
+
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 
 /**
  * A concrete implementation of the {@link IPolarizationImageFileSet}, which
@@ -13,8 +14,9 @@ public class TiffSoIImageFile implements ISoIImageFile {
 
     private final File _SoIImageFile;
 
-    public TiffSoIImageFile(TiffPolarizationImageFileSet fileSet) {
-        File parentFolder = fileSet.getFile(Polarization.pol0).getParentFile();
+    public TiffSoIImageFile(File rootFolder, ICapturedImageFileSet fileSet) {
+        File parentFolder = TiffPolarizationImageFileSet.formSetParentFolder(rootFolder, fileSet.getChannel(),
+                fileSet.getSetName());
 
         this._SoIImageFile = new File(parentFolder, _SoIImageName);
     }
