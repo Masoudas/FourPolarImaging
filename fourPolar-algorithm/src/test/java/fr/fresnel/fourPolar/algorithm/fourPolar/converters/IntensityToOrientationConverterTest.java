@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters.ImpossibleOrientationVector;
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.propagation.OpticalPropagationNotInvertible;
-import fr.fresnel.fourPolar.algorithm.fourPolar.inversePropagation.MatrixBasedInverseOpticalPropagationCalculator;
 import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
@@ -37,25 +37,26 @@ public class IntensityToOrientationConverterTest {
         OpticalPropagation optPropagation = new OpticalPropagation(channel, na);
         InverseOpticalPropagation inverseProp = new InverseOpticalPropagation(optPropagation);
 
-        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.XX, 0.7880897720);
-        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.YY, 0.20470751910);
-        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.ZZ, -1.0419630892);
-        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.XY, 0);
+        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.XX, 0.091685566886620);
+        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.XX, -0.166595030225210);
+        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.XX, 0.419325727568000);
+        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XX, 0.419325727568000);
 
-        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.XX, 0.20470751910);
-        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.YY, 0.78808977204);
-        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.ZZ, -1.0419630892);
-        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.XY, 0.0);
+        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.YY, -0.166595030225194);
+        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.YY, 0.091685572902112);
+        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.YY, 0.419325693894715);
+        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.YY, 0.419325693894715);
+        
 
-        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.XX, -0.1108420459);
-        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.YY, -0.1108420459);
-        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.ZZ, 0.55323020559);
-        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.XY, 0.16834141369);
-
-        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XX, -0.11084204599);
-        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.YY, -0.11084204599);
-        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.ZZ, 0.553230205596);
-        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XY, -0.16834141369);
+        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.ZZ, 0.201522875905556);
+        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.ZZ, 0.201522859722606);
+        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.ZZ, -0.612462773475724);
+        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.ZZ, -0.612462773475724);
+        
+        inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.XY, -0.000000000000000);
+        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.XY, 0.000000000000000);      
+        inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.XY, 0.309169707239095);
+        inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XY, -0.309169707239096);
 
         _converter = new IntensityToOrientationConverter(inverseProp);
     }
@@ -120,39 +121,40 @@ public class IntensityToOrientationConverterTest {
     /**
      * Note the orientation-intensity pairs used here are calculated using the
      * Matlab program written by Valentina Curcio. The file in the resource folder.
+     * 
+     * @throws IOException
+     * @throws ImpossibleOrientationVector
      */
     @Test
-    public void convert_BrasseletCurcioPrecalculatedValues_OrientationDifferenceIsLessThanHundredthOfDegree() {
+    public void convert_BrasseletCurcioPrecalculatedValues_OrientationDifferenceIsLessThanHundredthOfDegree()
+            throws IOException, ImpossibleOrientationVector {
         double error = Math.PI / 180 * 0.01;
-        try (InputStream stream = IntensityToOrientationConverterTest.class
-                .getResourceAsStream("IntensityOrientation.txt");) {
-            InputStreamReader iReader = new InputStreamReader(stream);
-            BufferedReader buffer = new BufferedReader(iReader); // Now this baby actually
+        InputStream stream = IntensityToOrientationConverterTest.class
+                .getResourceAsStream("inverse_YanAxelrod-NA_1.45-epi.txt");
+        InputStreamReader iReader = new InputStreamReader(stream);
+        BufferedReader buffer = new BufferedReader(iReader); 
 
-            String intensityOrientationPair = null;
-            boolean equals = true;
-            do {
-                intensityOrientationPair = buffer.readLine();
+        String intensityOrientationPair = null;
+        boolean equals = true;
+        do {
+            intensityOrientationPair = buffer.readLine();
 
-                String[] values = intensityOrientationPair.split(",");
+            String[] values = intensityOrientationPair.split(",");
 
-                IntensityVector iVector = new IntensityVector(Double.parseDouble(values[0]),
-                        Double.parseDouble(values[2]), Double.parseDouble(values[1]), Double.parseDouble(values[3]));
+            IntensityVector iVector = new IntensityVector(
+                Double.parseDouble(values[0]), Double.parseDouble(values[2]),
+                Double.parseDouble(values[1]), Double.parseDouble(values[3]));
 
-                OrientationVector original = new OrientationVector(Float.parseFloat(values[4]),
-                        Float.parseFloat(values[5]), Float.parseFloat(values[6]));
+            OrientationVector original = new OrientationVector(
+                Float.parseFloat(values[4]), Float.parseFloat(values[5]),
+                Float.parseFloat(values[6]));
 
-                IOrientationVector calculated = _converter.convert(iVector);
+            IOrientationVector calculated = _converter.convert(iVector);
 
-                equals &= _checkAnglePrecision(original, calculated, error);
+            equals &= _checkAnglePrecision(original, calculated, error);
 
-            } while (intensityOrientationPair != null);
+        } while (intensityOrientationPair != null);
 
-            assertTrue(equals);
-
-        } catch (Exception e) {
-            assertTrue(false);
-        }
+        assertTrue(equals);
     }
-
 }
