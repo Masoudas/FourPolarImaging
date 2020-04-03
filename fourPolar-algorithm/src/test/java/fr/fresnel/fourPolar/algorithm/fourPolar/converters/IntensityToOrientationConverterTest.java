@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -46,29 +47,18 @@ public class IntensityToOrientationConverterTest {
         inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.YY, 0.091685572902112);
         inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.YY, 0.419325693894715);
         inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.YY, 0.419325693894715);
-        
 
         inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.ZZ, 0.201522875905556);
         inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.ZZ, 0.201522859722606);
         inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.ZZ, -0.612462773475724);
         inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.ZZ, -0.612462773475724);
-        
+
         inverseProp.setInverseFactor(Polarization.pol0, DipoleSquaredComponent.XY, -0.000000000000000);
-        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.XY, 0.000000000000000);      
+        inverseProp.setInverseFactor(Polarization.pol90, DipoleSquaredComponent.XY, 0.000000000000000);
         inverseProp.setInverseFactor(Polarization.pol45, DipoleSquaredComponent.XY, 0.309169707239095);
         inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XY, -0.309169707239096);
 
         _converter = new IntensityToOrientationConverter(inverseProp);
-    }
-
-    private static boolean _checkAnglePrecision(IOrientationVector vec1, IOrientationVector vec2, double error) {
-        return _checkPrecision(vec1.getAngle(OrientationAngle.rho), vec2.getAngle(OrientationAngle.rho), error)
-                && _checkPrecision(vec1.getAngle(OrientationAngle.delta), vec2.getAngle(OrientationAngle.delta), error)
-                && _checkPrecision(vec1.getAngle(OrientationAngle.eta), vec2.getAngle(OrientationAngle.eta), error);
-    }
-
-    private static boolean _checkPrecision(double val1, double val2, double error) {
-        return Math.abs(val1 - val2) < error;
     }
 
     @Test
@@ -119,42 +109,76 @@ public class IntensityToOrientationConverterTest {
     }
 
     /**
-     * Note the orientation-intensity pairs used here are calculated using the
-     * Matlab program written by Valentina Curcio. The file in the resource folder.
+     * In this test, we try to compare our results with the forward problem. To do
+     * so, we have calculated the intensity from an orientation angle using the
+     * integration formulas (forward problem). Then, we try to estimate the angles
+     * with the back propagation matrix (inverse problem). These two methods will
+     * not yield the same results (especially for marginal cases such as delta=180
+     * or eta=0), but for more appropriate angles the error margin should not be
+     * very high.
      * 
-     * @throws IOException
-     * @throws ImpossibleOrientationVector
-     */ 
+     * Also note that for cases where rho is close to zero, we may get a rho close
+     * to 180. This is due to near equivalence of those angles.
+     */
     @Test
-    public void convert_BrasseletCurcioPrecalculatedValues_OrientationDifferenceIsLessThanHundredthOfDegree()
+    public void convert_BrasseletCurcioForwardValues_OrientationErrorIsLessThanThreshold()
             throws IOException, ImpossibleOrientationVector {
-        double error = Math.PI / 180 * 0.01;
-        InputStream stream = IntensityToOrientationConverterTest.class
-                .getResourceAsStream("inverse_YanAxelrod-NA_1.45-epi.txt");
+        double error = Math.PI / 180 * 10;
+
+        double etaGreaterThan = Math.PI / 180 * 10;
+        double deltaLessThan = Math.PI / 180 * 160;
+
+        InputStream stream = IntensityToOrientationConverterTest.class.getResourceAsStream("forwardMethodData.txt");
         InputStreamReader iReader = new InputStreamReader(stream);
-        BufferedReader buffer = new BufferedReader(iReader); 
- 
+        BufferedReader buffer = new BufferedReader(iReader);
+
         String intensityOrientationPair = null;
-        boolean equals = true; 
+        boolean equals = true;
         do {
             intensityOrientationPair = buffer.readLine();
 
             String[] values = intensityOrientationPair.split(",");
+            if (isEtaGreaterThan(values, etaGreaterThan) && isDeltaLessThan(values, deltaLessThan)) {
+                IntensityVector iVector = new IntensityVector(Double.parseDouble(values[0]),
+                        Double.parseDouble(values[2]), Double.parseDouble(values[1]), Double.parseDouble(values[3]));
 
-            IntensityVector iVector = new IntensityVector(
-                Double.parseDouble(values[0]), Double.parseDouble(values[2]),
-                Double.parseDouble(values[1]), Double.parseDouble(values[3]));
+                OrientationVector original = new OrientationVector(Double.parseDouble(values[4]),
+                        Double.parseDouble(values[6]), Double.parseDouble(values[5]));
 
-            OrientationVector original = new OrientationVector(
-                Double.parseDouble(values[4]), Double.parseDouble(values[6]),
-                Double.parseDouble(values[5]));
+                IOrientationVector calculated = _converter.convert(iVector);
 
-            IOrientationVector calculated = _converter.convert(iVector);
+                equals = _checkForwardAnglePrecision(original, calculated, error);
 
-            equals &= _checkAnglePrecision(original, calculated, error);
+            }
 
         } while (intensityOrientationPair != null && equals);
 
         assertTrue(equals);
     }
+
+    private boolean isEtaGreaterThan(String[] values, double threshold) {
+        return new BigDecimal(Double.parseDouble(values[5])).compareTo(new BigDecimal(threshold)) == 1;
+    }
+
+    private boolean isDeltaLessThan(String[] values, double threshold) {
+        return new BigDecimal(Double.parseDouble(values[6])).compareTo(new BigDecimal(threshold)) == -1;
+    }
+
+    /**
+     * To check forward angle precision, we check that delta and eta have acceptable
+     * error. For rho, we check that delta or (pi-delta) are close to the forward
+     * angle (this is due to rounding error around 0 degree as mentiond.)
+     */
+    private static boolean _checkForwardAnglePrecision(IOrientationVector vec1, IOrientationVector vec2, double error) {
+        return (_checkPrecision(Math.PI - vec1.getAngle(OrientationAngle.rho), vec2.getAngle(OrientationAngle.rho),
+                error)
+                || _checkPrecision(vec1.getAngle(OrientationAngle.rho), vec2.getAngle(OrientationAngle.rho), error))
+                && _checkPrecision(vec1.getAngle(OrientationAngle.delta), vec2.getAngle(OrientationAngle.delta), error)
+                && _checkPrecision(vec1.getAngle(OrientationAngle.eta), vec2.getAngle(OrientationAngle.eta), error);
+    }
+
+    private static boolean _checkPrecision(double val1, double val2, double error) {
+        return Math.abs(val1 - val2) < error;
+    }
+
 }
