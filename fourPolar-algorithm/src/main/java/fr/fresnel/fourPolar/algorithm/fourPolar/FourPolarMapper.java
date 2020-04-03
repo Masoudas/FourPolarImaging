@@ -49,7 +49,7 @@ public class FourPolarMapper {
             try {
                 orientationVector = _converter.convert(intensity);
             } catch (ImpossibleOrientationVector e) {
-                orientationVector = new OrientationVector(Float.NaN, Float.NaN, Float.NaN);
+                orientationVector = new OrientationVector(Double.NaN, Double.NaN, Double.NaN);
             }
 
             orientationIterator.next();

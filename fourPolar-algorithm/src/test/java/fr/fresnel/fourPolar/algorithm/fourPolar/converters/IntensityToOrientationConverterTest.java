@@ -146,8 +146,8 @@ public class IntensityToOrientationConverterTest {
                 Double.parseDouble(values[1]), Double.parseDouble(values[3]));
 
             OrientationVector original = new OrientationVector(
-                Float.parseFloat(values[4]), Float.parseFloat(values[6]),
-                Float.parseFloat(values[5]));
+                Double.parseDouble(values[4]), Double.parseDouble(values[6]),
+                Double.parseDouble(values[5]));
 
             IOrientationVector calculated = _converter.convert(iVector);
 

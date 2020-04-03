@@ -78,15 +78,15 @@ public class OrientationToIntensityConverterTest {
 
     @Test
     public void convert_Delta180_ReturnsSameIntensityForAllRhoAndEta() {
-        float delta = OrientationVector.MAX_Delta;
-        float angleStep = (float)Math.PI/180;
+        double delta = OrientationVector.MAX_Delta;
+        double angleStep = Math.PI/180;
 
         IOrientationVector baseVector = new OrientationVector(0f, delta, 0f);
         IntensityVector baseIntensity = _converter.convert(baseVector);
 
         boolean equals = true;
-        for (float rho = 0; rho < OrientationVector.MAX_Rho; rho += angleStep) {
-            for (float eta = 0; eta < OrientationVector.MAX_Eta; eta += angleStep) {
+        for (double rho = 0; rho < OrientationVector.MAX_Rho; rho += angleStep) {
+            for (double eta = 0; eta < OrientationVector.MAX_Eta; eta += angleStep) {
                 IOrientationVector vector = new OrientationVector(rho, delta, eta);
                 IntensityVector intensity = _converter.convert(vector);
 
@@ -107,15 +107,15 @@ public class OrientationToIntensityConverterTest {
 
     @Test
     public void convert_Eta0_ForOneDeltaReturnsSameIntensityForAllRho() {
-        float eta = 0f;
-        float angleStep = (float)Math.PI/180;
+        double eta = 0f;
+        double angleStep = Math.PI/180;
 
         boolean equals = true;
-        for (float delta = 0; delta < OrientationVector.MAX_Delta; delta += angleStep) {
+        for (double delta = 0; delta < OrientationVector.MAX_Delta; delta += angleStep) {
             IOrientationVector baseVector = new OrientationVector(0f, delta, eta);
             IntensityVector baseIntensity = _converter.convert(baseVector);
 
-            for (float rho = 0; rho < OrientationVector.MAX_Rho; rho += angleStep) {
+            for (double rho = 0; rho < OrientationVector.MAX_Rho; rho += angleStep) {
                 IOrientationVector vector = new OrientationVector(rho, delta, eta);
                 IntensityVector intensity = _converter.convert(vector);
 
@@ -154,8 +154,8 @@ public class OrientationToIntensityConverterTest {
 
                 String[] values = intensityOrientationPair.split(",");
 
-                OrientationVector oVector = new OrientationVector(Float.parseFloat(values[4]),
-                Float.parseFloat(values[6]), Float.parseFloat(values[5]));
+                OrientationVector oVector = new OrientationVector(Double.parseDouble(values[4]),
+                Double.parseDouble(values[6]), Double.parseDouble(values[5]));
 
                 IntensityVector original = new IntensityVector(Double.parseDouble(values[0]),
                         Double.parseDouble(values[2]), Double.parseDouble(values[1]), Double.parseDouble(values[3]));

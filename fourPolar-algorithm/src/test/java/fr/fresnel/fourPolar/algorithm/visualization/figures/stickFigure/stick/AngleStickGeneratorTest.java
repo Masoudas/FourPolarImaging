@@ -25,7 +25,7 @@ public class AngleStickGeneratorTest {
         int len = 1;
         for (int x = 1; x < 5; x++) {
             for (int y = 1; y < 5; y++) {
-                for (float rho = 0; rho < Math.PI; rho += Math.PI / 180 * 5) {
+                for (double rho = 0; rho < Math.PI; rho += Math.PI / 180 * 5) {
                     DPoint pose = new DPoint(x, y);
                     OrientationVector vec = new OrientationVector(rho, 0, 0);
 
@@ -50,7 +50,7 @@ public class AngleStickGeneratorTest {
         int len = 1;
         for (int x = 1; x < 5; x++) {
             for (int y = 1; y < 5; y++) {
-                for (float delta = 0; delta < Math.PI; delta += Math.PI / 180 * 5) {
+                for (double delta = 0; delta < Math.PI; delta += Math.PI / 180 * 5) {
                     DPoint pose = new DPoint(x, y);
                     OrientationVector vec = new OrientationVector(0, delta, 0);
 
@@ -75,7 +75,7 @@ public class AngleStickGeneratorTest {
         int len = 1;
         for (int x = 1; x < 5; x++) {
             for (int y = 1; y < 5; y++) {
-                for (float eta = 0; eta < Math.PI; eta += Math.PI / 180 * 5) {
+                for (double eta = 0; eta < Math.PI; eta += Math.PI / 180 * 5) {
                     DPoint pose = new DPoint(x, y);
                     // Note that actually this stick is independent of eta angle.
                     OrientationVector vec = new OrientationVector(0, 0, eta);
@@ -102,7 +102,7 @@ public class AngleStickGeneratorTest {
         int len = 10;
         int thickness = 1;
 
-        for (float rho = 0; rho < Math.PI; rho += Math.PI / 180) {
+        for (double rho = 0; rho < Math.PI; rho += Math.PI / 180) {
             OrientationVector vec = new OrientationVector(rho, 0, 0);
 
             IAngleStickIterator iterator = new AngleStickGenerator(cMap).getRhoStick(vec, pose, len, thickness)
@@ -123,7 +123,7 @@ public class AngleStickGeneratorTest {
         int len = 10;
         int thickness = 1;
 
-        for (float delta = 0; delta < Math.PI; delta += Math.PI / 180) {
+        for (double delta = 0; delta < Math.PI; delta += Math.PI / 180) {
             OrientationVector vec = new OrientationVector(0, delta, 0);
 
             IAngleStickIterator iterator = new AngleStickGenerator(cMap).getDeltaStick(vec, pose, len, thickness)
@@ -144,7 +144,7 @@ public class AngleStickGeneratorTest {
         int len = 10;
         int thickness = 1;
 
-        for (float rho = 0; rho < Math.PI; rho += Math.PI / 180) {
+        for (double rho = 0; rho < Math.PI; rho += Math.PI / 180) {
             OrientationVector vec = new OrientationVector(rho, 0, 0);
 
             IAngleStickIterator iterator = new AngleStickGenerator(cMap).getDeltaStick(vec, pose, len, thickness)
@@ -196,7 +196,7 @@ public class AngleStickGeneratorTest {
 
     @Test
     public void createStick_NullAngle_RaisesAngleStickUndefined() {
-        OrientationVector vec = new OrientationVector(Float.NaN, 0, 0);
+        OrientationVector vec = new OrientationVector(Double.NaN, 0, 0);
         DPoint pose = new DPoint(50, 50);
         int len = 10;
         int thickness = 1;
@@ -208,7 +208,7 @@ public class AngleStickGeneratorTest {
         
     }
 
-    private double pixelDistance(float slopeAngle, DPoint position, DPoint point) {
+    private double pixelDistance(double slopeAngle, DPoint position, DPoint point) {
         // Suppose line equation is given by -ax + ax_0 - y_0 + y = 0
         double a = Math.tan(slopeAngle);
         return Math.abs(-a * point.x + point.y + a * position.x - position.y) / Math.sqrt(a * a + 1);

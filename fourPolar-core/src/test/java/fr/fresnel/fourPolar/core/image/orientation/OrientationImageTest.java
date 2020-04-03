@@ -122,9 +122,9 @@ public class OrientationImageTest {
 
             equals &= _checkPrecision(angle.get(), orientationVector.getAngle(OrientationAngle.rho), 1e-6f);
             equals &= _checkPrecision(angle.get(),
-                    orientationVector.getAngle(OrientationAngle.delta) - (float) Math.PI / 180, 1e-6f);
+                    orientationVector.getAngle(OrientationAngle.delta) - Math.PI / 180, 1e-6f);
             equals &= _checkPrecision(angle.get(),
-                    orientationVector.getAngle(OrientationAngle.eta) - (float) Math.PI / 90, 1e-6f);
+                    orientationVector.getAngle(OrientationAngle.eta) - Math.PI / 90, 1e-6f);
         }
 
         assertTrue(equals);
@@ -153,7 +153,7 @@ public class OrientationImageTest {
             
     }
 
-    private static boolean _checkPrecision(float val1, float val2, float error) {
+    private static boolean _checkPrecision(double val1, double val2, double error) {
         return Math.abs(val1 - val2) < error;        
     }
 

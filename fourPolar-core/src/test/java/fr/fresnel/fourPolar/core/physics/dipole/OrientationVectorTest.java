@@ -11,39 +11,39 @@ import fr.fresnel.fourPolar.core.exceptions.physics.dipole.OrientationAngleOutOf
 public class OrientationVectorTest {
     @Test
     public void getAngle_NaNAngle_AllAngelsNan() {
-        OrientationVector vec1 = new OrientationVector(Float.NaN, 0, 0);
-        OrientationVector vec2 = new OrientationVector(0, Float.NaN, 0);
-        OrientationVector vec3 = new OrientationVector(0, 0, Float.NaN);
+        OrientationVector vec1 = new OrientationVector(Double.NaN, 0, 0);
+        OrientationVector vec2 = new OrientationVector(0, Double.NaN, 0);
+        OrientationVector vec3 = new OrientationVector(0, 0, Double.NaN);
 
         assertTrue(
-            Float.isNaN(vec1.getAngle(OrientationAngle.delta)) &&
-            Float.isNaN(vec1.getAngle(OrientationAngle.rho)) &&
-            Float.isNaN(vec1.getAngle(OrientationAngle.eta)) &&
-            Float.isNaN(vec2.getAngle(OrientationAngle.delta)) &&
-            Float.isNaN(vec2.getAngle(OrientationAngle.rho)) &&
-            Float.isNaN(vec2.getAngle(OrientationAngle.eta)) &&
-            Float.isNaN(vec3.getAngle(OrientationAngle.delta)) &&
-            Float.isNaN(vec3.getAngle(OrientationAngle.rho)) &&
-            Float.isNaN(vec3.getAngle(OrientationAngle.eta)));
+            Double.isNaN(vec1.getAngle(OrientationAngle.delta)) &&
+            Double.isNaN(vec1.getAngle(OrientationAngle.rho)) &&
+            Double.isNaN(vec1.getAngle(OrientationAngle.eta)) &&
+            Double.isNaN(vec2.getAngle(OrientationAngle.delta)) &&
+            Double.isNaN(vec2.getAngle(OrientationAngle.rho)) &&
+            Double.isNaN(vec2.getAngle(OrientationAngle.eta)) &&
+            Double.isNaN(vec3.getAngle(OrientationAngle.delta)) &&
+            Double.isNaN(vec3.getAngle(OrientationAngle.rho)) &&
+            Double.isNaN(vec3.getAngle(OrientationAngle.eta)));
 
     }
     
     @Test
     public void getAngle_RhoOutOfRange_RaisesException() {
-        assertThrows(OrientationAngleOutOfRange.class , ()->{new OrientationVector((float)(2 * Math.PI), Float.NaN, Float.NaN);});
-        assertThrows(OrientationAngleOutOfRange.class , ()->{new OrientationVector((float)(-Math.PI), Float.NaN, Float.NaN);});
+        assertThrows(OrientationAngleOutOfRange.class , ()->{new OrientationVector((double)(2 * Math.PI), Double.NaN, Double.NaN);});
+        assertThrows(OrientationAngleOutOfRange.class , ()->{new OrientationVector((double)(-Math.PI), Double.NaN, Double.NaN);});
     }
 
     @Test
     public void getAngle_DeltaOutOfRange_RaisesException() {
-        assertThrows(OrientationAngleOutOfRange.class , ()->{new OrientationVector(Float.NaN, (float)(2 * Math.PI), Float.NaN);});
-        assertThrows(OrientationAngleOutOfRange.class , ()->{new OrientationVector(Float.NaN, (float)(-Math.PI), Float.NaN);});
+        assertThrows(OrientationAngleOutOfRange.class , ()->{new OrientationVector(Double.NaN, (double)(2 * Math.PI), Double.NaN);});
+        assertThrows(OrientationAngleOutOfRange.class , ()->{new OrientationVector(Double.NaN, (double)(-Math.PI), Double.NaN);});
     }
 
     @Test
     public void getAngle_EtaOutOfRange_RaisesException() {
-        assertThrows(OrientationAngleOutOfRange.class , ()->{new OrientationVector(Float.NaN, Float.NaN, (float)(Math.PI));});
-        assertThrows(OrientationAngleOutOfRange.class , ()->{new OrientationVector(Float.NaN, Float.NaN, (float)(-Math.PI));});
+        assertThrows(OrientationAngleOutOfRange.class , ()->{new OrientationVector(Double.NaN, Double.NaN, (double)(Math.PI));});
+        assertThrows(OrientationAngleOutOfRange.class , ()->{new OrientationVector(Double.NaN, Double.NaN, (double)(-Math.PI));});
     }
 
 }

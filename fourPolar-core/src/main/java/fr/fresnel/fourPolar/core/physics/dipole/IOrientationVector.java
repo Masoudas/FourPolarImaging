@@ -11,7 +11,7 @@ public interface IOrientationVector {
      * @param angle
      * @return
      */
-    public float getAngle(OrientationAngle angle);
+    public double getAngle(OrientationAngle angle);
 
     /**
      * Method to get the orientation angle in degrees.
@@ -19,5 +19,5 @@ public interface IOrientationVector {
      * @param angle
      * @return
      */
-    public float getAngleInDegree(OrientationAngle angle);
+    public double getAngleInDegree(OrientationAngle angle);
 }

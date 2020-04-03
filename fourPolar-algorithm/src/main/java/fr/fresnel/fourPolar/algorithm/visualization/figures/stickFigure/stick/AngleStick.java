@@ -13,7 +13,7 @@ class AngleStick implements IAngleStick {
     private final DPoint _pose;
     private final RGB16 _color;
     private final int _len;
-    private final float _slopeAngle;
+    private final double _slopeAngle;
     private final int _thickness;
     private final IAngleStickIterator _iterator;
 
@@ -27,7 +27,7 @@ class AngleStick implements IAngleStick {
      * @param thickness  is the thickness of the stick in pixels.
      * @param color      is the {@link RGB16} color of the pixel.
      */
-    public AngleStick(DPoint pose, float slopeAngle, int len, int thickness, RGB16 color, IAngleStickIterator iterator) {
+    public AngleStick(DPoint pose, double slopeAngle, int len, int thickness, RGB16 color, IAngleStickIterator iterator) {
         this._pose = pose;
         this._color = color;
         this._len = len;
@@ -52,7 +52,7 @@ class AngleStick implements IAngleStick {
     }
 
     @Override
-    public float getSlopeAngle() {
+    public double getSlopeAngle() {
         return _slopeAngle;
     }
 

@@ -38,7 +38,7 @@ public interface IAngleStick {
     /**
      * Returns the slope of the stick in radian.
      */
-    public float getSlopeAngle();
+    public double getSlopeAngle();
 
     /**
      * Returns the thickness of this stick.

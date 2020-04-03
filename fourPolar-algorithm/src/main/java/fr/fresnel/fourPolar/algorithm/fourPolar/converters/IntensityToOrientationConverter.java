@@ -67,19 +67,19 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
      * value. Otherwise, add a pi to it, to get the equivalent positive angle and
      * then return it.
      */
-    private float _getRho(double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff) {
+    private double _getRho(double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff) {
         double raw_Rho = 0.5 * Math.atan2(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
-        return (float)((raw_Rho + OrientationVector.MAX_Rho) % OrientationVector.MAX_Rho);
+        return ((raw_Rho + OrientationVector.MAX_Rho) % OrientationVector.MAX_Rho);
     }
 
     /**
      * Calculate delta using the formula. Because the result is always positive (as ensured 
      * by conditions), we return the raw value.
      */
-    private float _getDelta(double sumNormalizedDipoleSquared) {
+    private double _getDelta(double sumNormalizedDipoleSquared) {
         double raw_delta = 2 * Math.acos((Math.sqrt(12 * sumNormalizedDipoleSquared - 3) - 1) / 2);
 
-        return (float)raw_delta;
+        return raw_delta;
     }
 
     /**
@@ -88,14 +88,14 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
      * than PI/2 has same propagation as it's PI complement, return the complement
      * value.
      */
-    private float _getEta(double normalizedDipoleSquared_Z, double sumNormalizedDipoleSquared) {
+    private double _getEta(double normalizedDipoleSquared_Z, double sumNormalizedDipoleSquared) {
         double raw_eta = Math.asin(Math.sqrt(
                 2 * (sumNormalizedDipoleSquared - normalizedDipoleSquared_Z) / (3 * sumNormalizedDipoleSquared - 1)));
 
         if (raw_eta < OrientationVector.MAX_Eta) {
-            return (float) raw_eta;
+            return raw_eta;
         } else {
-            return (float) (raw_eta - OrientationVector.MAX_Eta);
+            return raw_eta - OrientationVector.MAX_Eta;
         }
     }
 
@@ -144,9 +144,9 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         _checkEtaExists(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
 
         // Computing the angles
-        float rho = this._getRho(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
-        float delta = this._getDelta(sumNormalizedDipoleSquared);
-        float eta = this._getEta(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
+        double rho = this._getRho(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
+        double delta = this._getDelta(sumNormalizedDipoleSquared);
+        double eta = this._getEta(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
 
         return new OrientationVector(rho, delta, eta);
     }

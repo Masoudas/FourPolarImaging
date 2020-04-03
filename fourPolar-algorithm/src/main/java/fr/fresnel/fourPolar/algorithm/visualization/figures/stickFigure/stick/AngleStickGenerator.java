@@ -38,10 +38,10 @@ public class AngleStickGenerator {
      */
     public IAngleStick getRhoStick(IOrientationVector vec, DPoint dipolePosition, int length, int thickness)
             throws AngleStickUndefined {
-        if (Float.isNaN(vec.getAngle(OrientationAngle.rho)) || Float.isNaN(vec.getAngle(OrientationAngle.rho))) {
+        if (Double.isNaN(vec.getAngle(OrientationAngle.rho)) || Double.isNaN(vec.getAngle(OrientationAngle.rho))) {
             throw new AngleStickUndefined("Cannot define stick for nan angles.");
         }
-        float slope = vec.getAngle(OrientationAngle.rho);
+        double slope = vec.getAngle(OrientationAngle.rho);
 
         RGB16 color = _colorMap.getColor(0, OrientationVector.MAX_Rho, slope);
         IAngleStickIterator iterator = formIterator(slope, dipolePosition, length, thickness);
@@ -60,11 +60,11 @@ public class AngleStickGenerator {
      */
     public IAngleStick getDeltaStick(IOrientationVector vec, DPoint dipolePosition, int length, int thickness)
             throws AngleStickUndefined {
-        if (Float.isNaN(vec.getAngle(OrientationAngle.rho)) || Float.isNaN(vec.getAngle(OrientationAngle.rho))) {
+        if (Double.isNaN(vec.getAngle(OrientationAngle.rho)) || Double.isNaN(vec.getAngle(OrientationAngle.rho))) {
             throw new AngleStickUndefined("Cannot define stick for nan angles.");
         }
 
-        float slope = vec.getAngle(OrientationAngle.rho);
+        double slope = vec.getAngle(OrientationAngle.rho);
 
         RGB16 color = _colorMap.getColor(0, OrientationVector.MAX_Delta, vec.getAngle(OrientationAngle.delta));
         IAngleStickIterator iterator = formIterator(slope, dipolePosition, length, thickness);
@@ -84,11 +84,11 @@ public class AngleStickGenerator {
      */
     public IAngleStick getEtaStick(IOrientationVector vec, DPoint dipolePosition, int length, int thickness)
             throws AngleStickUndefined {
-        if (Float.isNaN(vec.getAngle(OrientationAngle.rho)) || Float.isNaN(vec.getAngle(OrientationAngle.rho))) {
+        if (Double.isNaN(vec.getAngle(OrientationAngle.rho)) || Double.isNaN(vec.getAngle(OrientationAngle.rho))) {
             throw new AngleStickUndefined("Cannot define stick for nan angles.");
         }
 
-        float slope = vec.getAngle(OrientationAngle.rho);
+        double slope = vec.getAngle(OrientationAngle.rho);
 
         RGB16 color = _colorMap.getColor(0, OrientationVector.MAX_Eta, vec.getAngle(OrientationAngle.eta));
         IAngleStickIterator iterator = formIterator(slope, dipolePosition, length, thickness);
@@ -109,7 +109,7 @@ public class AngleStickGenerator {
      * @return iterator that iterates over the region corresponding to this stick,
      *         in pixel coordinates.
      */
-    public IAngleStickIterator formIterator(float slopeAngle, DPoint dipolePosition, int length, int thickness) {
+    public IAngleStickIterator formIterator(double slopeAngle, DPoint dipolePosition, int length, int thickness) {
         Point[] endPoints = _getEndPoints(dipolePosition, slopeAngle, length);
         Line negativeLine = new Line(endPoints[0].x, endPoints[0].y, dipolePosition.x, dipolePosition.y);
         negativeLine.setStrokeWidth(thickness);
@@ -126,7 +126,7 @@ public class AngleStickGenerator {
      * 
      * @return start_point and end_point.
      */
-    private Point[] _getEndPoints(DPoint dipolePosition, float slopeAngle, int length) {
+    private Point[] _getEndPoints(DPoint dipolePosition, double slopeAngle, int length) {
         double xStart = dipolePosition.x - Math.cos(slopeAngle) * ((length - 1) / 2);
         double yStart = dipolePosition.y - Math.sin(slopeAngle) * ((length - 1) / 2);
 

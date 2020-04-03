@@ -46,13 +46,13 @@ class OrientationVectorIterator implements IOrientationVectorIterator {
 
     @Override
     public void set(IOrientationVector vector) {
-        Float32 rhoAngle = new Float32(vector.getAngle(OrientationAngle.rho));
+        Float32 rhoAngle = new Float32((float)vector.getAngle(OrientationAngle.rho));
         Pixel<Float32> rhoPixel = new Pixel<Float32>(rhoAngle);
 
-        Float32 deltaAngle = new Float32(vector.getAngle(OrientationAngle.delta));
+        Float32 deltaAngle = new Float32((float)vector.getAngle(OrientationAngle.delta));
         Pixel<Float32> deltaPixel = new Pixel<Float32>(deltaAngle);
 
-        Float32 etaAngle = new Float32(vector.getAngle(OrientationAngle.eta));
+        Float32 etaAngle = new Float32((float)vector.getAngle(OrientationAngle.eta));
         Pixel<Float32> etaPixel = new Pixel<Float32>(etaAngle);
 
         this._rhoCursor.setPixel(rhoPixel);
