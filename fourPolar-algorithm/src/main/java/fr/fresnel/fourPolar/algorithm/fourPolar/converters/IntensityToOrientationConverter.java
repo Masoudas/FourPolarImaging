@@ -69,12 +69,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
      */
     private float _getRho(double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff) {
         double raw_Rho = 0.5 * Math.atan2(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
-
-        if (raw_Rho >= 0) {
-            return (float) raw_Rho;
-        } else {
-            return (float) (OrientationVector.MAX_Rho + raw_Rho);
-        }
+        return (float)(raw_Rho % OrientationVector.MAX_Rho);
     }
 
     /**
@@ -85,11 +80,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     private float _getDelta(double sumNormalizedDipoleSquared) {
         double raw_delta = 2 * Math.acos((Math.sqrt(12 * sumNormalizedDipoleSquared - 3) - 1) / 2);
 
-        if (raw_delta >= 0) {
-            return (float) raw_delta;
-        } else {
-            return (float) (OrientationVector.MAX_Delta + raw_delta);
-        }
+        return (float)(raw_delta % OrientationVector.MAX_Delta);
     }
 
     /**
