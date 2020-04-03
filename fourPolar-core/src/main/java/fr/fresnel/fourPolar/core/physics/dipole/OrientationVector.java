@@ -87,8 +87,8 @@ public class OrientationVector implements IOrientationVector {
     }
 
     private void _checkDelta(float value) throws OrientationAngleOutOfRange {
-        if (value < 0 || value >= MAX_Delta) {
-            throw new OrientationAngleOutOfRange("Delta is out of [0, pi) range");
+        if (value < 0 || value > MAX_Delta) {
+            throw new OrientationAngleOutOfRange("Delta is out of [0, pi] range");
         }
     }
 
