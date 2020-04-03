@@ -69,18 +69,17 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
      */
     private float _getRho(double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff) {
         double raw_Rho = 0.5 * Math.atan2(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
-        return (float)(raw_Rho % OrientationVector.MAX_Rho);
+        return (float)((raw_Rho + OrientationVector.MAX_Rho) % OrientationVector.MAX_Rho);
     }
 
     /**
-     * Calculate dekta using the formula. If result is positive, return original
-     * value. Otherwise, add a pi to it, to get the equivalent positive angle and
-     * then return it.
+     * Calculate delta using the formula. Because the result is always positive (as ensured 
+     * by conditions), we return the raw value.
      */
     private float _getDelta(double sumNormalizedDipoleSquared) {
         double raw_delta = 2 * Math.acos((Math.sqrt(12 * sumNormalizedDipoleSquared - 3) - 1) / 2);
 
-        return (float)(raw_delta % OrientationVector.MAX_Delta);
+        return (float)raw_delta;
     }
 
     /**
@@ -141,8 +140,8 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
                 normalizedDipoleSquared_XYdiff, normalizedDipoleSquared_Z);
 
         // Check necessary conditions for angles to exist.
-        _checkSumNormalizedDipoleSquared(sumNormalizedDipoleSquared);
-        _checkNormalizedDipoleSquared_Z(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
+        _checkDeltaExistsAndPositive(sumNormalizedDipoleSquared);
+        _checkEtaExists(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
 
         // Computing the angles
         float rho = this._getRho(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
@@ -198,9 +197,9 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     }
 
     /**
-     * Check that sumNormalizedDipoleSquared is in the range 0.5 and 1.
+     * Check that delta exists and positive is in the range 0.5 and 1.
      */
-    private void _checkSumNormalizedDipoleSquared(double sumNormalizedDipoleSquared)
+    private void _checkDeltaExistsAndPositive(double sumNormalizedDipoleSquared)
             throws ImpossibleOrientationVector {
         if (sumNormalizedDipoleSquared > 1 || sumNormalizedDipoleSquared < 1 / 2) {
             throw new ImpossibleOrientationVector("Sum of normalized dipole squared must be in range [1/2, 1].");
@@ -208,10 +207,10 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     }
 
     /**
-     * Check normalizedDipoleSquared_Z <= sumNormalizedDipoleSquared and
+     * Check eta angle exists by checking normalizedDipoleSquared_Z <= sumNormalizedDipoleSquared and
      * normalizedDipoleSquared_Z >= 0.5(1 - sumNormalizedDipoleSquared)
      */
-    private void _checkNormalizedDipoleSquared_Z(double normalizedDipoleSquared_Z, double sumNormalizedDipoleSquared)
+    private void _checkEtaExists(double normalizedDipoleSquared_Z, double sumNormalizedDipoleSquared)
             throws ImpossibleOrientationVector {
         if (normalizedDipoleSquared_Z > sumNormalizedDipoleSquared
                 || normalizedDipoleSquared_Z < 0.5 * (1 - sumNormalizedDipoleSquared)) {
