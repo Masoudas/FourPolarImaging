@@ -1,8 +1,9 @@
-package fr.fresnel.fourPolar.io.image.polarization.file;
+package fr.fresnel.fourPolar.io.image.polarization.soi.file;
 
 import java.io.File;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.io.image.polarization.file.TiffPolarizationImageFileSet;
 
 /**
  * A concrete implementation of the {@link IPolarizationImageFileSet}, which
