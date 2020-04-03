@@ -68,7 +68,8 @@ public class OrientationToIntensityConverter implements IOrientationToIntensityC
         _propFactor_zz_135 = opticalPropagation.getPropagationFactor(
             DipoleSquaredComponent.ZZ, Polarization.pol135);
         _propFactor_xy_135 = opticalPropagation.getPropagationFactor(
-            DipoleSquaredComponent.XY, Polarization.pol135);    }
+            DipoleSquaredComponent.XY, Polarization.pol135);    
+        }
 
     @Override
     public IntensityVector convert(IOrientationVector orientationVector) {

@@ -32,25 +32,25 @@ public class OrientationToIntensityConverterTest {
 
         IOpticalPropagation opticalPropagation = new OpticalPropagation(channel, na);
 
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0, 1.72622242);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol0, 0.012080463);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol0, 0.348276444);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol0, 0.0);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0, 4.422973044436246);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol0, 0.551215121520568);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol0, 3.405602990940682);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol0, -0.0000000000000);
 
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol90, 0.012080463);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol90, 1.726222425);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol90, 0.348276444);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol90, 0.0);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol90, 0.551215121520568);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol90, 4.422973355351169);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol90, 3.405602990940375);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol90, -0.000000000000000);
 
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol45, 1.6369744726);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol45, 1.6369744726);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol45, 1.55973262275);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol45, 2.97015445583);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol45, 0.818345815444442);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol45, 0.818345815444442);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol45, 0.304192988437901);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol45, 1.617234768778063);
 
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol135, 1.63697447260);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135, 1.63697447260);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135, 1.55973262275);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135, -2.9701544558);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol135, 0.818345815444442);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135, 0.818345815444442);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135, 0.304192988437901);
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135, -1.617234768778063);        
 
         _converter = new OrientationToIntensityConverter(opticalPropagation);
     }
@@ -143,7 +143,7 @@ public class OrientationToIntensityConverterTest {
     public void convert_BrasseletCurcioPrecalculatedValues_IntensityDifferenceIsLessThanAThousandth() {
         double error = 1e-4;
         try (InputStream stream = OrientationToIntensityConverterTest.class
-                .getResourceAsStream("IntensityOrientation.txt");) {
+                .getResourceAsStream("inverse_YanAxelrod-NA_1.45-epi.txt");) {
             InputStreamReader iReader = new InputStreamReader(stream);
             BufferedReader buffer = new BufferedReader(iReader); // Now this baby actually
 
@@ -155,7 +155,7 @@ public class OrientationToIntensityConverterTest {
                 String[] values = intensityOrientationPair.split(",");
 
                 OrientationVector oVector = new OrientationVector(Float.parseFloat(values[4]),
-                Float.parseFloat(values[5]), Float.parseFloat(values[6]));
+                Float.parseFloat(values[6]), Float.parseFloat(values[5]));
 
                 IntensityVector original = new IntensityVector(Double.parseDouble(values[0]),
                         Double.parseDouble(values[2]), Double.parseDouble(values[1]), Double.parseDouble(values[3]));

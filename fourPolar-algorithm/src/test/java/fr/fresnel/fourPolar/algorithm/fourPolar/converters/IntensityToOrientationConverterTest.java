@@ -124,7 +124,7 @@ public class IntensityToOrientationConverterTest {
      * 
      * @throws IOException
      * @throws ImpossibleOrientationVector
-     */
+     */ 
     @Test
     public void convert_BrasseletCurcioPrecalculatedValues_OrientationDifferenceIsLessThanHundredthOfDegree()
             throws IOException, ImpossibleOrientationVector {
@@ -135,7 +135,7 @@ public class IntensityToOrientationConverterTest {
         BufferedReader buffer = new BufferedReader(iReader); 
 
         String intensityOrientationPair = null;
-        boolean equals = true;
+        boolean equals = true; 
         do {
             intensityOrientationPair = buffer.readLine();
 
@@ -146,8 +146,8 @@ public class IntensityToOrientationConverterTest {
                 Double.parseDouble(values[1]), Double.parseDouble(values[3]));
 
             OrientationVector original = new OrientationVector(
-                Float.parseFloat(values[4]), Float.parseFloat(values[5]),
-                Float.parseFloat(values[6]));
+                Float.parseFloat(values[4]), Float.parseFloat(values[6]),
+                Float.parseFloat(values[5]));
 
             IOrientationVector calculated = _converter.convert(iVector);
 
