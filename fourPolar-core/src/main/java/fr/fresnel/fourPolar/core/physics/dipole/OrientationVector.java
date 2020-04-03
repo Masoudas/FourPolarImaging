@@ -81,20 +81,20 @@ public class OrientationVector implements IOrientationVector {
     }
 
     private void _checkRho(float value) throws OrientationAngleOutOfRange {
-        if (value < 0 || value > MAX_Rho) {
-            throw new OrientationAngleOutOfRange("Rho is out of [0, pi] range");
+        if (value < 0 || value >= MAX_Rho) {
+            throw new OrientationAngleOutOfRange("Rho is out of [0, pi) range");
         }
     }
 
     private void _checkDelta(float value) throws OrientationAngleOutOfRange {
-        if (value < 0 || value > MAX_Delta) {
-            throw new OrientationAngleOutOfRange("Delta is out of [0, pi] range");
+        if (value < 0 || value >= MAX_Delta) {
+            throw new OrientationAngleOutOfRange("Delta is out of [0, pi) range");
         }
     }
 
     private void _checkEta(float value) throws OrientationAngleOutOfRange {
-        if (value < 0 || value > MAX_Eta) {
-            throw new OrientationAngleOutOfRange("Eta is out of [0, pi/2] range");
+        if (value < 0 || value >= MAX_Eta) {
+            throw new OrientationAngleOutOfRange("Eta is out of [0, pi/2) range");
         }
     }
 
