@@ -1,8 +1,8 @@
 package fr.fresnel.fourPolar.io.exceptions.image.generic;
 
 /**
- * Exception thrown when no proper reader is found for the given {@code Image}
- * type, or {@code PixelType} to the desired file extension.
+ * Exception thrown when no proper reader is found for the given {@link Image}
+ * type, or the underlying {@link PixelType}, to the desired file extension.
  */
 public class NoReaderFoundForImage extends Exception {
 
