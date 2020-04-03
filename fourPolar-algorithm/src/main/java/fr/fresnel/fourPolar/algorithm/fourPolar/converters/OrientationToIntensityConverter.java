@@ -73,17 +73,22 @@ public class OrientationToIntensityConverter implements IOrientationToIntensityC
 
     @Override
     public IntensityVector convert(IOrientationVector orientationVector) {
+        //Angles
+        double rho = orientationVector.getAngle(OrientationAngle.rho);
+        double delta = orientationVector.getAngle(OrientationAngle.delta);
+        double eta = orientationVector.getAngle(OrientationAngle.eta);
+        
         // Angle sines and cosines.
-        double cosHalfDelta = Math.cos(orientationVector.getAngle(OrientationAngle.delta) / 2);
+        double cosHalfDelta = Math.cos(delta / 2);
 
-        double cosEta = Math.cos(orientationVector.getAngle(OrientationAngle.eta));
+        double cosEta = Math.cos(eta);
         double cosSquaredEta = cosEta * cosEta;
 
-        double sinEta = Math.sin(orientationVector.getAngle(OrientationAngle.eta));
+        double sinEta = Math.sin(eta);
         double sinSquaredEta = sinEta * sinEta;
 
-        double sinRho = Math.sin(orientationVector.getAngle(OrientationAngle.rho));
-        double sin2Rho = Math.sin(2 * orientationVector.getAngle(OrientationAngle.rho));
+        double sinRho = Math.sin(rho);
+        double sin2Rho = Math.sin(2 * rho);
         double sinSquaredRho = sinRho * sinRho;
         double sinFourRho = sinSquaredRho * sinSquaredRho;
 
@@ -140,8 +145,8 @@ public class OrientationToIntensityConverter implements IOrientationToIntensityC
     private double _getPol45Intensity(
         double dipoleSquared_XX, double dipoleSquared_YY, double dipoleSquared_ZZ,
         double dipoleSquared_XY) throws PropagationFactorNotFound {
-        return dipoleSquared_XX * _propFactor_xx_45 + dipoleSquared_YY * _propFactor_yy_45
-            + dipoleSquared_ZZ * _propFactor_zz_45 + dipoleSquared_XY * _propFactor_xy_45;
+        return dipoleSquared_XX * _propFactor_xx_45 + dipoleSquared_YY * _propFactor_yy_45 +
+            dipoleSquared_ZZ * _propFactor_zz_45 + dipoleSquared_XY * _propFactor_xy_45;
     }
 
     private double _getPol90Intensity(
