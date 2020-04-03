@@ -50,17 +50,33 @@ public class OrientationToIntensityConverterTest {
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol135, 0.818345815444442);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135, 0.818345815444442);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135, 0.304192988437901);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135, -1.617234768778063);        
+        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135, -1.617234768778063);
 
         _converter = new OrientationToIntensityConverter(opticalPropagation);
     }
 
+    /** 
+     * Checks that the absolute difference of each component of intensity vector is less than threshold.
+     */
     private static boolean _checkIntensityPrecision(IntensityVector vec1, IntensityVector vec2, double error) {
-        return _checkPrecision(vec1.getIntensity(Polarization.pol0), vec2.getIntensity(Polarization.pol0), error) &&
-        _checkPrecision(vec1.getIntensity(Polarization.pol45), vec2.getIntensity(Polarization.pol45), error) &&
-        _checkPrecision(vec1.getIntensity(Polarization.pol90), vec2.getIntensity(Polarization.pol90), error) &&
-        _checkPrecision(vec1.getIntensity(Polarization.pol135), vec2.getIntensity(Polarization.pol135), error);
+        return _checkPrecision(vec1.getIntensity(Polarization.pol0), vec2.getIntensity(Polarization.pol0), error)
+                && _checkPrecision(vec1.getIntensity(Polarization.pol45), vec2.getIntensity(Polarization.pol45), error)
+                && _checkPrecision(vec1.getIntensity(Polarization.pol90), vec2.getIntensity(Polarization.pol90), error)
+                && _checkPrecision(vec1.getIntensity(Polarization.pol135), vec2.getIntensity(Polarization.pol135),
+                        error);
 
+    }
+
+    /** Checks that the ratio of each intensity is less than threshold.  */
+    private static boolean _checkRatioPrecision(IntensityVector vec1, IntensityVector vec2, double error) {
+        double ratio0 = vec1.getIntensity(Polarization.pol0)/ vec2.getIntensity(Polarization.pol0);
+        double ratio45 = vec1.getIntensity(Polarization.pol45)/ vec2.getIntensity(Polarization.pol45);
+        double ratio90 = vec1.getIntensity(Polarization.pol90)/ vec2.getIntensity(Polarization.pol90);
+        double ratio135 = vec1.getIntensity(Polarization.pol135)/ vec2.getIntensity(Polarization.pol135);
+
+        return _checkPrecision(ratio0, ratio45, error) && _checkPrecision(ratio0, ratio90, error)
+            && _checkPrecision(ratio0, ratio90, error) && _checkPrecision(ratio0, ratio135, error);
+        
     }
 
     private static boolean _checkPrecision(double val1, double val2, double error) {
@@ -79,26 +95,18 @@ public class OrientationToIntensityConverterTest {
     @Test
     public void convert_Delta180_ReturnsSameIntensityForAllRhoAndEta() {
         double delta = OrientationVector.MAX_Delta;
-        double angleStep = Math.PI/180;
+        double angleStep = Math.PI / 180;
 
         IOrientationVector baseVector = new OrientationVector(0f, delta, 0f);
         IntensityVector baseIntensity = _converter.convert(baseVector);
 
         boolean equals = true;
         for (double rho = 0; rho < OrientationVector.MAX_Rho; rho += angleStep) {
-            for (double eta = 0; eta < OrientationVector.MAX_Eta; eta += angleStep) {
+            for (double eta = 0; eta < OrientationVector.MAX_Eta && equals; eta += angleStep) {
                 IOrientationVector vector = new OrientationVector(rho, delta, eta);
                 IntensityVector intensity = _converter.convert(vector);
 
-                equals &= 
-                    _checkPrecision(
-                        intensity.getIntensity(Polarization.pol0), baseIntensity.getIntensity(Polarization.pol0), 1e-4)
-                    && _checkPrecision(
-                        intensity.getIntensity(Polarization.pol45), baseIntensity.getIntensity(Polarization.pol45), 1e-4)
-                    && _checkPrecision(
-                        intensity.getIntensity(Polarization.pol90), baseIntensity.getIntensity(Polarization.pol90), 1e-4)
-                    && _checkPrecision(
-                        intensity.getIntensity(Polarization.pol135), baseIntensity.getIntensity(Polarization.pol135), 1e-4);
+                equals &= _checkIntensityPrecision(intensity, baseIntensity, 1e-4);
             }
         }
 
@@ -108,26 +116,18 @@ public class OrientationToIntensityConverterTest {
     @Test
     public void convert_Eta0_ForOneDeltaReturnsSameIntensityForAllRho() {
         double eta = 0f;
-        double angleStep = Math.PI/180;
+        double angleStep = Math.PI / 180;
 
         boolean equals = true;
         for (double delta = 0; delta < OrientationVector.MAX_Delta; delta += angleStep) {
             IOrientationVector baseVector = new OrientationVector(0f, delta, eta);
             IntensityVector baseIntensity = _converter.convert(baseVector);
 
-            for (double rho = 0; rho < OrientationVector.MAX_Rho; rho += angleStep) {
+            for (double rho = 0; rho < OrientationVector.MAX_Rho && equals; rho += angleStep) {
                 IOrientationVector vector = new OrientationVector(rho, delta, eta);
                 IntensityVector intensity = _converter.convert(vector);
 
-                equals &= 
-                    _checkPrecision(
-                        intensity.getIntensity(Polarization.pol0), baseIntensity.getIntensity(Polarization.pol0), 1e-4)
-                    && _checkPrecision(
-                        intensity.getIntensity(Polarization.pol45), baseIntensity.getIntensity(Polarization.pol45), 1e-4)
-                    && _checkPrecision(
-                        intensity.getIntensity(Polarization.pol90), baseIntensity.getIntensity(Polarization.pol90), 1e-4)
-                    && _checkPrecision(
-                        intensity.getIntensity(Polarization.pol135), baseIntensity.getIntensity(Polarization.pol135), 1e-4);
+                equals &= _checkIntensityPrecision(intensity, baseIntensity, 1e-4);
             }
         }
 
@@ -137,7 +137,8 @@ public class OrientationToIntensityConverterTest {
 
     /**
      * Note the orientation-intensity pairs used here are calculated using the
-     * Matlab program written by Valentina Curcio. The file is in the resource folder.
+     * Matlab program written by Valentina Curcio. The file is in the resource
+     * folder.
      */
     @Test
     public void convert_BrasseletCurcioPrecalculatedValues_IntensityDifferenceIsLessThanAThousandth() {
@@ -155,16 +156,16 @@ public class OrientationToIntensityConverterTest {
                 String[] values = intensityOrientationPair.split(",");
 
                 OrientationVector oVector = new OrientationVector(Double.parseDouble(values[4]),
-                Double.parseDouble(values[6]), Double.parseDouble(values[5]));
+                        Double.parseDouble(values[6]), Double.parseDouble(values[5]));
 
                 IntensityVector original = new IntensityVector(Double.parseDouble(values[0]),
                         Double.parseDouble(values[2]), Double.parseDouble(values[1]), Double.parseDouble(values[3]));
 
                 IntensityVector calculated = _converter.convert(oVector);
 
-                equals &= _checkIntensityPrecision(original, calculated, error);
+                equals &= _checkRatioPrecision(original, calculated, error);
 
-            } while (intensityOrientationPair != null);
+            } while (intensityOrientationPair != null && equals);
 
             assertTrue(equals);
 
@@ -172,7 +173,5 @@ public class OrientationToIntensityConverterTest {
             assertTrue(false);
         }
     }
-
-    
 
 }
