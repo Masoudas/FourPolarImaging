@@ -133,7 +133,7 @@ public class IntensityToOrientationConverterTest {
                 .getResourceAsStream("inverse_YanAxelrod-NA_1.45-epi.txt");
         InputStreamReader iReader = new InputStreamReader(stream);
         BufferedReader buffer = new BufferedReader(iReader); 
-
+ 
         String intensityOrientationPair = null;
         boolean equals = true; 
         do {
@@ -153,7 +153,7 @@ public class IntensityToOrientationConverterTest {
 
             equals &= _checkAnglePrecision(original, calculated, error);
 
-        } while (intensityOrientationPair != null);
+        } while (intensityOrientationPair != null && equals);
 
         assertTrue(equals);
     }
