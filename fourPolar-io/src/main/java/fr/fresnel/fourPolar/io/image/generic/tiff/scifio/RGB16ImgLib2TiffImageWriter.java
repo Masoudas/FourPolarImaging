@@ -31,7 +31,7 @@ public class RGB16ImgLib2TiffImageWriter implements ImageWriter<RGB16> {
     final UnsignedByteType _readType = new UnsignedByteType();
     final ARGBType _argbType = new ARGBType();
 
-    RGB16ImgLib2TiffImageWriter() {
+    public RGB16ImgLib2TiffImageWriter() {
         this._saver = new ImgSaver();
         this._config = this._setSCFIOConfig();
 

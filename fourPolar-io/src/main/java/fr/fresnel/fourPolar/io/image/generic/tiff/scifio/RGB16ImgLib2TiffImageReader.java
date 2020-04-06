@@ -31,7 +31,7 @@ public class RGB16ImgLib2TiffImageReader implements ImageReader<RGB16> {
     final UnsignedByteType _readType = new UnsignedByteType();
     final ARGBType _argbType = new ARGBType();
 
-    RGB16ImgLib2TiffImageReader(ImgLib2ImageFactory factory) {
+    public RGB16ImgLib2TiffImageReader(ImgLib2ImageFactory factory) {
         this._config = _setSCFIOConfig();
         this._imgOpener = new ImgOpener();
         this._imgFactory = factory;
