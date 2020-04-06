@@ -121,14 +121,15 @@ public class IntensityToOrientationConverterTest {
      * to 180. This is due to near equivalence of those angles.
      */
     @Test
-    public void convert_BrasseletCurcioForwardValues_OrientationErrorIsLessThanThreshold()
+    public void convert_CurcioForwardValues_OrientationErrorIsLessThanThreshold()
             throws IOException, ImpossibleOrientationVector {
         double error = Math.PI / 180 * 10;
 
         double etaGreaterThan = Math.PI / 180 * 10;
         double deltaLessThan = Math.PI / 180 * 160;
 
-        InputStream stream = IntensityToOrientationConverterTest.class.getResourceAsStream("forwardMethodData.txt");
+        InputStream stream = IntensityToOrientationConverterTest.class
+                .getResourceAsStream("forwardMethodData-Curcio.txt");
         InputStreamReader iReader = new InputStreamReader(stream);
         BufferedReader buffer = new BufferedReader(iReader);
 
@@ -156,6 +157,55 @@ public class IntensityToOrientationConverterTest {
         assertTrue(equals);
     }
 
+    /**
+     * In this test, we try to compare our results with the inverse problem
+     * implemented by Curcio. It's expected that in all cases, both methods return
+     * the same angles.
+     * 
+     * Note the data is in degree rather than radian, and that the intensities are
+     * those in the forward data.
+     */
+    @Test
+    public void convert_CurcioInverseValues_OrientationErrorIsLessThanThreshold()
+            throws IOException, ImpossibleOrientationVector {
+        double error = Math.PI / 180 * 10;
+
+        double etaGreaterThan = Math.PI / 180 * 10;
+        double deltaLessThan = Math.PI / 180 * 160;
+
+        String intensityOrientationPair = null;
+        boolean equals = true;
+
+        BufferedReader forwardData = _readFile("forwardMethodData-Curcio.txt");
+        BufferedReader inverseData = _readFile("inverseMethodData-Curcio.txt");
+        int counter = 0;
+        while ((intensityOrientationPair = inverseData.readLine()) != null && equals) {
+            String[] angles = intensityOrientationPair.split(",");
+
+            double rho = Double.parseDouble(angles[0]) / 180 * Math.PI;
+            double eta = Double.parseDouble(angles[1]) / 180 * Math.PI;
+            double delta = Double.parseDouble(angles[2]) / 180 * Math.PI;
+
+            if (!Double.isNaN(rho) || !Double.isNaN(delta) || !Double.isNaN(eta)) {
+                String[] intensities = forwardData.readLine().split(",");
+
+                IntensityVector iVector = new IntensityVector(Double.parseDouble(intensities[0]),
+                        Double.parseDouble(intensities[2]), Double.parseDouble(intensities[1]),
+                        Double.parseDouble(intensities[3]));
+
+                OrientationVector original = new OrientationVector(rho, delta, eta);
+                System.out.println(++counter);
+                IOrientationVector calculated = _converter.convert(iVector);
+
+                equals = _checkForwardAnglePrecision(original, calculated, error);
+
+            }
+
+        }
+
+        assertTrue(equals);
+    }
+
     private boolean isEtaGreaterThan(String[] values, double threshold) {
         return new BigDecimal(Double.parseDouble(values[5])).compareTo(new BigDecimal(threshold)) == 1;
     }
@@ -179,6 +229,13 @@ public class IntensityToOrientationConverterTest {
 
     private static boolean _checkPrecision(double val1, double val2, double error) {
         return Math.abs(val1 - val2) < error;
+    }
+
+    private BufferedReader _readFile(String file) {
+        InputStream stream = IntensityToOrientationConverterTest.class.getResourceAsStream(file);
+        InputStreamReader iReader = new InputStreamReader(stream);
+        return new BufferedReader(iReader);
+
     }
 
 }

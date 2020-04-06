@@ -55,8 +55,9 @@ public class OrientationToIntensityConverterTest {
         _converter = new OrientationToIntensityConverter(opticalPropagation);
     }
 
-    /** 
-     * Checks that the absolute difference of each component of intensity vector is less than threshold.
+    /**
+     * Checks that the absolute difference of each component of intensity vector is
+     * less than threshold.
      */
     private static boolean _checkIntensityPrecision(IntensityVector vec1, IntensityVector vec2, double error) {
         return _checkPrecision(vec1.getIntensity(Polarization.pol0), vec2.getIntensity(Polarization.pol0), error)
@@ -67,16 +68,16 @@ public class OrientationToIntensityConverterTest {
 
     }
 
-    /** Checks that the ratio of each intensity is less than threshold.  */
+    /** Checks that the ratio of each intensity is less than threshold. */
     private static boolean _checkRatioPrecision(IntensityVector vec1, IntensityVector vec2, double error) {
-        double ratio0 = vec1.getIntensity(Polarization.pol0)/ vec2.getIntensity(Polarization.pol0);
-        double ratio45 = vec1.getIntensity(Polarization.pol45)/ vec2.getIntensity(Polarization.pol45);
-        double ratio90 = vec1.getIntensity(Polarization.pol90)/ vec2.getIntensity(Polarization.pol90);
-        double ratio135 = vec1.getIntensity(Polarization.pol135)/ vec2.getIntensity(Polarization.pol135);
+        double ratio0 = vec1.getIntensity(Polarization.pol0) / vec2.getIntensity(Polarization.pol0);
+        double ratio45 = vec1.getIntensity(Polarization.pol45) / vec2.getIntensity(Polarization.pol45);
+        double ratio90 = vec1.getIntensity(Polarization.pol90) / vec2.getIntensity(Polarization.pol90);
+        double ratio135 = vec1.getIntensity(Polarization.pol135) / vec2.getIntensity(Polarization.pol135);
 
         return _checkPrecision(ratio0, ratio45, error) && _checkPrecision(ratio0, ratio90, error)
-            && _checkPrecision(ratio0, ratio90, error) && _checkPrecision(ratio0, ratio135, error);
-        
+                && _checkPrecision(ratio0, ratio90, error) && _checkPrecision(ratio0, ratio135, error);
+
     }
 
     private static boolean _checkPrecision(double val1, double val2, double error) {
@@ -136,15 +137,18 @@ public class OrientationToIntensityConverterTest {
     }
 
     /**
-     * Note the orientation-intensity pairs used here are calculated using the
-     * Matlab program written by Valentina Curcio. The file is in the resource
-     * folder.
+     * In this test, we try to compare our results with the forward problem. To do
+     * so, we have calculated the intensity from an orientation angle using the
+     * integration formulas (forward problem). Then, we try to estimate the intensity
+     * from the angles with the propagation matrix. These two methods will
+     * not yield the same results 
+     * 
      */
     @Test
-    public void convert_BrasseletCurcioPrecalculatedValues_IntensityDifferenceIsLessThanAThousandth() {
-        double error = 1e-4;
+    public void convert_BrasseletCurcioForwardValues_IntensityRatioDifferenceIsLessThanThreshold() {
+        double error = 2;
         try (InputStream stream = OrientationToIntensityConverterTest.class
-                .getResourceAsStream("inverse_YanAxelrod-NA_1.45-epi.txt");) {
+                .getResourceAsStream("forwardMethodData.txt");) {
             InputStreamReader iReader = new InputStreamReader(stream);
             BufferedReader buffer = new BufferedReader(iReader); // Now this baby actually
 
