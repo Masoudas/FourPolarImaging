@@ -50,7 +50,7 @@ public class ImgLib2ImageFactoryTest {
 
     @Test
     public void checkImageType_LargeDimension_CreatesACellImage() {
-        long[] dimensions = new long[] { 250, 250, 1024, 2 };
+        long[] dimensions = new long[] { 1024, 1024, 1024, 2 };
         Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, new UINT16());
         
         assertTrue(image.toString().contains("CellImg"));
