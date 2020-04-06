@@ -7,28 +7,22 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import net.imglib2.Dimensions;
+import net.imglib2.FinalDimensions;
 import net.imglib2.img.Img;
-import net.imglib2.img.array.ArrayImgFactory;
-import net.imglib2.img.cell.CellImgFactory;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;
+import net.imglib2.util.Util;
 
 /**
- * A concrete factory to generate instances of images that comply with the {@code Image}
- * using ImgLib2.
+ * A concrete factory to generate instances of images that comply with the
+ * {@code Image} using ImgLib2.
  * 
  * @param <T> is the desired pixel type.
  */
 public class ImgLib2ImageFactory implements ImageFactory {
-    /**
-     * This is the threshold for the number of pixels, after which we opt for a cell
-     * image rather than an array image. This is roughly 256MB for an image of type
-     * float.
-     */
-    private static long _cellImgThr = 256 * 256 * 1024;
-
     @Override
     public <T extends PixelType> Image<T> create(long[] dim, T pixelType) {
         Image<T> _image = null;
@@ -75,10 +69,11 @@ public class ImgLib2ImageFactory implements ImageFactory {
 
     /**
      * Used for creating an {@code Image} from an existing ImgLib2 image.
-     * @param img is a {@code UnsignedShortType} image
+     * 
+     * @param img         is a {@code UnsignedShortType} image
      * @param imgLib2Type is an instance of UnsignedShortType
      */
-    public Image<UINT16> create(Img<UnsignedShortType> img, UnsignedShortType imgLib2Type){
+    public Image<UINT16> create(Img<UnsignedShortType> img, UnsignedShortType imgLib2Type) {
         try {
             return new ImgLib2Image<UINT16, UnsignedShortType>(img, imgLib2Type);
         } catch (ConverterNotFound e) {
@@ -89,7 +84,8 @@ public class ImgLib2ImageFactory implements ImageFactory {
 
     /**
      * Used for creating an {@code Image} from an existing ImgLib2 image.
-     * @param img is a {@code FloatType} image
+     * 
+     * @param img         is a {@code FloatType} image
      * @param imgLib2Type is an instance of FloatType
      */
     public Image<Float32> create(Img<FloatType> img, FloatType imgLib2Type) {
@@ -103,7 +99,8 @@ public class ImgLib2ImageFactory implements ImageFactory {
 
     /**
      * Used for creating an {@code Image} from an existing ImgLib2 image.
-     * @param img is a {@code ARGBType} image
+     * 
+     * @param img         is a {@code ARGBType} image
      * @param imgLib2Type is an instance of ARGBType
      */
     public Image<RGB16> create(Img<ARGBType> img, ARGBType imgLib2Type) {
@@ -123,29 +120,8 @@ public class ImgLib2ImageFactory implements ImageFactory {
      * @param t
      * @return
      */
-    private <U extends NativeType<U>> Img<U> _chooseImgFactory(long[] dim, U t) {
-        long nPixels = _getNPixels(dim);
-
-        if (nPixels < _cellImgThr) {
-            return new ArrayImgFactory<U>(t).create(dim);
-        } else {
-            return new CellImgFactory<U>(t).create(dim);
-        }
-    }
-
-    /**
-     * Calculate the number of pixels associated with the image.
-     * 
-     * @param dim is the dimension of the image.
-     * @return
-     */
-    private  long _getNPixels(long[] dim) {
-        long nPixels = 1;
-        for (long size : dim) {
-            nPixels = nPixels * size;
-        }
-
-        return nPixels;
+    private <U extends NativeType<U>> Img<U> _chooseImgFactory(long[] dim, U u) {
+        return Util.getSuitableImgFactory(new FinalDimensions(dim), u).create(dim);
     }
 
 }
