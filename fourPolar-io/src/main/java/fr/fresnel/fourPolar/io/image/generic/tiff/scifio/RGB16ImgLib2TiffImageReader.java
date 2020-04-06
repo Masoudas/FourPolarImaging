@@ -54,10 +54,11 @@ public class RGB16ImgLib2TiffImageReader implements ImageReader<RGB16> {
             throw new IOException("The given Tiff file does not exist.");
         }
 
-        this._reader.setSource(path, this._config);
+        this._reader.setSource(path.getAbsolutePath(), this._config);
 
         // Read the raw image, which holds R, G and B as channels.
-        Img<UnsignedByteType> rawImage = this._imgOpener.openImgs(this._reader, this._readType, this._config).get(0);
+        Img<UnsignedByteType> rawImage = this._imgOpener.openImgs(
+            this._reader, this._readType, this._config).get(0);
 
         // Merger RGB channes to form ARGB image.
         Img<ARGBType> img = createARGBImage(rawImage);
