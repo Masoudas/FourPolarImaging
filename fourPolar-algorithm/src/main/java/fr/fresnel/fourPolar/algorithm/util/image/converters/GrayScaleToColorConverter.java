@@ -1,4 +1,7 @@
-package fr.fresnel.fourPolar.algorithm.util.converters;
+package fr.fresnel.fourPolar.algorithm.util.image.converters;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
@@ -26,10 +29,19 @@ public class GrayScaleToColorConverter {
      * 
      * @throws ConverterToImgLib2NotFound
      */
-    public static Image<RGB16> convertImage(final Image<UINT16> image) throws ConverterToImgLib2NotFound {
+    public static void convertImage(final Image<UINT16> grayImage, final Image<RGB16> colorImage)
+            throws ConverterToImgLib2NotFound {
+        Objects.requireNonNull(grayImage, "grayImage cannot be null");
+        Objects.requireNonNull(grayImage, "colorImage cannot be null");
+
+        if (!Arrays.equals(grayImage.getDimensions(), colorImage.getDimensions())) {
+            throw new ArrayIndexOutOfBoundsException(
+                    "Cannot convert, because the two images don't have same dimension.");
+        }
+        
         // We use ImgLib2 classes, i.e, we convert to Img. Then we convert the Image.
         // Finaly, we create a new Image instance and fill it, and return it.
-        Img<UnsignedShortType> imgLib2Model = ImageToImgLib2Converter.getImg(image, UINT16.zero());
+        Img<UnsignedShortType> imgLib2Model = ImageToImgLib2Converter.getImg(grayImage, UINT16.zero());
 
         final RandomAccessibleInterval<UnsignedShortType> rai = imgLib2Model;
         final ColorTable8 cTable8 = new ColorTable8();
@@ -37,14 +49,11 @@ public class GrayScaleToColorConverter {
                 cTable8);
         final RandomAccessibleInterval<ARGBType> convertedRAI = Converters.convert(rai, converter, new ARGBType());
 
-        final Image<RGB16> colorImage = image.getFactory().create(image.getDimensions(), RGB16.zero());
         final IPixelCursor<RGB16> cursor = colorImage.getCursor();
         while (cursor.hasNext()) {
             RGB16 pixel = cursor.next().value();
             int color = convertedRAI.getAt(cursor.localize()).get();
             pixel.set(ARGBType.red(color), ARGBType.green(color), ARGBType.blue(color));
         }
-
-        return colorImage;
     }
 }
