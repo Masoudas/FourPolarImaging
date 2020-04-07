@@ -7,7 +7,6 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import net.imglib2.Dimensions;
 import net.imglib2.FinalDimensions;
 import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
@@ -33,7 +32,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
                     UnsignedShortType type = new UnsignedShortType();
                     Img<UnsignedShortType> img = _chooseImgFactory(dim, type);
 
-                    _image = new ImgLib2Image<T, UnsignedShortType>(img, new UnsignedShortType());
+                    _image = new ImgLib2Image<T, UnsignedShortType>(img, new UnsignedShortType(), this);
                 } catch (ConverterNotFound e) {
                     // Exception never caught, because of proper creation of image.
                 }
@@ -44,7 +43,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
                     FloatType type = new FloatType();
                     Img<FloatType> img = _chooseImgFactory(dim, type);
 
-                    _image = new ImgLib2Image<T, FloatType>(img, new FloatType());
+                    _image = new ImgLib2Image<T, FloatType>(img, new FloatType(), this);
                 } catch (ConverterNotFound e) {
                     // Exception never caught, because of proper creation of image.
                 }
@@ -55,7 +54,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
                     ARGBType type = new ARGBType();
                     Img<ARGBType> img = _chooseImgFactory(dim, type);
 
-                    _image = new ImgLib2Image<T, ARGBType>(img, new ARGBType());
+                    _image = new ImgLib2Image<T, ARGBType>(img, new ARGBType(), this);
                 } catch (ConverterNotFound e) {
                     // Exception never caught, because of proper creation of image.
                 }
@@ -75,7 +74,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
      */
     public Image<UINT16> create(Img<UnsignedShortType> img, UnsignedShortType imgLib2Type) {
         try {
-            return new ImgLib2Image<UINT16, UnsignedShortType>(img, imgLib2Type);
+            return new ImgLib2Image<UINT16, UnsignedShortType>(img, imgLib2Type, this);
         } catch (ConverterNotFound e) {
             // Exception never caught due to proper type handling
         }
@@ -90,7 +89,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
      */
     public Image<Float32> create(Img<FloatType> img, FloatType imgLib2Type) {
         try {
-            return new ImgLib2Image<Float32, FloatType>(img, imgLib2Type);
+            return new ImgLib2Image<Float32, FloatType>(img, imgLib2Type, this);
         } catch (ConverterNotFound e) {
             // Exception never caught due to proper type handling
         }
@@ -105,7 +104,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
      */
     public Image<RGB16> create(Img<ARGBType> img, ARGBType imgLib2Type) {
         try {
-            return new ImgLib2Image<RGB16, ARGBType>(img, imgLib2Type);
+            return new ImgLib2Image<RGB16, ARGBType>(img, imgLib2Type, this);
         } catch (ConverterNotFound e) {
             // Exception never caught due to proper type handling
         }

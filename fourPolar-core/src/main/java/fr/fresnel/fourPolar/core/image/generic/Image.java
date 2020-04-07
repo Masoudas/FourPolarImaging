@@ -33,4 +33,10 @@ public interface Image<T extends PixelType> {
      */
     public Type getPixelType();
 
+
+    /**
+     * Returns the {@link ImageFactory} associated with this image.
+     */
+    public ImageFactory getFactory();
+
 }

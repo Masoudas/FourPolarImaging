@@ -4,6 +4,7 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.types.Con
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverterFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
@@ -24,18 +25,22 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
 
     private final Type _pixelType;
 
+    private final ImageFactory _factory;
+
     /**
      * This constructor is works as a wrapper from ImgLib2 type to our type.
      * 
-     * @param img       is the ImgLib2 interface.
-     * @param type      is the data type of ImgLib2.
+     * @param img     is the ImgLib2 interface.
+     * @param type    is the data type of ImgLib2.
+     * @param factory is the associated {@link ImageFactory}.
      * @throws ConverterNotFound is thrown in case conversion to our data types is
      *                           not supported.
      */
-    ImgLib2Image(final Img<V> img, V type) throws ConverterNotFound {
+    ImgLib2Image(final Img<V> img, V type, final ImageFactory factory) throws ConverterNotFound {
         this._img = img;
         this._tConverter = TypeConverterFactory.getConverter(type);
         this._pixelType = _tConverter.getPixelType(type).getType();
+        this._factory = factory;
     }
 
     @Override
@@ -63,14 +68,20 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
 
     @Override
     public String toString() {
-       return _img.toString();
+        return _img.toString();
     }
 
     /**
-     * This method returns the {@link Img} interface associated with this implementation.
+     * This method returns the {@link Img} interface associated with this
+     * implementation.
      */
     public Img<V> getImg() {
         return this._img;
+    }
+
+    @Override
+    public ImageFactory getFactory() {
+        return _factory;
     }
 
 }
