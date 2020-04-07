@@ -19,7 +19,7 @@ public class ImgLib2ImageFactoryTest {
     @Test
     public void createByDimension_UINT16Image_CreatesImageOfSameDimension() {
         long[] dimensions = new long[] { 1, 1, 1, 1, 1 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, new UINT16());
+        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
         
         assertArrayEquals(image.getDimensions(), dimensions);
     }
@@ -27,7 +27,7 @@ public class ImgLib2ImageFactoryTest {
     @Test
     public void createByDimension_Float32Image_CreatesImageOfSameDimension() {
         long[] dimensions = new long[] { 1, 1, 1, 1, 1 };
-        Image<Float32> image = new ImgLib2ImageFactory().create(dimensions, new Float32());
+        Image<Float32> image = new ImgLib2ImageFactory().create(dimensions, Float32.zero());
 
         assertArrayEquals(image.getDimensions(), dimensions);
     }
@@ -35,7 +35,7 @@ public class ImgLib2ImageFactoryTest {
     @Test
     public void createByDimension_RGBImage_CreatesImageOfSameDimension() {
         long[] dimensions = new long[] { 1, 1, 1, 1, 1 };
-        Image<RGB16> image = new ImgLib2ImageFactory().create(dimensions, new RGB16());
+        Image<RGB16> image = new ImgLib2ImageFactory().create(dimensions, RGB16.zero());
 
         assertArrayEquals(image.getDimensions(), dimensions);
     }
@@ -43,7 +43,7 @@ public class ImgLib2ImageFactoryTest {
     @Test
     public void checkImageType_SmallDimension_CreatesAnArrayImage() {
         long[] dimensions = new long[] { 1, 1, 1, 1, 1 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, new UINT16());
+        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
 
         assertTrue(image.toString().contains("ArrayImg"));
     }
@@ -51,7 +51,7 @@ public class ImgLib2ImageFactoryTest {
     @Test
     public void checkImageType_LargeDimension_CreatesACellImage() {
         long[] dimensions = new long[] { 1024, 1024, 1024, 2 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, new UINT16());
+        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
         
         assertTrue(image.toString().contains("CellImg"));
     }

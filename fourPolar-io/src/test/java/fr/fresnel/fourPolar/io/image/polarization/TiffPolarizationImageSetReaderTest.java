@@ -32,10 +32,10 @@ public class TiffPolarizationImageSetReaderTest {
         TiffPolarizationImageFileSet fSet = new TiffPolarizationImageFileSet(_root, fileSet);
 
         long[] dim = { 2, 2 };
-        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, new UINT16());
+        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
 
         UINT16ImgLib2TiffImageWriter writer = new UINT16ImgLib2TiffImageWriter();
         writer.write(fSet.getFile(Polarization.pol0), pol0);

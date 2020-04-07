@@ -70,10 +70,10 @@ public class FourPolarMapperTest {
         // inverseProp.setInverseFactor(Polarization.pol135, DipoleSquaredComponent.XY, -0.16834141369);
 
         // long[] dim = { 2, 2 };
-        // Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        // Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        // Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        // Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, new UINT16());
+        // Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        // Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        // Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        // Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
 
         // IPixelCursor<UINT16> pol0Cursor = pol0.getCursor();
         // IPixelCursor<UINT16> pol45Cursor = pol45.getCursor();

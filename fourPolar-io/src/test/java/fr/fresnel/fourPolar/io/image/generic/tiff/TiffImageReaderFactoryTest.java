@@ -18,21 +18,21 @@ public class TiffImageReaderFactoryTest {
 
     @Test
     public void getReader_UINT16ImgLib2Implementation_ReturnsCorrectWriter() throws NoReaderFoundForImage {
-        ImageReader<UINT16> reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), new UINT16());
+        ImageReader<UINT16> reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), UINT16.zero());
 
         assertTrue(reader instanceof UINT16ImgLib2TiffImageReader);
     }
     
     @Test
     public void getReader_Float32ImgLib2Implementation_ReturnsCorrectWriter() throws NoReaderFoundForImage {
-        ImageReader<Float32> reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), new Float32());
+        ImageReader<Float32> reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), Float32.zero());
 
         assertTrue(reader instanceof Float32ImgLib2TiffImageReader);
     }
 
     @Test
     public void getReader_RGB16ImgLib2Implementation_ReturnsCorrectWriter() throws NoReaderFoundForImage {
-        ImageReader<RGB16> reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), new RGB16());
+        ImageReader<RGB16> reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), RGB16.zero());
 
         assertTrue(reader instanceof RGB16ImgLib2TiffImageReader);
     }

@@ -31,7 +31,7 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
      * @throws NoReaderFoundForImage
      */
     public TiffOrientationImageReader(ImageFactory factory) throws NoReaderFoundForImage {
-        _reader = TiffImageReaderFactory.getReader(factory, new Float32());
+        _reader = TiffImageReaderFactory.getReader(factory, Float32.zero());
     }
 
     @Override

@@ -31,7 +31,7 @@ public class UINT16ImgLib2TiffImageReaderTest {
         UINT16ImgLib2TiffImageReader reader = new UINT16ImgLib2TiffImageReader(new ImgLib2ImageFactory());
         Image<UINT16> img = reader.read(path);
         
-        ImageJFunctions.show(ImageToImgLib2Converter.getImg(img, new UINT16()));
+        ImageJFunctions.show(ImageToImgLib2Converter.getImg(img, UINT16.zero()));
         TimeUnit.SECONDS.sleep(10);
                 
     }

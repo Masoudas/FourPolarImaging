@@ -30,7 +30,7 @@ public class RGB16ImgLib2TiffImageWriterTest {
     public void write_RGB16Image_DiskImageHasSameData() throws IOException {
         File destination = new File(_root, "RGB16Image.tif");
 
-        Image<RGB16> image = _factory.create(_dim, new RGB16());
+        Image<RGB16> image = _factory.create(_dim, RGB16.zero());
 
         IPixelCursor<RGB16> cursor = image.getCursor();
         while (cursor.hasNext()) {

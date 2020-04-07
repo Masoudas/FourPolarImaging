@@ -26,7 +26,7 @@ public class Float32ImgLib2TiffImageWriterTest {
     public void write_Float32Image_DiskImageHasSameDimensions() throws IOException {
         File destination = new File(_root, "Float32Image.tif");
 
-        Image<Float32> image = _factory.create(_dim, new Float32());
+        Image<Float32> image = _factory.create(_dim, Float32.zero());
         Float32ImgLib2TiffImageWriter writer = new Float32ImgLib2TiffImageWriter();
         writer.write(destination, image);
         writer.close();
@@ -41,7 +41,7 @@ public class Float32ImgLib2TiffImageWriterTest {
 
     @Test
     public void write_WriteMultipleFiles_DiskImageHasSameDimensions() throws IOException {
-        Image<Float32> image = _factory.create(_dim, new Float32());
+        Image<Float32> image = _factory.create(_dim, Float32.zero());
         Float32ImgLib2TiffImageWriter writer = new Float32ImgLib2TiffImageWriter();
         File destination = new File(_root, "Float32Image.tif");
 

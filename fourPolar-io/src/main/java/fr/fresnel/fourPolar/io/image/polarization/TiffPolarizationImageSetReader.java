@@ -32,7 +32,7 @@ public class TiffPolarizationImageSetReader implements IPolarizationImageSetRead
      * @throws NoReaderFoundForImage
      */
     public TiffPolarizationImageSetReader(ImageFactory factory) throws NoReaderFoundForImage {
-        this._reader = TiffImageReaderFactory.getReader(factory, new UINT16());
+        this._reader = TiffImageReaderFactory.getReader(factory, UINT16.zero());
     }
 
     @Override

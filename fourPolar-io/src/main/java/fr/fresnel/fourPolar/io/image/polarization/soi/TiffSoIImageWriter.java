@@ -19,7 +19,7 @@ public class TiffSoIImageWriter implements ISoIImageWriter {
     final private ImageWriter<UINT16> _writer;
 
     public TiffSoIImageWriter(ISoIImage soiImage) throws NoWriterFoundForImage {
-        this._writer = TiffImageWriterFactory.getWriter(soiImage.getImage(), new UINT16());
+        this._writer = TiffImageWriterFactory.getWriter(soiImage.getImage(), UINT16.zero());
     }
 
     @Override

@@ -17,12 +17,7 @@ public class Float32 extends PixelType {
 
     private float _pixel = 0f;
 
-    /**
-     * Creates the type, and sets the value to zero. 
-     */
-    public Float32() {
-        this.set(0f);
-    }
+    private final static Float32 _zero = new Float32(0);
 
     /**
      * Construct with the specified value
@@ -62,6 +57,11 @@ public class Float32 extends PixelType {
     @Override
     public Type getType() {
         return Type.FLOAT_32;
+    }
+
+    public static Float32 zero() {
+        return _zero;
+        
     }
 
 }

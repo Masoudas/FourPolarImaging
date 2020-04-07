@@ -21,7 +21,7 @@ public class TiffSoIImageReader implements ISoIImageReader {
     final private ImageReader<UINT16> _reader;
 
     public TiffSoIImageReader(ImageFactory factory) throws NoReaderFoundForImage {
-        this._reader = TiffImageReaderFactory.getReader(factory, new UINT16());
+        this._reader = TiffImageReaderFactory.getReader(factory, UINT16.zero());
 
     }
 

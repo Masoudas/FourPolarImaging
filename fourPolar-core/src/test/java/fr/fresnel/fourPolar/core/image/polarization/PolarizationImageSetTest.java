@@ -23,10 +23,10 @@ public class PolarizationImageSetTest {
         long[] dim1 = { 1, 1, 1 };
         long[] dim2 = { 2, 1, 1 };
 
-        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim1, new UINT16());
-        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim1, new UINT16());
-        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim1, new UINT16());
-        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim2, new UINT16());
+        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim1, UINT16.zero());
+        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim1, UINT16.zero());
+        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim1, UINT16.zero());
+        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim2, UINT16.zero());
 
         assertThrows(CannotFormPolarizationImageSet.class, () -> {
             new PolarizationImageSet(null, pol0, pol45, pol90, pol135);
@@ -37,10 +37,10 @@ public class PolarizationImageSetTest {
     public void createClass_DuplicateImage_ThrowsCannotFormPolarizationImageSet() {
         long[] dim = { 1, 1, 1 };
 
-        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, new UINT16());
+        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
 
         assertThrows(CannotFormPolarizationImageSet.class, () -> {
             new PolarizationImageSet(null, pol0, pol0, pol90, pol135);
@@ -67,10 +67,10 @@ public class PolarizationImageSetTest {
             throws CannotFormPolarizationImageSet {
         long[] dim = { 1, 1 };
 
-        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, new UINT16());
+        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
 
         IPolarizationImageSet imageSet = new PolarizationImageSet(null, pol0, pol45, pol90, pol135);
 
@@ -84,11 +84,11 @@ public class PolarizationImageSetTest {
     public void getCursor_RandomDataSet_ReturnsCorrectIntensityForEachElement() throws CannotFormPolarizationImageSet {
         long[] dim = { 10, 10, 10, 10, 10 };
 
-        Image<UINT16> baseSet = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, new UINT16());
+        Image<UINT16> baseSet = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
 
         Random random = new Random();
 

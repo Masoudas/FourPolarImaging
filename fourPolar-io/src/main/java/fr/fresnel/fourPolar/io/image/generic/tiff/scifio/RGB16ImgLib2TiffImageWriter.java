@@ -55,7 +55,7 @@ public class RGB16ImgLib2TiffImageWriter implements ImageWriter<RGB16> {
         }
 
         try {
-            Img<ARGBType> imgLib2Image = ImageToImgLib2Converter.getImg(image, new RGB16());
+            Img<ARGBType> imgLib2Image = ImageToImgLib2Converter.getImg(image, RGB16.zero());
 
             Img<UnsignedByteType> convertedImg = _convertRGBToChannelImage(imgLib2Image);
             this._saver.saveImg(path.getAbsolutePath(), convertedImg, this._config);

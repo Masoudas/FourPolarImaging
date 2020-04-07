@@ -29,9 +29,9 @@ public class OrientationImageTest {
         long[] dim1 = { 1, 1 };
         long[] dim2 = { 2, 1 };
 
-        Image<Float32> rho = new ImgLib2ImageFactory().create(dim1, new Float32());
-        Image<Float32> eta = new ImgLib2ImageFactory().create(dim1, new Float32());
-        Image<Float32> delta = new ImgLib2ImageFactory().create(dim2, new Float32());
+        Image<Float32> rho = new ImgLib2ImageFactory().create(dim1, Float32.zero());
+        Image<Float32> eta = new ImgLib2ImageFactory().create(dim1, Float32.zero());
+        Image<Float32> delta = new ImgLib2ImageFactory().create(dim2, Float32.zero());
 
         assertThrows(CannotFormOrientationImage.class, () -> {
             new OrientationImage(null, rho, delta, eta);
@@ -42,8 +42,8 @@ public class OrientationImageTest {
     public void createClass_DuplicateImage_ThrowsCannotFormPolarizationImageSet() {
         long[] dim = { 1, 1, 1 };
 
-        Image<Float32> rho = new ImgLib2ImageFactory().create(dim, new Float32());
-        Image<Float32> delta = new ImgLib2ImageFactory().create(dim, new Float32());
+        Image<Float32> rho = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        Image<Float32> delta = new ImgLib2ImageFactory().create(dim, Float32.zero());
 
         assertThrows(CannotFormOrientationImage.class, () -> {
             new OrientationImage(null, rho, rho, delta);
@@ -60,9 +60,9 @@ public class OrientationImageTest {
     public void getPolarizationImage_ImgLib2PolarizationImage_ReturnsCorrectImage() throws CannotFormOrientationImage {
         long[] dim = { 2, 2 };
 
-        Image<Float32> rho = new ImgLib2ImageFactory().create(dim, new Float32());
-        Image<Float32> delta = new ImgLib2ImageFactory().create(dim, new Float32());
-        Image<Float32> eta = new ImgLib2ImageFactory().create(dim, new Float32());
+        Image<Float32> rho = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        Image<Float32> delta = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        Image<Float32> eta = new ImgLib2ImageFactory().create(dim, Float32.zero());
 
         OrientationImage orientationImage = new OrientationImage(null, rho, delta, eta);
 
@@ -76,10 +76,10 @@ public class OrientationImageTest {
             throws CannotFormOrientationImage {
         long[] dim = { 10, 10, 10, 10, 3 };
 
-        Image<Float32> baseSet = new ImgLib2ImageFactory().create(dim, new Float32());
-        Image<Float32> rho = new ImgLib2ImageFactory().create(dim, new Float32());
-        Image<Float32> delta = new ImgLib2ImageFactory().create(dim, new Float32());
-        Image<Float32> eta = new ImgLib2ImageFactory().create(dim, new Float32());
+        Image<Float32> baseSet = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        Image<Float32> rho = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        Image<Float32> delta = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        Image<Float32> eta = new ImgLib2ImageFactory().create(dim, Float32.zero());
 
         IPixelCursor<Float32> baseSetCursor = baseSet.getCursor();
         IPixelCursor<Float32> rhoCursor = rho.getCursor();
@@ -135,10 +135,10 @@ public class OrientationImageTest {
         ImageFactory factory = new ImgLib2ImageFactory();
 
         long[] dim = {2, 2, 2, 2};
-        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, new UINT16());
+        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
         
         IPolarizationImageSet polImage = new PolarizationImageSet(null, pol0, pol45, pol90, pol135);
         

@@ -29,7 +29,7 @@ public class TiffPolarizationImageSetWriter implements IPolarizationImageSetWrit
      */
     public TiffPolarizationImageSetWriter(IPolarizationImageSet imageSet) throws NoWriterFoundForImage {
         this._writer = TiffImageWriterFactory.getWriter(imageSet.getPolarizationImage(Polarization.pol0).getImage(),
-                new UINT16());
+                UINT16.zero());
     }
 
     @Override

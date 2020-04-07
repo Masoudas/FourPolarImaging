@@ -18,7 +18,7 @@ public class ImgLib2PixelRandomAccessTest {
     @Test
     public void setPixel_UINT16Image_SetsPixelsToDefinedValues() {
         long[] dimensions = new long[] { 2, 2 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, new UINT16());
+        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
 
         IPixelRandomAccess<UINT16> rAccess = image.getRandomAccess();
 
@@ -60,7 +60,7 @@ public class ImgLib2PixelRandomAccessTest {
     @Test
     public void setPixel_Float32Image_SetsPixelsToDefinedValues() {
         long[] dimensions = new long[] { 2, 2 };
-        Image<Float32> image = new ImgLib2ImageFactory().create(dimensions, new Float32());
+        Image<Float32> image = new ImgLib2ImageFactory().create(dimensions, Float32.zero());
 
         IPixelRandomAccess<Float32> rAccess = image.getRandomAccess();
 
@@ -102,7 +102,7 @@ public class ImgLib2PixelRandomAccessTest {
     @Test
     public void setPixel_RGB16Image_SetsPixelsToDefinedValues() {
         long[] dimensions = new long[] { 2, 2 };
-        Image<RGB16> image = new ImgLib2ImageFactory().create(dimensions, new RGB16());
+        Image<RGB16> image = new ImgLib2ImageFactory().create(dimensions, RGB16.zero());
 
         IPixelRandomAccess<RGB16> rAccess = image.getRandomAccess();
 
@@ -144,7 +144,7 @@ public class ImgLib2PixelRandomAccessTest {
     @Test
     public void getPixel_OutOfBoundPixel_ThrowsArrayIndexOutOfBound() {
         long[] dimensions = new long[] { 2, 2 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, new UINT16());
+        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
 
         IPixelRandomAccess<UINT16> rAccess = image.getRandomAccess();
 
@@ -156,12 +156,12 @@ public class ImgLib2PixelRandomAccessTest {
     @Test
     public void setPixel_OutOfBoundPixel_ThrowsArrayIndexOutOfBound() {
         long[] dimensions = new long[] { 2, 2 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, new UINT16());
+        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
 
         IPixelRandomAccess<UINT16> rAccess = image.getRandomAccess();
 
         rAccess.setPosition(new long[]{2,2});
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->{rAccess.setPixel(new Pixel<UINT16>(new UINT16()));});
+        assertThrows(ArrayIndexOutOfBoundsException.class, ()->{rAccess.setPixel(new Pixel<UINT16>(UINT16.zero()));});
         
     }
 

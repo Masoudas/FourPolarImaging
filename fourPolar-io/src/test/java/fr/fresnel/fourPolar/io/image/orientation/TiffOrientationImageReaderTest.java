@@ -32,9 +32,9 @@ public class TiffOrientationImageReaderTest {
         TiffOrientationImageFileSet fSet = new TiffOrientationImageFileSet(_root, fileSet);
         
         long[] dim = { 2, 2 };
-        Image<Float32> rho = new ImgLib2ImageFactory().create(dim, new Float32());
-        Image<Float32> delta = new ImgLib2ImageFactory().create(dim, new Float32());
-        Image<Float32> eta = new ImgLib2ImageFactory().create(dim, new Float32());
+        Image<Float32> rho = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        Image<Float32> delta = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        Image<Float32> eta = new ImgLib2ImageFactory().create(dim, Float32.zero());
 
         Float32ImgLib2TiffImageWriter writer = new Float32ImgLib2TiffImageWriter();
         writer.write(fSet.getFile(OrientationAngle.rho), rho);

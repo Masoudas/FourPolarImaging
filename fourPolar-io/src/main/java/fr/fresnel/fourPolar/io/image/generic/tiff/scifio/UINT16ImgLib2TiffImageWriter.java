@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
  * 
  */
 public class UINT16ImgLib2TiffImageWriter extends GrayScaleImgLib2TiffWriter<UINT16> {
-    final private UINT16 _pixelType = new UINT16();
+    final private UINT16 _pixelType = UINT16.zero();
 
     @Override
     public void write(File path, Image<UINT16> image) throws IOException {

@@ -9,15 +9,11 @@ public class RGB16 extends PixelType {
     private int _g;
     private int _b;
 
-    /**
-     * Constructs the type with all values set to zero.
-     */
-    public RGB16() {
-        this.set(0, 0, 0);
-    }
-    
+    private final static RGB16 _zero = new RGB16(0, 0, 0);
+
     /**
      * Constructs the type with specified values.
+     * 
      * @param r
      * @param g
      * @param b
@@ -82,6 +78,15 @@ public class RGB16 extends PixelType {
     @Override
     public Type getType() {
         return Type.RGB_16;
+    }
+
+    /**
+     * Return a shared zero instance. Used for initializing types.
+     * 
+     * @return a shared instance with value zero.
+     */
+    public static RGB16 zero() {
+        return _zero;
     }
 
 }

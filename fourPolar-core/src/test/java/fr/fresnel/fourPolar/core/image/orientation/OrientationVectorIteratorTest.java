@@ -24,10 +24,10 @@ public class OrientationVectorIteratorTest {
     public void next_RandomDataSet_ReturnsCorrectOrientationVectorForEachElement() {
         long[] dim = { 10, 10, 10, 10, 3 };
 
-        IPixelCursor<Float32> baseSetCursor = new ImgLib2ImageFactory().create(dim, new Float32()).getCursor();
-        IPixelCursor<Float32> rho = new ImgLib2ImageFactory().create(dim, new Float32()).getCursor();
-        IPixelCursor<Float32> delta = new ImgLib2ImageFactory().create(dim, new Float32()).getCursor();
-        IPixelCursor<Float32> eta = new ImgLib2ImageFactory().create(dim, new Float32()).getCursor();
+        IPixelCursor<Float32> baseSetCursor = new ImgLib2ImageFactory().create(dim, Float32.zero()).getCursor();
+        IPixelCursor<Float32> rho = new ImgLib2ImageFactory().create(dim, Float32.zero()).getCursor();
+        IPixelCursor<Float32> delta = new ImgLib2ImageFactory().create(dim, Float32.zero()).getCursor();
+        IPixelCursor<Float32> eta = new ImgLib2ImageFactory().create(dim, Float32.zero()).getCursor();
 
         Random random = new Random();
         Float32 one = new Float32((float) (Math.PI / 180));

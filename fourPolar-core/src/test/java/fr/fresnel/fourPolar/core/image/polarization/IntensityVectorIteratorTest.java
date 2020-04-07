@@ -24,11 +24,11 @@ public class IntensityVectorIteratorTest {
     public void next_RandomDataSet_ReturnsCorrectIntensityForEachElement() {
         long[] dim = { 10, 10, 10, 10, 3 };
 
-        IPixelCursor<UINT16> baseSetCursor = new ImgLib2ImageFactory().create(dim, new UINT16()).getCursor();
-        IPixelCursor<UINT16> pol0Cursor = new ImgLib2ImageFactory().create(dim, new UINT16()).getCursor();
-        IPixelCursor<UINT16> pol45Cursor = new ImgLib2ImageFactory().create(dim, new UINT16()).getCursor();
-        IPixelCursor<UINT16> pol90Cursor = new ImgLib2ImageFactory().create(dim, new UINT16()).getCursor();
-        IPixelCursor<UINT16> pol135Cursor = new ImgLib2ImageFactory().create(dim, new UINT16()).getCursor();
+        IPixelCursor<UINT16> baseSetCursor = new ImgLib2ImageFactory().create(dim, UINT16.zero()).getCursor();
+        IPixelCursor<UINT16> pol0Cursor = new ImgLib2ImageFactory().create(dim, UINT16.zero()).getCursor();
+        IPixelCursor<UINT16> pol45Cursor = new ImgLib2ImageFactory().create(dim, UINT16.zero()).getCursor();
+        IPixelCursor<UINT16> pol90Cursor = new ImgLib2ImageFactory().create(dim, UINT16.zero()).getCursor();
+        IPixelCursor<UINT16> pol135Cursor = new ImgLib2ImageFactory().create(dim, UINT16.zero()).getCursor();
 
         Random random = new Random();
         UINT16 one = new UINT16(1);

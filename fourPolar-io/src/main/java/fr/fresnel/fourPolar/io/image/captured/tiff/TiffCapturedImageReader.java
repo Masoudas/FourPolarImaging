@@ -27,7 +27,7 @@ public class TiffCapturedImageReader implements ICapturedImageReader {
      * @throws NoReaderFoundForImage
      */
     public TiffCapturedImageReader(ImageFactory factory) throws NoReaderFoundForImage {
-        _reader = TiffImageReaderFactory.getReader(factory, new UINT16());
+        _reader = TiffImageReaderFactory.getReader(factory, UINT16.zero());
     }
 
     @Override

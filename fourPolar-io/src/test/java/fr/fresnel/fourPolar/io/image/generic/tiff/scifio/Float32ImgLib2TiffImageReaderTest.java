@@ -31,7 +31,7 @@ public class Float32ImgLib2TiffImageReaderTest {
         Float32ImgLib2TiffImageReader reader = new Float32ImgLib2TiffImageReader(new ImgLib2ImageFactory());
         Image<Float32> img = reader.read(path);
 
-        ImageJFunctions.show(ImageToImgLib2Converter.getImg(img, new Float32()));
+        ImageJFunctions.show(ImageToImgLib2Converter.getImg(img, Float32.zero()));
         TimeUnit.SECONDS.sleep(10);
     }
 

@@ -27,7 +27,7 @@ public class UINT16ImgLib2TiffImageWriterTest {
     public void write_UINT16Image_DiskImageHasSameDimensions() throws IOException {
         File destination = new File(_root, "UINT16Image.tif");
 
-        Image<UINT16> image = _factory.create(_dim, new UINT16());
+        Image<UINT16> image = _factory.create(_dim, UINT16.zero());
         UINT16ImgLib2TiffImageWriter writer = new UINT16ImgLib2TiffImageWriter();
         writer.write(destination, image);
         writer.close();
@@ -44,7 +44,7 @@ public class UINT16ImgLib2TiffImageWriterTest {
 
     @Test
     public void write_WriteMultipleFiles_DiskImageHasSameDimensions() throws IOException {
-        Image<UINT16> image = _factory.create(_dim, new UINT16());
+        Image<UINT16> image = _factory.create(_dim, UINT16.zero());
         UINT16ImgLib2TiffImageWriter writer = new UINT16ImgLib2TiffImageWriter();
         File destination = new File(_root, "UINT16Image.tif");
 

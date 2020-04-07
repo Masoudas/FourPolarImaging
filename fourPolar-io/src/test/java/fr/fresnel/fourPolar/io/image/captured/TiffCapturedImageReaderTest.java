@@ -47,7 +47,7 @@ public class TiffCapturedImageReaderTest {
         final ICapturedImage capturedImage = imgReader.read(sImageSet.getChannelImages(1).get(0),
                 Cameras.getLabels(Cameras.One)[0]);
 
-        ImageJFunctions.show(ImageToImgLib2Converter.getImg(capturedImage.getImage(), new UINT16()));
+        ImageJFunctions.show(ImageToImgLib2Converter.getImg(capturedImage.getImage(), UINT16.zero()));
         TimeUnit.SECONDS.sleep(10);
 
     }

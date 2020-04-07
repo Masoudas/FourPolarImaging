@@ -12,12 +12,7 @@ public class UINT16 extends PixelType {
 
     private int _pixel = 0;
 
-    /**
-     * Construct the type and set it to zero.
-     */
-    public UINT16() {
-        this.set(0);
-    }
+    private final static UINT16 _zero = new UINT16(0);
 
     /**
      * Construct the type and set it to the specified value.
@@ -63,6 +58,15 @@ public class UINT16 extends PixelType {
     @Override
     public Type getType() {
         return Type.UINT_16;
+    }
+
+    /**
+     * Return a shared zero instance. Used for initializing types.
+     * 
+     * @return a shared instance with value zero.
+     */
+    public static UINT16 zero() {
+        return _zero;
     }
 
 }

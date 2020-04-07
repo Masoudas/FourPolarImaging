@@ -31,7 +31,7 @@ public class OrientationImage implements IOrientationImage {
      * @param polImage
      */
     public OrientationImage(ICapturedImageFileSet fileSet, ImageFactory factory, IPolarizationImageSet polImage) {
-        Float32 pixelType = new Float32();
+        Float32 pixelType = Float32.zero();
         long[] dimension = polImage.getPolarizationImage(Polarization.pol0).getImage().getDimensions();
 
         _rhoImage = new AngleImage(OrientationAngle.rho, factory.create(dimension, pixelType));

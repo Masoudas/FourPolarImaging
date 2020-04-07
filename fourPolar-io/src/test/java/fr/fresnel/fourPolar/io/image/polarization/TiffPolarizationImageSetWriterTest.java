@@ -31,10 +31,10 @@ public class TiffPolarizationImageSetWriterTest {
 
         long[] dim = { 2, 2 };
 
-        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, new UINT16());
-        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, new UINT16());
+        Image<UINT16> pol0 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol45 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
 
         PolarizationImageSet imageSet = new PolarizationImageSet(fileSet, pol0, pol45, pol90, pol135);
 

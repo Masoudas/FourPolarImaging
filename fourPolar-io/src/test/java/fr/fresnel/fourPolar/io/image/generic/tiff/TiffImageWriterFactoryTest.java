@@ -21,8 +21,8 @@ public class TiffImageWriterFactoryTest {
     @Test
     public void getWriter_UINT16ImgLib2Implementation_ReturnsCorrectWriter()
             throws NoWriterFoundForImage {
-        Image<UINT16> image = new ImgLib2ImageFactory().create(_dim, new UINT16());
-        ImageWriter<UINT16> reader = TiffImageWriterFactory.getWriter(image, new UINT16());
+        Image<UINT16> image = new ImgLib2ImageFactory().create(_dim, UINT16.zero());
+        ImageWriter<UINT16> reader = TiffImageWriterFactory.getWriter(image, UINT16.zero());
 
         assertTrue(reader instanceof UINT16ImgLib2TiffImageWriter);
     }
@@ -30,8 +30,8 @@ public class TiffImageWriterFactoryTest {
     @Test
     public void getWriter_Float32ImgLib2Implementation_ReturnsCorrectWriter()
             throws NoWriterFoundForImage {
-        Image<Float32> image = new ImgLib2ImageFactory().create(_dim, new Float32());
-        ImageWriter<Float32> reader = TiffImageWriterFactory.getWriter(image, new Float32());
+        Image<Float32> image = new ImgLib2ImageFactory().create(_dim, Float32.zero());
+        ImageWriter<Float32> reader = TiffImageWriterFactory.getWriter(image, Float32.zero());
 
         assertTrue(reader instanceof Float32ImgLib2TiffImageWriter);
     }
@@ -39,8 +39,8 @@ public class TiffImageWriterFactoryTest {
     @Test
     public void getWriter_RGB16ImgLib2Implementation_ReturnsCorrectWriter()
             throws NoWriterFoundForImage {
-        Image<RGB16> image = new ImgLib2ImageFactory().create(_dim, new RGB16());
-        ImageWriter<RGB16> reader = TiffImageWriterFactory.getWriter(image, new RGB16());
+        Image<RGB16> image = new ImgLib2ImageFactory().create(_dim, RGB16.zero());
+        ImageWriter<RGB16> reader = TiffImageWriterFactory.getWriter(image, RGB16.zero());
 
         assertTrue(reader instanceof RGB16ImgLib2TiffImageWriter);
     }

@@ -58,7 +58,7 @@ public class SophiesChoiceI {
 
         ImageFactory imgFactory = new ImgLib2ImageFactory();
 
-        ImageReader<UINT16> reader = TiffImageReaderFactory.getReader(imgFactory, new UINT16());
+        ImageReader<UINT16> reader = TiffImageReaderFactory.getReader(imgFactory, UINT16.zero());
         Image<UINT16> pol0Image = reader.read(pol0File);
         Image<UINT16> pol45Image = reader.read(pol45File);
         Image<UINT16> pol90Image = reader.read(pol90File);
@@ -76,7 +76,7 @@ public class SophiesChoiceI {
         mapper.map(polarizationImageSet.getIterator(), orientationImage.getOrientationVectorIterator());
 
         ImageWriter<Float32> writer = TiffImageWriterFactory
-                .getWriter(orientationImage.getAngleImage(OrientationAngle.rho).getImage(), new Float32());
+                .getWriter(orientationImage.getAngleImage(OrientationAngle.rho).getImage(), Float32.zero());
 
         writer.write(rhoFile, orientationImage.getAngleImage(OrientationAngle.rho).getImage());
         writer.write(deltaFile, orientationImage.getAngleImage(OrientationAngle.delta).getImage());
@@ -84,11 +84,11 @@ public class SophiesChoiceI {
         writer.close();
 
         ImageJFunctions.show(ImageToImgLib2Converter
-                .getImg(orientationImage.getAngleImage(OrientationAngle.rho).getImage(), new Float32()), "Rho");
+                .getImg(orientationImage.getAngleImage(OrientationAngle.rho).getImage(), Float32.zero()), "Rho");
         ImageJFunctions.show(ImageToImgLib2Converter
-                .getImg(orientationImage.getAngleImage(OrientationAngle.delta).getImage(), new Float32()), "Delta");
+                .getImg(orientationImage.getAngleImage(OrientationAngle.delta).getImage(), Float32.zero()), "Delta");
         ImageJFunctions.show(ImageToImgLib2Converter
-                .getImg(orientationImage.getAngleImage(OrientationAngle.eta).getImage(), new Float32()), "Eta");
+                .getImg(orientationImage.getAngleImage(OrientationAngle.eta).getImage(), Float32.zero()), "Eta");
 
 
     }

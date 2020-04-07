@@ -66,7 +66,7 @@ class TestPixelCursor implements IPixelCursor<UINT16> {
     int counter = 0;
     public TestPixelCursor(){
         for (int i = 0; i < pixel.length; i++) {
-            pixel[i] = new UINT16();
+            pixel[i] = UINT16.zero();
         }
 
     }

@@ -19,7 +19,7 @@ public class ImgLib2PixelCursorTest {
     @Test
     public void localize_UINT16Image_ReturnsAllPositionsInTheImage() {
         long[] dimensions = new long[] { 2, 2 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, new UINT16());
+        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
 
         IPixelCursor<UINT16> cursor = image.getCursor();
 
@@ -40,7 +40,7 @@ public class ImgLib2PixelCursorTest {
     @Test
     public void setPixel_UINT16Image_SetsPixelsToDefinedValues() {
         long[] dimensions = new long[] { 2, 2 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, new UINT16());
+        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
         IPixelCursor<UINT16> cursor = image.getCursor();
 
         int value = 1;
@@ -65,7 +65,7 @@ public class ImgLib2PixelCursorTest {
     @Test
     public void setPixel_Float32Image_SetsPixelsToDefinedValues() {
         long[] dimensions = new long[] { 2, 2 };
-        Image<Float32> image = new ImgLib2ImageFactory().create(dimensions, new Float32());
+        Image<Float32> image = new ImgLib2ImageFactory().create(dimensions, Float32.zero());
         IPixelCursor<Float32> cursor = image.getCursor();
 
         float value = 1.1f;
@@ -90,7 +90,7 @@ public class ImgLib2PixelCursorTest {
     @Test
     public void setPixel_RGB16Image_SetsPixelsToDefinedValues() {
         long[] dimensions = new long[] { 2, 2 };
-        Image<RGB16> image = new ImgLib2ImageFactory().create(dimensions, new RGB16());
+        Image<RGB16> image = new ImgLib2ImageFactory().create(dimensions, RGB16.zero());
         IPixelCursor<RGB16> cursor = image.getCursor();
  
         int value = 0;
