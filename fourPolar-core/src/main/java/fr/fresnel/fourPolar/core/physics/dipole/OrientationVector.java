@@ -26,6 +26,14 @@ public class OrientationVector implements IOrientationVector {
     public final static double MAX_Eta = Math.PI / 2;
 
     /**
+     * The maximum allowed devation from the given angle ranges. Hence:
+     * rho in [0 - ERR_Angle, MAX_Rho + ERR_Angle]
+     * delta in [0 - ERR_Angle, MAX_delta + ERR_Angle]
+     * eta in [0 - ERR_Angle, MAX_eta + ERR_Angle]
+     */
+    final private static double ERR_Angle = Math.PI / 180 * 0.0001;
+
+    /**
      * Models the orientation angles calculated using the four polar method. Note
      * that NaN is acceptable for each angle, and if NaN is given for one angle,
      * all angles are set to NaN.
@@ -81,19 +89,19 @@ public class OrientationVector implements IOrientationVector {
     }
 
     private void _checkRho(double value) throws OrientationAngleOutOfRange {
-        if (value < 0 || value >= MAX_Rho) {
+        if (value < -ERR_Angle || value - MAX_Rho > ERR_Angle) {
             throw new OrientationAngleOutOfRange("Rho is out of [0, pi) range");
         }
     }
 
     private void _checkDelta(double value) throws OrientationAngleOutOfRange {
-        if (value < 0 || value > MAX_Delta) {
+        if (value < -ERR_Angle || value - MAX_Delta > ERR_Angle) {
             throw new OrientationAngleOutOfRange("Delta is out of [0, pi] range");
         }
     }
 
     private void _checkEta(double value) throws OrientationAngleOutOfRange {
-        if (value < 0 || value >= MAX_Eta) {
+        if (value < -ERR_Angle || value - MAX_Eta > ERR_Angle) {
             throw new OrientationAngleOutOfRange("Eta is out of [0, pi/2) range");
         }
     }

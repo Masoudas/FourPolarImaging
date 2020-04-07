@@ -168,10 +168,11 @@ public class IntensityToOrientationConverterTest {
     @Test
     public void convert_CurcioInverseValues_OrientationErrorIsLessThanThreshold()
             throws IOException, ImpossibleOrientationVector {
-        double error = Math.PI / 180 * 10;
+        double error = Math.PI / 180 * 20;
 
-        double etaGreaterThan = Math.PI / 180 * 10;
-        double deltaLessThan = Math.PI / 180 * 160;
+        BigDecimal etaGreaterThan = new BigDecimal(Math.PI / 180 * 10);
+        BigDecimal rhoGreaterThan = new BigDecimal(Math.PI / 180 * 2);
+        BigDecimal deltaLessThan = new BigDecimal(Math.PI / 180 * 160);        
 
         String intensityOrientationPair = null;
         boolean equals = true;
@@ -180,13 +181,16 @@ public class IntensityToOrientationConverterTest {
         BufferedReader inverseData = _readFile("inverseMethodData-Curcio.txt");
         int counter = 0;
         while ((intensityOrientationPair = inverseData.readLine()) != null && equals) {
+            ++counter;
             String[] angles = intensityOrientationPair.split(",");
 
             double rho = Double.parseDouble(angles[0]) / 180 * Math.PI;
             double eta = Double.parseDouble(angles[1]) / 180 * Math.PI;
             double delta = Double.parseDouble(angles[2]) / 180 * Math.PI;
 
-            if (!Double.isNaN(rho) || !Double.isNaN(delta) || !Double.isNaN(eta)) {
+            if (!Double.isNaN(rho) && !Double.isNaN(delta) && !Double.isNaN(eta)
+                    && isGreaterThan(eta, etaGreaterThan) && isGreaterThan(rho, rhoGreaterThan)
+                    && isLessThan(delta, deltaLessThan)) {
                 String[] intensities = forwardData.readLine().split(",");
 
                 IntensityVector iVector = new IntensityVector(Double.parseDouble(intensities[0]),
@@ -194,9 +198,9 @@ public class IntensityToOrientationConverterTest {
                         Double.parseDouble(intensities[3]));
 
                 OrientationVector original = new OrientationVector(rho, delta, eta);
-                System.out.println(++counter);
                 IOrientationVector calculated = _converter.convert(iVector);
 
+                System.out.println(counter);
                 equals = _checkForwardAnglePrecision(original, calculated, error);
 
             }
@@ -206,12 +210,12 @@ public class IntensityToOrientationConverterTest {
         assertTrue(equals);
     }
 
-    private boolean isEtaGreaterThan(String[] values, double threshold) {
-        return new BigDecimal(Double.parseDouble(values[5])).compareTo(new BigDecimal(threshold)) == 1;
+    private boolean isGreaterThan(double value, BigDecimal threshold) {
+        return new BigDecimal(value).compareTo(threshold) == 1;
     }
 
-    private boolean isDeltaLessThan(String[] values, double threshold) {
-        return new BigDecimal(Double.parseDouble(values[6])).compareTo(new BigDecimal(threshold)) == -1;
+    private boolean isLessThan(double value, BigDecimal threshold) {
+        return new BigDecimal(value).compareTo(threshold) == -1;
     }
 
     /**
@@ -220,11 +224,12 @@ public class IntensityToOrientationConverterTest {
      * angle (this is due to rounding error around 0 degree as mentiond.)
      */
     private static boolean _checkForwardAnglePrecision(IOrientationVector vec1, IOrientationVector vec2, double error) {
-        return (_checkPrecision(Math.PI - vec1.getAngle(OrientationAngle.rho), vec2.getAngle(OrientationAngle.rho),
-                error)
-                || _checkPrecision(vec1.getAngle(OrientationAngle.rho), vec2.getAngle(OrientationAngle.rho), error))
-                && _checkPrecision(vec1.getAngle(OrientationAngle.delta), vec2.getAngle(OrientationAngle.delta), error)
-                && _checkPrecision(vec1.getAngle(OrientationAngle.eta), vec2.getAngle(OrientationAngle.eta), error);
+        return (
+            _checkPrecision(
+                Math.PI - vec1.getAngle(OrientationAngle.rho), vec2.getAngle(OrientationAngle.rho),error)
+            || _checkPrecision(vec1.getAngle(OrientationAngle.rho), vec2.getAngle(OrientationAngle.rho), error))
+            && _checkPrecision(vec1.getAngle(OrientationAngle.delta), vec2.getAngle(OrientationAngle.delta), error)
+            && _checkPrecision(vec1.getAngle(OrientationAngle.eta), vec2.getAngle(OrientationAngle.eta), error);
     }
 
     private static boolean _checkPrecision(double val1, double val2, double error) {
