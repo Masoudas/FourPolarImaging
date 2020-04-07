@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.visualization.figures.stickFigure;
 
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 
@@ -17,5 +18,10 @@ public interface IStickFigure {
      * @return
      */
     public Image<RGB16> getImage();
+
+    /**
+     * Returns the {@link ICapturedImageFileSet} this figure corresponds to.
+     */
+    public ICapturedImageFileSet getFileSet();
 
 }
