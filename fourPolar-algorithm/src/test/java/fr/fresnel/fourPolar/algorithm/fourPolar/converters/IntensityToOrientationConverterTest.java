@@ -3,10 +3,16 @@ package fr.fresnel.fourPolar.algorithm.fourPolar.converters;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -14,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters.ImpossibleOrientationVector;
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.propagation.OpticalPropagationNotInvertible;
+import fr.fresnel.fourPolar.core.exceptions.physics.dipole.OrientationAngleOutOfRange;
 import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
@@ -119,41 +126,50 @@ public class IntensityToOrientationConverterTest {
      * 
      * Also note that for cases where rho is close to zero, we may get a rho close
      * to 180. This is due to near equivalence of those angles.
+     * 
+     * The Matlab code to generate these results, as well as the code to generate
+     * the corresponding propagation factors in the resource folder.
      */
     @Test
-    public void convert_CurcioForwardValues_OrientationErrorIsLessThanThreshold()
-            throws IOException, ImpossibleOrientationVector {
-        double error = Math.PI / 180 * 10;
+    public void convert_CurcioForwardValues_OrientationErrorIsLessThanThreshold() throws IOException {
+        double error = Math.PI / 180 * 10.5;
 
-        double etaGreaterThan = Math.PI / 180 * 10;
-        double deltaLessThan = Math.PI / 180 * 160;
-
-        InputStream stream = IntensityToOrientationConverterTest.class
-                .getResourceAsStream("forwardMethodData-Curcio.txt");
-        InputStreamReader iReader = new InputStreamReader(stream);
-        BufferedReader buffer = new BufferedReader(iReader);
+        BigDecimal etaGreaterThan = new BigDecimal(Math.PI / 180 * 5);
+        BigDecimal rhoGreaterThan = new BigDecimal(Math.PI / 180 * 0);
+        BigDecimal deltaLessThan = new BigDecimal(Math.PI / 180 * 170);
 
         String intensityOrientationPair = null;
-        boolean equals = true;
-        do {
-            intensityOrientationPair = buffer.readLine();
+        BufferedReader forwardData = _readFile("ForwardMethodData-Curcio.txt");
+        forwardData.readLine();
 
+        boolean equals = true;
+        while ((intensityOrientationPair = forwardData.readLine()) != null && equals) {
             String[] values = intensityOrientationPair.split(",");
-            if (isEtaGreaterThan(values, etaGreaterThan) && isDeltaLessThan(values, deltaLessThan)) {
+            double rho = Double.parseDouble(values[4]) % Math.PI;
+            double eta = Double.parseDouble(values[5]) % Math.PI;
+            double delta = Double.parseDouble(values[6]);
+
+            if (eta > OrientationVector.MAX_Eta) {
+                eta = eta - OrientationVector.MAX_Eta;
+            }
+
+            if (isGreaterThan(eta, etaGreaterThan) && isGreaterThan(rho, rhoGreaterThan)
+                    && isLessThan(delta, deltaLessThan)) {
+
                 IntensityVector iVector = new IntensityVector(Double.parseDouble(values[0]),
                         Double.parseDouble(values[2]), Double.parseDouble(values[1]), Double.parseDouble(values[3]));
 
-                OrientationVector original = new OrientationVector(Double.parseDouble(values[4]),
-                        Double.parseDouble(values[6]), Double.parseDouble(values[5]));
-
-                IOrientationVector calculated = _converter.convert(iVector);
-
-                equals = _checkForwardAnglePrecision(original, calculated, error);
+                OrientationVector original = new OrientationVector(rho, delta, eta);
+                IOrientationVector calculated;
+                try {
+                    calculated = _converter.convert(iVector);
+                    equals = _checkForwardAnglePrecision(original, calculated, error);
+                } catch (ImpossibleOrientationVector e) {
+                }
 
             }
 
-        } while (intensityOrientationPair != null && equals);
-
+        }
         assertTrue(equals);
     }
 
@@ -164,49 +180,65 @@ public class IntensityToOrientationConverterTest {
      * 
      * Note the data is in degree rather than radian, and that the intensities are
      * those in the forward data.
+     * 
+     * The Matlab code to generate these data is also in the resource folder.
+     * 
+     * @throws ImpossibleOrientationVector
      */
     @Test
-    public void convert_CurcioInverseValues_OrientationErrorIsLessThanThreshold()
-            throws IOException, ImpossibleOrientationVector {
-        double error = Math.PI / 180 * 20;
+    public void convert_CurcioInverseValues_OrientationErrorIsLessThanThreshold() throws IOException {
+        double error = Math.PI / 180 * 5;
 
-        BigDecimal etaGreaterThan = new BigDecimal(Math.PI / 180 * 10);
-        BigDecimal rhoGreaterThan = new BigDecimal(Math.PI / 180 * 2);
-        BigDecimal deltaLessThan = new BigDecimal(Math.PI / 180 * 160);        
+        BigDecimal etaGreaterThan = new BigDecimal(Math.PI / 180 * 0);
+        BigDecimal rhoGreaterThan = new BigDecimal(Math.PI / 180 * 0);
+        BigDecimal deltaLessThan = new BigDecimal(Math.PI / 180 * 180);
 
         String intensityOrientationPair = null;
         boolean equals = true;
 
-        BufferedReader forwardData = _readFile("forwardMethodData-Curcio.txt");
-        BufferedReader inverseData = _readFile("inverseMethodData-Curcio.txt");
-        int counter = 0;
+        BufferedReader forwardData = _readFile("ForwardMethodData-Curcio.txt");
+        BufferedReader inverseData = _readFile("InverseMethodData-Curcio.txt");
+
+        forwardData.readLine();
+        inverseData.readLine();
+
+        BufferedOutputStream outputData = _writeFile();
+        int counter = 1;
         while ((intensityOrientationPair = inverseData.readLine()) != null && equals) {
-            ++counter;
+            String[] intensities = forwardData.readLine().split(",");
             String[] angles = intensityOrientationPair.split(",");
 
-            double rho = Double.parseDouble(angles[0]) / 180 * Math.PI;
+            double rho = (Double.parseDouble(angles[0]) / 180 * Math.PI + Math.PI) % Math.PI;
             double eta = Double.parseDouble(angles[1]) / 180 * Math.PI;
             double delta = Double.parseDouble(angles[2]) / 180 * Math.PI;
 
-            if (!Double.isNaN(rho) && !Double.isNaN(delta) && !Double.isNaN(eta)
-                    && isGreaterThan(eta, etaGreaterThan) && isGreaterThan(rho, rhoGreaterThan)
-                    && isLessThan(delta, deltaLessThan)) {
-                String[] intensities = forwardData.readLine().split(",");
-
+            IOrientationVector calculated = new OrientationVector(Double.NaN, Double.NaN, Double.NaN);
+            if (!Double.isNaN(rho) && !Double.isNaN(delta) && !Double.isNaN(eta) && isGreaterThan(eta, etaGreaterThan)
+                    && isGreaterThan(rho, rhoGreaterThan) && isLessThan(delta, deltaLessThan)) {
+                if (counter == 12887) {
+                    System.out.println(1);
+                }
                 IntensityVector iVector = new IntensityVector(Double.parseDouble(intensities[0]),
                         Double.parseDouble(intensities[2]), Double.parseDouble(intensities[1]),
                         Double.parseDouble(intensities[3]));
 
                 OrientationVector original = new OrientationVector(rho, delta, eta);
-                IOrientationVector calculated = _converter.convert(iVector);
 
-                System.out.println(counter);
-                equals = _checkForwardAnglePrecision(original, calculated, error);
+                try {
+                    calculated = _converter.convert(iVector);
+                    equals = _checkForwardAnglePrecision(original, calculated, error);
 
+                } catch (ImpossibleOrientationVector e) {
+                    System.out.println(counter);
+
+                }
             }
-
+            String output = intensities[0] + "," + intensities[2] + "," + intensities[1] + "," + intensities[3] + ","
+                    + calculated.getAngle(OrientationAngle.rho) + "," + +calculated.getAngle(OrientationAngle.eta) +
+                    "," + calculated.getAngle(OrientationAngle.delta) + "\n";
+            outputData.write(output.getBytes());
+            outputData.flush();
         }
-
         assertTrue(equals);
     }
 
@@ -224,12 +256,12 @@ public class IntensityToOrientationConverterTest {
      * angle (this is due to rounding error around 0 degree as mentiond.)
      */
     private static boolean _checkForwardAnglePrecision(IOrientationVector vec1, IOrientationVector vec2, double error) {
-        return (
-            _checkPrecision(
-                Math.PI - vec1.getAngle(OrientationAngle.rho), vec2.getAngle(OrientationAngle.rho),error)
-            || _checkPrecision(vec1.getAngle(OrientationAngle.rho), vec2.getAngle(OrientationAngle.rho), error))
-            && _checkPrecision(vec1.getAngle(OrientationAngle.delta), vec2.getAngle(OrientationAngle.delta), error)
-            && _checkPrecision(vec1.getAngle(OrientationAngle.eta), vec2.getAngle(OrientationAngle.eta), error);
+        return (_checkPrecision(Math.PI - vec1.getAngle(OrientationAngle.rho), vec2.getAngle(OrientationAngle.rho),
+                error)
+                || _checkPrecision(vec1.getAngle(OrientationAngle.rho), vec2.getAngle(OrientationAngle.rho), error))
+                && _checkPrecision(vec1.getAngle(OrientationAngle.delta), vec2.getAngle(OrientationAngle.delta), error);
+        // && _checkPrecision(vec1.getAngle(OrientationAngle.eta),
+        // vec2.getAngle(OrientationAngle.eta), error);
     }
 
     private static boolean _checkPrecision(double val1, double val2, double error) {
@@ -240,6 +272,19 @@ public class IntensityToOrientationConverterTest {
         InputStream stream = IntensityToOrientationConverterTest.class.getResourceAsStream(file);
         InputStreamReader iReader = new InputStreamReader(stream);
         return new BufferedReader(iReader);
+
+    }
+
+    private BufferedOutputStream _writeFile() throws IOException {
+        File file = new File(IntensityToOrientationConverterTest.class.getResource("").getPath(),
+                "InverseMethodData-Masoud.txt");
+        file.createNewFile();
+        FileOutputStream iReader = null;
+        try {
+            iReader = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+        }
+        return new BufferedOutputStream(iReader);
 
     }
 
