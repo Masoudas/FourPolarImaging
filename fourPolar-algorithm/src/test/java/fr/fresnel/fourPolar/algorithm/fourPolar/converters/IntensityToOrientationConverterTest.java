@@ -202,7 +202,6 @@ public class IntensityToOrientationConverterTest {
         forwardData.readLine();
         inverseData.readLine();
 
-        BufferedOutputStream outputData = _writeFile();
         int counter = 1;
         while ((intensityOrientationPair = inverseData.readLine()) != null && equals) {
             String[] intensities = forwardData.readLine().split(",");
@@ -212,7 +211,6 @@ public class IntensityToOrientationConverterTest {
             double eta = Double.parseDouble(angles[1]) / 180 * Math.PI;
             double delta = Double.parseDouble(angles[2]) / 180 * Math.PI;
 
-            IOrientationVector calculated = new OrientationVector(Double.NaN, Double.NaN, Double.NaN);
             if (!Double.isNaN(rho) && !Double.isNaN(delta) && !Double.isNaN(eta) && isGreaterThan(eta, etaGreaterThan)
                     && isGreaterThan(rho, rhoGreaterThan) && isLessThan(delta, deltaLessThan)) {
                 if (counter == 12887) {
@@ -225,7 +223,7 @@ public class IntensityToOrientationConverterTest {
                 OrientationVector original = new OrientationVector(rho, delta, eta);
 
                 try {
-                    calculated = _converter.convert(iVector);
+                    IOrientationVector calculated = _converter.convert(iVector);
                     equals = _checkForwardAnglePrecision(original, calculated, error);
 
                 } catch (ImpossibleOrientationVector e) {
@@ -233,11 +231,6 @@ public class IntensityToOrientationConverterTest {
 
                 }
             }
-            String output = intensities[0] + "," + intensities[2] + "," + intensities[1] + "," + intensities[3] + ","
-                    + calculated.getAngle(OrientationAngle.rho) + "," + +calculated.getAngle(OrientationAngle.eta) +
-                    "," + calculated.getAngle(OrientationAngle.delta) + "\n";
-            outputData.write(output.getBytes());
-            outputData.flush();
         }
         assertTrue(equals);
     }
@@ -272,19 +265,6 @@ public class IntensityToOrientationConverterTest {
         InputStream stream = IntensityToOrientationConverterTest.class.getResourceAsStream(file);
         InputStreamReader iReader = new InputStreamReader(stream);
         return new BufferedReader(iReader);
-
-    }
-
-    private BufferedOutputStream _writeFile() throws IOException {
-        File file = new File(IntensityToOrientationConverterTest.class.getResource("").getPath(),
-                "InverseMethodData-Masoud.txt");
-        file.createNewFile();
-        FileOutputStream iReader = null;
-        try {
-            iReader = new FileOutputStream(file);
-        } catch (FileNotFoundException e) {
-        }
-        return new BufferedOutputStream(iReader);
 
     }
 
