@@ -21,6 +21,10 @@ import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
 public class MatrixBasedInverseOpticalPropagationCalculatorTest {
     double acceptedError = 1e-12;
 
+    /**
+     * The code to calculate this propagation matrix developed by Curcio is in the
+     * resource folder.
+     */
     @Test
     public void getInverseFactor_MatlabCalculatedInverse_CalculatedMatrixErrorIsLessThanacceptedError()
             throws PropagationFactorNotFound, OpticalPropagationNotInvertible {
