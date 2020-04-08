@@ -25,7 +25,7 @@ public class ImgLib2ImageTest {
         UnsignedShortType type = new UnsignedShortType();
         Img<UnsignedShortType> img = new ArrayImgFactory<UnsignedShortType>(type).create(dimensions);
 
-        ImgLib2Image<UINT16, UnsignedShortType> image = new ImgLib2Image<UINT16, UnsignedShortType>(img, type);
+        ImgLib2Image<UINT16, UnsignedShortType> image = new ImgLib2Image<UINT16, UnsignedShortType>(img, type, null);
 
         assertArrayEquals(
             dimensions, image.getDimensions());
@@ -37,7 +37,7 @@ public class ImgLib2ImageTest {
         UnsignedShortType type = new UnsignedShortType();
         Img<UnsignedShortType> img = new ArrayImgFactory<UnsignedShortType>(type).create(dimensions);
 
-        ImgLib2Image<UINT16, UnsignedShortType> image = new ImgLib2Image<UINT16, UnsignedShortType>(img, type);
+        ImgLib2Image<UINT16, UnsignedShortType> image = new ImgLib2Image<UINT16, UnsignedShortType>(img, type, null);
 
         assertTrue(image.getPixelType() == Type.UINT_16);
     }
@@ -48,7 +48,7 @@ public class ImgLib2ImageTest {
         FloatType type = new FloatType();
         Img<FloatType> img = new ArrayImgFactory<FloatType>(type).create(dimensions);
 
-        ImgLib2Image<Float32, FloatType> image = new ImgLib2Image<Float32, FloatType>(img, type);
+        ImgLib2Image<Float32, FloatType> image = new ImgLib2Image<Float32, FloatType>(img, type, null);
 
         assertTrue(image.getPixelType() == Type.FLOAT_32);
     }
@@ -59,7 +59,7 @@ public class ImgLib2ImageTest {
         ARGBType type = new ARGBType();
         Img<ARGBType> img = new ArrayImgFactory<ARGBType>(type).create(dimensions);
 
-        ImgLib2Image<RGB16, ARGBType> image = new ImgLib2Image<RGB16, ARGBType>(img, type);
+        ImgLib2Image<RGB16, ARGBType> image = new ImgLib2Image<RGB16, ARGBType>(img, type, null);
 
         assertTrue(image.getPixelType() == Type.RGB_16);
     }
@@ -70,7 +70,7 @@ public class ImgLib2ImageTest {
         ByteType type = new ByteType();
         Img<ByteType> img = new ArrayImgFactory<ByteType>(type).create(dimensions);
 
-        assertThrows(ConverterNotFound.class, ()->{new ImgLib2Image<>(img, type);});
+        assertThrows(ConverterNotFound.class, ()->{new ImgLib2Image<>(img, type, null);});
     }
 
 }
