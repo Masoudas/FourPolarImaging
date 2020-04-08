@@ -13,6 +13,45 @@ import fr.fresnel.fourPolar.core.physics.propagation.IInverseOpticalPropagation;
  * This implementation is based on the paper by Brasselet.
  */
 public class IntensityToOrientationConverter implements IIntensityToOrientationConverter {
+    /**
+     * This parameter accepts how close around 90 degree we apply modular
+     * calculation for eta. Hence for eta < 90 - ERR_ModEta_90, we keep the original
+     * angle, for eta > 90 + ERR_ModEta_90 we return 90 - eta and for the rest, we
+     * return 90.
+     */
+    private final static double ERR_ModEta_90 = 1e-4;
+
+    /**
+     * This parameter indicates the acceptable error for lower range of
+     * sumNormalizedDipoleSquared. In other words, for sumNormalizedDipoleSquared -
+     * 1/2 < ERR_SumNormalizedDipoleSquared_L an exception is returned.
+     */
+    private final static double ERR_SumNormalizedDipoleSquared_L = 1e-14;
+
+    /**
+     * This parameter indicates the acceptable error for higher range of
+     * sumNormalizedDipoleSquared. In other words, for 1 -
+     * sumNormalizedDipoleSquared < ERR_SumNormalizedDipoleSquared_H an exception is
+     * returned.
+     */
+    private final static double ERR_SumNormalizedDipoleSquared_H = 1e-14;
+
+    /**
+     * This parameter indicates the acceptable error for lower range of
+     * sumNormalizedDipoleSquared. In other words, for normalizedDipoleSquared_Z -
+     * sumNormalizedDipoleSquared < ERR_NormalizedDipoleSquared_Z_L an exception is
+     * returned.
+     */
+    private final static double ERR_NormalizedDipoleSquared_Z_L = 1e-14;
+
+    /**
+     * This parameter indicates the acceptable error for higher range of
+     * sumNormalizedDipoleSquared. In other words, for sumNormalizedDipoleSquared -
+     * normalizedDipoleSquared_Z < ERR_NormalizedDipoleSquared_Z_H an exception is
+     * returned.
+     */
+    private final static double ERR_NormalizedDipoleSquared_Z_H = 1e-14;
+
     final private double _iProp_0_xx;
     final private double _iProp_0_yy;
     final private double _iProp_0_zz;
@@ -73,8 +112,8 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     }
 
     /**
-     * Calculate delta using the formula. Because the result is always positive (as ensured 
-     * by conditions), we return the raw value.
+     * Calculate delta using the formula. Because the result is always positive (as
+     * ensured by conditions), we return the raw value.
      */
     private double _getDelta(double sumNormalizedDipoleSquared) {
         double raw_delta = 2 * Math.acos((Math.sqrt(12 * sumNormalizedDipoleSquared - 3) - 1) / 2);
@@ -83,20 +122,24 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     }
 
     /**
-     * Calculate eta using the formula (note that angle is always positive). If
-     * eta < PI/2, return the original value. Otherwise, because angle greater
-     * than PI/2 has same propagation as it's PI complement, return the complement
-     * value.
+     * Calculate eta using the formula (note that angle is always positive). If eta
+     * < PI/2, return the original value. Otherwise, because angle greater than PI/2
+     * has same propagation as it's PI complement, return the complement value.
      */
     private double _getEta(double normalizedDipoleSquared_Z, double sumNormalizedDipoleSquared) {
         double raw_eta = Math.asin(Math.sqrt(
                 2 * (sumNormalizedDipoleSquared - normalizedDipoleSquared_Z) / (3 * sumNormalizedDipoleSquared - 1)));
 
-        if (raw_eta < OrientationVector.MAX_Eta) {
-            return raw_eta;
+        double eta = 0;
+        if (raw_eta < OrientationVector.MAX_Eta - ERR_ModEta_90) {
+            eta = raw_eta;
+        } else if (raw_eta > OrientationVector.MAX_Eta + ERR_ModEta_90) {
+            eta = raw_eta - OrientationVector.MAX_Eta;
         } else {
-            return raw_eta - OrientationVector.MAX_Eta;
+            eta = OrientationVector.MAX_Eta;
         }
+
+        return eta;
     }
 
     @Override
@@ -199,21 +242,22 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     /**
      * Check that delta exists and positive is in the range 0.5 and 1.
      */
-    private void _checkDeltaExistsAndPositive(double sumNormalizedDipoleSquared)
-            throws ImpossibleOrientationVector {
-        if (sumNormalizedDipoleSquared > 1 || sumNormalizedDipoleSquared < 1 / 2) {
+    private void _checkDeltaExistsAndPositive(double sumNormalizedDipoleSquared) throws ImpossibleOrientationVector {
+        if (1 - sumNormalizedDipoleSquared < ERR_SumNormalizedDipoleSquared_H
+                || sumNormalizedDipoleSquared - 1 / 2 < ERR_SumNormalizedDipoleSquared_L) {
             throw new ImpossibleOrientationVector("Sum of normalized dipole squared must be in range [1/2, 1].");
         }
     }
 
     /**
-     * Check eta angle exists by checking normalizedDipoleSquared_Z <= sumNormalizedDipoleSquared and
-     * normalizedDipoleSquared_Z >= 0.5(1 - sumNormalizedDipoleSquared)
+     * Check eta angle exists by checking normalizedDipoleSquared_Z <=
+     * sumNormalizedDipoleSquared and normalizedDipoleSquared_Z >= 0.5(1 -
+     * sumNormalizedDipoleSquared)
      */
     private void _checkEtaExists(double normalizedDipoleSquared_Z, double sumNormalizedDipoleSquared)
             throws ImpossibleOrientationVector {
-        if (normalizedDipoleSquared_Z > sumNormalizedDipoleSquared
-                || normalizedDipoleSquared_Z < 0.5 * (1 - sumNormalizedDipoleSquared)) {
+        if (sumNormalizedDipoleSquared - normalizedDipoleSquared_Z  < ERR_NormalizedDipoleSquared_Z_H ||
+                normalizedDipoleSquared_Z - 0.5 * (1 - sumNormalizedDipoleSquared) < ERR_NormalizedDipoleSquared_Z_L) {
             throw new ImpossibleOrientationVector("Pz is not in the accepted range.");
         }
 
