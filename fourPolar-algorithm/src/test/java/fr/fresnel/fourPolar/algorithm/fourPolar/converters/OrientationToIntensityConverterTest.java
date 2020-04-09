@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -147,7 +148,11 @@ public class OrientationToIntensityConverterTest {
     @Test
     public void convert_CurcioForwardValues_IntensityRatioDifferenceIsLessThanThreshold()
             throws OrientationAngleOutOfRange, NumberFormatException, IOException {
-        double error = 0.8;
+        double error = 0.005;
+        BigDecimal etaGreaterThan = new BigDecimal(Math.PI / 180 * 5);
+        BigDecimal rhoGreaterThan = new BigDecimal(Math.PI / 180 * 0);
+        BigDecimal deltaLessThan = new BigDecimal(Math.PI / 180 * 170);
+        
         BufferedReader forward = _readFile("ForwardMethodData-Curcio.txt");
 
         forward.readLine(); // Skip comment line.
@@ -164,12 +169,15 @@ public class OrientationToIntensityConverterTest {
                 eta = eta - OrientationVector.MAX_Eta;
             }
 
-            OrientationVector oVector = new OrientationVector(rho, delta, eta);
-            IntensityVector original = new IntensityVector(Double.parseDouble(values[0]), Double.parseDouble(values[2]),
-                    Double.parseDouble(values[1]), Double.parseDouble(values[3]));
-            IntensityVector calculated = _converter.convert(oVector);
+            if (isGreaterThan(eta, etaGreaterThan) && isGreaterThan(rho, rhoGreaterThan)
+                    && isLessThan(delta, deltaLessThan)) {
+                OrientationVector oVector = new OrientationVector(rho, delta, eta);
+                IntensityVector original = new IntensityVector(Double.parseDouble(values[0]),
+                        Double.parseDouble(values[2]), Double.parseDouble(values[1]), Double.parseDouble(values[3]));
+                IntensityVector calculated = _converter.convert(oVector);
 
-            equals &= _checkRatioPrecision(original, calculated, error);
+                equals &= _checkRatioPrecision(original, calculated, error);
+            }
 
         }
 
@@ -193,14 +201,13 @@ public class OrientationToIntensityConverterTest {
             double rho = (Double.parseDouble(values[4]) / 180 * Math.PI + Math.PI) % Math.PI;
             double eta = Double.parseDouble(values[5]) / 180 * Math.PI;
             double delta = Double.parseDouble(values[6]) / 180 * Math.PI;
-            if (!Double.isNaN(rho) && !Double.isNaN(delta) && !Double.isNaN(eta)){
+            if (!Double.isNaN(rho) && !Double.isNaN(delta) && !Double.isNaN(eta)) {
                 OrientationVector oVector = new OrientationVector(rho, delta, eta);
                 IntensityVector original = new IntensityVector(Double.parseDouble(values[0]),
-                        Double.parseDouble(values[2]), Double.parseDouble(values[1]),
-                        Double.parseDouble(values[3]));
-    
+                        Double.parseDouble(values[2]), Double.parseDouble(values[1]), Double.parseDouble(values[3]));
+
                 IntensityVector calculated = _converter.convert(oVector);
-                equals &= _checkRatioPrecision(original, calculated, error);    
+                equals &= _checkRatioPrecision(original, calculated, error);
             }
         }
         assertTrue(equals);
@@ -210,6 +217,14 @@ public class OrientationToIntensityConverterTest {
         InputStream stream = IntensityToOrientationConverterTest.class.getResourceAsStream(file);
         InputStreamReader iReader = new InputStreamReader(stream);
         return new BufferedReader(iReader);
+    }
+
+    private boolean isGreaterThan(double value, BigDecimal threshold) {
+        return new BigDecimal(value).compareTo(threshold) == 1;
+    }
+
+    private boolean isLessThan(double value, BigDecimal threshold) {
+        return new BigDecimal(value).compareTo(threshold) == -1;
     }
 
 }
