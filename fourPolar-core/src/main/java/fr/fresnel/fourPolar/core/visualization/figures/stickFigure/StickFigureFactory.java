@@ -6,6 +6,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.polarization.soi.ISoIImage;
+import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.StickType;
 
 /**
  * The factory to generate a {@link IStickFigure}.
@@ -19,7 +20,7 @@ public class StickFigureFactory {
      * @param image is the {@link Image} interface of the figure.
      * @return an stick figure.
      */
-    public static IStickFigure createExisting(StickFigureType type, Image<RGB16> image, ICapturedImageFileSet fileSet) {
+    public static IStickFigure createExisting(StickType type, Image<RGB16> image, ICapturedImageFileSet fileSet) {
         Objects.requireNonNull(type, "type cannot be null");
         Objects.requireNonNull(image, "image cannot be null");
         Objects.requireNonNull(fileSet, "fileSet cannot be null");
@@ -39,7 +40,7 @@ public class StickFigureFactory {
      * @return an empty stick figure.
      */
     public static IStickFigure createEmpty(
-        StickFigureType type, ISoIImage soiImage, ICapturedImageFileSet fileSet) {
+        StickType type, ISoIImage soiImage, ICapturedImageFileSet fileSet) {
         Objects.requireNonNull(type, "type cannot be null");
         Objects.requireNonNull(soiImage, "soiImage cannot be null");
         Objects.requireNonNull(fileSet, "fileSet cannot be null");
