@@ -10,13 +10,14 @@ import ij.gui.Line;
 public class IAngleStickIteratorTest {
     @Test
     public void next_AngleStickIteratorImplementation_OneElementNegativeAndPostiveIterator_CounterWillBeTwo() {
-        Line negativeLine = new Line(0, 0, 0, 0);
-        Line positiveLine = new Line(0, 0, 0, 0);
+        long[] position = {0, 0};
+        Line negativeLine = new Line(0, 0, position[0], position[1]);
+        Line positiveLine = new Line(position[0], position[1], 0, 0);
 
-        IAngleStickIterator iterator = new AngleStickIterator(negativeLine.iterator(), positiveLine.iterator());
+        IAngleStickIterator iterator = new Angle2DStickIterator(
+            negativeLine.iterator(), positiveLine.iterator(), position);
 
         int counter = 0;
-
         while (iterator.hasNext()) {
             counter++;
             iterator.next();
