@@ -3,12 +3,14 @@ package fr.fresnel.fourPolar.algorithm.fourPolar.converters;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.exceptions.physics.dipole.OrientationAngleOutOfRange;
 import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
@@ -68,29 +70,23 @@ public class OrientationToIntensityConverterTest {
 
     }
 
-    /** Checks that the ratio of each intensity is less than threshold. */
+    /**
+     * Checks that the difference in the ratio of intensities is less than a certain
+     * percentage, point being that the two ratios must be as close to each other as
+     * possible.
+     */
     private static boolean _checkRatioPrecision(IntensityVector vec1, IntensityVector vec2, double error) {
-        double ratio0 = vec1.getIntensity(Polarization.pol0) / vec2.getIntensity(Polarization.pol0);
-        double ratio45 = vec1.getIntensity(Polarization.pol45) / vec2.getIntensity(Polarization.pol45);
-        double ratio90 = vec1.getIntensity(Polarization.pol90) / vec2.getIntensity(Polarization.pol90);
-        double ratio135 = vec1.getIntensity(Polarization.pol135) / vec2.getIntensity(Polarization.pol135);
+        double one0_90 = vec1.getIntensity(Polarization.pol0) + vec1.getIntensity(Polarization.pol90);
+        double one45_135 = vec1.getIntensity(Polarization.pol45) + vec1.getIntensity(Polarization.pol135);
 
-        return _checkPrecision(ratio0, ratio45, error) && _checkPrecision(ratio0, ratio90, error)
-                && _checkPrecision(ratio0, ratio90, error) && _checkPrecision(ratio0, ratio135, error);
+        double two0_90 = vec2.getIntensity(Polarization.pol0) + vec2.getIntensity(Polarization.pol90);
+        double two45_135 = vec2.getIntensity(Polarization.pol45) + vec2.getIntensity(Polarization.pol135);
 
+        return Math.abs((one0_90 / two0_90 - one45_135 / two45_135) / (one45_135 / two45_135)) < error;
     }
 
     private static boolean _checkPrecision(double val1, double val2, double error) {
         return Math.abs(val1 - val2) < error;
-    }
-
-    @Test
-    public void convert_BenchMark() {
-        IOrientationVector vector = new OrientationVector(0, 0, 0);
-
-        for (int i = 0; i < 1000000; i++) {
-            _converter.convert(vector);
-        }
     }
 
     @Test
@@ -139,43 +135,81 @@ public class OrientationToIntensityConverterTest {
     /**
      * In this test, we try to compare our results with the forward problem. To do
      * so, we have calculated the intensity from an orientation angle using the
-     * integration formulas (forward problem). Then, we try to estimate the intensity
-     * from the angles with the propagation matrix. These two methods will
-     * not yield the same results 
+     * integration formulas (forward problem). Then, we try to estimate the
+     * intensity from the angles with the propagation matrix. These two methods will
+     * not yield the same results
+     * 
+     * @throws IOException
+     * @throws NumberFormatException
+     * @throws OrientationAngleOutOfRange
      * 
      */
     @Test
-    public void convert_BrasseletCurcioForwardValues_IntensityRatioDifferenceIsLessThanThreshold() {
-        double error = 2;
-        try (InputStream stream = OrientationToIntensityConverterTest.class
-                .getResourceAsStream("forwardMethodData.txt");) {
-            InputStreamReader iReader = new InputStreamReader(stream);
-            BufferedReader buffer = new BufferedReader(iReader); // Now this baby actually
+    public void convert_CurcioForwardValues_IntensityRatioDifferenceIsLessThanThreshold()
+            throws OrientationAngleOutOfRange, NumberFormatException, IOException {
+        double error = 0.8;
+        BufferedReader forward = _readFile("ForwardMethodData-Curcio.txt");
 
-            String intensityOrientationPair = null;
-            boolean equals = true;
-            do {
-                intensityOrientationPair = buffer.readLine();
+        forward.readLine(); // Skip comment line.
 
-                String[] values = intensityOrientationPair.split(",");
+        String intensityOrientationPair = null;
+        boolean equals = true;
+        while ((intensityOrientationPair = forward.readLine()) != null && equals) {
+            String[] values = intensityOrientationPair.split(",");
 
-                OrientationVector oVector = new OrientationVector(Double.parseDouble(values[4]),
-                        Double.parseDouble(values[6]), Double.parseDouble(values[5]));
+            double rho = Double.parseDouble(values[4]) % Math.PI;
+            double eta = Double.parseDouble(values[5]) % Math.PI;
+            double delta = Double.parseDouble(values[6]);
+            if (eta > OrientationVector.MAX_Eta) {
+                eta = eta - OrientationVector.MAX_Eta;
+            }
 
-                IntensityVector original = new IntensityVector(Double.parseDouble(values[0]),
-                        Double.parseDouble(values[2]), Double.parseDouble(values[1]), Double.parseDouble(values[3]));
+            OrientationVector oVector = new OrientationVector(rho, delta, eta);
+            IntensityVector original = new IntensityVector(Double.parseDouble(values[0]), Double.parseDouble(values[2]),
+                    Double.parseDouble(values[1]), Double.parseDouble(values[3]));
+            IntensityVector calculated = _converter.convert(oVector);
 
-                IntensityVector calculated = _converter.convert(oVector);
+            equals &= _checkRatioPrecision(original, calculated, error);
 
-                equals &= _checkRatioPrecision(original, calculated, error);
-
-            } while (intensityOrientationPair != null && equals);
-
-            assertTrue(equals);
-
-        } catch (Exception e) {
-            assertTrue(false);
         }
+
+        assertTrue(equals);
+
+    }
+
+    @Test
+    public void convert_CurcioInverseValues_IntensityRatioDifferenceIsLessThanThreshold()
+            throws OrientationAngleOutOfRange, NumberFormatException, IOException {
+        double error = 0.001;
+        BufferedReader inverseData = _readFile("InverseMethodData-Curcio.txt");
+
+        inverseData.readLine(); // Skip comment line.
+
+        String intensityOrientationPair = null;
+        boolean equals = true;
+        while ((intensityOrientationPair = inverseData.readLine()) != null && equals) {
+            String[] values = intensityOrientationPair.split(",");
+
+            double rho = (Double.parseDouble(values[4]) / 180 * Math.PI + Math.PI) % Math.PI;
+            double eta = Double.parseDouble(values[5]) / 180 * Math.PI;
+            double delta = Double.parseDouble(values[6]) / 180 * Math.PI;
+            if (!Double.isNaN(rho) && !Double.isNaN(delta) && !Double.isNaN(eta)){
+                OrientationVector oVector = new OrientationVector(rho, delta, eta);
+                IntensityVector original = new IntensityVector(Double.parseDouble(values[0]),
+                        Double.parseDouble(values[2]), Double.parseDouble(values[1]),
+                        Double.parseDouble(values[3]));
+    
+                IntensityVector calculated = _converter.convert(oVector);
+                equals &= _checkRatioPrecision(original, calculated, error);    
+            }
+        }
+        assertTrue(equals);
+    }
+
+    private BufferedReader _readFile(String file) {
+        InputStream stream = IntensityToOrientationConverterTest.class.getResourceAsStream(file);
+        InputStreamReader iReader = new InputStreamReader(stream);
+        return new BufferedReader(iReader);
     }
 
 }

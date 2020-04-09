@@ -24,33 +24,23 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     /**
      * This parameter indicates the acceptable error for lower range of
      * sumNormalizedDipoleSquared. In other words, for sumNormalizedDipoleSquared -
-     * 1/2 < ERR_SumNormalizedDipoleSquared_L an exception is returned.
+     * 1/3 < ERR_DeltaExists an exception is returned.
      */
-    private final static double ERR_SumNormalizedDipoleSquared_L = 1e-14;
-
-    /**
-     * This parameter indicates the acceptable error for higher range of
-     * sumNormalizedDipoleSquared. In other words, for 1 -
-     * sumNormalizedDipoleSquared < ERR_SumNormalizedDipoleSquared_H an exception is
-     * returned.
-     */
-    private final static double ERR_SumNormalizedDipoleSquared_H = 1e-14;
+    private final static double ERR_DeltaExists = 1e-14;
 
     /**
      * This parameter indicates the acceptable error for lower range of
      * sumNormalizedDipoleSquared. In other words, for normalizedDipoleSquared_Z -
-     * sumNormalizedDipoleSquared < ERR_NormalizedDipoleSquared_Z_L an exception is
+     * sumNormalizedDipoleSquared < ERR_EtaExists an exception is
      * returned.
      */
-    private final static double ERR_NormalizedDipoleSquared_Z_L = 1e-14;
+    private final static double ERR_EtaExists = 1e-14;
 
     /**
-     * This parameter indicates the acceptable error for higher range of
-     * sumNormalizedDipoleSquared. In other words, for sumNormalizedDipoleSquared -
-     * normalizedDipoleSquared_Z < ERR_NormalizedDipoleSquared_Z_H an exception is
-     * returned.
+     * Acceptable distance of eta from zero. If this distance is violated, an
+     * exception is returned.
      */
-    private final static double ERR_NormalizedDipoleSquared_Z_H = 1e-14;
+    private final static double ETA_DisTo0 = Math.PI / 180 * 0.1;
 
     final private double _iProp_0_xx;
     final private double _iProp_0_yy;
@@ -156,7 +146,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         // defined. We cath
         // both cases simultaneously here.
         if (pol0Intensity == 0 || pol45Intensity == 0 || pol90Intensity == 0 || pol135Intensity == 0) {
-            throw new ImpossibleOrientationVector("All intensities cannot be zero simultaneously.");
+            throw new ImpossibleOrientationVector("Can't compute the orientation vector because intensities can't be zero.");
         }
 
         // Computing dipole squared.
@@ -187,9 +177,13 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         _checkEtaExists(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
 
         // Computing the angles
+        double eta = this._getEta(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
+        if (eta - 0 < ETA_DisTo0){
+            throw new ImpossibleOrientationVector("Can't compute the orientation vector because eta is zero.");
+        }
         double rho = this._getRho(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
         double delta = this._getDelta(sumNormalizedDipoleSquared);
-        double eta = this._getEta(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
+        
 
         return new OrientationVector(rho, delta, eta);
     }
@@ -243,9 +237,8 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
      * Check that delta exists and positive is in the range 0.5 and 1.
      */
     private void _checkDeltaExistsAndPositive(double sumNormalizedDipoleSquared) throws ImpossibleOrientationVector {
-        if (1 - sumNormalizedDipoleSquared < ERR_SumNormalizedDipoleSquared_H
-                || sumNormalizedDipoleSquared - 1 / 2 < ERR_SumNormalizedDipoleSquared_L) {
-            throw new ImpossibleOrientationVector("Sum of normalized dipole squared must be in range [1/2, 1].");
+        if (sumNormalizedDipoleSquared - 1 / 3 < ERR_DeltaExists) {
+            throw new ImpossibleOrientationVector("Can't compute the orientation vector because delta can't be computed.");
         }
     }
 
@@ -256,9 +249,8 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
      */
     private void _checkEtaExists(double normalizedDipoleSquared_Z, double sumNormalizedDipoleSquared)
             throws ImpossibleOrientationVector {
-        if (sumNormalizedDipoleSquared - normalizedDipoleSquared_Z  < ERR_NormalizedDipoleSquared_Z_H ||
-                normalizedDipoleSquared_Z - 0.5 * (1 - sumNormalizedDipoleSquared) < ERR_NormalizedDipoleSquared_Z_L) {
-            throw new ImpossibleOrientationVector("Pz is not in the accepted range.");
+        if (normalizedDipoleSquared_Z - 0.5 * (1 - sumNormalizedDipoleSquared) < ERR_EtaExists) {
+            throw new ImpossibleOrientationVector("Can't compute the orientation vector because eta can't be computed.");
         }
 
     }

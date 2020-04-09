@@ -127,6 +127,9 @@ public class IntensityToOrientationConverterTest {
      * Also note that for cases where rho is close to zero, we may get a rho close
      * to 180. This is due to near equivalence of those angles.
      * 
+     * Because we use the inverse method, we expect the error to be as high as
+     * 10 degrees for some angles.
+     * 
      * The Matlab code to generate these results, as well as the code to generate
      * the corresponding propagation factors in the resource folder.
      */
@@ -145,10 +148,10 @@ public class IntensityToOrientationConverterTest {
         boolean equals = true;
         while ((intensityOrientationPair = forwardData.readLine()) != null && equals) {
             String[] values = intensityOrientationPair.split(",");
+
             double rho = Double.parseDouble(values[4]) % Math.PI;
             double eta = Double.parseDouble(values[5]) % Math.PI;
             double delta = Double.parseDouble(values[6]);
-
             if (eta > OrientationVector.MAX_Eta) {
                 eta = eta - OrientationVector.MAX_Eta;
             }
@@ -181,55 +184,45 @@ public class IntensityToOrientationConverterTest {
      * Note the data is in degree rather than radian, and that the intensities are
      * those in the forward data.
      * 
+     * Because the inverse method is the same as the one we use here, we should
+     * get little to no error.
+     * 
      * The Matlab code to generate these data is also in the resource folder.
      * 
      * @throws ImpossibleOrientationVector
      */
     @Test
     public void convert_CurcioInverseValues_OrientationErrorIsLessThanThreshold() throws IOException {
-        double error = Math.PI / 180 * 5;
-
-        BigDecimal etaGreaterThan = new BigDecimal(Math.PI / 180 * 0);
-        BigDecimal rhoGreaterThan = new BigDecimal(Math.PI / 180 * 0);
-        BigDecimal deltaLessThan = new BigDecimal(Math.PI / 180 * 180);
+        double error = Math.PI / 180 * 0.001;
 
         String intensityOrientationPair = null;
         boolean equals = true;
 
-        BufferedReader forwardData = _readFile("ForwardMethodData-Curcio.txt");
         BufferedReader inverseData = _readFile("InverseMethodData-Curcio.txt");
 
-        forwardData.readLine();
         inverseData.readLine();
-
-        int counter = 1;
+        int counter = 0;
         while ((intensityOrientationPair = inverseData.readLine()) != null && equals) {
-            String[] intensities = forwardData.readLine().split(",");
-            String[] angles = intensityOrientationPair.split(",");
+            String[] values = intensityOrientationPair.split(",");
+            System.out.println(++counter);
+            double rho = (Double.parseDouble(values[4]) / 180 * Math.PI + Math.PI) % Math.PI;
+            double eta = Double.parseDouble(values[5]) / 180 * Math.PI;
+            double delta = Double.parseDouble(values[6]) / 180 * Math.PI;
 
-            double rho = (Double.parseDouble(angles[0]) / 180 * Math.PI + Math.PI) % Math.PI;
-            double eta = Double.parseDouble(angles[1]) / 180 * Math.PI;
-            double delta = Double.parseDouble(angles[2]) / 180 * Math.PI;
+            IntensityVector iVector = new IntensityVector(Double.parseDouble(values[0]), Double.parseDouble(values[2]),
+                    Double.parseDouble(values[1]), Double.parseDouble(values[3]));
 
-            if (!Double.isNaN(rho) && !Double.isNaN(delta) && !Double.isNaN(eta) && isGreaterThan(eta, etaGreaterThan)
-                    && isGreaterThan(rho, rhoGreaterThan) && isLessThan(delta, deltaLessThan)) {
-                if (counter == 12887) {
-                    System.out.println(1);
-                }
-                IntensityVector iVector = new IntensityVector(Double.parseDouble(intensities[0]),
-                        Double.parseDouble(intensities[2]), Double.parseDouble(intensities[1]),
-                        Double.parseDouble(intensities[3]));
+            OrientationVector original = new OrientationVector(rho, delta, eta);
 
-                OrientationVector original = new OrientationVector(rho, delta, eta);
-
-                try {
-                    IOrientationVector calculated = _converter.convert(iVector);
-                    equals = _checkForwardAnglePrecision(original, calculated, error);
-
-                } catch (ImpossibleOrientationVector e) {
-                    System.out.println(counter);
-
-                }
+            try {
+                IOrientationVector calculated = _converter.convert(iVector);
+                equals = _checkForwardAnglePrecision(original, calculated, error);
+            } catch (ImpossibleOrientationVector e) {
+                // If orientation vector does not exist, make sure original value
+                // also does not exist.
+                equals = Double.isNaN(original.getAngle(OrientationAngle.rho))
+                        || Double.isNaN(original.getAngle(OrientationAngle.delta))
+                        || Double.isNaN(original.getAngle(OrientationAngle.eta));
             }
         }
         assertTrue(equals);
