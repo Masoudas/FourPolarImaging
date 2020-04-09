@@ -1,15 +1,16 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.stick;
 
+import java.util.Objects;
+
 import fr.fresnel.fourPolar.algorithm.exceptions.visualization.figures.stickFigure.AngleStickUndefined;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
-import fr.fresnel.fourPolar.core.util.DPoint;
-import fr.fresnel.fourPolar.core.util.Point;
 import fr.fresnel.fourPolar.core.util.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStick;
 import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStickIterator;
+import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.StickType;
 import ij.gui.Line;
 
 /**
@@ -28,72 +29,118 @@ public class AngleStickGenerator {
 
     /**
      * Generates an {@link IAngleStick}, where the slope is the rho angle, and color
-     * is again the rho angle.
+     * is again the rho angle. If rho is NaN, and exception is thrown.
      * 
-     * @param vec            is the orientation vector.
-     * @param dipolePosition is the corresponding dipole discrete position.
-     * @param length         is the desired length of the dipole, and greater than equal 1.
-     * @param thickness      is the desired thickness of the dipole, and greater than equal 1.
-     * @return
+     * @param rhoAngle       is the rho orinetation angle.
+     * @param dipolePosition is the corresponding dipole discrete position, as [x, y, z, ...].
+     * @param length         is the desired length of the dipole, must be greater
+     *                       than equal 1.
+     * @param thickness      is the desired thickness of the dipole, must be greater
+     *                       than equal 1.
+     * @return the generated angle stick.
+     *
+     * @throws AngleStickUndefined if rho angle is NaN.
      */
-    public IAngleStick getRhoStick(IOrientationVector vec, DPoint dipolePosition, int length, int thickness)
+    public IAngleStick generate2DStick(StickType stickType, IOrientationVector orientationVector, long[] dipolePosition, int length, int thickness)
             throws AngleStickUndefined {
-        if (Double.isNaN(vec.getAngle(OrientationAngle.rho)) || Double.isNaN(vec.getAngle(OrientationAngle.rho))) {
-            throw new AngleStickUndefined("Cannot define stick for nan angles.");
+        Objects.requireNonNull(dipolePosition, "dipolePosition cannot be null.");
+        Objects.requireNonNull(orientationVector, "orientationVector cannot be zero.");
+
+        double rho = orientationVector.getAngle(OrientationAngle.rho);
+        double delta = orientationVector.getAngle(OrientationAngle.delta);
+        double eta = orientationVector.getAngle(OrientationAngle.eta);
+
+        if (Double.isNaN(rho) || Double.isNaN(delta) || Double.isNaN(rho)){
+            throw new AngleStickUndefined("Can't define stick for undefined ");
         }
-        double slope = vec.getAngle(OrientationAngle.rho);
 
-        RGB16 color = _colorMap.getColor(0, OrientationVector.MAX_Rho, slope);
-        IAngleStickIterator iterator = formIterator(slope, dipolePosition, length, thickness);
+        if (length <= 0) {
+            throw new AngleStickUndefined("Stick length must be positive.");
+        }
 
-        return new AngleStick(dipolePosition, vec.getAngle(OrientationAngle.rho), length, thickness, color, iterator);
+        if (thickness <= 0) {
+            throw new AngleStickUndefined("Stick thickness must be positive.");
+        }
+
+        RGB16 color = _colorMap.getColor(0, OrientationVector.MAX_Rho, rhoAngle);
+        IAngleStickIterator iterator = _formIterator(rhoAngle, dipolePosition, length, thickness);
+
+        return new AngleStick(dipolePosition, rhoAngle, length, thickness, color, iterator);
     }
 
     /**
      * Generates an {@link IAngleStick}, where the slope is the rho angle, and color
-     * the delta angle.
+     * the delta angle. If rho or delta is NaN, and exception is thrown.
      * 
-     * @param vec            is the orientation vector.
-     * @param dipolePosition is the corresponding dipole discrete position.
-     * @param length         is the desired length of the dipole, and greater than equal 1.
-     * @param thickness      is the desired thickness of the dipole, and greater than equal 1.     * @return
+     * @param rhoAngle       is the rho angle.
+     * @param deltaAngle     is the delta angle.
+     * @param dipolePosition is the corresponding dipole discrete position, as [x, y, z, ...].
+     * @param length         is the desired length of the dipole, must be greater
+     *                       than equal 1.
+     * @param thickness      is the desired thickness of the dipole, must be greater
+     *                       than equal 1.
+     * @return the generated angle stick.
+     * 
+     * @throws AngleStickUndefined if rho or delta angle is NaN.
      */
-    public IAngleStick getDeltaStick(IOrientationVector vec, DPoint dipolePosition, int length, int thickness)
-            throws AngleStickUndefined {
-        if (Double.isNaN(vec.getAngle(OrientationAngle.rho)) || Double.isNaN(vec.getAngle(OrientationAngle.rho))) {
+    
+    public IAngleStick getDelta2DStick(double rhoAngle, double deltaAngle, long[] dipolePosition, int length,
+            int thickness) throws AngleStickUndefined {
+        Objects.requireNonNull(dipolePosition, "dipolePosition cannot be null");
+
+        if (Double.isNaN(rhoAngle) || Double.isNaN(deltaAngle)) {
             throw new AngleStickUndefined("Cannot define stick for nan angles.");
         }
 
-        double slope = vec.getAngle(OrientationAngle.rho);
+        if (length <= 0) {
+            throw new AngleStickUndefined("Stick length must be positive.");
+        }
 
-        RGB16 color = _colorMap.getColor(0, OrientationVector.MAX_Delta, vec.getAngle(OrientationAngle.delta));
-        IAngleStickIterator iterator = formIterator(slope, dipolePosition, length, thickness);
+        if (thickness <= 0) {
+            throw new AngleStickUndefined("Stick thickness must be positive.");
+        }
 
-        return new AngleStick(dipolePosition, vec.getAngle(OrientationAngle.rho), length, thickness, color, iterator);
+        RGB16 color = _colorMap.getColor(0, OrientationVector.MAX_Delta, deltaAngle);
+        IAngleStickIterator iterator = _formIterator(rhoAngle, dipolePosition, length, thickness);
+
+        return new AngleStick(dipolePosition, rhoAngle, length, thickness, color, iterator);
     }
 
     /**
      * Generates an {@link IAngleStick}, where the slope is the rho angle, and color
-     * is the eta angle.
+     * the delta angle. If rho or delta is NaN, and exception is thrown.
      * 
-     * @param vec            is the orientation vector.
-     * @param dipolePosition is the corresponding dipole discrete position.
-     * @param length         is the desired length of the dipole, and greater than equal 1.
-     * @param thickness      is the desired thickness of the dipole, and greater than equal 1.
-     * @return
+     * @param rhoAngle       is the rho orientation angle.
+     * @param deltaAngle     is the delta angle.
+     * @param dipolePosition is the corresponding dipole discrete position, as [x, y, z, ...].
+     * @param length         is the desired length of the dipole, must be greater
+     *                       than equal 1.
+     * @param thickness      is the desired thickness of the dipole, must be greater
+     *                       than equal 1.
+     * @return the generated angle stick.
+     * 
+     * @throws AngleStickUndefined if rho or eta angle is NaN.
      */
-    public IAngleStick getEtaStick(IOrientationVector vec, DPoint dipolePosition, int length, int thickness)
+    public IAngleStick getEta2DStick(double rhoAngle, double etaAngle, long[] dipolePosition, int length, int thickness)
             throws AngleStickUndefined {
-        if (Double.isNaN(vec.getAngle(OrientationAngle.rho)) || Double.isNaN(vec.getAngle(OrientationAngle.rho))) {
+        Objects.requireNonNull(dipolePosition, "dipolePosition cannot be null");
+
+        if (Double.isNaN(rhoAngle) || Double.isNaN(etaAngle)) {
             throw new AngleStickUndefined("Cannot define stick for nan angles.");
         }
 
-        double slope = vec.getAngle(OrientationAngle.rho);
+        if (length <= 0) {
+            throw new AngleStickUndefined("Stick length must be positive.");
+        }
 
-        RGB16 color = _colorMap.getColor(0, OrientationVector.MAX_Eta, vec.getAngle(OrientationAngle.eta));
-        IAngleStickIterator iterator = formIterator(slope, dipolePosition, length, thickness);
+        if (thickness <= 0) {
+            throw new AngleStickUndefined("Stick thickness must be positive.");
+        }
 
-        return new AngleStick(dipolePosition, slope, length, thickness, color, iterator);
+        RGB16 color = _colorMap.getColor(0, OrientationVector.MAX_Eta, etaAngle);
+        IAngleStickIterator iterator = _formIterator(rhoAngle, dipolePosition, length, thickness);
+
+        return new AngleStick(dipolePosition, rhoAngle, length, thickness, color, iterator);
     }
 
     /**
@@ -103,37 +150,32 @@ public class AngleStickGenerator {
      * the stick always passes through the dipole!
      * 
      * @param slopeAngle     is the slope of the dipole in particular direction.
-     * @param dipolePosition is the pixel position of the dipole.
+     * @param dipolePosition is the pixel position of the dipole, as [x, y, z, ...]
      * @param length         is the desired length of the stick.
      * @param thickness      is the desired thickness of the stick.
      * @return iterator that iterates over the region corresponding to this stick,
      *         in pixel coordinates.
      */
-    public IAngleStickIterator formIterator(double slopeAngle, DPoint dipolePosition, int length, int thickness) {
-        Point[] endPoints = _getEndPoints(dipolePosition, slopeAngle, length);
-        Line negativeLine = new Line(endPoints[0].x, endPoints[0].y, dipolePosition.x, dipolePosition.y);
+    private IAngleStickIterator _formIterator(double slopeAngle, long[] dipolePosition, int length, int thickness) {
+        double xStart = dipolePosition[0] - Math.cos(slopeAngle) * ((length - 1) / 2);
+        double yStart = dipolePosition[1] - Math.sin(slopeAngle) * ((length - 1) / 2);
+
+        double xEnd = dipolePosition[0] + Math.cos(slopeAngle) * (length / 2);
+        double yEnd = dipolePosition[1] + Math.sin(slopeAngle) * (length / 2);
+
+        Line negativeLine = new Line(xStart, yStart, dipolePosition[0], dipolePosition[1]);
         negativeLine.setStrokeWidth(thickness);
 
-        Line positiveLine = new Line(dipolePosition.x, dipolePosition.y, endPoints[1].x, endPoints[1].y);
+        Line positiveLine = new Line(dipolePosition[0], dipolePosition[1], xEnd, yEnd);
         positiveLine.setStrokeWidth(thickness);
 
-        return new AngleStickIterator(negativeLine.iterator(), positiveLine.iterator());
+        return new Angle2DStickIterator(negativeLine.iterator(), positiveLine.iterator(), dipolePosition);
     }
 
-    /**
-     * Calculate the end points of the stick, assuming the length of the stick and
-     * knowing the angle of the stick.
-     * 
-     * @return start_point and end_point.
-     */
-    private Point[] _getEndPoints(DPoint dipolePosition, double slopeAngle, int length) {
-        double xStart = dipolePosition.x - Math.cos(slopeAngle) * ((length - 1) / 2);
-        double yStart = dipolePosition.y - Math.sin(slopeAngle) * ((length - 1) / 2);
-
-        double xEnd = dipolePosition.x + Math.cos(slopeAngle) * (length / 2);
-        double yEnd = dipolePosition.y + Math.sin(slopeAngle) * (length / 2);
-
-        return new Point[] { new Point(xStart, yStart), new Point(xEnd, yEnd) };
+    @FunctionalInterface
+    interface BasicFunctionalInterface
+    {
+        void performTask();
     }
 
 }

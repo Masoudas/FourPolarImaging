@@ -19,11 +19,11 @@ import fr.fresnel.fourPolar.core.util.DPoint;
  */
 public interface IAngleStick {
     /**
-     * Returns a 2D vector, corresponding to the pixel position of the stick in the
+     * Returns a long vector, corresponding to the pixel position of the stick in the
      * plane.
      * 
      */
-    public DPoint getPosition();
+    public long[] getPosition();
 
     /**
      * Returns the color associated with this stick.

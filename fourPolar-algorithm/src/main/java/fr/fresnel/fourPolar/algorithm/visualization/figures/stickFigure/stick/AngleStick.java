@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.stick;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
-import fr.fresnel.fourPolar.core.util.DPoint;
 import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStick;
 import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStickIterator;
 
@@ -10,7 +9,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleS
  * have negative coordinates in this implementation.
  */
 class AngleStick implements IAngleStick {
-    private final DPoint _pose;
+    private final long[] _pose;
     private final RGB16 _color;
     private final int _len;
     private final double _slopeAngle;
@@ -27,7 +26,7 @@ class AngleStick implements IAngleStick {
      * @param thickness  is the thickness of the stick in pixels.
      * @param color      is the {@link RGB16} color of the pixel.
      */
-    public AngleStick(DPoint pose, double slopeAngle, int len, int thickness, RGB16 color, IAngleStickIterator iterator) {
+    public AngleStick(long[] pose, double slopeAngle, int len, int thickness, RGB16 color, IAngleStickIterator iterator) {
         this._pose = pose;
         this._color = color;
         this._len = len;
@@ -37,7 +36,7 @@ class AngleStick implements IAngleStick {
     }
 
     @Override
-    public DPoint getPosition() {
+    public long[] getPosition() {
         return _pose;
     }
 
