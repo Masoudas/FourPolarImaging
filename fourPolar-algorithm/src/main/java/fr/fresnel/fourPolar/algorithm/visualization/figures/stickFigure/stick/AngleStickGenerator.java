@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.stick;
 
+import java.util.Objects;
+
 import fr.fresnel.fourPolar.algorithm.exceptions.visualization.figures.stickFigure.AngleStickUndefined;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.util.colorMap.ColorMap;
@@ -17,6 +19,7 @@ public class AngleStickGenerator {
      * Define a colormap, to choose the stick colors from.
      */
     public AngleStickGenerator(ColorMap colorMap) {
+        Objects.requireNonNull(colorMap, "colormap cannot be null.");
         this._colorMap = colorMap;
     }
 
