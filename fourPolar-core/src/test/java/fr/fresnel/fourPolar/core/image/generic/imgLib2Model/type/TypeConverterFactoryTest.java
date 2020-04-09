@@ -121,6 +121,7 @@ public class TypeConverterFactoryTest {
 
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
     public void getConverter_BogusNativeType_ThrowsConverterNotFound() {
         assertThrows(ConverterNotFound.class, ()->{TypeConverterFactory.getConverter(new BogusType());});

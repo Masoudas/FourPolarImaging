@@ -47,6 +47,7 @@ class ImgLib2PixelRandomAccess<U extends PixelType, T extends NativeType<T>> imp
 
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public IPixel<U> getPixel() throws ArrayIndexOutOfBoundsException {
         try {

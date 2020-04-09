@@ -26,6 +26,7 @@ public class ImageToImgLib2Converter {
      *         ImgLib2.
      * @throws ConverterToImgLib2NotFound
      */
+    @SuppressWarnings("unchecked")
     public static Img<UnsignedShortType> getImg(Image<UINT16> image, UINT16 pixelType)
             throws ConverterToImgLib2NotFound {
         Img<UnsignedShortType> img = null;
@@ -50,6 +51,7 @@ public class ImageToImgLib2Converter {
      *         ImgLib2.
      * @throws ConverterToImgLib2NotFound
      */
+    @SuppressWarnings("unchecked")
     public static Img<FloatType> getImg(Image<Float32> image, Float32 pixelType) throws ConverterToImgLib2NotFound {
         Img<FloatType> img = null;
 
@@ -72,6 +74,7 @@ public class ImageToImgLib2Converter {
      * @return the {@link Img} interface, which is the basic image interface of
      *         ImgLib2.
      */
+    @SuppressWarnings("unchecked")
     public static Img<ARGBType> getImg(Image<RGB16> image, RGB16 pixelType) throws ConverterToImgLib2NotFound {
         Img<ARGBType> img = null;
 

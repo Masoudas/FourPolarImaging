@@ -24,6 +24,7 @@ public class TiffImageReaderFactory {
      * @return
      * @throws NoReaderFoundForImage
      */
+    @SuppressWarnings("unchecked")
     public static <T extends PixelType> ImageReader<T> getReader(ImageFactory factory, T pixelType)
             throws NoReaderFoundForImage {
         ImageReader<T> reader;

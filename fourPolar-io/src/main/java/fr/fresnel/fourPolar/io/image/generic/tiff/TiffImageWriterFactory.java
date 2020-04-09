@@ -23,6 +23,7 @@ public class TiffImageWriterFactory {
      * @param image
      * @return
      */
+    @SuppressWarnings("unchecked")
     public static <T extends PixelType> ImageWriter<T> getWriter(Image<T> image, T pixelType) throws NoWriterFoundForImage{
         ImageWriter<T> writer;
 

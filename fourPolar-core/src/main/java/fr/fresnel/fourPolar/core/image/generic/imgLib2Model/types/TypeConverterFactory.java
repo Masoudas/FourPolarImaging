@@ -19,6 +19,7 @@ public class TypeConverterFactory {
      * @return the proper converter for the given ImgLib2 type.
      * @throws ConverterNotFound
      */
+    @SuppressWarnings("unchecked")
     public static <T extends NativeType<T>> TypeConverter<T> getConverter(T type) throws ConverterNotFound {
         TypeConverter<T> converter = null;
 

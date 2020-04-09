@@ -40,6 +40,7 @@ class ImgLib2PixelCursor<U extends PixelType, T extends NativeType<T>> implement
         return this._cursor.hasNext();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public IPixel<U> next() {
         PixelType pixelValue = _tConverter.getPixelType(this._cursor.next());
