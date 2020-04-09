@@ -22,6 +22,26 @@ import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.StickTy
  * Using this class, we can fill the stick figure with sticks.
  */
 public class StickFigureFiller {
+    /**
+     * Using this method, we generate 2D rho sticks (@see AngleStickGenerator) for
+     * all positions (all pixels) in the orientation image. All sticks will have the
+     * same length and thickness with this method.
+     * 
+     * CAUTION: The chosen colormap must not have black or white colors, otherwise,
+     * it will be misinterpreted as intensity (because the background is an SoI image).
+     * 
+     * @param orientationImage is the desired orientation image.
+     * @param stickFigure      is the stick figure that corresponds to this
+     *                         orientation image (created using the
+     *                         {@link ISoIImage} that corresponds to this
+     *                         orientation image).
+     * @param length           is the desired length of the stick in pixels, must be
+     *                         greater than equal one.
+     * @param colorMap         is the color map used for filling the sticks.
+     * @param thickness        is the desired thickness of sticks, must be greater
+     *                         than equal one.
+     */
+
     public static void fillWith2DStick(final IOrientationImage orientationImage, final IStickFigure stickFigure,
             final int length, final int thickness, final ColorMap colorMap) {
         Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
