@@ -83,7 +83,6 @@ public class StickFigureFiller {
 
         while (rhoCursor.hasNext()) {
             final float rhoAngle = rhoCursor.next().value().get();
-
             final long[] position = rhoCursor.localize();
             try {
                 final IAngleStick angleStick = stickGenerator.generate2DStick(rhoAngle, rhoAngle,
@@ -93,16 +92,19 @@ public class StickFigureFiller {
                 final RGB16 color = angleStick.getColor();
 
                 while (stickIterator.hasNext()) {
-                    stickRA.setPosition(position);
+                    final long[] stickPixelPosition = stickIterator.next();
+                    stickRA.setPosition(stickPixelPosition);
                     final IPixel<RGB16> stickPixel = stickRA.getPixel();
                     stickPixel.value().set(color.getR(), color.getG(), color.getB());
-
+                    stickRA.setPixel(stickPixel);
                 }
 
             } catch (final AngleStickUndefined e) {
                 // Skip the postions where angle is NaN.
+                // System.out.println(counter);
             }
         }
+
     }
 
     /**
@@ -179,10 +181,11 @@ public class StickFigureFiller {
                 final RGB16 color = angleStick.getColor();
 
                 while (stickIterator.hasNext()) {
-                    stickRA.setPosition(position);
+                    final long[] stickPixelPosition = stickIterator.next();
+                    stickRA.setPosition(stickPixelPosition);
                     final IPixel<RGB16> stickPixel = stickRA.getPixel();
                     stickPixel.value().set(color.getR(), color.getG(), color.getB());
-
+                    stickRA.setPixel(stickPixel);
                 }
 
             } catch (final AngleStickUndefined e) {
