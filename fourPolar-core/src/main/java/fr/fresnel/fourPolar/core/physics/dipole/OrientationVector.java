@@ -34,30 +34,21 @@ public class OrientationVector implements IOrientationVector {
     final private static double ERR_Angle = Math.PI / 180 * 0.0001;
 
     /**
-     * Models the orientation angles calculated using the four polar method. Note
-     * that NaN is acceptable for each angle, and if NaN is given for one angle,
-     * all angles are set to NaN.
+     * Models the orientation angles calculated using the four polar method. 
      * 
-     * @param rho   : rho angle in radian, ranges from 0 to pi.
-     * @param delta : delta angle in radian, ranges from 0 to pi.
-     * @param eta   : eta angle in radian, ranges from 0 to pi/2.
+     * @param rho   : rho angle in radian, ranges from 0 to pi. NaN is acceptable.
+     * @param delta : delta angle in radian, ranges from 0 to pi. NaN is acceptable.
+     * @param eta   : eta angle in radian, ranges from 0 to pi/2. NaN is acceptable.
      */
     public OrientationVector(double rho, double delta, double eta) throws OrientationAngleOutOfRange {
-        if (Double.isNaN(rho) || Double.isNaN(delta) || Double.isNaN(eta)) {
-            _rho = Double.NaN;
-            _delta = Double.NaN;
-            _eta = Double.NaN;
-        } else {
-            _checkRho(rho);
-            _rho = rho;
+        _checkRho(rho);
+        _rho = rho;
 
-            _checkDelta(delta);
-            _delta = delta;
+        _checkDelta(delta);
+        _delta = delta;
 
-            _checkEta(eta);
-            _eta = eta;
-        }
- 
+        _checkEta(eta);
+        _eta = eta; 
     }
 
     @Override
@@ -90,7 +81,7 @@ public class OrientationVector implements IOrientationVector {
 
     private void _checkRho(double value) throws OrientationAngleOutOfRange {
         if (value < -ERR_Angle || value - MAX_Rho > ERR_Angle) {
-            throw new OrientationAngleOutOfRange("Rho is out of [0, pi) range");
+            throw new OrientationAngleOutOfRange("Rho is out of [0, pi] range");
         }
     }
 
