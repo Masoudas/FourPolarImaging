@@ -58,7 +58,7 @@ public class AngleStickGeneratorTest {
                         .generate2DStick(angle, 0, 0, pose, len, thickness).getIterator();
 
                 while (iterator.hasNext()) {
-                    distanceAcceptable &= pixelDistance(angle, pose, iterator.next()) < Math.sqrt(2);
+                    distanceAcceptable &= pixelDistance(Math.PI - angle, pose, iterator.next()) < Math.sqrt(2);
                 }
             }
 

@@ -24,9 +24,10 @@ public class AngleStickGenerator {
     }
 
     /**
-     * Generates an {@link IAngleStick}, where the slope is the equal to the slope angle, 
-     * and the color of the stick is chosen from the color map using the color map, with
-     * respect to the maximum possible value of that angle.
+     * Generates an {@link IAngleStick}, where the slope is pi - orientaionAngle
+     * (because y is inverted in image coordinate), and the color of the stick is
+     * chosen from the color map using the color map, with respect to the maximum
+     * possible value of that angle.
      * 
      * @param slopeAngle     is the angle that would be the slope of the angle.
      * @param colorAngle     is the angle that assigns the color of the stick.
@@ -56,10 +57,12 @@ public class AngleStickGenerator {
             throw new AngleStickUndefined("Stick thickness must be positive.");
         }
 
-        RGB16 color = _colorMap.getColor(0, maxColorAngle, colorAngle);
-        IAngleStickIterator iterator = Angle2DStickIterator.form(slopeAngle, dipolePosition, length, thickness);
+        double imageSlope = Math.PI - slopeAngle;
 
-        return new AngleStick(dipolePosition, slopeAngle, length, thickness, color, iterator);
+        RGB16 color = _colorMap.getColor(0, maxColorAngle, colorAngle);
+        IAngleStickIterator iterator = Angle2DStickIterator.form(imageSlope, dipolePosition, length, thickness);
+
+        return new AngleStick(dipolePosition, imageSlope, length, thickness, color, iterator);
     }
 
 }

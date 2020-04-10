@@ -35,7 +35,9 @@ public interface IAngleStick {
     public int getLength();
 
     /**
-     * Returns the slope of the stick in radian.
+     * Returns the slope of the stick in radian. Note that this slope is 
+     * pi - originalAngle. This is because in image coordinates, y is inverted. 
+     * Hence 45 degrees correspond to 135 in image coordinates.
      */
     public double getSlopeAngle();
 
