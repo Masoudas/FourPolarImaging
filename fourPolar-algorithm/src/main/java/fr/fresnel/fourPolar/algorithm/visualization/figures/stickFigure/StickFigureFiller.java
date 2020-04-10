@@ -28,7 +28,8 @@ public class StickFigureFiller {
      * same length and thickness with this method.
      * 
      * CAUTION: The chosen colormap must not have black or white colors, otherwise,
-     * it will be misinterpreted as intensity (because the background is an SoI image).
+     * it will be misinterpreted as intensity (because the background is an SoI
+     * image).
      * 
      * @param orientationImage is the desired orientation image.
      * @param stickFigure      is the stick figure that corresponds to this
@@ -81,29 +82,7 @@ public class StickFigureFiller {
         final IPixelRandomAccess<RGB16> stickRA = stickFigure.getImage().getRandomAccess();
         final AngleStickGenerator stickGenerator = new AngleStickGenerator(colorMap);
 
-        while (rhoCursor.hasNext()) {
-            final float rhoAngle = rhoCursor.next().value().get();
-            final long[] position = rhoCursor.localize();
-            try {
-                final IAngleStick angleStick = stickGenerator.generate2DStick(rhoAngle, rhoAngle,
-                        OrientationVector.MAX_Rho, position, length, thickness);
-
-                final IAngleStickIterator stickIterator = angleStick.getIterator();
-                final RGB16 color = angleStick.getColor();
-
-                while (stickIterator.hasNext()) {
-                    final long[] stickPixelPosition = stickIterator.next();
-                    stickRA.setPosition(stickPixelPosition);
-                    final IPixel<RGB16> stickPixel = stickRA.getPixel();
-                    stickPixel.value().set(color.getR(), color.getG(), color.getB());
-                    stickRA.setPixel(stickPixel);
-                }
-
-            } catch (final AngleStickUndefined e) {
-                // Skip the postions where angle is NaN.
-                // System.out.println(counter);
-            }
-        }
+        _loopOverOneAngle(length, thickness, rhoCursor, OrientationVector.MAX_Rho, stickRA, stickGenerator);
 
     }
 
@@ -127,12 +106,13 @@ public class StickFigureFiller {
             final int length, final int thickness, final ColorMap colorMap) {
         final IPixelCursor<Float32> rhoCursor = orientationImage.getAngleImage(OrientationAngle.rho).getImage()
                 .getCursor();
-        final IPixelCursor<Float32> deltaCursor = orientationImage.getAngleImage(OrientationAngle.rho).getImage()
+        final IPixelCursor<Float32> deltaCursor = orientationImage.getAngleImage(OrientationAngle.delta).getImage()
                 .getCursor();
         final IPixelRandomAccess<RGB16> stickRA = stickFigure.getImage().getRandomAccess();
         final AngleStickGenerator stickGenerator = new AngleStickGenerator(colorMap);
 
-        _loopOverTwoAngles(length, thickness, rhoCursor, deltaCursor, stickRA, stickGenerator);
+        _loopOverTwoAngles(length, thickness, rhoCursor, deltaCursor, OrientationVector.MAX_Delta, stickRA,
+                stickGenerator);
     }
 
     /**
@@ -155,27 +135,60 @@ public class StickFigureFiller {
             final int length, final int thickness, final ColorMap colorMap) {
         final IPixelCursor<Float32> rhoCursor = orientationImage.getAngleImage(OrientationAngle.rho).getImage()
                 .getCursor();
-        final IPixelCursor<Float32> eta = orientationImage.getAngleImage(OrientationAngle.eta).getImage().getCursor();
+        final IPixelCursor<Float32> etaCursor = orientationImage.getAngleImage(OrientationAngle.eta).getImage()
+                .getCursor();
         final IPixelRandomAccess<RGB16> stickRA = stickFigure.getImage().getRandomAccess();
         final AngleStickGenerator stickGenerator = new AngleStickGenerator(colorMap);
 
-        _loopOverTwoAngles(length, thickness, rhoCursor, eta, stickRA, stickGenerator);
+        _loopOverTwoAngles(length, thickness, rhoCursor, etaCursor, OrientationVector.MAX_Eta, stickRA, stickGenerator);
     }
 
     /**
-     * Loops over two orinetation angles to generate slope and color for the given pixels.
+     * Loops over a single angle to generate the sticks. The same angle is used for
+     * both color and slope.
      */
-    private static void _loopOverTwoAngles(final int length, final int thickness, final IPixelCursor<Float32> rhoCursor,
-            final IPixelCursor<Float32> deltaCursor, final IPixelRandomAccess<RGB16> stickRA,
+    private static void _loopOverOneAngle(final int length, final int thickness,
+            final IPixelCursor<Float32> angleCursor, double maxAngle, final IPixelRandomAccess<RGB16> stickRA,
             final AngleStickGenerator stickGenerator) {
-        while (rhoCursor.hasNext()) {
-            final float rhoAngle = rhoCursor.next().value().get();
-            final float deltaAngle = deltaCursor.next().value().get();
-
-            final long[] position = rhoCursor.localize();
+        while (angleCursor.hasNext()) {
+            final float angle = angleCursor.next().value().get();
+            final long[] position = angleCursor.localize();
             try {
-                final IAngleStick angleStick = stickGenerator.generate2DStick(rhoAngle, deltaAngle,
-                        OrientationVector.MAX_Delta, position, length, thickness);
+                final IAngleStick angleStick = stickGenerator.generate2DStick(angle, angle, maxAngle, position, length,
+                        thickness);
+
+                final IAngleStickIterator stickIterator = angleStick.getIterator();
+                final RGB16 color = angleStick.getColor();
+
+                while (stickIterator.hasNext()) {
+                    final long[] stickPixelPosition = stickIterator.next();
+                    stickRA.setPosition(stickPixelPosition);
+                    final IPixel<RGB16> stickPixel = stickRA.getPixel();
+                    stickPixel.value().set(color.getR(), color.getG(), color.getB());
+                    stickRA.setPixel(stickPixel);
+                }
+
+            } catch (final AngleStickUndefined e) {
+                // Skip the postions where angle is NaN.
+            }
+        }
+    }
+
+    /**
+     * Loops over two orinetation angles to generate the sticks. angle1 is used for
+     * slope, while angle2 is used for color.
+     */
+    private static void _loopOverTwoAngles(final int length, final int thickness,
+            final IPixelCursor<Float32> angle1Cursor, final IPixelCursor<Float32> angle2Cursor, double maxAngle2,
+            final IPixelRandomAccess<RGB16> stickRA, final AngleStickGenerator stickGenerator) {
+        while (angle1Cursor.hasNext()) {
+            final float angle1 = angle1Cursor.next().value().get();
+            final float angle2 = angle2Cursor.next().value().get();
+
+            final long[] position = angle1Cursor.localize();
+            try {
+                final IAngleStick angleStick = stickGenerator.generate2DStick(angle1, angle2, maxAngle2, position,
+                        length, thickness);
 
                 final IAngleStickIterator stickIterator = angleStick.getIterator();
                 final RGB16 color = angleStick.getColor();
