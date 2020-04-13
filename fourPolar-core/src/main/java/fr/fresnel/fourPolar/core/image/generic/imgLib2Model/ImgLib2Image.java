@@ -37,8 +37,7 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
      *                   {@link PixelType}.
      * @param factory    is the associated {@link ImageFactory}.
      */
-    ImgLib2Image(final Img<V> img, final TypeConverter<U, V> tConverter, final ImageFactory factory)
-            throws ConverterNotFound {
+    ImgLib2Image(final Img<V> img, final TypeConverter<U, V> tConverter, final ImageFactory factory) {
         this._img = img;
         this._tConverter = tConverter;
         this._factory = factory;
