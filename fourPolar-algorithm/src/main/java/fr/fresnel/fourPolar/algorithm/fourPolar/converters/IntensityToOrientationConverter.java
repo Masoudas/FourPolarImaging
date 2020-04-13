@@ -151,12 +151,13 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     }
 
     @Override
-    public IOrientationVector convert(IntensityVector intensity) throws ImpossibleOrientationVector {
+    public void convert(IntensityVector intensityVector, IOrientationVector orientationVector)
+            throws ImpossibleOrientationVector {
         // Getting intensities.
-        double pol0Intensity = intensity.getIntensity(Polarization.pol0);
-        double pol45Intensity = intensity.getIntensity(Polarization.pol45);
-        double pol90Intensity = intensity.getIntensity(Polarization.pol90);
-        double pol135Intensity = intensity.getIntensity(Polarization.pol135);
+        double pol0Intensity = intensityVector.getIntensity(Polarization.pol0);
+        double pol45Intensity = intensityVector.getIntensity(Polarization.pol45);
+        double pol90Intensity = intensityVector.getIntensity(Polarization.pol90);
+        double pol135Intensity = intensityVector.getIntensity(Polarization.pol135);
 
         /**
          * If one of the intensities is zero, then the dipole amplitude lambda_3 is
@@ -164,8 +165,8 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
          * zero, then no orientation can be defined. We catch both cases simultaneously
          * here.
          */
-        if (pol0Intensity - 0 < ERR_ZeroIntensity || pol45Intensity - 0 < ERR_ZeroIntensity ||
-            pol90Intensity - 0 < ERR_ZeroIntensity || pol135Intensity - 0 < ERR_ZeroIntensity) {
+        if (pol0Intensity - 0 < ERR_ZeroIntensity || pol45Intensity - 0 < ERR_ZeroIntensity
+                || pol90Intensity - 0 < ERR_ZeroIntensity || pol135Intensity - 0 < ERR_ZeroIntensity) {
             throw new ImpossibleOrientationVector(
                     "Can't compute the orientation vector because intensities can't be zero.");
         }
@@ -203,26 +204,24 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         _checkEtaExists(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
 
         // Computing the angles
-        IOrientationVector orientationVector = null;
         double delta = this._getDelta(sumNormalizedDipoleSquared);
         double eta = Double.NaN;
         double rho = Double.NaN;
 
         boolean deltaIsPI = Math.PI - delta < ERR_DeltaIsPi;
         if (deltaIsPI) {
-            orientationVector = new OrientationVector(rho, delta, eta);
+            orientationVector.setAngles(rho, delta, eta);
         } else {
             eta = this._getEta(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
             boolean etaIs0 = eta - 0 < ETA_DisTo0;
             if (etaIs0) {
-                orientationVector = new OrientationVector(rho, delta, eta);
+                orientationVector.setAngles(rho, delta, eta);
             } else {
                 rho = this._getRho(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
-                orientationVector = new OrientationVector(rho, delta, eta);
+                orientationVector.setAngles(rho, delta, eta);
             }
         }
 
-        return orientationVector;
     }
 
     private double _computeDipoleSquared_XX(double pol0Intensity, double pol45Intensity, double pol90Intensity,

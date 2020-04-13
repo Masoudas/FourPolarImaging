@@ -15,5 +15,5 @@ public interface IOrientationToIntensityConverter {
      * @param orientationVector
      * @return
      */
-    public IntensityVector convert(IOrientationVector orientationVector);
+    public void convert(IOrientationVector orientationVector, IntensityVector intensityVector);
 }

@@ -16,5 +16,5 @@ public interface IIntensityToOrientationConverter {
      * @param orientationVector
      * @return
      */
-    public IOrientationVector convert(IntensityVector intensity) throws ImpossibleOrientationVector;
+    public void convert(IntensityVector intensity, IOrientationVector orientationVector) throws ImpossibleOrientationVector;
 }
