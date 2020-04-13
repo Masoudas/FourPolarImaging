@@ -90,8 +90,8 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
         }
 
         for (int i = 0; i < bottomCorner.length; i++) {
-            if (bottomCorner[i] + len[i] > this._dim[i])
-                throw new IllegalArgumentException("start cannot be greater than end.");
+            if (bottomCorner[i] + len[i] >= this._dim[i])
+                throw new IllegalArgumentException("bottomCorner + len cannot exceed image dimension.");
         }
 
         Cursor<V> cursor = Views.iterable(Views.offsetInterval(this._img, bottomCorner, len)).cursor();
