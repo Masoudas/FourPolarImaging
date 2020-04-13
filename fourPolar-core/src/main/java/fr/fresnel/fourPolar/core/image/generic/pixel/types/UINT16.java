@@ -69,4 +69,9 @@ public class UINT16 extends PixelType {
         return _zero;
     }
 
+    @Override
+    public PixelType copy() {
+        return new UINT16(get());
+    }
+
 }

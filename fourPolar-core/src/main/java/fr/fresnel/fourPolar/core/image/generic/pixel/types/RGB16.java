@@ -89,4 +89,9 @@ public class RGB16 extends PixelType {
         return _zero;
     }
 
+    @Override
+    public PixelType copy() {
+        return new RGB16(getR(), getG(), getB());
+    }
+
 }

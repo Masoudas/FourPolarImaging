@@ -64,4 +64,9 @@ public class Float32 extends PixelType {
         
     }
 
+    @Override
+    public PixelType copy() {
+        return new Float32(this.get());
+    }
+
 }

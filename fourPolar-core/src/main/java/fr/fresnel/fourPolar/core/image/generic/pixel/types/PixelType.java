@@ -9,4 +9,10 @@ public abstract class PixelType {
      * @return
      */
     public abstract Type getType();
+
+    /**
+     * Returns a new reference, with the current value (a deep copy).
+     * @return
+     */
+    public abstract PixelType copy();
 }
