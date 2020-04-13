@@ -6,7 +6,6 @@ import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
-import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverterFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
 import net.imglib2.img.Img;
@@ -21,25 +20,22 @@ import net.imglib2.type.NativeType;
 public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Image<U> {
     private final Img<V> _img;
 
-    private final TypeConverter<V> _tConverter;
-
-    private final Type _pixelType;
+    private final TypeConverter<U, V> _tConverter;
 
     private final ImageFactory _factory;
 
     /**
      * This constructor is works as a wrapper from ImgLib2 type to our type.
      * 
-     * @param img     is the ImgLib2 interface.
-     * @param type    is the data type of ImgLib2.
-     * @param factory is the associated {@link ImageFactory}.
-     * @throws ConverterNotFound is thrown in case conversion to our data types is
-     *                           not supported.
+     * @param img        is the ImgLib2 interface.
+     * @param tConverter is the appropriate converter from ImgLib2 type to
+     *                   {@link PixelType}.
+     * @param factory    is the associated {@link ImageFactory}.
      */
-    ImgLib2Image(final Img<V> img, V type, final ImageFactory factory) throws ConverterNotFound {
+    ImgLib2Image(final Img<V> img, final TypeConverter<U, V> tConverter, final ImageFactory factory)
+            throws ConverterNotFound {
         this._img = img;
-        this._tConverter = TypeConverterFactory.getConverter(type);
-        this._pixelType = _tConverter.getPixelType(type).getType();
+        this._tConverter = tConverter;
         this._factory = factory;
     }
 
@@ -63,7 +59,7 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
 
     @Override
     public Type getPixelType() {
-        return _pixelType;
+        return this._tConverter.getPixelType();
     }
 
     @Override

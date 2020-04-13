@@ -3,6 +3,8 @@ package fr.fresnel.fourPolar.core.image.generic.imgLib2Model;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.types.ConverterNotFound;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverterFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
@@ -31,8 +33,11 @@ public class ImgLib2ImageFactory implements ImageFactory {
                 try {
                     UnsignedShortType type = new UnsignedShortType();
                     Img<UnsignedShortType> img = _chooseImgFactory(dim, type);
+                    TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory
+                            .getConverter(UINT16.zero(), type);
 
-                    _image = new ImgLib2Image<T, UnsignedShortType>(img, new UnsignedShortType(), this);
+                    _image = new ImgLib2Image<T, UnsignedShortType>(img,
+                            (TypeConverter<T, UnsignedShortType>) converter, this);
                 } catch (ConverterNotFound e) {
                     // Exception never caught, because of proper creation of image.
                 }
@@ -42,8 +47,10 @@ public class ImgLib2ImageFactory implements ImageFactory {
                 try {
                     FloatType type = new FloatType();
                     Img<FloatType> img = _chooseImgFactory(dim, type);
+                    TypeConverter<Float32, FloatType> converter = TypeConverterFactory.getConverter(Float32.zero(),
+                            type);
 
-                    _image = new ImgLib2Image<T, FloatType>(img, new FloatType(), this);
+                    _image = new ImgLib2Image<T, FloatType>(img, (TypeConverter<T, FloatType>) converter, this);
                 } catch (ConverterNotFound e) {
                     // Exception never caught, because of proper creation of image.
                 }
@@ -53,8 +60,9 @@ public class ImgLib2ImageFactory implements ImageFactory {
                 try {
                     ARGBType type = new ARGBType();
                     Img<ARGBType> img = _chooseImgFactory(dim, type);
+                    TypeConverter<RGB16, ARGBType> converter = TypeConverterFactory.getConverter(RGB16.zero(), type);
 
-                    _image = new ImgLib2Image<T, ARGBType>(img, new ARGBType(), this);
+                    _image = new ImgLib2Image<T, ARGBType>(img, (TypeConverter<T, ARGBType>) converter, this);
                 } catch (ConverterNotFound e) {
                     // Exception never caught, because of proper creation of image.
                 }
@@ -74,7 +82,8 @@ public class ImgLib2ImageFactory implements ImageFactory {
      */
     public Image<UINT16> create(Img<UnsignedShortType> img, UnsignedShortType imgLib2Type) {
         try {
-            return new ImgLib2Image<UINT16, UnsignedShortType>(img, imgLib2Type, this);
+            return new ImgLib2Image<UINT16, UnsignedShortType>(img,
+                    TypeConverterFactory.getConverter(UINT16.zero(), imgLib2Type), this);
         } catch (ConverterNotFound e) {
             // Exception never caught due to proper type handling
         }
@@ -89,7 +98,8 @@ public class ImgLib2ImageFactory implements ImageFactory {
      */
     public Image<Float32> create(Img<FloatType> img, FloatType imgLib2Type) {
         try {
-            return new ImgLib2Image<Float32, FloatType>(img, imgLib2Type, this);
+            return new ImgLib2Image<Float32, FloatType>(img,
+                    TypeConverterFactory.getConverter(Float32.zero(), imgLib2Type), this);
         } catch (ConverterNotFound e) {
             // Exception never caught due to proper type handling
         }
@@ -104,7 +114,8 @@ public class ImgLib2ImageFactory implements ImageFactory {
      */
     public Image<RGB16> create(Img<ARGBType> img, ARGBType imgLib2Type) {
         try {
-            return new ImgLib2Image<RGB16, ARGBType>(img, imgLib2Type, this);
+            return new ImgLib2Image<RGB16, ARGBType>(img,
+                    TypeConverterFactory.getConverter(RGB16.zero(), imgLib2Type), this);
         } catch (ConverterNotFound e) {
             // Exception never caught due to proper type handling
         }
