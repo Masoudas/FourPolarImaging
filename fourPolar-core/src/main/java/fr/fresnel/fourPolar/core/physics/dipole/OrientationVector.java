@@ -6,9 +6,9 @@ import fr.fresnel.fourPolar.core.exceptions.physics.dipole.OrientationAngleOutOf
  * Models the orientation angles calculated using the four polar method.
  */
 public class OrientationVector implements IOrientationVector {
-    final private double _rho;
-    final private double _delta;
-    final private double _eta;
+    private double _rho;
+    private double _delta;
+    private double _eta;
 
     /**
      * Maximum possible value for the rho
@@ -41,14 +41,7 @@ public class OrientationVector implements IOrientationVector {
      * @param eta   : eta angle in radian, ranges from 0 to pi/2. NaN is acceptable.
      */
     public OrientationVector(double rho, double delta, double eta) throws OrientationAngleOutOfRange {
-        _checkRho(rho);
-        _rho = rho;
-
-        _checkDelta(delta);
-        _delta = delta;
-
-        _checkEta(eta);
-        _eta = eta; 
+        this.setAngles(rho, delta, eta);
     }
 
     @Override
@@ -77,6 +70,18 @@ public class OrientationVector implements IOrientationVector {
     @Override
     public double getAngleInDegree(OrientationAngle angle) {
         return Math.toDegrees(this.getAngle(angle));
+    }
+
+    @Override
+    public void setAngles(double rho, double delta, double eta) throws OrientationAngleOutOfRange {
+        _checkRho(rho);
+        _rho = rho;
+
+        _checkDelta(delta);
+        _delta = delta;
+
+        _checkEta(eta);
+        _eta = eta; 
     }
 
     private void _checkRho(double value) throws OrientationAngleOutOfRange {

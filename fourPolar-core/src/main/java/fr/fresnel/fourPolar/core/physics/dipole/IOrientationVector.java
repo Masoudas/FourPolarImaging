@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.core.physics.dipole;
 
+import fr.fresnel.fourPolar.core.exceptions.physics.dipole.OrientationAngleOutOfRange;
+
 /**
  * This interface models allows access to the orientation angles derived using
  * the four polar method.
@@ -20,4 +22,13 @@ public interface IOrientationVector {
      * @return
      */
     public double getAngleInDegree(OrientationAngle angle);
+
+    /**
+     * Method to set the orientation angles.
+     * @param rho
+     * @param delta
+     * @param eta
+     * @throws OrientationAngleOutOfRange
+     */
+    public void setAngles(double rho, double delta, double eta) throws OrientationAngleOutOfRange;
 }
