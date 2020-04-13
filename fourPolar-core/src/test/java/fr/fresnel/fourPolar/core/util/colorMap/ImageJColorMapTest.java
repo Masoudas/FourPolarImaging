@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 public class ImageJColorMapTest {
     @Test
     public void getColor_REDColorMap_ReturnsProperColors() {
-        ImageJColorMap cMap = new ImageJColorMap("Red.lut");
+        ImageJColorMap cMap = ImageJColorMap.getDefaultColorMaps("Red.lut");
 
         double min = 0;
         double max = 1;
