@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.types.ConverterNotFound;
+import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverterFactory;
+import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
@@ -67,6 +69,39 @@ public class ImgLib2ImageTest {
         ImgLib2Image<RGB16, ARGBType> image = new ImgLib2Image<RGB16, ARGBType>(img, converter, null);
 
         assertTrue(image.getPixelType() == Type.RGB_16);
+    }
+
+    @Test
+    public void getCursor_IntervalCursor_ShouldGetAndSetProperly() throws ConverterNotFound {
+        long[] dimensions = new long[] { 5 };
+        UnsignedShortType type = new UnsignedShortType();
+        Img<UnsignedShortType> img = new ArrayImgFactory<UnsignedShortType>(type).create(dimensions);
+        TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory.getConverter(UINT16.zero(), type);
+
+        int pixelNumber = 2;
+        int intervalLen = 2;
+        ImgLib2Image<UINT16, UnsignedShortType> image = new ImgLib2Image<UINT16, UnsignedShortType>(img, converter, null);
+        IPixelCursor<UINT16> cursor = image.getCursor(new long[]{pixelNumber}, new long[]{intervalLen});
+
+        int counter = 0;
+        while (cursor.hasNext()) {
+            System.out.println(counter);
+            cursor.next();
+            cursor.setPixel(new Pixel<UINT16>(new UINT16(3)));
+        }
+        
+        IPixelCursor<UINT16> wholeImageCursor = image.getCursor();
+        boolean equals = true;
+        counter = 0;
+        while (wholeImageCursor.hasNext()) {
+            if (counter++ > 2 && counter < 5)
+                equals = wholeImageCursor.next().value().get() == 3;
+            else
+                equals = wholeImageCursor.next().value().get() == 0;
+        }
+
+        assertTrue(equals);
+        
     }
 
 
