@@ -14,6 +14,20 @@ import fr.fresnel.fourPolar.core.physics.propagation.IInverseOpticalPropagation;
  */
 public class IntensityToOrientationConverter implements IIntensityToOrientationConverter {
     /**
+     * A terrible condition, set so that for (backgorund) noise, no orientation is
+     * returend. Note that mathematically intensities can have any scale, hence they
+     * can theoretically be less than this value, and this is why this condition is
+     * terrible!
+     */
+    private final static double ERR_ZeroIntensity = 1e-8;
+
+    /**
+     * Checks that M_xx + M_yy + M_z > ERR_PositiveNormDipoleSquared, so that angles
+     * can be computed in principle.
+     */
+    private final static double ERR_PositiveNormDipoleSquared = 1e-8;
+
+    /**
      * This parameter accepts how close around 90 degree we apply modular
      * calculation for eta. Hence for eta < 90 - ERR_ModEta_90, we keep the original
      * angle, for eta > 90 + ERR_ModEta_90 we return 90 - eta and for the rest, we
@@ -31,8 +45,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     /**
      * This parameter indicates the acceptable error for lower range of
      * sumNormalizedDipoleSquared. In other words, for normalizedDipoleSquared_Z -
-     * sumNormalizedDipoleSquared < ERR_EtaExists an exception is
-     * returned.
+     * sumNormalizedDipoleSquared < ERR_EtaExists an exception is returned.
      */
     private final static double ERR_EtaExists = 1e-14;
 
@@ -41,6 +54,11 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
      * exception is returned.
      */
     private final static double ETA_DisTo0 = Math.PI / 180 * 0.1;
+
+    /**
+     * The distance from PI, before we consider delta angle to be pi.
+     */
+    private final static double ERR_DeltaIsPi = Math.PI / 180 * 0.05;
 
     final private double _iProp_0_xx;
     final private double _iProp_0_yy;
@@ -140,13 +158,16 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         double pol90Intensity = intensity.getIntensity(Polarization.pol90);
         double pol135Intensity = intensity.getIntensity(Polarization.pol135);
 
-        // ‌If one of the intensities is zero, then the dipole amplitude lambda_3 is
-        // infinity, which is mathematically
-        // impossible. Also if all intensities are zero, then no orientation can be
-        // defined. We cath
-        // both cases simultaneously here.
-        if (pol0Intensity == 0 || pol45Intensity == 0 || pol90Intensity == 0 || pol135Intensity == 0) {
-            throw new ImpossibleOrientationVector("Can't compute the orientation vector because intensities can't be zero.");
+        /**
+         * If one of the intensities is zero, then the dipole amplitude lambda_3 is
+         * infinite, which is mathematically impossible. Also if all intensities are
+         * zero, then no orientation can be defined. We catch both cases simultaneously
+         * here.
+         */
+        if (pol0Intensity - 0 < ERR_ZeroIntensity || pol45Intensity - 0 < ERR_ZeroIntensity ||
+            pol90Intensity - 0 < ERR_ZeroIntensity || pol135Intensity - 0 < ERR_ZeroIntensity) {
+            throw new ImpossibleOrientationVector(
+                    "Can't compute the orientation vector because intensities can't be zero.");
         }
 
         // Computing dipole squared.
@@ -158,6 +179,11 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
                 pol135Intensity);
         double dipoleSquared_XY = this._computeDipoleSquared_XY(pol0Intensity, pol45Intensity, pol90Intensity,
                 pol135Intensity);
+
+        if (dipoleSquared_XX + dipoleSquared_YY + dipoleSquared_ZZ < ERR_PositiveNormDipoleSquared) {
+            throw new ImpossibleOrientationVector(
+                    "Can't compute the orientation vector because norm of dipole squareds must be positive.");
+        }
 
         // Computing normalized dipole squared.
         double normalizedDipoleSquared_XYdiff = this._normalizedDipoleSquared_XYdiff(dipoleSquared_XX, dipoleSquared_YY,
@@ -177,15 +203,26 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
         _checkEtaExists(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
 
         // Computing the angles
-        double eta = this._getEta(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
-        if (eta - 0 < ETA_DisTo0){
-            throw new ImpossibleOrientationVector("Can't compute the orientation vector because eta is zero.");
-        }
-        double rho = this._getRho(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
+        IOrientationVector orientationVector = null;
         double delta = this._getDelta(sumNormalizedDipoleSquared);
-        
+        double eta = Double.NaN;
+        double rho = Double.NaN;
 
-        return new OrientationVector(rho, delta, eta);
+        boolean deltaIsPI = Math.PI - delta < ERR_DeltaIsPi;
+        if (deltaIsPI) {
+            orientationVector = new OrientationVector(rho, delta, eta);
+        } else {
+            eta = this._getEta(normalizedDipoleSquared_Z, sumNormalizedDipoleSquared);
+            boolean etaIs0 = eta - 0 < ETA_DisTo0;
+            if (etaIs0) {
+                orientationVector = new OrientationVector(rho, delta, eta);
+            } else {
+                rho = this._getRho(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
+                orientationVector = new OrientationVector(rho, delta, eta);
+            }
+        }
+
+        return orientationVector;
     }
 
     private double _computeDipoleSquared_XX(double pol0Intensity, double pol45Intensity, double pol90Intensity,
@@ -238,7 +275,8 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
      */
     private void _checkDeltaExistsAndPositive(double sumNormalizedDipoleSquared) throws ImpossibleOrientationVector {
         if (sumNormalizedDipoleSquared - 1 / 3 < ERR_DeltaExists) {
-            throw new ImpossibleOrientationVector("Can't compute the orientation vector because delta can't be computed.");
+            throw new ImpossibleOrientationVector(
+                    "Can't compute the orientation vector because delta can't be computed.");
         }
     }
 
@@ -250,7 +288,8 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     private void _checkEtaExists(double normalizedDipoleSquared_Z, double sumNormalizedDipoleSquared)
             throws ImpossibleOrientationVector {
         if (normalizedDipoleSquared_Z - 0.5 * (1 - sumNormalizedDipoleSquared) < ERR_EtaExists) {
-            throw new ImpossibleOrientationVector("Can't compute the orientation vector because eta can't be computed.");
+            throw new ImpossibleOrientationVector(
+                    "Can't compute the orientation vector because eta can't be computed.");
         }
 
     }

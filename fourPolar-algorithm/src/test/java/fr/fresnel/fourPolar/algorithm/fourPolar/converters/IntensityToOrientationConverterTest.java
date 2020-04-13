@@ -61,50 +61,15 @@ public class IntensityToOrientationConverterTest {
         _converter = new IntensityToOrientationConverter(inverseProp);
     }
 
-    @Test
-    public void convert_BenchMark() throws ImpossibleOrientationVector {
-        IntensityVector intensity = new IntensityVector(1, 1, 1, 1);
-
-        IOrientationVector vector = null;
-        for (int i = 0; i < 1000000; i++) {
-            vector = _converter.convert(intensity);
-        }
-
-        System.out.println(vector.getAngle(OrientationAngle.eta));
-    }
 
     @Test
     public void convert_UnfeasibleIntensityVectors_ThrowsImpossibleOrientationVector() {
         IntensityVector vec1 = new IntensityVector(1, 0, 0, 0);
-        IntensityVector vec2 = new IntensityVector(0, 1, 0, 0);
-        IntensityVector vec3 = new IntensityVector(0, 0, 1, 0);
-        IntensityVector vec4 = new IntensityVector(0, 0, 0, 1);
-        IntensityVector vec5 = new IntensityVector(1, 0, 0, 1);
-        IntensityVector vec6 = new IntensityVector(0, 0, 0, 0);
-
-        assertThrows(ImpossibleOrientationVector.class, () -> {
+        
+        ImpossibleOrientationVector exception1 = assertThrows(ImpossibleOrientationVector.class, () -> {
             _converter.convert(vec1);
         });
-
-        assertThrows(ImpossibleOrientationVector.class, () -> {
-            _converter.convert(vec2);
-        });
-
-        assertThrows(ImpossibleOrientationVector.class, () -> {
-            _converter.convert(vec3);
-        });
-
-        assertThrows(ImpossibleOrientationVector.class, () -> {
-            _converter.convert(vec4);
-        });
-
-        assertThrows(ImpossibleOrientationVector.class, () -> {
-            _converter.convert(vec5);
-        });
-
-        assertThrows(ImpossibleOrientationVector.class, () -> {
-            _converter.convert(vec6);
-        });
+        assertTrue(exception1.getMessage().contains("zero"));
 
     }
 
@@ -120,8 +85,8 @@ public class IntensityToOrientationConverterTest {
      * Also note that for cases where rho is close to zero, we may get a rho close
      * to 180. This is due to near equivalence of those angles.
      * 
-     * Because we use the inverse method, we expect the error to be as high as
-     * 10 degrees for some angles.
+     * Because we use the inverse method, we expect the error to be as high as 10
+     * degrees for some angles.
      * 
      * The Matlab code to generate these results, as well as the code to generate
      * the corresponding propagation factors in the resource folder.
@@ -177,15 +142,16 @@ public class IntensityToOrientationConverterTest {
      * Note the data is in degree rather than radian, and that the intensities are
      * those in the forward data.
      * 
-     * Because the inverse method is the same as the one we use here, we should
-     * get little to no error.
+     * Because the inverse method is the same as the one we use here, we should get
+     * little to no error.
      * 
      * The Matlab code to generate these data is also in the resource folder.
      * 
      * @throws ImpossibleOrientationVector
      */
     @Test
-    public void convert_CurcioInverseValues_OrientationErrorIsLessThanThreshold() throws IOException {
+    public void convert_CurcioInverseValues_OrientationErrorIsLessThanThreshold()
+            throws IOException, ImpossibleOrientationVector {
         double error = Math.PI / 180 * 0.001;
 
         String intensityOrientationPair = null;
@@ -194,10 +160,8 @@ public class IntensityToOrientationConverterTest {
         BufferedReader inverseData = _readFile("InverseMethodData-Curcio.txt");
 
         inverseData.readLine();
-        int counter = 0;
         while ((intensityOrientationPair = inverseData.readLine()) != null && equals) {
             String[] values = intensityOrientationPair.split(",");
-            System.out.println(++counter);
             double rho = (Double.parseDouble(values[4]) / 180 * Math.PI + Math.PI) % Math.PI;
             double eta = Double.parseDouble(values[5]) / 180 * Math.PI;
             double delta = Double.parseDouble(values[6]) / 180 * Math.PI;
@@ -206,17 +170,8 @@ public class IntensityToOrientationConverterTest {
                     Double.parseDouble(values[1]), Double.parseDouble(values[3]));
 
             OrientationVector original = new OrientationVector(rho, delta, eta);
-
-            try {
-                IOrientationVector calculated = _converter.convert(iVector);
-                equals = _checkForwardAnglePrecision(original, calculated, error);
-            } catch (ImpossibleOrientationVector e) {
-                // If orientation vector does not exist, make sure original value
-                // also does not exist.
-                equals = Double.isNaN(original.getAngle(OrientationAngle.rho))
-                        || Double.isNaN(original.getAngle(OrientationAngle.delta))
-                        || Double.isNaN(original.getAngle(OrientationAngle.eta));
-            }
+            IOrientationVector calculated = _converter.convert(iVector);
+            equals = _checkForwardAnglePrecision(original, calculated, error);
         }
         assertTrue(equals);
     }
@@ -244,7 +199,11 @@ public class IntensityToOrientationConverterTest {
     }
 
     private static boolean _checkPrecision(double val1, double val2, double error) {
-        return Math.abs(val1 - val2) < error;
+        if (Double.isNaN(val1) && Double.isNaN(val2)) {
+            return true;
+        } else {
+            return Math.abs(val1 - val2) < error;
+        }
     }
 
     private BufferedReader _readFile(String file) {
