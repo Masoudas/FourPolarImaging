@@ -6,9 +6,12 @@ import java.lang.reflect.Field;
 
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.exceptions.util.colormap.ColorMapNotFound;
+
 public class ColorMapFactoryTest {
     @Test
-    public void create_AllColorMaps_CreatesColorMap() throws IllegalArgumentException, IllegalAccessException {
+    public void create_AllColorMaps_CreatesColorMap()
+            throws IllegalArgumentException, IllegalAccessException, ColorMapNotFound {
         boolean equals = true;
         Field[] allFields = ColorMapFactory.class.getDeclaredFields();
 
