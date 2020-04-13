@@ -5,7 +5,8 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 
 /**
  * Using this interface, we can randomly access a location inside the image, and
- * set the value for that pixel.
+ * set the value for that pixel. Note that to salvage memory, only one instance
+ * of {@link IPixel} and {@ PixelType} are created.
  */
 public interface IPixelRandomAccess<U extends PixelType> {
     /**

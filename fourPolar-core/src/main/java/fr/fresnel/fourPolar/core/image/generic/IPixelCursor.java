@@ -7,7 +7,8 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 
 /**
  * An interface for iterating over the pixels of an image. It extends the basic
- * {@code Iterator} class of java.
+ * {@code Iterator} class of java. Note that to salvage memory, only one
+ * instance of {@link IPixel} and {@ PixelType} are created.
  */
 public interface IPixelCursor<T extends PixelType> extends Iterator<IPixel<T>> {
     /**
@@ -31,6 +32,7 @@ public interface IPixelCursor<T extends PixelType> extends Iterator<IPixel<T>> {
 
     /**
      * Returns the number of pixels associated with this iterator.
+     * 
      * @return
      */
     public long size();
