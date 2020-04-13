@@ -66,4 +66,14 @@ public class uint16Test {
         assertTrue(pixel1.get() == 0);
     }
 
+    @Test
+    public void copy_CopyType_ShouldReturnNewInstanceSameValue() {
+        UINT16 u16 = new UINT16(10);
+
+        UINT16 u16_coUint16 = (UINT16)u16.copy();
+
+        assertTrue(u16_coUint16 != u16 && u16_coUint16.get() == u16.get());
+        
+    }
+
 }
