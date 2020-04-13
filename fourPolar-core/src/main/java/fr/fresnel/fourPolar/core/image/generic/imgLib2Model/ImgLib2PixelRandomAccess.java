@@ -18,7 +18,8 @@ import net.imglib2.type.NativeType;
  */
 class ImgLib2PixelRandomAccess<U extends PixelType, T extends NativeType<T>> implements IPixelRandomAccess<U> {
     final private RandomAccess<T> _rAccess;
-    final private TypeConverter<T> _tConverter;
+    final private TypeConverter<U, T> _tConverter;
+    final private IPixel<U> _pixel;
 
     /**
      * Implementation of {@code IPixelRandomAccess} for the ImgLib2 image.
@@ -27,9 +28,10 @@ class ImgLib2PixelRandomAccess<U extends PixelType, T extends NativeType<T>> imp
      * @param converter    is the converter between ImgLib2 data types and our data
      *                     types.
      */
-    public ImgLib2PixelRandomAccess(final RandomAccess<T> randomAccess, final TypeConverter<T> converter) {
+    public ImgLib2PixelRandomAccess(final RandomAccess<T> randomAccess, final TypeConverter<U, T> converter) {
         _rAccess = randomAccess;
         _tConverter = converter;
+        _pixel = new Pixel<U>((U)converter.getPixelType().create(converter.getPixelType()));
     }
 
     @Override
@@ -47,12 +49,11 @@ class ImgLib2PixelRandomAccess<U extends PixelType, T extends NativeType<T>> imp
 
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public IPixel<U> getPixel() throws ArrayIndexOutOfBoundsException {
         try {
-            PixelType pixel = this._tConverter.getPixelType(this._rAccess.get());
-            return new Pixel<U>((U) pixel);
+            this._tConverter.setPixelType(this._rAccess.get(), _pixel.value());
+            return _pixel;
         } catch (Exception e) {
             throw new ArrayIndexOutOfBoundsException("The given pixel position does not exist");
         }

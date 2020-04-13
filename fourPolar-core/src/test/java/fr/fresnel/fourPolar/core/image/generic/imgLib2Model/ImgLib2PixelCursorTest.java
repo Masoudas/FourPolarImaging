@@ -50,16 +50,14 @@ public class ImgLib2PixelCursorTest {
             value++;
         }
 
-        List<UINT16> pixels = new ArrayList<>();
-
         cursor.reset();
-
+        value = 1;
+        boolean equals = true;
         while (cursor.hasNext()) {
-            pixels.add(cursor.next().value());
+            equals = cursor.next().value().get() == value++;
         }
 
-        assertTrue(pixels.get(0).get() == 1 && pixels.get(1).get() == 2 && pixels.get(2).get() == 3
-                && pixels.get(3).get() == 4);
+        assertTrue(equals);
     }
 
     @Test
@@ -75,16 +73,14 @@ public class ImgLib2PixelCursorTest {
             value++;
         }
 
-        List<Float32> pixels = new ArrayList<>();
-
         cursor.reset();
-
+        value = 1.1f;
+        boolean equals = true;
         while (cursor.hasNext()) {
-            pixels.add(cursor.next().value());
+            equals = cursor.next().value().get() == value++;
         }
 
-        assertTrue(pixels.get(0).get() == 1.1f && pixels.get(1).get() == 2.1f && pixels.get(2).get() == 3.1f
-                && pixels.get(3).get() == 4.1f);
+        assertTrue(equals);
     }
 
     @Test
@@ -92,25 +88,21 @@ public class ImgLib2PixelCursorTest {
         long[] dimensions = new long[] { 2, 2 };
         Image<RGB16> image = new ImgLib2ImageFactory().create(dimensions, RGB16.zero());
         IPixelCursor<RGB16> cursor = image.getCursor();
- 
+
         int value = 0;
         while (cursor.hasNext()) {
             cursor.next();
             cursor.setPixel(new Pixel<RGB16>(new RGB16(++value, 0, 0)));
         }
 
-        List<RGB16> pixels = new ArrayList<>();
-        
+        boolean equals = true;
         cursor.reset();
+        value = 0;
         while (cursor.hasNext()) {
-            pixels.add(cursor.next().value());
+            equals = cursor.next().value().getR() == ++value;
         }
-        
-        assertTrue(
-            pixels.get(0).getR() == 1 && pixels.get(0).getG() == 0 && pixels.get(0).getB() == 0 &&
-            pixels.get(1).getR() == 2 && pixels.get(1).getG() == 0 && pixels.get(1).getB() == 0 &&
-            pixels.get(2).getR() == 3 && pixels.get(2).getG() == 0 && pixels.get(2).getB() == 0 &&
-            pixels.get(3).getR() == 4 && pixels.get(3).getG() == 0 && pixels.get(3).getB() == 0 );
+
+        assertTrue(equals);
     }
 
 }

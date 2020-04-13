@@ -19,20 +19,29 @@ import net.imglib2.type.NativeType;
 class ImgLib2PixelCursor<U extends PixelType, T extends NativeType<T>> implements IPixelCursor<U> {
     final private Cursor<T> _cursor;
     private long[] _position;
-    final private TypeConverter<T> _tConverter;
+    final private TypeConverter<U, T> _tConverter;
     final private long _size;
+    final private IPixel<U> _pixel;
 
     /**
+     * Creates a cursor, which wraps the behavior of the Cursor. Note that only one
+     * instance of {@link IPixel} and {@link IPixelType} are created for each
+     * iteration.
      * 
-     * @param cursor is the cursor of the ImgLib2.
-     * @param ndim   is the dimension of the associated image.
-     * @throws ConverterNotFound
+     * @param cursor     is the cursor of the ImgLib2.
+     * @param ndim       is the dimension of the associated image.
+     * @param cursor     is the ImgLib2 cursor.
+     * @param imageDim   is the dimension of the underlying image.
+     * @param converter is the appropriate converter (@see TypeConverter).
      */
-    public ImgLib2PixelCursor(final Cursor<T> cursor, final long[] imageDim, final TypeConverter<T> tConverter) {
+    public ImgLib2PixelCursor(final Cursor<T> cursor, final long[] imageDim, final TypeConverter<U, T> converter) {
         this._cursor = cursor;
         this._position = new long[imageDim.length];
-        this._tConverter = tConverter;
+        this._tConverter = converter;
         this._size = _computeSizeOfCursor(imageDim);
+        U pixelValue = (U)converter.getPixelType().create(converter.getPixelType());
+        this._pixel = new Pixel<U>(pixelValue);
+
     }
 
     @Override
@@ -40,11 +49,11 @@ class ImgLib2PixelCursor<U extends PixelType, T extends NativeType<T>> implement
         return this._cursor.hasNext();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public IPixel<U> next() {
-        PixelType pixelValue = _tConverter.getPixelType(this._cursor.next());
-        return new Pixel<U>((U) pixelValue);
+        _tConverter.setPixelType(this._cursor.next(), this._pixel.value());
+
+        return _pixel;
     }
 
     @Override

@@ -3,8 +3,6 @@ package fr.fresnel.fourPolar.core.image.generic.imgLib2Model;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
@@ -23,38 +21,32 @@ public class ImgLib2PixelRandomAccessTest {
         IPixelRandomAccess<UINT16> rAccess = image.getRandomAccess();
 
         int pixelValue = 0;
-        rAccess.setPosition(new long[]{0,0});
+        rAccess.setPosition(new long[] { 0, 0 });
         rAccess.setPixel(new Pixel<UINT16>(new UINT16(++pixelValue)));
 
-        rAccess.setPosition(new long[]{1,0});
+        rAccess.setPosition(new long[] { 1, 0 });
         rAccess.setPixel(new Pixel<UINT16>(new UINT16(++pixelValue)));
 
-        rAccess.setPosition(new long[]{0,1});
+        rAccess.setPosition(new long[] { 0, 1 });
         rAccess.setPixel(new Pixel<UINT16>(new UINT16(++pixelValue)));
 
-        rAccess.setPosition(new long[]{1,1});
+        rAccess.setPosition(new long[] { 1, 1 });
         rAccess.setPixel(new Pixel<UINT16>(new UINT16(++pixelValue)));
 
-        ArrayList<UINT16> pixels = new ArrayList<>();
+        boolean equals = true;
+        rAccess.setPosition(new long[] { 0, 0 });
+        equals = rAccess.getPixel().value().get() == 1;
 
-        rAccess.setPosition(new long[]{0,0});
-        pixels.add(rAccess.getPixel().value());
+        rAccess.setPosition(new long[] { 1, 0 });
+        equals = rAccess.getPixel().value().get() == 2;
 
-        rAccess.setPosition(new long[]{1,0});
-        pixels.add(rAccess.getPixel().value());
+        rAccess.setPosition(new long[] { 0, 1 });
+        equals = rAccess.getPixel().value().get() == 3;
 
-        rAccess.setPosition(new long[]{0,1});
-        pixels.add(rAccess.getPixel().value());
+        rAccess.setPosition(new long[] { 1, 1 });
+        equals = rAccess.getPixel().value().get() == 4;
 
-        rAccess.setPosition(new long[]{1,1});
-        pixels.add(rAccess.getPixel().value());
-
-        assertTrue(
-            pixels.get(0).get() == 1 &&
-            pixels.get(1).get() == 2 &&
-            pixels.get(2).get() == 3 &&
-            pixels.get(3).get() == 4
-         );
+        assertTrue(equals);
     }
 
     @Test
@@ -65,38 +57,32 @@ public class ImgLib2PixelRandomAccessTest {
         IPixelRandomAccess<Float32> rAccess = image.getRandomAccess();
 
         float pixelValue = 0.1f;
-        rAccess.setPosition(new long[]{0,0});
+        rAccess.setPosition(new long[] { 0, 0 });
         rAccess.setPixel(new Pixel<Float32>(new Float32(++pixelValue)));
 
-        rAccess.setPosition(new long[]{1,0});
+        rAccess.setPosition(new long[] { 1, 0 });
         rAccess.setPixel(new Pixel<Float32>(new Float32(++pixelValue)));
 
-        rAccess.setPosition(new long[]{0,1});
+        rAccess.setPosition(new long[] { 0, 1 });
         rAccess.setPixel(new Pixel<Float32>(new Float32(++pixelValue)));
 
-        rAccess.setPosition(new long[]{1,1});
+        rAccess.setPosition(new long[] { 1, 1 });
         rAccess.setPixel(new Pixel<Float32>(new Float32(++pixelValue)));
 
-        ArrayList<Float32> pixels = new ArrayList<>();
+        boolean equals = true;
+        rAccess.setPosition(new long[] { 0, 0 });
+        equals = rAccess.getPixel().value().get() == 1.1f;
 
-        rAccess.setPosition(new long[]{0,0});
-        pixels.add(rAccess.getPixel().value());
+        rAccess.setPosition(new long[] { 1, 0 });
+        equals = rAccess.getPixel().value().get() == 2.1f;
 
-        rAccess.setPosition(new long[]{1,0});
-        pixels.add(rAccess.getPixel().value());
+        rAccess.setPosition(new long[] { 0, 1 });
+        equals = rAccess.getPixel().value().get() == 3.1f;
 
-        rAccess.setPosition(new long[]{0,1});
-        pixels.add(rAccess.getPixel().value());
+        rAccess.setPosition(new long[] { 1, 1 });
+        equals = rAccess.getPixel().value().get() == 4.1f;
 
-        rAccess.setPosition(new long[]{1,1});
-        pixels.add(rAccess.getPixel().value());
-
-        assertTrue(
-            pixels.get(0).get() == 1.1f &&
-            pixels.get(1).get() == 2.1f &&
-            pixels.get(2).get() == 3.1f &&
-            pixels.get(3).get() == 4.1f
-         );
+        assertTrue(equals);
     }
 
     @Test
@@ -107,38 +93,32 @@ public class ImgLib2PixelRandomAccessTest {
         IPixelRandomAccess<RGB16> rAccess = image.getRandomAccess();
 
         int pixelValue = 0;
-        rAccess.setPosition(new long[]{0,0});
+        rAccess.setPosition(new long[] { 0, 0 });
         rAccess.setPixel(new Pixel<RGB16>(new RGB16(++pixelValue, 0, 0)));
 
-        rAccess.setPosition(new long[]{1,0});
+        rAccess.setPosition(new long[] { 1, 0 });
         rAccess.setPixel(new Pixel<RGB16>(new RGB16(++pixelValue, 0, 0)));
 
-        rAccess.setPosition(new long[]{0,1});
+        rAccess.setPosition(new long[] { 0, 1 });
         rAccess.setPixel(new Pixel<RGB16>(new RGB16(++pixelValue, 0, 0)));
 
-        rAccess.setPosition(new long[]{1,1});
+        rAccess.setPosition(new long[] { 1, 1 });
         rAccess.setPixel(new Pixel<RGB16>(new RGB16(++pixelValue, 0, 0)));
 
-        ArrayList<RGB16> pixels = new ArrayList<>();
+        boolean equals = true;
+        rAccess.setPosition(new long[] { 0, 0 });
+        equals = rAccess.getPixel().value().getR() == 1;
 
-        rAccess.setPosition(new long[]{0,0});
-        pixels.add(rAccess.getPixel().value());
+        rAccess.setPosition(new long[] { 1, 0 });
+        equals = rAccess.getPixel().value().getR() == 2;
 
-        rAccess.setPosition(new long[]{1,0});
-        pixels.add(rAccess.getPixel().value());
+        rAccess.setPosition(new long[] { 0, 1 });
+        equals = rAccess.getPixel().value().getR() == 3;
 
-        rAccess.setPosition(new long[]{0,1});
-        pixels.add(rAccess.getPixel().value());
+        rAccess.setPosition(new long[] { 1, 1 });
+        equals = rAccess.getPixel().value().getR() == 4;
 
-        rAccess.setPosition(new long[]{1,1});
-        pixels.add(rAccess.getPixel().value());
-
-        assertTrue(
-            pixels.get(0).getR() == 1 && pixels.get(0).getG() == 0 && pixels.get(0).getB() == 0 &&
-            pixels.get(1).getR() == 2 && pixels.get(1).getG() == 0 && pixels.get(1).getB() == 0 &&
-            pixels.get(2).getR() == 3 && pixels.get(2).getG() == 0 && pixels.get(2).getB() == 0 &&
-            pixels.get(3).getR() == 4 && pixels.get(3).getG() == 0 && pixels.get(3).getB() == 0
-         );
+        assertTrue(equals);
     }
 
     @Test
@@ -148,9 +128,11 @@ public class ImgLib2PixelRandomAccessTest {
 
         IPixelRandomAccess<UINT16> rAccess = image.getRandomAccess();
 
-        rAccess.setPosition(new long[]{2,2});
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->{rAccess.getPixel();});
-        
+        rAccess.setPosition(new long[] { 2, 2 });
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+            rAccess.getPixel();
+        });
+
     }
 
     @Test
@@ -160,10 +142,11 @@ public class ImgLib2PixelRandomAccessTest {
 
         IPixelRandomAccess<UINT16> rAccess = image.getRandomAccess();
 
-        rAccess.setPosition(new long[]{2,2});
-        assertThrows(ArrayIndexOutOfBoundsException.class, ()->{rAccess.setPixel(new Pixel<UINT16>(UINT16.zero()));});
-        
+        rAccess.setPosition(new long[] { 2, 2 });
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+            rAccess.setPixel(new Pixel<UINT16>(UINT16.zero()));
+        });
+
     }
 
-    
 }
