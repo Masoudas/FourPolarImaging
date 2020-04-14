@@ -6,6 +6,7 @@ import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RealType;
+import fr.fresnel.fourPolar.core.util.DPoint;
 
 public class ImageStatistics {
 
@@ -34,7 +35,8 @@ public class ImageStatistics {
         int nPlanes = getNPlanes(image);
         double[][] minMax = new double[2][nPlanes];
 
-        int planeSize = getPlaneSize(image);
+        DPoint planeDim = getPlaneSize(image);
+        long planeSize = planeDim.x * planeDim.y;
 
         IPixelCursor<T> cursor = image.getCursor();
         for (int plane = 0; plane < nPlanes; plane++) {
@@ -58,9 +60,9 @@ public class ImageStatistics {
 
     }
 
-    public static <T extends PixelType> int getPlaneSize(Image<T> image) {
+    public static <T extends PixelType> DPoint getPlaneSize(Image<T> image) {
         long[] dims = image.getDimensions();
-        return (int) (dims[0] * dims[1]);
+        return new DPoint((int) dims[0], (int) dims[1]);
     }
 
 }
