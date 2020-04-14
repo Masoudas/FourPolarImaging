@@ -12,6 +12,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
+import fr.fresnel.fourPolar.core.util.DPoint;
 import fr.fresnel.fourPolar.core.util.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.IStickFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStick;
@@ -50,10 +51,19 @@ public class StickFigureFiller {
         Objects.requireNonNull(colorMap, "colorMap cannot be null");
 
         if (stickFigure.getType() == StickType.Rho2D) {
+            OrientationAngle slopeAngle = OrientationAngle.rho;
+            OrientationAngle colorAngle = OrientationAngle.rho;
+
             _fillWithRho2DStick(orientationImage, stickFigure, length, thickness, colorMap);
         } else if (stickFigure.getType() == StickType.Delta2D) {
+            OrientationAngle slopeAngle = OrientationAngle.rho;
+            OrientationAngle colorAngle = OrientationAngle.delta;
+
             _fillWithDelta2DStick(orientationImage, stickFigure, length, thickness, colorMap);
         } else {
+            OrientationAngle slopeAngle = OrientationAngle.rho;
+            OrientationAngle colorAngle = OrientationAngle.eta;
+
             _fillWithEta2DStick(orientationImage, stickFigure, length, thickness, colorMap);
         }
 
@@ -81,8 +91,10 @@ public class StickFigureFiller {
                 .getCursor();
         final IPixelRandomAccess<RGB16> stickRA = stickFigure.getImage().getRandomAccess();
         final AngleStickGenerator stickGenerator = new AngleStickGenerator(colorMap);
+        final DPoint planeDim = _getXYPlaneDimension(stickFigure);
 
-        _loopOverOneAngle(length, thickness, rhoCursor, OrientationVector.MAX_Rho, stickRA, stickGenerator);
+        _loopOverOneAngle(length, thickness, rhoCursor, OrientationVector.MAX_Rho, stickRA, stickGenerator, planeDim);
+
 
     }
 
@@ -110,9 +122,10 @@ public class StickFigureFiller {
                 .getCursor();
         final IPixelRandomAccess<RGB16> stickRA = stickFigure.getImage().getRandomAccess();
         final AngleStickGenerator stickGenerator = new AngleStickGenerator(colorMap);
+        final DPoint planeDim = _getXYPlaneDimension(stickFigure);
 
         _loopOverTwoAngles(length, thickness, rhoCursor, deltaCursor, OrientationVector.MAX_Delta, stickRA,
-                stickGenerator);
+                stickGenerator, planeDim);
     }
 
     /**
@@ -140,7 +153,10 @@ public class StickFigureFiller {
         final IPixelRandomAccess<RGB16> stickRA = stickFigure.getImage().getRandomAccess();
         final AngleStickGenerator stickGenerator = new AngleStickGenerator(colorMap);
 
-        _loopOverTwoAngles(length, thickness, rhoCursor, etaCursor, OrientationVector.MAX_Eta, stickRA, stickGenerator);
+        final DPoint planeDim = _getXYPlaneDimension(stickFigure);
+
+        _loopOverTwoAngles(length, thickness, rhoCursor, etaCursor, OrientationVector.MAX_Eta, stickRA, stickGenerator,
+                planeDim);
     }
 
     /**
@@ -149,23 +165,27 @@ public class StickFigureFiller {
      */
     private static void _loopOverOneAngle(final int length, final int thickness,
             final IPixelCursor<Float32> angleCursor, double maxAngle, final IPixelRandomAccess<RGB16> stickRA,
-            final AngleStickGenerator stickGenerator) {
+            final AngleStickGenerator stickGenerator, DPoint planeDim) {
         while (angleCursor.hasNext()) {
             final float angle = angleCursor.next().value().get();
             final long[] position = angleCursor.localize();
             try {
                 final IAngleStick angleStick = stickGenerator.generate2DStick(angle, angle, maxAngle, position, length,
-                        thickness);
+                        thickness, planeDim);
 
                 final IAngleStickIterator stickIterator = angleStick.getIterator();
                 final RGB16 color = angleStick.getColor();
 
                 while (stickIterator.hasNext()) {
                     final long[] stickPixelPosition = stickIterator.next();
-                    stickRA.setPosition(stickPixelPosition);
-                    final IPixel<RGB16> stickPixel = stickRA.getPixel();
-                    stickPixel.value().set(color.getR(), color.getG(), color.getB());
-                    stickRA.setPixel(stickPixel);
+                    boolean isPixelInRange = (stickPixelPosition[0] > 1 && stickPixelPosition[0] < planeDim.x)
+                            && (stickPixelPosition[1] > 1 && stickPixelPosition[1] < planeDim.y);
+                    if (isPixelInRange) {
+                        stickRA.setPosition(stickPixelPosition);
+                        final IPixel<RGB16> stickPixel = stickRA.getPixel();
+                        stickPixel.value().set(color.getR(), color.getG(), color.getB());
+                        stickRA.setPixel(stickPixel);
+                    }
                 }
 
             } catch (final AngleStickUndefined e) {
@@ -180,7 +200,7 @@ public class StickFigureFiller {
      */
     private static void _loopOverTwoAngles(final int length, final int thickness,
             final IPixelCursor<Float32> angle1Cursor, final IPixelCursor<Float32> angle2Cursor, double maxAngle2,
-            final IPixelRandomAccess<RGB16> stickRA, final AngleStickGenerator stickGenerator) {
+            final IPixelRandomAccess<RGB16> stickRA, final AngleStickGenerator stickGenerator, DPoint planeDim) {
         while (angle1Cursor.hasNext()) {
             final float angle1 = angle1Cursor.next().value().get();
             final float angle2 = angle2Cursor.next().value().get();
@@ -188,23 +208,33 @@ public class StickFigureFiller {
             final long[] position = angle1Cursor.localize();
             try {
                 final IAngleStick angleStick = stickGenerator.generate2DStick(angle1, angle2, maxAngle2, position,
-                        length, thickness);
+                        length, thickness, planeDim);
 
                 final IAngleStickIterator stickIterator = angleStick.getIterator();
                 final RGB16 color = angleStick.getColor();
 
                 while (stickIterator.hasNext()) {
                     final long[] stickPixelPosition = stickIterator.next();
-                    stickRA.setPosition(stickPixelPosition);
-                    final IPixel<RGB16> stickPixel = stickRA.getPixel();
-                    stickPixel.value().set(color.getR(), color.getG(), color.getB());
-                    stickRA.setPixel(stickPixel);
+                    boolean isPixelInRange = (stickPixelPosition[0] > 1 && stickPixelPosition[0] < planeDim.x)
+                            && (stickPixelPosition[1] > 1 && stickPixelPosition[1] < planeDim.y);
+                    if (isPixelInRange) {
+                        stickRA.setPosition(stickPixelPosition);
+                        final IPixel<RGB16> stickPixel = stickRA.getPixel();
+                        stickPixel.value().set(color.getR(), color.getG(), color.getB());
+                        stickRA.setPixel(stickPixel);
+                    }
                 }
 
             } catch (final AngleStickUndefined e) {
                 // Skip the postions where angle is NaN.
             }
         }
+    }
+
+    private static DPoint _getXYPlaneDimension(final IStickFigure stickFigure) {
+        long[] dim = stickFigure.getImage().getDimensions();
+        DPoint planeDim = new DPoint((int) dim[0], (int) dim[1]);
+        return planeDim;
     }
 
 }

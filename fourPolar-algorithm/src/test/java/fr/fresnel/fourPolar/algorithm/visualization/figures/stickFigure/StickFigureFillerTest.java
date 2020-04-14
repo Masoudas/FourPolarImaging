@@ -3,7 +3,6 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
@@ -70,8 +69,8 @@ public class StickFigureFillerTest {
     }
 
     @Test
-    public void fillWith2DStick_DeltaStick_GeneratesProperImage() throws CannotFormOrientationImage,
-            ConverterToImgLib2NotFound {
+    public void fillWith2DStick_DeltaStick_GeneratesProperImage()
+            throws CannotFormOrientationImage, ConverterToImgLib2NotFound {
         long[] dim = { 300, 300 };
         CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
         Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
@@ -85,7 +84,7 @@ public class StickFigureFillerTest {
         IPixelCursor<Float32> deltaCursor = deltaImage.getCursor();
         while (rhoCursor.hasNext()) {
             IPixel<Float32> pixel = rhoCursor.next();
-            
+
             pixel.value().set(Float.NaN);
             rhoCursor.setPixel(pixel);
 
@@ -119,8 +118,8 @@ public class StickFigureFillerTest {
     }
 
     @Test
-    public void fillWith2DStick_EtaStick_GeneratesProperImage() throws CannotFormOrientationImage,
-            ConverterToImgLib2NotFound {
+    public void fillWith2DStick_EtaStick_GeneratesProperImage()
+            throws CannotFormOrientationImage, ConverterToImgLib2NotFound {
         long[] dim = { 300, 300 };
         CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
         Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
@@ -134,7 +133,7 @@ public class StickFigureFillerTest {
         IPixelCursor<Float32> etaCursor = etaImage.getCursor();
         while (rhoCursor.hasNext()) {
             IPixel<Float32> pixel = rhoCursor.next();
-            
+
             pixel.value().set(Float.NaN);
             rhoCursor.setPixel(pixel);
 
@@ -167,10 +166,9 @@ public class StickFigureFillerTest {
 
     }
 
-
     @Test
-    public void fillWith2DStick_OutOfRangeRhoStick_CutsTheStickOut() throws CannotFormOrientationImage,
-            ConverterToImgLib2NotFound {
+    public void fillWith2DStick_OutOfRangeRhoStick_CutsTheStickOut()
+            throws CannotFormOrientationImage, ConverterToImgLib2NotFound {
         long[] dim = { 300, 300 };
         CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
         Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
@@ -184,13 +182,13 @@ public class StickFigureFillerTest {
             pixel.value().set(Float.NaN);
             rhoCursor.setPixel(pixel);
         }
- 
-        setPixel(ra, new long[] { 5, 5}, new Float32((float) Math.toRadians(90)));
-        setPixel(ra, new long[] { 295, 295}, new Float32((float) Math.toRadians(180)));
-        
-        setPixel(ra, new long[] { 295, 5}, new Float32((float) Math.toRadians(90)));
-        setPixel(ra, new long[] { 5, 295}, new Float32((float) Math.toRadians(180)));
-        
+
+        setPixel(ra, new long[] { 1, 1 }, new Float32((float) Math.toRadians(90)));
+        // setPixel(ra, new long[] { 295, 295}, new Float32((float)
+        // Math.toRadians(180)));
+
+        // setPixel(ra, new long[] { 295, 5}, new Float32((float) Math.toRadians(90)));
+        // setPixel(ra, new long[] { 5, 295}, new Float32((float) Math.toRadians(180)));
 
         IOrientationImage orientationImage = new OrientationImage(fileSet, rhoImage, deltaImage, etaImage);
         Image<RGB16> soi = new ImgLib2ImageFactory().create(dim, RGB16.zero());
@@ -218,7 +216,7 @@ public class StickFigureFillerTest {
         ImgSaver saver = new ImgSaver();
         String root = StickFigureFillerTest.class.getResource("").getPath();
         saver.saveImg(new File(root, angleImageName).getPath(),
-        ImageToImgLib2Converter.getImg(angleImage, Float32.zero()));
+                ImageToImgLib2Converter.getImg(angleImage, Float32.zero()));
 
     }
 
