@@ -15,8 +15,8 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 public class TiffPolarizationImageFileSet implements IPolarizationImageFileSet {
     final private static String _pol0 = "Polarization0.tif";
     final private static String _pol45 = "Polarization45.tif";
-    final private static String _pol90 = "Polarization90.tif";;
-    final private static String _pol135 = "Polarization135.tif";;
+    final private static String _pol90 = "Polarization90.tif";
+    final private static String _pol135 = "Polarization135.tif";
 
     final private File _pol0File;
     final private File _pol45File;
