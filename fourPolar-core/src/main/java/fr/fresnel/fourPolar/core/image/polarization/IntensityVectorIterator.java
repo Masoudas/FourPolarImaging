@@ -11,12 +11,24 @@ class IntensityVectorIterator implements IIntensityVectorIterator {
     final private IPixelCursor<UINT16> _pol90Cursor;
     final private IPixelCursor<UINT16> _pol135Cursor;
 
+    /**
+     * The single instance of the intensity, returned by this iterator.
+     */
+    final private IntensityVector _intensity;
+
+
+    /**
+     * Create a synchronous iterator for the polarizations, using the cursor of
+     * the images. Note that this iterator returns the same instance of intensity for all
+     * positions.
+     */
     public IntensityVectorIterator(IPixelCursor<UINT16> pol0Cursor, IPixelCursor<UINT16> pol45Cursor,
             IPixelCursor<UINT16> pol90Cursor, IPixelCursor<UINT16> pol135Cursor) {
         this._pol0Cursor = pol0Cursor;
         this._pol45Cursor = pol45Cursor;
         this._pol90Cursor = pol90Cursor;
         this._pol135Cursor = pol135Cursor;
+        this._intensity = new IntensityVector(0, 0, 0, 0);
 
         this._pol0Cursor.reset();
     }
@@ -33,9 +45,9 @@ class IntensityVectorIterator implements IIntensityVectorIterator {
         double intensityPol90 = this._pol90Cursor.next().value().get();
         double intensityPol135 = this._pol135Cursor.next().value().get();
 
-        IntensityVector polIntensity = new IntensityVector(intensityPol0, intensityPol45, intensityPol90,
+        this._intensity.setIntensity(intensityPol0, intensityPol45, intensityPol90,
                 intensityPol135);
-        return polIntensity;
+        return this._intensity;
     }
 
     @Override
