@@ -35,7 +35,7 @@ public class ImageStatistics {
         int nPlanes = getNPlanes(image);
         double[][] minMax = new double[2][nPlanes];
 
-        DPoint planeDim = getPlaneSize(image);
+        DPoint planeDim = getPlaneDim(image);
         long planeSize = planeDim.x * planeDim.y;
 
         IPixelCursor<T> cursor = image.getCursor();
@@ -60,7 +60,7 @@ public class ImageStatistics {
 
     }
 
-    public static <T extends PixelType> DPoint getPlaneSize(Image<T> image) {
+    public static <T extends PixelType> DPoint getPlaneDim(Image<T> image) {
         long[] dims = image.getDimensions();
         return new DPoint((int) dims[0], (int) dims[1]);
     }

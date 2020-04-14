@@ -54,7 +54,7 @@ public class GrayScaleToColorConverter {
 
         final double[][] minMax = ImageStatistics.getPlaneMinMax(grayImage);
         
-        DPoint planeDim = ImageStatistics.getPlaneSize(grayImage);
+        DPoint planeDim = ImageStatistics.getPlaneDim(grayImage);
         final long planeSize = planeDim.x * planeDim.y;
 
         int planeNo = 1;
