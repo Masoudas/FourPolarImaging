@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import fr.fresnel.fourPolar.core.util.DPoint;
 import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStickIterator;
 import ij.gui.Line;
 
@@ -28,23 +29,49 @@ class Angle2DStickIterator implements IAngleStickIterator {
      * @param dipolePosition is the pixel position of the dipole, as [x, y, z, ...]
      * @param length         is the desired length of the stick.
      * @param thickness      is the desired thickness of the stick.
+     * @param planeDim       is the dimension of the image plane.
      * @return iterator that iterates over the region corresponding to this stick,
      *         in pixel coordinates.
      */
-    public static Angle2DStickIterator form(double slopeAngle, long[] dipolePosition, int length, int thickness) {
-        double xStart = dipolePosition[0] - Math.cos(slopeAngle) * ((length - 1) / 2);
-        double yStart = dipolePosition[1] - Math.sin(slopeAngle) * ((length - 1) / 2);
+    public static Angle2DStickIterator form(double slopeAngle, long[] dipolePosition, int length, int thickness,
+            DPoint planeDim) {
+        double slope =  Math.tan(slopeAngle);
+        double cosSlopeAngle = Math.cos(slopeAngle);        
 
-        double xEnd = dipolePosition[0] + Math.cos(slopeAngle) * (length / 2);
-        double yEnd = dipolePosition[1] + Math.sin(slopeAngle) * (length / 2);
+        double[] xyStart = new double[2];
+        double xS0 = dipolePosition[0] - cosSlopeAngle * ((length - 1) / 2);
+        xyStart[0] = xS0 < 1 ? 1 : xS0;
+        xyStart[1] = dipolePosition[1] + (xS0 - dipolePosition[0]) * slope;
 
-        Line negativeLine = new Line(xStart, yStart, dipolePosition[0], dipolePosition[1]);
+        double[] xyEnd = new double[2];
+        double xE0 = dipolePosition[0] + cosSlopeAngle * (length / 2);
+        xyEnd[0] = xE0 > planeDim.x ? planeDim.x : xE0;
+        xyEnd[1] = dipolePosition[1] + (xE0 - dipolePosition[0]) * slope;
+
+        RangeChecker checkerLambda = (double[] XY) -> {
+            if (XY[1] > planeDim.y) {
+                XY[1] = planeDim.y;
+                XY[0] = dipolePosition[0] + (planeDim.y - dipolePosition[1]) / slope;
+            } else if (XY[1] < 1) {
+                XY[1] = 1;
+                XY[0] = dipolePosition[0] + (1 - dipolePosition[1]) / slope;
+            }
+        };
+
+        checkerLambda._checkY(xyStart);
+        checkerLambda._checkY(xyEnd);
+
+        Line negativeLine = new Line(xyStart[0], xyStart[1], dipolePosition[0], dipolePosition[1]);
         negativeLine.setStrokeWidth(thickness);
 
-        Line positiveLine = new Line(dipolePosition[0], dipolePosition[1], xEnd, yEnd);
+        Line positiveLine = new Line(dipolePosition[0], dipolePosition[1], xyEnd[0], xyEnd[1]);
         positiveLine.setStrokeWidth(thickness);
 
         return new Angle2DStickIterator(negativeLine.iterator(), positiveLine.iterator(), dipolePosition);
+    }
+
+    interface RangeChecker {
+        void _checkY(double[] XY);
     }
 
     /**
@@ -54,7 +81,7 @@ class Angle2DStickIterator implements IAngleStickIterator {
      * @param positiveLineIterator is the iterator on positive points.
      * @param position             is the position of the 2D stick.
      */
-    public Angle2DStickIterator(Iterator<Point> negativeLineIterator, Iterator<Point> positiveLineIterator,
+    private Angle2DStickIterator(Iterator<Point> negativeLineIterator, Iterator<Point> positiveLineIterator,
             long[] positition) {
         this._negativeIterator = negativeLineIterator;
         this._positiveIterator = positiveLineIterator;
@@ -70,9 +97,9 @@ class Angle2DStickIterator implements IAngleStickIterator {
     public long[] next() throws NoSuchElementException {
         Point point;
 
-        try {
+        if (_negativeIterator.hasNext()) {
             point = _negativeIterator.next();
-        } catch (NoSuchElementException e) {
+        } else {
             point = _positiveIterator.next();
         }
 
