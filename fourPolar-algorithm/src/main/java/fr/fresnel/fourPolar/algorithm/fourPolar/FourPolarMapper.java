@@ -42,12 +42,12 @@ public class FourPolarMapper {
                     + " orientation image does not correspond to polarization image.");
         }
 
+        IOrientationVector orientationVector = new OrientationVector(0, 0, 0);
         while (intensityIterator.hasNext()) {
             IntensityVector intensity = intensityIterator.next();
 
-            IOrientationVector orientationVector = null;
             try {
-                orientationVector = _converter.convert(intensity);
+                _converter.convert(intensity, orientationVector);
             } catch (ImpossibleOrientationVector e) {
                 orientationVector = new OrientationVector(Double.NaN, Double.NaN, Double.NaN);
             }
