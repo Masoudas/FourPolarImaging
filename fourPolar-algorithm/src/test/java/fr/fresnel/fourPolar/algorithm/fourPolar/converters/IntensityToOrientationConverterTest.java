@@ -61,13 +61,13 @@ public class IntensityToOrientationConverterTest {
         _converter = new IntensityToOrientationConverter(inverseProp);
     }
 
-
     @Test
     public void convert_UnfeasibleIntensityVectors_ThrowsImpossibleOrientationVector() {
         IntensityVector vec1 = new IntensityVector(1, 0, 0, 0);
-        
+        IOrientationVector calculated = new OrientationVector(0, 0, 0);
+
         ImpossibleOrientationVector exception1 = assertThrows(ImpossibleOrientationVector.class, () -> {
-            _converter.convert(vec1);
+            _converter.convert(vec1, calculated);
         });
         assertTrue(exception1.getMessage().contains("zero"));
 
@@ -103,6 +103,8 @@ public class IntensityToOrientationConverterTest {
         BufferedReader forwardData = _readFile("ForwardMethodData-Curcio.txt");
         forwardData.readLine();
 
+        IOrientationVector calculated = new OrientationVector(0, 0, 0);
+        OrientationVector original = new OrientationVector(0, 0, 0);
         boolean equals = true;
         while ((intensityOrientationPair = forwardData.readLine()) != null && equals) {
             String[] values = intensityOrientationPair.split(",");
@@ -120,10 +122,10 @@ public class IntensityToOrientationConverterTest {
                 IntensityVector iVector = new IntensityVector(Double.parseDouble(values[0]),
                         Double.parseDouble(values[2]), Double.parseDouble(values[1]), Double.parseDouble(values[3]));
 
-                OrientationVector original = new OrientationVector(rho, delta, eta);
-                IOrientationVector calculated;
+                original.setAngles(rho, delta, eta);
+
                 try {
-                    calculated = _converter.convert(iVector);
+                    _converter.convert(iVector, calculated);
                     equals = _checkForwardAnglePrecision(original, calculated, error);
                 } catch (ImpossibleOrientationVector e) {
                 }
@@ -159,6 +161,8 @@ public class IntensityToOrientationConverterTest {
 
         BufferedReader inverseData = _readFile("InverseMethodData-Curcio.txt");
 
+        IOrientationVector calculated = new OrientationVector(0, 0, 0);
+        OrientationVector original = new OrientationVector(0, 0, 0);
         inverseData.readLine();
         while ((intensityOrientationPair = inverseData.readLine()) != null && equals) {
             String[] values = intensityOrientationPair.split(",");
@@ -169,8 +173,8 @@ public class IntensityToOrientationConverterTest {
             IntensityVector iVector = new IntensityVector(Double.parseDouble(values[0]), Double.parseDouble(values[2]),
                     Double.parseDouble(values[1]), Double.parseDouble(values[3]));
 
-            OrientationVector original = new OrientationVector(rho, delta, eta);
-            IOrientationVector calculated = _converter.convert(iVector);
+            original.setAngles(rho, delta, eta);
+            _converter.convert(iVector, calculated);
             equals = _checkForwardAnglePrecision(original, calculated, error);
         }
         assertTrue(equals);

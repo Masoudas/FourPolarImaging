@@ -59,19 +59,6 @@ public class OrientationToIntensityConverterTest {
     }
 
     /**
-     * Checks that the absolute difference of each component of intensity vector is
-     * less than threshold.
-     */
-    private static boolean _checkIntensityPrecision(IntensityVector vec1, IntensityVector vec2, double error) {
-        return _checkPrecision(vec1.getIntensity(Polarization.pol0), vec2.getIntensity(Polarization.pol0), error)
-                && _checkPrecision(vec1.getIntensity(Polarization.pol45), vec2.getIntensity(Polarization.pol45), error)
-                && _checkPrecision(vec1.getIntensity(Polarization.pol90), vec2.getIntensity(Polarization.pol90), error)
-                && _checkPrecision(vec1.getIntensity(Polarization.pol135), vec2.getIntensity(Polarization.pol135),
-                        error);
-
-    }
-
-    /**
      * Checks that the difference in the ratio of intensities is less than a certain
      * percentage, point being that the two ratios must be as close to each other as
      * possible.
@@ -86,25 +73,25 @@ public class OrientationToIntensityConverterTest {
         return Math.abs((one0_90 / two0_90 - one45_135 / two45_135) / (one45_135 / two45_135)) < error;
     }
 
-    private static boolean _checkPrecision(double val1, double val2, double error) {
-        return Math.abs(val1 - val2) < error;
-    }
-
     @Test
     public void convert_Delta180_ReturnsSameIntensityForAllRhoAndEta() {
         double delta = OrientationVector.MAX_Delta;
         double angleStep = Math.PI / 180;
 
         IOrientationVector baseVector = new OrientationVector(0f, delta, 0f);
-        IntensityVector baseIntensity = _converter.convert(baseVector);
+        IntensityVector baseIntensity = new IntensityVector(0, 0, 0, 0);
+        
+        IOrientationVector vector = new OrientationVector(0, 0, 0);
+        IntensityVector intensity = new IntensityVector(0, 0, 0, 0);
+
+        _converter.convert(baseVector, baseIntensity);
 
         boolean equals = true;
         for (double rho = 0; rho < OrientationVector.MAX_Rho; rho += angleStep) {
             for (double eta = 0; eta < OrientationVector.MAX_Eta && equals; eta += angleStep) {
-                IOrientationVector vector = new OrientationVector(rho, delta, eta);
-                IntensityVector intensity = _converter.convert(vector);
-
-                equals &= _checkIntensityPrecision(intensity, baseIntensity, 1e-4);
+                vector.setAngles(rho, delta, eta);
+                _converter.convert(vector, intensity);
+                equals &= _checkRatioPrecision(intensity, baseIntensity, 1e-4);
             }
         }
 
@@ -116,16 +103,22 @@ public class OrientationToIntensityConverterTest {
         double eta = 0f;
         double angleStep = Math.PI / 180;
 
+        IOrientationVector baseVector = new OrientationVector(0, 0, 0);
+        IntensityVector baseIntensity = new IntensityVector(0, 0, 0, 0);
+        
+        IOrientationVector vector = new OrientationVector(0, 0, 0);
+        IntensityVector intensity = new IntensityVector(0, 0, 0, 0);
+        
+        
         boolean equals = true;
         for (double delta = 0; delta < OrientationVector.MAX_Delta; delta += angleStep) {
-            IOrientationVector baseVector = new OrientationVector(0f, delta, eta);
-            IntensityVector baseIntensity = _converter.convert(baseVector);
+            baseVector.setAngles(0f, delta, eta);
+            _converter.convert(baseVector, baseIntensity);
 
             for (double rho = 0; rho < OrientationVector.MAX_Rho && equals; rho += angleStep) {
-                IOrientationVector vector = new OrientationVector(rho, delta, eta);
-                IntensityVector intensity = _converter.convert(vector);
-
-                equals &= _checkIntensityPrecision(intensity, baseIntensity, 1e-4);
+                vector.setAngles(rho, delta, eta);
+                _converter.convert(vector, intensity);
+                equals &= _checkRatioPrecision(intensity, baseIntensity, 1e-4);
             }
         }
 
@@ -152,10 +145,14 @@ public class OrientationToIntensityConverterTest {
         BigDecimal etaGreaterThan = new BigDecimal(Math.PI / 180 * 5);
         BigDecimal rhoGreaterThan = new BigDecimal(Math.PI / 180 * 0);
         BigDecimal deltaLessThan = new BigDecimal(Math.PI / 180 * 170);
-        
+
         BufferedReader forward = _readFile("ForwardMethodData-Curcio.txt");
 
         forward.readLine(); // Skip comment line.
+
+        OrientationVector oVector = new OrientationVector(0, 0, 0);
+        IntensityVector original = new IntensityVector(0, 0, 0, 0);
+        IntensityVector calculated = new IntensityVector(0, 0, 0, 0);
 
         String intensityOrientationPair = null;
         boolean equals = true;
@@ -171,18 +168,16 @@ public class OrientationToIntensityConverterTest {
 
             if (isGreaterThan(eta, etaGreaterThan) && isGreaterThan(rho, rhoGreaterThan)
                     && isLessThan(delta, deltaLessThan)) {
-                OrientationVector oVector = new OrientationVector(rho, delta, eta);
-                IntensityVector original = new IntensityVector(Double.parseDouble(values[0]),
-                        Double.parseDouble(values[2]), Double.parseDouble(values[1]), Double.parseDouble(values[3]));
-                IntensityVector calculated = _converter.convert(oVector);
+                oVector.setAngles(rho, delta, eta);
+                original.setIntensity(Double.parseDouble(values[0]), Double.parseDouble(values[2]),
+                        Double.parseDouble(values[1]), Double.parseDouble(values[3]));
+                _converter.convert(oVector, calculated);
 
                 equals &= _checkRatioPrecision(original, calculated, error);
             }
-
         }
 
         assertTrue(equals);
-
     }
 
     @Test
@@ -193,6 +188,10 @@ public class OrientationToIntensityConverterTest {
 
         inverseData.readLine(); // Skip comment line.
 
+        OrientationVector oVector = new OrientationVector(0, 0, 0);
+        IntensityVector original = new IntensityVector(0, 0, 0, 0);
+        IntensityVector calculated = new IntensityVector(0, 0, 0, 0);
+
         String intensityOrientationPair = null;
         boolean equals = true;
         while ((intensityOrientationPair = inverseData.readLine()) != null && equals) {
@@ -202,11 +201,10 @@ public class OrientationToIntensityConverterTest {
             double eta = Double.parseDouble(values[5]) / 180 * Math.PI;
             double delta = Double.parseDouble(values[6]) / 180 * Math.PI;
             if (!Double.isNaN(rho) && !Double.isNaN(delta) && !Double.isNaN(eta)) {
-                OrientationVector oVector = new OrientationVector(rho, delta, eta);
-                IntensityVector original = new IntensityVector(Double.parseDouble(values[0]),
-                        Double.parseDouble(values[2]), Double.parseDouble(values[1]), Double.parseDouble(values[3]));
-
-                IntensityVector calculated = _converter.convert(oVector);
+                oVector.setAngles(rho, delta, eta);
+                original.setIntensity(Double.parseDouble(values[0]), Double.parseDouble(values[2]),
+                        Double.parseDouble(values[1]), Double.parseDouble(values[3]));
+                _converter.convert(oVector, calculated);
                 equals &= _checkRatioPrecision(original, calculated, error);
             }
         }
