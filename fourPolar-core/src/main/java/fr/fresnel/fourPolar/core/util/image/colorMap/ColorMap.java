@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.colorMap;
+package fr.fresnel.fourPolar.core.util.image.colorMap;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 

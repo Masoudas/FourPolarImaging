@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.colorMap;
+package fr.fresnel.fourPolar.core.util.image.colorMap;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

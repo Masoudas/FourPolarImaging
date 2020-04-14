@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.colorMap;
+package fr.fresnel.fourPolar.core.util.image.colorMap;
 
 import java.io.IOException;
 import java.net.URL;
