@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import fr.fresnel.fourPolar.algorithm.exceptions.visualization.figures.stickFigure.AngleStickUndefined;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.util.DPoint;
 import fr.fresnel.fourPolar.core.util.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStick;
 import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.IAngleStickIterator;
@@ -39,12 +40,13 @@ public class AngleStickGenerator {
      *                       than equal 1.
      * @param thickness      is the desired thickness of the dipole, must be greater
      *                       than equal 1.
+     * @param planeDim       is the dimension of the image plane.
      * @return the generated angle stick.
      *
      * @throws AngleStickUndefined if rho angle is NaN.
      */
     public IAngleStick generate2DStick(double slopeAngle, double colorAngle, double maxColorAngle,
-            long[] dipolePosition, int length, int thickness) throws AngleStickUndefined {
+            long[] dipolePosition, int length, int thickness, DPoint planeDim) throws AngleStickUndefined {
         if (Double.isNaN(slopeAngle) || Double.isNaN(colorAngle) || Double.isNaN(maxColorAngle)) {
             throw new AngleStickUndefined("Can't define stick for undefined ");
         }
@@ -60,7 +62,7 @@ public class AngleStickGenerator {
         double imageSlope = Math.PI - slopeAngle;
 
         RGB16 color = _colorMap.getColor(0, maxColorAngle, colorAngle);
-        IAngleStickIterator iterator = Angle2DStickIterator.form(imageSlope, dipolePosition, length, thickness);
+        IAngleStickIterator iterator = Angle2DStickIterator.form(imageSlope, dipolePosition, length, thickness, planeDim);
 
         return new AngleStick(dipolePosition, imageSlope, length, thickness, color, iterator);
     }
