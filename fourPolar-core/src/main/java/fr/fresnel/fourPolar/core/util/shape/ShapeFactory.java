@@ -44,7 +44,7 @@ public class ShapeFactory {
 
         WritableBox box = GeomMasks.closedBox(minCopy, maxCopy);
 
-        Shape shape = this._getUniqueShape(ShapeType.Close2DBox);
+        Shape shape = this._getUniqueShape(ShapeType.Closed2DBox);
         shape.setImgLib2Shape(min.length, min, box);
         return shape;
     }
@@ -80,7 +80,7 @@ public class ShapeFactory {
         AffineTransform2D transform2d = _generate2DTransform(center, rotationAngle);
         RealMaskRealInterval rotatedTranslatedBox = box.transform(transform2d);
 
-        Shape shape = this._getUniqueShape(ShapeType.Close2DBox);
+        Shape shape = this._getUniqueShape(ShapeType.Closed2DBox);
         shape.setImgLib2Shape(2, min, rotatedTranslatedBox);
 
         return shape;
@@ -120,7 +120,7 @@ public class ShapeFactory {
         AffineTransform3D transform3d = _generate3DTransform(center, x_rotation, z_rotation);
         RealMaskRealInterval rotatedTranslatedBox = box.transform(transform3d);
 
-        Shape shape = this._getUniqueShape(ShapeType.Close3DBox);
+        Shape shape = this._getUniqueShape(ShapeType.Closed3DBox);
         shape.setImgLib2Shape(3, min, rotatedTranslatedBox);
         return shape;
     }
@@ -138,7 +138,7 @@ public class ShapeFactory {
         
         WritablePolygon2D polygon2D = GeomMasks.closedPolygon2D(xPoints, yPoints);
 
-        Shape shape = _getUniqueShape(ShapeType.Polygon2D);
+        Shape shape = _getUniqueShape(ShapeType.ClosedPolygon2D);
         shape.setImgLib2Shape(2, new long[]{x[0], y[0]}, polygon2D);
 
         return shape;

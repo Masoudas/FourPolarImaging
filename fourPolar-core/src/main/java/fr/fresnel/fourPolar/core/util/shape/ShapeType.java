@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
 public enum ShapeType {
-    Close2DBox,
-    Close3DBox,
-    Polygon,
+    Closed2DBox,
+    Closed3DBox,
+    ClosedPolygon2D,
 }
