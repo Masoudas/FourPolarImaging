@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.visualization.figures.stickFigure;
+package fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure;
 
 import java.util.Objects;
 
@@ -6,12 +6,12 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.polarization.soi.ISoIImage;
-import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.StickType;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.GaugeType;
 
 /**
- * The factory to generate a {@link IStickFigure}.
+ * The factory to generate a {@link IGaugeFigure}.
  */
-public class StickFigureFactory {
+public class GaugeFigureFactory {
     /**
      * Create a stick figure from an Image interface. This constructor should be
      * used when a previously generated stick figure is read.
@@ -20,12 +20,11 @@ public class StickFigureFactory {
      * @param image is the {@link Image} interface of the figure.
      * @return an stick figure.
      */
-    public static IStickFigure createExisting(StickType type, Image<RGB16> image, ICapturedImageFileSet fileSet) {
-        Objects.requireNonNull(type, "type cannot be null");
+    public static IGaugeFigure createExisting(Image<RGB16> image, ICapturedImageFileSet fileSet) {
         Objects.requireNonNull(image, "image cannot be null");
         Objects.requireNonNull(fileSet, "fileSet cannot be null");
 
-        return new StickFigure(type, image, fileSet);
+        return new GaugeFigure(GaugeType.Empty, image, fileSet);
     }
 
     /**
@@ -39,8 +38,8 @@ public class StickFigureFactory {
      * @param soiImage is the corresponding {@link ISoIImage}.
      * @return an empty stick figure.
      */
-    public static IStickFigure createEmpty(
-        StickType type, ISoIImage soiImage, ICapturedImageFileSet fileSet) {
+    public static IGaugeFigure createEmpty(
+        GaugeType type, ISoIImage soiImage, ICapturedImageFileSet fileSet) {
         Objects.requireNonNull(type, "type cannot be null");
         Objects.requireNonNull(soiImage, "soiImage cannot be null");
         Objects.requireNonNull(fileSet, "fileSet cannot be null");
@@ -48,7 +47,7 @@ public class StickFigureFactory {
         Image<RGB16> image = soiImage.getImage().getFactory().create(
             soiImage.getImage().getDimensions(), RGB16.zero());
 
-        return new StickFigure(type, image, fileSet);
+        return new GaugeFigure(type, image, fileSet);
 
     }
 }

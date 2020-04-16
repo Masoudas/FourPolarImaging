@@ -1,12 +1,12 @@
-package fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick;
+package fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage;
 
 import fr.fresnel.fourPolar.core.util.shape.IShapeIteraror;
-import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.IStickFigure;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 
 /**
- * An interface for painting a stick in a {@link IStickFigure}.
+ * An interface for painting a stick in a {@link IGaugeFigure}.
  */
-public interface IAngleStickPainter {
+public interface IAngleGaugePainter {
     /**
      * Draw the sticks in the specified region by shapeIterator, for positions where
      * intensity >= soiThreshold.
@@ -21,6 +21,6 @@ public interface IAngleStickPainter {
     /**
      * Returns the stick figure filled with this painter.
      */
-    public IStickFigure getStickFigure();
+    public IGaugeFigure getStickFigure();
 
 }

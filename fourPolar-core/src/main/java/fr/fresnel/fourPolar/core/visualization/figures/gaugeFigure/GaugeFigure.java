@@ -1,16 +1,16 @@
-package fr.fresnel.fourPolar.core.visualization.figures.stickFigure;
+package fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
-import fr.fresnel.fourPolar.core.visualization.figures.stickFigure.stick.StickType;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.GaugeType;
 
 /**
- * A concrete implementation of the {@link IStickFigure}.
+ * A concrete implementation of the {@link IGaugeFigure}.
  */
-class StickFigure implements IStickFigure {
+class GaugeFigure implements IGaugeFigure {
     private final Image<RGB16> _image;
-    private final StickType _type;
+    private final GaugeType _type;
     private final ICapturedImageFileSet _fileSet;
 
     /**
@@ -20,14 +20,14 @@ class StickFigure implements IStickFigure {
      * @param image   is the colored SoI image.
      * @param fileSet is the captured file set this stick image corresponds to.
      */
-    public StickFigure(StickType type, Image<RGB16> image, ICapturedImageFileSet fileSet) {
+    public GaugeFigure(GaugeType type, Image<RGB16> image, ICapturedImageFileSet fileSet) {
         this._image = image;
         this._type = type;
         this._fileSet = fileSet;
     }
 
     @Override
-    public StickType getType() {
+    public GaugeType getType() {
         return _type;
     }
 
