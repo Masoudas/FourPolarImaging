@@ -18,6 +18,9 @@ public interface IAngleStickPainter {
      */
     public void draw(IShapeIteraror shapeIteraror, double soiThreshold);
 
+    /**
+     * Returns the stick figure filled with this painter.
+     */
     public IStickFigure getStickFigure();
 
 }
