@@ -33,6 +33,26 @@ public class OrientationVector implements IOrientationVector {
      */
     final private static double ERR_Angle = Math.PI / 180 * 0.0001;
 
+    public static double maxAngle(OrientationAngle angle) {
+        double max = 0;
+        switch (angle) {
+            case rho:
+                max = MAX_Rho;      
+                break;
+
+            case delta:
+                max = MAX_Delta;
+
+            case eta:
+                max = MAX_Eta;
+        
+            default:
+                break;
+        }
+        
+        return max;
+    }
+
     /**
      * Models the orientation angles calculated using the four polar method. 
      * 
