@@ -100,9 +100,8 @@ public class OrientationImage implements IOrientationImage {
 
     @Override
     public IOrientationVectorIterator getOrientationVectorIterator() {
-        return new OrientationVectorIterator(
-            _rhoImage.getImage().getCursor(), _deltaImage.getImage().getCursor(),
-            _etaImage.getImage().getCursor());
+        return new OrientationVectorIterator(_rhoImage.getImage().getCursor(), _deltaImage.getImage().getCursor(),
+                _etaImage.getImage().getCursor());
     }
 
     private boolean _hasDimensionsEqual(Image<Float32> rho, Image<Float32> delta, Image<Float32> eta) {
@@ -112,6 +111,12 @@ public class OrientationImage implements IOrientationImage {
 
     private boolean _hasDuplicateImage(Image<Float32> rho, Image<Float32> delta, Image<Float32> eta) {
         return rho == delta || rho == eta || delta == eta;
+    }
+
+    @Override
+    public IOrientationImageRandomAccess getRandomAccess() {
+        return new OrientationImageRandomAccess(_rhoImage.getImage().getRandomAccess(),
+                _deltaImage.getImage().getRandomAccess(), _etaImage.getImage().getRandomAccess());
     }
 
 }

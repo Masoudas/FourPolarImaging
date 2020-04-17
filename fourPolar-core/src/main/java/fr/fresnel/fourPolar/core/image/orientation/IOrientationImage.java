@@ -28,4 +28,10 @@ public interface IOrientationImage {
      * @return
      */
     public IOrientationVectorIterator getOrientationVectorIterator();
+
+    /**
+     * Returns an interface for randomly accessing the underlying orientation vectors.
+     * @return
+     */
+    public IOrientationImageRandomAccess getRandomAccess();
 }
