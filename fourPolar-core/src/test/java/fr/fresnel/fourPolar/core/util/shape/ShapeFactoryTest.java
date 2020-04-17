@@ -28,126 +28,148 @@ public class ShapeFactoryTest {
     }
 
     @Test
-    public void closed2DBox_Rotation90_ReturnsCorrectCoordinates() {
-        long[] center = { 0, 0 };
+    public void closed2DBox_Rotate_ReturnsCorrectCoordinates() {
+        IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 });
 
-        IShape shape = new ShapeFactory().closed2DBox(center, 4, 2, Math.PI / 2);
-        WritableBox box = GeomMasks.closedBox(new double[] { -1, -2 }, new double[] { 1, 2 });
+        IShape rotated90 = shape.transform2D(new long[] { 0, 0 }, Math.PI / 2);
+        WritableBox box1 = GeomMasks.closedBox(new double[] { -2, 0 }, new double[] { 0, 1 });
+        assertTrue(_checkPointInsideMask(box1, rotated90.getIterator()));
 
-        IShapeIteraror iterator = shape.getIterator();
-        assertTrue(_checkPointInsideMask(box, iterator));
+        IShape rotated270 = shape.transform2D(new long[] { 0, 0 }, -Math.PI / 2);
+        WritableBox box2 = GeomMasks.closedBox(new double[] { 0, -1 }, new double[] { 2, 0 });
+        assertTrue(_checkPointInsideMask(box2, rotated270.getIterator()));
     }
 
     @Test
-    public void closed2DBox_WithShift_ReturnsCorrectCoordinates() {
-        long[] center = { 50, 50 };
+    public void closed2DBox_Shift_ReturnsCorrectCoordinates() {
+        IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 });
 
-        IShape shape = new ShapeFactory().closed2DBox(center, 4, 2, 0);
-        WritableBox box = GeomMasks.closedBox(new double[] { 50 - 2, 50 - 1 }, new double[] { 50 + 2, 50 + 1 });
+        IShape translated50 = shape.transform2D(new long[] { 50, 50 }, 0);
+        WritableBox box1 = GeomMasks.closedBox(new double[] { 50, 50 }, new double[] { 50 + 1, 50 + 2 });
+        assertTrue(_checkPointInsideMask(box1, translated50.getIterator()));
 
-        IShapeIteraror iterator = shape.getIterator();
-        assertTrue(_checkPointInsideMask(box, iterator));
+        IShape translated100 = shape.transform2D(new long[] { 100, 100 }, 0);
+        WritableBox box2 = GeomMasks.closedBox(new double[] { 100, 100 }, new double[] { 100 + 1, 100 + 2 });
+        assertTrue(_checkPointInsideMask(box2, translated100.getIterator()));
     }
 
     @Test
-    public void closed2DBox_Rotation90WithShift_ReturnsCorrectCoordinates() {
-        long[] center = { 50, 50 };
+    public void closed2DBox_TranslateAndRotate_ReturnsCorrectCoordinates() {
+        IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 });
 
-        IShape shape = new ShapeFactory().closed2DBox(center, 4, 2, Math.PI / 2);
-        WritableBox box = GeomMasks.closedBox(new double[] { 50 - 1, 50 - 2 }, new double[] { 50 + 1, 50 + 2 });
+        IShape translated50rotate90 = shape.transform2D(new long[] { 50, 50 }, Math.PI / 2);
+        WritableBox box1 = GeomMasks.closedBox(new double[] { 50 - 2, 50 - 0 }, new double[] { 50 + 0, 50 + 1 });
+        assertTrue(_checkPointInsideMask(box1, translated50rotate90.getIterator()));
 
-        IShapeIteraror iterator = shape.getIterator();
-        assertTrue(_checkPointInsideMask(box, iterator));
+        IShape translated50rotate270 = shape.transform2D(new long[] { 50, 50 }, -Math.PI / 2);
+        WritableBox box2 = GeomMasks.closedBox(new double[] { 50 - 0, 50 - 1 }, new double[] { 50 + 2, 50 + 0 });
+        assertTrue(_checkPointInsideMask(box2, translated50rotate270.getIterator()));
     }
 
     @Test
-    public void closed3DBox_zRotation90_ReturnsCorrectCoordinates() {
-        long[] center = { 0, 0, 0 };
+    public void closed3DBox_zRotate_ReturnsCorrectCoordinates() {
+        IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 });
 
-        IShape shape = new ShapeFactory().closed3DBox(center, 4, 2, 6, Math.PI / 2, 0);
-        WritableBox box = GeomMasks.closedBox(new double[] { -2, -3, -1 }, new double[] { 2, 3, 1 });
+        IShape rotated90 = shape.transform3D(new long[] { 0, 0, 0 }, 0, Math.PI / 2, 0);
+        WritableBox box1 = GeomMasks.closedBox(new double[] { -2, 0, 0 }, new double[] { 0, 1, 3 });
+        // assertTrue(_checkPointInsideMask(box1, rotated90.getIterator()));
 
-        IShapeIteraror iterator = shape.getIterator();
-        assertTrue(_checkPointInsideMask(box, iterator));
+        IShape rotated270 = shape.transform3D(new long[] { 0, 0, 0 }, 0, -Math.PI / 2, 0);
+        WritableBox box2 = GeomMasks.closedBox(new double[] { 0, -1, 0 }, new double[] { 2, 0, 3 });
+        assertTrue(_checkPointInsideMask(box2, rotated90.getIterator()));
 
     }
 
     @Test
-    public void closed3DBox_xRotation90_ReturnsCorrectCoordinates() {
-        long[] center = { 0, 0, 0 };
+    public void closed3DBox_xRotate_ReturnsCorrectCoordinates() {
+        IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 });
 
-        IShape shape = new ShapeFactory().closed3DBox(center, 4, 2, 6, 0, Math.PI / 2);
-        WritableBox box = GeomMasks.closedBox(new double[] { -1, -2, -3 }, new double[] { 1, 2, 3 });
+        IShape rotated90 = shape.transform3D(new long[] { 0, 0, 0 }, Math.PI / 2, 0, 0);
+        WritableBox box1 = GeomMasks.closedBox(new double[] { -3, 0, 0 }, new double[] { 1, 2, 0 });
+        assertTrue(_checkPointInsideMask(box1, rotated90.getIterator()));
 
-        IShapeIteraror iterator = shape.getIterator();
-        assertTrue(_checkPointInsideMask(box, iterator));
-
+        IShape rotated270 = shape.transform3D(new long[] { 0, 0, 0 }, -Math.PI / 2, 0, 0);
+        WritableBox box2 = GeomMasks.closedBox(new double[] { 0, -2, 0 }, new double[] { 1, 3, 0 });
+        assertTrue(_checkPointInsideMask(box2, rotated270.getIterator()));
     }
 
     @Test
     public void closed3DBox_xRotation90zrotation90_ReturnsCorrectCoordinates() {
-        long[] center = { 0, 0, 0 };
+        IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 });
 
-        IShape shape = new ShapeFactory().closed3DBox(center, 4, 2, 6, Math.PI / 2, Math.PI / 2);
-        WritableBox box = GeomMasks.closedBox(new double[] { -3, -2, -1 }, new double[] { 3, 2, 1 });
+        IShape rotated9090 = shape.transform3D(new long[] { 0, 0, 0 }, Math.PI / 2, Math.PI / 2, 0);
+        WritableBox box1 = GeomMasks.closedBox(new double[] { 0, 0, 0 }, new double[] { 3, 1, 2 });
+        assertTrue(_checkPointInsideMask(box1, rotated9090.getIterator()));
 
-        IShapeIteraror iterator = shape.getIterator();
-        assertTrue(_checkPointInsideMask(box, iterator));
+        IShape rotated270270 = shape.transform3D(new long[] { 0, 0, 0 }, -Math.PI / 2, -Math.PI / 2, 0);
+        WritableBox box2 = GeomMasks.closedBox(new double[] { 0, -1, -2 }, new double[] { 3, 0, 0 });
+        assertTrue(_checkPointInsideMask(box2, rotated270270.getIterator()));
 
-    }
+        IShape rotated27090 = shape.transform3D(new long[] { 0, 0, 0 }, -Math.PI / 2, Math.PI / 2, 0);
+        WritableBox box3 = GeomMasks.closedBox(new double[] { -3, 0, -2 }, new double[] { 0, 1, 0 });
+        assertTrue(_checkPointInsideMask(box3, rotated27090.getIterator()));
 
-    @Test
-    public void closed3DBox_50Shift_ReturnsCorrectCoordinates() {
-        long[] center = { 50, 50, 50 };
-
-        IShape shape = new ShapeFactory().closed3DBox(center, 4, 2, 4, 0, 0);
-        WritableBox box = GeomMasks.closedBox(new double[] { 50 - 2, 50 - 1, 50 - 2 },
-                new double[] { 50 + 2, 50 + 1, 50 + 2 });
-
-        IShapeIteraror iterator = shape.getIterator();
-        assertTrue(_checkPointInsideMask(box, iterator));
+        IShape rotated90270 = shape.transform3D(new long[] { 0, 0, 0 }, Math.PI / 2, -Math.PI / 2, 0);
+        WritableBox box4 = GeomMasks.closedBox(new double[] { -3, -1, 0 }, new double[] { 0, 0, 2 });
+        assertTrue(_checkPointInsideMask(box4, rotated90270.getIterator()));
 
     }
 
     @Test
-    public void closed3DBox_xRotation90With50Shift_ReturnsCorrectCoordinates() {
-        long[] center = { 50, 50, 50 };
+    public void closed3DBox_translate_ReturnsCorrectCoordinates() {
+        IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 });
 
-        IShape shape = new ShapeFactory().closed3DBox(center, 4, 2, 6, Math.PI / 2, 0);
-        WritableBox box = GeomMasks.closedBox(new double[] { 50 - 2, 50 - 3, 50 - 1 },
-                new double[] { 50 + 2, 50 + 3, 50 + 1 });
+        IShape translated50 = shape.transform3D(new long[] { 50, 50, 50 }, 0, 0, 0);
+        WritableBox box1 = GeomMasks.closedBox(new double[] { 50, 50, 50 }, new double[] { 50 + 1, 50 + 2, 50 + 3 });
+        assertTrue(_checkPointInsideMask(box1, translated50.getIterator()));
 
-        IShapeIteraror iterator = shape.getIterator();
-        assertTrue(_checkPointInsideMask(box, iterator));
+        IShape translated100 = shape.transform3D(new long[] { 100, 100, 100 }, 0, 0, 0);
+        WritableBox box2 = GeomMasks.closedBox(new double[] { 100, 100, 100 },
+                new double[] { 100 + 1, 100 + 2, 100 + 3 });
+        assertTrue(_checkPointInsideMask(box2, translated100.getIterator()));
+
     }
 
     @Test
-    public void closed3DBox_zRotation90With50Shift_ReturnsCorrectCoordinates() {
-        long[] center = { 50, 50, 50 };
+    public void closed3DBox_RotateAndTranslate_ReturnsCorrectCoordinates() {
+        IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 });
 
-        IShape shape = new ShapeFactory().closed3DBox(center, 4, 2, 6, 0, Math.PI / 2);
-        WritableBox box = GeomMasks.closedBox(new double[] { 50 - 1, 50 - 2, 50 - 3 },
-                new double[] { 50 + 1, 50 + 2, 50 + 3 });
+        IShape rotated9090 = shape.transform3D(new long[] { 50, 50, 50 }, Math.PI / 2, Math.PI / 2, 0);
+        WritableBox box1 = GeomMasks.closedBox(new double[] { 50, 50, 50 }, new double[] { 50 + 3, 50 + 1, 50 + 2 });
+        assertTrue(_checkPointInsideMask(box1, rotated9090.getIterator()));
 
-        IShapeIteraror iterator = shape.getIterator();
-        assertTrue(_checkPointInsideMask(box, iterator));
+        IShape rotated270270 = shape.transform3D(new long[] { 50, 50, 50 }, -Math.PI / 2, -Math.PI / 2, 0);
+        WritableBox box2 = GeomMasks.closedBox(new double[] { 50 + 0, 50 - 1, 50 - 2 },
+                new double[] { 50 + 3, 50 + 0, 50 + 0 });
+        assertTrue(_checkPointInsideMask(box2, rotated270270.getIterator()));
+
+        IShape rotated27090 = shape.transform3D(new long[] { 50, 50, 50 }, -Math.PI / 2, Math.PI / 2, 0);
+        WritableBox box3 = GeomMasks.closedBox(new double[] { 50 - 3, 50 + 0, 50 - 2 },
+                new double[] { 50 + 0, 50 + 1, 50 + 0 });
+        assertTrue(_checkPointInsideMask(box3, rotated27090.getIterator()));
+
+        IShape rotated90270 = shape.transform3D(new long[] { 50, 50, 50 }, Math.PI / 2, -Math.PI / 2, 0);
+        WritableBox box4 = GeomMasks.closedBox(new double[] { 50 - 3, 50 - 1, 50 + 0 },
+                new double[] { 50 + 0, 50 + 0, 50 + 2 });
+        assertTrue(_checkPointInsideMask(box4, rotated90270.getIterator()));
     }
 
-    @Test
-    public void closedPolygon2d_TriangleShape_ReturnsCorrectCoordinates() {
-        long[] x = { 0, 2, 2 };
-        long[] y = { 0, 0, 2 };
+    // @Test
+    // public void closedPolygon2d_TriangleShape_ReturnsCorrectCoordinates() {
+    // long[] x = { 0, 2, 2 };
+    // long[] y = { 0, 0, 2 };
 
-        IShape shape = new ShapeFactory().closedPolygon2D(x, y);
-        Polygon2D polygon2d = GeomMasks.closedPolygon2D(new double[] { 0, 2, 2 }, new double[] { 0, 0, 2 });
+    // IShape shape = new ShapeFactory().closedPolygon2D(x, y);
+    // Polygon2D polygon2d = GeomMasks.closedPolygon2D(new double[] { 0, 2, 2 }, new
+    // double[] { 0, 0, 2 });
 
-        IShapeIteraror iterator = shape.getIterator();
-        assertTrue(_checkPointInsideMask(polygon2d, iterator));
-    }
+    // IShapeIteraror iterator = shape.getIterator();
+    // assertTrue(_checkPointInsideMask(polygon2d, iterator));
+    // }
 
-    public void polygon2D() {
+    // public void polygon2D() {
 
-    }
+    // }
 
     private boolean _checkPointInsideMask(RealMaskRealInterval box, IShapeIteraror iterator) {
         boolean equals = true;
