@@ -1,11 +1,16 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
+import net.imglib2.realtransform.AffineGet;
+import net.imglib2.realtransform.AffineSet;
+import net.imglib2.realtransform.AffineTransform;
 import net.imglib2.realtransform.AffineTransform2D;
 import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.roi.IterableRegion;
 import net.imglib2.roi.Masks;
 import net.imglib2.roi.RealMaskRealInterval;
 import net.imglib2.roi.Regions;
+import net.imglib2.roi.geom.GeomMasks;
+import net.imglib2.roi.geom.real.WritablePointMask;
 import net.imglib2.type.logic.BoolType;
 import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
@@ -15,19 +20,25 @@ import net.imglib2.view.Views;
  * for other libraries. Use set methods.
  */
 class ImgLib2Shape implements IShape {
-    private static double[][] _identity2D = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };
-    private static double[][] _identity3D = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } };
+    private static double[][] _identity2D = { { 1, 0, 0 }, { 0, 1, 0 } };
+    private static double[][] _identity3D = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 } };
 
     private RealMaskRealInterval _maskRealInterval;
-    private ShapeType _type;
+    private final ShapeType _type;
     private int _shapeDim;
-    private long[] _samplePosition = null;
 
-    private ImgLib2Shape _transformed2D;
-    private ImgLib2Shape _transformed3D;
+    private ImgLib2Shape _transformed;
 
     private final AffineTransform2D _affine2D;
     private final AffineTransform3D _affine3D;
+    
+    private final AffineTransform _transform2D;
+    private final AffineTransform _transform3D;
+
+    /**
+     * A point mask instance to check whether a point is inside the shape.
+     */
+    final private WritablePointMask _pointMask;
 
     /**
      * Construct the shape, using ImgLib2 ROI. @See RealMaskRealInterval.
@@ -40,25 +51,27 @@ class ImgLib2Shape implements IShape {
      *                         this value.
      * @param maskRealInterval is the associated ImgLib2 shape interval.
      */
-    public ImgLib2Shape(final ShapeType shapeType) {
+    public ImgLib2Shape(final ShapeType shapeType, final int shapeDim) {
         this._type = shapeType;
         this._affine2D = new AffineTransform2D();
         this._affine3D = new AffineTransform3D();
+        this._transform2D = new AffineTransform(shapeDim);
+        this._transform3D = new AffineTransform(shapeDim);
+        this._shapeDim = shapeDim;
+        this._pointMask = GeomMasks.pointMask(new double[shapeDim]);
     }
 
-    public void setImgLib2Shape(int shapeDim, long[] samplePosition, RealMaskRealInterval maskRealInterval) {
-        this._maskRealInterval = maskRealInterval;        
-        this._samplePosition = samplePosition;
-        this._shapeDim = shapeDim;
+    public void setImgLib2Shape(final RealMaskRealInterval maskRealInterval) {
+        this._maskRealInterval = maskRealInterval;
     }
 
     @Override
     public IShapeIteraror getIterator() {
-        IterableRegion<BoolType> iterableRegion = Regions
+        final IterableRegion<BoolType> iterableRegion = Regions
                 .iterable(Views.interval(Views.raster(Masks.toRealRandomAccessible(this._maskRealInterval)),
                         Intervals.largestContainedInterval(this._maskRealInterval)));
 
-        return new ShapeIterator(iterableRegion, this._shapeDim, this._samplePosition);
+        return new ShapeIterator(iterableRegion, this._shapeDim);
     }
 
     @Override
@@ -68,7 +81,7 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public int numDimension() {
-        return this._samplePosition.length;
+        return this._shapeDim;
     }
 
     @Override
@@ -77,44 +90,39 @@ class ImgLib2Shape implements IShape {
     }
 
     @Override
-    public IShape transform2D(long[] translation, double rotation) {
-        if (this._shapeDim != 2) {
-            throw new IllegalStateException("Can't 2d transform a shape that is not 2d.");
-        }
-
+    public IShape transform2D(final long[] translation, final double rotation) {
         if (translation.length != 2) {
             throw new IllegalArgumentException("translation vector has to be 2d.");
         }
 
-        if (this._transformed2D == null){
-            this._transformed2D = new ImgLib2Shape(this._type);
+        if (this._transformed == null) {
+            this._transformed = new ImgLib2Shape(this._type, this._shapeDim);
         }
 
         this._affine2D.set(_identity2D);
 
         this._affine2D.rotate(-rotation);
-        double[] rotatedTranslation = { -translation[0], -translation[1] };
+        final double[] rotatedTranslation = { -translation[0], -translation[1] };
         this._affine2D.apply(rotatedTranslation, rotatedTranslation);
         this._affine2D.translate(rotatedTranslation);
+        
+        this._setAffineTransform(this._transform2D, this._affine2D);
 
-        RealMaskRealInterval transformedMask = this._maskRealInterval.transform(this._affine2D);
-        this._transformed2D.setImgLib2Shape(this._shapeDim, this._samplePosition, transformedMask);
+        final RealMaskRealInterval transformedMask = this._maskRealInterval.transform(this._transform2D);
+        this._transformed.setImgLib2Shape(transformedMask);
 
-        return this._transformed2D;
+        return this._transformed;
     }
 
     @Override
-    public IShape transform3D(long[] translation, double x_rotation, double z_rotation, double y_rotation) {
-        if (this._shapeDim != 3) {
-            throw new IllegalStateException("Can't 3d transform a shape that is not 3d.");
-        }
-
+    public IShape transform3D(final long[] translation, final double x_rotation, final double z_rotation,
+            final double y_rotation) {
         if (translation.length != 3) {
             throw new IllegalArgumentException("translation vector has to be 3d.");
         }
 
-        if (this._transformed3D == null){
-            this._transformed3D = new ImgLib2Shape(this._type);
+        if (this._transformed == null) {
+            this._transformed = new ImgLib2Shape(this._type, this._shapeDim);
         }
 
         this._affine3D.set(_identity3D);
@@ -125,16 +133,45 @@ class ImgLib2Shape implements IShape {
         this._affine3D.rotate(0, -x_rotation);
         this._affine3D.rotate(1, -y_rotation);
 
-        double[] rotatedTranslation = { -translation[0], -translation[1], -translation[2] };
+        final double[] rotatedTranslation = { -translation[0], -translation[1], -translation[2] };
         this._affine3D.apply(rotatedTranslation, rotatedTranslation);
-
         this._affine3D.translate(rotatedTranslation);
 
-        RealMaskRealInterval transformedMask = this._maskRealInterval.transform(this._affine3D);
-        this._transformed3D.setImgLib2Shape(this._shapeDim, this._samplePosition, transformedMask);
+        this._setAffineTransform(this._transform3D, this._affine3D);
 
-        return this._transformed3D;
+        final RealMaskRealInterval transformedMask = this._maskRealInterval.transform(this._transform3D);
+        this._transformed.setImgLib2Shape(transformedMask);
 
+        return this._transformed;
+
+    }
+
+    /**
+     * Assign to a higher dimensional matrix from a lower dimensional matrix.
+     * 
+     * @param affine
+     */
+    private void _setAffineTransform(AffineTransform finalTransform, AffineGet affine) {
+        int dim = affine.numDimensions();
+        // Set rotation
+        for (int row = 0; row < dim; row++) {
+            for (int column = 0; column < dim; column++) {
+                finalTransform.set(affine.get(row, column), row, column);
+            }
+        }
+
+        int lastColumn = finalTransform.numDimensions();
+        // Set translation
+        for (int row = 0; row < dim; row++) {
+            finalTransform.set(affine.get(row, dim), row, lastColumn);
+        }
+
+    }
+
+    @Override
+    public boolean isInside(long[] point) {        
+        this._pointMask.setPosition(point);
+        return this._maskRealInterval.test(this._pointMask);
     }
 
 }

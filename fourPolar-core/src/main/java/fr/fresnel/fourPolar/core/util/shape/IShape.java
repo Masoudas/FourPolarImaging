@@ -50,4 +50,9 @@ public interface IShape {
      */
     public IShape transform3D(long[] translation, double x_rotation, double z_rotation, double y_rotation);
 
+    /**
+     * Checks whether the given point is inside the shape.
+     */
+    public boolean isInside(long[] point);
+
 }
