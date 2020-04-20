@@ -18,6 +18,8 @@ class ImageJColorMap implements ColorMap {
     private ColorTable _cTable;
     private final String _colorMap;
 
+    private final RGB16 _color;
+
     public static ImageJColorMap getDefaultColorMaps(String colorMap) {
         ImageJColorMap jColorMap = null;
         LUTService lService = new DefaultLUTService();
@@ -41,29 +43,26 @@ class ImageJColorMap implements ColorMap {
         }
 
         return jColorMap;
-        
+
     }
 
     private ImageJColorMap(String colorMap, ColorTable colorTable) {
         this._colorMap = colorMap;
         this._cTable = colorTable;
-        
+        this._color = new RGB16(0, 0, 0);
+
     }
 
     @Override
     public RGB16 getColor(double min, double max, double val) {
-        if (min > max || val < min || val > max){
-            throw new IllegalArgumentException("val must be in the range of min and max.");
-        }
         int index = this._cTable.lookupARGB(min, max, val);
-        return new RGB16(ARGBType.red(index), ARGBType.green(index), ARGBType.blue(index));
+        this._color.set(ARGBType.red(index), ARGBType.green(index), ARGBType.blue(index));
+        return _color;
     }
 
     @Override
     public String getColorMap() {
         return _colorMap;
     }
-    
 
-    
 }
