@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
 import net.imglib2.realtransform.AffineGet;
-import net.imglib2.realtransform.AffineSet;
 import net.imglib2.realtransform.AffineTransform;
 import net.imglib2.realtransform.AffineTransform2D;
 import net.imglib2.realtransform.AffineTransform3D;
@@ -101,10 +100,10 @@ class ImgLib2Shape implements IShape {
 
         this._affine2D.set(_identity2D);
 
+        final double[] t = { -translation[0], -translation[1] };
+        // this._affine2D.apply(rotatedTranslation, rotatedTranslation);
+        this._affine2D.translate(t);
         this._affine2D.rotate(-rotation);
-        final double[] rotatedTranslation = { -translation[0], -translation[1] };
-        this._affine2D.apply(rotatedTranslation, rotatedTranslation);
-        this._affine2D.translate(rotatedTranslation);
         
         this._setAffineTransform(this._transform2D, this._affine2D);
 
@@ -127,15 +126,14 @@ class ImgLib2Shape implements IShape {
 
         this._affine3D.set(_identity3D);
 
+        final double[] t = { -translation[0], -translation[1], -translation[2] };
+        this._affine3D.translate(t);
+
         // In the following order, x rotation is applied first, and then z rotation, and
         // then y.
         this._affine3D.rotate(2, -z_rotation);
         this._affine3D.rotate(0, -x_rotation);
         this._affine3D.rotate(1, -y_rotation);
-
-        final double[] rotatedTranslation = { -translation[0], -translation[1], -translation[2] };
-        this._affine3D.apply(rotatedTranslation, rotatedTranslation);
-        this._affine3D.translate(rotatedTranslation);
 
         this._setAffineTransform(this._transform3D, this._affine3D);
 
