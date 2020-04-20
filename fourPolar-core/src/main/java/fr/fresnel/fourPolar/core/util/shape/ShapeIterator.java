@@ -4,7 +4,7 @@ import net.imglib2.Cursor;
 import net.imglib2.roi.IterableRegion;
 import net.imglib2.type.logic.BoolType;
 
-class ShapeIterator implements IShapeIteraror {
+class ShapeIterator implements IShapeIterator {
     private final long[] _position;
     private final Cursor<Void> _regionCursor;
 
