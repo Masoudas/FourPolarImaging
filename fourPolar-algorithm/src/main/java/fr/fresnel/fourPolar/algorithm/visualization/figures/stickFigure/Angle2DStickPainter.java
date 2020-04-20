@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
-import fr.fresnel.fourPolar.core.util.shape.IShapeIteraror;
+import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
@@ -91,7 +91,7 @@ class Angle2DStickPainter implements IAngleGaugePainter {
         int threshold = soiThreshold.get();
         Pixel<RGB16> pixel = new Pixel<>(RGB16.zero());
 
-        IShapeIteraror shapeIteraror = shape.getIterator();
+        IShapeIterator shapeIteraror = shape.getIterator();
         while (shapeIteraror.hasNext()) {
             long[] stickCenterPosition = shapeIteraror.next();
 
@@ -110,7 +110,7 @@ class Angle2DStickPainter implements IAngleGaugePainter {
         IShape stick = _getStick(stickCenterPosition, orientationVector);
         final RGB16 color = _getStickColor(orientationVector);
 
-        IShapeIteraror stickIterator = stick.getIterator();
+        IShapeIterator stickIterator = stick.getIterator();
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
             if (this._imageRegion.isInside(stickPosition)) {
@@ -128,9 +128,9 @@ class Angle2DStickPainter implements IAngleGaugePainter {
     }
 
     private IShape _getStick(long[] position, IOrientationVector orientationVector) {
-        IShape stick = this._stick.transform2D(position, Math.PI / 2 + orientationVector.getAngle(_slopeAngle));
-        System.out.println(orientationVector.getAngle(_slopeAngle));
-        return stick;
+        this._stick.translate(position);
+        this._stick.rotate(0, Math.PI / 2 + orientationVector.getAngle(_slopeAngle), 0);
+        return this._stick.getTransformedShape();
     }
 
     private IOrientationVector _getOrientationVector(long[] stickCenterPosition) {

@@ -84,9 +84,59 @@ public class GaugePainterFactoryTest {
     }
 
     @Test
+    public void rho2DStick_3DImageRhoChangesFrom0to180_GeneratesProperImage()
+            throws CannotFormOrientationImage, ConverterToImgLib2NotFound, InterruptedException {
+        long[] dim = { 1024, 512, 5 };
+        CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
+        Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        Image<Float32> deltaImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        Image<Float32> etaImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        IPixelRandomAccess<Float32> ra = rhoImage.getRandomAccess();
+
+        IPixelCursor<Float32> rhoCursor = rhoImage.getCursor();
+        while (rhoCursor.hasNext()) {
+            IPixel<Float32> pixel = rhoCursor.next();
+            pixel.value().set(Float.NaN);
+            rhoCursor.setPixel(pixel);
+        }
+
+        for (int k = 0; k < 5; k++) {
+            int j = 0;
+            for (int i = 0; i <= 180; i += 1) {
+                j = i % 20 >= 1 ? j : j + 2;
+                setPixel(
+                    ra, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, k }, new Float32((float) Math.toRadians(i)));
+
+            }
+        }
+
+        IOrientationImage orientationImage = new OrientationImage(fileSet, rhoImage, deltaImage, etaImage);
+        Image<UINT16> soi = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        ISoIImage soiImage = new SoIImage(fileSet, soi);
+
+        IGaugeFigure stickFigure = GaugeFigureFactory.createEmpty(soiImage, fileSet);
+
+        int length = 40;
+        int thickness = 4;
+        ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
+
+        IAngleGaugePainter painter = GaugePainterFactory.rho2DStick(
+            stickFigure, orientationImage, soiImage, length, thickness, cMap);
+
+        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1024, 512, 5 });
+
+        painter.draw(entireImageRegion, new UINT16(0));
+
+        _saveAngleFigure(rhoImage, "rhoImage_3D.tif");
+        _saveStickFigure(stickFigure, "rho2DStick_3D.tiff");
+
+        assertTrue(true);
+    }
+
+    @Test
     public void delta2DStick_RhoAndDeltaChangeFrom0to180_GeneratesProperImage()
             throws CannotFormOrientationImage, ConverterToImgLib2NotFound {
-        long[] dim = { 1024, 1024 };
+        long[] dim = { 300, 300 };
         CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
         Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
         Image<Float32> deltaImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
@@ -183,7 +233,7 @@ public class GaugePainterFactoryTest {
         IGaugeFigure stickFigure = GaugeFigureFactory.createEmpty(soiImage, fileSet);
 
         IAngleGaugePainter painter = GaugePainterFactory.eta2DStick(stickFigure, orientationImage, soiImage, length,
-                thickness, cMap);                
+                thickness, cMap);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
 
