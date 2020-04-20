@@ -6,7 +6,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.polarization.soi.ISoIImage;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.GaugeType;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 
 /**
  * The factory to generate a {@link IGaugeFigure}.
@@ -20,11 +20,11 @@ public class GaugeFigureFactory {
      * @param image is the {@link Image} interface of the figure.
      * @return an stick figure.
      */
-    public static IGaugeFigure createExisting(Image<RGB16> image, ICapturedImageFileSet fileSet) {
+    public static IGaugeFigure createExisting(AngleGaugeType type, Image<RGB16> image, ICapturedImageFileSet fileSet) {
         Objects.requireNonNull(image, "image cannot be null");
         Objects.requireNonNull(fileSet, "fileSet cannot be null");
 
-        return new GaugeFigure(GaugeType.Empty, image, fileSet);
+        return new GaugeFigure(type, image, fileSet);
     }
 
     /**
@@ -39,15 +39,14 @@ public class GaugeFigureFactory {
      * @return an empty stick figure.
      */
     public static IGaugeFigure createEmpty(
-        GaugeType type, ISoIImage soiImage, ICapturedImageFileSet fileSet) {
-        Objects.requireNonNull(type, "type cannot be null");
+        ISoIImage soiImage, ICapturedImageFileSet fileSet) {
         Objects.requireNonNull(soiImage, "soiImage cannot be null");
         Objects.requireNonNull(fileSet, "fileSet cannot be null");
 
         Image<RGB16> image = soiImage.getImage().getFactory().create(
             soiImage.getImage().getDimensions(), RGB16.zero());
 
-        return new GaugeFigure(type, image, fileSet);
+        return new GaugeFigure(AngleGaugeType.Empty, image, fileSet);
 
     }
 }

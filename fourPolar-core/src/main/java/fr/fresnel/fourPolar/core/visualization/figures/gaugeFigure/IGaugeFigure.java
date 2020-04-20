@@ -3,16 +3,22 @@ package fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.GaugeType;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 
 /**
- * An interface to model a stick figure.
+ * An interface to model a gauge figure.
  */
 public interface IGaugeFigure {
     /**
-     * Returns the type of the stick figure.
+     * Returns the type of the gauge figure.
      */
-    public GaugeType getType();
+    public AngleGaugeType getType();
+
+    /**
+     * Sets the gauge type.
+     * @param type
+     */
+    public void setType(AngleGaugeType type);
 
     /**
      * Returns the underlying {@link Image}.
