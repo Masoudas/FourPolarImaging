@@ -8,7 +8,7 @@ public interface IShape {
     /**
      * Returns an iterator that goes over the shape and returns the coordinates.
      */
-    public IShapeIteraror getIterator();
+    public IShapeIterator getIterator();
 
     /**
      * Returns the underlying type of the shape.
@@ -16,10 +16,9 @@ public interface IShape {
     public ShapeType getType();
 
     /**
-     * Returns the number of dimensions the shape span. For example, a 2D box span
-     * two or more dimensions.
+     * Returns the dimension of the space over which the shape is defined.
      */
-    public int numDimension();
+    public int spaceDim();
 
     /**
      * Returns the dimension of the shape (see numDimension).
@@ -29,26 +28,37 @@ public interface IShape {
     public int shapeDim();
 
     /**
-     * Apply a 2d affine transform to the original shape in the xy plane. Note that
-     * the same reference is returned for every rotated shape.
+     * Apply a 3d affine rotation to the original shape in the xyz space.
+     * <p>
+     * VERY IMPORTANT NOTE: The order of rotation would be x, z and then y. If only
+     * xy rotation is needed, use z_rotation. Use getTransformedShape() to access
+     * the rotated shape.
      * 
-     * @param translation is the translation. Must be 2d.
-     * @param rotation    is the rotation angle in radian.
+     * @param x_rotation is the rotation around x-axis in radian.
+     * @param z_rotation is the rotation around z-axis in radian.
+     * @param y_rotation is the rotation around y-axis in radian.
      */
-    public IShape transform2D(long[] translation, double rotation);
+    public IShape rotate(double x_rotation, double z_rotation, double y_rotation);
 
     /**
-     * Apply a 3d affine transform to the original shape in the xyz space. Note that
-     * the same reference is returned for every rotated shape.
+     * Apply a translation to the original shape.
      * <p>
-     * VERY IMPORTANT NOTE: The order of rotation would be x, z and then y.
+     * VERY IMPORTANT NOTE: If rotation is applied, the order would be rotate, then
+     * translate.
      * 
-     * @param translation is the translation. Must be 3d.
-     * @param x_rotation  is the rotation around x-axis in radian.
-     * @param z_rotation  is the rotation around z-axis in radian.
-     * @param y_rotation  is the rotation around y-axis in radian.
+     * @param translation is the desired translation. If number of dimensions is
+     *                    less than the shape dimension, an IllegalArgumentException
+     *                    is raised.
      */
-    public IShape transform3D(long[] translation, double x_rotation, double z_rotation, double y_rotation);
+    public void translate(long[] translation);
+
+    /**
+     * Return the transformed shape. Note that the same reference is returned after
+     * each transformation. Once a transformed shape is returned, this method returns
+     * the original image.
+     * 
+     */
+    public IShape getTransformedShape();
 
     /**
      * Checks whether the given point is inside the shape.

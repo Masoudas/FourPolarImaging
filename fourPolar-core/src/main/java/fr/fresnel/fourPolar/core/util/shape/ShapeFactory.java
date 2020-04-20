@@ -26,9 +26,14 @@ public class ShapeFactory {
         double[] minCopy = Arrays.stream(min).asDoubleStream().toArray();
         double[] maxCopy = Arrays.stream(max).asDoubleStream().toArray();
 
+        int shapeDim = 0;
+        do {
+            shapeDim++;
+        } while (shapeDim < min.length && min[shapeDim] != max[shapeDim]);
+
         WritableBox box = GeomMasks.closedBox(minCopy, maxCopy);
 
-        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.Closed2DBox, min.length);
+        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.Closed2DBox, shapeDim, min.length);
         shape.setImgLib2Shape(box);
         return shape;
     }
@@ -41,14 +46,15 @@ public class ShapeFactory {
             throw new IllegalArgumentException("x and y should have the same dimension.");
         }
 
-        double[] xPoints =  Arrays.stream(x).asDoubleStream().toArray();
+        double[] xPoints = Arrays.stream(x).asDoubleStream().toArray();
         double[] yPoints = Arrays.stream(y).asDoubleStream().toArray();
-        
+
         WritablePolygon2D polygon2D = GeomMasks.closedPolygon2D(xPoints, yPoints);
 
-        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.ClosedPolygon2D, 2);
+        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.ClosedPolygon2D, 2, 2);
         shape.setImgLib2Shape(polygon2D);
 
         return shape;
     }
+
 }
