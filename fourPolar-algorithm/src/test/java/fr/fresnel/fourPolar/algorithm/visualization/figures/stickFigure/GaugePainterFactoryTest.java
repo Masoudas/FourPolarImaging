@@ -67,7 +67,7 @@ public class GaugePainterFactoryTest {
         IGaugeFigure stickFigure = GaugeFigureFactory.createEmpty(soiImage, fileSet);
 
         int length = 40;
-        int thickness = 4;
+        int thickness = 2;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
         IAngleGaugePainter painter = GaugePainterFactory.rho2DStick(stickFigure, orientationImage, soiImage, length,
@@ -86,7 +86,7 @@ public class GaugePainterFactoryTest {
     @Test
     public void rho2DStick_3DImageRhoChangesFrom0to180_GeneratesProperImage()
             throws CannotFormOrientationImage, ConverterToImgLib2NotFound, InterruptedException {
-        long[] dim = { 1024, 512, 5 };
+        long[] dim = { 1024, 512, 10, 3 };
         CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
         Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
         Image<Float32> deltaImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
@@ -100,14 +100,17 @@ public class GaugePainterFactoryTest {
             rhoCursor.setPixel(pixel);
         }
 
-        for (int k = 0; k < 5; k++) {
-            int j = 0;
-            for (int i = 0; i <= 180; i += 1) {
-                j = i % 20 >= 1 ? j : j + 2;
-                setPixel(
-                    ra, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, k }, new Float32((float) Math.toRadians(i)));
+        for (int c = 0; c < 3; c++) {
+            for (int k = 0; k < 10; k++) {
+                int j = 0;
+                for (int i = 0; i <= 180; i += 1) {
+                    j = i % 20 >= 1 ? j : j + 2;
+                    setPixel(ra, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, k , c},
+                            new Float32((float) Math.toRadians(i)));
 
+                }
             }
+
         }
 
         IOrientationImage orientationImage = new OrientationImage(fileSet, rhoImage, deltaImage, etaImage);
@@ -120,10 +123,10 @@ public class GaugePainterFactoryTest {
         int thickness = 4;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IAngleGaugePainter painter = GaugePainterFactory.rho2DStick(
-            stickFigure, orientationImage, soiImage, length, thickness, cMap);
+        IAngleGaugePainter painter = GaugePainterFactory.rho2DStick(stickFigure, orientationImage, soiImage, length,
+                thickness, cMap);
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1024, 512, 5 });
+        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0 }, new long[] { 1024, 512, 10, 3 });
 
         painter.draw(entireImageRegion, new UINT16(0));
 
