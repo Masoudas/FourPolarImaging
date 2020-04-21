@@ -262,10 +262,10 @@ public class ShapeFactoryTest {
     @Test
     public void isInside_CheckForShapeAndRotatedShape_ReturnsCorrectResult() {
         IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 });
-        shape.rotate(0, Math.PI / 2, 0 );
+        shape.rotate(0, Math.PI / 2, 0);
         shape.translate(new long[] { 0, 0 });
         IShape rotated90 = shape.getTransformedShape();
-        rotated90.rotate(0, -Math.PI / 2, 0 );
+        rotated90.rotate(0, -Math.PI / 2, 0);
         rotated90.translate(new long[] { 0, 0 });
         IShape rotatedback = rotated90.getTransformedShape();
 
@@ -275,6 +275,29 @@ public class ShapeFactoryTest {
         assertTrue(!rotated90.isInside(new long[] { 1, 1 }));
         assertTrue(!rotated90.isInside(new long[] { 1, 1, 1, 1 }));
         assertTrue(rotatedback.isInside(new long[] { 1, 1 }));
+    }
+
+    @Test
+    public void and_AndTwoRectangles_ReturnsAndedShape() {
+        IShape shapeWithin = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 });
+        IShape shapeOutside = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 4, 4 });
+
+        IShape andResult = shapeWithin.and(shapeOutside);
+
+        WritableBox andedShape = GeomMasks.closedBox(new double[] { 0, 0, }, new double[] { 1, 2 });
+        assertTrue(_checkPointInsideMask(andedShape, andResult.getIterator()));
+
+    }
+
+    @Test
+    public void and_AndTwoNonOverlappingRectangles_IteratorHasNoElements() {
+        IShape shapeWithin = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 });
+        IShape shapeOutside = new ShapeFactory().closedBox(new long[] { 2, 2 }, new long[] { 4, 4 });
+
+        IShape andResult = shapeWithin.and(shapeOutside);
+
+        assertTrue(!andResult.getIterator().hasNext());
+
     }
 
     private boolean _checkPointInsideMask(RealMaskRealInterval box, IShapeIterator iterator) {

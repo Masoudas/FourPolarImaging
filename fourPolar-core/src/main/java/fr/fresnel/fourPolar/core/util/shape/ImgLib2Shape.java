@@ -44,11 +44,11 @@ class ImgLib2Shape implements IShape {
     /**
      * Construct the shape, using ImgLib2 ROI. @See RealMaskRealInterval.
      * 
-     * @param shapeType        is the associated shape type.
-     * @param shapeDim         is the dimension of the shape (two for a 2DBox for
-     *                         example).
-     * @param spaceDim         This is the dimension of the space over which the shape is defined.
-     *  
+     * @param shapeType is the associated shape type.
+     * @param shapeDim  is the dimension of the shape (two for a 2DBox for example).
+     * @param spaceDim  This is the dimension of the space over which the shape is
+     *                  defined.
+     * 
      */
     public ImgLib2Shape(final ShapeType shapeType, final int shapeDim, final int spaceDim) {
         this._type = shapeType;
@@ -88,6 +88,10 @@ class ImgLib2Shape implements IShape {
         return this._shapeDim;
     }
 
+    public RealMaskRealInterval getRealMaskRealInterval() {
+        return this._maskRealInterval;
+    }
+
     @Override
     public IShape rotate(final double x_rotation, final double z_rotation, final double y_rotation) {
 
@@ -104,13 +108,12 @@ class ImgLib2Shape implements IShape {
             throw new IllegalArgumentException("Translation dimension must equal shape space dimension.");
         }
 
-        if (this._spaceDim < 3){
-            this._translation = new double[]{-translation[0], -translation[1], 0};
-        }else{
+        if (this._spaceDim < 3) {
+            this._translation = new double[] { -translation[0], -translation[1], 0 };
+        } else {
             this._translation = Arrays.stream(translation).mapToDouble((x) -> -x).toArray();
         }
 
-        
     }
 
     @Override
@@ -161,18 +164,39 @@ class ImgLib2Shape implements IShape {
 
     }
 
-    private void _resetTransformationParams(){
+    private void _resetTransformationParams() {
         this._affine3D.set(_identity3D);
-        _xRotation = 0; 
+        _xRotation = 0;
         _yRotation = 0;
         _zRotation = 0;
-        Arrays.setAll(_translation, (t)-> 0d);
+        Arrays.setAll(_translation, (t) -> 0d);
     }
 
     @Override
     public boolean isInside(long[] point) {
         this._pointMask.setPosition(point);
         return this._maskRealInterval.test(this._pointMask);
+    }
+
+    @Override
+    public IShape and(IShape shape) {
+        if (this._transformed == null) {
+            this._transformed = new ImgLib2Shape(this._type, this._shapeDim, this._spaceDim);
+        }
+
+        if (shape.shapeDim() != this._shapeDim || shape.spaceDim() != this._spaceDim) {
+            throw new IllegalArgumentException(
+                    "The two shapes must have the same dimension and have the same space dimension");
+        }
+
+        RealMaskRealInterval result = null;
+        if (shape instanceof ImgLib2Shape) {
+            ImgLib2Shape shapeRef = (ImgLib2Shape) shape;
+            result = this._maskRealInterval.and(shapeRef.getRealMaskRealInterval());
+        }
+        this._transformed.setImgLib2Shape(result);
+
+        return this._transformed;
     }
 
 }

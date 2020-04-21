@@ -54,8 +54,8 @@ public interface IShape {
 
     /**
      * Return the transformed shape. Note that the same reference is returned after
-     * each transformation. Once a transformed shape is returned, this method returns
-     * the original image.
+     * each transformation. Once a transformed shape is returned, this method
+     * returns the original image.
      * 
      */
     public IShape getTransformedShape();
@@ -64,5 +64,15 @@ public interface IShape {
      * Checks whether the given point is inside the shape.
      */
     public boolean isInside(long[] point);
+
+    /**
+     * And this shape with the given shape. The same reference is returned for the
+     * shape. In case there's no overlap, the resulting shape has no elements.
+     * 
+     * @throws IllegalArgumentException in case shape does not have the same
+     *                                  dimension and space dimension as this shape.
+     * 
+     */
+    public IShape and(IShape shape);
 
 }
