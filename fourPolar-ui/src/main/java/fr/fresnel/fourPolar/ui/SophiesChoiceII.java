@@ -28,11 +28,13 @@ import ij.io.FileSaver;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 
 /**
- * Given this choice, Sophie (AKA boss) can draw gauge figures that contain 2D
+ * With this choice, Sophie (AKA boss) can draw gauge figures that contain 2D
  * rho stick, 2D delta stick and 2D eta sticks.
  * 
  * To draw the gauge figures, the orientation images should be formed using
  * SophiesChoiceI.
+ * 
+ * * To use this code, the only needed piece of information is the path to images.
  */
 public class SophiesChoiceII {
     public static void main(final String[] args) throws IOException {
