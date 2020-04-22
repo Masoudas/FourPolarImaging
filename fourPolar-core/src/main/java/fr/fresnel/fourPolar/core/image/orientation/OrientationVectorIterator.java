@@ -29,9 +29,8 @@ class OrientationVectorIterator implements IOrientationVectorIterator {
         _rhoCursor = rhoCursor;
         _deltaCursor = deltaCursor;
         _etaCursor = etaCursor;
-        
-        this._orientationVector = new OrientationVector(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY,
-                Double.NEGATIVE_INFINITY);
+
+        this._orientationVector = new OrientationVector(Double.NaN, Double.NaN, Double.NaN);
     }
 
     @Override
@@ -46,7 +45,7 @@ class OrientationVectorIterator implements IOrientationVectorIterator {
         double eta = this._etaCursor.next().value().get();
 
         this._orientationVector.setAngles(rho, delta, eta);
-      
+
         return this._orientationVector;
     }
 
