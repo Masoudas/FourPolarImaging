@@ -278,27 +278,10 @@ public class ShapeFactoryTest {
     }
 
     @Test
-    public void and_AndTwoRectangles_ReturnsAndedShape() {
-        IShape shapeWithin = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 });
-        IShape shapeOutside = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 4, 4 });
-
-        IShape andResult = shapeWithin.and(shapeOutside);
-
-        WritableBox andedShape = GeomMasks.closedBox(new double[] { 0, 0, }, new double[] { 1, 2 });
-        assertTrue(_checkPointInsideMask(andedShape, andResult.getIterator()));
-
-    }
-
-    @Test
-    public void and_AndTwoNonOverlappingRectangles_IteratorHasNoElements() {
-        IShape shapeWithin = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 });
-        IShape shapeOutside = new ShapeFactory().closedBox(new long[] { 2, 2 }, new long[] { 4, 4 });
-
-        IShape andResult = shapeWithin.and(shapeOutside);
-
-        assertTrue(!andResult.getIterator().hasNext());
-
-    }
+    public void isInside_LesserDimensionPointThanShapeDim_FalseIsReturned() {
+        IShape shape2D = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 });
+        assertTrue(!shape2D.isInside(new long[]{1}));
+    }    
 
     private boolean _checkPointInsideMask(RealMaskRealInterval box, IShapeIterator iterator) {
         boolean equals = true;

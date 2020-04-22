@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import net.imglib2.realtransform.AffineTransform;
 import net.imglib2.realtransform.AffineTransform3D;
@@ -174,29 +175,13 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public boolean isInside(long[] point) {
+        if (point.length < this._spaceDim ){
+            return false;
+        }
+
         this._pointMask.setPosition(point);
         return this._maskRealInterval.test(this._pointMask);
     }
 
-    @Override
-    public IShape and(IShape shape) {
-        if (this._transformed == null) {
-            this._transformed = new ImgLib2Shape(this._type, this._shapeDim, this._spaceDim);
-        }
-
-        if (shape.shapeDim() != this._shapeDim || shape.spaceDim() != this._spaceDim) {
-            throw new IllegalArgumentException(
-                    "The two shapes must have the same dimension and have the same space dimension");
-        }
-
-        RealMaskRealInterval result = null;
-        if (shape instanceof ImgLib2Shape) {
-            ImgLib2Shape shapeRef = (ImgLib2Shape) shape;
-            result = this._maskRealInterval.and(shapeRef.getRealMaskRealInterval());
-        }
-        this._transformed.setImgLib2Shape(result);
-
-        return this._transformed;
-    }
 
 }

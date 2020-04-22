@@ -16,12 +16,14 @@ public interface IShape {
     public ShapeType getType();
 
     /**
-     * Returns the dimension of the space over which the shape is defined.
+     * Returns the dimension of the space over which the shape is defined. A 2D box
+     * (shapeDim=2) can be defined a 3D space (spaceDim=3).
      */
     public int spaceDim();
 
     /**
-     * Returns the dimension of the shape (see numDimension).
+     * Returns the dimension of the shape (see spaceDim). A 2D box (shapeDim=2) can
+     * be defined a 3D space (spaceDim=3).
      * 
      * @return
      */
@@ -61,18 +63,11 @@ public interface IShape {
     public IShape getTransformedShape();
 
     /**
-     * Checks whether the given point is inside the shape.
+     * Checks whether the given point is inside the shape. If the point dimension is
+     * less than the space dimension of the shape (see shapeDim and spaceDim), then
+     * false is returned.
      */
     public boolean isInside(long[] point);
 
-    /**
-     * And this shape with the given shape. The same reference is returned for the
-     * shape. In case there's no overlap, the resulting shape has no elements.
-     * 
-     * @throws IllegalArgumentException in case shape does not have the same
-     *                                  dimension and space dimension as this shape.
-     * 
-     */
-    public IShape and(IShape shape);
 
 }
