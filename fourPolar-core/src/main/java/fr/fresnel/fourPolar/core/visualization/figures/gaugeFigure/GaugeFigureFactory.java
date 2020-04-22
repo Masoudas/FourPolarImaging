@@ -13,40 +13,41 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGa
  */
 public class GaugeFigureFactory {
     /**
-     * Create a stick figure from an Image interface. This constructor should be
-     * used when a previously generated stick figure is read.
+     * Create a gauge figure from an Image interface. This constructor should be
+     * used when a previously generated gauge figure is read.
      * 
-     * @param type  is the type of this stick figure.
-     * @param image is the {@link Image} interface of the figure.
-     * @return an stick figure.
+     * @param angleGaugeType is the angle gauge type of this gauge figure.
+     * @param image          is the {@link Image} interface of the figure.
+     * @return an gauge figure.
      */
-    public static IGaugeFigure createExisting(AngleGaugeType type, Image<RGB16> image, ICapturedImageFileSet fileSet) {
+    public static IGaugeFigure createExisting(AngleGaugeType angleGaugeType, Image<RGB16> image,
+            ICapturedImageFileSet fileSet) {
         Objects.requireNonNull(image, "image cannot be null");
         Objects.requireNonNull(fileSet, "fileSet cannot be null");
 
-        return new GaugeFigure(type, image, fileSet);
+        return new GaugeFigure(angleGaugeType, image, fileSet);
     }
 
     /**
-     * Creates an empty stick figure, which can be filled with sticks. Note that The
+     * Creates an empty gauge figure, which can be filled with sticks. Note that The
      * generated figure is in fact not empty, but rather has an RGB version of
      * {@link ISoIImage}. The sticks are drawn on top of this figure. Note that the
      * underlying {@link Image} uses the same {@link ImageFactory} (has the same
      * image implementation).
      * 
-     * @param type     is the desired type of stick figure.
-     * @param soiImage is the corresponding {@link ISoIImage}.
-     * @return an empty stick figure.
+     * @param angleGaugeType is the angle gauge used in this figure.
+     * @param type           is the desired type of gauge figure.
+     * @param soiImage       is the corresponding {@link ISoIImage}.
+     * @return an empty gauge figure.
      */
-    public static IGaugeFigure createEmpty(
-        ISoIImage soiImage, ICapturedImageFileSet fileSet) {
+    public static IGaugeFigure createEmpty(AngleGaugeType angleGaugeType, ISoIImage soiImage,
+            ICapturedImageFileSet fileSet) {
         Objects.requireNonNull(soiImage, "soiImage cannot be null");
         Objects.requireNonNull(fileSet, "fileSet cannot be null");
 
-        Image<RGB16> image = soiImage.getImage().getFactory().create(
-            soiImage.getImage().getDimensions(), RGB16.zero());
+        Image<RGB16> image = soiImage.getImage().getFactory().create(soiImage.getImage().getDimensions(), RGB16.zero());
 
-        return new GaugeFigure(AngleGaugeType.Empty, image, fileSet);
+        return new GaugeFigure(angleGaugeType, image, fileSet);
 
     }
 }

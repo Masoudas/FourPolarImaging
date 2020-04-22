@@ -15,12 +15,6 @@ public interface IGaugeFigure {
     public AngleGaugeType getType();
 
     /**
-     * Sets the gauge type.
-     * @param type
-     */
-    public void setType(AngleGaugeType type);
-
-    /**
      * Returns the underlying {@link Image}.
      * @return
      */

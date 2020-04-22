@@ -41,9 +41,4 @@ class GaugeFigure implements IGaugeFigure {
         return _fileSet;
     }
 
-    @Override
-    public void setType(AngleGaugeType type) {
-        this._type = type;
-    }
-
 }
