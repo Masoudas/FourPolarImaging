@@ -95,7 +95,6 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public IShape rotate(final double x_rotation, final double z_rotation, final double y_rotation) {
-
         _xRotation = -x_rotation;
         _yRotation = -y_rotation;
         _zRotation = -z_rotation;
