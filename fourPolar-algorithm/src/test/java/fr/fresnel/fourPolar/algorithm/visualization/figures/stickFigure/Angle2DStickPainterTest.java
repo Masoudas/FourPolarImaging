@@ -64,8 +64,6 @@ public class Angle2DStickPainterTest {
         Image<UINT16> soi = new ImgLib2ImageFactory().create(dim, UINT16.zero());
         ISoIImage soiImage = new SoIImage(fileSet, soi);
 
-        IGaugeFigure stickFigure = GaugeFigureFactory.createEmpty(soiImage, fileSet);
-
         int length = 40;
         int thickness = 2;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
@@ -76,6 +74,7 @@ public class Angle2DStickPainterTest {
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
 
         painter.draw(entireImageRegion, new UINT16(0));
+        IGaugeFigure stickFigure = painter.getStickFigure();
 
         _saveAngleFigure(rhoImage, "rhoImage.tif");
         _saveStickFigure(stickFigure, "rho2DStick.tiff");
@@ -117,19 +116,18 @@ public class Angle2DStickPainterTest {
         Image<UINT16> soi = new ImgLib2ImageFactory().create(dim, UINT16.zero());
         ISoIImage soiImage = new SoIImage(fileSet, soi);
 
-        IGaugeFigure stickFigure = GaugeFigureFactory.createEmpty(soiImage, fileSet);
-
         int length = 40;
         int thickness = 4;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IAngleGaugePainter painter = GaugePainterFactory.rho2DStick(stickFigure, orientationImage, soiImage, length,
-                thickness, cMap);
+        IAngleGaugePainter painter = GaugePainterFactory.rho2DStick(orientationImage, soiImage, length, thickness,
+                cMap);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0 },
                 new long[] { 1024, 512, 10, 3 });
 
         painter.draw(entireImageRegion, new UINT16(0));
+        IGaugeFigure stickFigure = painter.getStickFigure();
 
         _saveAngleFigure(rhoImage, "rhoImage_3D.tif");
         _saveStickFigure(stickFigure, "rho2DStick_3D.tiff");
@@ -173,18 +171,17 @@ public class Angle2DStickPainterTest {
         Image<UINT16> soi = new ImgLib2ImageFactory().create(dim, UINT16.zero());
         ISoIImage soiImage = new SoIImage(fileSet, soi);
 
-        IGaugeFigure stickFigure = GaugeFigureFactory.createEmpty(soiImage, fileSet);
-
         int length = 20;
         int thickness = 4;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IAngleGaugePainter painter = GaugePainterFactory.delta2DStick(stickFigure, orientationImage, soiImage, length,
-                thickness, cMap);
+        IAngleGaugePainter painter = GaugePainterFactory.delta2DStick(orientationImage, soiImage, length, thickness,
+                cMap);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
 
         painter.draw(entireImageRegion, new UINT16(0));
+        IGaugeFigure stickFigure = painter.getStickFigure();
 
         _saveAngleFigure(rhoImage, "rhoImage.tif");
         _saveAngleFigure(deltaImage, "deltaImage.tif");
@@ -234,14 +231,13 @@ public class Angle2DStickPainterTest {
         int thickness = 2;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IGaugeFigure stickFigure = GaugeFigureFactory.createEmpty(soiImage, fileSet);
-
-        IAngleGaugePainter painter = GaugePainterFactory.eta2DStick(stickFigure, orientationImage, soiImage, length,
-                thickness, cMap);
+        IAngleGaugePainter painter = GaugePainterFactory.eta2DStick(orientationImage, soiImage, length, thickness,
+                cMap);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
 
         painter.draw(entireImageRegion, new UINT16(0));
+        IGaugeFigure stickFigure = painter.getStickFigure();
 
         _saveAngleFigure(rhoImage, "rhoImage.tif");
         _saveAngleFigure(deltaImage, "etaImage.tif");
@@ -282,14 +278,13 @@ public class Angle2DStickPainterTest {
         int thickness = 2;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IGaugeFigure stickFigure = GaugeFigureFactory.createEmpty(soiImage, fileSet);
-
-        IAngleGaugePainter painter = GaugePainterFactory.eta2DStick(stickFigure, orientationImage, soiImage, length,
-                thickness, cMap);
+        IAngleGaugePainter painter = GaugePainterFactory.eta2DStick(orientationImage, soiImage, length, thickness,
+                cMap);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
 
         painter.draw(entireImageRegion, new UINT16(0));
+        IGaugeFigure stickFigure = painter.getStickFigure();
 
         _saveAngleFigure(rhoImage, "rhoImage_OurOfRange.tif");
         _saveStickFigure(stickFigure, "rho2DStick_OurOfRange.tiff");
@@ -315,13 +310,12 @@ public class Angle2DStickPainterTest {
             rhoCursor.setPixel(pixel);
         }
 
-        
         for (int k = 0; k < dim[2]; k++) {
             int j = 0;
             for (int i = 0; i <= 180; i += 1) {
                 j = i % 20 >= 1 ? j : j + 2;
-                setPixel(
-                    ra, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, k }, new Float32((float) Math.toRadians(i)));
+                setPixel(ra, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, k },
+                        new Float32((float) Math.toRadians(i)));
             }
         }
 
@@ -333,15 +327,14 @@ public class Angle2DStickPainterTest {
         int thickness = 2;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IGaugeFigure stickFigure = GaugeFigureFactory.createEmpty(soiImage, fileSet);
+        IAngleGaugePainter painter = GaugePainterFactory.rho2DStick(orientationImage, soiImage, length, thickness,
+                cMap);
 
-        IAngleGaugePainter painter = GaugePainterFactory.rho2DStick(
-            stickFigure, orientationImage, soiImage, length, thickness, cMap);
-
-        IShape smallerRegionOfImage = new ShapeFactory().closedPolygon2D(
-            new long[]{100, 500, 400, 300, 200}, new long[]{100, 100, 500, 200, 500});
+        IShape smallerRegionOfImage = new ShapeFactory().closedPolygon2D(new long[] { 100, 500, 400, 300, 200 },
+                new long[] { 100, 100, 500, 200, 500 });
 
         painter.draw(smallerRegionOfImage, new UINT16(0));
+        IGaugeFigure stickFigure = painter.getStickFigure();
 
         _saveAngleFigure(rhoImage, "rhoImage.tif");
         _saveStickFigure(stickFigure, "rho2DStick_smallerRegion.tiff");
