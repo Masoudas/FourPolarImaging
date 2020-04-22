@@ -6,6 +6,7 @@ import java.io.IOException;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.GaugePainterFactory;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
+import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
@@ -38,13 +39,16 @@ import net.imglib2.img.display.imagej.ImageJFunctions;
  */
 public class SophiesChoiceII {
     public static void main(final String[] args) throws IOException {
-        // Define path to orientation images. NO BACKWARD SLASHES!
-        final File rhoFile = new File("/home/masoud/Documents/SampleImages/1/rho.tif");
-        final File deltaFile = new File("/home/masoud/Documents/SampleImages/1/delta.tif");
-        final File etaFile = new File("/home/masoud/Documents/SampleImages/1/eta.tif");
-        final File soiFile = new File("/home/masoud/Documents/SampleImages/1/soi.tif");
+        // Define root folder of orientation image. NO BACKSLASHES!
+        String rootFolder = "/home/masoud/Documents/SampleImages/A4PolarDataSet";
 
-        // Stick visual params.
+        // Define path to orientation images.
+        final File rhoFile = new File(rootFolder, "rho.tif");
+        final File deltaFile = new File(rootFolder, "delta.tif");
+        final File etaFile = new File(rootFolder, "eta.tif");
+        final File soiFile = new File(rootFolder, "soi.tif");
+
+        // 2D Stick visual params.
         final int length = 40;
         final int thickness = 2;
         final ColorMap cMapRho2D = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
@@ -108,7 +112,7 @@ public class SophiesChoiceII {
         try {
             reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), UINT16.zero());
             final Image<UINT16> soi = reader.read(rhoFile);
-            soiImage = new SoIImage(null, soi);
+            soiImage = new SoIImage(new CapturedImageFileSet(1, new File("1.tif")), soi);
 
         } catch (final NoReaderFoundForImage e) {
         }

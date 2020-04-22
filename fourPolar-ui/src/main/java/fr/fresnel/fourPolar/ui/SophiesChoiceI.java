@@ -47,14 +47,14 @@ import net.imglib2.img.display.imagej.ImageJFunctions;
  */
 public class SophiesChoiceI {
     public static void main(String[] args) throws IOException {
-        // Define root folder of polarization image. NO BACKWARD SLASHES!
-        String rootFolder = "/home/masoud/Documents/SampleImages";
+        // Define root folder of polarization image. NO BACKSLASHES!
+        String rootFolder = "/home/masoud/Documents/SampleImages/A4PolarDataSet";
 
         // Add name of file for each polarization image here.
-        File pol0File = new File(rootFolder, "pol0.tif");
-        File pol45File = new File(rootFolder, "pol45.tif");
-        File pol90File = new File(rootFolder, "pol90.tif");
-        File pol135File = new File(rootFolder, "pol135.tif");
+        File pol0File = new File(rootFolder, "AVG_Pol0.tif");
+        File pol45File = new File(rootFolder, "AVG_Pol45.tif");
+        File pol90File = new File(rootFolder, "AVG_Pol90.tif");
+        File pol135File = new File(rootFolder, "AVG_Pol135.tif");
 
         ImageFactory imgFactory = new ImgLib2ImageFactory();
         Image<UINT16>[] polImages = readPolarizationImages(pol0File, pol45File, pol90File, pol135File, imgFactory);
