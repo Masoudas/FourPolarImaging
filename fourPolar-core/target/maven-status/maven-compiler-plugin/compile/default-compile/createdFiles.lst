@@ -1,0 +1,8 @@
+fr/fresnel/fourPolar/core/image/polarization/PolarizationImageSet$1.class
+fr/fresnel/fourPolar/core/imageSet/acquisition/bead/BeadImageSet.class
+fr/fresnel/fourPolar/core/imagingSetup/FourPolarImagingSetup.class
+fr/fresnel/fourPolar/core/imagingSetup/imageFormation/Cameras$1.class
+fr/fresnel/fourPolar/core/image/orientation/OrientationImage$1.class
+fr/fresnel/fourPolar/core/imagingSetup/imageFormation/Cameras.class
+fr/fresnel/fourPolar/core/imageSet/acquisition/sample/SampleImageSet.class
+fr/fresnel/fourPolar/core/image/generic/imgLib2Model/ImgLib2ImageFactory$1.class

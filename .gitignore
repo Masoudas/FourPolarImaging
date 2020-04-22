@@ -15,11 +15,11 @@ hs_err_pid*
 ##############################
 ## Maven
 ##############################
-fourPolar-core/target
-fourPolar-io/target
-fourPolar-math/target
-fourPolar-viewModels/target
-fourPolar-ImageJGUI/target
+./fourPolar-core/target
+./fourPolar-io/target
+./fourPolar-math/target
+./fourPolar-viewModels/target
+./fourPolar-ImageJGUI/target
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup

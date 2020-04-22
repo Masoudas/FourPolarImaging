@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern.SampleImageSetByNamePatternFinderTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s - in fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern.SampleImageSetByNamePatternFinderTest
