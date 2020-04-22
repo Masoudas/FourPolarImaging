@@ -68,8 +68,8 @@ public class Angle2DStickPainterTest {
         int thickness = 2;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IAngleGaugePainter painter = GaugePainterFactory.rho2DStick(stickFigure, orientationImage, soiImage, length,
-                thickness, cMap);
+        IAngleGaugePainter painter = GaugePainterFactory.rho2DStick(orientationImage, soiImage, length, thickness,
+                cMap);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
 
