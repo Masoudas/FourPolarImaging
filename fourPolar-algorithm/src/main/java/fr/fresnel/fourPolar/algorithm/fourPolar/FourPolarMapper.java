@@ -36,7 +36,7 @@ public class FourPolarMapper {
      * @throws ImpossibleOrientationVector
      */
     public void map(IIntensityVectorIterator intensityIterator, IOrientationVectorIterator orientationIterator)
-            throws IteratorMissMatch, ImpossibleOrientationVector {
+            throws IteratorMissMatch {
         if (orientationIterator.size() != intensityIterator.size()) {
             throw new IteratorMissMatch("Orientation and intensity iterators don't have same size. Hence,"
                     + " orientation image does not correspond to polarization image.");
