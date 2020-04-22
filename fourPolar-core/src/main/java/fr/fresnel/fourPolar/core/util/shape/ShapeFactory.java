@@ -10,10 +10,14 @@ import net.imglib2.roi.geom.real.WritablePolygon2D;
 public class ShapeFactory {
     /**
      * Generates a box from min to max. The box is closed in the sense that it
-     * contains the boundary.
+     * contains the boundary. Note that the dimension of the shape can be less than
+     * the space (min = [0, 0, 1], max = [2, 2, 1]);
      * 
      * @param min is the minimum coordinate.
      * @param max is the maximum coordinate.
+     * 
+     * @throws IllegalArgumentException in case min and max don't have equal
+     *                                  dimension or shape dimension is less than 2.
      */
     public IShape closedBox(long[] min, long[] max) {
         Objects.requireNonNull(min, "min should not be null");
@@ -23,14 +27,17 @@ public class ShapeFactory {
             throw new IllegalArgumentException("min and max should have the same dimension");
         }
 
-        double[] minCopy = Arrays.stream(min).asDoubleStream().toArray();
-        double[] maxCopy = Arrays.stream(max).asDoubleStream().toArray();
-
         int shapeDim = 0;
         do {
             shapeDim++;
         } while (shapeDim < min.length && min[shapeDim] != max[shapeDim]);
 
+        if (shapeDim < 2) {
+            throw new IllegalArgumentException("Dimension of the box has to be at least two.");
+        }
+
+        double[] minCopy = Arrays.stream(min).asDoubleStream().toArray();
+        double[] maxCopy = Arrays.stream(max).asDoubleStream().toArray();
         WritableBox box = GeomMasks.closedBox(minCopy, maxCopy);
 
         ImgLib2Shape shape = new ImgLib2Shape(ShapeType.Closed2DBox, shapeDim, min.length);
@@ -42,8 +49,9 @@ public class ShapeFactory {
         Objects.requireNonNull(x, "x should not be null");
         Objects.requireNonNull(y, "y should not be null");
 
-        if (x.length != y.length) {
-            throw new IllegalArgumentException("x and y should have the same dimension.");
+        if (x.length != y.length || x.length < 3) {
+            throw new IllegalArgumentException(
+                "x and y should have the same dimension and greater than three.");
         }
 
         double[] xPoints = Arrays.stream(x).asDoubleStream().toArray();
@@ -56,5 +64,7 @@ public class ShapeFactory {
 
         return shape;
     }
+
+    
 
 }
