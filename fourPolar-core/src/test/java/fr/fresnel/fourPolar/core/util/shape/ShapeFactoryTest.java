@@ -275,7 +275,7 @@ public class ShapeFactoryTest {
     }    
 
     private boolean _checkPointInsideMask(RealMaskRealInterval box, IShapeIterator iterator) {
-        boolean equals = true;
+        boolean equals = iterator.hasNext();
         while (iterator.hasNext()) {
             double[] point = Arrays.stream(iterator.next()).asDoubleStream().toArray();
             PointMask pointMask = GeomMasks.pointMask(point);
