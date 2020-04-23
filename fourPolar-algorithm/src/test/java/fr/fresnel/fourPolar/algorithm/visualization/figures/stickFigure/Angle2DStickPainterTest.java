@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -84,7 +85,7 @@ public class Angle2DStickPainterTest {
     @Test
     public void rho2DStick_4DImageRhoChangesFrom0to180_GeneratesProperImage()
             throws CannotFormOrientationImage, ConverterToImgLib2NotFound, InterruptedException {
-        long[] dim = { 1024, 512, 10, 3 };
+        long[] dim = { 1024, 512, 3, 80 };
         CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
         Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
         Image<Float32> deltaImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
@@ -98,13 +99,14 @@ public class Angle2DStickPainterTest {
             rhoCursor.setPixel(pixel);
         }
 
-        for (int c = 0; c < 3; c++) {
-            for (int k = 0; k < 10; k++) {
+        Random angle = new Random();
+        for (int c = 0; c < dim[3]; c++) {
+            for (int k = 0; k < dim[2]; k++) {
                 int j = 0;
                 for (int i = 0; i <= 180; i += 1) {
                     j = i % 20 >= 1 ? j : j + 2;
                     setPixel(ra, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, k, c },
-                            new Float32((float) Math.toRadians(i)));
+                            new Float32((float) Math.toRadians(angle.nextInt(180))));
 
                 }
             }
@@ -122,12 +124,13 @@ public class Angle2DStickPainterTest {
         IAngleGaugePainter painter = GaugePainterFactory.rho2DStick(orientationImage, soiImage, length, thickness,
                 cMap);
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0 },
-                new long[] { 1024, 512, 10, 3 });
+        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 },
+                new long[] { 1024, 512 });
 
         painter.draw(entireImageRegion, new UINT16(0));
         IGaugeFigure stickFigure = painter.getStickFigure();
 
+        
         _saveAngleFigure(rhoImage, "rhoImage_3D.tif");
         _saveStickFigure(stickFigure, "rho2DStick_3D.tiff");
 
