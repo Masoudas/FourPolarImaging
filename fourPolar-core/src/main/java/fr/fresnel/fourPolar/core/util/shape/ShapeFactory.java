@@ -40,8 +40,7 @@ public class ShapeFactory {
         double[] maxCopy = Arrays.stream(max).asDoubleStream().toArray();
         WritableBox box = GeomMasks.closedBox(minCopy, maxCopy);
 
-        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.Closed2DBox, shapeDim, min.length);
-        shape.setImgLib2Shape(box);
+        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.Closed2DBox, shapeDim, min.length, box);
         return shape;
     }
 
@@ -59,8 +58,7 @@ public class ShapeFactory {
 
         WritablePolygon2D polygon2D = GeomMasks.closedPolygon2D(xPoints, yPoints);
 
-        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.ClosedPolygon2D, 2, 2);
-        shape.setImgLib2Shape(polygon2D);
+        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.ClosedPolygon2D, 2, 2, polygon2D);
 
         return shape;
     }

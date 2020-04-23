@@ -30,37 +30,23 @@ public interface IShape {
     public int shapeDim();
 
     /**
-     * Apply a 3d affine rotation to the original shape in the xyz space.
+     * Apply a 3d affine rotation and translation to the original shape in the xyz
+     * space.
      * <p>
      * VERY IMPORTANT NOTE: The order of rotation would be x, z and then y. If only
-     * xy rotation is needed, use z_rotation. Use getTransformedShape() to access
-     * the rotated shape.
+     * xy rotation is needed, use z_rotation.
      * 
      * @param x_rotation is the rotation around x-axis in radian.
      * @param z_rotation is the rotation around z-axis in radian.
      * @param y_rotation is the rotation around y-axis in radian.
      */
-    public IShape rotate(double x_rotation, double z_rotation, double y_rotation);
+    public void transform(long[] translation, double x_rotation, double z_rotation, double y_rotation);
 
     /**
-     * Apply a translation to the original shape.
-     * <p>
-     * VERY IMPORTANT NOTE: If rotation is applied, the order would be rotate, then
-     * translate.
-     * 
-     * @param translation is the desired translation. If number of dimensions is
-     *                    less than the shape dimension, an IllegalArgumentException
-     *                    is raised.
+     * Using this method, we can reset the shape to it's original untransformed
+     * formation.
      */
-    public void translate(long[] translation);
-
-    /**
-     * Return the transformed shape. Note that the same reference is returned after
-     * each transformation. Once a transformed shape is returned, this method
-     * returns the original image.
-     * 
-     */
-    public IShape getTransformedShape();
+    public void resetToOriginalShape();
 
     /**
      * Checks whether the given point is inside the shape. If the point dimension is
@@ -69,5 +55,14 @@ public interface IShape {
      */
     public boolean isInside(long[] point);
 
+    /**
+     * Ands this shape with the given shape. In case there's no overlap, the
+     * resulting shape has no elements.
+     * 
+     * @throws IllegalArgumentException in case source and destination shape don't
+     *                                  have the same space dimension.
+     * 
+     */
+    public void and(IShape shape);
 
 }
