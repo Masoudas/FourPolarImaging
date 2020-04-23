@@ -29,6 +29,9 @@ class Angle2DStickPainter implements IAngleGaugePainter {
     final private IPixelRandomAccess<UINT16> _soiRA;
     final private ColorMap _colormap;
 
+    /**
+     * We generate a single stick, and then transform it for different dipoles.
+     */
     final private IShape _stick;
 
     private final OrientationAngle _slopeAngle;
@@ -123,11 +126,11 @@ class Angle2DStickPainter implements IAngleGaugePainter {
     }
 
     private void _drawStick(Pixel<RGB16> pixel, IOrientationVector orientationVector, long[] stickCenterPosition) {
-        IShape stick = _getStick(stickCenterPosition, orientationVector);
-        ShapeUtils.and(this._imageRegion, stick);
+        _transformStick(stickCenterPosition, orientationVector);
+        this._stick.and(this._imageRegion);
         final RGB16 color = _getStickColor(orientationVector);
 
-        IShapeIterator stickIterator = stick.getIterator();
+        IShapeIterator stickIterator = this._stick.getIterator();
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
             this._stickFigureRA.setPosition(stickPosition);
@@ -142,10 +145,9 @@ class Angle2DStickPainter implements IAngleGaugePainter {
         return color;
     }
 
-    private IShape _getStick(long[] position, IOrientationVector orientationVector) {
-        this._stick.translate(position);
-        this._stick.rotate(0, Math.PI / 2 + orientationVector.getAngle(_slopeAngle), 0);
-        return this._stick.getTransformedShape();
+    private void _transformStick(long[] position, IOrientationVector orientationVector) {
+        this._stick.resetToOriginalShape();
+        this._stick.transform(position, 0, Math.PI / 2 + orientationVector.getAngle(_slopeAngle), 0);
     }
 
     private IOrientationVector _getOrientationVector(long[] stickCenterPosition) {
