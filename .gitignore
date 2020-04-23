@@ -17,7 +17,7 @@ hs_err_pid*
 ##############################
 fourPolar-core/target/*
 fourPolar-io/target/*
-fourPolar-math/target/*
+fourPolar-algorithm/target/*
 fourPolar-viewModels/target/*
 fourPolar-ImageJGUI/target/*
 pom.xml.tag
