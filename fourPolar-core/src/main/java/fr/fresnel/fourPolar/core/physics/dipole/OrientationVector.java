@@ -9,6 +9,7 @@ public class OrientationVector implements IOrientationVector {
     private double _rho;
     private double _delta;
     private double _eta;
+    private boolean _isWellDefind;
 
     /**
      * Maximum possible value for the rho
@@ -26,10 +27,9 @@ public class OrientationVector implements IOrientationVector {
     public final static double MAX_Eta = Math.PI / 2;
 
     /**
-     * The maximum allowed devation from the given angle ranges. Hence:
-     * rho in [0 - ERR_Angle, MAX_Rho + ERR_Angle]
-     * delta in [0 - ERR_Angle, MAX_delta + ERR_Angle]
-     * eta in [0 - ERR_Angle, MAX_eta + ERR_Angle]
+     * The maximum allowed devation from the given angle ranges. Hence: rho in [0 -
+     * ERR_Angle, MAX_Rho + ERR_Angle] delta in [0 - ERR_Angle, MAX_delta +
+     * ERR_Angle] eta in [0 - ERR_Angle, MAX_eta + ERR_Angle]
      */
     final private static double ERR_Angle = Math.PI / 180 * 0.0001;
 
@@ -37,7 +37,7 @@ public class OrientationVector implements IOrientationVector {
         double max = 0;
         switch (angle) {
             case rho:
-                max = MAX_Rho;      
+                max = MAX_Rho;
                 break;
 
             case delta:
@@ -45,16 +45,16 @@ public class OrientationVector implements IOrientationVector {
 
             case eta:
                 max = MAX_Eta;
-        
+
             default:
                 break;
         }
-        
+
         return max;
     }
 
     /**
-     * Models the orientation angles calculated using the four polar method. 
+     * Models the orientation angles calculated using the four polar method.
      * 
      * @param rho   : rho angle in radian, ranges from 0 to pi. NaN is acceptable.
      * @param delta : delta angle in radian, ranges from 0 to pi. NaN is acceptable.
@@ -62,6 +62,8 @@ public class OrientationVector implements IOrientationVector {
      */
     public OrientationVector(double rho, double delta, double eta) throws OrientationAngleOutOfRange {
         this.setAngles(rho, delta, eta);
+        _setIsWellDefined();
+
     }
 
     @Override
@@ -101,7 +103,9 @@ public class OrientationVector implements IOrientationVector {
         _delta = delta;
 
         _checkEta(eta);
-        _eta = eta; 
+        _eta = eta;
+
+        _setIsWellDefined();
     }
 
     private void _checkRho(double value) throws OrientationAngleOutOfRange {
@@ -120,6 +124,15 @@ public class OrientationVector implements IOrientationVector {
         if (value < -ERR_Angle || value - MAX_Eta > ERR_Angle) {
             throw new OrientationAngleOutOfRange("Eta is out of [0, pi/2) range");
         }
+    }
+
+    @Override
+    public boolean isWellDefined() {
+        return false;
+    }
+
+    private void _setIsWellDefined() {
+        this._isWellDefind = !Double.isNaN(this._delta) && !Double.isNaN(this._eta) && !Double.isNaN(this._rho);
     }
 
 }

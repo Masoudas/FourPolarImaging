@@ -31,4 +31,9 @@ public interface IOrientationVector {
      * @throws OrientationAngleOutOfRange
      */
     public void setAngles(double rho, double delta, double eta) throws OrientationAngleOutOfRange;
+
+    /**
+     * Returns true if none of the orientation angles are undefined (are NaN).
+     */
+    public boolean isWellDefined();
 }
