@@ -33,10 +33,12 @@ public class OrientationVectorTest {
         OrientationVector vec1 = new OrientationVector(Double.NaN, 0, 0);
         OrientationVector vec2 = new OrientationVector(0, Double.NaN, 0);
         OrientationVector vec3 = new OrientationVector(0, 0, Double.NaN);
+        OrientationVector vec4 = new OrientationVector(0, 0, 0);
 
         assertTrue(!vec1.isWellDefined());
         assertTrue(!vec2.isWellDefined());
         assertTrue(!vec3.isWellDefined());
+        assertTrue(vec4.isWellDefined());
 
         
     }

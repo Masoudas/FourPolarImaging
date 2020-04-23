@@ -9,7 +9,7 @@ public class OrientationVector implements IOrientationVector {
     private double _rho;
     private double _delta;
     private double _eta;
-    private boolean _isWellDefind;
+    private boolean _isWellDefind = false;
 
     /**
      * Maximum possible value for the rho
@@ -62,7 +62,6 @@ public class OrientationVector implements IOrientationVector {
      */
     public OrientationVector(double rho, double delta, double eta) throws OrientationAngleOutOfRange {
         this.setAngles(rho, delta, eta);
-        _setIsWellDefined();
 
     }
 
@@ -128,7 +127,7 @@ public class OrientationVector implements IOrientationVector {
 
     @Override
     public boolean isWellDefined() {
-        return false;
+        return this._isWellDefind;
     }
 
     private void _setIsWellDefined() {
