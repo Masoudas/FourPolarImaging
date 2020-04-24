@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 
@@ -9,6 +10,9 @@ import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
  */
 class ShapeScalarIterator implements IShapeIterator {
     public static IShapeIterator getIterator(IShape shape, long[] scaleDimension) {
+        Objects.requireNonNull(shape, "Shape cannot be null");
+        Objects.requireNonNull(scaleDimension, "scaleDimension cannot be null");
+
         if (shape.shapeDim() >= scaleDimension.length) {
             return shape.getIterator();
         } else {
@@ -20,11 +24,15 @@ class ShapeScalarIterator implements IShapeIterator {
     final private long[] _scaleDim;
     private long[] _coords;
     final private int _shapeDim;
-    
+
     private long _sumHigherDims;
     private long _currentSumHigherDims;
 
     private ShapeScalarIterator(IShapeIterator shapeIterator, int shapeDim, long[] scaleDimension) {
+        if (Arrays.stream(scaleDimension, shapeDim, scaleDimension.length).min().getAsLong() <= 0) {
+            throw new IllegalArgumentException("Scale dimension cannot be zero or negative");
+        }
+        
         this._scaleDim = scaleDimension;
         this._coords = scaleDimension.clone();
         this._coords[this._coords.length - 1] += 1;
