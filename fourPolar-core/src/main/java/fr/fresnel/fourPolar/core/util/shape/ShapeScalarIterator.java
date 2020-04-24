@@ -72,7 +72,7 @@ class ShapeScalarIterator implements IShapeIterator {
             this._coords[i - 1] %= this._scaleDim[i - 1];
         }
 
-        return this._coords;
+        return this._coords.clone();
     }
 
     @Override

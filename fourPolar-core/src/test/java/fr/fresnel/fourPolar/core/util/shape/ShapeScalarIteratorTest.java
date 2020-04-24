@@ -34,7 +34,7 @@ public class ShapeScalarIteratorTest {
         while (iterator.hasNext()) {
             long[] pos = iterator.next();
             counter++;
-            System.out.println(pos[0] + " " + pos[1] + " " + pos[2]);
+            System.out.println(pos[0] + " " + pos[1] + " " + pos[2] + " " + pos[3]);
 
         }
 
@@ -53,7 +53,7 @@ public class ShapeScalarIteratorTest {
             long[] pos = iterator.next();
             counter++;
             System.out.println(pos[0] + " " + pos[1] + " " + pos[2] + " " + pos[3] + " " + pos[4]);
-
+            
         }
 
         assertTrue(counter == 4 * 3 * 2);
