@@ -30,8 +30,8 @@ public interface IShape {
     public int shapeDim();
 
     /**
-     * Apply a 3d rotation with the given axis order, where axis = 0 is the first
-     * axis of the shape.
+     * Apply a 3d rotation with the given axis order, where axis in {0, 1, 2},
+     * non-repetitive.
      * 
      * @param angle1 is the rotation over the first axis in radian.
      * @param angle2 is the rotation over the second axis in radian.

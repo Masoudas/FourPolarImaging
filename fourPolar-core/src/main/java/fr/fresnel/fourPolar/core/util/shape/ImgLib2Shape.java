@@ -122,8 +122,9 @@ class ImgLib2Shape implements IShape {
         }
 
         IntSummaryStatistics stats = Arrays.stream(axis).summaryStatistics();
-        if (stats.getMin() < 0 || stats.getMax() > this._spaceDim) {
-            throw new IllegalArgumentException("Rotation axis must be between 0 and space dimension");
+        if (stats.getMin() < 0 || stats.getMax() > 3 || stats.getSum() != 3) {
+            throw new IllegalArgumentException(
+                    "Rotation axis must be between 0 and 2 dimension and Repetition is not allowed.");
         }
 
         AffineTransform3D affine3D = new AffineTransform3D();
@@ -134,7 +135,7 @@ class ImgLib2Shape implements IShape {
         AffineTransform fTransform = new AffineTransform(_spaceDim);
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
-                fTransform.set(affine3D.get(row, column), axis[row], axis[column]);
+                fTransform.set(affine3D.get(row, column), row, column);
             }
         }
 
@@ -161,7 +162,7 @@ class ImgLib2Shape implements IShape {
     @Override
     public void rotate2D(double angle) {
         AffineTransform2D affine2D = new AffineTransform2D();
-        affine2D.rotate(angle);
+        affine2D.rotate(-angle);
 
         AffineTransform fTransform = new AffineTransform(_spaceDim);
         for (int row = 0; row < 2; row++) {
