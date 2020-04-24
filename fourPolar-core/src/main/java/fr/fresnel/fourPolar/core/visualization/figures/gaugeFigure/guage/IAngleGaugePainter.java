@@ -14,19 +14,19 @@ public interface IAngleGaugePainter {
      * soiThreshold.
      * <p>
      * For the region, note that the pixels start from 0 to image dimension - 1 of
-     * the orientation image (or equivalently the soi Image). If a pixel of the
-     * shape is out of image dimension, no sticks are drawn. If the region's
-     * space dimension is less than that of the orientation image, it's automatically
-     * scaled to all higher dimensions. For example, the same 2D box region would be
-     * used for z = 0, 1, ... .
+     * the orientation image (or equivalently the soi Image). If the space dimension
+     * of the provided region is greater than that of soi Image, an exception is
+     * thrown. Otherwise, if a pixel of the region is out of image dimension, no
+     * sticks are drawn. If the region's space dimension is less than that of the
+     * orientation image, it's automatically scaled to all higher dimensions. For
+     * example, the same 2D box region would be used for z = 0, 1, ... .
      * 
      * @param region       is the region over which we wish to draw sticks.
      * @param soiThreshold is the resired threshold for sum of intensity. For
      *                     positions below threshold, no stick is drawn.
      * 
-     * @throws Illegal argument exception in case the dimension of the space over
-     *                 which the region is defined is greater than SoIImage
-     *                 dimension.
+     * @throws IllegalArgumentException in case the dimension of the space of region
+     *                                  is greater than SoIImage dimension.
      */
     public void draw(IShape region, UINT16 soiThreshold) throws IllegalArgumentException;
 
