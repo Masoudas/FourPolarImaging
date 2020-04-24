@@ -30,17 +30,29 @@ public interface IShape {
     public int shapeDim();
 
     /**
-     * Apply a 3d affine rotation and translation to the original shape in the xyz
-     * space.
-     * <p>
-     * VERY IMPORTANT NOTE: The order of rotation would be x, z and then y. If only
-     * xy rotation is needed, use z_rotation.
+     * Apply a 3d rotation with the given axis order, where axis = 0 is the first
+     * axis of the shape.
      * 
-     * @param x_rotation is the rotation around x-axis in radian.
-     * @param z_rotation is the rotation around z-axis in radian.
-     * @param y_rotation is the rotation around y-axis in radian.
+     * @param angle1 is the rotation over the first axis in radian.
+     * @param angle2 is the rotation over the second axis in radian.
+     * @param angle3 is the rotation over the second axis in radian.
+     * @param axis   is a 3d vector. Axis should be less than space dim.
      */
-    public void transform(long[] translation, double x_rotation, double z_rotation, double y_rotation);
+    public void rotate3D(double angle1, double angle2, double angle3, int[] axis);
+
+    /**
+     * Apply a 2d rotation to the shape (which applies to the first two dimensions).
+     * 
+     * @param angle is the rotation over the first axis in radian.
+     */
+    public void rotate2D(double angle);
+
+    /**
+     * Translate this shape by the given vector. The vector dimension should equal
+     * the space dimension. Translation after rotation is guaranteed to work
+     * properly.
+     */
+    public void translate(long[] translation);
 
     /**
      * Using this method, we can reset the shape to it's original untransformed

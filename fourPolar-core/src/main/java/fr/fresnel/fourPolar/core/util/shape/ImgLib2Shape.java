@@ -1,9 +1,11 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
 import java.util.Arrays;
+import java.util.IntSummaryStatistics;
 import java.util.Objects;
 
 import net.imglib2.realtransform.AffineTransform;
+import net.imglib2.realtransform.AffineTransform2D;
 import net.imglib2.realtransform.AffineTransform3D;
 import net.imglib2.roi.IterableRegion;
 import net.imglib2.roi.Masks;
@@ -20,17 +22,12 @@ import net.imglib2.view.Views;
  * for other libraries. Use set methods.
  */
 class ImgLib2Shape implements IShape {
-    private static double[][] _identity3D = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 } };
-
     final private RealMaskRealInterval _originalShape;
     private RealMaskRealInterval _shape;
 
     private final ShapeType _type;
     private final int _shapeDim;
     private final int _spaceDim;
-
-    private final AffineTransform3D _affine3D;
-    private final AffineTransform _finalTransform;
 
     /**
      * A point mask instance to check whether a point is inside the shape.
@@ -48,8 +45,6 @@ class ImgLib2Shape implements IShape {
      */
     public ImgLib2Shape(final ShapeType shapeType, final int shapeDim, final int spaceDim, RealMaskRealInterval shape) {
         this._type = shapeType;
-        this._affine3D = new AffineTransform3D();
-        this._finalTransform = new AffineTransform(spaceDim);
         this._shapeDim = shapeDim;
         this._spaceDim = spaceDim;
         this._pointMask = GeomMasks.pointMask(new double[spaceDim]);
@@ -86,67 +81,6 @@ class ImgLib2Shape implements IShape {
     }
 
     @Override
-    public void transform(final long[] translation, final double x_rotation, final double z_rotation,
-            final double y_rotation) {
-        if (translation.length != this._spaceDim) {
-            throw new IllegalArgumentException("Translation dimension must equal shape space dimension.");
-        }
-
-        double[] t;
-        if (this._spaceDim < 3) {
-            t = new double[] { -translation[0], -translation[1], 0 };
-        } else {
-            t = Arrays.stream(translation).mapToDouble((x) -> -x).toArray();
-        }
-
-        this._affine3D.translate(Arrays.stream(t).limit(3).toArray());
-
-        // In the following order, x rotation is applied first, and then z rotation, and
-        // then y.
-        this._affine3D.rotate(2, -z_rotation);
-        this._affine3D.rotate(0, -x_rotation);
-        this._affine3D.rotate(1, -y_rotation);
-
-        this._setAffineTransform(t);
-        this._reset3DTransform();
-
-        this._shape = this._shape.transform(this._finalTransform);
-
-    }
-
-    /**
-     * Transforms the 3D affine transform to the trasnform appropriate for the
-     * shape.
-     * 
-     * @param affine
-     */
-    private void _setAffineTransform(double[] translation) {
-        // Set rotation
-        for (int row = 0; row < this._shapeDim; row++) {
-            for (int column = 0; column < this._shapeDim; column++) {
-                _finalTransform.set(_affine3D.get(row, column), row, column);
-            }
-        }
-
-        // Set translation
-        for (int row = 0; row < this._shapeDim; row++) {
-            _finalTransform.set(_affine3D.get(row, 3), row, this._spaceDim);
-        }
-
-        for (int row = this._shapeDim; row < this._spaceDim; row++) {
-            _finalTransform.set(translation[row], row, this._spaceDim);
-        }
-
-    }
-
-    /**
-     * Resets the 3D transform for future uses.
-     */
-    private void _reset3DTransform() {
-        this._affine3D.set(_identity3D);
-    }
-
-    @Override
     public boolean isInside(long[] point) {
         if (point.length < this._spaceDim) {
             return false;
@@ -179,6 +113,65 @@ class ImgLib2Shape implements IShape {
     @Override
     public void resetToOriginalShape() {
         this._shape = this._originalShape;
+    }
+
+    @Override
+    public void rotate3D(double angle1, double angle2, double angle3, int[] axis) {
+        if (axis.length != 3) {
+            throw new IllegalArgumentException("Rotation angles and axis should be three");
+        }
+
+        IntSummaryStatistics stats = Arrays.stream(axis).summaryStatistics();
+        if (stats.getMin() < 0 || stats.getMax() > this._spaceDim) {
+            throw new IllegalArgumentException("Rotation axis must be between 0 and space dimension");
+        }
+
+        AffineTransform3D affine3D = new AffineTransform3D();
+        affine3D.rotate(axis[2], -angle3);
+        affine3D.rotate(axis[1], -angle2);
+        affine3D.rotate(axis[0], -angle1);
+
+        AffineTransform fTransform = new AffineTransform(_spaceDim);
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < 3; column++) {
+                fTransform.set(affine3D.get(row, column), axis[row], axis[column]);
+            }
+        }
+
+        this._shape = this._shape.transform(fTransform);
+
+    }
+
+    @Override
+    public void translate(long[] translation) {
+        if (translation.length != this._spaceDim) {
+            throw new IllegalArgumentException("Translation dimension must equal shape space dimension.");
+        }
+
+        AffineTransform fTransform = new AffineTransform(_spaceDim);
+        // Set translation
+        for (int row = 0; row < this._spaceDim; row++) {
+            fTransform.set(-translation[row], row, this._spaceDim);
+        }
+
+        this._shape = this._shape.transform(fTransform);
+
+    }
+
+    @Override
+    public void rotate2D(double angle) {
+        AffineTransform2D affine2D = new AffineTransform2D();
+        affine2D.rotate(angle);
+
+        AffineTransform fTransform = new AffineTransform(_spaceDim);
+        for (int row = 0; row < 2; row++) {
+            for (int column = 0; column < 2; column++) {
+                fTransform.set(affine2D.get(row, column), row, column);
+            }
+        }
+
+        this._shape = this._shape.transform(fTransform);
+
     }
 
 }
