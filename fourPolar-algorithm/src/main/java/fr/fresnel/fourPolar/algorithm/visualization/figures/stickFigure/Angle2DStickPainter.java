@@ -22,6 +22,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGa
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
 class Angle2DStickPainter implements IAngleGaugePainter {
+    final private long[] _soiImageDim;
     final private IGaugeFigure _stick2DFigure;
     final private IPixelRandomAccess<RGB16> _stick2DFigureRA;
 
@@ -58,6 +59,7 @@ class Angle2DStickPainter implements IAngleGaugePainter {
             throw new IllegalArgumentException("thickness must be greater than one");
         }
 
+        this._soiImageDim = soiImage.getImage().getDimensions();
         this._stick2DFigure = gaugeFigure;
         this._soiRA = soiImage.getImage().getRandomAccess();
         this._orientationRA = orientationImage.getRandomAccess();
@@ -99,13 +101,15 @@ class Angle2DStickPainter implements IAngleGaugePainter {
 
     @Override
     public void draw(IShape region, UINT16 soiThreshold) {
-        if (region.spaceDim() > this._stickFigureRegion.spaceDim()) {
-            throw new IllegalArgumentException("The space dimension of the region to draw sticks over cannot"
-                    + "be greater than the gauge figure dimension.");
+        if (region.spaceDim() > this._soiImageDim.length) {
+            throw new IllegalArgumentException("The region to draw sticks over in the orientation image "
+                    + "cannot have more dimensions than the orientation image.");
         }
+
         int threshold = soiThreshold.get();
         Pixel<RGB16> pixel = new Pixel<>(RGB16.zero());
 
+        // If region has less dimension than the soi Image, scale it to span higher dimensions too.
         IShapeIterator pixelScalarItr = ShapeUtils.scaleShapeOverHigherDim(region,
                 this._stick2DFigure.getImage().getDimensions());
         while (pixelScalarItr.hasNext()) {
@@ -145,7 +149,8 @@ class Angle2DStickPainter implements IAngleGaugePainter {
 
     private void _transformStick(long[] position, IOrientationVector orientationVector) {
         this._stick.resetToOriginalShape();
-        this._stick.transform(position, 0, Math.PI / 2 + orientationVector.getAngle(_slopeAngle), 0);
+        this._stick.rotate2D(Math.PI / 2 + orientationVector.getAngle(_slopeAngle));
+        this._stick.translate(position);
     }
 
     private IOrientationVector _getOrientationVector(long[] stickCenterPosition) {
