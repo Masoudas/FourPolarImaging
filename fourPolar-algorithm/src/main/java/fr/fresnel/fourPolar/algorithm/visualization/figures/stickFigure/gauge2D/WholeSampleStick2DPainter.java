@@ -23,7 +23,6 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
 class WholeSampleStick2DPainter implements IAngleGaugePainter {
     final private long[] _soiImageDim;
     final private IGaugeFigure _stick2DFigure;
-    final private IPixelRandomAccess<RGB16> _stick2DFigureRA;
 
     final private IOrientationImageRandomAccess _orientationRA;
     final private IPixelRandomAccess<UINT16> _soiRA;
@@ -46,7 +45,6 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
 
         this._stick2DFigure = builder.getGaugeFigure();
-        this._stick2DFigureRA = _stick2DFigure.getImage().getRandomAccess();
 
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
 
@@ -56,15 +54,13 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         this._colorAngle = getColorAngle(this._stick2DFigure.getType());
         this._maxColorAngle = OrientationVector.maxAngle(_colorAngle);
 
-        this._stick = this._defineBaseStick(
-            builder.getSticklength(), builder.getStickThickness(),
-            this._stick2DFigure.getImage().getDimensions());
-        
-        this._stickFigureRegion = this._defineGaugeImageBoundaryAsBoxShape(
-            this._stick2DFigure.getImage().getDimensions());
+        this._stick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness(),
+                this._stick2DFigure.getImage().getDimensions());
 
-        this._fillGaugeFigureWithSoI(
-            builder.getSoIImage().getImage(), this._stick2DFigure.getImage());
+        this._stickFigureRegion = this
+                ._defineGaugeImageBoundaryAsBoxShape(this._stick2DFigure.getImage().getDimensions());
+
+        this._fillGaugeFigureWithSoI(builder.getSoIImage().getImage(), this._stick2DFigure.getImage());
 
     }
 
@@ -112,6 +108,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
 
         int threshold = soiThreshold.get();
         Pixel<RGB16> pixel = new Pixel<>(RGB16.zero());
+        IPixelRandomAccess<RGB16> stickFigureRA = _stick2DFigure.getImage().getRandomAccess();
 
         // If region has less dimension than the soi Image, scale it to span higher
         // dimensions too.
@@ -124,7 +121,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
                 this._soiRA.setPosition(stickCenterPosition);
                 final IOrientationVector orientationVector = this._getOrientationVector(stickCenterPosition);
                 if (_isSoIAboveThreshold(threshold) && _slopeAndColorAngleExist(orientationVector)) {
-                    _drawStick(pixel, orientationVector, stickCenterPosition);
+                    _drawStick(pixel, orientationVector, stickCenterPosition, stickFigureRA);
                 }
             }
 
@@ -132,17 +129,19 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
 
     }
 
-    private void _drawStick(Pixel<RGB16> pixel, IOrientationVector orientationVector, long[] stickCenterPosition) {
+    private void _drawStick(Pixel<RGB16> pixel, IOrientationVector orientationVector, long[] stickCenterPosition,
+            IPixelRandomAccess<RGB16> stickFigureRA) {
         _transformStick(stickCenterPosition, orientationVector);
         this._stick.and(this._stickFigureRegion);
         final RGB16 color = _getStickColor(orientationVector);
+        _stick2DFigure.getImage().getRandomAccess();
 
         IShapeIterator stickIterator = this._stick.getIterator();
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
-            this._stick2DFigureRA.setPosition(stickPosition);
+            stickFigureRA.setPosition(stickPosition);
             pixel.value().set(color.getR(), color.getG(), color.getB());
-            this._stick2DFigureRA.setPixel(pixel);
+            stickFigureRA.setPixel(pixel);
 
         }
     }
