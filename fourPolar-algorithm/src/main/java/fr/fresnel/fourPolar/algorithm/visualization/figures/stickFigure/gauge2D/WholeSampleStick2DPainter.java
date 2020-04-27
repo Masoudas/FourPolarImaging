@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D;
 
-import java.util.Objects;
-
 import fr.fresnel.fourPolar.algorithm.util.image.converters.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
@@ -22,7 +20,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
-class Stick2DPainter implements IAngleGaugePainter {
+class WholeSampleStick2DPainter implements IAngleGaugePainter {
     final private long[] _soiImageDim;
     final private IGaugeFigure _stick2DFigure;
     final private IPixelRandomAccess<RGB16> _stick2DFigureRA;
@@ -43,7 +41,7 @@ class Stick2DPainter implements IAngleGaugePainter {
 
     private final IShape _stickFigureRegion;
 
-    public Stick2DPainter(Stick2DPainterBuilder builder) throws ConverterToImgLib2NotFound {
+    public WholeSampleStick2DPainter(Stick2DPainterBuilder builder) throws ConverterToImgLib2NotFound {
         this._soiImageDim = builder.getSoIImage().getImage().getDimensions();
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
 
@@ -54,8 +52,8 @@ class Stick2DPainter implements IAngleGaugePainter {
 
         this._colormap = builder.getColorMap();
 
-        this._slopeAngle = this._getSlopeAngle(this._stick2DFigure.getType());
-        this._colorAngle = this._getColorAngle(this._stick2DFigure.getType());
+        this._slopeAngle = getSlopeAngle(this._stick2DFigure.getType());
+        this._colorAngle = getColorAngle(this._stick2DFigure.getType());
         this._maxColorAngle = OrientationVector.maxAngle(_colorAngle);
 
         this._stick = this._defineBaseStick(
@@ -179,7 +177,7 @@ class Stick2DPainter implements IAngleGaugePainter {
         return _stick2DFigure;
     }
 
-    private OrientationAngle _getSlopeAngle(AngleGaugeType type) {
+    public static OrientationAngle getSlopeAngle(AngleGaugeType type) {
         OrientationAngle angle = null;
         switch (type) {
             case Rho2D:
@@ -201,7 +199,7 @@ class Stick2DPainter implements IAngleGaugePainter {
         return angle;
     }
 
-    private OrientationAngle _getColorAngle(AngleGaugeType type) {
+    public static OrientationAngle getColorAngle(AngleGaugeType type) {
         OrientationAngle angle = null;
         switch (type) {
             case Rho2D:
