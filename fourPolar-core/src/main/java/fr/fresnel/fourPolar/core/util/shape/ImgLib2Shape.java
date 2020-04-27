@@ -82,7 +82,7 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public boolean isInside(long[] point) {
-        if (point.length < this._spaceDim) {
+        if (point.length != this._spaceDim) {
             return false;
         }
 

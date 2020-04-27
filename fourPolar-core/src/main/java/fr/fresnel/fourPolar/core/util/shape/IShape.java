@@ -62,7 +62,7 @@ public interface IShape {
 
     /**
      * Checks whether the given point is inside the shape. If the point dimension is
-     * less than the space dimension of the shape (see shapeDim and spaceDim), then
+     * not equal to the space dimension of the shape (see shapeDim and spaceDim), then
      * false is returned.
      */
     public boolean isInside(long[] point);
