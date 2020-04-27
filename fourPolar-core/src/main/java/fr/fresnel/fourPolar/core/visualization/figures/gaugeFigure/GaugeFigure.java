@@ -29,7 +29,7 @@ class GaugeFigure implements IGaugeFigure {
     }
 
     @Override
-    public AngleGaugeType getType() {
+    public AngleGaugeType getGaugeType() {
         return _type;
     }
 

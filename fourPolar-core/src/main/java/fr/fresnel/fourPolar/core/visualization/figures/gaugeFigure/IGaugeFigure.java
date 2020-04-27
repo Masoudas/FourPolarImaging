@@ -12,7 +12,7 @@ public interface IGaugeFigure {
     /**
      * Returns the type of the gauge figure.
      */
-    public AngleGaugeType getType();
+    public AngleGaugeType getGaugeType();
     
     /**
      * Returns the type of the gauge figure.
