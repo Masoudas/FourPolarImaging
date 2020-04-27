@@ -13,6 +13,11 @@ public interface IGaugeFigure {
      * Returns the type of the gauge figure.
      */
     public AngleGaugeType getType();
+    
+    /**
+     * Returns the type of the gauge figure.
+     */
+    public GaugeFigureType getFigureType();
 
     /**
      * Returns the underlying {@link Image}.
