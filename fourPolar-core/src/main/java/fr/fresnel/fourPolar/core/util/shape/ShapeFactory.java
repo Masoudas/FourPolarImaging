@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import net.imglib2.roi.geom.GeomMasks;
+import net.imglib2.roi.geom.real.PointMask;
 import net.imglib2.roi.geom.real.WritableBox;
 import net.imglib2.roi.geom.real.WritablePolygon2D;
 
@@ -40,7 +41,7 @@ public class ShapeFactory {
         double[] maxCopy = Arrays.stream(max).asDoubleStream().toArray();
         WritableBox box = GeomMasks.closedBox(minCopy, maxCopy);
 
-        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.Closed2DBox, shapeDim, min.length, box);
+        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.ClosedBox, shapeDim, min.length, box);
         return shape;
     }
 
@@ -61,6 +62,14 @@ public class ShapeFactory {
         ImgLib2Shape shape = new ImgLib2Shape(ShapeType.ClosedPolygon2D, 2, 2, polygon2D);
 
         return shape;
+    }
+
+    public IShape point(long[] point) {
+        Objects.requireNonNull(point, "location cannot be null");
+        
+        PointMask mask = GeomMasks.pointMask(Arrays.stream(point).asDoubleStream().toArray());
+
+        return new ImgLib2Shape(ShapeType.Point, 1, point.length, mask);
     }
 
     
