@@ -10,6 +10,7 @@ import fr.fresnel.fourPolar.core.image.polarization.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
@@ -21,8 +22,9 @@ public class Stick2DPainterBuilder {
 
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
-    private int _length = 10;
-    
+    private int _length = 50;
+    private GaugeFigureType _gaugeFigureType = GaugeFigureType.WholeSample;
+
     private IGaugeFigure _gaugeFigure;
 
     public Stick2DPainterBuilder(IOrientationImage orientationImage, ISoIImage soiImage, AngleGaugeType gaugeType) {
@@ -76,6 +78,25 @@ public class Stick2DPainterBuilder {
         return this;
     }
 
+    /**
+     * Determines the gauge figure type. If SingleSample is chosen, the stick figure
+     * would be the same size as a single stick, and using a Point Shape in the
+     * {@link IAngleGaugePainter}, the orientation of single sticks can be viewed.
+     */
+    public Stick2DPainterBuilder gaugeFigureType(GaugeFigureType figureType) {
+        Objects.requireNonNull(figureType, "figureType cannot be null");
+        this._gaugeFigureType = figureType;
+
+        return this;
+    }
+
+    /**
+     * Build the Painter from the provided constraints.
+     * 
+     * @return the interface for the painter of sticks.
+     * @throws ConverterToImgLib2NotFound in case the Image interface of SoIImage
+     *                                    cannot be converted to ImgLib2 image type.
+     */
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
         this._createGaugeFigure();
 
@@ -84,12 +105,25 @@ public class Stick2DPainterBuilder {
     }
 
     private void _createGaugeFigure() {
-        long[] dim = this._soiImage.getImage().getDimensions();
-        Image<RGB16> image = this._soiImage.getImage().getFactory().create(dim, RGB16.zero());
-        this._gaugeFigure = GaugeFigureFactory.create(this._gaugeType, image, this._soiImage.getFileSet());
+        long[] dim = null;
+        switch (this._gaugeFigureType) {
+            case WholeSample:
+                dim = this._soiImage.getImage().getDimensions();
+                break;
+
+            case SingleDipole:
+                dim = new long[]{this._length, this._length};
+                break;
+
+            default:
+                break;
+        }
+
+        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dim, RGB16.zero());
+        this._gaugeFigure = GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
+                this._soiImage.getFileSet());
 
     }
-
 
     public ColorMap getColorMap() {
         return this._colorMap;
