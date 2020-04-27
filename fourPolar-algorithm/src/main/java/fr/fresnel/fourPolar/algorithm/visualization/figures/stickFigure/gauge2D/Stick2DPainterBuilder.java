@@ -98,31 +98,29 @@ public class Stick2DPainterBuilder {
      *                                    cannot be converted to ImgLib2 image type.
      */
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
-        this._createGaugeFigure();
-
-        return new Stick2DPainter(this);
-
-    }
-
-    private void _createGaugeFigure() {
-        long[] dim = null;
+        IAngleGaugePainter painter = null;
         switch (this._gaugeFigureType) {
             case WholeSample:
-                dim = this._soiImage.getImage().getDimensions();
+                this._gaugeFigure = this._createGaugeFigure(this._soiImage.getImage().getDimensions());
+                painter = new SingleDipoleStick2DPainter(this);
                 break;
 
             case SingleDipole:
-                dim = new long[]{this._length, this._length};
-                break;
+                this._gaugeFigure = this._createGaugeFigure(new long[] { this._length, this._length });
+                painter = new SingleDipoleStick2DPainter(this);
 
             default:
                 break;
         }
 
-        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dim, RGB16.zero());
-        this._gaugeFigure = GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
-                this._soiImage.getFileSet());
+        return painter;
 
+    }
+
+    private IGaugeFigure _createGaugeFigure(long[] dim) {
+        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dim, RGB16.zero());
+        return GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
+                this._soiImage.getFileSet());
     }
 
     public ColorMap getColorMap() {
