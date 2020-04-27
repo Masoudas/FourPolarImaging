@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure;
 
+import fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D.Stick2DPainter;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.polarization.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
@@ -40,7 +41,7 @@ public class GaugePainterFactory {
             int thickness, ColorMap colorMap) {
         IGaugeFigure gaugeFigure = GaugeFigureFactory.createEmpty(AngleGaugeType.Rho2D, soiImage,
                 soiImage.getFileSet());
-        return new Angle2DStickPainter(gaugeFigure, orientationImage, soiImage, len, thickness, colorMap);
+        return new Stick2DPainter(gaugeFigure, orientationImage, soiImage, len, thickness, colorMap);
 
     }
 
@@ -50,9 +51,7 @@ public class GaugePainterFactory {
      * as their color. All sticks will have the same length and thickness with this
      * method.
      * <p>
-     * CAUTION: The chosen colormap must not have black or white colors, otherwise,
-     * it will be misinterpreted as intensity (because the background is an SoI
-     * image).
+     * CAUTION: 
      * 
      * @param orientationImage is the desired orientation image.
      * @param soiImage         is the stick figure that corresponds to this
@@ -70,7 +69,7 @@ public class GaugePainterFactory {
             int thickness, ColorMap colorMap) {
         IGaugeFigure gaugeFigure = GaugeFigureFactory.createEmpty(AngleGaugeType.Delta2D, soiImage,
                 soiImage.getFileSet());
-        return new Angle2DStickPainter(gaugeFigure, orientationImage, soiImage, len, thickness, colorMap);
+        return new Stick2DPainter(gaugeFigure, orientationImage, soiImage, len, thickness, colorMap);
 
     }
 
@@ -100,7 +99,7 @@ public class GaugePainterFactory {
             int thickness, ColorMap colorMap) {
         IGaugeFigure gaugeFigure = GaugeFigureFactory.createEmpty(AngleGaugeType.Eta2D, soiImage,
                 soiImage.getFileSet());
-        return new Angle2DStickPainter(gaugeFigure, orientationImage, soiImage, len, thickness, colorMap);
+        return new Stick2DPainter(gaugeFigure, orientationImage, soiImage, len, thickness, colorMap);
 
     }
 
