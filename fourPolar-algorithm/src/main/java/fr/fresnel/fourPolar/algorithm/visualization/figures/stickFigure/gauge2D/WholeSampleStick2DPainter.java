@@ -50,8 +50,8 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
 
         this._colormap = builder.getColorMap();
 
-        this._slopeAngle = getSlopeAngle(this._stick2DFigure.getType());
-        this._colorAngle = getColorAngle(this._stick2DFigure.getType());
+        this._slopeAngle = getSlopeAngle(this._stick2DFigure.getGaugeType());
+        this._colorAngle = getColorAngle(this._stick2DFigure.getGaugeType());
         this._maxColorAngle = OrientationVector.maxAngle(_colorAngle);
 
         this._stick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness(),
@@ -107,7 +107,6 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         }
 
         int threshold = soiThreshold.get();
-        Pixel<RGB16> pixel = new Pixel<>(RGB16.zero());
         IPixelRandomAccess<RGB16> stickFigureRA = _stick2DFigure.getImage().getRandomAccess();
 
         // If region has less dimension than the soi Image, scale it to span higher
@@ -121,7 +120,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
                 this._soiRA.setPosition(stickCenterPosition);
                 final IOrientationVector orientationVector = this._getOrientationVector(stickCenterPosition);
                 if (_isSoIAboveThreshold(threshold) && _slopeAndColorAngleExist(orientationVector)) {
-                    _drawStick(pixel, orientationVector, stickCenterPosition, stickFigureRA);
+                    _drawStick(orientationVector, stickCenterPosition, stickFigureRA);
                 }
             }
 
@@ -129,26 +128,27 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
 
     }
 
-    private void _drawStick(Pixel<RGB16> pixel, IOrientationVector orientationVector, long[] stickCenterPosition,
+    /**
+     * Draw the stick for the given orientation vector on the corresponding position.
+     */
+    private void _drawStick(IOrientationVector orientationVector, long[] stickCenterPosition,
             IPixelRandomAccess<RGB16> stickFigureRA) {
         _transformStick(stickCenterPosition, orientationVector);
         this._stick.and(this._stickFigureRegion);
-        final RGB16 color = _getStickColor(orientationVector);
-        _stick2DFigure.getImage().getRandomAccess();
 
+        final RGB16 pixelColor = _getStickColor(orientationVector);
+        Pixel<RGB16> pixelValue = new Pixel<RGB16>(pixelColor); // Use the same pixel for every pixel of stick.
+        
         IShapeIterator stickIterator = this._stick.getIterator();
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
             stickFigureRA.setPosition(stickPosition);
-            pixel.value().set(color.getR(), color.getG(), color.getB());
-            stickFigureRA.setPixel(pixel);
-
+            stickFigureRA.setPixel(pixelValue);
         }
     }
 
     private RGB16 _getStickColor(IOrientationVector orientationVector) {
-        final RGB16 color = this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
-        return color;
+        return this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
     }
 
     private void _transformStick(long[] position, IOrientationVector orientationVector) {
