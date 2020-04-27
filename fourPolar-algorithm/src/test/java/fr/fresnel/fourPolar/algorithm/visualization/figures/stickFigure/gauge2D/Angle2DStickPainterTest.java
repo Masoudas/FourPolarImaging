@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure;
+package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.GaugePainterFactory;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
