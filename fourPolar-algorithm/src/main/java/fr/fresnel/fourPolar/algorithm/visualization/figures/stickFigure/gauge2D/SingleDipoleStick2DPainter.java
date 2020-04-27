@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D;
 
+import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
@@ -68,12 +69,22 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
      * Define the image region from pixel zero to dim - 1;
      */
     private IShape _defineOrientationImageBoundaryAsBoxShape(long[] imDimension) {
-        long[] imageMax = imDimension.clone();
+        long[] imageMax = null;
+        long[] imageMin = null;
+
+        if (imDimension.length == 1) {
+            imageMax = new long[] { imDimension[0], 0 };
+            imageMin = new long[2];
+        } else {
+            imageMax = imDimension.clone();
+            imageMin = new long[imDimension.length];
+        }
+
         for (int i = 0; i < imageMax.length; i++) {
             imageMax[i] -= 1;
         }
 
-        return new ShapeFactory().closedBox(new long[imDimension.length], imageMax);
+        return new ShapeFactory().closedBox(imageMin, imageMax);
     }
 
     /**
@@ -90,6 +101,8 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
             throw new IllegalArgumentException(
                     "The dipole coordinate for drawing the stick must be inside the orientation image");
         }
+
+        this._paintStickFigureBlack();
 
         int threshold = soiThreshold.get();
         IPixelRandomAccess<RGB16> stickFigureRA = this._dipoleFigure.getImage().getRandomAccess();
@@ -143,7 +156,21 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
 
         // Move the stick to the center of figure
         long stickCenter = this._dipoleFigure.getImage().getDimensions()[0];
-        this._stick.translate(new long[] { stickCenter, stickCenter });
+        this._stick.translate(new long[] { stickCenter / 2, stickCenter / 2});
+    }
+
+    /**
+     * Set all pixels of the stick figure black, to ensure that in repetitive use of the painter,
+     * the background remains
+     */
+    private void _paintStickFigureBlack() {
+        IPixelCursor<RGB16> cursor = this._dipoleFigure.getImage().getCursor();
+        
+        Pixel<RGB16> pixel = new Pixel<RGB16>(new RGB16(0, 0, 0));
+        while (cursor.hasNext()) {
+            cursor.next();
+            cursor.setPixel(pixel);
+        }
     }
 
 }
