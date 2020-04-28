@@ -102,7 +102,7 @@ public class Stick2DPainterBuilder {
         switch (this._gaugeFigureType) {
             case WholeSample:
                 this._gaugeFigure = this._createGaugeFigure(this._soiImage.getImage().getDimensions());
-                painter = new SingleDipoleStick2DPainter(this);
+                painter = new WholeSampleStick2DPainter(this);
                 break;
 
             case SingleDipole:
