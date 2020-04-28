@@ -97,7 +97,7 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
     public void draw(IShape point, UINT16 soiThreshold) throws IllegalArgumentException {
         long[] dipolePosition = point.getIterator().next();
 
-        if (this._orientationImageBoundary.isInside(dipolePosition)) {
+        if (!this._orientationImageBoundary.isInside(dipolePosition)) {
             throw new IllegalArgumentException(
                     "The dipole coordinate for drawing the stick must be inside the orientation image");
         }
