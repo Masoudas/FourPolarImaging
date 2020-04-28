@@ -7,6 +7,7 @@
 *.war
 *.ear
 *.nar
+*.lst
 *.prefs
 *.factorypath
 *.classpath
