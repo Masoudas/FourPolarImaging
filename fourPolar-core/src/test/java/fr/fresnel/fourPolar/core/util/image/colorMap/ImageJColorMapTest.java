@@ -11,14 +11,11 @@ public class ImageJColorMapTest {
     public void getColor_REDColorMap_ReturnsProperColors() {
         ImageJColorMap cMap = ImageJColorMap.getDefaultColorMaps("Red.lut");
 
-        double min = 0;
         double max = 1;
 
-        RGB16 white = cMap.getColor(min, max, min);
-        RGB16 red = cMap.getColor(min, max, max);
+        RGB16 red = cMap.getColor(0, 1, max);
 
         assertTrue(
-            white.getR() == 0 && white.getG() == 0 && white.getB() == 0 &&
             red.getR() == 255 && red.getG() == 0 && red.getB() == 0);
         
     }
