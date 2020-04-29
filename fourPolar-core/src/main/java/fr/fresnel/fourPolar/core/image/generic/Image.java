@@ -51,4 +51,10 @@ public interface Image<T extends PixelType> {
      */
     public ImageFactory getFactory();
 
+    /**
+     * Returns the {@link IMetadata} associated with this image.
+     * @return
+     */
+    public IMetadata getAxisOrder();
+
 }
