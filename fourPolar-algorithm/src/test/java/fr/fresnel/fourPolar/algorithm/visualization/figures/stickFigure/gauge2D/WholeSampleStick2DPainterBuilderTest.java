@@ -36,7 +36,7 @@ import ij.io.FileSaver;
 import io.scif.img.ImgSaver;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 
-public class WholeSampleStick2DPainterTest {
+public class WholeSampleStick2DPainterBuilderTest {
     @Test
     public void rho2DStick_RhoChangesFrom0to180_GeneratesProperImage()
             throws CannotFormOrientationImage, ConverterToImgLib2NotFound, InterruptedException {
@@ -350,14 +350,14 @@ public class WholeSampleStick2DPainterTest {
 
     private void _saveAngleFigure(Image<Float32> angleImage, String angleImageName) throws ConverterToImgLib2NotFound {
         ImgSaver saver = new ImgSaver();
-        String root = WholeSampleStick2DPainterTest.class.getResource("").getPath();
+        String root = WholeSampleStick2DPainterBuilderTest.class.getResource("").getPath();
         saver.saveImg(new File(root, angleImageName).getPath(),
                 ImageToImgLib2Converter.getImg(angleImage, Float32.zero()));
 
     }
 
     private void _saveStickFigure(IGaugeFigure stickFigure, String stickImageName) throws ConverterToImgLib2NotFound {
-        String root = WholeSampleStick2DPainterTest.class.getResource("").getPath();
+        String root = WholeSampleStick2DPainterBuilderTest.class.getResource("").getPath();
         ImagePlus imp = ImageJFunctions.wrapRGB(ImageToImgLib2Converter.getImg(stickFigure.getImage(), RGB16.zero()),
                 "RGB");
         FileSaver impSaver = new FileSaver(imp);

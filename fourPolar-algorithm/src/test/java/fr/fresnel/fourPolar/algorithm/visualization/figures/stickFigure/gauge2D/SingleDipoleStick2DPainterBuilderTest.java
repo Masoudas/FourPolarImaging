@@ -43,7 +43,7 @@ import ij.io.FileSaver;
 import net.imglib2.RealPoint;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 
-public class SingleDipoleStick2DPainterTest {
+public class SingleDipoleStick2DPainterBuilderTest {
 
     /**
      * We store the sticks for 0, 45, 90 and 135 in separate figures.
@@ -147,7 +147,7 @@ public class SingleDipoleStick2DPainterTest {
     }
 
     private void _saveStickFigure(IGaugeFigure stickFigure, String stickImageName) throws ConverterToImgLib2NotFound {
-        String root = SingleDipoleStick2DPainterTest.class.getResource("").getPath();
+        String root = SingleDipoleStick2DPainterBuilderTest.class.getResource("").getPath();
         ImagePlus imp = ImageJFunctions.wrapRGB(ImageToImgLib2Converter.getImg(stickFigure.getImage(), RGB16.zero()),
                 "RGB");
         FileSaver impSaver = new FileSaver(imp);
