@@ -127,7 +127,7 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
     }
 
     @Override
-    public IGaugeFigure getStickFigure() {
+    public IGaugeFigure getFigure() {
         return this._dipoleFigure;
     }
 

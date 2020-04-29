@@ -142,11 +142,11 @@ public class SophiesChoiceII {
             ImagePlus imp;
             try {
                 imp = ImageJFunctions.wrapRGB(
-                        ImageToImgLib2Converter.getImg(iAngleGaugePainter.getStickFigure().getImage(), RGB16.zero()),
+                        ImageToImgLib2Converter.getImg(iAngleGaugePainter.getFigure().getImage(), RGB16.zero()),
                         "RGB");
                 final FileSaver impSaver = new FileSaver(imp);
                 impSaver.saveAsTiff(new File(soiFile.getParentFile().getAbsolutePath(),
-                        iAngleGaugePainter.getStickFigure().getType().name()).getAbsolutePath());
+                        iAngleGaugePainter.getFigure().getType().name()).getAbsolutePath());
 
             } catch (final ConverterToImgLib2NotFound e) {
             }
@@ -159,8 +159,8 @@ public class SophiesChoiceII {
         for (final IAngleGaugePainter iAngleGaugePainter : gaugePainters) {
             try {
                 ImageJFunctions.show(
-                        ImageToImgLib2Converter.getImg(iAngleGaugePainter.getStickFigure().getImage(), RGB16.zero()),
-                        iAngleGaugePainter.getStickFigure().getType().name());
+                        ImageToImgLib2Converter.getImg(iAngleGaugePainter.getFigure().getImage(), RGB16.zero()),
+                        iAngleGaugePainter.getFigure().getType().name());
             } catch (ConverterToImgLib2NotFound e) {
             }
 

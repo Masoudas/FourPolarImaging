@@ -174,7 +174,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     }
 
     @Override
-    public IGaugeFigure getStickFigure() {
+    public IGaugeFigure getFigure() {
         return _stick2DFigure;
     }
 

@@ -86,7 +86,7 @@ public class SingleDipoleStick2DPainterBuilderTest {
         for (int i = 0; i < 4; i++) {
             IShape point = new ShapeFactory().point(new long[] { i, i });
             painter.draw(point, UINT16.zero());
-            _saveStickFigure(painter.getStickFigure(), "rho" + rhoAngles[i] + ".tif");
+            _saveStickFigure(painter.getFigure(), "rho" + rhoAngles[i] + ".tif");
         }
 
     }
@@ -128,7 +128,7 @@ public class SingleDipoleStick2DPainterBuilderTest {
                 BdvOptions.options().is2D());
 
         // Viewer to show the stick.
-        Bdv bdv1 = BdvFunctions.show(ImageToImgLib2Converter.getImg(painter.getStickFigure().getImage(), RGB16.zero()),
+        Bdv bdv1 = BdvFunctions.show(ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), RGB16.zero()),
                 "Dipole", BdvOptions.options().is2D());
 
         Behaviours behaviours = new Behaviours(new InputTriggerConfig());

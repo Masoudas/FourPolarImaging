@@ -204,7 +204,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     }
 
     @Override
-    public IGaugeFigure getStickFigure() {
+    public IGaugeFigure getFigure() {
         return _stick3DFigure;
     }
 

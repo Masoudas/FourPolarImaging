@@ -27,8 +27,8 @@ public interface IAngleGaugePainter {
     public void draw(IShape region, UINT16 soiThreshold) throws IllegalArgumentException;
 
     /**
-     * Returns the stick figure filled with this painter.
+     * Returns the gauge figure filled with this painter.
      */
-    public IGaugeFigure getStickFigure();
+    public IGaugeFigure getFigure();
 
 }

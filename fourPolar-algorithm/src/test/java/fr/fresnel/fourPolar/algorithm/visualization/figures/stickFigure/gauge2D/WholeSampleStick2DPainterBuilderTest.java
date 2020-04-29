@@ -75,7 +75,7 @@ public class WholeSampleStick2DPainterBuilderTest {
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
 
         painter.draw(entireImageRegion, new UINT16(0));
-        IGaugeFigure stickFigure = painter.getStickFigure();
+        IGaugeFigure stickFigure = painter.getFigure();
 
         _saveAngleFigure(rhoImage, "rhoImage.tif");
         _saveStickFigure(stickFigure, "rho2DStick.tiff");
@@ -127,7 +127,7 @@ public class WholeSampleStick2DPainterBuilderTest {
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
 
         painter.draw(entireImageRegion, new UINT16(0));
-        IGaugeFigure stickFigure = painter.getStickFigure();
+        IGaugeFigure stickFigure = painter.getFigure();
 
         _saveAngleFigure(rhoImage, "rhoImage_3D.tif");
         _saveStickFigure(stickFigure, "rho2DStick_3D.tiff");
@@ -181,7 +181,7 @@ public class WholeSampleStick2DPainterBuilderTest {
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
 
         painter.draw(entireImageRegion, new UINT16(0));
-        IGaugeFigure stickFigure = painter.getStickFigure();
+        IGaugeFigure stickFigure = painter.getFigure();
 
         _saveAngleFigure(rhoImage, "rhoImage.tif");
         _saveAngleFigure(deltaImage, "deltaImage.tif");
@@ -237,7 +237,7 @@ public class WholeSampleStick2DPainterBuilderTest {
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
 
         painter.draw(entireImageRegion, new UINT16(0));
-        IGaugeFigure stickFigure = painter.getStickFigure();
+        IGaugeFigure stickFigure = painter.getFigure();
 
         _saveAngleFigure(rhoImage, "rhoImage.tif");
         _saveAngleFigure(deltaImage, "etaImage.tif");
@@ -284,7 +284,7 @@ public class WholeSampleStick2DPainterBuilderTest {
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
 
         painter.draw(entireImageRegion, new UINT16(0));
-        IGaugeFigure stickFigure = painter.getStickFigure();
+        IGaugeFigure stickFigure = painter.getFigure();
 
         _saveAngleFigure(rhoImage, "rhoImage_OurOfRange.tif");
         _saveStickFigure(stickFigure, "rho2DStick_OurOfRange.tiff");
@@ -334,7 +334,7 @@ public class WholeSampleStick2DPainterBuilderTest {
                 new long[] { 100, 100, 500, 200, 500 });
 
         painter.draw(smallerRegionOfImage, new UINT16(0));
-        IGaugeFigure stickFigure = painter.getStickFigure();
+        IGaugeFigure stickFigure = painter.getFigure();
 
         _saveAngleFigure(rhoImage, "rhoImage.tif");
         _saveStickFigure(stickFigure, "rho2DStick_smallerRegion.tiff");
