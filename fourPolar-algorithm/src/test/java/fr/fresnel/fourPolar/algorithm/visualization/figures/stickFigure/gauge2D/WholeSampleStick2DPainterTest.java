@@ -172,7 +172,7 @@ public class WholeSampleStick2DPainterTest {
         ISoIImage soiImage = new SoIImage(fileSet, soi);
 
         int length = 20;
-        int thickness = 4;
+        int thickness = 2;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
         IAngleGaugePainter painter = new WholeSampleStick2DPainterBuilder(orientationImage, soiImage,

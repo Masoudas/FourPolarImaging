@@ -21,14 +21,10 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
 /**
- * Class that fills the proper gauge with 3D sticks. A 3D sticks represents in
- * plane angle (rho), and off-plane angle (eta) as a 3D stick, where the stick
- * color is the wobbling (delta). Note that stick length is closely associated
- * with the z-dimension of the images, in the sense that each 3D stick filles as
- * many z-planes as the length of the stick. Hence, the gauge figure need to
- * have been properly interleaved with z-planes to accommodate the 3D sticks.
+ * Class that fills the proper gauge with 3D sticks. See
+ * {@link WholeSampleStick3DPainterBuilder}.
  */
-class Angle3DStickPainter implements IAngleGaugePainter {
+class WholeSampleStick3DPainter implements IAngleGaugePainter {
     final private long[] _soiImageDim;
     final private IGaugeFigure _stick3DFigure;
     final private IPixelRandomAccess<RGB16> _stick3DFigureRA;
@@ -37,6 +33,7 @@ class Angle3DStickPainter implements IAngleGaugePainter {
     final private ColorMap _colormap;
     final private IShape _soiImageBoundary;
     final private IShape _stick3DFigureBoundary;
+    final private int _stickLength;
 
     /**
      * We generate a single stick, and then rotate and translate it for different
@@ -45,53 +42,26 @@ class Angle3DStickPainter implements IAngleGaugePainter {
     final private IShape _stick;
 
     /**
-     * This is the interleaving factor (i.e, the stick len) in the z-direction.
-     */
-    final private int _zInterleaveFactor;
-
-    /**
-     * Create the 3D painter with the provided parameters.
+     * Create the 3D painter using the builder parameters.
      * 
-     * @param gaugeFigure      is the gauge figure to be filled with this painter.
-     * @param orientationImage is the orientation image associated with this gauge
-     *                         figure.
-     * @param soiImage         is the soi image associated with the orientation
-     *                         image. Note that eventhough SoI is not used in the
-     *                         final image, we need it for thresholding.
-     * @param len              is the length of the stick (in z coordinates).
-     * @param thickness        is the thickness of the stick.
-     * @param colorMap         is the colormap used for representing the delta
-     *                         angle.
-     * 
-     * @throws IllegalArgumentException in case the stick len or thickness is less
-     *                                  than 2.
      */
-    public Angle3DStickPainter(IGaugeFigure gaugeFigure, IOrientationImage orientationImage, ISoIImage soiImage,
-            int len, int thickness, ColorMap colorMap) {
-        Objects.requireNonNull(soiImage, "soiImage cannot be null");
-        Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
-        Objects.requireNonNull(gaugeFigure, "gaugeFigure cannot be null");
-        Objects.requireNonNull(colorMap, "colorMap cannot be null");
+    public WholeSampleStick3DPainter(WholeSampleStick3DPainterBuilder builder) {
+        this._soiImageDim = builder.getSoIImage().getImage().getDimensions();
+        this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
 
-        if (len < 1 || len % 2 == 1) {
-            throw new IllegalArgumentException("Stick len must be greater than one and it should be even.");
-        }
+        this._stick3DFigure = builder.getGaugeFigure();
+        this._stick3DFigureRA = this._stick3DFigure.getImage().getRandomAccess();
 
-        if (thickness < 1) {
-            throw new IllegalArgumentException("Stick Thickness must be greater than one");
-        }
+        this._orientationRA = builder.getOrientationImage().getRandomAccess();
+        this._colormap = builder.getColorMap();
+        this._stickLength = builder.getSticklength();
 
-        this._soiImageDim = soiImage.getImage().getDimensions();
-        this._stick3DFigure = gaugeFigure;
-        this._stick3DFigureRA = gaugeFigure.getImage().getRandomAccess();
-        this._soiRA = soiImage.getImage().getRandomAccess();
-        this._orientationRA = orientationImage.getRandomAccess();
-        this._colormap = colorMap;
-        this._zInterleaveFactor = len;
+        this._stick = _defineBaseStick(this._stickLength, builder.getStickThickness(),
+                this._stick3DFigure.getImage().getDimensions());
 
-        this._stick = _defineBaseStick(len, thickness, gaugeFigure.getImage().getDimensions());
-        this._soiImageBoundary = _defineImageBoundaryAsBox(soiImage.getImage().getDimensions());
-        this._stick3DFigureBoundary = _defineImageBoundaryAsBox(gaugeFigure.getImage().getDimensions());
+        this._soiImageBoundary = _defineImageBoundaryAsBox(this._soiImageDim);
+        this._stick3DFigureBoundary = _defineImageBoundaryAsBox(
+            this._stick3DFigure.getImage().getDimensions());
         ;
 
     }
@@ -206,10 +176,10 @@ class Angle3DStickPainter implements IAngleGaugePainter {
         if (dipolePosition.length < 3) {
             stickTranslation = new long[4];
             System.arraycopy(dipolePosition, 0, stickTranslation, 0, 2);
-            stickTranslation[2] = this._zInterleaveFactor / 2 - 1;
+            stickTranslation[2] = this._stickLength / 2 - 1;
         } else {
             stickTranslation = dipolePosition.clone();
-            stickTranslation[2] = dipolePosition[3] * this._zInterleaveFactor + this._zInterleaveFactor / 2 - 1;
+            stickTranslation[2] = dipolePosition[3] * this._stickLength + this._stickLength / 2 - 1;
             stickTranslation[3] = dipolePosition[2];
         }
 

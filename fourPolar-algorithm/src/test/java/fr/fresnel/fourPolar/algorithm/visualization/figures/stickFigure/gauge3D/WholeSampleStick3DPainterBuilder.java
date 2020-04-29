@@ -6,7 +6,6 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D.Angle2DStickPainterTest;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
@@ -28,6 +27,7 @@ import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import ij.ImagePlus;
@@ -38,7 +38,7 @@ import net.imglib2.img.display.imagej.ImageJFunctions;
  * Note that when creating Image for gauge figure in this text, the number of z
  * planes must soi_z * sticklen.
  */
-public class Angle3DStickPainterTest {
+public class WholeSampleStick3DPainterBuilder {
     /**
      * The figure generated in this example would be the same as the Delta2DStick,
      * because all sticks would be in the same plane.
@@ -98,7 +98,8 @@ public class Angle3DStickPainterTest {
 
         Image<RGB16> gaugeImage = new ImgLib2ImageFactory().create(new long[] { dim[0], dim[1], 1, length },
                 RGB16.zero());
-        IGaugeFigure gaugeFigure = GaugeFigureFactory.create(AngleGaugeType.Stick3D, gaugeImage, fileSet);
+        IGaugeFigure gaugeFigure = GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D,
+                gaugeImage, fileSet);
 
         Angle3DStickPainter painter = new Angle3DStickPainter(gaugeFigure, orientationImage, soiImage, length,
                 thickness, cMap);
@@ -176,7 +177,8 @@ public class Angle3DStickPainterTest {
 
         Image<RGB16> gaugeImage = new ImgLib2ImageFactory()
                 .create(new long[] { dim[0], dim[1], 1, length * dim[3], dim[4] }, RGB16.zero());
-        IGaugeFigure gaugeFigure = GaugeFigureFactory.create(AngleGaugeType.Stick3D, gaugeImage, fileSet);
+        IGaugeFigure gaugeFigure = GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D,
+                gaugeImage, fileSet);
 
         Angle3DStickPainter painter = new Angle3DStickPainter(gaugeFigure, orientationImage, soiImage, length,
                 thickness, cMap);
@@ -195,7 +197,7 @@ public class Angle3DStickPainterTest {
     @Test
     public void draw_MultiZPlaneEta0_DrawsPerpendicularSticks()
             throws CannotFormOrientationImage, ConverterToImgLib2NotFound {
-        long[] dim = { 1024, 512, 1, 3 }; 
+        long[] dim = { 1024, 512, 1, 3 };
         CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
         Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
         Image<Float32> deltaImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
@@ -246,7 +248,8 @@ public class Angle3DStickPainterTest {
 
         Image<RGB16> gaugeImage = new ImgLib2ImageFactory().create(new long[] { dim[0], dim[1], 1, length * dim[3] },
                 RGB16.zero());
-        IGaugeFigure gaugeFigure = GaugeFigureFactory.create(AngleGaugeType.Stick3D, gaugeImage, fileSet);
+        IGaugeFigure gaugeFigure = GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D,
+                gaugeImage, fileSet);
 
         Angle3DStickPainter painter = new Angle3DStickPainter(gaugeFigure, orientationImage, soiImage, length,
                 thickness, cMap);
@@ -315,7 +318,8 @@ public class Angle3DStickPainterTest {
 
         Image<RGB16> gaugeImage = new ImgLib2ImageFactory().create(new long[] { dim[0], dim[1], 1, length },
                 RGB16.zero());
-        IGaugeFigure gaugeFigure = GaugeFigureFactory.create(AngleGaugeType.Stick3D, gaugeImage, fileSet);
+        IGaugeFigure gaugeFigure = GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D,
+                gaugeImage, fileSet);
 
         Angle3DStickPainter painter = new Angle3DStickPainter(gaugeFigure, orientationImage, soiImage, length,
                 thickness, cMap);
@@ -386,7 +390,8 @@ public class Angle3DStickPainterTest {
 
         Image<RGB16> gaugeImage = new ImgLib2ImageFactory().create(new long[] { dim[0], dim[1], 1, length },
                 RGB16.zero());
-        IGaugeFigure gaugeFigure = GaugeFigureFactory.create(AngleGaugeType.Stick3D, gaugeImage, fileSet);
+        IGaugeFigure gaugeFigure = GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D,
+                gaugeImage, fileSet);
 
         Angle3DStickPainter painter = new Angle3DStickPainter(gaugeFigure, orientationImage, soiImage, length,
                 thickness, cMap);
@@ -396,7 +401,7 @@ public class Angle3DStickPainterTest {
         _saveStickFigure(stickFigure, "3DStick_SingleZPlane_StickOutOfImageFrame.tiff");
 
         assertTrue(true);
-    
+
     }
 
     private void setPixel(IPixelRandomAccess<Float32> ra, long[] position, Float32 value) {
@@ -405,7 +410,7 @@ public class Angle3DStickPainterTest {
     }
 
     private void _saveStickFigure(IGaugeFigure stickFigure, String stickImageName) throws ConverterToImgLib2NotFound {
-        String root = Angle2DStickPainterTest.class.getResource("").getPath();
+        String root = Angle3DStickPainter.class.getResource("").getPath();
         ImagePlus imp = ImageJFunctions.wrapRGB(ImageToImgLib2Converter.getImg(stickFigure.getImage(), RGB16.zero()),
                 "RGB");
         FileSaver impSaver = new FileSaver(imp);
