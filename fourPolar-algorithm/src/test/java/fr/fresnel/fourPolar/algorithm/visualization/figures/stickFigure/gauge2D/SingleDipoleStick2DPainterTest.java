@@ -80,8 +80,8 @@ public class SingleDipoleStick2DPainterTest {
         ISoIImage soiImage = new SoIImage(fileSet, soi);
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IAngleGaugePainter painter = new Stick2DPainterBuilder(orientationImage, soiImage, AngleGaugeType.Rho2D)
-                .stickLen(100).gaugeFigureType(GaugeFigureType.SingleDipole).colorMap(cMap).stickThickness(8).build();
+        IAngleGaugePainter painter = new SingleDipoleStick2DPainterBuilder(orientationImage, soiImage,
+                AngleGaugeType.Rho2D).stickLen(100).colorMap(cMap).stickThickness(8).build();
 
         for (int i = 0; i < 4; i++) {
             IShape point = new ShapeFactory().point(new long[] { i, i });
@@ -120,8 +120,8 @@ public class SingleDipoleStick2DPainterTest {
         ISoIImage soiImage = new SoIImage(fileSet, soiGray);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
-        IAngleGaugePainter painter = new Stick2DPainterBuilder(orientationImage, soiImage, AngleGaugeType.Rho2D)
-                .stickLen(50).gaugeFigureType(GaugeFigureType.SingleDipole).colorMap(cMap).stickThickness(8).build();
+        IAngleGaugePainter painter = new SingleDipoleStick2DPainterBuilder(orientationImage, soiImage,
+                AngleGaugeType.Rho2D).stickLen(50).colorMap(cMap).stickThickness(8).build();
 
         // Viewer to show the soi.
         Bdv bdv = BdvFunctions.show(ImageToImgLib2Converter.getImg(soi, RGB16.zero()), "SoI",
@@ -136,7 +136,6 @@ public class SingleDipoleStick2DPainterTest {
 
         ShowDipoleUponClick doubleClick = new ShowDipoleUponClick(bdv1, painter);
         behaviours.behaviour(doubleClick, "print global pos", "button1");
-
 
         TimeUnit.SECONDS.sleep(100);
 
