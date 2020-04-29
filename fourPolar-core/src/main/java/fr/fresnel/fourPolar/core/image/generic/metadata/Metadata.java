@@ -15,7 +15,7 @@ public class Metadata implements IMetadata {
     /**
      * Build metadata.
      */
-    public class MetadataBuilder {
+    public static class MetadataBuilder {
         private AxisOrder _axisOrder = AxisOrder.NoOrder;
 
         public MetadataBuilder() {
