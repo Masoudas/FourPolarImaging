@@ -35,7 +35,7 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
 
     private final IShape _orientationImageBoundary;
 
-    public SingleDipoleStick2DPainter(Stick2DPainterBuilder builder) {
+    public SingleDipoleStick2DPainter(SingleDipoleStick2DPainterBuilder builder) {
         this._dipoleFigure = builder.getGaugeFigure();
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
@@ -156,16 +156,16 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
 
         // Move the stick to the center of figure
         long stickCenter = this._dipoleFigure.getImage().getDimensions()[0];
-        this._stick.translate(new long[] { stickCenter / 2, stickCenter / 2});
+        this._stick.translate(new long[] { stickCenter / 2, stickCenter / 2 });
     }
 
     /**
-     * Set all pixels of the stick figure black, to ensure that in repetitive use of the painter,
-     * the background remains
+     * Set all pixels of the stick figure black, to ensure that in repetitive use of
+     * the painter, the background remains
      */
     private void _paintStickFigureBlack() {
         IPixelCursor<RGB16> cursor = this._dipoleFigure.getImage().getCursor();
-        
+
         Pixel<RGB16> pixel = new Pixel<RGB16>(new RGB16(0, 0, 0));
         while (cursor.hasNext()) {
             cursor.next();

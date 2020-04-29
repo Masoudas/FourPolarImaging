@@ -40,7 +40,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
 
     private final IShape _stickFigureRegion;
 
-    public WholeSampleStick2DPainter(Stick2DPainterBuilder builder) throws ConverterToImgLib2NotFound {
+    public WholeSampleStick2DPainter(WholeSampleStick2DPainterBuilder builder) throws ConverterToImgLib2NotFound {
         this._soiImageDim = builder.getSoIImage().getImage().getDimensions();
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
 
@@ -72,7 +72,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
      */
     private void _fillGaugeFigureWithSoI(Image<UINT16> soiImage, Image<RGB16> gaugeFigure)
             throws ConverterToImgLib2NotFound {
-        GrayScaleToColorConverter.convertPlane(soiImage, gaugeFigure);
+        GrayScaleToColorConverter.useMaxEachPlane(soiImage, gaugeFigure);
     }
 
     /**
