@@ -16,9 +16,7 @@ import net.imglib2.converter.Converter;
 import net.imglib2.converter.RealLUTConverter;
 import net.imglib2.display.ColorTable8;
 import net.imglib2.type.numeric.ARGBType;
-import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.DoubleType;
-import net.imagej.minmax.DefaultMinMaxMethod;
 
 /**
  * Using this class, we can convert GrayScale types (e.g, {@link UINT16}) to
@@ -29,11 +27,12 @@ public class GrayScaleToColorConverter {
      * Convertes an {@link UINT16} to an {@link RGB16} image. Note that an 8 bit
      * lookup table is used for the conversion, hence there are only 256 white
      * pixels. Note that each image plane is scaled with respect to it's minimum and
-     * maximum (not the maximum of the entire image.)
+     * maximum (not the maximum of the entire image.). If a plane has no maximum,
+     * all pixels will be black.
      * 
      * @throws ConverterToImgLib2NotFound
      */
-    public static <T extends RealType> void convertPlane(final Image<T> grayImage, final Image<RGB16> colorImage)
+    public static <T extends RealType> void useMaxEachPlane(final Image<T> grayImage, final Image<RGB16> colorImage)
             throws ConverterToImgLib2NotFound {
         Objects.requireNonNull(grayImage, "grayImage cannot be null");
         Objects.requireNonNull(grayImage, "colorImage cannot be null");
@@ -52,7 +51,7 @@ public class GrayScaleToColorConverter {
         final DoubleType doubleType = new DoubleType();
         final ARGBType argbType = new ARGBType();
 
-        final double[][] minMax = ImageStatistics.getPlaneMinMax(grayImage);
+        final double[][] minMax = _getPlaneMinMax(grayImage);
         
         DPoint planeDim = ImageStatistics.getPlaneDim(grayImage);
         final long planeSize = planeDim.x * planeDim.y;
@@ -76,5 +75,15 @@ public class GrayScaleToColorConverter {
             pixel.value().set(ARGBType.red(color), ARGBType.green(color), ARGBType.blue(color));
             colorCursor.setPixel(pixel);
         }
+    }
+
+    private static <T extends RealType> double[][] _getPlaneMinMax(final Image<T> grayImage) {
+        final double[][] minMax = ImageStatistics.getPlaneMinMax(grayImage);
+        for (int i = 0; i < minMax[0].length; i++) {
+            if (minMax[0][i] == minMax[1][i]){
+                minMax[1][i]++;
+            }
+        }
+        return minMax;
     }
 }
