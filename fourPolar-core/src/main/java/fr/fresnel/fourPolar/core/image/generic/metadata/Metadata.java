@@ -22,8 +22,9 @@ public class Metadata implements IMetadata {
 
         }
 
-        public void axisOrder(AxisOrder axisOrder){
+        public MetadataBuilder axisOrder(AxisOrder axisOrder){
             this._axisOrder = Objects.requireNonNull(axisOrder, "axisOrder must not be null");
+            return this;
         }
 
         public IMetadata build() {
