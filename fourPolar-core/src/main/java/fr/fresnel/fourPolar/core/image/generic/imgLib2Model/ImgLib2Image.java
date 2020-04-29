@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.core.image.generic.imgLib2Model;
 import java.util.Comparator;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.types.ConverterNotFound;
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
@@ -23,7 +24,7 @@ import net.imglib2.view.Views;
  */
 public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Image<U> {
     private final Img<V> _img;
-
+    private final IMetadata _metadata;
     private final TypeConverter<U, V> _tConverter;
 
     private final ImageFactory _factory;
@@ -36,17 +37,20 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
      * @param tConverter is the appropriate converter from ImgLib2 type to
      *                   {@link PixelType}.
      * @param factory    is the associated {@link ImageFactory}.
+     * @param metadata   is the metadata associated with this image.
      */
-    ImgLib2Image(final Img<V> img, final TypeConverter<U, V> tConverter, final ImageFactory factory) {
+    ImgLib2Image(final Img<V> img, final TypeConverter<U, V> tConverter, final ImageFactory factory,
+            final IMetadata metadata) {
         this._img = img;
         this._tConverter = tConverter;
         this._factory = factory;
         this._dim = new long[this._img.numDimensions()];
         this._img.dimensions(this._dim);
+        this._metadata = metadata;
     }
 
     @Override
-    public long[] getDimensions() {        
+    public long[] getDimensions() {
         return _dim.clone();
     }
 
@@ -85,7 +89,7 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
 
     @Override
     public IPixelCursor<U> getCursor(long[] bottomCorner, long[] len) throws IllegalArgumentException {
-        if (bottomCorner.length != this._dim.length || len.length != this._dim.length){
+        if (bottomCorner.length != this._dim.length || len.length != this._dim.length) {
             throw new IllegalArgumentException("start or end does not have same dimension as image.");
         }
 
@@ -96,6 +100,11 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
 
         Cursor<V> cursor = Views.iterable(Views.offsetInterval(this._img, bottomCorner, len)).cursor();
         return new ImgLib2PixelCursor<>(cursor, this._dim, this._tConverter);
+    }
+
+    @Override
+    public IMetadata gMetadata() {
+        return this._metadata;
     }
 
 }
