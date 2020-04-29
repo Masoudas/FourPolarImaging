@@ -23,7 +23,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * generate the gauge figure, the orientation figure is interleaved in the
  * z-dimension to accommodate for the stick length (interleave factor =
  * stick_length). The {@link GaugeFigureType} associated with this builder would
- * be WholeSample,.
+ * be WholeSample.
  * <p>
  * For the region provided for the painter built by this class, if a pixel of
  * the region is out of image dimension, no sticks are drawn. If the region's
@@ -34,22 +34,29 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
 public class WholeSampleStick3DPainterBuilder {
     private final IOrientationImage _orientationImage;
     private final ISoIImage _soiImage;
-    private final AngleGaugeType _gaugeType;
 
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
     private int _length = 50;
-    private GaugeFigureType _gaugeFigureType = GaugeFigureType.WholeSample;
 
     private IGaugeFigure _gaugeFigure;
 
-    public WholeSampleStick3DPainterBuilder(IOrientationImage orientationImage, ISoIImage soiImage,
-            AngleGaugeType gaugeType) {
+    /**
+     * Initiate builder from orientation and soi images.
+     * 
+     * @param IllegalArgumentException is thrown in case orientation image is not at
+     *                                 least two dimensions.
+     */
+    public WholeSampleStick3DPainterBuilder(IOrientationImage orientationImage, ISoIImage soiImage) {
         Objects.requireNonNull(soiImage, "soiImage cannot be null");
         Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
-        Objects.requireNonNull(gaugeType, "gaugeType cannot be null");
 
-        this._gaugeType = gaugeType;
+        long[] orientationImageDim = orientationImage.getAngleImage(
+            OrientationAngle.rho).getImage().getDimensions();
+        if (orientationImageDim.length < 2) {
+            throw new IllegalArgumentException("The orientation image must be at least two dimensionsal.");
+        }
+
         this._soiImage = soiImage;
         this._orientationImage = orientationImage;
     }
@@ -108,13 +115,21 @@ public class WholeSampleStick3DPainterBuilder {
     }
 
     /**
-     * To create the gauge figure, the gauge figure interleaves the orientation image in the 
-     * z-direction.
+     * To create the gauge figure, the gauge figure interleaves the orientation
+     * image in the z-direction.
      */
     private IGaugeFigure _createGaugeFigure(long[] dim) {
-        dim[3] = dim[3] * this._length;
-        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dim, RGB16.zero());
-        return GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
+        long[] dimGaugeIm;
+        if (dim.length <= 3) // If image has no z (and not xycz).
+        {
+            dimGaugeIm = new long[] { dim[0], dim[1], 1, this._length };
+        } else {
+            dimGaugeIm = dim.clone();
+            dimGaugeIm[3] = dimGaugeIm[3] * this._length;
+        }
+
+        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dimGaugeIm, RGB16.zero());
+        return GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D, gaugeImage,
                 this._soiImage.getFileSet());
     }
 

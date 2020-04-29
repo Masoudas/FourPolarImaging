@@ -79,16 +79,8 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
      * Define the image region from pixel zero to dim - 1;
      */
     private IShape _defineGaugeImageBoundaryAsBoxShape(long[] imDimension) {
-        long[] imageMax = null;
+        long[] imageMax = imDimension.clone();
         long[] imageMin = null;
-
-        if (imDimension.length == 1) {
-            imageMax = new long[] { imDimension[0], 0 };
-            imageMin = new long[2];
-        } else {
-            imageMax = imDimension.clone();
-            imageMin = new long[imDimension.length];
-        }
 
         for (int i = 0; i < imageMax.length; i++) {
             imageMax[i] -= 1;

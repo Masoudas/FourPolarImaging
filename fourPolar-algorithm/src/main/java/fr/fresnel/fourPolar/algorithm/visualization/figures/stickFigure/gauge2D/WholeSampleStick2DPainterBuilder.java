@@ -7,6 +7,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.polarization.soi.ISoIImage;
+import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
@@ -27,8 +28,8 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * For the region provided for the painter built by this class, if a pixel of
  * the region is out of image dimension, no sticks are drawn. If the region's
  * space dimension is less than that of the orientation image, it's
- * automatically scaled to all higher dimensions. For example, the same 2D box in 
- * region would be used for z = 0, 1, ... .
+ * automatically scaled to all higher dimensions. For example, the same 2D box
+ * in region would be used for z = 0, 1, ... .
  */
 public class WholeSampleStick2DPainterBuilder {
     private final IOrientationImage _orientationImage;
@@ -42,13 +43,27 @@ public class WholeSampleStick2DPainterBuilder {
 
     private IGaugeFigure _gaugeFigure;
 
+    /**
+     * Initialize the painter with the given orientation and soi image, for the
+     * given angle gauge tpe.
+     * 
+     * @param orientationImage is the orientation image
+     * @param soiImage         is the corresponding soi Image of @param
+     *                         orientationImage.
+     * @param angleGaugeType   is the angle gauge type to be painted.
+     */
     public WholeSampleStick2DPainterBuilder(IOrientationImage orientationImage, ISoIImage soiImage,
-            AngleGaugeType gaugeType) {
+            AngleGaugeType angleGaugeType) {
         Objects.requireNonNull(soiImage, "soiImage cannot be null");
         Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
-        Objects.requireNonNull(gaugeType, "gaugeType cannot be null");
+        Objects.requireNonNull(angleGaugeType, "gaugeType cannot be null");
 
-        this._gaugeType = gaugeType;
+        long[] orientationImageDim = orientationImage.getAngleImage(OrientationAngle.rho).getImage().getDimensions();
+        if (orientationImageDim.length < 2) {
+            throw new IllegalArgumentException("The orientation image must be at least two dimensionsal.");
+        }
+
+        this._gaugeType = angleGaugeType;
         this._soiImage = soiImage;
         this._orientationImage = orientationImage;
     }

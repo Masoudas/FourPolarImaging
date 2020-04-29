@@ -60,10 +60,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
                 this._stick3DFigure.getImage().getDimensions());
 
         this._soiImageBoundary = _defineImageBoundaryAsBox(this._soiImageDim);
-        this._stick3DFigureBoundary = _defineImageBoundaryAsBox(
-            this._stick3DFigure.getImage().getDimensions());
-        ;
-
+        this._stick3DFigureBoundary = _defineImageBoundaryAsBox(this._stick3DFigure.getImage().getDimensions());
     }
 
     /**
