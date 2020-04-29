@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
+import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
+
 /**
  * An interface that models a shape. A shape is a region of discrete
  * coordinates, e.g, Box, Polygon, etc.
@@ -76,5 +78,11 @@ public interface IShape {
      * 
      */
     public void and(IShape shape);
+
+    /**
+     * Get the {@link AxisOrder} associated with this shape.
+     * @return
+     */
+    public AxisOrder getAxisOrder();
 
 }
