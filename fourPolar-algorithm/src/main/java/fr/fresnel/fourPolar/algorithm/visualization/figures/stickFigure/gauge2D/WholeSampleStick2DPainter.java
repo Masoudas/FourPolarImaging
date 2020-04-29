@@ -101,10 +101,10 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         long[] stickMin = new long[imDimension.length];
         long[] stickMax = new long[imDimension.length];
 
-        stickMin[0] = -thickness / 2;
-        stickMin[1] = -len / 2;
-        stickMax[0] = thickness / 2;
-        stickMax[1] = len / 2;
+        stickMin[0] = -len / 2;
+        stickMin[1] = -thickness / 2;
+        stickMax[0] = len / 2;
+        stickMax[1] = thickness / 2;
 
         return new ShapeFactory().closedBox(stickMin, stickMax);
     }
@@ -163,7 +163,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
 
     private void _transformStick(long[] position, IOrientationVector orientationVector) {
         this._stick.resetToOriginalShape();
-        this._stick.rotate2D(Math.PI / 2 + orientationVector.getAngle(_slopeAngle));
+        this._stick.rotate2D(-orientationVector.getAngle(_slopeAngle));
         this._stick.translate(position);
     }
 
