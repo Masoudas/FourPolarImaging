@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.IntSummaryStatistics;
 import java.util.Objects;
 
+import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import net.imglib2.realtransform.AffineTransform;
 import net.imglib2.realtransform.AffineTransform2D;
 import net.imglib2.realtransform.AffineTransform3D;
@@ -28,6 +29,7 @@ class ImgLib2Shape implements IShape {
     private final ShapeType _type;
     private final int _shapeDim;
     private final int _spaceDim;
+    private final AxisOrder _axisOrder;
 
     /**
      * A point mask instance to check whether a point is inside the shape.
@@ -43,13 +45,15 @@ class ImgLib2Shape implements IShape {
      *                  defined.
      * 
      */
-    public ImgLib2Shape(final ShapeType shapeType, final int shapeDim, final int spaceDim, RealMaskRealInterval shape) {
+    public ImgLib2Shape(final ShapeType shapeType, final int shapeDim, final int spaceDim, RealMaskRealInterval shape,
+            final AxisOrder axisOrder) {
         this._type = shapeType;
         this._shapeDim = shapeDim;
         this._spaceDim = spaceDim;
         this._pointMask = GeomMasks.pointMask(new double[spaceDim]);
         this._originalShape = shape;
         this._shape = shape.and(shape); // Just a bogus operation to get a new copy of the shape.
+        this._axisOrder = axisOrder;
     }
 
     @Override
@@ -117,6 +121,10 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public void rotate3D(double angle1, double angle2, double angle3, int[] axis) {
+        int z_axis = AxisOrder.getZAxis(this._axisOrder);
+        if (AxisOrder.getZAxis(this._axisOrder) < 0){
+            throw new IllegalArgumentException("Impossible to rotate 3D because no z-axis exists.")
+        }
         if (axis.length != 3) {
             throw new IllegalArgumentException("Rotation angles and axis should be three");
         }
@@ -132,10 +140,11 @@ class ImgLib2Shape implements IShape {
         affine3D.rotate(axis[1], -angle2);
         affine3D.rotate(axis[0], -angle1);
 
+        int[] rowsToFill = {0, 1, z_axis}; // Row, columns to be filled in the affine transform.
         AffineTransform fTransform = new AffineTransform(_spaceDim);
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
-                fTransform.set(affine3D.get(row, column), row, column);
+                fTransform.set(affine3D.get(row, column), rowsToFill[row], rowsToFill[column]);
             }
         }
 
@@ -156,7 +165,6 @@ class ImgLib2Shape implements IShape {
         }
 
         this._shape = this._shape.transform(fTransform);
-
     }
 
     @Override
@@ -173,6 +181,11 @@ class ImgLib2Shape implements IShape {
 
         this._shape = this._shape.transform(fTransform);
 
+    }
+
+    @Override
+    public AxisOrder getAxisOrder() {
+        return this._axisOrder;
     }
 
 }
