@@ -21,7 +21,14 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * provide one or several regions over which to draw the sticks, but the output
  * {@link IGaugeFigure} will have the same size as the orientation (or soi)
  * image. The {@link GaugeFigureType} associated with this builder would be
- * WholeSample.
+ * WholeSample. Note finally that the background of the gauge figure will be
+ * filled with {@link ISoIImage}.
+ * <p>
+ * For the region provided for the painter built by this class, if a pixel of
+ * the region is out of image dimension, no sticks are drawn. If the region's
+ * space dimension is less than that of the orientation image, it's
+ * automatically scaled to all higher dimensions. For example, the same 2D box in 
+ * region would be used for z = 0, 1, ... .
  */
 public class WholeSampleStick2DPainterBuilder {
     private final IOrientationImage _orientationImage;
