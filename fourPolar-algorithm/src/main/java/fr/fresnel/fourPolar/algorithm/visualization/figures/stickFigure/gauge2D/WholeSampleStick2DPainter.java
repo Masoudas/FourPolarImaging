@@ -18,7 +18,6 @@ import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
-import fr.fresnel.fourPolar.core.util.shape.ShapeUtils;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
@@ -56,7 +55,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         this._maxColorAngle = OrientationVector.maxAngle(_colorAngle);
 
         this._stick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness(),
-                this._stick2DFigure.getImage().getDimensions());
+                this._stick2DFigure.getImage().getMetadata().axisOrder());
 
         this._stickFigureRegion = this._defineGaugeImageBoundaryAsBoxShape(
                 this._stick2DFigure.getImage().getDimensions(),
@@ -86,16 +85,16 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         return new ShapeFactory().closedBox(imageMin, imageMax, axisOrder);
     }
 
-    private IShape _defineBaseStick(int len, int thickness, long[] imDimension) {
-        long[] stickMin = new long[imDimension.length];
-        long[] stickMax = new long[imDimension.length];
+    private IShape _defineBaseStick(int len, int thickness, AxisOrder axisOrder) {
+        long[] stickMin = new long[AxisOrder.getNumAxis(axisOrder)];
+        long[] stickMax = new long[AxisOrder.getNumAxis(axisOrder)];
 
         stickMin[0] = -len / 2;
         stickMin[1] = -thickness / 2;
         stickMax[0] = len / 2;
         stickMax[1] = thickness / 2;
 
-        return new ShapeFactory().closedBox(stickMin, stickMax, AxisOrder.XY);
+        return new ShapeFactory().closedBox(stickMin, stickMax, axisOrder);
     }
 
     @Override
