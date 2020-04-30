@@ -6,8 +6,8 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 
 /**
- * Implements the metadata. Note that all current and future metadata
- * info are set to default values.
+ * Implements the metadata. Note that all current and future metadata info are
+ * set to default values.
  */
 public class Metadata implements IMetadata {
     private AxisOrder _axisOrder;
@@ -18,11 +18,24 @@ public class Metadata implements IMetadata {
     public static class MetadataBuilder {
         private AxisOrder _axisOrder = AxisOrder.NoOrder;
 
+        /**
+         * Build metadata from scratch.
+         */
         public MetadataBuilder() {
 
         }
 
-        public MetadataBuilder axisOrder(AxisOrder axisOrder){
+        /**
+         * Build metadata, starting from another metadata, but optionally change other
+         * parameters.
+         * 
+         * @param metadata
+         */
+        public MetadataBuilder(IMetadata metadata) {
+            this.axisOrder(metadata.axisOrder());
+        }
+
+        public MetadataBuilder axisOrder(AxisOrder axisOrder) {
             this._axisOrder = Objects.requireNonNull(axisOrder, "axisOrder must not be null");
             return this;
         }
