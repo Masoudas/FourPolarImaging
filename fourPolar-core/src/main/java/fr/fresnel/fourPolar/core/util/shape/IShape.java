@@ -38,9 +38,9 @@ public interface IShape {
      * @param angle1 is the rotation over the first axis in radian.
      * @param angle2 is the rotation over the second axis in radian.
      * @param angle3 is the rotation over the second axis in radian.
-     * @param axis   is a 3d vector. Axis should be less than space dim.
+     * @param rotationOrder  is the desired order of rotation
      */
-    public void rotate3D(double angle1, double angle2, double angle3, int[] axis);
+    public void rotate3D(double angle1, double angle2, double angle3, Rotation3DOrder rotation3dOrder);
 
     /**
      * Apply a 2d rotation to the shape (which applies to the first two dimensions).

@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
-import java.util.Arrays;
-import java.util.IntSummaryStatistics;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
@@ -112,27 +110,20 @@ class ImgLib2Shape implements IShape {
     }
 
     @Override
-    public void rotate3D(double angle1, double angle2, double angle3, int[] axis) {
+    public void rotate3D(double angle1, double angle2, double angle3, Rotation3DOrder rotation3dOrder) {
         int z_axis = AxisOrder.getZAxis(this._axisOrder);
-        if (AxisOrder.getZAxis(this._axisOrder) < 2){
+        if (AxisOrder.getZAxis(this._axisOrder) < 2) {
             throw new IllegalArgumentException("Impossible to rotate 3D because no z-axis exists.");
         }
-        if (axis.length != 3) {
-            throw new IllegalArgumentException("Rotation angles and axis should be three");
-        }
 
-        IntSummaryStatistics stats = Arrays.stream(axis).summaryStatistics();
-        if (stats.getMin() < 0 || stats.getMax() > 3 || stats.getSum() != 3) {
-            throw new IllegalArgumentException(
-                    "Rotation axis must be between 0 and 2 dimension and Repetition is not allowed.");
-        }
+        int[] axis = Rotation3DOrder.getAxisOrder(rotation3dOrder);
 
         AffineTransform3D affine3D = new AffineTransform3D();
         affine3D.rotate(axis[2], -angle3);
         affine3D.rotate(axis[1], -angle2);
         affine3D.rotate(axis[0], -angle1);
 
-        int[] rowsToFill = {0, 1, z_axis}; // Row, columns to be filled in the affine transform.
+        int[] rowsToFill = { 0, 1, z_axis }; // Row, columns to be filled in the affine transform.
         AffineTransform fTransform = new AffineTransform(_spaceDim);
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
