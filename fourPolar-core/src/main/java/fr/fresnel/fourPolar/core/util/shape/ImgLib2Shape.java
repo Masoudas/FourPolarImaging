@@ -122,8 +122,8 @@ class ImgLib2Shape implements IShape {
     @Override
     public void rotate3D(double angle1, double angle2, double angle3, int[] axis) {
         int z_axis = AxisOrder.getZAxis(this._axisOrder);
-        if (AxisOrder.getZAxis(this._axisOrder) < 0){
-            throw new IllegalArgumentException("Impossible to rotate 3D because no z-axis exists.")
+        if (AxisOrder.getZAxis(this._axisOrder) < 2){
+            throw new IllegalArgumentException("Impossible to rotate 3D because no z-axis exists.");
         }
         if (axis.length != 3) {
             throw new IllegalArgumentException("Rotation angles and axis should be three");
