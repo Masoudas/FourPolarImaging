@@ -87,21 +87,13 @@ class ImgLib2Shape implements IShape {
     @Override
     public boolean isInside(long[] point) {
         if (point.length != this._spaceDim) {
-            return false;
+            throw new IllegalArgumentException("The given point does not have same number of axis as shape.");
         }
 
         this._pointMask.setPosition(point);
         return this._shape.test(this._pointMask);
     }
 
-    /**
-     * Ands this shape with the given shape. In case there's no overlap, the
-     * resulting shape has no elements.
-     * 
-     * @throws IllegalArgumentException in case source and destination shape don't
-     *                                  have the same space dimension.
-     * 
-     */
     @Override
     public void and(IShape shape) {
         Objects.requireNonNull(shape, "shape should not be null.");

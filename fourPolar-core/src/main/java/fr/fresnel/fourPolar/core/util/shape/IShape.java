@@ -64,8 +64,11 @@ public interface IShape {
 
     /**
      * Checks whether the given point is inside the shape. If the point dimension is
-     * not equal to the space dimension of the shape (see shapeDim and spaceDim), then
-     * false is returned.
+     * not equal to the space dimension of the shape (see shapeDim and spaceDim),
+     * then false is returned.
+     * 
+     * @throws IllegalArgumentException in case the point does not have same number
+     *                                  of axis as shape.
      */
     public boolean isInside(long[] point);
 
@@ -73,14 +76,15 @@ public interface IShape {
      * Ands this shape with the given shape. In case there's no overlap, the
      * resulting shape has no elements.
      * 
-     * @throws IllegalArgumentException in case source and destination shape don't
-     *                                  have the same space dimension.
+     * @throws IllegalArgumentException in case the two shapes don't have same
+     *                                  number of axis.
      * 
      */
     public void and(IShape shape);
 
     /**
      * Get the {@link AxisOrder} associated with this shape.
+     * 
      * @return
      */
     public AxisOrder getAxisOrder();
