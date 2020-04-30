@@ -18,22 +18,21 @@ public interface IShape {
     public ShapeType getType();
 
     /**
-     * Returns the dimension of the space over which the shape is defined. A 2D box
-     * (shapeDim=2) can be defined a 3D space (spaceDim=3).
+     * Returns the Axis order associated with the shape. 
+     * 
      */
-    public int spaceDim();
+    public AxisOrder axisOrder();
 
     /**
-     * Returns the dimension of the shape (see spaceDim). A 2D box (shapeDim=2) can
-     * be defined a 3D space (spaceDim=3).
+     * Returns the dimension of the shape (see axisOrder). A 2D box (shapeDim=2) can
+     * be defined over a 3D space (AxisOrder = XYZ or others).
      * 
      * @return
      */
     public int shapeDim();
 
     /**
-     * Apply a 3d rotation with the given axis order, where axis in {0, 1, 2},
-     * non-repetitive.
+     * Apply a 3d rotation with the given rotation order.
      * 
      * @param angle1 is the rotation over the first axis in radian.
      * @param angle2 is the rotation over the second axis in radian.
@@ -81,12 +80,4 @@ public interface IShape {
      * 
      */
     public void and(IShape shape);
-
-    /**
-     * Get the {@link AxisOrder} associated with this shape.
-     * 
-     * @return
-     */
-    public AxisOrder getAxisOrder();
-
 }

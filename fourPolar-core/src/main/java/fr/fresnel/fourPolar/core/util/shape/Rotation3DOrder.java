@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
 public enum Rotation3DOrder {
-    ZXY, ZYX;
+    XZY, ZXY, ZYX;
 
     /**
      * Returns the order of rotation as a vector.
@@ -9,6 +9,10 @@ public enum Rotation3DOrder {
     public static int[] getAxisOrder(Rotation3DOrder rotation3dOrder) {
         int[] rotationAxis = null;
         switch (rotation3dOrder) {
+            case XZY:
+                rotationAxis = new int[] { 0, 2, 1 };
+                break;
+
             case ZXY:
                 rotationAxis = new int[] { 2, 0, 1 };
                 break;

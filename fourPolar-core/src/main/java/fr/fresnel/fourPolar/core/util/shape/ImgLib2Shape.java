@@ -26,7 +26,6 @@ class ImgLib2Shape implements IShape {
 
     private final ShapeType _type;
     private final int _shapeDim;
-    private final int _spaceDim;
     private final AxisOrder _axisOrder;
 
     /**
@@ -43,12 +42,11 @@ class ImgLib2Shape implements IShape {
      *                  defined.
      * 
      */
-    public ImgLib2Shape(final ShapeType shapeType, final int shapeDim, final int spaceDim, RealMaskRealInterval shape,
+    public ImgLib2Shape(final ShapeType shapeType, final int shapeDim, RealMaskRealInterval shape,
             final AxisOrder axisOrder) {
         this._type = shapeType;
         this._shapeDim = shapeDim;
-        this._spaceDim = spaceDim;
-        this._pointMask = GeomMasks.pointMask(new double[spaceDim]);
+        this._pointMask = GeomMasks.pointMask(new double[AxisOrder.getNumAxis(axisOrder)]);
         this._originalShape = shape;
         this._shape = shape.and(shape); // Just a bogus operation to get a new copy of the shape.
         this._axisOrder = axisOrder;
@@ -60,7 +58,7 @@ class ImgLib2Shape implements IShape {
                 .iterable(Views.interval(Views.raster(Masks.toRealRandomAccessible(this._shape)),
                         Intervals.largestContainedInterval(this._shape)));
 
-        return new ShapeIterator(iterableRegion, this._spaceDim);
+        return new ShapeIterator(iterableRegion, this._axisOrder);
     }
 
     @Override
@@ -69,13 +67,13 @@ class ImgLib2Shape implements IShape {
     }
 
     @Override
-    public int spaceDim() {
-        return this._spaceDim;
+    public int shapeDim() {
+        return this._shapeDim;
     }
 
     @Override
-    public int shapeDim() {
-        return this._shapeDim;
+    public AxisOrder axisOrder() {
+        return this._axisOrder;
     }
 
     public RealMaskRealInterval getImgLib2Shape() {
@@ -84,7 +82,7 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public boolean isInside(long[] point) {
-        if (point.length != this._spaceDim) {
+        if (point.length != AxisOrder.getNumAxis(this._axisOrder)) {
             throw new IllegalArgumentException("The given point does not have same number of axis as shape.");
         }
 
@@ -96,8 +94,8 @@ class ImgLib2Shape implements IShape {
     public void and(IShape shape) {
         Objects.requireNonNull(shape, "shape should not be null.");
 
-        if (shape.spaceDim() != this.spaceDim()) {
-            throw new IllegalArgumentException("To and two shapes, they must have the same space dimension");
+        if (shape.axisOrder() != this.axisOrder()) {
+            throw new IllegalArgumentException("The two shapes are not defined over the same axis.");
         }
 
         ImgLib2Shape shapeRef = (ImgLib2Shape) shape;
@@ -124,7 +122,7 @@ class ImgLib2Shape implements IShape {
         affine3D.rotate(axis[0], -angle1);
 
         int[] rowsToFill = { 0, 1, z_axis }; // Row, columns to be filled in the affine transform.
-        AffineTransform fTransform = new AffineTransform(_spaceDim);
+        AffineTransform fTransform = new AffineTransform(AxisOrder.getNumAxis(this._axisOrder));
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
                 fTransform.set(affine3D.get(row, column), rowsToFill[row], rowsToFill[column]);
@@ -137,14 +135,16 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public void translate(long[] translation) {
-        if (translation.length != this._spaceDim) {
-            throw new IllegalArgumentException("Translation dimension must equal shape space dimension.");
+        int numAxis = AxisOrder.getNumAxis(this._axisOrder);
+        if (translation.length != numAxis) {
+            throw new IllegalArgumentException(
+                    "Translation must occur over all axis. Consider using zero for undesired axis.");
         }
 
-        AffineTransform fTransform = new AffineTransform(_spaceDim);
+        AffineTransform fTransform = new AffineTransform(numAxis);
         // Set translation
-        for (int row = 0; row < this._spaceDim; row++) {
-            fTransform.set(-translation[row], row, this._spaceDim);
+        for (int row = 0; row < numAxis; row++) {
+            fTransform.set(-translation[row], row, numAxis);
         }
 
         this._shape = this._shape.transform(fTransform);
@@ -155,7 +155,7 @@ class ImgLib2Shape implements IShape {
         AffineTransform2D affine2D = new AffineTransform2D();
         affine2D.rotate(-angle);
 
-        AffineTransform fTransform = new AffineTransform(_spaceDim);
+        AffineTransform fTransform = new AffineTransform(AxisOrder.getNumAxis(this._axisOrder));
         for (int row = 0; row < 2; row++) {
             for (int column = 0; column < 2; column++) {
                 fTransform.set(affine2D.get(row, column), row, column);
@@ -164,11 +164,6 @@ class ImgLib2Shape implements IShape {
 
         this._shape = this._shape.transform(fTransform);
 
-    }
-
-    @Override
-    public AxisOrder getAxisOrder() {
-        return this._axisOrder;
     }
 
 }

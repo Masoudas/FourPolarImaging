@@ -1,27 +1,25 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
+import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import net.imglib2.Cursor;
 import net.imglib2.roi.IterableRegion;
 import net.imglib2.type.logic.BoolType;
 
+/**
+ * An iterator to iterator over discrete coordinate points.
+ */
 class ShapeIterator implements IShapeIterator {
     private final long[] _position;
     private final Cursor<Void> _regionCursor;
 
     /**
-     * Forms the iterator. shapeDim determines the dimension of the shape (or
-     * dimensions where iteratation occurs). Sample position is used to determine
-     * the constant dimensions (or dimensions greater than shapeDim). Hence, over
-     * each iteration, the first shapeDim elements will vary, and the rest remain
-     * constant.
-     * 
-     * @param iterableRegion
-     * @param shapeDim
-     * @param samplePosition
+     * Form the iterator, corresponding to space properties and shape.
+     * @param iterableRegion is the iterable of ImgLib2.
+     * @param axisOrder is the space axis associated via 
      */
-    public ShapeIterator(IterableRegion<BoolType> iterableRegion, int shapeDim) {
+    public ShapeIterator(IterableRegion<BoolType> iterableRegion, AxisOrder axisOrder) {
         this._regionCursor = iterableRegion.cursor();
-        this._position = new long[shapeDim];
+        this._position = new long[AxisOrder.getNumAxis(axisOrder)];
     }
 
     @Override
