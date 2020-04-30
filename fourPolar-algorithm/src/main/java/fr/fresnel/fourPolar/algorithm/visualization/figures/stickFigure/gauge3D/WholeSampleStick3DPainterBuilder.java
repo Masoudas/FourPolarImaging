@@ -3,10 +3,13 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge3D
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.polarization.soi.ISoIImage;
+import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
@@ -51,8 +54,7 @@ public class WholeSampleStick3DPainterBuilder {
         Objects.requireNonNull(soiImage, "soiImage cannot be null");
         Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
 
-        long[] orientationImageDim = orientationImage.getAngleImage(
-            OrientationAngle.rho).getImage().getDimensions();
+        long[] orientationImageDim = orientationImage.getAngleImage(OrientationAngle.rho).getImage().getDimensions();
         if (orientationImageDim.length < 2) {
             throw new IllegalArgumentException("The orientation image must be at least two dimensionsal.");
         }
@@ -110,25 +112,34 @@ public class WholeSampleStick3DPainterBuilder {
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
         long[] orientationImageDim = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
                 .getDimensions();
-        this._gaugeFigure = this._createGaugeFigure(orientationImageDim);
+        IMetadata orientImMetadata = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
+                .getMetadata();
+        this._gaugeFigure = this._createGaugeFigure(orientationImageDim, orientImMetadata);
         return new WholeSampleStick3DPainter(this);
     }
 
     /**
      * To create the gauge figure, the gauge figure interleaves the orientation
-     * image in the z-direction.
+     * image in the z-direction. For 2D orientation image, just add a z-axis,
+     * otherwise, keep axis order of orientation image.
      */
-    private IGaugeFigure _createGaugeFigure(long[] dim) {
+    private IGaugeFigure _createGaugeFigure(long[] dim, IMetadata orientImMetadata) {
+        AxisOrder orientImAxisOrder = orientImMetadata.axisOrder();
+
+        IMetadata gaugeMetadata;
         long[] dimGaugeIm;
-        if (dim.length <= 3) // If image has no z (and not xycz).
+        if (AxisOrder.getZAxis(orientImAxisOrder) < 0) // If image has no z.
         {
-            dimGaugeIm = new long[] { dim[0], dim[1], 1, this._length };
-        } else {
+            dimGaugeIm = new long[] { dim[0], dim[1], this._length };
+            gaugeMetadata = new Metadata.MetadataBuilder(orientImMetadata).axisOrder(AxisOrder.XYZ).build();
+        } else { 
+            int zAxis = AxisOrder.getZAxis(orientImAxisOrder);
             dimGaugeIm = dim.clone();
-            dimGaugeIm[3] = dimGaugeIm[3] * this._length;
+            dimGaugeIm[zAxis] = dimGaugeIm[zAxis] * this._length;
+            gaugeMetadata = new Metadata.MetadataBuilder(orientImMetadata).build();
         }
 
-        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dimGaugeIm, RGB16.zero());
+        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dimGaugeIm, RGB16.zero(), gaugeMetadata);
         return GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D, gaugeImage,
                 this._soiImage.getFileSet());
     }

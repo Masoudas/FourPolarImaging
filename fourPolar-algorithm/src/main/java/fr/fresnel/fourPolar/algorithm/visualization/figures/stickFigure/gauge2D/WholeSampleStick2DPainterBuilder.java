@@ -3,7 +3,9 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.polarization.soi.ISoIImage;
@@ -115,12 +117,15 @@ public class WholeSampleStick2DPainterBuilder {
      *                                    cannot be converted to ImgLib2 image type.
      */
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
-        this._gaugeFigure = this._createGaugeFigure(this._soiImage.getImage().getDimensions());
+        IMetadata orientImMetadata = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
+                .getMetadata();
+        this._gaugeFigure = this._createGaugeFigure(this._soiImage.getImage().getDimensions(), orientImMetadata);
         return new WholeSampleStick2DPainter(this);
     }
 
-    private IGaugeFigure _createGaugeFigure(long[] dim) {
-        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dim, RGB16.zero());
+    private IGaugeFigure _createGaugeFigure(long[] dim, IMetadata orientationImgMetadata) {
+        IMetadata metadata = new Metadata.MetadataBuilder(orientationImgMetadata).build();
+        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dim, RGB16.zero(), metadata);
         return GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
                 this._soiImage.getFileSet());
     }

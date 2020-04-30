@@ -3,10 +3,14 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.polarization.soi.ISoIImage;
+import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
@@ -98,13 +102,22 @@ public class SingleDipoleStick2DPainterBuilder {
      *                                    cannot be converted to ImgLib2 image type.
      */
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
-        this._gaugeFigure = this._createGaugeFigure(new long[] { this._length, this._length });
+        IMetadata orientImMetadata = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
+                .getMetadata();
+        this._gaugeFigure = this._createGaugeFigure(new long[] { this._length, this._length }, orientImMetadata);
         return new SingleDipoleStick2DPainter(this);
 
     }
 
-    private IGaugeFigure _createGaugeFigure(long[] dim) {
-        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dim, RGB16.zero());
+    /**
+     * Create gauge figure, and set it's metadata to the orientation image metadata,
+     * except for the axis, which is just xy.
+     * 
+     */
+    private IGaugeFigure _createGaugeFigure(long[] dim, IMetadata orientationImMetadata) {
+        IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(orientationImMetadata).axisOrder(AxisOrder.XY)
+                .build();
+        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dim, RGB16.zero(), gaugeFigMetadata);
         return GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
                 this._soiImage.getFileSet());
     }
