@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.core.util.shape;
 import java.util.Arrays;
 import java.util.Objects;
 
+import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import net.imglib2.roi.geom.GeomMasks;
 import net.imglib2.roi.geom.real.PointMask;
 import net.imglib2.roi.geom.real.WritableBox;
@@ -20,7 +21,7 @@ public class ShapeFactory {
      * @throws IllegalArgumentException in case min and max don't have equal
      *                                  dimension or shape dimension is less than 2.
      */
-    public IShape closedBox(long[] min, long[] max) {
+    public IShape closedBox(long[] min, long[] max, AxisOrder axisOrder) {
         Objects.requireNonNull(min, "min should not be null");
         Objects.requireNonNull(max, "max should not be null");
 
@@ -41,7 +42,7 @@ public class ShapeFactory {
         double[] maxCopy = Arrays.stream(max).asDoubleStream().toArray();
         WritableBox box = GeomMasks.closedBox(minCopy, maxCopy);
 
-        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.ClosedBox, shapeDim, min.length, box);
+        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.ClosedBox, shapeDim, min.length, box, axisOrder);
         return shape;
     }
 
@@ -59,7 +60,7 @@ public class ShapeFactory {
 
         WritablePolygon2D polygon2D = GeomMasks.closedPolygon2D(xPoints, yPoints);
 
-        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.ClosedPolygon2D, 2, 2, polygon2D);
+        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.ClosedPolygon2D, 2, 2, polygon2D, AxisOrder.XY);
 
         return shape;
     }
@@ -69,7 +70,7 @@ public class ShapeFactory {
         
         PointMask mask = GeomMasks.pointMask(Arrays.stream(point).asDoubleStream().toArray());
 
-        return new ImgLib2Shape(ShapeType.Point, 1, point.length, mask);
+        return new ImgLib2Shape(ShapeType.Point, 1, point.length, mask, AxisOrder.XY);
     }
 
     
