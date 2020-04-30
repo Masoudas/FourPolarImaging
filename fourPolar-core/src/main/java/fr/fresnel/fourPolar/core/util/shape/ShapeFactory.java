@@ -34,6 +34,12 @@ public class ShapeFactory {
             throw new IllegalArgumentException("Number of axis must correspond to shape dimension");
         }
 
+        for (int j = 0; j < max.length; j++) {
+            if (min[j] > max[j]){
+                throw new IllegalArgumentException("max should be greater than or equal to min");
+            }                
+        }
+
         int shapeDim = 0;
         while (shapeDim < min.length && min[shapeDim] != max[shapeDim]) {
             shapeDim++;
