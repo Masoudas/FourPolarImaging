@@ -6,6 +6,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImageRandomAccess;
+import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
@@ -49,7 +50,8 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
         this._stick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness());
 
         this._orientationImageBoundary = this._defineOrientationImageBoundaryAsBoxShape(
-                builder.getOrientationImage().getAngleImage(OrientationAngle.rho).getImage().getDimensions());
+                builder.getOrientationImage().getAngleImage(OrientationAngle.rho).getImage().getDimensions(),
+                builder.getOrientationImage().getAngleImage(OrientationAngle.rho).getImage().getMetadata().axisOrder());
 
     }
 
@@ -62,13 +64,13 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
         stickMax[0] = thickness / 2;
         stickMax[1] = len / 2;
 
-        return new ShapeFactory().closedBox(stickMin, stickMax);
+        return new ShapeFactory().closedBox(stickMin, stickMax, AxisOrder.XY);
     }
 
     /**
      * Define the image region from pixel zero to dim - 1;
      */
-    private IShape _defineOrientationImageBoundaryAsBoxShape(long[] imDimension) {
+    private IShape _defineOrientationImageBoundaryAsBoxShape(long[] imDimension, AxisOrder axisOrder) {
         long[] imageMax = null;
         long[] imageMin = null;
 
@@ -84,7 +86,7 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
             imageMax[i] -= 1;
         }
 
-        return new ShapeFactory().closedBox(imageMin, imageMax);
+        return new ShapeFactory().closedBox(imageMin, imageMax, axisOrder);
     }
 
     /**

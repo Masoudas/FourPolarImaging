@@ -103,7 +103,7 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
     }
 
     @Override
-    public IMetadata gMetadata() {
+    public IMetadata getMetadata() {
         return this._metadata;
     }
 

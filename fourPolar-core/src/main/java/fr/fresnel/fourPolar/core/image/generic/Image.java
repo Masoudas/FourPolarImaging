@@ -55,6 +55,6 @@ public interface Image<T extends PixelType> {
      * Returns the {@link IMetadata} associated with this image.
      * @return
      */
-    public IMetadata gMetadata();
+    public IMetadata getMetadata();
 
 }
