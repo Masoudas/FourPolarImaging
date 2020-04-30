@@ -4,4 +4,5 @@ public enum ShapeType {
     ClosedBox,
     ClosedPolygon2D,
     Point,
+    Scaled
 }

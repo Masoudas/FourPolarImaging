@@ -29,8 +29,8 @@ public class ShapeUtils {
      *                                  scaled dimension.
      */
 
-    public static IShapeIterator addNewDimension(IShape shape, AxisOrder newAxisOrder, long[] max) {
-        return ShapeScalarIterator.getIterator(shape, newAxisOrder, max);
+    public static IShape addNewDimension(IShape shape, AxisOrder newAxisOrder, long[] max) {
+        return new ScaledShape(shape, newAxisOrder, max);
     }
 
 }
