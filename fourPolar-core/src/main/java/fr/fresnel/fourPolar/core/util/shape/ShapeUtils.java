@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
+import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 
 /**
  * A set of utility methods for shape.
@@ -10,20 +11,26 @@ public class ShapeUtils {
     }
 
     /**
-     * Scales the given shape over higher dimensions, so that the same shape can be
-     * repeated in higher dimensions.
+     * Add new axis to the given shape and iterates over all axis, from o point to
+     * max point (inclusive). max must correspond to the number of newly added dimensions.
      * <p>
-     * Example: Suppose a box as [0,0] to [1,1]. If scaleDimension is [5, 5, 2],
-     * then the iterator would iterate over the following boxes, [0,0,0] to [1,1,0],
-     * [0,0,1] to [1,1,1].
+     * Example: We can add a new axis to a circle in XY, say Z (scaledAxisOrder =
+     * XYZ) starting from min = [0], to max[2], which turns circle into cylinder it
+     * into a cylinder.
      * 
-     * @param shape
-     * @param scaleDimension
-     * @return
+     * @param shape           is the original shape.
+     * @param scaledAxisOrder is the new axis order. Note that the unscaled axis
+     *                        must be the same as original shape.
+     * @param max             is the final point of new axis.
+     * @return the shape iterator for the scaled shape.
+     * 
+     * @throws IllegalArgumentException in case min or max have unequal length, or
+     *                                  their length is unequal to the number of
+     *                                  scaled dimension.
      */
-    public static IShapeIterator scaleShapeOverHigherDim(IShape shape, long[] scaleDimension) {
-        return ShapeScalarIterator.getIterator(shape, scaleDimension);
-    }
 
+    public static IShapeIterator addNewDimension(IShape shape, AxisOrder newAxisOrder, long[] max) {
+        return ShapeScalarIterator.getIterator(shape, newAxisOrder, max);
+    }
 
 }
