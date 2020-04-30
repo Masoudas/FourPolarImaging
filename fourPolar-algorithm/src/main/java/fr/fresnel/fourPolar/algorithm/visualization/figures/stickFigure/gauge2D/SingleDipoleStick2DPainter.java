@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D;
 
+import java.util.Arrays;
+
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
@@ -14,6 +16,7 @@ import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
+import fr.fresnel.fourPolar.core.util.shape.ShapeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
@@ -75,29 +78,28 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
         long[] imageMin = null;
 
         if (imDimension.length == 1) {
-            imageMax = new long[] { imDimension[0], 0 };
+            imageMax = new long[] { imDimension[0] - 1, 0 };
             imageMin = new long[2];
         } else {
-            imageMax = imDimension.clone();
+            imageMax = Arrays.stream(imDimension).map((x) -> x - 1).toArray();
             imageMin = new long[imDimension.length];
-        }
-
-        for (int i = 0; i < imageMax.length; i++) {
-            imageMax[i] -= 1;
         }
 
         return new ShapeFactory().closedBox(imageMin, imageMax, axisOrder);
     }
 
-    /**
-     * Draws the stick for the point provided by the region, if it passes the given
-     * soiThreshold. Note that if the given region is not a point region, the stick
-     * is drawn for only the first point in the region.
-     * 
-     */
     @Override
-    public void draw(IShape point, UINT16 soiThreshold) throws IllegalArgumentException {
-        long[] dipolePosition = point.getIterator().next();
+    public void draw(IShape region, UINT16 soiThreshold) throws IllegalArgumentException {
+        long[] dipolePosition = region.getIterator().next();
+
+        if (region.getType() != ShapeType.Point) {
+            throw new IllegalArgumentException("Only point shape can be used to localize a dipole.");
+        }
+
+        if (region.axisOrder() != this._orientationImageBoundary.axisOrder()) {
+            throw new IllegalArgumentException(
+                    "The given point should be defined over the same axis order as orientation image.");
+        }
 
         if (!this._orientationImageBoundary.isInside(dipolePosition)) {
             throw new IllegalArgumentException(

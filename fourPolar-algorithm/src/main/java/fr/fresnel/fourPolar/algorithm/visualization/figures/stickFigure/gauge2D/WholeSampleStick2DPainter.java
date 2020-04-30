@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D;
 
+import java.util.Arrays;
+
 import fr.fresnel.fourPolar.algorithm.util.image.converters.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
@@ -8,6 +10,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImageRandomAccess;
+import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
@@ -21,7 +24,6 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGa
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
 class WholeSampleStick2DPainter implements IAngleGaugePainter {
-    final private long[] _soiImageDim;
     final private IGaugeFigure _stick2DFigure;
 
     final private IOrientationImageRandomAccess _orientationRA;
@@ -41,7 +43,6 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     private final IShape _stickFigureRegion;
 
     public WholeSampleStick2DPainter(WholeSampleStick2DPainterBuilder builder) throws ConverterToImgLib2NotFound {
-        this._soiImageDim = builder.getSoIImage().getImage().getDimensions();
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
 
         this._stick2DFigure = builder.getGaugeFigure();
@@ -57,11 +58,11 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         this._stick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness(),
                 this._stick2DFigure.getImage().getDimensions());
 
-        this._stickFigureRegion = this
-                ._defineGaugeImageBoundaryAsBoxShape(this._stick2DFigure.getImage().getDimensions());
+        this._stickFigureRegion = this._defineGaugeImageBoundaryAsBoxShape(
+                this._stick2DFigure.getImage().getDimensions(),
+                this._stick2DFigure.getImage().getMetadata().axisOrder());
 
         this._fillGaugeFigureWithSoI(builder.getSoIImage().getImage(), this._stick2DFigure.getImage());
-
     }
 
     /**
@@ -78,15 +79,11 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     /**
      * Define the image region from pixel zero to dim - 1;
      */
-    private IShape _defineGaugeImageBoundaryAsBoxShape(long[] imDimension) {
-        long[] imageMax = imDimension.clone();
+    private IShape _defineGaugeImageBoundaryAsBoxShape(long[] imDimension, AxisOrder axisOrder) {
+        long[] imageMax = Arrays.stream(imDimension).map((x) -> x - 1).toArray();
         long[] imageMin = new long[imDimension.length];
 
-        for (int i = 0; i < imageMax.length; i++) {
-            imageMax[i] -= 1;
-        }
-
-        return new ShapeFactory().closedBox(imageMin, imageMax);
+        return new ShapeFactory().closedBox(imageMin, imageMax, axisOrder);
     }
 
     private IShape _defineBaseStick(int len, int thickness, long[] imDimension) {
@@ -98,25 +95,23 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         stickMax[0] = len / 2;
         stickMax[1] = thickness / 2;
 
-        return new ShapeFactory().closedBox(stickMin, stickMax);
+        return new ShapeFactory().closedBox(stickMin, stickMax, AxisOrder.XY);
     }
 
     @Override
     public void draw(IShape region, UINT16 soiThreshold) {
-        if (region.spaceDim() > this._soiImageDim.length) {
-            throw new IllegalArgumentException("The region to draw sticks over in the orientation image "
-                    + "cannot have more dimensions than the orientation image.");
+        AxisOrder stickFigureAxis = this._stick2DFigure.getImage().getMetadata().axisOrder();
+        if (region.axisOrder() != stickFigureAxis) {
+            throw new IllegalArgumentException(
+                "The region should be defined over the same axis order as orientation image.");
         }
 
         int threshold = soiThreshold.get();
         IPixelRandomAccess<RGB16> stickFigureRA = _stick2DFigure.getImage().getRandomAccess();
 
-        // If region has less dimension than the soi Image, scale it to span higher
-        // dimensions too.
-        IShapeIterator pixelScalarItr = ShapeUtils.scaleShapeOverHigherDim(region,
-                this._stick2DFigure.getImage().getDimensions());
-        while (pixelScalarItr.hasNext()) {
-            long[] stickCenterPosition = pixelScalarItr.next();
+        IShapeIterator iterator = region.getIterator();
+        while (iterator.hasNext()) {
+            long[] stickCenterPosition = iterator.next();
 
             if (_stickFigureRegion.isInside(stickCenterPosition)) {
                 this._soiRA.setPosition(stickCenterPosition);
@@ -131,7 +126,8 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     }
 
     /**
-     * Draw the stick for the given orientation vector on the corresponding position.
+     * Draw the stick for the given orientation vector on the corresponding
+     * position.
      */
     private void _drawStick(IOrientationVector orientationVector, long[] stickCenterPosition,
             IPixelRandomAccess<RGB16> stickFigureRA) {
@@ -140,7 +136,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
 
         final RGB16 pixelColor = _getStickColor(orientationVector);
         Pixel<RGB16> pixelValue = new Pixel<RGB16>(pixelColor); // Use the same pixel for every pixel of stick.
-        
+
         IShapeIterator stickIterator = this._stick.getIterator();
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
@@ -221,5 +217,4 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
 
         return angle;
     }
-
 }

@@ -13,16 +13,17 @@ public interface IAngleGaugePainter {
      * soiThreshold.
      * <p>
      * For the region, note that the pixels start from 0 to image dimension - 1 of
-     * the orientation image (or equivalently the soi Image). If the space dimension
-     * of the provided region is greater than that of soi Image, an exception is
-     * thrown. Further constrains maybe set by implementation classes.
+     * the orientation image (or equivalently the soi Image). The region must have
+     * same AxisOrder as the underlying orientation image.
      * 
      * @param region       is the region over which we wish to draw sticks.
      * @param soiThreshold is the resired threshold for sum of intensity. For
      *                     positions below threshold, no stick is drawn.
      * 
-     * @throws IllegalArgumentException in case the provided region does not satisfy
-     *                                  the constrains demanded by implementations.
+     * @throws IllegalArgumentException in case the provided region does not have
+     *                                  same axis order as underlying orientation
+     *                                  image or is not the desired shape type of
+     *                                  the specific implementation.
      */
     public void draw(IShape region, UINT16 soiThreshold) throws IllegalArgumentException;
 
