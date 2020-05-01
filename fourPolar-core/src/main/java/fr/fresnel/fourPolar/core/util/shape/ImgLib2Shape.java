@@ -46,7 +46,7 @@ class ImgLib2Shape implements IShape {
             final AxisOrder axisOrder) {
         this._type = shapeType;
         this._shapeDim = shapeDim;
-        this._pointMask = GeomMasks.pointMask(new double[AxisOrder.getNumAxis(axisOrder)]);
+        this._pointMask = GeomMasks.pointMask(new double[AxisOrder.getNumDefinedAxis(axisOrder)]);
         this._originalShape = shape;
         this._shape = shape.and(shape); // Just a bogus operation to get a new copy of the shape.
         this._axisOrder = axisOrder;
@@ -82,7 +82,7 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public boolean isInside(long[] point) {
-        if (point.length != AxisOrder.getNumAxis(this._axisOrder)) {
+        if (point.length != AxisOrder.getNumDefinedAxis(this._axisOrder)) {
             throw new IllegalArgumentException("The given point does not have same number of axis as shape.");
         }
 
@@ -122,7 +122,7 @@ class ImgLib2Shape implements IShape {
         affine3D.rotate(axis[0], -angle1);
 
         int[] rowsToFill = { 0, 1, z_axis }; // Row, columns to be filled in the affine transform.
-        AffineTransform fTransform = new AffineTransform(AxisOrder.getNumAxis(this._axisOrder));
+        AffineTransform fTransform = new AffineTransform(AxisOrder.getNumDefinedAxis(this._axisOrder));
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
                 fTransform.set(affine3D.get(row, column), rowsToFill[row], rowsToFill[column]);
@@ -135,7 +135,7 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public void translate(long[] translation) {
-        int numAxis = AxisOrder.getNumAxis(this._axisOrder);
+        int numAxis = AxisOrder.getNumDefinedAxis(this._axisOrder);
         if (translation.length != numAxis) {
             throw new IllegalArgumentException(
                     "Translation must occur over all axis. Consider using zero for undesired axis.");
@@ -155,7 +155,7 @@ class ImgLib2Shape implements IShape {
         AffineTransform2D affine2D = new AffineTransform2D();
         affine2D.rotate(-angle);
 
-        AffineTransform fTransform = new AffineTransform(AxisOrder.getNumAxis(this._axisOrder));
+        AffineTransform fTransform = new AffineTransform(AxisOrder.getNumDefinedAxis(this._axisOrder));
         for (int row = 0; row < 2; row++) {
             for (int column = 0; column < 2; column++) {
                 fTransform.set(affine2D.get(row, column), row, column);

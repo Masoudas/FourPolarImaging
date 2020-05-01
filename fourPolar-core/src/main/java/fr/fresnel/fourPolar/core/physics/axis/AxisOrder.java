@@ -7,11 +7,14 @@ public enum AxisOrder {
     NoOrder, XY, XYC, XYCT, XYCZT, XYT, XYTC, XYZ, XYZC, XYZCT, XYZT, XYZTC;
 
     /**
-     * Returns the number of axis corresponding to the given order.
-     * 
+     * Returns the number of labeled axis corresponding to the given order.
+     * <p>
+     * WARNING: This method should not be used to check how many dimensions an entity has,
+     * given that it returns -1 for NoOrder. For example for the {@link Image} interface, 
+     * we should directly work with the dimension vector of image.
      * @return -1 if no order is defined, otherwise the number of axis.
      */
-    public static int getNumAxis(AxisOrder axisOrder) {
+    public static int getNumDefinedAxis(AxisOrder axisOrder) {
         if (axisOrder == NoOrder) {
             return -1;
         } else {

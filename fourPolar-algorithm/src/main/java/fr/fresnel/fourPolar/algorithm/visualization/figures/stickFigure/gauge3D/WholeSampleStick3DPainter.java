@@ -75,8 +75,8 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     }
 
     private IShape _defineBaseStick(int len, int thickness, AxisOrder axisOrder) {
-        long[] stickMin = new long[AxisOrder.getNumAxis(axisOrder)];
-        long[] stickMax = new long[AxisOrder.getNumAxis(axisOrder)];
+        long[] stickMin = new long[AxisOrder.getNumDefinedAxis(axisOrder)];
+        long[] stickMax = new long[AxisOrder.getNumDefinedAxis(axisOrder)];
 
         int zAxis = AxisOrder.getZAxis(axisOrder);
         stickMin[0] = -thickness / 2 + 1;
@@ -155,7 +155,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
 
         // In case the original image is planar, add the z translation, otherwise
         // use the z position in the soi image.
-        if (AxisOrder.getNumAxis(this._soiImageAxisOrder) < 0) {
+        if (AxisOrder.getNumDefinedAxis(this._soiImageAxisOrder) < 0) {
             stickTranslation = new long[4];
             System.arraycopy(dipolePosition, 0, stickTranslation, 0, 2);
             stickTranslation[2] = this._stickLength / 2 - 1;

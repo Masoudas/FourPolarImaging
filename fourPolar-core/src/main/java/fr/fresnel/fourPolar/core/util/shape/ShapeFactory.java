@@ -30,7 +30,7 @@ public class ShapeFactory {
             throw new IllegalArgumentException("min and max should have the same dimension");
         }
 
-        if (axisOrder != AxisOrder.NoOrder && AxisOrder.getNumAxis(axisOrder) != min.length) {
+        if (axisOrder != AxisOrder.NoOrder && AxisOrder.getNumDefinedAxis(axisOrder) != min.length) {
             throw new IllegalArgumentException("Number of axis must correspond to shape dimension");
         }
 
