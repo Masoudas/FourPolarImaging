@@ -142,7 +142,7 @@ public class WholeSampleStick3DPainterBuilder {
         if (AxisOrder.getZAxis(orientImAxisOrder) < 0) // If image has no z.
         {
             AxisOrder newAxisOrder = AxisOrder.append_zAxis(orientImAxisOrder);
-            dimGaugeIm = _defineGaugeFigSizeNoZAxis(dim, orientImAxisOrder, newAxisOrder);
+            dimGaugeIm = _defineGaugeFigSizeNoZAxis(dim, newAxisOrder);
             gaugeMetadata = new Metadata.MetadataBuilder(orientImMetadata).axisOrder(newAxisOrder).build();
         } else {
             int zAxis = AxisOrder.getZAxis(orientImAxisOrder);
@@ -158,16 +158,21 @@ public class WholeSampleStick3DPainterBuilder {
     }
 
     /**
-     * The implicit assumptio here is that when we append the z-axis to the image.
+     * The implicit assumption here is that when we append the z-axis to the image.
      */
-    private long[] _defineGaugeFigSizeNoZAxis(long[] dimOrientImg, AxisOrder orientImAxisOrder,
-            AxisOrder newAxisOrder) {
-        long[] dimGaugeIm = new long[AxisOrder.getNumDefinedAxis(orientImAxisOrder)];
-        dimGaugeIm[AxisOrder.getZAxis(newAxisOrder)] = this._length;
-
-        for (int i = 0; i < dimGaugeIm.length && i != AxisOrder.getZAxis(newAxisOrder); i++)
-            dimGaugeIm[i] = dimOrientImg[i];
+    private long[] _defineGaugeFigSizeNoZAxis(long[] dimOrientImg, AxisOrder newAxisOrder) {
+        long[] dimGaugeIm = new long[AxisOrder.getNumDefinedAxis(newAxisOrder)];
         
+        int z_axis = AxisOrder.getZAxis(newAxisOrder);
+        int j = 0;
+        for (int i = 0; i < dimGaugeIm.length; i++){
+            if (i == z_axis){
+                dimGaugeIm[i] = this._length;
+            }else{
+                dimGaugeIm[i] = dimOrientImg[j++];
+            }
+        }
+            
         return dimGaugeIm;
     }
 
