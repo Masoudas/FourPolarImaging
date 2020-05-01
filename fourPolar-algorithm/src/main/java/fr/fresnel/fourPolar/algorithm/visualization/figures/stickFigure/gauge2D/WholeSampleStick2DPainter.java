@@ -89,8 +89,8 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         long[] stickMin = new long[AxisOrder.getNumDefinedAxis(axisOrder)];
         long[] stickMax = new long[AxisOrder.getNumDefinedAxis(axisOrder)];
 
-        stickMin[0] = -len / 2;
-        stickMin[1] = -thickness / 2;
+        stickMin[0] = -len / 2 + 1;
+        stickMin[1] = -thickness / 2 + 1;
         stickMax[0] = len / 2;
         stickMax[1] = thickness / 2;
 
