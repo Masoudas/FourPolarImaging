@@ -151,18 +151,25 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
      * @param orientationVector is the orientation of the dipole.
      */
     private void _transformStick(long[] dipolePosition, IOrientationVector orientationVector) {
-        long[] stickTranslation = null;
+        long[] stickTranslation = new long[AxisOrder.getNumDefinedAxis(this._stick.axisOrder())];
 
-        // In case the original image is planar, add the z translation, otherwise
-        // use the z position in the soi image.
-        if (AxisOrder.getNumDefinedAxis(this._soiImageAxisOrder) < 3) {
-            stickTranslation = new long[3];
-            System.arraycopy(dipolePosition, 0, stickTranslation, 0, 2);
-            stickTranslation[2] = this._stickLength / 2 - 1;
+        // In case the orientation image has no z-axis, we need to put translation in
+        // the appended dimension.
+        // The implicit assumption here is that in all those cases, z-axis would be the
+        // last dimension,
+        int z_axis = AxisOrder.getZAxis(this._stick.axisOrder());
+        if (AxisOrder.getZAxis(this._soiImageAxisOrder) < 0) {
+            int j = 0;
+            for (int i = 0; i < stickTranslation.length; i++) {
+                if (i == z_axis) {
+                    stickTranslation[i] = this._stickLength / 2 - 1;
+                } else {
+                    stickTranslation[i] = dipolePosition[j++];
+                }
+            }
         } else {
             stickTranslation = dipolePosition.clone();
-            stickTranslation[2] = dipolePosition[3] * this._stickLength + this._stickLength / 2 - 1;
-            stickTranslation[3] = dipolePosition[2];
+            stickTranslation[z_axis] = dipolePosition[z_axis] * this._stickLength + this._stickLength / 2 - 1;
         }
 
         this._stick.resetToOriginalShape();
