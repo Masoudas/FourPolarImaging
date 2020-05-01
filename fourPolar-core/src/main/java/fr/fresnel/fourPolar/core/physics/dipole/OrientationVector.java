@@ -42,9 +42,12 @@ public class OrientationVector implements IOrientationVector {
 
             case delta:
                 max = MAX_Delta;
+                break;
+
 
             case eta:
                 max = MAX_Eta;
+                break;
 
             default:
                 break;

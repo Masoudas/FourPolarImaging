@@ -172,6 +172,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
                 } catch (ConverterNotFound e) {
                     // Exception never caught, because of proper creation of image.
                 }
+                break;
 
             default:
                 break;
