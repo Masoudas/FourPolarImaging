@@ -142,8 +142,9 @@ public class SingleDipoleStick2DPainterBuilderTest {
         ShowDipoleUponClick doubleClick = new ShowDipoleUponClick(bdv1, painter);
         behaviours.behaviour(doubleClick, "print global pos", "button1");
 
-        TimeUnit.SECONDS.sleep(150);
-
+        while (bdv.getBdvHandle().getViewerPanel().isShowing()) {
+            
+        }
     }
 
     private void setPixel(IPixelRandomAccess<Float32> ra, long[] position, Float32 value) {
