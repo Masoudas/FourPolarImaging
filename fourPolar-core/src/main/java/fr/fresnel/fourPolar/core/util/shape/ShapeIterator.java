@@ -19,7 +19,7 @@ class ShapeIterator implements IShapeIterator {
      */
     public ShapeIterator(IterableRegion<BoolType> iterableRegion, AxisOrder axisOrder) {
         this._regionCursor = iterableRegion.cursor();
-        this._position = new long[AxisOrder.getNumAxis(axisOrder)];
+        this._position = new long[AxisOrder.getNumDefinedAxis(axisOrder)];
     }
 
     @Override
