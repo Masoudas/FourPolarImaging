@@ -11,5 +11,11 @@ public interface IMetadata {
      */
     public AxisOrder axisOrder();
 
+    /**
+     * Returns number of channels associated with the image. If no {@link AxisOrder} is
+     * defined, returns -1.
+     */
+    public int numChannels();
+
     
 }

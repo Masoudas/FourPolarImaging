@@ -11,13 +11,14 @@ import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
  */
 public class Metadata implements IMetadata {
     private AxisOrder _axisOrder;
+    private int _numChannels;
 
     /**
      * Build metadata.
      */
     public static class MetadataBuilder {
         private AxisOrder _axisOrder = AxisOrder.NoOrder;
-
+        private int _numChannels = -1; 
         /**
          * Build metadata from scratch.
          */
@@ -40,6 +41,11 @@ public class Metadata implements IMetadata {
             return this;
         }
 
+        public MetadataBuilder numChannels(int n) {
+            this._numChannels = n;
+            return this;
+        }
+
         public IMetadata build() {
             return new Metadata(this);
         }
@@ -47,11 +53,21 @@ public class Metadata implements IMetadata {
 
     private Metadata(MetadataBuilder builder) {
         this._axisOrder = builder._axisOrder;
+        this._numChannels = builder._numChannels;
     }
 
     @Override
     public AxisOrder axisOrder() {
         return this._axisOrder;
     }
+
+   @Override
+   public int numChannels() {
+       if (this._axisOrder == AxisOrder.NoOrder){
+           return -1;
+       }
+
+       return this._numChannels;
+   }
 
 }
