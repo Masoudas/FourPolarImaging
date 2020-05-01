@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.ui;
 import java.io.File;
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.GaugePainterFactory;
+import fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D.WholeSampleStick2DPainterBuilder;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
@@ -16,10 +16,12 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.OrientationImage;
 import fr.fresnel.fourPolar.core.image.polarization.soi.SoIImage;
+import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
@@ -35,7 +37,8 @@ import net.imglib2.img.display.imagej.ImageJFunctions;
  * To draw the gauge figures, the orientation images should be formed using
  * SophiesChoiceI.
  * 
- * * To use this code, the only needed piece of information is the path to images.
+ * To use this code, the only needed piece of information is the path to images.
+ * All other parameters are optional.
  */
 public class SophiesChoiceII {
     public static void main(final String[] args) throws IOException {
@@ -48,14 +51,8 @@ public class SophiesChoiceII {
         final File etaFile = new File(rootFolder, "eta.tif");
         final File soiFile = new File(rootFolder, "soi.tif");
 
-        // 2D Stick visual params.
-        final int length = 40;
-        final int thickness = 2;
-        final ColorMap cMapRho2D = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
-        final ColorMap cMapEtaAndDelta = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
-
-        // Threshold for SoI. Sticks will be drawn above this threshold.
-        final int soiThreshold = 0;
+        // Axis associated with the image. For planar images, XY.
+        AxisOrder axisOrder = AxisOrder.XY;
 
         /**
          * A box RoI from min to max coordinates. The box can be 2d (in which case it
@@ -66,7 +63,7 @@ public class SophiesChoiceII {
          */
         final long[] min = { 0, 0 };
         final long[] max = { 1024, 512 };
-        final IShape roi = new ShapeFactory().closedBox(min, max);
+        final IShape roi = new ShapeFactory().closedBox(min, max, axisOrder);
 
         /**
          * If a polygon RoI is desired, comment the previous three lines and uncomment
@@ -77,6 +74,16 @@ public class SophiesChoiceII {
         // long[] yCoordinates = new long[]{1, 2, 3};
         // IShape roi = new ShapeFactory().closedPolygon2D(xCoordinates, yCoordinates);
 
+        // 2D Stick visual params.
+        final int length = 40;
+        final int thickness = 2;
+        final ColorMap cMapRho2D = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
+        final ColorMap cMapEtaAndDelta = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
+
+        // Threshold for SoI. Sticks will be drawn above this threshold.
+        final int soiThreshold = 0;
+
+        
         final IOrientationImage orientationImage = readOrientationImage(rhoFile, deltaFile, etaFile);
 
         final SoIImage soiImage = readSoIImage(rhoFile);
@@ -98,11 +105,16 @@ public class SophiesChoiceII {
             final SoIImage soiImage) {
         final IAngleGaugePainter[] gaugePainters = new IAngleGaugePainter[3];
 
-        gaugePainters[0] = GaugePainterFactory.rho2DStick(orientationImage, soiImage, length, thickness, cMapRho2D);
-        gaugePainters[1] = GaugePainterFactory.delta2DStick(orientationImage, soiImage, length, thickness,
-                cMapEtaAndDelta);
-        gaugePainters[2] = GaugePainterFactory.eta2DStick(orientationImage, soiImage, length, thickness,
-                cMapEtaAndDelta);
+        try {
+            gaugePainters[0] = new WholeSampleStick2DPainterBuilder(orientationImage, soiImage, AngleGaugeType.Rho2D)
+                    .colorMap(cMapRho2D).stickThickness(thickness).stickLen(length).build();
+            gaugePainters[1] = new WholeSampleStick2DPainterBuilder(orientationImage, soiImage, AngleGaugeType.Delta2D)
+                    .colorMap(cMapEtaAndDelta).stickThickness(thickness).stickLen(length).build();
+            gaugePainters[2] = new WholeSampleStick2DPainterBuilder(orientationImage, soiImage, AngleGaugeType.Eta2D)
+                    .colorMap(cMapEtaAndDelta).stickThickness(thickness).stickLen(length).build();
+        } catch (ConverterToImgLib2NotFound e) {
+
+        }
         return gaugePainters;
     }
 
@@ -142,11 +154,10 @@ public class SophiesChoiceII {
             ImagePlus imp;
             try {
                 imp = ImageJFunctions.wrapRGB(
-                        ImageToImgLib2Converter.getImg(iAngleGaugePainter.getFigure().getImage(), RGB16.zero()),
-                        "RGB");
+                        ImageToImgLib2Converter.getImg(iAngleGaugePainter.getFigure().getImage(), RGB16.zero()), "RGB");
                 final FileSaver impSaver = new FileSaver(imp);
                 impSaver.saveAsTiff(new File(soiFile.getParentFile().getAbsolutePath(),
-                        iAngleGaugePainter.getFigure().getType().name()).getAbsolutePath());
+                        iAngleGaugePainter.getFigure().getGaugeType().name()).getAbsolutePath());
 
             } catch (final ConverterToImgLib2NotFound e) {
             }
@@ -160,7 +171,7 @@ public class SophiesChoiceII {
             try {
                 ImageJFunctions.show(
                         ImageToImgLib2Converter.getImg(iAngleGaugePainter.getFigure().getImage(), RGB16.zero()),
-                        iAngleGaugePainter.getFigure().getType().name());
+                        iAngleGaugePainter.getFigure().getGaugeType().name());
             } catch (ConverterToImgLib2NotFound e) {
             }
 
