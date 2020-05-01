@@ -9,6 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.polarization.soi.ISoIImage;
+import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
@@ -63,6 +64,14 @@ public class WholeSampleStick2DPainterBuilder {
         long[] orientationImageDim = orientationImage.getAngleImage(OrientationAngle.rho).getImage().getDimensions();
         if (orientationImageDim.length < 2) {
             throw new IllegalArgumentException("The orientation image must be at least two dimensionsal.");
+        }
+
+        if (soiImage.getImage().getMetadata().axisOrder() == AxisOrder.NoOrder) {
+            throw new IllegalArgumentException("axisOrder is undefined in the metadata of soi and orientation image.");
+        }
+
+        if (AxisOrder.getChannelAxis(soiImage.getImage().getMetadata().axisOrder()) > 0) {
+            throw new IllegalArgumentException("The soi and orientation images must not have channels.");
         }
 
         this._gaugeType = angleGaugeType;

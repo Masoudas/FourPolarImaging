@@ -7,17 +7,18 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
-import bdv.util.AxisOrder;
 import bdv.util.BdvFunctions;
 import bdv.util.BdvOptions;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
@@ -26,6 +27,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.OrientationImage;
 import fr.fresnel.fourPolar.core.image.polarization.soi.SoIImage;
+import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
@@ -58,10 +60,13 @@ public class WholeSampleStick3DPainterBuilderTest {
     public void draw_SingleZPlaneEta90_DrawsFlippedAngleSticks()
             throws CannotFormOrientationImage, ConverterToImgLib2NotFound, InterruptedException {
         long[] dim = { 1024, 512 };
+        AxisOrder axisOrder = AxisOrder.XY;
+        IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(axisOrder).build();
+
         CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
-        Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
-        Image<Float32> deltaImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
-        Image<Float32> etaImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
+        Image<Float32> deltaImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
+        Image<Float32> etaImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
 
         IPixelRandomAccess<Float32> rhoRA = rhoImage.getRandomAccess();
         IPixelRandomAccess<Float32> deltaRA = deltaImage.getRandomAccess();
@@ -91,21 +96,23 @@ public class WholeSampleStick3DPainterBuilderTest {
         }
 
         IOrientationImage orientationImage = new OrientationImage(fileSet, rhoImage, deltaImage, etaImage);
-        Image<UINT16> soi = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> soi = new ImgLib2ImageFactory().create(dim, UINT16.zero(), metadata);
         SoIImage soiImage = new SoIImage(fileSet, soi);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
+        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 },
+                axisOrder);
 
         IAngleGaugePainter painter = new WholeSampleStick3DPainterBuilder(orientationImage, soiImage).stickLen(20)
                 .stickThickness(4).colorMap(cMap).build();
         painter.draw(entireImageRegion, new UINT16(0));
-        IGaugeFigure stickFigure = painter.getFigure();
 
+        IGaugeFigure stickFigure = painter.getFigure();
         _saveStickFigure(stickFigure, "3DStick_SingleZPlaneEta90.tiff");
+
         BdvFunctions.show(ImageToImgLib2Converter.getImg(stickFigure.getImage(), RGB16.zero()), "SingleZPlaneEta90",
-                BdvOptions.options().is2D());
+                BdvOptions.options().axisOrder(bdv.util.AxisOrder.XYZ));
 
         TimeUnit.SECONDS.sleep(40);
 
@@ -127,11 +134,15 @@ public class WholeSampleStick3DPainterBuilderTest {
     @Test
     public void draw_MultiZPlaneEta90_DrawsFlippedAngleSticks()
             throws CannotFormOrientationImage, ConverterToImgLib2NotFound, InterruptedException {
-        long[] dim = { 1024, 512, 1, 3, 2 }; // One channel, three z, two t.
+        long[] dim = { 1024, 512, 3, 2 }; // three z, two t.
+
+        AxisOrder axisOrder = AxisOrder.XYZT;
+        IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(axisOrder).build();
+
         CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
-        Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
-        Image<Float32> deltaImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
-        Image<Float32> etaImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
+        Image<Float32> deltaImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
+        Image<Float32> etaImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
 
         IPixelRandomAccess<Float32> rhoRA = rhoImage.getRandomAccess();
         IPixelRandomAccess<Float32> deltaRA = deltaImage.getRandomAccess();
@@ -152,16 +163,16 @@ public class WholeSampleStick3DPainterBuilderTest {
             etaCursor.setPixel(pixel);
         }
 
-        for (int t = 0; t < dim[4]; t++) {
-            for (int z = 0; z < dim[3]; z++) {
+        for (int t = 0; t < dim[3]; t++) {
+            for (int z = 0; z < dim[2]; z++) {
                 int j = 0;
                 for (int i = 0; i <= 180; i += 1) {
                     j = i % 20 >= 1 ? j : j + 2;
-                    setPixel(rhoRA, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, 0, z, t },
+                    setPixel(rhoRA, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, z, t },
                             new Float32((float) Math.toRadians(i)));
-                    setPixel(deltaRA, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, 0, z, t },
+                    setPixel(deltaRA, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, z, t },
                             new Float32((float) Math.toRadians(i)));
-                    setPixel(etaRA, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, 0, z, t },
+                    setPixel(etaRA, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, z, t },
                             new Float32((float) Math.toRadians(90)));
                 }
 
@@ -169,20 +180,21 @@ public class WholeSampleStick3DPainterBuilderTest {
         }
 
         IOrientationImage orientationImage = new OrientationImage(fileSet, rhoImage, deltaImage, etaImage);
-        Image<UINT16> soi = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> soi = new ImgLib2ImageFactory().create(dim, UINT16.zero(), metadata);
         SoIImage soiImage = new SoIImage(fileSet, soi);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
         IAngleGaugePainter painter = new WholeSampleStick3DPainterBuilder(orientationImage, soiImage).stickLen(20)
                 .stickThickness(4).colorMap(cMap).build();
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
+        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0 },
+                new long[] { 1024, 512, 3, 2 }, axisOrder);
         painter.draw(entireImageRegion, new UINT16(0));
         IGaugeFigure stickFigure = painter.getFigure();
 
         _saveStickFigure(stickFigure, "3DStick_MultipleZPlaneAndTimeEta90.tiff");
         BdvFunctions.show(ImageToImgLib2Converter.getImg(stickFigure.getImage(), RGB16.zero()),
-                "MultipleZPlaneAndTimeEta90", BdvOptions.options().axisOrder(AxisOrder.XYCZT));
+                "MultipleZPlaneAndTimeEta90", BdvOptions.options().axisOrder(bdv.util.AxisOrder.XYZT));
         TimeUnit.SECONDS.sleep(40);
 
         assertTrue(true);
@@ -198,10 +210,13 @@ public class WholeSampleStick3DPainterBuilderTest {
     public void draw_MultiZPlaneEta0_DrawsPerpendicularSticks()
             throws CannotFormOrientationImage, ConverterToImgLib2NotFound, InterruptedException {
         long[] dim = { 1024, 512, 3 };
+        AxisOrder axisOrder = AxisOrder.XYZ;
+        IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(axisOrder).build();
+
         CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
-        Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
-        Image<Float32> deltaImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
-        Image<Float32> etaImage = new ImgLib2ImageFactory().create(dim, Float32.zero());
+        Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
+        Image<Float32> deltaImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
+        Image<Float32> etaImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
 
         IPixelRandomAccess<Float32> rhoRA = rhoImage.getRandomAccess();
         IPixelRandomAccess<Float32> deltaRA = deltaImage.getRandomAccess();
@@ -237,18 +252,19 @@ public class WholeSampleStick3DPainterBuilderTest {
         }
 
         IOrientationImage orientationImage = new OrientationImage(fileSet, rhoImage, deltaImage, etaImage);
-        Image<UINT16> soi = new ImgLib2ImageFactory().create(dim, UINT16.zero());
+        Image<UINT16> soi = new ImgLib2ImageFactory().create(dim, UINT16.zero(), metadata);
         SoIImage soiImage = new SoIImage(fileSet, soi);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
         IAngleGaugePainter painter = new WholeSampleStick3DPainterBuilder(orientationImage, soiImage).stickLen(20)
                 .stickThickness(10).colorMap(cMap).build();
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1024, 512 });
+        IShape entireImageRegion = new ShapeFactory().closedBox(
+            new long[] { 0, 0, 0 }, new long[] { 1023, 511, 2 }, AxisOrder.XYZ);
         painter.draw(entireImageRegion, new UINT16(0));
 
         BdvFunctions.show(ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), RGB16.zero()),
-                "MultipleZPlaneAndTimeEta90", BdvOptions.options().axisOrder(AxisOrder.XYZ));
+                "MultipleZPlaneAndTimeEta90", BdvOptions.options().axisOrder(bdv.util.AxisOrder.XYZ));
         TimeUnit.SECONDS.sleep(40);
 
         _saveStickFigure(painter.getFigure(), "3DStick_ETA0Sticks.tiff");
