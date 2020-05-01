@@ -83,10 +83,12 @@ public class SophiesChoiceII {
         // Threshold for SoI. Sticks will be drawn above this threshold.
         final int soiThreshold = 0;
 
-        
+        // -------------------------------------------------------------------
+        // YOU DON'T NEED TO TOUCH ANYTHING FROM HERE ON!
+        // -------------------------------------------------------------------
         final IOrientationImage orientationImage = readOrientationImage(rhoFile, deltaFile, etaFile);
 
-        final SoIImage soiImage = readSoIImage(rhoFile);
+        final SoIImage soiImage = readSoIImage(soiFile);
 
         final IAngleGaugePainter[] gaugePainters = _getGaugePainters(length, thickness, cMapRho2D, cMapEtaAndDelta,
                 orientationImage, soiImage);
