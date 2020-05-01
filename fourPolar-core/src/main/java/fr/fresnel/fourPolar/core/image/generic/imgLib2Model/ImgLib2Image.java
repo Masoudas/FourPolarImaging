@@ -11,6 +11,7 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
+import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import net.imglib2.Cursor;
 import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
@@ -47,6 +48,7 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
         this._dim = new long[this._img.numDimensions()];
         this._img.dimensions(this._dim);
         this._metadata = metadata;
+        this._isMetadataConsistentWithImage();
     }
 
     @Override
@@ -105,6 +107,14 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
     @Override
     public IMetadata getMetadata() {
         return this._metadata;
+    }
+
+    private void _isMetadataConsistentWithImage() {
+        if (this._metadata.axisOrder() != AxisOrder.NoOrder
+                && AxisOrder.getNumDefinedAxis(this._metadata.axisOrder()) != this._dim.length) {
+            throw new IllegalArgumentException("Number of axis in metadata AxisOrder should equal image dimension");
+        }
+
     }
 
 }
