@@ -48,7 +48,10 @@ public class WholeSampleStick3DPainterBuilder {
      * Initiate builder from orientation and soi images.
      * 
      * @param IllegalArgumentException is thrown in case orientation image is not at
-     *                                 least two dimensions.
+     *                                 least two dimensionsal, or soi and
+     *                                 orientation image are not from the same set,
+     *                                 or that soi or orientation image have
+     *                                 channels.
      */
     public WholeSampleStick3DPainterBuilder(IOrientationImage orientationImage, ISoIImage soiImage) {
         Objects.requireNonNull(soiImage, "soiImage cannot be null");
@@ -57,6 +60,14 @@ public class WholeSampleStick3DPainterBuilder {
         long[] orientationImageDim = orientationImage.getAngleImage(OrientationAngle.rho).getImage().getDimensions();
         if (orientationImageDim.length < 2) {
             throw new IllegalArgumentException("The orientation image must be at least two dimensionsal.");
+        }
+
+        if (soiImage.getImage().getMetadata().axisOrder() == AxisOrder.NoOrder) {
+            throw new IllegalArgumentException("axisOrder is undefined in the metadata of soi and orientation image.");
+        }
+
+        if (AxisOrder.getChannelAxis(soiImage.getImage().getMetadata().axisOrder()) > 0) {
+            throw new IllegalArgumentException("The soi and orientation images must not have channels.");
         }
 
         this._soiImage = soiImage;
@@ -130,18 +141,34 @@ public class WholeSampleStick3DPainterBuilder {
         long[] dimGaugeIm;
         if (AxisOrder.getZAxis(orientImAxisOrder) < 0) // If image has no z.
         {
-            dimGaugeIm = new long[] { dim[0], dim[1], this._length };
-            gaugeMetadata = new Metadata.MetadataBuilder(orientImMetadata).axisOrder(AxisOrder.XYZ).build();
-        } else { 
+            AxisOrder newAxisOrder = AxisOrder.append_zAxis(orientImAxisOrder);
+            dimGaugeIm = _defineGaugeFigSizeNoZAxis(dim, orientImAxisOrder, newAxisOrder);
+            gaugeMetadata = new Metadata.MetadataBuilder(orientImMetadata).axisOrder(newAxisOrder).build();
+        } else {
             int zAxis = AxisOrder.getZAxis(orientImAxisOrder);
             dimGaugeIm = dim.clone();
             dimGaugeIm[zAxis] = dimGaugeIm[zAxis] * this._length;
             gaugeMetadata = new Metadata.MetadataBuilder(orientImMetadata).build();
         }
 
-        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dimGaugeIm, RGB16.zero(), gaugeMetadata);
+        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dimGaugeIm, RGB16.zero(),
+                gaugeMetadata);
         return GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D, gaugeImage,
                 this._soiImage.getFileSet());
+    }
+
+    /**
+     * The implicit assumptio here is that when we append the z-axis to the image.
+     */
+    private long[] _defineGaugeFigSizeNoZAxis(long[] dimOrientImg, AxisOrder orientImAxisOrder,
+            AxisOrder newAxisOrder) {
+        long[] dimGaugeIm = new long[AxisOrder.getNumDefinedAxis(orientImAxisOrder)];
+        dimGaugeIm[AxisOrder.getZAxis(newAxisOrder)] = this._length;
+
+        for (int i = 0; i < dimGaugeIm.length && i != AxisOrder.getZAxis(newAxisOrder); i++)
+            dimGaugeIm[i] = dimOrientImg[i];
+        
+        return dimGaugeIm;
     }
 
     public ColorMap getColorMap() {
