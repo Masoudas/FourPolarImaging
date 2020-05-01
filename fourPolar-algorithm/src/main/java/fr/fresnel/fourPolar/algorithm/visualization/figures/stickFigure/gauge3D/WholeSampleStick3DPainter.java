@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
+import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
@@ -43,35 +44,34 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
 
     /**
      * Create the 3D painter using the builder parameters.
-     * 
      */
     public WholeSampleStick3DPainter(WholeSampleStick3DPainterBuilder builder) {
         this._soiImageDim = builder.getSoIImage().getImage().getDimensions();
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
+        this._soiImageAxisOrder = builder.getSoIImage().getImage().getMetadata().axisOrder();
+        this._soiImageBoundary = _defineImageBoundaryAsBox(builder.getSoIImage().getImage());
 
         this._stick3DFigure = builder.getGaugeFigure();
         this._stick3DFigureRA = this._stick3DFigure.getImage().getRandomAccess();
+        this._stick3DFigureBoundary = _defineImageBoundaryAsBox(this._stick3DFigure.getImage());
 
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
+
         this._colormap = builder.getColorMap();
         this._stickLength = builder.getSticklength();
 
-        this._soiImageAxisOrder = builder.getSoIImage().getImage().getMetadata().axisOrder();
-        this._soiImageBoundary = _defineImageBoundaryAsBox(this._soiImageDim, this._soiImageAxisOrder);
-        this._stick3DFigureBoundary = _defineImageBoundaryAsBox(this._stick3DFigure.getImage().getDimensions(),
-                this._soiImageAxisOrder);
-
-        this._stick = _defineBaseStick(this._stickLength, builder.getStickThickness(), this._soiImageAxisOrder);
+        this._stick = _defineBaseStick(this._stickLength, builder.getStickThickness(),
+                this._stick3DFigure.getImage().getMetadata().axisOrder());
     }
 
     /**
      * Define the image region as a box spanning from pixel zero to dim - 1;
      */
-    private IShape _defineImageBoundaryAsBox(long[] imDimension, AxisOrder axisOrder) {
-        long[] imageMax = Arrays.stream(imDimension).map((t) -> t - 1).toArray();
-        long[] imageMin = new long[imDimension.length];
+    private IShape _defineImageBoundaryAsBox(Image<?> image) {
+        long[] imageMax = Arrays.stream(image.getDimensions()).map((t) -> t - 1).toArray();
+        long[] imageMin = new long[image.getDimensions().length];
 
-        return new ShapeFactory().closedBox(imageMin, imageMax, axisOrder);
+        return new ShapeFactory().closedBox(imageMin, imageMax, image.getMetadata().axisOrder());
     }
 
     private IShape _defineBaseStick(int len, int thickness, AxisOrder axisOrder) {
@@ -155,8 +155,8 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
 
         // In case the original image is planar, add the z translation, otherwise
         // use the z position in the soi image.
-        if (AxisOrder.getNumDefinedAxis(this._soiImageAxisOrder) < 0) {
-            stickTranslation = new long[4];
+        if (AxisOrder.getNumDefinedAxis(this._soiImageAxisOrder) < 3) {
+            stickTranslation = new long[3];
             System.arraycopy(dipolePosition, 0, stickTranslation, 0, 2);
             stickTranslation[2] = this._stickLength / 2 - 1;
         } else {
