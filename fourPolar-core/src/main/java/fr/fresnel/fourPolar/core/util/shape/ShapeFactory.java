@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.core.util.shape;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import net.imglib2.roi.geom.GeomMasks;
@@ -34,10 +35,11 @@ public class ShapeFactory {
             throw new IllegalArgumentException("Number of axis must correspond to shape dimension");
         }
 
-        for (int j = 0; j < max.length; j++) {
-            if (min[j] > max[j]){
-                throw new IllegalArgumentException("max should be greater than or equal to min");
-            }                
+        if (IntStream.range(0, max.length).anyMatch((i) -> {
+            return min[i] > max[i];
+        })) {
+            throw new IllegalArgumentException("max should be greater than or equal to min");
+
         }
 
         int shapeDim = 0;
