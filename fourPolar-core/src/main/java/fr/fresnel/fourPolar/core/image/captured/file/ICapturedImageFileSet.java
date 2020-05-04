@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.core.image.captured.file;
 
 import java.io.File;
 
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 
@@ -10,7 +11,7 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
  */
 public interface ICapturedImageFileSet  {    
     /**
-     * Returns the file. The labels are the one given by the {@link Cameras};
+     * Returns the file. The labels are the one given by {@link Cameras};
      * @return
      */ 
     public File getFile(String label);
@@ -29,7 +30,6 @@ public interface ICapturedImageFileSet  {
 
     /**
      * Checks whether the given label is in the file set labels.
-     * @return
      */
     public boolean hasLabel(String label);
 
@@ -37,12 +37,17 @@ public interface ICapturedImageFileSet  {
     @Override
     public boolean equals(Object obj);
 
+
     @Override
     public int hashCode();
 
     /**
-     * Returns the channel number that corresponds to this file set.
-     * @return
+     * Returns the metadata associated with the given file, using it's label in the fileset as key.
      */
-    public int getChannel();
+    public IMetadata getMetadata();
+
+    /**
+     * Returns the part of metadata that is common to all the files in this fileSet.
+     */
+    public IMetadata getMetadataIntersecion();
 }
