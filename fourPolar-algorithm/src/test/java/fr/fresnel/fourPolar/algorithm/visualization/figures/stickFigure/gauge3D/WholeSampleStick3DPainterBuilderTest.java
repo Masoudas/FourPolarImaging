@@ -201,9 +201,9 @@ public class WholeSampleStick3DPainterBuilderTest {
     @Test
     public void draw_MultiZPlaneEta90_DrawsFlippedAngleSticks()
             throws CannotFormOrientationImage, ConverterToImgLib2NotFound, InterruptedException {
-        long[] dim = { 1024, 512, 3, 2 }; // three z, two t.
+        long[] dim = { 1024, 512, 1, 3, 2 }; // three z, two t.
 
-        AxisOrder axisOrder = AxisOrder.XYZT;
+        AxisOrder axisOrder = AxisOrder.XYCZT;
         IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(axisOrder).build();
 
         CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
@@ -230,16 +230,16 @@ public class WholeSampleStick3DPainterBuilderTest {
             etaCursor.setPixel(pixel);
         }
 
-        for (int t = 0; t < dim[3]; t++) {
-            for (int z = 0; z < dim[2]; z++) {
+        for (int t = 0; t < dim[4]; t++) {
+            for (int z = 0; z < dim[3]; z++) {
                 int j = 0;
                 for (int i = 0; i <= 180; i += 1) {
                     j = i % 20 >= 1 ? j : j + 2;
-                    setPixel(rhoRA, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, z, t },
+                    setPixel(rhoRA, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, 0, z, t },
                             new Float32((float) Math.toRadians(i)));
-                    setPixel(deltaRA, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, z, t },
+                    setPixel(deltaRA, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, 0, z, t },
                             new Float32((float) Math.toRadians(i)));
-                    setPixel(etaRA, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, z, t },
+                    setPixel(etaRA, new long[] { 70 + ((i % 20) * 45), 5 + j * 25, 0, z, t },
                             new Float32((float) Math.toRadians(90)));
                 }
 
@@ -254,12 +254,12 @@ public class WholeSampleStick3DPainterBuilderTest {
         IAngleGaugePainter painter = new WholeSampleStick3DPainterBuilder(orientationImage, soiImage).stickLen(20)
                 .stickThickness(4).colorMap(cMap).build();
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0 },
-                new long[] { 1024, 512, 3, 2 }, axisOrder);
+        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
+                new long[] { 1024, 512, 0, 3, 2 }, axisOrder);
         painter.draw(entireImageRegion, new UINT16(0));
         IGaugeFigure stickFigure = painter.getFigure();
 
-        _saveStickFigure(stickFigure, "3DStick_MultipleZPlaneAndTimeEta90.tiff");
+        _saveStickFigure(stickFigure, "3DStick_SingleChannel.tiff");
 
         assertTrue(true);
 
@@ -327,7 +327,7 @@ public class WholeSampleStick3DPainterBuilderTest {
                 AxisOrder.XYZ);
         painter.draw(entireImageRegion, new UINT16(0));
 
-        _saveStickFigure(painter.getFigure(), "3DStick_MultipleZPlaneEta90.tiff");
+        _saveStickFigure(painter.getFigure(), "3DStick_MultipleZPlaneEta0.tiff");
 
         assertTrue(true);
 

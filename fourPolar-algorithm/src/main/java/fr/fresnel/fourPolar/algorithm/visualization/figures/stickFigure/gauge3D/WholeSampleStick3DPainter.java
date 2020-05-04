@@ -1,6 +1,8 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge3D;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
@@ -25,7 +27,6 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * {@link WholeSampleStick3DPainterBuilder}.
  */
 class WholeSampleStick3DPainter implements IAngleGaugePainter {
-    final private long[] _soiImageDim;
     final private IGaugeFigure _stick3DFigure;
     final private IPixelRandomAccess<RGB16> _stick3DFigureRA;
     final private IOrientationImageRandomAccess _orientationRA;
@@ -46,7 +47,6 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
      * Create the 3D painter using the builder parameters.
      */
     public WholeSampleStick3DPainter(WholeSampleStick3DPainterBuilder builder) {
-        this._soiImageDim = builder.getSoIImage().getImage().getDimensions();
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
         this._soiImageAxisOrder = builder.getSoIImage().getImage().getMetadata().axisOrder();
         this._soiImageBoundary = _defineImageBoundaryAsBox(builder.getSoIImage().getImage());
@@ -151,22 +151,12 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
      * @param orientationVector is the orientation of the dipole.
      */
     private void _transformStick(long[] dipolePosition, IOrientationVector orientationVector) {
-        long[] stickTranslation = new long[AxisOrder.getNumDefinedAxis(this._stick.axisOrder())];
-
-        // In case the orientation image has no z-axis, we need to put translation in
-        // the appended dimension.
-        // The implicit assumption here is that in all those cases, z-axis would be the
-        // last dimension,
         int z_axis = AxisOrder.getZAxis(this._stick.axisOrder());
+
+        long[] stickTranslation = null;
         if (AxisOrder.getZAxis(this._soiImageAxisOrder) < 0) {
-            int j = 0;
-            for (int i = 0; i < stickTranslation.length; i++) {
-                if (i == z_axis) {
-                    stickTranslation[i] = this._stickLength / 2 - 1;
-                } else {
-                    stickTranslation[i] = dipolePosition[j++];
-                }
-            }
+            stickTranslation = _defineStickTranslationNoZAxis(dipolePosition, z_axis);
+
         } else {
             stickTranslation = dipolePosition.clone();
             stickTranslation[z_axis] = dipolePosition[z_axis] * this._stickLength + this._stickLength / 2 - 1;
@@ -176,6 +166,22 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
         this._stick.rotate3D(orientationVector.getAngle(OrientationAngle.eta),
                 -Math.PI / 2 + orientationVector.getAngle(OrientationAngle.rho), 0, Rotation3DOrder.XZY);
         this._stick.translate(stickTranslation);
+    }
+
+    /**
+     * In case the orientation image has no z-axis (it's planar), we need to put
+     * translation in the appended z-axis of the gauge image (as defined by the
+     * builder class).
+     * 
+     * @param dipolePosition is the dipole postion associated with this stick.
+     * @param z_axis         is the dimension of the appended z-axis
+     * @return
+     */
+    private long[] _defineStickTranslationNoZAxis(long[] dipolePosition, int z_axis) {
+        List<Long> transAList = Arrays.stream(dipolePosition).boxed().collect(Collectors.toList());
+        transAList.add(z_axis, (long) (this._stickLength / 2 - 1));
+
+        return Arrays.stream(transAList.toArray(new Long[0])).mapToLong((t) -> t).toArray();
     }
 
     private IOrientationVector _getOrientationVector(long[] stickCenterPosition) {
