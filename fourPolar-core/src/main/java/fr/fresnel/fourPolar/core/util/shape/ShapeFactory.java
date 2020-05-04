@@ -32,18 +32,17 @@ public class ShapeFactory {
         }
 
         if (axisOrder != AxisOrder.NoOrder && AxisOrder.getNumDefinedAxis(axisOrder) != min.length) {
-            throw new IllegalArgumentException("Number of axis must correspond to shape dimension");
+            throw new IllegalArgumentException("Number of axis must correspond to shape min and max");
         }
 
         if (IntStream.range(0, max.length).anyMatch((i) -> {
             return min[i] > max[i];
         })) {
             throw new IllegalArgumentException("max should be greater than or equal to min");
-
         }
 
         int shapeDim = 0;
-        while (shapeDim < min.length && min[shapeDim] != max[shapeDim]) {
+        while (shapeDim < min.length && min[shapeDim] < max[shapeDim]) {
             shapeDim++;
         }
 
@@ -78,10 +77,13 @@ public class ShapeFactory {
     }
 
     public IShape point(long[] point, AxisOrder axisOrder) {
-        Objects.requireNonNull(point, "location cannot be null");
+        Objects.requireNonNull(point, "location cannot be null.");
+
+        if (axisOrder != AxisOrder.NoOrder && AxisOrder.getNumDefinedAxis(axisOrder) != point.length) {
+            throw new IllegalArgumentException("Number of axis must correspond to point dimension.");
+        }
 
         PointMask mask = GeomMasks.pointMask(Arrays.stream(point).asDoubleStream().toArray());
-
         return new ImgLib2Shape(ShapeType.Point, 1, mask, axisOrder);
     }
 
