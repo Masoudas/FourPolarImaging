@@ -42,11 +42,6 @@ public interface ICapturedImageFileSet  {
     public int hashCode();
 
     /**
-     * Returns the metadata associated with the given file, using it's label in the fileset as key.
-     */
-    public IMetadata getMetadata();
-
-    /**
      * Returns the part of metadata that is common to all the files in this fileSet.
      */
     public IMetadata getMetadataIntersecion();
