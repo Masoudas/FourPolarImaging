@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 class CapturedImageFileSet implements ICapturedImageFileSet {
     private final IMetadata _metadataIntersection;
     private String setName = "";
-    final private Hashtable<String, File> fileSet = new Hashtable<String, File>();
+    final private Hashtable<String, File[]> fileSet = new Hashtable<String, File[]>();
     final private Cameras cameras;
 
     /**
@@ -29,14 +29,14 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
      * @param pol0_45_90_135       is the captured image file that has all four
      *                             polarizations.
      */
-    public CapturedImageFileSet(IMetadata metadataIntersection, File pol0_45_90_135) {
+    public CapturedImageFileSet(IMetadata metadataIntersection, File[] pol0_45_90_135) {
         cameras = Cameras.One;
 
         String[] labels = Cameras.getLabels(cameras);
         fileSet.put(labels[0], pol0_45_90_135);
 
         this._metadataIntersection = metadataIntersection;
-        setName = defineSetName(pol0_45_90_135);
+        setName = defineSetName(pol0_45_90_135[0]); // Use the first file as flag to define a set name.
     }
 
     /**
@@ -50,7 +50,7 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
      * @param pol45_135            is the captured image file that has polarizations
      *                             45 and 135.
      */
-    public CapturedImageFileSet(IMetadata metadataIntersection, File pol0_90, File pol45_135) {
+    public CapturedImageFileSet(IMetadata metadataIntersection, File[] pol0_90, File[] pol45_135) {
         cameras = Cameras.Two;
         String[] labels = Cameras.getLabels(cameras);
 
@@ -58,7 +58,7 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
         fileSet.put(labels[1], pol45_135);
 
         this._metadataIntersection = metadataIntersection;
-        setName = defineSetName(pol0_90);
+        setName = defineSetName(pol0_90[0]); // Use the first file as flag to define a set name.
     }
 
     /**
@@ -76,7 +76,8 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
      * @param pol135               is the captured image file that has polarization
      *                             135.
      */
-    public CapturedImageFileSet(IMetadata metadataIntersection, File pol0, File pol45, File pol90, File pol135) {
+    public CapturedImageFileSet(IMetadata metadataIntersection, File[] pol0, File[] pol45, File[] pol90,
+            File[] pol135) {
         cameras = Cameras.Four;
         String[] labels = Cameras.getLabels(cameras);
 
@@ -86,22 +87,19 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
         fileSet.put(labels[3], pol135);
 
         this._metadataIntersection = metadataIntersection;
-        setName = defineSetName(pol0);
+        setName = defineSetName(pol0[0]); // Use the first file as flag to define a set name.
     }
 
     /**
-     * Returns a string, comprising fileName + first five bytes of hash.
+     * Define set name, which comprieses the flag file name + the hash of the
+     * complete path to the file. The hash is added so that if the flag file name of
+     * two different files are equal, the set name would be different thanks to
+     * hash.
      * 
-     * @param file
-     * @return
      */
     private String defineSetName(File file) {
         byte[] hash = { 0 };
-        String concatenatedPaths = "";
-
-        for (String label : fileSet.keySet()) {
-            concatenatedPaths += fileSet.get(label);
-        }
+        String concatenatedPaths = file.getAbsolutePath();
 
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -138,7 +136,7 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
     }
 
     @Override
-    public File getFile(String label) {
+    public File[] getFile(String label) {
         return fileSet.get(label);
     }
 
