@@ -1,6 +1,9 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge3D;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
@@ -158,22 +161,15 @@ public class WholeSampleStick3DPainterBuilder {
     }
 
     /**
-     * The implicit assumption here is that when we append the z-axis to the image.
+     * Append the orientation image dimension with the z-axis, in the location defined 
+     * by the {@link AxisOrder#append_zAxis(AxisOrder)} 
      */
     private long[] _defineGaugeFigSizeNoZAxis(long[] dimOrientImg, AxisOrder newAxisOrder) {
-        long[] dimGaugeIm = new long[AxisOrder.getNumDefinedAxis(newAxisOrder)];
-        
-        int z_axis = AxisOrder.getZAxis(newAxisOrder);
-        int j = 0;
-        for (int i = 0; i < dimGaugeIm.length; i++){
-            if (i == z_axis){
-                dimGaugeIm[i] = this._length;
-            }else{
-                dimGaugeIm[i] = dimOrientImg[j++];
-            }
-        }
-            
-        return dimGaugeIm;
+        List<Long> gaugeImDimAsList = Arrays.stream(dimOrientImg).boxed().collect(Collectors.toList());
+        gaugeImDimAsList.add(AxisOrder.getZAxis(newAxisOrder), (long)this._length);
+
+        return Arrays.stream(gaugeImDimAsList.toArray(new Long[0])).mapToLong((t) -> t).toArray();
+
     }
 
     public ColorMap getColorMap() {
