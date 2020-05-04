@@ -63,14 +63,7 @@ public class SophiesChoiceIII {
         // By changing this parameter, Delta, Rho or Eta stick can be drawn.
         AngleGaugeType angleGaugeType = AngleGaugeType.Rho2D;
 
-        /**
-         * If a polygon RoI is desired, comment the previous three lines and uncomment
-         * these lines. Note that a polygon must have at least three points. eel free to
-         * add coordinates in the curly braces
-         */
-        // long[] xCoordinates = new long[]{1, 2, 3};
-        // long[] yCoordinates = new long[]{1, 2, 3};
-        // IShape roi = new ShapeFactory().closedPolygon2D(xCoordinates, yCoordinates);
+        
 
         // 2D Stick visual params.
         final int length = 40;
