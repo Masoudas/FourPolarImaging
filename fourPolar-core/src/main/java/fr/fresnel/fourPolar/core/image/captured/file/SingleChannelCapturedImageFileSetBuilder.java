@@ -67,10 +67,9 @@ public class SingleChannelCapturedImageFileSetBuilder {
         if (this._cameras != Cameras.One) {
             throw new IllegalArgumentException("Use add method for " + this._cameras + " cameras");
         }
+        this._files[0][channel - 1] = Objects.requireNonNull(pol0_45_90_135, "pol0_45_90_135 can't be null");
 
         this._channelCtr++;
-        this._files[0][channel - 1] = pol0_45_90_135;
-
         return this;
     }
 
@@ -93,10 +92,10 @@ public class SingleChannelCapturedImageFileSetBuilder {
         if (this._cameras != Cameras.Two) {
             throw new IllegalArgumentException("Use add method for " + this._cameras + " cameras");
         }
+        this._files[0][channel - 1] = Objects.requireNonNull(pol0_90, "pol0_90 can't be null");
+        this._files[1][channel - 1] = Objects.requireNonNull(pol45_135, "pol45_135 can't be null");
 
         this._channelCtr++;
-        this._files[0][(channel - 1)] = pol0_90;
-        this._files[1][(channel - 1)] = pol45_135;
 
         return this;
     }
@@ -120,13 +119,12 @@ public class SingleChannelCapturedImageFileSetBuilder {
         if (this._cameras != Cameras.Four) {
             throw new IllegalArgumentException("Use add method for " + this._cameras + " cameras");
         }
+        this._files[0][channel - 1] = Objects.requireNonNull(pol0, "pol0 can't be null");
+        this._files[1][channel - 1] = Objects.requireNonNull(pol45, "pol45 can't be null");
+        this._files[2][channel - 1] = Objects.requireNonNull(pol90, "pol90 can't be null");
+        this._files[3][channel - 1] = Objects.requireNonNull(pol135, "pol135 can't be null");
 
         this._channelCtr++;
-        this._files[0][(channel - 1)] = pol0;
-        this._files[1][(channel - 1)] = pol45;
-        this._files[2][(channel - 1)] = pol90;
-        this._files[3][(channel - 1)] = pol135;
-
         return this;
     }
 
