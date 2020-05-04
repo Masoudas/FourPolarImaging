@@ -83,13 +83,23 @@ public class FourPolarImagingSetup {
      * @param propagationChannel : propagation channel data
      */
     public void setChannel(int channel, IChannel propagationChannel) {
+        this._checkChannel(channel);
         this._pChannel[channel-1] = propagationChannel;
     }
 
     /**
-     * @return the _pChannel
+     * @return the propagation channel properties.
      */
     public IChannel getChannel(int channel) {
+        this._checkChannel(channel);
         return this._pChannel[channel-1];
     }
+
+    private void _checkChannel(int channel) {
+        if (channel <= 0 || channel > channel) {
+            throw new IllegalArgumentException(
+                    "Channel must be greater than zero and less than total number of channels.");
+        }
+    }
+
 }
