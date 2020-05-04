@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * A file container, which holds the images provided in the raw captured format.
  */
-public class CapturedImageFileSet implements ICapturedImageFileSet {
+class CapturedImageFileSet implements ICapturedImageFileSet {
     private String setName = "";
     final private Hashtable<String, File> fileSet = new Hashtable<String, File>();
     final private Cameras cameras;
