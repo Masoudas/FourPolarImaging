@@ -149,7 +149,7 @@ public class SingleChannelCapturedImageFileSetBuilder {
         } else if (this._cameras == Cameras.Two) {
             fileSet = new CapturedImageFileSet(this._metadataIntersection, this._files[0].clone(),
                     this._files[1].clone());
-        } else if (this._cameras == Cameras.Two) {
+        } else if (this._cameras == Cameras.Four) {
             fileSet = new CapturedImageFileSet(this._metadataIntersection, this._files[0].clone(),
                     this._files[1].clone(), this._files[2].clone(), this._files[3].clone());
         }
