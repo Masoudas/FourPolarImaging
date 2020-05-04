@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.core.image.captured.file;
 import java.util.Arrays;
 import java.util.Hashtable;
 
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 import java.io.File;
@@ -15,56 +16,67 @@ import java.security.NoSuchAlgorithmException;
  * A file container, which holds the images provided in the raw captured format.
  */
 class CapturedImageFileSet implements ICapturedImageFileSet {
+    private final IMetadata _metadataIntersection;
     private String setName = "";
     final private Hashtable<String, File> fileSet = new Hashtable<String, File>();
     final private Cameras cameras;
-    final private int _channel;
-
 
     /**
      * Used for the case when only one camera is present.
      * 
-     * @param channel is the channel number.
-     * @param pol0_45_90_135 is the captured image file that has all four polarizations.
+     * @param metadataIntersection is the metadata associated with this single
+     *                             polarization image file.
+     * @param pol0_45_90_135       is the captured image file that has all four
+     *                             polarizations.
      */
-    public CapturedImageFileSet(int channel, File pol0_45_90_135) {
+    public CapturedImageFileSet(IMetadata metadataIntersection, File pol0_45_90_135) {
         cameras = Cameras.One;
 
         String[] labels = Cameras.getLabels(cameras);
         fileSet.put(labels[0], pol0_45_90_135);
 
+        this._metadataIntersection = metadataIntersection;
         setName = defineSetName(pol0_45_90_135);
-        _channel = channel;
     }
 
     /**
      * Used when two cameras are present.
      * 
-     * @param channel is the channel number.
-     * @param pol0_90 is the captured image file that has polarizations 0 and 90.
-     * @param pol45_135 is the captured image file that has polarizations 45 and 135.
+     * @param metadataIntersection is the metadata that is common among the two
+     *                             files (including the number of channels and axis
+     *                             order).
+     * @param pol0_90              is the captured image file that has polarizations
+     *                             0 and 90.
+     * @param pol45_135            is the captured image file that has polarizations
+     *                             45 and 135.
      */
-    public CapturedImageFileSet(int channel, File pol0_90, File pol45_135) {
+    public CapturedImageFileSet(IMetadata metadataIntersection, File pol0_90, File pol45_135) {
         cameras = Cameras.Two;
         String[] labels = Cameras.getLabels(cameras);
 
         fileSet.put(labels[0], pol0_90);
         fileSet.put(labels[1], pol45_135);
 
+        this._metadataIntersection = metadataIntersection;
         setName = defineSetName(pol0_90);
-        _channel = channel;
     }
 
     /**
      * Used when four cameras are present.
      * 
-     * @param channel is the channel number.
-     * @param pol0 is the captured image file that has polarization 0.
-     * @param pol45 is the captured image file that has polarization 45.
-     * @param pol90 is the captured image file that has polarization 90.
-     * @param pol135 is the captured image file that has polarization 135.
+     * @param metadataIntersection is the metadata that is common among the two
+     *                             files (including the number of channels and axis
+     *                             order).
+     * @param pol0                 is the captured image file that has polarization
+     *                             0.
+     * @param pol45                is the captured image file that has polarization
+     *                             45.
+     * @param pol90                is the captured image file that has polarization
+     *                             90.
+     * @param pol135               is the captured image file that has polarization
+     *                             135.
      */
-    public CapturedImageFileSet(int channel, File pol0, File pol45, File pol90, File pol135) {
+    public CapturedImageFileSet(IMetadata metadataIntersection, File pol0, File pol45, File pol90, File pol135) {
         cameras = Cameras.Four;
         String[] labels = Cameras.getLabels(cameras);
 
@@ -73,8 +85,8 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
         fileSet.put(labels[2], pol90);
         fileSet.put(labels[3], pol135);
 
+        this._metadataIntersection = metadataIntersection;
         setName = defineSetName(pol0);
-        _channel = channel;
     }
 
     /**
@@ -156,8 +168,7 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
     }
 
     @Override
-    public int getChannel() {
-        return this._channel;
+    public IMetadata getMetadataIntersecion() {
+        return this._metadataIntersection;
     }
-
 }
