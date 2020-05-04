@@ -36,7 +36,8 @@ public class SingleChannelCapturedImageFileSetBuilder {
      *                             {@link IMetadata#axisOrder()} and
      *                             {@link IMetadata#numChannels()}
      */
-    public SingleChannelCapturedImageFileSetBuilder(IMetadata metadataIntersection, FourPolarImagingSetup imagingSetup) {
+    public SingleChannelCapturedImageFileSetBuilder(IMetadata metadataIntersection,
+            FourPolarImagingSetup imagingSetup) {
         this._cameras = Objects.requireNonNull(imagingSetup, "imaging setup cannot be null.").getCameras();
         this._metadataIntersection = Objects.requireNonNull(metadataIntersection,
                 "metadataIntersection cannot be null.");
@@ -52,7 +53,8 @@ public class SingleChannelCapturedImageFileSetBuilder {
     /**
      * Add files to the fileSet being built. Each time this method is used, the
      * given files are interpeted as the new channel. After using the build method,
-     * the counter is set to zero for reuse.
+     * the counter is set to zero for reuse. Returns the current instance to allow
+     * method chaining.
      * <p>
      * Used for the case when only one camera is present.
      * 
@@ -60,7 +62,7 @@ public class SingleChannelCapturedImageFileSetBuilder {
      * @param pol0_45_90_135 is the captured image file that corresponds to all four
      *                       polarizations.
      */
-    public void add(int channel, File pol0_45_90_135) {
+    public SingleChannelCapturedImageFileSetBuilder add(int channel, File pol0_45_90_135) {
         _checkChannel(channel);
         if (this._cameras != Cameras.One) {
             throw new IllegalArgumentException("Use add method for " + this._cameras + " cameras");
@@ -68,12 +70,15 @@ public class SingleChannelCapturedImageFileSetBuilder {
 
         this._channelCtr++;
         this._files[0][channel - 1] = pol0_45_90_135;
+
+        return this;
     }
 
     /**
      * Add files to the fileSet being built. Each time this method is used, the
      * given files are interpeted as the new channel. After using the build method,
-     * the counter is set to zero for reuse.
+     * the counter is set to zero for reuse. Returns the current instance to allow
+     * method chaining.
      * <p>
      * Used for the case when two cameras are present.
      * 
@@ -83,7 +88,7 @@ public class SingleChannelCapturedImageFileSetBuilder {
      * @param pol45_135 is the captured image file that corresponds to polarizations
      *                  45 and 135.
      */
-    public void add(int channel, File pol0_90, File pol45_135) {
+    public SingleChannelCapturedImageFileSetBuilder add(int channel, File pol0_90, File pol45_135) {
         _checkChannel(channel);
         if (this._cameras != Cameras.Two) {
             throw new IllegalArgumentException("Use add method for " + this._cameras + " cameras");
@@ -92,12 +97,15 @@ public class SingleChannelCapturedImageFileSetBuilder {
         this._channelCtr++;
         this._files[0][(channel - 1)] = pol0_90;
         this._files[1][(channel - 1)] = pol45_135;
+
+        return this;
     }
 
     /**
      * Add files to the fileSet being built. Each time this method is used, the
      * given files are interpeted as the new channel. After using the build method,
-     * the counter is set to zero for reuse.
+     * the counter is set to zero for reuse. Returns the current instance to allow
+     * method chaining.
      * <p>
      * Used for the case when four cameras are present.
      * 
@@ -107,7 +115,7 @@ public class SingleChannelCapturedImageFileSetBuilder {
      * @param pol90   is the captured image file that has polarization 90.
      * @param pol135  is the captured image file that has polarization 135.
      */
-    public void add(int channel, File pol0, File pol45, File pol90, File pol135) {
+    public SingleChannelCapturedImageFileSetBuilder add(int channel, File pol0, File pol45, File pol90, File pol135) {
         _checkChannel(channel);
         if (this._cameras != Cameras.Four) {
             throw new IllegalArgumentException("Use add method for " + this._cameras + " cameras");
@@ -118,6 +126,8 @@ public class SingleChannelCapturedImageFileSetBuilder {
         this._files[1][(channel - 1)] = pol45;
         this._files[2][(channel - 1)] = pol90;
         this._files[3][(channel - 1)] = pol135;
+
+        return this;
     }
 
     /**
