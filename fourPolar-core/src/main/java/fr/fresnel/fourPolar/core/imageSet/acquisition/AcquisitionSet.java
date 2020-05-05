@@ -7,7 +7,6 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageChecker;
-import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
@@ -19,92 +18,51 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 public abstract class AcquisitionSet {
     protected FourPolarImagingSetup _imagingSetup;
     protected ICapturedImageChecker _imageChecker;
+    private String[] _imageLabels;
 
+    /**
+     * Creates the set of images for the given imaging setup. All images are checker
+     * against the imageChecker to ensure they satisfy the imposed checks.
+     * 
+     * @param imagingSetup is the image setup associated with this acquired image
+     *                     set.
+     * @param imageChecker is the image checker for the acquired images.
+     */
     public AcquisitionSet(FourPolarImagingSetup imagingSetup, ICapturedImageChecker imageChecker) {
         this._imagingSetup = imagingSetup;
         this._imageChecker = imageChecker;
+        this._imageLabels = Cameras.getLabels(imagingSetup.getCameras());
     }
 
     /**
-     * Add an image to the set in the case of one camera.
-     * 
-     * @param channel
-     * @param pol0_45_90_135
-     * @throws KeyAlreadyExistsException : In case the file set has already been
+     * Add a captured file set to this set, where every file is checked against
+     * {@link ICapturedImageChecker} provided for the class.
+     *
+     * @throws KeyAlreadyExistsException in case the file set has already been
      *                                   added.
-     * @throws IllegalArgumentException  : In case the wrong addImage method is
-     *                                   used.
-     * @throws IncompatibleCapturedImage      : In case at least one image is corrupt.
+     * @throws IllegalArgumentException  in case the wrong addImage method is used.
+     * @throws IncompatibleCapturedImage in case at least one image is incompatible.
      */
-    public void addImage(int channel, File pol0_45_90_135)
+    public void addImage(ICapturedImageFileSet fileSet)
             throws KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
-        if (this._imagingSetup.getCameras() != Cameras.One) {
-            throw new IllegalArgumentException(
-                    "Use addImage method for " + this._imagingSetup.getCameras() + " cameras");
+        if (this._imagingSetup.getCameras() != fileSet.getnCameras()) {
+            throw new IllegalArgumentException("File set corresponds to different number of cameras.");
         }
 
-        this._imageChecker.checkCompatible(pol0_45_90_135);
-        this._addImage(channel, new CapturedImageFileSet(channel, pol0_45_90_135));
-    }
-
-    /**
-     * Add two images of the same sample in case of two cameras.
-     * 
-     * @param channel
-     * @param pol0_90
-     * @param pol45_135
-     * @throws KeyAlreadyExistsException : In case the file set has already been
-     *                                   added.
-     * @throws IllegalArgumentException  : In case the wrong addImage method is
-     *                                   used.
-     * @throws IncompatibleCapturedImage      : In case at least one image is corrupt.
-     */
-    public void addImage(int channel, File pol0_90, File pol45_135)
-            throws KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
-        if (this._imagingSetup.getCameras() != Cameras.Two) {
-            throw new IllegalArgumentException(
-                    "Use addImage method for " + this._imagingSetup.getCameras() + " cameras");
+        for (String label : this._imageLabels) {
+            for (File imagePath : fileSet.getFile(label)) {
+                this._imageChecker.checkCompatible(imagePath);
+            }
         }
-
-        this._imageChecker.checkCompatible(pol0_90);
-        this._imageChecker.checkCompatible(pol45_135);
-        this._addImage(channel, new CapturedImageFileSet(channel, pol0_90, pol45_135));
-
-    }
-
-    /**
-     * Add four images of the same sampl in case of four cameras.
-     * 
-     * @param channel
-     * @param pol0
-     * @param pol45
-     * @param pol90
-     * @param pol135
-     * @throws KeyAlreadyExistsException : In case the file set has already been
-     *                                   added.
-     * @throws IllegalArgumentException  : In case the wrong addImage method is
-     *                                   used.
-     * @throws IncompatibleCapturedImage      : In case at least one image is corrupt.
-     */
-    public void addImage(int channel, File pol0, File pol45, File pol90, File pol135)
-            throws KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
-        if (this._imagingSetup.getCameras() != Cameras.Four) {
-            throw new IllegalArgumentException(
-                    "Use addImage method for " + this._imagingSetup.getCameras() + " cameras");
-        }
-
-        this._imageChecker.checkCompatible(pol0);
-        this._imageChecker.checkCompatible(pol45);
-        this._imageChecker.checkCompatible(pol90);
-        this._imageChecker.checkCompatible(pol135);
-        this._addImage(channel, new CapturedImageFileSet(channel, pol0, pol45, pol90, pol135));
+        
+        this._addImage(fileSet);
 
     }
 
     /**
      * Method to add image to the set for classes that extend this class.
      */
-    protected abstract void _addImage(int channel, ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException;
+    protected abstract void _addImage(ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException;
 
     /**
      * Returns a particular image set using the channel number and set name.
@@ -118,6 +76,7 @@ public abstract class AcquisitionSet {
 
     /**
      * Remove an image using channel number and set name.
+     * 
      * @param channel
      * @param setName
      */
@@ -138,5 +97,4 @@ public abstract class AcquisitionSet {
     public ICapturedImageChecker getCapturedImageChecker() {
         return _imageChecker;
     }
-
 }
