@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.core.imagingSetup;
 
+import java.util.ArrayList;
+
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
@@ -10,11 +12,21 @@ import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
  * polarization.
  */
 public class FourPolarImagingSetup {
-    private int _nChannel;
+    private final ArrayList<IChannel> _channels;
+
     private Cameras _cameras;
     private IFieldOfView _fov = null;
-    private IChannel[] _pChannel;
     private INumericalAperture _numAperture;
+
+    private static FourPolarImagingSetup _instance = null;
+
+    public static FourPolarImagingSetup instance() {
+        if (_instance == null) {
+            _instance = new FourPolarImagingSetup();
+        }
+
+        return _instance;
+    }
 
     /**
      * This class encapsulates the imaging setup, used for capturing images of four
@@ -23,11 +35,12 @@ public class FourPolarImagingSetup {
      * @param nChannel : Number of channels
      * @param cameras  : Number of cameras
      */
-    public FourPolarImagingSetup(int nChannel, Cameras cameras) {
-        this._nChannel = nChannel;
-        this._cameras = cameras;
+    private FourPolarImagingSetup() {
+        this._channels = new ArrayList<>();
+    }
 
-        this._pChannel = new IChannel[nChannel];
+    public void setCameras(Cameras cameras) {
+        this._cameras = cameras;
     }
 
     /**
@@ -41,7 +54,7 @@ public class FourPolarImagingSetup {
      * @return the nChannel
      */
     public int getnChannel() {
-        return this._nChannel;
+        return this._channels.size();
     }
 
     /**
@@ -84,7 +97,7 @@ public class FourPolarImagingSetup {
      */
     public void setChannel(int channel, IChannel propagationChannel) {
         this._checkChannel(channel);
-        this._pChannel[channel-1] = propagationChannel;
+        this._channels.add(channel, propagationChannel);
     }
 
     /**
@@ -92,13 +105,12 @@ public class FourPolarImagingSetup {
      */
     public IChannel getChannel(int channel) {
         this._checkChannel(channel);
-        return this._pChannel[channel-1];
+        return this._channels.get(channel);
     }
 
     private void _checkChannel(int channel) {
-        if (channel <= 0 || channel > channel) {
-            throw new IllegalArgumentException(
-                    "Channel must be greater than zero and less than total number of channels.");
+        if (channel <= 0) {
+            throw new IllegalArgumentException("Channel number must be greater than zero.");
         }
     }
 
