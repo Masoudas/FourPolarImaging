@@ -15,16 +15,13 @@ public interface ImageFactory {
     public <T extends PixelType> Image<T> create(long[] dim, T pixelType);
 
     /**
-     * Create an image, with the given dimensions, type and metadata.
+     * Create an image based on its metadata.
      * 
-     * @param dim       is the dimension of the image.
-     * @param pixelType is the pixel type of the image
-     * @param metadata  is the metadata of the image.
-
+     * @param metadata is the metadata of the desired image.
+     * 
      * @throws IllegalArgumentException if there's inconsitency between the metadata
-     *                                  and dimension.
+     *                                  and pixelType
      */
-    public <T extends PixelType> Image<T> create(long[] dim, T pixelType, IMetadata metadata)
-            throws IllegalArgumentException;
+    public <T extends PixelType> Image<T> create(IMetadata metadata) throws IllegalArgumentException;
 
 }

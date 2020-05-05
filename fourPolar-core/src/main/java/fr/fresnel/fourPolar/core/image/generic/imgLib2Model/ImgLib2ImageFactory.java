@@ -9,6 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverterF
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import net.imglib2.FinalDimensions;
@@ -28,8 +29,8 @@ import net.imglib2.util.Util;
 public class ImgLib2ImageFactory implements ImageFactory {
     @Override
     public <T extends PixelType> Image<T> create(long[] dim, T pixelType) {
-        IMetadata defaultMetadata = new Metadata.MetadataBuilder().build();
-        return this.create(dim, pixelType, defaultMetadata);
+        IMetadata defaultMetadata = new Metadata.MetadataBuilder(pixelType.getType(), dim).build();
+        return this.create(defaultMetadata);
     }
 
     /**
@@ -40,7 +41,8 @@ public class ImgLib2ImageFactory implements ImageFactory {
      * @param IMetadata   is the metadata associated with this image.
      */
     public Image<UINT16> create(Img<UnsignedShortType> img, UnsignedShortType imgLib2Type) {
-        IMetadata defaulMetadata = new Metadata.MetadataBuilder().build();
+        long[] dim = _getDimFromImg(img);
+        IMetadata defaulMetadata = new Metadata.MetadataBuilder(PixelTypes.UINT_16, dim).build();
         return this.create(img, imgLib2Type, defaulMetadata);
     }
 
@@ -68,7 +70,8 @@ public class ImgLib2ImageFactory implements ImageFactory {
      * @param imgLib2Type is an instance of FloatType
      */
     public Image<Float32> create(Img<FloatType> img, FloatType imgLib2Type) {
-        IMetadata defaulMetadata = new Metadata.MetadataBuilder().build();
+        long[] dim = _getDimFromImg(img);
+        IMetadata defaulMetadata = new Metadata.MetadataBuilder(PixelTypes.FLOAT_32, dim).build();
 
         return this.create(img, imgLib2Type, defaulMetadata);
     }
@@ -97,7 +100,8 @@ public class ImgLib2ImageFactory implements ImageFactory {
      * @param imgLib2Type is an instance of ARGBType
      */
     public Image<RGB16> create(Img<ARGBType> img, ARGBType imgLib2Type) {
-        IMetadata defaulMetadata = new Metadata.MetadataBuilder().build();
+        long[] dim = _getDimFromImg(img);
+        IMetadata defaulMetadata = new Metadata.MetadataBuilder(PixelTypes.RGB_16, dim).build();
         return this.create(img, imgLib2Type, defaulMetadata);
     }
 
@@ -131,13 +135,13 @@ public class ImgLib2ImageFactory implements ImageFactory {
     }
 
     @Override
-    public <T extends PixelType> Image<T> create(long[] dim, T pixelType, IMetadata metadata) {
+    public <T extends PixelType> Image<T> create(IMetadata metadata) {
         Image<T> _image = null;
-        switch (pixelType.getType()) {
+        switch (metadata.getPixelType()) {
             case UINT_16:
                 try {
                     UnsignedShortType type = new UnsignedShortType();
-                    Img<UnsignedShortType> img = _chooseImgFactory(dim, type);
+                    Img<UnsignedShortType> img = _chooseImgFactory(metadata.getDim(), type);
                     TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory
                             .getConverter(UINT16.zero(), type);
 
@@ -151,7 +155,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
             case FLOAT_32:
                 try {
                     FloatType type = new FloatType();
-                    Img<FloatType> img = _chooseImgFactory(dim, type);
+                    Img<FloatType> img = _chooseImgFactory(metadata.getDim(), type);
                     TypeConverter<Float32, FloatType> converter = TypeConverterFactory.getConverter(Float32.zero(),
                             type);
 
@@ -165,7 +169,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
             case RGB_16:
                 try {
                     ARGBType type = new ARGBType();
-                    Img<ARGBType> img = _chooseImgFactory(dim, type);
+                    Img<ARGBType> img = _chooseImgFactory(metadata.getDim(), type);
                     TypeConverter<RGB16, ARGBType> converter = TypeConverterFactory.getConverter(RGB16.zero(), type);
 
                     _image = new ImgLib2Image<T, ARGBType>(img, (TypeConverter<T, ARGBType>) converter, this, metadata);
@@ -179,6 +183,18 @@ public class ImgLib2ImageFactory implements ImageFactory {
         }
 
         return _image;
+    }
+
+    /**
+     * Get image dimension from image interface.
+     * 
+     * @param img
+     */
+    private long[] _getDimFromImg(Img<?> img) {
+        long[] dim = new long[img.numDimensions()];
+        img.dimensions(dim);
+
+        return dim;
     }
 
 }
