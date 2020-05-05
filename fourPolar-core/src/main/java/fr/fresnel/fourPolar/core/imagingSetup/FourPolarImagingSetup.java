@@ -53,7 +53,7 @@ public class FourPolarImagingSetup {
     /**
      * @return the nChannel
      */
-    public int getnChannel() {
+    public int getNumChannel() {
         return this._channels.size();
     }
 

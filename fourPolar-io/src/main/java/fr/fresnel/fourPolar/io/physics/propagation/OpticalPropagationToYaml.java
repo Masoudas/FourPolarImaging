@@ -23,7 +23,7 @@ public class OpticalPropagationToYaml {
     public void write(File rootFolder, FourPolarImagingSetup setup, IOpticalPropagationDB database)
             throws PropagationChannelNotInDatabase, IOException {
         ObjectMapper mapper = getYamlMapper();
-        for (int channel = 1; channel <= setup.getnChannel(); channel++) {
+        for (int channel = 1; channel <= setup.getNumChannel(); channel++) {
             IOpticalPropagationJSONAdaptor adaptor = getJSONAdaptor(setup, database, channel);
 
             File path = getFilePath(rootFolder, channel);

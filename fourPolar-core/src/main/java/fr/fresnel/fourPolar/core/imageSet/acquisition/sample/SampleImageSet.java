@@ -20,9 +20,9 @@ public class SampleImageSet extends AcquisitionSet {
 
     public SampleImageSet(FourPolarImagingSetup imagingSetup, ICapturedImageChecker imageChecker) {
         super(imagingSetup, imageChecker);
-        fileSuperSet = new ArrayList<Hashtable<String, ICapturedImageFileSet>>(imagingSetup.getnChannel());
+        fileSuperSet = new ArrayList<Hashtable<String, ICapturedImageFileSet>>(imagingSetup.getNumChannel());
 
-        for (int channel = 0; channel < imagingSetup.getnChannel(); channel++) {
+        for (int channel = 0; channel < imagingSetup.getNumChannel(); channel++) {
             fileSuperSet.add(channel, new Hashtable<String, ICapturedImageFileSet>());
         }
     }

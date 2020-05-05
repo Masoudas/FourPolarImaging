@@ -74,7 +74,7 @@ public class SampleImageSetWriter {
      * @throws FileNotFoundException
      */
     public void write() throws IOException, CorruptSampleSetExcel {
-        for (int channel = 1; channel <= this.sampleSet.getImagingSetup().getnChannel(); channel++) {
+        for (int channel = 1; channel <= this.sampleSet.getImagingSetup().getNumChannel(); channel++) {
             this.writeChannel(channel);
         }
     }

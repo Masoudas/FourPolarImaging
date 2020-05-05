@@ -33,7 +33,7 @@ public class MultiChannelCapturedImageFileSetBuilder {
                     "Multi-channel captured file set must not be used for single-channel images.");
         }
 
-        if (metadataIntersection.numChannels() != imagingSetup.getnChannel()) {
+        if (metadataIntersection.numChannels() != imagingSetup.getNumChannel()) {
             throw new IllegalArgumentException("Number of channels in the metadata intersection does not"
                     + " correspond to the number of channels defined by the imaging setup.");
         }

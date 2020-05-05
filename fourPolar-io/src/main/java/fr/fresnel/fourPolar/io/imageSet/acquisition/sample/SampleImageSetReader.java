@@ -55,7 +55,7 @@ public class SampleImageSetReader {
     public SampleImageSet read()
             throws SampleImageNotFound, ExcelIncorrentRow, SampleSetExcelNotFound, IncompatibleCapturedImage {
         this._sampleImageSet = new SampleImageSet(this._imagingSetup, new CapturedImageExistsChecker());
-        for (int channel = 1; channel <= this._imagingSetup.getnChannel(); channel++) {
+        for (int channel = 1; channel <= this._imagingSetup.getNumChannel(); channel++) {
             this.readChannel(channel);
         }
 

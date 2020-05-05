@@ -29,7 +29,7 @@ public class BeadImageSet extends AcquisitionSet {
     public BeadImageSet(FourPolarImagingSetup imagingSetup, ICapturedImageChecker imageChecker) {
         super(imagingSetup, imageChecker);
 
-        this.imageFileSet = new ICapturedImageFileSet[imagingSetup.getnChannel()];
+        this.imageFileSet = new ICapturedImageFileSet[imagingSetup.getNumChannel()];
     }
 
     @Override

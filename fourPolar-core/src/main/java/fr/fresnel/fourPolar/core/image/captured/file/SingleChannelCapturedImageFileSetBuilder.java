@@ -46,7 +46,7 @@ public class SingleChannelCapturedImageFileSetBuilder {
             throw new IllegalArgumentException(
                     "Single channel captured file set must not be used for multi-channel images.");
         }
-        this._numChannels = imagingSetup.getnChannel();
+        this._numChannels = imagingSetup.getNumChannel();
         this._files = new File[Cameras.getNImages(this._cameras)][this._numChannels];
     }
 

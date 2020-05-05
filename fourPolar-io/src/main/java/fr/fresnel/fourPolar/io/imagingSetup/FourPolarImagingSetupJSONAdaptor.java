@@ -60,7 +60,7 @@ class FourPolarImagingSetupJSONAdaptor {
     }
 
     private void _setChannels(FourPolarImagingSetup imagingSetup) {
-        int nchannel = imagingSetup.getnChannel();
+        int nchannel = imagingSetup.getNumChannel();
         this._channelAdaptor = new TreeMap<String, IChannelJSONAdaptor>();
 
         for (int channel = 1; channel <= nchannel; channel++) {
