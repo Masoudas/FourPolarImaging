@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.core.imagingSetup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
@@ -12,7 +13,7 @@ import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
  * polarization.
  */
 public class FourPolarImagingSetup {
-    private final ArrayList<IChannel> _channels;
+    private final HashMap<Integer, IChannel> _channels;
 
     private Cameras _cameras;
     private IFieldOfView _fov = null;
@@ -36,7 +37,7 @@ public class FourPolarImagingSetup {
      * @param cameras  : Number of cameras
      */
     private FourPolarImagingSetup() {
-        this._channels = new ArrayList<>();
+        this._channels = new HashMap<>();
     }
 
     public void setCameras(Cameras cameras) {
@@ -95,16 +96,31 @@ public class FourPolarImagingSetup {
      * @param channel            : channel number
      * @param propagationChannel : propagation channel data
      */
-    public void setChannel(int channel, IChannel propagationChannel) {
+    public void setChannel(int channel, IChannel propagationChannel) throws IllegalArgumentException {
         this._checkChannel(channel);
-        this._channels.add(channel, propagationChannel);
+        if (this._channels.containsKey(channel)) {
+            throw new IllegalArgumentException("Duplicate channel number.");
+        }
+
+        for (IChannel existingChannel : this._channels.values()) {
+            if (existingChannel.equals(propagationChannel)) {
+                throw new IllegalArgumentException("Duplicate propagation channel.");
+            }
+        }
+
+        this._channels.put(channel, propagationChannel);
     }
 
     /**
-     * @return the propagation channel properties.
+     * @return the propagation channel.
      */
     public IChannel getChannel(int channel) {
         this._checkChannel(channel);
+        
+        if (channel > this._channels.size()) {
+            throw new IllegalArgumentException("Channel exceeds number of channels.");
+        }
+        
         return this._channels.get(channel);
     }
 
