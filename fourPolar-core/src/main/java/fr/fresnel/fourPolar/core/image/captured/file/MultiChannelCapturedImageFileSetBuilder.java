@@ -17,26 +17,11 @@ public class MultiChannelCapturedImageFileSetBuilder {
     final private IMetadata _metadataIntersection;
 
     /**
-     * @param metadataIntersection is the common part of metadata among all the
-     *                             images of this file set. Of special intereset are
-     *                             {@link IMetadata#axisOrder()} and
-     *                             {@link IMetadata#numChannels()}
      * @param imagingSetup         is the corresponding imaging setup.
      */
-    public MultiChannelCapturedImageFileSetBuilder(IMetadata metadataIntersection, FourPolarImagingSetup imagingSetup) {
+    public MultiChannelCapturedImageFileSetBuilder(FourPolarImagingSetup imagingSetup) {
         this._cameras = Objects.requireNonNull(imagingSetup, "imaging setup cannot be null.").getCameras();
-        this._metadataIntersection = Objects.requireNonNull(metadataIntersection,
-                "metadataIntersection cannot be null.");
 
-        if (AxisOrder.getChannelAxis(metadataIntersection.axisOrder()) < 0) {
-            throw new IllegalArgumentException(
-                    "Multi-channel captured file set must not be used for single-channel images.");
-        }
-
-        if (metadataIntersection.numChannels() != imagingSetup.getNumChannel()) {
-            throw new IllegalArgumentException("Number of channels in the metadata intersection does not"
-                    + " correspond to the number of channels defined by the imaging setup.");
-        }
     }
 
     /**

@@ -36,16 +36,8 @@ public class SingleChannelCapturedImageFileSetBuilder {
      *                             {@link IMetadata#numChannels()}
      * @param imagingSetup         is the corresponding imaging setup.
      */
-    public SingleChannelCapturedImageFileSetBuilder(IMetadata metadataIntersection,
-            FourPolarImagingSetup imagingSetup) {
+    public SingleChannelCapturedImageFileSetBuilder(FourPolarImagingSetup imagingSetup) {
         this._cameras = Objects.requireNonNull(imagingSetup, "imaging setup cannot be null.").getCameras();
-        this._metadataIntersection = Objects.requireNonNull(metadataIntersection,
-                "metadataIntersection cannot be null.");
-
-        if (AxisOrder.getChannelAxis(metadataIntersection.axisOrder()) > 0) {
-            throw new IllegalArgumentException(
-                    "Single channel captured file set must not be used for multi-channel images.");
-        }
         this._numChannels = imagingSetup.getNumChannel();
         this._files = new File[Cameras.getNImages(this._cameras)][this._numChannels];
     }
