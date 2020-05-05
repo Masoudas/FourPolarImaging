@@ -34,8 +34,8 @@ public class Float32ImgLib2TiffImageWriterTest {
         Image<Float32> diskImage = new Float32ImgLib2TiffImageReader(_factory).read(destination);
 
         assertTrue(
-            diskImage.getDimensions()[0] == _dim[0] &&
-            diskImage.getDimensions()[1] == _dim[1]
+            diskImage.getMetadata().getDim()[0] == _dim[0] &&
+            diskImage.getMetadata().getDim()[1] == _dim[1]
         );
     }
 
@@ -54,8 +54,8 @@ public class Float32ImgLib2TiffImageWriterTest {
         Image<Float32> diskImage = new Float32ImgLib2TiffImageReader(_factory).read(destination);
 
         assertTrue(
-            diskImage.getDimensions()[0] == _dim[0] && 
-            diskImage.getDimensions()[1] == _dim[1]
+            diskImage.getMetadata().getDim()[0] == _dim[0] && 
+            diskImage.getMetadata().getDim()[1] == _dim[1]
         );
 
     }

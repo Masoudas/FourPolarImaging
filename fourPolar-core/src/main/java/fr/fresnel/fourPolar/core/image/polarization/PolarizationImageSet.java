@@ -92,9 +92,9 @@ public class PolarizationImageSet implements IPolarizationImageSet {
      */
     private boolean _hasEqualDimensions(Image<UINT16> pol0, Image<UINT16> pol45, Image<UINT16> pol90,
             Image<UINT16> pol135) {
-        return Arrays.equals(pol0.getDimensions(), pol45.getDimensions())
-                && Arrays.equals(pol0.getDimensions(), pol90.getDimensions())
-                && Arrays.equals(pol0.getDimensions(), pol135.getDimensions());
+        return Arrays.equals(pol0.getMetadata().getDim(), pol45.getMetadata().getDim())
+                && Arrays.equals(pol0.getMetadata().getDim(), pol90.getMetadata().getDim())
+                && Arrays.equals(pol0.getMetadata().getDim(), pol135.getMetadata().getDim());
     }
 
     /**

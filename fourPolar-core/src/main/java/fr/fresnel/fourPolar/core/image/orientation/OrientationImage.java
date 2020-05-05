@@ -32,7 +32,7 @@ public class OrientationImage implements IOrientationImage {
      */
     public OrientationImage(ICapturedImageFileSet fileSet, ImageFactory factory, IPolarizationImageSet polImage) {
         Float32 pixelType = Float32.zero();
-        long[] dimension = polImage.getPolarizationImage(Polarization.pol0).getImage().getDimensions();
+        long[] dimension = polImage.getPolarizationImage(Polarization.pol0).getImage().getMetadata().getDim();
 
         _rhoImage = new AngleImage(OrientationAngle.rho, factory.create(dimension, pixelType));
         _deltaImage = new AngleImage(OrientationAngle.delta, factory.create(dimension, pixelType));
@@ -105,8 +105,8 @@ public class OrientationImage implements IOrientationImage {
     }
 
     private boolean _hasDimensionsEqual(Image<Float32> rho, Image<Float32> delta, Image<Float32> eta) {
-        return Arrays.equals(rho.getDimensions(), delta.getDimensions())
-                && Arrays.equals(rho.getDimensions(), eta.getDimensions());
+        return Arrays.equals(rho.getMetadata().getDim(), delta.getMetadata().getDim())
+                && Arrays.equals(rho.getMetadata().getDim(), eta.getMetadata().getDim());
     }
 
     private boolean _hasDuplicateImage(Image<Float32> rho, Image<Float32> delta, Image<Float32> eta) {

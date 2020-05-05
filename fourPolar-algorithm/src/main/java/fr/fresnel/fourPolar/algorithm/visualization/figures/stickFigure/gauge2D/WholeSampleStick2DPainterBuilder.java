@@ -61,7 +61,7 @@ public class WholeSampleStick2DPainterBuilder {
         Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
         Objects.requireNonNull(angleGaugeType, "gaugeType cannot be null");
 
-        long[] orientationImageDim = orientationImage.getAngleImage(OrientationAngle.rho).getImage().getDimensions();
+        long[] orientationImageDim = orientationImage.getAngleImage(OrientationAngle.rho).getImage().getMetadata().getDim();
         if (orientationImageDim.length < 2) {
             throw new IllegalArgumentException("The orientation image must be at least two dimensionsal.");
         }
@@ -128,7 +128,7 @@ public class WholeSampleStick2DPainterBuilder {
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
         IMetadata orientImMetadata = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
                 .getMetadata();
-        this._gaugeFigure = this._createGaugeFigure(this._soiImage.getImage().getDimensions(), orientImMetadata);
+        this._gaugeFigure = this._createGaugeFigure(this._soiImage.getImage().getMetadata().getDim(), orientImMetadata);
         return new WholeSampleStick2DPainter(this);
     }
 

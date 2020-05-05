@@ -58,7 +58,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
                 this._stick2DFigure.getImage().getMetadata().axisOrder());
 
         this._stickFigureRegion = this._defineGaugeImageBoundaryAsBoxShape(
-                this._stick2DFigure.getImage().getDimensions(),
+                this._stick2DFigure.getImage().getMetadata().getDim(),
                 this._stick2DFigure.getImage().getMetadata().axisOrder());
 
         this._fillGaugeFigureWithSoI(builder.getSoIImage().getImage(), this._stick2DFigure.getImage());

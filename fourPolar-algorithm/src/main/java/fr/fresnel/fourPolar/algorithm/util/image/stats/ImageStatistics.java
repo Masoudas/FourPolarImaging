@@ -15,7 +15,7 @@ public class ImageStatistics {
      */
     public static <T extends PixelType> int getNPlanes(Image<T> image) {
         Objects.requireNonNull(image, "image cannot be null.");
-        long[] dims = image.getDimensions();
+        long[] dims = image.getMetadata().getDim();
 
         int nPlanes = 1;
         for (int dim = 2; dim < dims.length; dim++) {
@@ -61,7 +61,7 @@ public class ImageStatistics {
     }
 
     public static <T extends PixelType> DPoint getPlaneDim(Image<T> image) {
-        long[] dims = image.getDimensions();
+        long[] dims = image.getMetadata().getDim();
         return new DPoint((int) dims[0], (int) dims[1]);
     }
 

@@ -53,7 +53,7 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
         this._stick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness());
 
         this._orientationImageBoundary = this._defineOrientationImageBoundaryAsBoxShape(
-                builder.getOrientationImage().getAngleImage(OrientationAngle.rho).getImage().getDimensions(),
+                builder.getOrientationImage().getAngleImage(OrientationAngle.rho).getImage().getMetadata().getDim(),
                 builder.getOrientationImage().getAngleImage(OrientationAngle.rho).getImage().getMetadata().axisOrder());
 
     }
@@ -159,7 +159,7 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
         this._stick.rotate2D(Math.PI / 2 + orientationVector.getAngle(_slopeAngle));
 
         // Move the stick to the center of figure
-        long stickCenter = this._dipoleFigure.getImage().getDimensions()[0];
+        long stickCenter = this._dipoleFigure.getImage().getMetadata().getDim()[0];
         this._stick.translate(new long[] { stickCenter / 2, stickCenter / 2 });
     }
 

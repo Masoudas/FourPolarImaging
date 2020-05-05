@@ -50,13 +50,13 @@ public class TiffPolarizationImageSetReaderTest {
 
         assertTrue(       
             Arrays.equals(
-                imageSet.getPolarizationImage(Polarization.pol0).getImage().getDimensions(), dim) &&
+                imageSet.getPolarizationImage(Polarization.pol0).getImage().getMetadata().getDim(), dim) &&
             Arrays.equals(
-                imageSet.getPolarizationImage(Polarization.pol45).getImage().getDimensions(), dim) &&
+                imageSet.getPolarizationImage(Polarization.pol45).getImage().getMetadata().getDim(), dim) &&
             Arrays.equals(
-                imageSet.getPolarizationImage(Polarization.pol90).getImage().getDimensions(), dim) &&
+                imageSet.getPolarizationImage(Polarization.pol90).getImage().getMetadata().getDim(), dim) &&
             Arrays.equals(
-                imageSet.getPolarizationImage(Polarization.pol135).getImage().getDimensions(), dim));
+                imageSet.getPolarizationImage(Polarization.pol135).getImage().getMetadata().getDim(), dim));
     }
 
 }

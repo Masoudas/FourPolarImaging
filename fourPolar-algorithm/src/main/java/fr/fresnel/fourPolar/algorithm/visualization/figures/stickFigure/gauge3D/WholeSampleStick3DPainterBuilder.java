@@ -60,7 +60,7 @@ public class WholeSampleStick3DPainterBuilder {
         Objects.requireNonNull(soiImage, "soiImage cannot be null");
         Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
 
-        long[] orientationImageDim = orientationImage.getAngleImage(OrientationAngle.rho).getImage().getDimensions();
+        long[] orientationImageDim = orientationImage.getAngleImage(OrientationAngle.rho).getImage().getMetadata().getDim();
         if (orientationImageDim.length < 2) {
             throw new IllegalArgumentException("The orientation image must be at least two dimensionsal.");
         }
@@ -125,7 +125,7 @@ public class WholeSampleStick3DPainterBuilder {
      */
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
         long[] orientationImageDim = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
-                .getDimensions();
+                .getMetadata().getDim();
         IMetadata orientImMetadata = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
                 .getMetadata();
         this._gaugeFigure = this._createGaugeFigure(orientationImageDim, orientImMetadata);

@@ -22,7 +22,7 @@ public class SoIImage implements ISoIImage {
      * @param factory              is the desired image factory.
      */
     public SoIImage(IPolarizationImageSet polarizationImageSet, ImageFactory factory) {
-        long[] dim = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage().getDimensions();
+        long[] dim = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage().getMetadata().getDim();
         this._image = factory.create(dim, UINT16.zero());
 
         this._fileSet = polarizationImageSet.getFileSet();

@@ -33,7 +33,7 @@ public class ImgLib2ImageTest {
         ImgLib2Image<UINT16, UnsignedShortType> image = new ImgLib2Image<UINT16, UnsignedShortType>(img, converter,
                 null, metadata);
 
-        assertArrayEquals(dimensions, image.getDimensions());
+        assertArrayEquals(dimensions, image.getMetadata().getDim());
     }
 
     @Test
@@ -47,7 +47,7 @@ public class ImgLib2ImageTest {
         ImgLib2Image<UINT16, UnsignedShortType> image = new ImgLib2Image<UINT16, UnsignedShortType>(img, converter,
                 null, metadata);
 
-        assertTrue(image.getPixelType() == PixelTypes.UINT_16);
+        assertTrue(image.getMetadata().getPixelType() == PixelTypes.UINT_16);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class ImgLib2ImageTest {
 
         ImgLib2Image<Float32, FloatType> image = new ImgLib2Image<Float32, FloatType>(img, converter, null, metadata);
 
-        assertTrue(image.getPixelType() == PixelTypes.FLOAT_32);
+        assertTrue(image.getMetadata().getPixelType() == PixelTypes.FLOAT_32);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ImgLib2ImageTest {
 
         ImgLib2Image<RGB16, ARGBType> image = new ImgLib2Image<RGB16, ARGBType>(img, converter, null, metadata);
 
-        assertTrue(image.getPixelType() == PixelTypes.RGB_16);
+        assertTrue(image.getMetadata().getPixelType() == PixelTypes.RGB_16);
     }
 
     @Test

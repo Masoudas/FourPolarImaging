@@ -21,7 +21,7 @@ public class ImgLib2ImageFactoryTest {
         long[] dimensions = new long[] { 1, 1, 1, 1, 1 };
         Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
         
-        assertArrayEquals(image.getDimensions(), dimensions);
+        assertArrayEquals(image.getMetadata().getDim(), dimensions);
     }
 
     @Test
@@ -29,7 +29,7 @@ public class ImgLib2ImageFactoryTest {
         long[] dimensions = new long[] { 1, 1, 1, 1, 1 };
         Image<Float32> image = new ImgLib2ImageFactory().create(dimensions, Float32.zero());
 
-        assertArrayEquals(image.getDimensions(), dimensions);
+        assertArrayEquals(image.getMetadata().getDim(), dimensions);
     }
 
     @Test
@@ -37,7 +37,7 @@ public class ImgLib2ImageFactoryTest {
         long[] dimensions = new long[] { 1, 1, 1, 1, 1 };
         Image<RGB16> image = new ImgLib2ImageFactory().create(dimensions, RGB16.zero());
 
-        assertArrayEquals(image.getDimensions(), dimensions);
+        assertArrayEquals(image.getMetadata().getDim(), dimensions);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class ImgLib2ImageFactoryTest {
         Img<UnsignedShortType> img = new ArrayImgFactory<UnsignedShortType>(type).create(dimensions);
         Image<UINT16> image = new ImgLib2ImageFactory().create(img, type);
 
-        assertArrayEquals(image.getDimensions(), dimensions);        
+        assertArrayEquals(image.getMetadata().getDim(), dimensions);        
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ImgLib2ImageFactoryTest {
         Img<FloatType> img = new ArrayImgFactory<FloatType>(type).create(dimensions);
         Image<Float32> image = new ImgLib2ImageFactory().create(img, type);
 
-        assertArrayEquals(image.getDimensions(), dimensions);        
+        assertArrayEquals(image.getMetadata().getDim(), dimensions);        
     }
 
     @Test
@@ -83,7 +83,7 @@ public class ImgLib2ImageFactoryTest {
         Img<ARGBType> img = new ArrayImgFactory<ARGBType>(type).create(dimensions);
         Image<RGB16> image = new ImgLib2ImageFactory().create(img, type);
 
-        assertArrayEquals(image.getDimensions(), dimensions);        
+        assertArrayEquals(image.getMetadata().getDim(), dimensions);        
     }
 
 

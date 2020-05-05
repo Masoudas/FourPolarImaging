@@ -47,11 +47,11 @@ public class TiffOrientationImageReaderTest {
 
         assertTrue(
             Arrays.equals(
-                imageSet.getAngleImage(OrientationAngle.rho).getImage().getDimensions(), dim) && 
+                imageSet.getAngleImage(OrientationAngle.rho).getImage().getMetadata().getDim(), dim) && 
             Arrays.equals(
-                imageSet.getAngleImage(OrientationAngle.delta).getImage().getDimensions(), dim) && 
+                imageSet.getAngleImage(OrientationAngle.delta).getImage().getMetadata().getDim(), dim) && 
             Arrays.equals(
-                imageSet.getAngleImage(OrientationAngle.eta).getImage().getDimensions(), dim));
+                imageSet.getAngleImage(OrientationAngle.eta).getImage().getMetadata().getDim(), dim));
     }
 
 }

@@ -68,8 +68,8 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
      * Define the image region as a box spanning from pixel zero to dim - 1;
      */
     private IShape _defineImageBoundaryAsBox(Image<?> image) {
-        long[] imageMax = Arrays.stream(image.getDimensions()).map((t) -> t - 1).toArray();
-        long[] imageMin = new long[image.getDimensions().length];
+        long[] imageMax = Arrays.stream(image.getMetadata().getDim()).map((t) -> t - 1).toArray();
+        long[] imageMin = new long[image.getMetadata().getDim().length];
 
         return new ShapeFactory().closedBox(imageMin, imageMax, image.getMetadata().axisOrder());
     }

@@ -34,7 +34,7 @@ public class GrayScaleToColorConverterTest {
             cursor.setPixel(pixel);
         }
         
-        Image<RGB16> colorImage = new ImgLib2ImageFactory().create(grayImage.getDimensions(), RGB16.zero());
+        Image<RGB16> colorImage = new ImgLib2ImageFactory().create(grayImage.getMetadata().getDim(), RGB16.zero());
 
         GrayScaleToColorConverter.useMaxEachPlane(grayImage, colorImage);
 
@@ -53,7 +53,7 @@ public class GrayScaleToColorConverterTest {
         Image<UINT16> grayImage = factory.create(new ImgOpener().openImgs(grayImageFile.getAbsolutePath(), type).get(0),
                 type);
 
-        Image<RGB16> colorImage = factory.create(grayImage.getDimensions(), RGB16.zero());
+        Image<RGB16> colorImage = factory.create(grayImage.getMetadata().getDim(), RGB16.zero());
 
         GrayScaleToColorConverter.useMaxEachPlane(grayImage, colorImage);
 

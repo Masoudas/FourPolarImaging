@@ -36,9 +36,9 @@ public class UINT16ImgLib2TiffImageWriterTest {
         Image<UINT16> diskImage = new UINT16ImgLib2TiffImageReader(_factory).read(destination);
 
         assertTrue(
-            diskImage.getDimensions()[0] == _dim[0] && 
-            diskImage.getDimensions()[1] == _dim[1] && 
-            diskImage.getDimensions()[2] == _dim[2]
+            diskImage.getMetadata().getDim()[0] == _dim[0] && 
+            diskImage.getMetadata().getDim()[1] == _dim[1] && 
+            diskImage.getMetadata().getDim()[2] == _dim[2]
         );
     }
 
@@ -56,9 +56,9 @@ public class UINT16ImgLib2TiffImageWriterTest {
         Image<UINT16> diskImage = new UINT16ImgLib2TiffImageReader(_factory).read(destination);
 
         assertTrue(
-            diskImage.getDimensions()[0] == _dim[0] && 
-            diskImage.getDimensions()[1] == _dim[1] && 
-            diskImage.getDimensions()[2] == _dim[2]
+            diskImage.getMetadata().getDim()[0] == _dim[0] && 
+            diskImage.getMetadata().getDim()[1] == _dim[1] && 
+            diskImage.getMetadata().getDim()[2] == _dim[2]
         );
 
     }

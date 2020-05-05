@@ -45,15 +45,9 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
         this._img = img;
         this._tConverter = tConverter;
         this._factory = factory;
-        this._dim = new long[this._img.numDimensions()];
-        this._img.dimensions(this._dim);
         this._metadata = metadata;
         this._isMetadataConsistentWithImage();
-    }
-
-    @Override
-    public long[] getDimensions() {
-        return _dim.clone();
+        this._dim = metadata.getDim();
     }
 
     @Override
@@ -63,12 +57,7 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
 
     @Override
     public IPixelCursor<U> getCursor() {
-        return new ImgLib2PixelCursor<U, V>(this._img.cursor(), this.getDimensions(), this._tConverter);
-    }
-
-    @Override
-    public PixelTypes getPixelType() {
-        return this._tConverter.getPixelType();
+        return new ImgLib2PixelCursor<U, V>(this._img.cursor(), this.getMetadata().getDim(), this._tConverter);
     }
 
     @Override

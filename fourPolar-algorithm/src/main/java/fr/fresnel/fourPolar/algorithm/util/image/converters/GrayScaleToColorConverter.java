@@ -37,7 +37,7 @@ public class GrayScaleToColorConverter {
         Objects.requireNonNull(grayImage, "grayImage cannot be null");
         Objects.requireNonNull(grayImage, "colorImage cannot be null");
 
-        if (!Arrays.equals(grayImage.getDimensions(), colorImage.getDimensions())) {
+        if (!Arrays.equals(grayImage.getMetadata().getDim(), colorImage.getMetadata().getDim())) {
             throw new ArrayIndexOutOfBoundsException(
                     "Cannot convert, because the two images don't have same dimension.");
         }

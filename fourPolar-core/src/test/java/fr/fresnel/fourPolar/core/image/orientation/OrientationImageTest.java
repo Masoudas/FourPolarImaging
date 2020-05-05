@@ -145,11 +145,11 @@ public class OrientationImageTest {
         IOrientationImage orientationImage = new OrientationImage(null, factory, polImage);
         assertTrue(
             Arrays.equals(
-                orientationImage.getAngleImage(OrientationAngle.rho).getImage().getDimensions(), dim) &&
+                orientationImage.getAngleImage(OrientationAngle.rho).getImage().getMetadata().getDim(), dim) &&
             Arrays.equals(
-                orientationImage.getAngleImage(OrientationAngle.delta).getImage().getDimensions(), dim) &&
+                orientationImage.getAngleImage(OrientationAngle.delta).getImage().getMetadata().getDim(), dim) &&
             Arrays.equals(
-                orientationImage.getAngleImage(OrientationAngle.eta).getImage().getDimensions(), dim));
+                orientationImage.getAngleImage(OrientationAngle.eta).getImage().getMetadata().getDim(), dim));
             
     }
 
