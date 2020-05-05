@@ -32,6 +32,11 @@ public class MultiChannelCapturedImageFileSetBuilder {
             throw new IllegalArgumentException(
                     "Multi-channel captured file set must not be used for single-channel images.");
         }
+
+        if (metadataIntersection.numChannels() != imagingSetup.getnChannel()) {
+            throw new IllegalArgumentException("Number of channels in the metadata intersection does not"
+                    + " correspond to the number of channels defined by the imaging setup.");
+        }
     }
 
     /**
