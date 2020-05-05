@@ -11,8 +11,7 @@ import javassist.tools.reflect.CannotCreateException;
 
 /**
  * Using this builder, we can create {@link ICapturedImageFileSet} for the case
- * where there's a separate file for each channel. The same builder can be used
- * to build several instances of unrelated captured images.
+ * where there's a separate file for each channel.
  */
 public class SingleChannelCapturedImageFileSetBuilder {
     final private Cameras _cameras;
@@ -20,8 +19,8 @@ public class SingleChannelCapturedImageFileSetBuilder {
     final private IMetadata _metadataIntersection;
 
     /**
-     * List of files added by the user. Each time the user adds new files, they're
-     * added to the next nCameras places in this array.
+     * List of files added by the user. Each row corresponds to the images of a
+     * camera, and the columns correspond to different channels.
      */
     final private File[][] _files;
 
@@ -35,6 +34,7 @@ public class SingleChannelCapturedImageFileSetBuilder {
      *                             images of this file set. Of special intereset are
      *                             {@link IMetadata#axisOrder()} and
      *                             {@link IMetadata#numChannels()}
+     * @param imagingSetup         is the corresponding imaging setup.
      */
     public SingleChannelCapturedImageFileSetBuilder(IMetadata metadataIntersection,
             FourPolarImagingSetup imagingSetup) {
