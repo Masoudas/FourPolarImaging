@@ -20,7 +20,7 @@ class CapturedImageExistsChecker implements ICapturedImageChecker {
     }
 
     @Override
-    public void checkCompatible(File imagePath) throws IncompatibleCapturedImage {
+    public void check(File imagePath) throws IncompatibleCapturedImage {
         if (!imagePath.exists()) {
             throw new IncompatibleCapturedImage(new RejectedCapturedImage(imagePath, notExists));
         }

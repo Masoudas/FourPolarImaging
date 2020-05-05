@@ -26,6 +26,6 @@ public interface ICapturedImageChecker {
      * @return
      * @throws IncompatibleCapturedImage
      */
-    public void checkCompatible(File imagePath) throws IncompatibleCapturedImage;    
+    public void check(File imagePath) throws IncompatibleCapturedImage;    
 
 }

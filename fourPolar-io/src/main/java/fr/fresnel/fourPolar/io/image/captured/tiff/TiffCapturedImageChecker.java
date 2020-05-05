@@ -35,7 +35,7 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
      * @throws IncompatibleCapturedImage
      */
     @Override
-    public void checkCompatible(File image) throws IncompatibleCapturedImage {
+    public void check(File image) throws IncompatibleCapturedImage {
         try {
             if (!image.exists()){
                 throw new IncompatibleCapturedImage(new RejectedCapturedImage(image, notExist));

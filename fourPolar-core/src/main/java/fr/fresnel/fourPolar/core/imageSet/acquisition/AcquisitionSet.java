@@ -51,7 +51,7 @@ public abstract class AcquisitionSet {
 
         for (String label : this._imageLabels) {
             for (File imagePath : fileSet.getFile(label)) {
-                this._imageChecker.checkCompatible(imagePath);
+                this._imageChecker.check(imagePath);
             }
         }
         

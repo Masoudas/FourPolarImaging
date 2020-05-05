@@ -26,7 +26,7 @@ public class TiffCapturedImageCheckerTest {
     public void checkCompatible_16bitTiff_ThrowsNoException() throws IncompatibleCapturedImage {
         File tiffImage = new File(_root, "16bit.tif");
         assertDoesNotThrow(() -> {
-            tiffChecker.checkCompatible(tiffImage);
+            tiffChecker.check(tiffImage);
         });
     }
 
@@ -35,7 +35,7 @@ public class TiffCapturedImageCheckerTest {
         File tiffImage = new File(_root, "8bit.tif");
 
         IncompatibleCapturedImage exception = assertThrows(IncompatibleCapturedImage.class, () -> {
-            tiffChecker.checkCompatible(tiffImage);
+            tiffChecker.check(tiffImage);
         });
 
         assertTrue(TiffCapturedImageChecker.lowBitDepth.equals(exception.getRejectedImage().getReason()));
@@ -46,7 +46,7 @@ public class TiffCapturedImageCheckerTest {
     public void checkCompatible_corruptTiff_ThrowsIncompatibleCapturedImage() throws IncompatibleCapturedImage {
         File image = new File(_root, "corrupt.tif");
         IncompatibleCapturedImage exception = assertThrows(IncompatibleCapturedImage.class, () -> {
-            tiffChecker.checkCompatible(image);
+            tiffChecker.check(image);
         });
 
         assertTrue(TiffCapturedImageChecker.corruptContent.equals(exception.getRejectedImage().getReason()));
@@ -57,7 +57,7 @@ public class TiffCapturedImageCheckerTest {
         File jpegImage = new File(_root, "otherFormat.jpeg");
 
         IncompatibleCapturedImage exception = assertThrows(IncompatibleCapturedImage.class, () -> {
-            tiffChecker.checkCompatible(jpegImage);
+            tiffChecker.check(jpegImage);
         });
 
         assertTrue(TiffCapturedImageChecker.badExtension.equals(exception.getRejectedImage().getReason()));
@@ -68,7 +68,7 @@ public class TiffCapturedImageCheckerTest {
         File nonExistent = new File(_root, "ThisFileDoesNotExist.jpeg");
 
         IncompatibleCapturedImage exception = assertThrows(IncompatibleCapturedImage.class, () -> {
-            tiffChecker.checkCompatible(nonExistent);
+            tiffChecker.check(nonExistent);
         });
 
         assertTrue(TiffCapturedImageChecker.notExist.equals(exception.getRejectedImage().getReason()));

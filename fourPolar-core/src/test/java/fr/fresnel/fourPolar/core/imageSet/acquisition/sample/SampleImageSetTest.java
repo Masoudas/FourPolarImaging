@@ -67,7 +67,7 @@ class DummyImageChecker implements ICapturedImageChecker {
     }
 
     @Override
-    public void checkCompatible(File imagePath) throws IncompatibleCapturedImage {
+    public void check(File imagePath) throws IncompatibleCapturedImage {
 
     }
 
