@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 
 public class ScaledShapeTest {
     @Test

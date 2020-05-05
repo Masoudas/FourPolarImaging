@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageChecker;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
-import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import io.scif.FormatException;
 import io.scif.ImageMetadata;
 import io.scif.Metadata;

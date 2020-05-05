@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.core.util.shape;
 import java.util.Arrays;
 import java.util.Objects;
 
-import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 
 /**

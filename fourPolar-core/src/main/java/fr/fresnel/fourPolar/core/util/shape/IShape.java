@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
-import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 
 /**
  * An interface that models a shape. A shape is a region of discrete

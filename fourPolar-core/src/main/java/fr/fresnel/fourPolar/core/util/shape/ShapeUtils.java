@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
-import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 
 /**
  * A set of utility methods for shape.

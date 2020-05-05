@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.physics.axis;
+package fr.fresnel.fourPolar.core.image.generic.axis;
 
 /**
  * Defines the order of axis associated with a data set. NO FURTHER ORDERS

@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.core.image.generic.metadata;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
-import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 
 /**
  * Implements the metadata. Note that all current and future metadata info are

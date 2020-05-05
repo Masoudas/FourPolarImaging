@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import net.imglib2.roi.geom.GeomMasks;
 import net.imglib2.roi.geom.real.PointMask;
 import net.imglib2.roi.geom.real.WritableBox;

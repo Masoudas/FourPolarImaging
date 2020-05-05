@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
-import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 
 /**
  * Using this builder, we can create {@link ICapturedImageFileSet} for images

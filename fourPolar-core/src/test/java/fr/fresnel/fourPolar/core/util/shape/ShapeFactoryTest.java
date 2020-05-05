@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import net.imglib2.Cursor;
 import net.imglib2.roi.Masks;
 import net.imglib2.roi.RealMaskRealInterval;

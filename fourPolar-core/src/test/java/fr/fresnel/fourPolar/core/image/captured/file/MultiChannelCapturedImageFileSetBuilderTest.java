@@ -9,10 +9,10 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
-import fr.fresnel.fourPolar.core.physics.axis.AxisOrder;
 import javassist.tools.reflect.CannotCreateException;
 
 public class MultiChannelCapturedImageFileSetBuilderTest {
