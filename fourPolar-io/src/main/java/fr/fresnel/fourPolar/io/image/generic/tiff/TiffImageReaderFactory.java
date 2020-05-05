@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.io.image.generic.tiff;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.Float32ImgLib2TiffImageReader;
@@ -29,13 +29,13 @@ public class TiffImageReaderFactory {
             throws NoReaderFoundForImage {
         ImageReader<T> reader;
 
-        if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == Type.UINT_16){
+        if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.UINT_16){
             reader = (ImageReader<T>) new UINT16ImgLib2TiffImageReader((ImgLib2ImageFactory)factory);
         }
-        else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == Type.FLOAT_32){
+        else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.FLOAT_32){
             reader = (ImageReader<T>) new Float32ImgLib2TiffImageReader((ImgLib2ImageFactory)factory); 
         } 
-        else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == Type.RGB_16){
+        else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.RGB_16){
             reader = (ImageReader<T>) new RGB16ImgLib2TiffImageReader((ImgLib2ImageFactory)factory); 
         }
         else{

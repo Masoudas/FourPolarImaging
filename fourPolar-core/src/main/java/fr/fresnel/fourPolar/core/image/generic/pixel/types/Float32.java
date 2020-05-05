@@ -55,8 +55,8 @@ public class Float32 implements RealType {
     }
 
     @Override
-    public Type getType() {
-        return Type.FLOAT_32;
+    public PixelTypes getType() {
+        return PixelTypes.FLOAT_32;
     }
 
     public static Float32 zero() {

@@ -56,8 +56,8 @@ public class UINT16 implements RealType {
     }
 
     @Override
-    public Type getType() {
-        return Type.UINT_16;
+    public PixelTypes getType() {
+        return PixelTypes.UINT_16;
     }
 
     /**

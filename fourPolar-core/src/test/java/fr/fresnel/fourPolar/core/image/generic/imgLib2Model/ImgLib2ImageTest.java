@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
@@ -47,7 +47,7 @@ public class ImgLib2ImageTest {
         ImgLib2Image<UINT16, UnsignedShortType> image = new ImgLib2Image<UINT16, UnsignedShortType>(img, converter,
                 null, metadata);
 
-        assertTrue(image.getPixelType() == Type.UINT_16);
+        assertTrue(image.getPixelType() == PixelTypes.UINT_16);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class ImgLib2ImageTest {
 
         ImgLib2Image<Float32, FloatType> image = new ImgLib2Image<Float32, FloatType>(img, converter, null, metadata);
 
-        assertTrue(image.getPixelType() == Type.FLOAT_32);
+        assertTrue(image.getPixelType() == PixelTypes.FLOAT_32);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ImgLib2ImageTest {
 
         ImgLib2Image<RGB16, ARGBType> image = new ImgLib2Image<RGB16, ARGBType>(img, converter, null, metadata);
 
-        assertTrue(image.getPixelType() == Type.RGB_16);
+        assertTrue(image.getPixelType() == PixelTypes.RGB_16);
     }
 
     @Test

@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import net.imglib2.type.NativeType;
 
 /**
@@ -25,5 +25,5 @@ public interface TypeConverter<T extends PixelType, U extends NativeType<U>> {
     /**
      * Returns the {@link PixelType} that would be used for this converter.
      */
-    public Type getPixelType();
+    public PixelTypes getPixelType();
 }

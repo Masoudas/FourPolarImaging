@@ -8,7 +8,7 @@ public interface PixelType {
      * Returns the type of the pixel
      * @return
      */
-    public Type getType();
+    public PixelTypes getType();
 
     /**
      * Returns a new reference, with the current value (a deep copy).

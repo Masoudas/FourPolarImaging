@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import net.imglib2.Cursor;
 import net.imglib2.img.Img;
 import net.imglib2.type.NativeType;
@@ -67,7 +67,7 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
     }
 
     @Override
-    public Type getPixelType() {
+    public PixelTypes getPixelType() {
         return this._tConverter.getPixelType();
     }
 

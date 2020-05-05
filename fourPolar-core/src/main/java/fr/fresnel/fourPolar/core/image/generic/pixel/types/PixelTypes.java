@@ -1,14 +1,14 @@
 package fr.fresnel.fourPolar.core.image.generic.pixel.types;
 
-public enum Type {
+public enum PixelTypes {
     FLOAT_32, RGB_16, UINT_16;
 
     /**
-     * Returns an appropriate zero value instance of the {@link Type}
+     * Returns an appropriate zero value instance of the {@link PixelTypes}
      * 
      * @return
      */
-    public static PixelType create(Type type) {
+    public static PixelType create(PixelTypes type) {
         PixelType pixelType = null;
         switch (type) {
             case FLOAT_32:

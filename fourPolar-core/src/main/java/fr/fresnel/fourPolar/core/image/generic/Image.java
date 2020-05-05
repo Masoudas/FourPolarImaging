@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.image.generic;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.Type;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 
 public interface Image<T extends PixelType> {
     /**
@@ -44,7 +44,7 @@ public interface Image<T extends PixelType> {
      * 
      * @return
      */
-    public Type getPixelType();
+    public PixelTypes getPixelType();
 
     /**
      * Returns the {@link ImageFactory} associated with this image.

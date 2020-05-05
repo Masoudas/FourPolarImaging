@@ -76,8 +76,8 @@ public class RGB16 implements PixelType {
     }
 
     @Override
-    public Type getType() {
-        return Type.RGB_16;
+    public PixelTypes getType() {
+        return PixelTypes.RGB_16;
     }
 
     /**
