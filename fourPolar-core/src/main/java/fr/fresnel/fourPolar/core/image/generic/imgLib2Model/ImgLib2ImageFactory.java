@@ -136,17 +136,18 @@ public class ImgLib2ImageFactory implements ImageFactory {
 
     @Override
     public <T extends PixelType> Image<T> create(IMetadata metadata, T pixelType) {
+        IMetadata metadataCP = new Metadata.MetadataBuilder(metadata).build();
         Image<T> _image = null;
         switch (pixelType.getType()) {
             case UINT_16:
                 try {
                     UnsignedShortType type = new UnsignedShortType();
-                    Img<UnsignedShortType> img = _chooseImgFactory(metadata.getDim(), type);
+                    Img<UnsignedShortType> img = _chooseImgFactory(metadataCP.getDim(), type);
                     TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory
                             .getConverter(UINT16.zero(), type);
 
                     _image = new ImgLib2Image<T, UnsignedShortType>(img,
-                            (TypeConverter<T, UnsignedShortType>) converter, this, metadata);
+                            (TypeConverter<T, UnsignedShortType>) converter, this, metadataCP);
                 } catch (ConverterNotFound e) {
                     // Exception never caught, because of proper creation of image.
                 }
@@ -155,12 +156,12 @@ public class ImgLib2ImageFactory implements ImageFactory {
             case FLOAT_32:
                 try {
                     FloatType type = new FloatType();
-                    Img<FloatType> img = _chooseImgFactory(metadata.getDim(), type);
+                    Img<FloatType> img = _chooseImgFactory(metadataCP.getDim(), type);
                     TypeConverter<Float32, FloatType> converter = TypeConverterFactory.getConverter(Float32.zero(),
                             type);
 
                     _image = new ImgLib2Image<T, FloatType>(img, (TypeConverter<T, FloatType>) converter, this,
-                            metadata);
+                            metadataCP);
                 } catch (ConverterNotFound e) {
                     // Exception never caught, because of proper creation of image.
                 }
@@ -169,10 +170,10 @@ public class ImgLib2ImageFactory implements ImageFactory {
             case RGB_16:
                 try {
                     ARGBType type = new ARGBType();
-                    Img<ARGBType> img = _chooseImgFactory(metadata.getDim(), type);
+                    Img<ARGBType> img = _chooseImgFactory(metadataCP.getDim(), type);
                     TypeConverter<RGB16, ARGBType> converter = TypeConverterFactory.getConverter(RGB16.zero(), type);
 
-                    _image = new ImgLib2Image<T, ARGBType>(img, (TypeConverter<T, ARGBType>) converter, this, metadata);
+                    _image = new ImgLib2Image<T, ARGBType>(img, (TypeConverter<T, ARGBType>) converter, this, metadataCP);
                 } catch (ConverterNotFound e) {
                     // Exception never caught, because of proper creation of image.
                 }
