@@ -22,7 +22,6 @@ public class Metadata implements IMetadata {
     public static class MetadataBuilder {
         private final long[] _dim;
         private AxisOrder _axisOrder = AxisOrder.NoOrder;
-        private int _numChannels = 0;
         private int _bitPerPixel;
 
         /**
@@ -44,8 +43,6 @@ public class Metadata implements IMetadata {
         public MetadataBuilder(IMetadata metadata) {
             this._dim = metadata.getDim();
             this.axisOrder(metadata.axisOrder());
-            this.numChannels(metadata.numChannels());
-            this.bitPerPixel(metadata.bitPerPixel());
         }
 
         public MetadataBuilder axisOrder(AxisOrder axisOrder) {
@@ -54,14 +51,6 @@ public class Metadata implements IMetadata {
             }
 
             this._axisOrder = Objects.requireNonNull(axisOrder, "axisOrder must not be null");
-            return this;
-        }
-
-        public MetadataBuilder numChannels(int n) {
-            if (n < 0) {
-                throw new IllegalArgumentException("Number of channels must be greater than equal zero.");
-            }
-            this._numChannels = n;
             return this;
         }
 
@@ -92,8 +81,7 @@ public class Metadata implements IMetadata {
         }
 
         public IMetadata build() {
-            if (this._axisOrder != AxisOrder.NoOrder
-                    && (this._numChannels > 0 && AxisOrder.getChannelAxis(this._axisOrder) < 0)) {
+            if (this._axisOrder != AxisOrder.NoOrder) {
                 throw new IllegalArgumentException("No channel in AxisOrder for channels > 1");
             }
             return new Metadata(this);
@@ -102,9 +90,9 @@ public class Metadata implements IMetadata {
 
     private Metadata(MetadataBuilder builder) {
         this._axisOrder = builder._axisOrder;
-        this._numChannels = builder._numChannels;
         this._dim = builder._dim;
         this._bitPerPixel = builder._bitPerPixel;
+        this._numChannels = (int)this._dim[AxisOrder.getChannelAxis(this._axisOrder)];
     }
 
     @Override
@@ -114,10 +102,6 @@ public class Metadata implements IMetadata {
 
     @Override
     public int numChannels() {
-        if (this._axisOrder == AxisOrder.NoOrder) {
-            return -1;
-        }
-
         return this._numChannels;
     }
 
