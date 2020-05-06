@@ -12,8 +12,11 @@ import io.scif.ImageMetadata;
 import io.scif.Metadata;
 import io.scif.Reader;
 import io.scif.SCIFIO;
+import io.scif.formats.TIFFFormat.Writer;
+import io.scif.formats.tiff.TiffSaver;
 import io.scif.util.FormatTools;
 import net.imagej.axis.AxisType;
+import net.imagej.axis.DefaultAxisType;
 
 /**
  * A class for checking the compatibility of a tiff image with the software
@@ -104,11 +107,16 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
     public static void main(String[] args) throws FormatException, IOException {
         final SCIFIO scifio = new SCIFIO();
         final Reader reader = scifio.initializer()
-                .initializeReader("/home/masoud/Documents/SampleImages/126-Phospho_H3_Bod1_siRNA.oe.tiff");
+                .initializeReader("/home/masoud/Documents/SampleImages/AffPAmsf.tif");
         final Metadata meta = reader.getMetadata();
 
         final ImageMetadata iMeta = meta.get(0);
+        iMeta.getBitsPerPixel();
+        iMeta.getAxes().get(0).type().getLabel();
+        DefaultAxisType type = new DefaultAxisType("Channel");
         // iMeta.getAxes().get(0).type()
+
+        
         long[] axis = iMeta.getAxesLengths();
         System.out.println(axis);
     }
