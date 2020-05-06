@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.io.image.generic;
 import java.io.File;
 import java.io.IOException;
 
+import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 
 /**
@@ -16,7 +17,7 @@ public interface IMetadataReader {
      * @param imageFile
      * @return
      */
-    public IMetadata read(File imageFile) throws IOException;
+    public IMetadata read(File imageFile) throws IOException, UnsupportedAxisOrder;
 
     /**
      * Close all resources associated with this reader.
