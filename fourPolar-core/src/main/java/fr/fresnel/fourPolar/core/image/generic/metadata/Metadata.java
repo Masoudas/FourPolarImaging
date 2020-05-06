@@ -46,7 +46,7 @@ public class Metadata implements IMetadata {
         }
 
         public MetadataBuilder axisOrder(AxisOrder axisOrder) {
-            if (AxisOrder.getNumDefinedAxis(axisOrder) != this._dim.length) {
+            if (axisOrder != AxisOrder.NoOrder && AxisOrder.getNumDefinedAxis(axisOrder) != this._dim.length) {
                 throw new IllegalArgumentException("Number of axis does not equal image dimension.");
             }
 
@@ -81,9 +81,6 @@ public class Metadata implements IMetadata {
         }
 
         public IMetadata build() {
-            if (this._axisOrder != AxisOrder.NoOrder) {
-                throw new IllegalArgumentException("No channel in AxisOrder for channels > 1");
-            }
             return new Metadata(this);
         }
     }
@@ -92,7 +89,15 @@ public class Metadata implements IMetadata {
         this._axisOrder = builder._axisOrder;
         this._dim = builder._dim;
         this._bitPerPixel = builder._bitPerPixel;
-        this._numChannels = (int)this._dim[AxisOrder.getChannelAxis(this._axisOrder)];
+
+        int channelAxis = AxisOrder.getChannelAxis(this._axisOrder);
+        if (channelAxis > 0)
+        {
+            this._numChannels = (int)this._dim[AxisOrder.getChannelAxis(this._axisOrder)];
+        }
+        else{
+            this._numChannels = 0;
+        }
     }
 
     @Override
