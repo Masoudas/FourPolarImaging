@@ -8,6 +8,7 @@ import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
 import io.scif.config.SCIFIOConfig;
 import io.scif.formats.TIFFFormat.Metadata;
 import io.scif.formats.TIFFFormat.Reader;
+import io.scif.formats.TIFFFormat.Writer;
 
 /**
  * Reads metadata of a tiff image using SCIFIO library.
@@ -19,7 +20,7 @@ public class SCIFIOMetadataReader implements IMetadataReader {
     public SCIFIOMetadataReader() {
         this._config = _setSCFIOConfig();
         this._reader = new Reader<>();
-
+        
     }
 
     @Override

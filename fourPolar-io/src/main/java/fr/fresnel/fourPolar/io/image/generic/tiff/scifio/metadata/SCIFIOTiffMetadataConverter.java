@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata;
 import java.util.Iterator;
 import java.util.List;
 
-import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.AxisOrderUndefined;
+import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
@@ -21,10 +21,10 @@ public class SCIFIOTiffMetadataConverter {
     /**
      * Convert from SCIFIO metadata
      * 
-     * @throws AxisOrderUndefined in case the underlying image has an undefined axis
+     * @throws UnsupportedAxisOrder in case the underlying image has an undefined axis
      *                            order.
      */
-    public static IMetadata convertFrom(ImageMetadata SCIFIOMetadata) throws AxisOrderUndefined {
+    public static IMetadata convertFrom(ImageMetadata SCIFIOMetadata) throws UnsupportedAxisOrder {
         long[] dim = SCIFIOMetadata.getAxesLengths();
         int bitDepth = SCIFIOMetadata.getBitsPerPixel();
         AxisOrder axisOrder = _getAxisOrder(SCIFIOMetadata.getAxes());
@@ -54,8 +54,8 @@ public class SCIFIOTiffMetadataConverter {
     /**
      * Returns {@link AxisOrder} from the given axisList.
      */
-    private static AxisOrder _getAxisOrder(List<CalibratedAxis> axisList) throws AxisOrderUndefined {
-        String axisOrder = null;
+    private static AxisOrder _getAxisOrder(List<CalibratedAxis> axisList) throws UnsupportedAxisOrder {
+        String axisOrder = "";
 
         boolean undefAxis = true;
         for (Iterator<CalibratedAxis> itr = axisList.iterator(); itr.hasNext() && undefAxis;) {
@@ -63,10 +63,12 @@ public class SCIFIOTiffMetadataConverter {
             if (axisName.equals(Axes.CHANNEL.getLabel())) {
                 axisOrder += "C";
             } else if (axisName.equals(Axes.TIME.getLabel())) {
-                axisOrder += axisName;
+                axisOrder += "T";
             } else if (axisName.equals(Axes.UNKNOWN_LABEL)) {
                 undefAxis = false;
                 axisOrder = "NoOrder";
+            } else {
+                axisOrder += axisName;
             }
         }
         return AxisOrder.fromString(axisOrder);
