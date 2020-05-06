@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -8,7 +7,6 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.AxisOrderUndefine
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.IncompatibleMetadata;
 import io.scif.ImageMetadata;
 import net.imagej.axis.Axes;
 import net.imagej.axis.AxisType;

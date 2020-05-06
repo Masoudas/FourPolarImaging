@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.core.image.generic.axis;
 
-import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.AxisOrderUndefined;
+import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 
 /**
  * Defines the order of axis associated with a data set. NO FURTHER ORDERS
@@ -87,11 +87,11 @@ public enum AxisOrder {
 
     }
 
-    public static AxisOrder fromString(String axisOrder) throws AxisOrderUndefined {
+    public static AxisOrder fromString(String axisOrder) throws UnsupportedAxisOrder {
         try {
             return AxisOrder.valueOf(axisOrder);     
         } catch (IllegalArgumentException e) {
-            throw new AxisOrderUndefined();
+            throw new UnsupportedAxisOrder();
         }
     }
 }
