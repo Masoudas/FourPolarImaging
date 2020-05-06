@@ -13,20 +13,19 @@ public interface IMetadata {
     public AxisOrder axisOrder();
 
     /**
-     * Returns number of channels associated with the image. If no {@link AxisOrder} is
-     * defined, returns -1.
+     * Returns number of channels associated with the image. If no {@link AxisOrder}
+     * is defined, returns -1.
      */
     public int numChannels();
 
     /**
-     * Get the pixel type associated with the image.
+     * Get number of bits per pixel.
      */
-    public PixelTypes getPixelType();
+    public int bitPerPixel();
 
     /**
      * Get dimension of the associated image.
      */
     public long[] getDim();
 
-    
 }

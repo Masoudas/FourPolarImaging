@@ -13,26 +13,25 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 public class Metadata implements IMetadata {
     private final AxisOrder _axisOrder;
     private final int _numChannels;
-    private final PixelTypes _pixelType;
     private final long[] _dim;
+    private final int _bitPerPixel;
 
     /**
      * Build metadata.
      */
     public static class MetadataBuilder {
+        private final long[] _dim;
         private AxisOrder _axisOrder = AxisOrder.NoOrder;
         private int _numChannels = 0;
-        private final PixelTypes _pixelType;
-        private final long[] _dim;
+        private int _bitPerPixel;
 
         /**
          * Build metadata from scratch.
          * 
          * @param pixelType is the desired pixel type.
-         * @param dim is the dimension of the underlying image.
+         * @param dim       is the dimension of the underlying image.
          */
-        public MetadataBuilder(PixelTypes pixelType, long[] dim) {
-            this._pixelType = Objects.requireNonNull(pixelType, "pixelType can't be null.");
+        public MetadataBuilder(long[] dim) {
             this._dim = Objects.requireNonNull(dim, "dim can't be null.");
         }
 
@@ -44,13 +43,12 @@ public class Metadata implements IMetadata {
          */
         public MetadataBuilder(IMetadata metadata) {
             this._dim = metadata.getDim();
-            this._pixelType = metadata.getPixelType();
             this.axisOrder(metadata.axisOrder());
             this.numChannels(metadata.numChannels());
         }
 
         public MetadataBuilder axisOrder(AxisOrder axisOrder) {
-            if (AxisOrder.getNumDefinedAxis(axisOrder) != this._dim.length){
+            if (AxisOrder.getNumDefinedAxis(axisOrder) != this._dim.length) {
                 throw new IllegalArgumentException("Number of axis does not equal image dimension.");
             }
 
@@ -63,6 +61,32 @@ public class Metadata implements IMetadata {
                 throw new IllegalArgumentException("Number of channels must be greater than equal zero.");
             }
             this._numChannels = n;
+            return this;
+        }
+
+        /**
+         * Set bit per pixel directly. There's no guarantee that the underlying image
+         * would have the same bit-depth as specified. Use
+         * {@link #bitPerPixel(PixelTypes)} for known types.
+         */
+        public MetadataBuilder bitPerPixel(int n) {
+            this._bitPerPixel = n;
+
+            return this;
+        }
+
+        /**
+         * Set bit per pixel from the {@link PixelTypes}.
+         */
+        public MetadataBuilder bitPerPixel(PixelTypes pixelType) {
+            if (pixelType == PixelTypes.UINT_16) {
+                this._bitPerPixel = 16;
+            } else if (pixelType == PixelTypes.FLOAT_32) {
+                this._bitPerPixel = 32;
+            } else if (pixelType == PixelTypes.RGB_16) {
+                this._bitPerPixel = 8;
+            }
+
             return this;
         }
 
@@ -79,7 +103,7 @@ public class Metadata implements IMetadata {
         this._axisOrder = builder._axisOrder;
         this._numChannels = builder._numChannels;
         this._dim = builder._dim;
-        this._pixelType = builder._pixelType;
+        this._bitPerPixel = builder._bitPerPixel;
     }
 
     @Override
@@ -97,13 +121,13 @@ public class Metadata implements IMetadata {
     }
 
     @Override
-    public PixelTypes getPixelType() {
-        return this._pixelType;
+    public long[] getDim() {
+        return this._dim;
     }
 
     @Override
-    public long[] getDim() {
-        return this._dim;
+    public int bitPerPixel() {
+        return this._bitPerPixel;
     }
 
 }
