@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.io.image.generic;
 
 import java.io.File;
+import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 
@@ -15,6 +16,11 @@ public interface IMetadataReader {
      * @param imageFile
      * @return
      */
-    public IMetadata read(File imageFile);
+    public IMetadata read(File imageFile) throws IOException;
+
+    /**
+     * Close all resources associated with this reader.
+     */
+    public void close() throws IOException;
 
 }
