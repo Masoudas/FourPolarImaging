@@ -22,6 +22,6 @@ public interface ImageFactory {
      * @throws IllegalArgumentException if there's inconsitency between the metadata
      *                                  and pixelType
      */
-    public <T extends PixelType> Image<T> create(IMetadata metadata) throws IllegalArgumentException;
+    public <T extends PixelType> Image<T> create(IMetadata metadata, T pixelType) throws IllegalArgumentException;
 
 }

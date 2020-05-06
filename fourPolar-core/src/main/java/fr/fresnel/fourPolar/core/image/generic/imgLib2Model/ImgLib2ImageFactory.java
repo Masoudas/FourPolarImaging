@@ -29,8 +29,8 @@ import net.imglib2.util.Util;
 public class ImgLib2ImageFactory implements ImageFactory {
     @Override
     public <T extends PixelType> Image<T> create(long[] dim, T pixelType) {
-        IMetadata defaultMetadata = new Metadata.MetadataBuilder(pixelType.getType(), dim).build();
-        return this.create(defaultMetadata);
+        IMetadata defaultMetadata = new Metadata.MetadataBuilder(dim).bitPerPixel(pixelType.getType()).build();
+        return this.create(defaultMetadata, pixelType);
     }
 
     /**
@@ -42,7 +42,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
      */
     public Image<UINT16> create(Img<UnsignedShortType> img, UnsignedShortType imgLib2Type) {
         long[] dim = _getDimFromImg(img);
-        IMetadata defaulMetadata = new Metadata.MetadataBuilder(PixelTypes.UINT_16, dim).build();
+        IMetadata defaulMetadata = new Metadata.MetadataBuilder(dim).bitPerPixel(PixelTypes.UINT_16).build();
         return this.create(img, imgLib2Type, defaulMetadata);
     }
 
@@ -71,7 +71,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
      */
     public Image<Float32> create(Img<FloatType> img, FloatType imgLib2Type) {
         long[] dim = _getDimFromImg(img);
-        IMetadata defaulMetadata = new Metadata.MetadataBuilder(PixelTypes.FLOAT_32, dim).build();
+        IMetadata defaulMetadata = new Metadata.MetadataBuilder(dim).bitPerPixel(PixelTypes.FLOAT_32).build();
 
         return this.create(img, imgLib2Type, defaulMetadata);
     }
@@ -101,7 +101,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
      */
     public Image<RGB16> create(Img<ARGBType> img, ARGBType imgLib2Type) {
         long[] dim = _getDimFromImg(img);
-        IMetadata defaulMetadata = new Metadata.MetadataBuilder(PixelTypes.RGB_16, dim).build();
+        IMetadata defaulMetadata = new Metadata.MetadataBuilder(dim).bitPerPixel(PixelTypes.RGB_16).build();
         return this.create(img, imgLib2Type, defaulMetadata);
     }
 
@@ -135,9 +135,9 @@ public class ImgLib2ImageFactory implements ImageFactory {
     }
 
     @Override
-    public <T extends PixelType> Image<T> create(IMetadata metadata) {
+    public <T extends PixelType> Image<T> create(IMetadata metadata, T pixelType) {
         Image<T> _image = null;
-        switch (metadata.getPixelType()) {
+        switch (pixelType.getType()) {
             case UINT_16:
                 try {
                     UnsignedShortType type = new UnsignedShortType();
