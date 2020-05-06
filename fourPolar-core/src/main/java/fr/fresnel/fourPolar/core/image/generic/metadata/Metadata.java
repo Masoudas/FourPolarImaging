@@ -45,6 +45,7 @@ public class Metadata implements IMetadata {
             this._dim = metadata.getDim();
             this.axisOrder(metadata.axisOrder());
             this.numChannels(metadata.numChannels());
+            this.bitPerPixel(metadata.bitPerPixel());
         }
 
         public MetadataBuilder axisOrder(AxisOrder axisOrder) {
