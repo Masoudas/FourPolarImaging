@@ -6,9 +6,9 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.Float32ImgLib2TiffImageWriter;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.RGB16ImgLib2TiffImageWriter;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.UINT16ImgLib2TiffImageWriter;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.Float32SCIFIOTiffImageWriter;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.RGB16SCIFIOTiffImageWriter;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.UINT16SCIFIOTiffImageWriter;
  
 /**
  * A factory to get a proper writer for the given implementation of
@@ -28,13 +28,13 @@ public class TiffImageWriterFactory {
         ImageWriter<T> writer;
 
         if (image instanceof ImgLib2Image && pixelType.getType() == PixelTypes.UINT_16){
-            writer = (ImageWriter<T>)new UINT16ImgLib2TiffImageWriter();
+            writer = (ImageWriter<T>)new UINT16SCIFIOTiffImageWriter();
         }
         else if (image instanceof ImgLib2Image && pixelType.getType() == PixelTypes.FLOAT_32){
-            writer = (ImageWriter<T>)new Float32ImgLib2TiffImageWriter();
+            writer = (ImageWriter<T>)new Float32SCIFIOTiffImageWriter();
         }
         else if (image instanceof ImgLib2Image && pixelType.getType() == PixelTypes.RGB_16){
-            writer = (ImageWriter<T>)new RGB16ImgLib2TiffImageWriter();
+            writer = (ImageWriter<T>)new RGB16SCIFIOTiffImageWriter();
         }
         else{
             throw new NoWriterFoundForImage();

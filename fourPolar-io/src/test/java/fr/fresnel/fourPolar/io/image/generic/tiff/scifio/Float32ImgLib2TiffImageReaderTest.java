@@ -28,7 +28,7 @@ public class Float32ImgLib2TiffImageReaderTest {
     public void read_Float32Image_ShouldShowImage()
             throws IOException, InterruptedException, ConverterToImgLib2NotFound {
         File path = new File(_testResource, "Float32Image.tif");
-        Float32ImgLib2TiffImageReader reader = new Float32ImgLib2TiffImageReader(new ImgLib2ImageFactory());
+        Float32SCIFIOTiffImageReader reader = new Float32SCIFIOTiffImageReader(new ImgLib2ImageFactory());
         Image<Float32> img = reader.read(path);
 
         ImageJFunctions.show(ImageToImgLib2Converter.getImg(img, Float32.zero()));
@@ -39,7 +39,7 @@ public class Float32ImgLib2TiffImageReaderTest {
     public void read_SameImageTenThousandTimes_ShouldNotRunOutOfResource() throws IllegalArgumentException, IOException,
             InterruptedException, KeyException, IncompatibleCapturedImage {
         File path = new File(_testResource, "Float32Image.tif");
-        Float32ImgLib2TiffImageReader reader = new Float32ImgLib2TiffImageReader(new ImgLib2ImageFactory());
+        Float32SCIFIOTiffImageReader reader = new Float32SCIFIOTiffImageReader(new ImgLib2ImageFactory());
 
         for (int i = 0; i < 10000; i++) {
             reader.read(path);

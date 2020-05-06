@@ -38,13 +38,13 @@ public class RGB16ImgLib2TiffImageWriterTest {
             cursor.setPixel(new Pixel<RGB16>(_pixel));
         }
 
-        RGB16ImgLib2TiffImageWriter writer = new RGB16ImgLib2TiffImageWriter();
+        RGB16SCIFIOTiffImageWriter writer = new RGB16SCIFIOTiffImageWriter();
         
         writer.write(destination, image);
         writer.close();
 
         
-        Image<RGB16> diskImage = new RGB16ImgLib2TiffImageReader(_factory).read(destination);
+        Image<RGB16> diskImage = new RGB16SCIFIOTiffImageReader(_factory).read(destination);
 
         boolean equals = true;
         IPixelCursor<RGB16> diskCursor = diskImage.getCursor();

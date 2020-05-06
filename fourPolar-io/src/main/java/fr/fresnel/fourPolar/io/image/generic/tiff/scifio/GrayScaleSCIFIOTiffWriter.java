@@ -18,7 +18,7 @@ import io.scif.FormatException;
  * 
  * @param <T> extends Pixel type.
  */
-public abstract class GrayScaleImgLib2TiffWriter<T extends PixelType> implements ImageWriter<T> {
+public abstract class GrayScaleSCIFIOTiffWriter<T extends PixelType> implements ImageWriter<T> {
     final protected ImgSaver _saver;
     final protected SCIFIOConfig _config;
     protected Writer _writer;
@@ -28,7 +28,7 @@ public abstract class GrayScaleImgLib2TiffWriter<T extends PixelType> implements
      * This constructor creates the save once, which can be used as many times as
      * desired for saving different images of the same time.
      */
-    GrayScaleImgLib2TiffWriter() {
+    GrayScaleSCIFIOTiffWriter() {
         this._saver = new ImgSaver();
         this._config = this._setSCFIOConfig();
 

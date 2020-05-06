@@ -28,12 +28,12 @@ public class UINT16ImgLib2TiffImageWriterTest {
         File destination = new File(_root, "UINT16Image.tif");
 
         Image<UINT16> image = _factory.create(_dim, UINT16.zero());
-        UINT16ImgLib2TiffImageWriter writer = new UINT16ImgLib2TiffImageWriter();
+        UINT16SCIFIOTiffImageWriter writer = new UINT16SCIFIOTiffImageWriter();
         writer.write(destination, image);
         writer.close();
 
         
-        Image<UINT16> diskImage = new UINT16ImgLib2TiffImageReader(_factory).read(destination);
+        Image<UINT16> diskImage = new UINT16SCIFIOTiffImageReader(_factory).read(destination);
 
         assertTrue(
             diskImage.getMetadata().getDim()[0] == _dim[0] && 
@@ -45,7 +45,7 @@ public class UINT16ImgLib2TiffImageWriterTest {
     @Test
     public void write_WriteMultipleFiles_DiskImageHasSameDimensions() throws IOException {
         Image<UINT16> image = _factory.create(_dim, UINT16.zero());
-        UINT16ImgLib2TiffImageWriter writer = new UINT16ImgLib2TiffImageWriter();
+        UINT16SCIFIOTiffImageWriter writer = new UINT16SCIFIOTiffImageWriter();
         File destination = new File(_root, "UINT16Image.tif");
 
         for (int i = 0; i < 10000; i++) {
@@ -53,7 +53,7 @@ public class UINT16ImgLib2TiffImageWriterTest {
         }
         writer.close();
 
-        Image<UINT16> diskImage = new UINT16ImgLib2TiffImageReader(_factory).read(destination);
+        Image<UINT16> diskImage = new UINT16SCIFIOTiffImageReader(_factory).read(destination);
 
         assertTrue(
             diskImage.getMetadata().getDim()[0] == _dim[0] && 

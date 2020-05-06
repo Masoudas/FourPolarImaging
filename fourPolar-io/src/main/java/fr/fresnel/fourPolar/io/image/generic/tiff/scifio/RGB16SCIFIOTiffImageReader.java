@@ -22,7 +22,7 @@ import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.util.Util;
 
-public class RGB16ImgLib2TiffImageReader implements ImageReader<RGB16> {
+public class RGB16SCIFIOTiffImageReader implements ImageReader<RGB16> {
     final private SCIFIOConfig _config;
     private Reader _reader;
     final private ImgOpener _imgOpener;
@@ -31,7 +31,7 @@ public class RGB16ImgLib2TiffImageReader implements ImageReader<RGB16> {
     final UnsignedByteType _readType = new UnsignedByteType();
     final ARGBType _argbType = new ARGBType();
 
-    public RGB16ImgLib2TiffImageReader(ImgLib2ImageFactory factory) {
+    public RGB16SCIFIOTiffImageReader(ImgLib2ImageFactory factory) {
         this._config = _setSCFIOConfig();
         this._imgOpener = new ImgOpener();
         this._imgFactory = factory;

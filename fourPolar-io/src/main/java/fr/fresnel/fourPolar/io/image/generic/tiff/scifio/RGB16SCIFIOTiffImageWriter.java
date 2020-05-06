@@ -23,7 +23,7 @@ import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.util.Util;
 
-public class RGB16ImgLib2TiffImageWriter implements ImageWriter<RGB16> {
+public class RGB16SCIFIOTiffImageWriter implements ImageWriter<RGB16> {
     final private ImgSaver _saver;
     final private SCIFIOConfig _config;
     private Writer _writer;
@@ -31,7 +31,7 @@ public class RGB16ImgLib2TiffImageWriter implements ImageWriter<RGB16> {
     final UnsignedByteType _readType = new UnsignedByteType();
     final ARGBType _argbType = new ARGBType();
 
-    public RGB16ImgLib2TiffImageWriter() {
+    public RGB16SCIFIOTiffImageWriter() {
         this._saver = new ImgSaver();
         this._config = this._setSCFIOConfig();
 

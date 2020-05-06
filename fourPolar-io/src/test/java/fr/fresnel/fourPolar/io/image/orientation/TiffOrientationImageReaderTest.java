@@ -17,7 +17,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.Float32ImgLib2TiffImageWriter;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.Float32SCIFIOTiffImageWriter;
 import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageFileSet;
 
 public class TiffOrientationImageReaderTest {
@@ -36,7 +36,7 @@ public class TiffOrientationImageReaderTest {
         Image<Float32> delta = new ImgLib2ImageFactory().create(dim, Float32.zero());
         Image<Float32> eta = new ImgLib2ImageFactory().create(dim, Float32.zero());
 
-        Float32ImgLib2TiffImageWriter writer = new Float32ImgLib2TiffImageWriter();
+        Float32SCIFIOTiffImageWriter writer = new Float32SCIFIOTiffImageWriter();
         writer.write(fSet.getFile(OrientationAngle.rho), rho);
         writer.write(fSet.getFile(OrientationAngle.delta), delta);
         writer.write(fSet.getFile(OrientationAngle.eta), eta);

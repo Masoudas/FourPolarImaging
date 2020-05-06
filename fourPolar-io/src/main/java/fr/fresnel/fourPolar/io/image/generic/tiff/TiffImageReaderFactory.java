@@ -6,9 +6,9 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.Float32ImgLib2TiffImageReader;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.RGB16ImgLib2TiffImageReader;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.UINT16ImgLib2TiffImageReader;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.Float32SCIFIOTiffImageReader;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.RGB16SCIFIOTiffImageReader;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.UINT16SCIFIOTiffImageReader;
 
 /**
  * A factory to get a proper writer for the given implementation of
@@ -30,13 +30,13 @@ public class TiffImageReaderFactory {
         ImageReader<T> reader;
 
         if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.UINT_16){
-            reader = (ImageReader<T>) new UINT16ImgLib2TiffImageReader((ImgLib2ImageFactory)factory);
+            reader = (ImageReader<T>) new UINT16SCIFIOTiffImageReader((ImgLib2ImageFactory)factory);
         }
         else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.FLOAT_32){
-            reader = (ImageReader<T>) new Float32ImgLib2TiffImageReader((ImgLib2ImageFactory)factory); 
+            reader = (ImageReader<T>) new Float32SCIFIOTiffImageReader((ImgLib2ImageFactory)factory); 
         } 
         else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.RGB_16){
-            reader = (ImageReader<T>) new RGB16ImgLib2TiffImageReader((ImgLib2ImageFactory)factory); 
+            reader = (ImageReader<T>) new RGB16SCIFIOTiffImageReader((ImgLib2ImageFactory)factory); 
         }
         else{
             throw new NoReaderFoundForImage();

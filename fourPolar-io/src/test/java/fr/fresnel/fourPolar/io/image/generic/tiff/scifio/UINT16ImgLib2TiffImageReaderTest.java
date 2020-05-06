@@ -28,7 +28,7 @@ public class UINT16ImgLib2TiffImageReaderTest {
     public void read_UINT16Image_ShouldShowImage()
             throws IOException, InterruptedException, ConverterToImgLib2NotFound {
         File path = new File(_testResource, "UINT16Image.tif");   
-        UINT16ImgLib2TiffImageReader reader = new UINT16ImgLib2TiffImageReader(new ImgLib2ImageFactory());
+        UINT16SCIFIOTiffImageReader reader = new UINT16SCIFIOTiffImageReader(new ImgLib2ImageFactory());
         Image<UINT16> img = reader.read(path);
         
         ImageJFunctions.show(ImageToImgLib2Converter.getImg(img, UINT16.zero()));
@@ -40,7 +40,7 @@ public class UINT16ImgLib2TiffImageReaderTest {
     public void read_SameImageTenThousandTimes_ShouldNotRunOutOfResource()
             throws IllegalArgumentException, IOException, InterruptedException, KeyException, IncompatibleCapturedImage {
         File path = new File(_testResource, "UINT16Image.tif");   
-        UINT16ImgLib2TiffImageReader reader = new UINT16ImgLib2TiffImageReader(new ImgLib2ImageFactory());
+        UINT16SCIFIOTiffImageReader reader = new UINT16SCIFIOTiffImageReader(new ImgLib2ImageFactory());
         
         for (int i = 0; i < 10000; i++) {
             reader.read(path);

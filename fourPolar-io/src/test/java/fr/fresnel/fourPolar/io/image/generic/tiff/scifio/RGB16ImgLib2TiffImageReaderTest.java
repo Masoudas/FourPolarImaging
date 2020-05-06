@@ -20,7 +20,7 @@ public class RGB16ImgLib2TiffImageReaderTest {
 
         ImgLib2ImageFactory factory = new ImgLib2ImageFactory();
 
-        Image<RGB16> img = new RGB16ImgLib2TiffImageReader(factory).read(path);
+        Image<RGB16> img = new RGB16SCIFIOTiffImageReader(factory).read(path);
 
         IPixelCursor<RGB16> cursor = img.getCursor();
 

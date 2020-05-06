@@ -17,7 +17,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.UINT16ImgLib2TiffImageWriter;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.UINT16SCIFIOTiffImageWriter;
 import fr.fresnel.fourPolar.io.image.polarization.file.TiffPolarizationImageFileSet;
 
 public class TiffPolarizationImageSetReaderTest {
@@ -37,7 +37,7 @@ public class TiffPolarizationImageSetReaderTest {
         Image<UINT16> pol90 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
         Image<UINT16> pol135 = new ImgLib2ImageFactory().create(dim, UINT16.zero());
 
-        UINT16ImgLib2TiffImageWriter writer = new UINT16ImgLib2TiffImageWriter();
+        UINT16SCIFIOTiffImageWriter writer = new UINT16SCIFIOTiffImageWriter();
         writer.write(fSet.getFile(Polarization.pol0), pol0);
         writer.write(fSet.getFile(Polarization.pol45), pol45);
         writer.write(fSet.getFile(Polarization.pol90), pol90);
