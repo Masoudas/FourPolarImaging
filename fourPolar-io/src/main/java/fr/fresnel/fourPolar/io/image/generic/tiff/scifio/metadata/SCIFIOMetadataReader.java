@@ -6,6 +6,7 @@ import java.io.IOException;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
+import io.scif.SCIFIO;
 import io.scif.config.SCIFIOConfig;
 import io.scif.formats.TIFFFormat.Metadata;
 import io.scif.formats.TIFFFormat.Reader;
@@ -21,11 +22,12 @@ public class SCIFIOMetadataReader implements IMetadataReader {
     public SCIFIOMetadataReader() {
         this._config = _setSCFIOConfig();
         this._reader = new Reader<>();
+        this._reader.setContext(new SCIFIO().context());
     }
 
     @Override
     public IMetadata read(File imageFile) throws IOException, UnsupportedAxisOrder {
-        this._reader.setSource(imageFile, this._config);
+        this._reader.setSource(imageFile.getAbsolutePath(), this._config);
         return SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
     }
 
