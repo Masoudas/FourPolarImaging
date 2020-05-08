@@ -22,10 +22,10 @@ public interface AcquisitionSet {
      * 
      * @param imagingSetup is the image setup associated with this acquired image
      *                     set.
-
-    /**
-     * Add a captured file set to this set, where every file is checked against
-     * {@link ICapturedImageChecker} provided for the class.
+     * 
+     *                     /** Add a captured file set to this set, where every file
+     *                     is checked against {@link ICapturedImageChecker} provided
+     *                     for the class.
      *
      * @throws KeyAlreadyExistsException in case the file set has already been
      *                                   added.
@@ -54,12 +54,4 @@ public interface AcquisitionSet {
      * @param setName
      */
     public void removeImageSet(String setName) throws KeyException;
-
-    /**
-     * Return an iterator over all images of a particular channel.
-     * @param channel
-     * @throws KeyException
-     */
-    public Iterator<File> getChannelImages(int channel) throws KeyException;
-
 }
