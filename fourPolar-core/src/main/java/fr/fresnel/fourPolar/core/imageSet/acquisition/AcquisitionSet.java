@@ -1,11 +1,13 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition;
 
+import java.io.File;
 import java.security.KeyException;
 import java.util.Iterator;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 
 /**
@@ -52,5 +54,12 @@ public interface AcquisitionSet {
      * @param setName
      */
     public void removeImageSet(String setName) throws KeyException;
+
+    /**
+     * Return an iterator over all images of a particular channel.
+     * @param channel
+     * @throws KeyException
+     */
+    public Iterator<File> getChannelImages(int channel) throws KeyException;
 
 }
