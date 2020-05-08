@@ -8,9 +8,6 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.image.generic.IMetadata;
-import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import javassist.tools.reflect.CannotCreateException;
@@ -54,31 +51,21 @@ public class MultiChannelCapturedImageFileSetBuilderTest {
     File pol135_3 = new File("pol135_3.tiff");
 
     @Test
-    public void build_AxisOrderHasNoChannel_ThrowsException() {
-        IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(AxisOrder.XY).numChannels(2).build();
-        FourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.One);
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            new MultiChannelCapturedImageFileSetBuilder(metadata, setup);
-        });
-    }
-
-    @Test
     public void build_BuildWithInsufficientFiles_ThrowsException() {
-        IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(AxisOrder.XYC).numChannels(2).build();
-        FourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.Two);
+        FourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        setup.setCameras(Cameras.Two);
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new MultiChannelCapturedImageFileSetBuilder(metadata, setup).build(pol0_90_45_135);
+            new MultiChannelCapturedImageFileSetBuilder(setup).build(pol0_90_45_135);
         });
     }
 
     @Test
     public void build_createTwoSeparateSetsOneCam_ReturnsTwoSets() throws CannotCreateException {
-        IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(AxisOrder.XYC).numChannels(2).build();
-        FourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.One);
+        FourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        setup.setCameras(Cameras.One);
 
-        MultiChannelCapturedImageFileSetBuilder builder = new MultiChannelCapturedImageFileSetBuilder(metadata, setup);
+        MultiChannelCapturedImageFileSetBuilder builder = new MultiChannelCapturedImageFileSetBuilder(setup);
 
         ICapturedImageFileSet fileSet = builder.build(pol0_90_45_135);
         ICapturedImageFileSet fileSet_1 = builder.build(pol0_90_45_135_1);
@@ -90,10 +77,10 @@ public class MultiChannelCapturedImageFileSetBuilderTest {
 
     @Test
     public void build_createTwoSeparateSetsTwoCam_ReturnsTwoSets() throws CannotCreateException {
-        IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(AxisOrder.XYZC).numChannels(2).build();
-        FourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.Two);
+        FourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        setup.setCameras(Cameras.Two);
 
-        MultiChannelCapturedImageFileSetBuilder builder = new MultiChannelCapturedImageFileSetBuilder(metadata, setup);
+        MultiChannelCapturedImageFileSetBuilder builder = new MultiChannelCapturedImageFileSetBuilder(setup);
 
         ICapturedImageFileSet fileSet = builder.build(pol0_90, pol45_135);
         ICapturedImageFileSet fileSet_1 = builder.build(pol0_90_1, pol45_135_1);
@@ -106,10 +93,10 @@ public class MultiChannelCapturedImageFileSetBuilderTest {
 
     @Test
     public void build_createTwoSeparateSetsFourCam_ReturnsTwoSets() throws CannotCreateException {
-        IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(AxisOrder.XYZC).numChannels(2).build();
-        FourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.Four);
+        FourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        setup.setCameras(Cameras.Four);
 
-        MultiChannelCapturedImageFileSetBuilder builder = new MultiChannelCapturedImageFileSetBuilder(metadata, setup);
+        MultiChannelCapturedImageFileSetBuilder builder = new MultiChannelCapturedImageFileSetBuilder(setup);
 
         ICapturedImageFileSet fileSet = builder.build(pol0, pol45, pol90, pol135);
         ICapturedImageFileSet fileSet_1 = builder.build(pol0_1, pol45_1, pol90_1, pol135_1);

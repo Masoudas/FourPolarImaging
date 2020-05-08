@@ -59,7 +59,7 @@ public class SingleChannelCapturedImageFileSetBuilderTest {
         FourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.One);
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new SingleChannelCapturedImageFileSetBuilder(metadata, setup);
+            new CapturedImageFileSetBuilder(metadata, setup);
         });
     }
 
@@ -69,7 +69,7 @@ public class SingleChannelCapturedImageFileSetBuilderTest {
         FourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.One);
 
         assertThrows(CannotCreateException.class, () -> {
-            new SingleChannelCapturedImageFileSetBuilder(metadata, setup).add(1, pol0_90_45_135).build();
+            new CapturedImageFileSetBuilder(metadata, setup).add(1, pol0_90_45_135).build();
         });
     }
 
@@ -78,7 +78,7 @@ public class SingleChannelCapturedImageFileSetBuilderTest {
         IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(AxisOrder.XYZ).build();
         FourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.One);
 
-        SingleChannelCapturedImageFileSetBuilder builder = new SingleChannelCapturedImageFileSetBuilder(metadata,
+        CapturedImageFileSetBuilder builder = new CapturedImageFileSetBuilder(metadata,
                 setup);
 
         ICapturedImageFileSet fileSet = builder.add(1, pol0_90_45_135).add(2, pol0_90_45_135_1).build();
@@ -94,7 +94,7 @@ public class SingleChannelCapturedImageFileSetBuilderTest {
         IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(AxisOrder.XYZ).build();
         FourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.Two);
 
-        SingleChannelCapturedImageFileSetBuilder builder = new SingleChannelCapturedImageFileSetBuilder(metadata,
+        CapturedImageFileSetBuilder builder = new CapturedImageFileSetBuilder(metadata,
                 setup);
 
         ICapturedImageFileSet fileSet = builder.add(1, pol0_90, pol45_135).add(2, pol0_90_1, pol45_135_1).build();
@@ -111,7 +111,7 @@ public class SingleChannelCapturedImageFileSetBuilderTest {
         IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(AxisOrder.XYZ).build();
         FourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.Four);
 
-        SingleChannelCapturedImageFileSetBuilder builder = new SingleChannelCapturedImageFileSetBuilder(metadata,
+        CapturedImageFileSetBuilder builder = new CapturedImageFileSetBuilder(metadata,
                 setup);
 
         ICapturedImageFileSet fileSet = builder.add(1, pol0, pol45, pol90, pol135)
