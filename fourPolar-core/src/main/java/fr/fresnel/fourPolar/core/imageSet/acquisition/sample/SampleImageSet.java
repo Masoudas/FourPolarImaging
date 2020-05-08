@@ -2,61 +2,49 @@ package fr.fresnel.fourPolar.core.imageSet.acquisition.sample;
 
 import java.security.KeyException;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.Iterator;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
-import fr.fresnel.fourPolar.core.image.captured.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 
 /**
  * Encapsulates the sample image set files as provided by the user.
  */
-public class SampleImageSet extends AcquisitionSet {
-    private ArrayList<Hashtable<String, ICapturedImageFileSet>> fileSuperSet;
+public class SampleImageSet implements AcquisitionSet {
+    private ArrayList<ICapturedImageFileSet> _fileSuperSet;
 
-    public SampleImageSet(FourPolarImagingSetup imagingSetup, ICapturedImageChecker imageChecker) {
-        super(imagingSetup, imageChecker);
-        fileSuperSet = new ArrayList<Hashtable<String, ICapturedImageFileSet>>(imagingSetup.getNumChannel());
+    public SampleImageSet() {
+        _fileSuperSet = new ArrayList<ICapturedImageFileSet>();
+    }
 
-        for (int channel = 0; channel < imagingSetup.getNumChannel(); channel++) {
-            fileSuperSet.add(channel, new Hashtable<String, ICapturedImageFileSet>());
+    @Override
+    public void removeImageSet(String setName) throws KeyException {
+        if (!_fileSuperSet.remove(setName)) {
+            throw new KeyException("The given set name does not exist.");
         }
+
     }
 
     @Override
-    public void removeImage(int channel, String setName) {
-        fileSuperSet.get(channel - 1).remove(setName);
-    }
-
-    /**
-     * Returns the images of a channel as a set as of {@link ICapturedImageFileSet}.
-     * 
-     * @param channel
-     * @return : All images of this channel as an array list.
-     * @throws KeyException : In case channel number is zero or greater than number
-     *                      of channels.
-     */
-    public List<ICapturedImageFileSet> getChannelImages(int channel) {
-        return new ArrayList<ICapturedImageFileSet>(fileSuperSet.get(channel - 1).values());
-    }
-
-    @Override
-    protected void _addImage(int channel, ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
-        if (fileSuperSet.get(channel - 1).containsKey(fileSet.getSetName()))
+    public void addImageSet(ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
+        if (_fileSuperSet.contains(fileSet))
             throw new KeyAlreadyExistsException("The given file set already exists for this channel");
 
-        fileSuperSet.get(channel - 1).put(fileSet.getSetName(), fileSet);
+        _fileSuperSet.add(fileSet);
 
     }
 
     @Override
-    public ICapturedImageFileSet getImage(int channel, String setName) throws KeyException {
-        if (!fileSuperSet.get(channel - 1).containsKey(setName))
-            throw new KeyAlreadyExistsException("The given file set already exists for this channel");
-        return null;
+    public ICapturedImageFileSet getImageSet(String setName) throws KeyException {
+        if (!_fileSuperSet.contains(setName))
+            throw new KeyAlreadyExistsException("The given file set does not exist.");
+        return _fileSuperSet.get(_fileSuperSet.indexOf(setName));
+    }
+
+    @Override
+    public Iterator<ICapturedImageFileSet> getIterator() {
+        return _fileSuperSet.iterator();
     }
 }
