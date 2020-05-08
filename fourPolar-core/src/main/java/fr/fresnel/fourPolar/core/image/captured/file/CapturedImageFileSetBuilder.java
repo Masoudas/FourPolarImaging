@@ -9,9 +9,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
-import fr.fresnel.fourPolar.core.image.generic.IMetadata;
-import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import javassist.tools.reflect.CannotCreateException;
@@ -138,11 +137,14 @@ public class CapturedImageFileSetBuilder {
      * Returns the {@link ICapturedImageFileSet} that is created based on the added
      * files.
      *
-     * @throws CannotCreateException in case not enough files are given for all
-     *                               channels.
+     * @throws CannotCreateException     in case not enough files are given for all
+     *                                   channels.
+     * @throws IncompatibleCapturedImage in case the image file does not satisfy the
+     *                                   constraints put forth by
+     *                                   {@link ICapturedImageChecker}.
      * 
      */
-    public ICapturedImageFileSet build() throws CannotCreateException {
+    public ICapturedImageFileSet build() throws CannotCreateException, IncompatibleCapturedImage {
         if (IntStream.range(0, this._numChannels).anyMatch((i) -> !_buildChannels[i])) {
             throw new CannotCreateException("Not enough captured images are given for all channels.");
         }
@@ -181,9 +183,9 @@ public class CapturedImageFileSetBuilder {
     private void _resetBuilder() {
         IntStream.range(0, this._numChannels).forEach((i) -> _buildChannels[i] = false);
         for (List<ICapturedImageFile> cameraChannels : this._files) {
-            cameraChannels.clear();    
+            cameraChannels.clear();
         }
-        
+
     }
 
 }
