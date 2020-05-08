@@ -62,11 +62,11 @@ public class SCIFIOTiffMetadataConverter {
                 axisOrder += "C";
             } else if (axisName.equals(Axes.TIME.getLabel())) {
                 axisOrder += "T";
-            } else if (axisName.equals(Axes.UNKNOWN_LABEL)) {
+            } else if (axisName.equals(Axes.Z.getLabel()) || axisName.equals(Axes.X.getLabel()) || axisName.equals(Axes.Y.getLabel())) {
+                axisOrder += axisName;
+            } else {
                 undefAxis = false;
                 axisOrder = "NoOrder";
-            } else {
-                axisOrder += axisName;
             }
         }
         return AxisOrder.fromString(axisOrder);
@@ -95,13 +95,4 @@ public class SCIFIOTiffMetadataConverter {
         }
     }
 
-    private static long _getNumChannels(long[] dim, AxisOrder axisOrder) {
-        int channelAxis = AxisOrder.getChannelAxis(axisOrder);
-        if (channelAxis < 0) {
-            return 0;
-        } else {
-            return dim[channelAxis];
-        }
-
-    }
 }
