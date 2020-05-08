@@ -1,10 +1,11 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition.bead;
 
 import java.security.KeyException;
+import java.util.Arrays;
+import java.util.Iterator;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
-import fr.fresnel.fourPolar.core.image.captured.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
@@ -15,7 +16,7 @@ import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
  * {@link CapturedImageFileSet}.
  */
 public class BeadImageSet extends AcquisitionSet {
-    private ICapturedImageFileSet[] imageFileSet = null;
+    private ICapturedImageFileSet imageFileSet = null;
 
     /**
      *
@@ -26,33 +27,44 @@ public class BeadImageSet extends AcquisitionSet {
      * @param imagingSetup
      * @param imageChecker
      */
-    public BeadImageSet(FourPolarImagingSetup imagingSetup, ICapturedImageChecker imageChecker) {
-        super(imagingSetup, imageChecker);
-
-        this.imageFileSet = new ICapturedImageFileSet[imagingSetup.getNumChannel()];
+    public BeadImageSet(FourPolarImagingSetup imagingSetup) {
+        super(imagingSetup);
     }
 
     @Override
-    protected void _addImage(int channel, ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
-        if (imageFileSet[channel - 1] != null) {
-            throw new KeyAlreadyExistsException("A bead image is already defined for channel " + channel);
+    public void addImageSet(ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
+        if (imageFileSet != null) {
+            throw new KeyAlreadyExistsException("Bead image set has already been defined.");
         }
 
-        imageFileSet[channel - 1] = fileSet;
+        imageFileSet = fileSet;
     }
 
     @Override
-    public ICapturedImageFileSet getImage(int channel, String setName) throws KeyException {
-        return imageFileSet[channel];
+    public ICapturedImageFileSet getImageSet(String setName) throws KeyException {
+        if (imageFileSet.getSetName().equals(setName)) {
+            return imageFileSet;
+        } else {
+            throw new KeyException("The given set name does not exist.");
+        }
     }
 
     /**
      * This method only requires the channel number to function.
      */
     @Override
-    public void removeImage(int channel, String setName) {
-        imageFileSet[channel - 1] = null;
+    public void removeImageSet(String setName) throws KeyException {
+        if (imageFileSet.getSetName().equals(setName)) {
+            imageFileSet = null;
+        } else {
+            throw new KeyException("The given set name does not exist.");
+        }
 
+    }
+
+    @Override
+    public Iterator<ICapturedImageFileSet> getIterator() {
+        return Arrays.stream(new ICapturedImageFileSet[]{imageFileSet}).iterator();
     }
 
 }
