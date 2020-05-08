@@ -5,9 +5,9 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 /**
- * An interface for accessing the captured image. It is assumed that the
- * captured image has been transformed to a 16bit grayscale, to be accessed
- * properly by this format.
+ * A captured image is a single microscopic image file given by the user. This
+ * single image may have one or several channels inside, and one, two or four
+ * polarizations. 
  */
 public interface ICapturedImage {
     /**
