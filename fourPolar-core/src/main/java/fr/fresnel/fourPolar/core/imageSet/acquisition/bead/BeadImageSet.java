@@ -8,28 +8,12 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 
 /**
- * Defines the bead image set, which accompanies the sample image set. Each
- * channel must contain a separate bead image set, which is stored as a
- * {@link CapturedImageFileSet}.
+ * Defines the bead image set, which accompanies the sample image set. 
  */
-public class BeadImageSet extends AcquisitionSet {
+public class BeadImageSet implements AcquisitionSet {
     private ICapturedImageFileSet imageFileSet = null;
-
-    /**
-     *
-     * Defines the bead image set, which accompanies the sample image set. Each
-     * channel must contain a separate bead image set, which is stored as a
-     * {@link CapturedImageFileSet}.
-     * 
-     * @param imagingSetup
-     * @param imageChecker
-     */
-    public BeadImageSet(FourPolarImagingSetup imagingSetup) {
-        super(imagingSetup);
-    }
 
     @Override
     public void addImageSet(ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
