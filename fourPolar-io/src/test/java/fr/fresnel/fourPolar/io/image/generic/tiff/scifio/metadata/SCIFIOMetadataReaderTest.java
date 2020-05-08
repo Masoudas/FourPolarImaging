@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
 
 public class SCIFIOMetadataReaderTest {
     @Test
-    public void reader_XYZT16BitImage_ReturnsCorrectMetadata() throws IOException, UnsupportedAxisOrder {
+    public void reader_XYZT16BitImageJ1Image_ReturnsCorrectMetadata() throws IOException, UnsupportedAxisOrder {
         File image = new File(SCIFIOMetadataReaderTest.class.getResource("").getPath(), "XYZT.tif");
 
         IMetadataReader reader = new SCIFIOMetadataReader();
@@ -25,7 +25,7 @@ public class SCIFIOMetadataReaderTest {
     }
 
     @Test
-    public void reader_XYZT16BitImageRepeatedUse_ReturnsCorrectMetadata() throws IOException, UnsupportedAxisOrder {
+    public void reader_XYZT16BitImageJ1ImageRepeatedUse_ReturnsCorrectMetadata() throws IOException, UnsupportedAxisOrder {
         File image = new File(SCIFIOMetadataReaderTest.class.getResource("").getPath(), "XYZT.tif");
 
         IMetadataReader reader = new SCIFIOMetadataReader();
