@@ -28,10 +28,8 @@ public class SCIFIOTiffMetadataConverter {
         long[] dim = SCIFIOMetadata.getAxesLengths();
         int bitDepth = SCIFIOMetadata.getBitsPerPixel();
         AxisOrder axisOrder = _getAxisOrder(SCIFIOMetadata.getAxes());
-        int numChannels = (int) _getNumChannels(dim, axisOrder);
 
-        return new Metadata.MetadataBuilder(dim).axisOrder(axisOrder).bitPerPixel(bitDepth).numChannels(numChannels)
-                .build();
+        return new Metadata.MetadataBuilder(dim).axisOrder(axisOrder).bitPerPixel(bitDepth).build();
     }
 
     /**
