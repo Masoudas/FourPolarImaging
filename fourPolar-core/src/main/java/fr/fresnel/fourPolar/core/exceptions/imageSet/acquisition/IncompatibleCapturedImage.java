@@ -24,5 +24,9 @@ public class IncompatibleCapturedImage extends Exception{
     public RejectedCapturedImage getRejectedImage() {
         return _rejectedImage;
     }
-    
+
+    @Override
+    public String getMessage() {
+        return _rejectedImage.getReason();
+    }
 }
