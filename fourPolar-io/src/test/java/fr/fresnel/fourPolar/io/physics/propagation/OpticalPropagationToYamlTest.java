@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.io.physics.propagation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Hashtable;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +10,7 @@ import fr.fresnel.fourPolar.core.exceptions.fourPolar.propagationdb.PropagationC
 import fr.fresnel.fourPolar.core.fourPolar.propagationdb.IOpticalPropagationDB;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
@@ -32,7 +34,8 @@ public class OpticalPropagationToYamlTest {
         IOpticalPropagation propagation2 = createOpticalPropagation(channel2, na, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7,
                 0.8, 0.9, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16);
 
-        IFourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.One);
+        IFourPolarImagingSetup setup = new DummyFPSetup();
+        setup.setCameras(Cameras.One);
         setup.setChannel(1, channel1);
         setup.setChannel(2, channel2);
         setup.setNumericalAperture(na);
@@ -78,6 +81,59 @@ public class OpticalPropagationToYamlTest {
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135, xy_135);
 
         return opticalPropagation;
+    }
+
+}
+
+class DummyFPSetup implements IFourPolarImagingSetup {
+    private Cameras cameras;
+    private Hashtable<Integer, IChannel> channels = new Hashtable<>();
+    private INumericalAperture na;
+    private IFieldOfView fov;
+
+    @Override
+    public Cameras getCameras() {
+        return cameras;
+    }
+
+    @Override
+    public void setCameras(Cameras cameras) throws IllegalArgumentException {
+        this.cameras = cameras;
+    }
+
+    @Override
+    public IChannel getChannel(int channel) throws IllegalArgumentException {
+        return channels.get(channel);
+    }
+
+    @Override
+    public void setChannel(int channel, IChannel propagationChannel) throws IllegalArgumentException {
+        channels.put(channel, propagationChannel);
+    }
+
+    @Override
+    public int getNumChannel() {
+        return this.channels.size();
+    }
+
+    @Override
+    public INumericalAperture getNumericalAperture() {
+        return na;
+    }
+
+    @Override
+    public void setNumericalAperture(INumericalAperture na) {
+        this.na = na;
+    }
+
+    @Override
+    public IFieldOfView getFieldOfView() {
+        return this.fov;
+    }
+
+    @Override
+    public void setFieldOfView(IFieldOfView fov) throws IllegalArgumentException {
+        this.fov = fov;
     }
 
 }
