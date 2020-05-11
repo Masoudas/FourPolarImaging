@@ -145,16 +145,16 @@ public class CapturedImageFileSetBuilder {
      * 
      */
     public ICapturedImageFileSet build() throws CannotCreateException, IncompatibleCapturedImage {
-        if (IntStream.range(0, this._numChannels).anyMatch((i) -> !_buildChannels[i])) {
-            throw new CannotCreateException("Not enough captured images are given for all channels.");
-        }
+        _checkAllChannelsAreGiven();
+        _checkUsingChecker();
 
-        for (List<ICapturedImageFile> cameraChannels : _files) {
-            for (Iterator<ICapturedImageFile> channel = cameraChannels.iterator(); channel.hasNext();) {
-                _checker.check(channel.next());
-            }
-        }
+        ICapturedImageFileSet fileSet = _createFileSet();
 
+        _resetBuilder();
+        return fileSet;
+    }
+
+    private ICapturedImageFileSet _createFileSet() {
         ICapturedImageFileSet fileSet = null;
         if (this._cameras == Cameras.One) {
             fileSet = new CapturedImageFileSet(this._files[0].toArray(new ICapturedImageFile[0]));
@@ -167,9 +167,21 @@ public class CapturedImageFileSetBuilder {
                     this._files[2].toArray(new ICapturedImageFile[0]),
                     this._files[3].toArray(new ICapturedImageFile[0]));
         }
-
-        _resetBuilder();
         return fileSet;
+    }
+
+    private void _checkUsingChecker() throws IncompatibleCapturedImage {
+        for (List<ICapturedImageFile> cameraChannels : _files) {
+            for (Iterator<ICapturedImageFile> channel = cameraChannels.iterator(); channel.hasNext();) {
+                _checker.check(channel.next());
+            }
+        }
+    }
+
+    private void _checkAllChannelsAreGiven() throws CannotCreateException {
+        if (IntStream.range(0, this._numChannels).anyMatch((i) -> !_buildChannels[i])) {
+            throw new CannotCreateException("Not enough captured images are given for all channels.");
+        }
     }
 
     private void _checkChannel(int[] channel) {
