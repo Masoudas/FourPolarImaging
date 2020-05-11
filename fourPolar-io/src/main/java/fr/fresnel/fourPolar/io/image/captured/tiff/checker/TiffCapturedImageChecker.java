@@ -103,14 +103,15 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
      */
     private void _NumImageChannelsCorrespond(IMetadata metadata, ICapturedImageFile image)
             throws IncompatibleCapturedImage {
+        boolean userSpecifiedOneChannel = image.channels().length == 1;     
         boolean tiffOneChannel = metadata.numChannels() == 0 || metadata.numChannels() == 1;
-        boolean userSpecifiedOneChannel = image.channels().length == 1;
 
-        boolean tiffAndUserSpecifiedSameNumChannels = metadata.numChannels() == image.channels().length;
+        boolean userSpecifiedMultiChannel = !userSpecifiedOneChannel && image.channels().length > 1;
+        boolean tiffAndUserHaveSameNumChannels = metadata.numChannels() == image.channels().length;
 
-        if (tiffOneChannel && !userSpecifiedOneChannel) {
+        if (userSpecifiedOneChannel && !tiffOneChannel) {
             throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), incompatipleChannels));
-        } else if (!tiffAndUserSpecifiedSameNumChannels) {
+        } else if (userSpecifiedMultiChannel && !tiffAndUserHaveSameNumChannels) {
             throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), incompatipleChannels));
         }
 
