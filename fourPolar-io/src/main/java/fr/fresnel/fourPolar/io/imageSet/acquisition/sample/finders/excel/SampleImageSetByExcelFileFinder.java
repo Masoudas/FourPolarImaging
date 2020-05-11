@@ -3,10 +3,7 @@ package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.excel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.management.openmbean.KeyAlreadyExistsException;
+import java.util.Iterator;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,69 +12,59 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
-import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.ExcelIncorrentRow;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.MissingExcelTitleRow;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.TemplateSampleSetExcelNotFound;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 
 /**
  * This class is used for finding the images of the sample set from an excel
- * file, which is dedicated to one channel.
+ * file. The class first checks that each row has the same number of files as
+ * the number of {@link Cameras}, and then returns each row. We can use the
+ * {@link SampleImageSet} to build the set separately.
+ * 
+ * Note that this class is agnostic of how many channels are present in each
+ * file (could be one or all).
  */
 public class SampleImageSetByExcelFileFinder {
     /**
-     * This class is used for finding the images of the sample set from an excel
-     * file, which is dedicated to one channel.
-     * 
-     * @param imageChecker The image checker for the corresponding file format we
-     *                     seek to find.
-     */
-    public SampleImageSetByExcelFileFinder() {
-    }
-
-    /**
-     * Read the excel file provided and adds the images to the sample set.
+     * Reads the excel file, and returns an iterator that iterators over each row of
+     * the file.
      * <p>
      * The excel file must have the same format as provided by
-     * {@link TemplateExcelFileGenerator}
+     * {@link TemplateExcelFileGenerator}, otherwise an exception is raised.
      * 
-     * @param sampleImageSet : Sample image set to be filled.
-     * @param channel        : Channel number.
-     * @param channelFile    : The path to the corresponding excel file.
-     * @throws IncorrectSampleSetExcelFormat
-     * @throws TemplateSampleSetExcelNotFound
-     * @return List of rejected of rejected images.
+     * @param channelFile is the path to the corresponding excel file.
+     * @param cameras     is the number of cameras in the setup.
+     * 
+     * @throws IncorrectSampleSetExcelFormat  if the format of the file set (number
+     *                                        of columns or title row) does not
+     *                                        correspond to the generated template.
+     * @throws TemplateSampleSetExcelNotFound is the excel file is not found on
+     *                                        disk.
+     * @return an iterator that iterato
      */
-    public List<RejectedCapturedImage> findChannelImages(SampleImageSet sampleImageSet, int channel, File channelFile)
+    public Iterator<File[]> read(File channelFile, Cameras cameras)
             throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow {
-        ArrayList<RejectedCapturedImage> rejectedImages = new ArrayList<RejectedCapturedImage>();
+        SampleImageSetExcelFileRowIterator itrCreator = new SampleImageSetExcelFileRowIterator();
 
         try (XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(channelFile))) {
             Sheet sheet = workbook.getSheetAt(0);
 
-            int titleRow = this._findTitleRow(sheet, sampleImageSet.getImagingSetup().getCameras());
-            int nImages = Cameras.getNImages(sampleImageSet.getImagingSetup().getCameras());
+            int titleRow = this._findTitleRow(sheet, cameras);
+            int nImages = Cameras.getNImages(cameras);
 
             for (int rowCtr = titleRow + 1; rowCtr <= sheet.getLastRowNum(); rowCtr++) {
                 Row row = sheet.getRow(rowCtr);
                 File[] files = createFiles(nImages, row);
-
-                try {
-                    this._addImage(sampleImageSet, channel, files);
-                } catch (IncompatibleCapturedImage e) {
-                    rejectedImages.add(e.getRejectedImage());
-                } catch (KeyAlreadyExistsException e) {
-                    RejectedCapturedImage rCapturedImage = new RejectedCapturedImage(files[0], "Duplicate file set");
-                    rejectedImages.add(rCapturedImage);
-                }
+                itrCreator.add(files);
+                
             }
-
-            return rejectedImages;
 
         } catch (IOException e) {
             throw new TemplateSampleSetExcelNotFound("The template file does not exist or corrupted.");
         }
+
+        return itrCreator.iterator();
     }
 
     /**
@@ -103,21 +90,6 @@ public class SampleImageSetByExcelFileFinder {
         }
 
         return files;
-    }
-
-    private void _addImage(SampleImageSet sampleImageSet, int channel, File[] files)
-            throws IncompatibleCapturedImage, KeyAlreadyExistsException {
-        try {
-            if (files.length == 1)
-                sampleImageSet.addImage(channel, files[0]);
-            else if (files.length == 2)
-                sampleImageSet.addImage(channel, files[0], files[1]);
-            else
-                sampleImageSet.addImage(channel, files[0], files[1], files[2], files[3]);
-
-        } catch (IllegalArgumentException e) {
-        }
-
     }
 
     private int _findTitleRow(Sheet sheet, Cameras camera) throws MissingExcelTitleRow {
