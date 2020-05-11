@@ -1,13 +1,7 @@
 package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-
-import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 
 class FourCameraChannelImageFinder implements IChannelImageFinder {
 
@@ -15,7 +9,7 @@ class FourCameraChannelImageFinder implements IChannelImageFinder {
     public Iterator<File[]> find(SampleImageSetByNamePatternFinder sampleSetFinder, String channelLabel) {
         String[] polLabel = sampleSetFinder.getPolLabel();
 
-        File[] imagesPol0 = sampleSetFinder.getRootFolder().listFiles(new FilterCapturedImage(polLabel[0], channelLabel);
+        File[] imagesPol0 = sampleSetFinder.getRootFolder().listFiles(new FilterCapturedImage(polLabel[0], channelLabel));
 
 
         File[] polFiles = new File[4];
