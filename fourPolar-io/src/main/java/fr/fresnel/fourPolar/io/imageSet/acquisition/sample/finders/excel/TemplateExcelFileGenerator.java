@@ -120,7 +120,7 @@ public class TemplateExcelFileGenerator {
 
     private String[] _generateFilePageComments() {
         String[] comments_filePage = new String[1];
-        comments_filePage[0] = "Refer to the next sheet on instructions for filling this excel file";
+        comments_filePage[0] = "Refer to the next sheet for instructions on how to fill this excel file";
 
         return comments_filePage;
     }
