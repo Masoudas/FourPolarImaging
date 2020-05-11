@@ -6,7 +6,6 @@ import java.util.TreeMap;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.imagingSetup.imageFormation.fov.IFieldOfViewJSONAdaptor;
@@ -47,17 +46,17 @@ class FourPolarImagingSetupJSONAdaptor {
         }
     }
 
-    private void _setFieldOfViewAdaptor(FourPolarImagingSetup imagingSetup) {
+    private void _setFieldOfViewAdaptor(IFourPolarImagingSetup imagingSetup) {
         _fovAdaptor = new IFieldOfViewJSONAdaptor();
         _fovAdaptor.toJSON(imagingSetup.getFieldOfView());
     }
 
-    private void _setNumericalApertureAdaptor(FourPolarImagingSetup imagingSetup) {
+    private void _setNumericalApertureAdaptor(IFourPolarImagingSetup imagingSetup) {
         _naAdaptor = new INumericalApertureJSONAdaptor();
         _naAdaptor.toJSON(imagingSetup.getNumericalAperture());
     }
 
-    private void _setChannels(FourPolarImagingSetup imagingSetup) {
+    private void _setChannels(IFourPolarImagingSetup imagingSetup) {
         int nchannel = imagingSetup.getNumChannel();
         this._channelAdaptor = new TreeMap<String, IChannelJSONAdaptor>();
 
@@ -69,7 +68,7 @@ class FourPolarImagingSetupJSONAdaptor {
         }
     }
 
-    private void _setNCameras(FourPolarImagingSetup imagingSetup) {
+    private void _setNCameras(IFourPolarImagingSetup imagingSetup) {
         _cameras = imagingSetup.getCameras();
     }
 }
