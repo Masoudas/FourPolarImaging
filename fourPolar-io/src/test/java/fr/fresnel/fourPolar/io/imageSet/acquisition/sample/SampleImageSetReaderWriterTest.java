@@ -100,11 +100,6 @@ public class SampleImageSetReaderWriterTest {
 class DummyTiffChecker implements ICapturedImageChecker {
 
         @Override
-        public String getExtension() {
-                return "tif";
-        }
-
-        @Override
         public void check(File imagePath) throws IncompatibleCapturedImage {
         }
 
