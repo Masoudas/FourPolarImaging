@@ -64,7 +64,7 @@ public class CapturedImageFileSetBuilder {
         Objects.requireNonNull(pol0_45_90_135, "pol0_45_90_135 can't be null");
 
         IntStream.range(0, channels.length).forEach((i) -> {
-            this._buildChannels[channels[i]] = true;
+            this._buildChannels[channels[i] - 1] = true;
         });
         this._files[0].add(new CapturedImageFile(channels, pol0_45_90_135));
         return this;
@@ -92,7 +92,7 @@ public class CapturedImageFileSetBuilder {
         Objects.requireNonNull(pol45_135, "pol45_135 can't be null");
 
         IntStream.range(0, channels.length).forEach((i) -> {
-            this._buildChannels[channels[i]] = true;
+            this._buildChannels[channels[i] - 1] = true;
         });
         this._files[0].add(new CapturedImageFile(channels, pol0_90));
         this._files[1].add(new CapturedImageFile(channels, pol45_135));
@@ -123,7 +123,7 @@ public class CapturedImageFileSetBuilder {
         Objects.requireNonNull(pol135, "pol135 can't be null");
 
         IntStream.range(0, channels.length).forEach((i) -> {
-            this._buildChannels[channels[i]] = true;
+            this._buildChannels[channels[i] - 1] = true;
         });
         this._files[0].add(new CapturedImageFile(channels, pol0));
         this._files[1].add(new CapturedImageFile(channels, pol45));
