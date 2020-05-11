@@ -17,6 +17,13 @@ public interface IFourPolarImagingSetup {
     public Cameras getCameras();
 
     /**
+     * Set number of cameras.
+     * 
+     * @throws IllegalArgumentException if already set.
+     */
+    public void setCameras(Cameras cameras) throws IllegalArgumentException;
+
+    /**
      * Returns the propagation channel.
      * 
      * @param n is the channel number starting from one.
@@ -24,6 +31,17 @@ public interface IFourPolarImagingSetup {
      * @throws IllegalArgumentException if channel is not in the imaging channels.
      */
     public IChannel getChannel(int channel) throws IllegalArgumentException;
+
+    /**
+     * Set propagation channel channel.
+     * 
+     * @param channel            channel number
+     * @param propagationChannel propagation channel data
+     * 
+     * @throws IllegalArgumentException in case of duplicate channel number or
+     *                                  channel parameters.
+     */
+    public void setChannel(int channel, IChannel propagationChannel) throws IllegalArgumentException;
 
     /**
      * Returns number of channels.
@@ -36,8 +54,22 @@ public interface IFourPolarImagingSetup {
     public INumericalAperture getNumericalAperture();
 
     /**
+     * Sets the numerical aperture.
+     * 
+     * @throws IllegalArgumentException if already set.
+     */
+    public void setNumericalAperture(INumericalAperture na)
+
+    /**
      * Return the field of view for each polarization.
      */
     public IFieldOfView getFieldOfView();
+
+    /**
+     * Set the field of view.
+     * 
+     * @throws IllegalArgumentException if already set.
+     */
+    public void setFieldOfView(IFieldOfView fov) throws IllegalArgumentException;
 
 }
