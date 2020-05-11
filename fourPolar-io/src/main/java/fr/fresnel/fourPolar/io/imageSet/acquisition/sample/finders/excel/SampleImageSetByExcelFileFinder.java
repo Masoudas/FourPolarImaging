@@ -26,6 +26,12 @@ import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.ex
  * file (could be one or all).
  */
 public class SampleImageSetByExcelFileFinder {
+    final private Cameras _cameras;
+
+    public SampleImageSetByExcelFileFinder(Cameras _cameras) {
+        this._cameras = _cameras;
+    }
+
     /**
      * Reads the excel file, and returns an iterator that iterators over each row of
      * the file.
@@ -43,15 +49,15 @@ public class SampleImageSetByExcelFileFinder {
      *                                        disk.
      * @return an iterator that iterato
      */
-    public Iterator<File[]> read(File channelFile, Cameras cameras)
+    public Iterator<File[]> read(File channelFile)
             throws TemplateSampleSetExcelNotFound, MissingExcelTitleRow, ExcelIncorrentRow {
         SampleImageSetExcelFileRowIterator itrCreator = new SampleImageSetExcelFileRowIterator();
 
         try (XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(channelFile))) {
             Sheet sheet = workbook.getSheetAt(0);
 
-            int titleRow = this._findTitleRow(sheet, cameras);
-            int nImages = Cameras.getNImages(cameras);
+            int titleRow = this._findTitleRow(sheet, this._cameras);
+            int nImages = Cameras.getNImages(this._cameras);
 
             for (int rowCtr = titleRow + 1; rowCtr <= sheet.getLastRowNum(); rowCtr++) {
                 Row row = sheet.getRow(rowCtr);
