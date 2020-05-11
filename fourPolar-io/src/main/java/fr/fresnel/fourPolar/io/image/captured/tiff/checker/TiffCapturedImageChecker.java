@@ -117,8 +117,7 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
 
     }
 
-    @Override
-    public String getExtension() {
+    private String getExtension() {
         return "tif";
     }
 

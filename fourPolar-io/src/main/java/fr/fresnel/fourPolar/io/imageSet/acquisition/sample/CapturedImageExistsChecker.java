@@ -16,11 +16,6 @@ class CapturedImageExistsChecker implements ICapturedImageChecker {
     private static String notExists = "The captured image has been removed.";
 
     @Override
-    public String getExtension() {
-        return null;
-    }
-
-    @Override
     public void check(ICapturedImageFile capturedImageFile) throws IncompatibleCapturedImage {
         if (!capturedImageFile.file().exists()) {
             throw new IncompatibleCapturedImage(new RejectedCapturedImage(capturedImageFile.file(), notExists));

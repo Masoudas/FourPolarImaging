@@ -77,10 +77,6 @@ public class SampleImageSetTest {
  * A dummy checker, always checks to valid.
  */
 class DummyChecker implements ICapturedImageChecker {
-    @Override
-    public String getExtension() {
-        return null;
-    }
 
     @Override
     public void check(ICapturedImageFile capturedImageFile) throws IncompatibleCapturedImage {
