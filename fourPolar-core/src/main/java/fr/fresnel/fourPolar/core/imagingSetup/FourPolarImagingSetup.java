@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.imagingSetup;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
@@ -9,15 +9,15 @@ import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 
 /**
- * This class encapsulates the imaging setup, used for capturing images of four
- * polarization.
+ * This class models the imaging setup as a singleton. Note that once values are
+ * set through the setter methods, they can't be overridden.
  */
-public class FourPolarImagingSetup {
+public class FourPolarImagingSetup implements IFourPolarImagingSetup {
     private final HashMap<Integer, IChannel> _channels;
 
-    private Cameras _cameras;
+    private Cameras _cameras = null;
     private IFieldOfView _fov = null;
-    private INumericalAperture _numAperture;
+    private INumericalAperture _numAperture = null;
 
     private static FourPolarImagingSetup _instance = null;
 
@@ -40,20 +40,27 @@ public class FourPolarImagingSetup {
         this._channels = new HashMap<>();
     }
 
+    /**
+     * Set number of cameras.
+     * 
+     * @throws IllegalArgumentException if already set.
+     */
     public void setCameras(Cameras cameras) {
+        Objects.requireNonNull(cameras, "cameras must not be null.");
+
+        if (this._cameras == null) {
+            throw new IllegalArgumentException("Camera is already set");
+        }
+
         this._cameras = cameras;
     }
 
-    /**
-     * @return the cameras
-     */
+    @Override
     public Cameras getCameras() {
         return this._cameras;
     }
 
-    /**
-     * @return the nChannel
-     */
+    @Override
     public int getNumChannel() {
         return this._channels.size();
     }
@@ -61,15 +68,19 @@ public class FourPolarImagingSetup {
     /**
      * Set the field of view.
      * 
-     * @param fov
+     * @throws IllegalArgumentException if already set.
      */
     public void setFieldOfView(IFieldOfView fov) {
+        Objects.requireNonNull(fov, "fov must not be null.");
+
+        if (this._fov == null) {
+            throw new IllegalArgumentException("FoV is already set");
+        }
+
         this._fov = fov;
     }
 
-    /**
-     * @return the field of view
-     */
+    @Override
     public IFieldOfView getFieldOfView() {
         return this._fov;
     }
@@ -77,15 +88,19 @@ public class FourPolarImagingSetup {
     /**
      * Sets the numerical aperture.
      * 
-     * @param na
+     * @throws IllegalArgumentException if already set.
      */
     public void setNumericalAperture(INumericalAperture na) {
+        Objects.requireNonNull(na, "na must not be null.");
+
+        if (this._numAperture == null) {
+            throw new IllegalArgumentException("NA is already set");
+        }
+
         this._numAperture = na;
     }
 
-    /**
-     * @return the numerical Aperture
-     */
+    @Override
     public INumericalAperture getNumericalAperture() {
         return this._numAperture;
     }
@@ -93,10 +108,13 @@ public class FourPolarImagingSetup {
     /**
      * Set propagation channel channel.
      * 
-     * @param channel            : channel number
-     * @param propagationChannel : propagation channel data
+     * @param channel            channel number
+     * @param propagationChannel propagation channel data
+     * 
+     * @throws IllegalArgumentException in case of duplicate channel number or
+     *                                  channel parameters.
      */
-    public void setChannel(int channel, IChannel propagationChannel) throws IllegalArgumentException {
+    public void setChannel(int channel, IChannel propagationChannel) {
         this._checkChannel(channel);
         if (this._channels.containsKey(channel)) {
             throw new IllegalArgumentException("Duplicate channel number.");
@@ -111,16 +129,14 @@ public class FourPolarImagingSetup {
         this._channels.put(channel, propagationChannel);
     }
 
-    /**
-     * @return the propagation channel.
-     */
+    @Override
     public IChannel getChannel(int channel) {
         this._checkChannel(channel);
-        
+
         if (channel > this._channels.size()) {
             throw new IllegalArgumentException("Channel exceeds number of channels.");
         }
-        
+
         return this._channels.get(channel);
     }
 
