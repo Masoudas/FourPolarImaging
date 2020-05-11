@@ -2,13 +2,12 @@ package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern;
 
 import java.io.File;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
-import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.NoImageFoundOnRoot;
-import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.WrongSampleSetFinder;
 
 /**
  * Using this class, we can find the images of the sample set on the given root
@@ -28,7 +27,6 @@ public class SampleImageSetByNamePatternFinder {
     private File rootFolder = null;
     private IChannelImageFinder channelImageFinder = null;
     private Cameras _camera;
-    private Hashtable<File, String> _rejectedImages;
 
     /**
      * Used for finding the images in case of single camera.
@@ -86,13 +84,8 @@ public class SampleImageSetByNamePatternFinder {
         this.channelImageFinder = new FourCameraChannelImageFinder();
     }
 
-    public List<RejectedCapturedImage> findChannelImages(SampleImageSet sampleImageSet, int channel,
-            String channelLabel) throws NoImageFoundOnRoot, WrongSampleSetFinder {
-        if (sampleImageSet.getImagingSetup().getCameras() != this._camera) {
-            throw new WrongSampleSetFinder("Use class constructor for " + this._camera.toString() + " cameras");
-        }
-
-        return this.channelImageFinder.find(this, sampleImageSet, channel, channelLabel);
+    public Iterator<File[]> findChannelImages(String channelLabel) {
+        return this.channelImageFinder.find(this, channelLabel);
     }
 
     /**
@@ -109,13 +102,4 @@ public class SampleImageSetByNamePatternFinder {
         return rootFolder;
     }
 
-    /**
-     * Returns the rejected images as a disctionary, where the keys are the rejected
-     * files and the value is the reason.
-     * 
-     * @return the rejected images
-     */
-    public Hashtable<File, String> getRejectedImages() {
-        return _rejectedImages;
-    }
 }
