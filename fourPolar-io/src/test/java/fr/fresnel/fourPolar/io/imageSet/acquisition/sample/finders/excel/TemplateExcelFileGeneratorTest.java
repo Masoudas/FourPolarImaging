@@ -25,7 +25,7 @@ public class TemplateExcelFileGeneratorTest {
         TemplateExcelFileGenerator fileGenerator = new TemplateExcelFileGenerator(Cameras.One, rootFolder);
 
         // If no exceptions are caught, the file has been created.
-        assertTrue(fileGenerator.createChannelFile(1));
+        assertTrue(fileGenerator.create(1));
     }
 
     @Test
@@ -33,14 +33,15 @@ public class TemplateExcelFileGeneratorTest {
         TemplateExcelFileGenerator fileGenerator = new TemplateExcelFileGenerator(Cameras.Two, rootFolder);
 
         // If no exceptions are caught, the file has been created.
-        assertTrue(fileGenerator.createChannelFile(2));
+        assertTrue(fileGenerator.create(2));
     }
 
     @Test
-    public void create_FourCameraChannel3_CreatesThefileInTheResourceTestMaterialFolder() throws IOException {
-        TemplateExcelFileGenerator fileGenerator = new TemplateExcelFileGenerator(Cameras.Four, rootFolder);
+    public void create_FullChannel_CreatesThefileInTheResourceTestMaterialFolder() throws IOException {
+        TemplateExcelFileGenerator fileGenerator = new TemplateExcelFileGenerator(Cameras.One, rootFolder);
 
         // If no exceptions are caught, the file has been created.
-        assertTrue(fileGenerator.createChannelFile(3));
+        assertTrue(fileGenerator.create());
     }
+
 }
