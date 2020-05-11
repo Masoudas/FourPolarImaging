@@ -4,15 +4,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Hashtable;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.util.DRectangle;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
@@ -29,7 +33,9 @@ public class FourPolarImagingSetupFromYamlTest {
     @Test
     public void write_WriteOneCameraOneChannel_FileGeneratedinResourceFolder()
             throws JsonGenerationException, JsonMappingException, IOException {
-        IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
+        IFourPolarImagingSetup imagingSetup = new DummyFPSetup();
+
+        imagingSetup.setCameras(Cameras.One);
 
         DRectangle rect0 = new DRectangle(1, 1, 128, 128);
         DRectangle rect45 = new DRectangle(128, 1, 128, 128);
@@ -49,8 +55,12 @@ public class FourPolarImagingSetupFromYamlTest {
         FourPolarImagingSetupToYaml writer = new FourPolarImagingSetupToYaml(imagingSetup, rootFolder);
         writer.write();
 
+        /**
+         * Reading from disk.
+         */
+        IFourPolarImagingSetup diskImagingSetup = new DummyFPSetup();
         FourPolarImagingSetupFromYaml reader = new FourPolarImagingSetupFromYaml(rootFolder);
-        IFourPolarImagingSetup diskImagingSetup = reader.read();
+        reader.read(diskImagingSetup);
 
         DRectangle diskRect0 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol0);
         DRectangle diskRect45 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol45);
@@ -88,4 +98,57 @@ public class FourPolarImagingSetupFromYamlTest {
                         .getCalibrationFactor(Polarization.pol135);
 
     }
+}
+
+class DummyFPSetup implements IFourPolarImagingSetup {
+    private Cameras cameras;
+    private Hashtable<Integer, IChannel> channels = new Hashtable<>();
+    private INumericalAperture na;
+    private IFieldOfView fov;
+
+    @Override
+    public Cameras getCameras() {
+        return cameras;
+    }
+
+    @Override
+    public void setCameras(Cameras cameras) throws IllegalArgumentException {
+        this.cameras = cameras;
+    }
+
+    @Override
+    public IChannel getChannel(int channel) throws IllegalArgumentException {
+        return channels.get(channel);
+    }
+
+    @Override
+    public void setChannel(int channel, IChannel propagationChannel) throws IllegalArgumentException {
+        channels.put(channel, propagationChannel);
+    }
+
+    @Override
+    public int getNumChannel() {
+        return this.channels.size();
+    }
+
+    @Override
+    public INumericalAperture getNumericalAperture() {
+        return na;
+    }
+
+    @Override
+    public void setNumericalAperture(INumericalAperture na) {
+        this.na = na;
+    }
+
+    @Override
+    public IFieldOfView getFieldOfView() {
+        return this.fov;
+    }
+
+    @Override
+    public void setFieldOfView(IFieldOfView fov) throws IllegalArgumentException {
+        this.fov = fov;
+    }
+
 }
