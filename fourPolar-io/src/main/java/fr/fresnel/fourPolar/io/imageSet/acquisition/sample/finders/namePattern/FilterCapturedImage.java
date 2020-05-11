@@ -10,21 +10,16 @@ import java.util.regex.Pattern;
  */
 
 class FilterCapturedImage implements FilenameFilter {
-    String extension;
     String channelLabel;
     String polLabel;
 
-    public FilterCapturedImage(String polLabel, String channelLabel, String extension){
-        this.extension = extension.toLowerCase();
+    public FilterCapturedImage(String polLabel, String channelLabel){
         this.channelLabel = channelLabel;
         this.polLabel = polLabel;
     }
 
     @Override
     public boolean accept(File dir, String name) {
-        if (!name.toLowerCase().endsWith("." + this.extension))
-            return false;
-        
         if (this.channelLabel != null && !Pattern.compile(this.channelLabel).matcher(name).find())
             return false;
 
