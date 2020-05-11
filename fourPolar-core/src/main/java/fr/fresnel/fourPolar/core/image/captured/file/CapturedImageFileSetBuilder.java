@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import javassist.tools.reflect.CannotCreateException;
 
@@ -32,7 +32,7 @@ public class CapturedImageFileSetBuilder {
      * @param checker      is the set of constraints we put to accepted or reject a
      *                     given file as proper captured image.
      */
-    public CapturedImageFileSetBuilder(FourPolarImagingSetup imagingSetup, ICapturedImageChecker checker) {
+    public CapturedImageFileSetBuilder(IFourPolarImagingSetup imagingSetup, ICapturedImageChecker checker) {
         this._checker = Objects.requireNonNull(checker, "checker cannot be null");
         Objects.requireNonNull(imagingSetup, "imaging setup cannot be null.");
 

@@ -14,12 +14,12 @@ import org.junit.jupiter.api.Test;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.ExcelIncorrentRow;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.MissingExcelTitleRow;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.excel.TemplateSampleSetExcelNotFound;
-import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageChecker;
+import fr.fresnel.fourPolar.io.image.captured.tiff.checker.TiffCapturedImageChecker;
 
 public class SampleImageSetByExcelFileFinderTest {
         static private File root;
@@ -38,7 +38,7 @@ public class SampleImageSetByExcelFileFinderTest {
                 File oneCameraChannel1Excel = new File(rootOneCamera, "TemplateOneCamera-Channel1.xlsx");
                 File oneCameraChannel2Excel = new File(rootOneCamera, "TemplateOneCamera-Channel2.xlsx");
 
-                FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
+                IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
 
                 SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder();
@@ -66,7 +66,7 @@ public class SampleImageSetByExcelFileFinderTest {
                 File rootTwoCamera = new File(root, "TwoCamera");
                 File twoCameraExcel = new File(rootTwoCamera, "TemplateTwoCamera.xlsx");
 
-                FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
+                IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
 
                 SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder();
@@ -90,7 +90,7 @@ public class SampleImageSetByExcelFileFinderTest {
                 File rootFourCamera = new File(root, "FourCamera");
                 File fourCameraExcel = new File(rootFourCamera, "TemplateFourCamera.xlsx");
 
-                FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
+                IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
 
                 SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder();
@@ -120,7 +120,7 @@ public class SampleImageSetByExcelFileFinderTest {
         public void findChannelImage_WrongNFilesInExcel_RaisesExcelIncorrentRow() {
                 File wrongOneCameraExcel = new File(root, "WrongTemplateOneCamera-Channel1.xlsx");
 
-                FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
+                IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
 
                 SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder();
@@ -135,7 +135,7 @@ public class SampleImageSetByExcelFileFinderTest {
         public void findChannelImage_NoTitleRow_RaisesMissingExcelTitleRow() {
                 File wrongOneCameraExcel = new File(root, "MissingTitleTemplateOneCamera-Channel1.xlsx");
 
-                FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
+                IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
 
                 SampleImageSetByExcelFileFinder finder = new SampleImageSetByExcelFileFinder();

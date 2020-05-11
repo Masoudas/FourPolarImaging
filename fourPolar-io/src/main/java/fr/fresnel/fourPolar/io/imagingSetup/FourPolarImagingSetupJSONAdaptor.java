@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.imagingSetup.imageFormation.fov.IFieldOfViewJSONAdaptor;
 import fr.fresnel.fourPolar.io.physics.channel.IChannelJSONAdaptor;
@@ -29,24 +30,21 @@ class FourPolarImagingSetupJSONAdaptor {
     @JsonProperty("Number Of Cameras")
     private Cameras _cameras;
 
-    public void toYaml(FourPolarImagingSetup imagingSetup) {
+    public void toYaml(IFourPolarImagingSetup imagingSetup) {
         _setFieldOfViewAdaptor(imagingSetup);
         _setNumericalApertureAdaptor(imagingSetup);
         _setChannels(imagingSetup);
         _setNCameras(imagingSetup);
     }
 
-    public FourPolarImagingSetup fromYaml() throws IOException {
-        FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(this._channelAdaptor.size(), this._cameras);
-
+    public void fromYaml(IFourPolarImagingSetup imagingSetup) throws IOException {
         imagingSetup.setFieldOfView(this._fovAdaptor.fromJSON());
         imagingSetup.setNumericalAperture(this._naAdaptor.fromJSON());
+        imagingSetup.setCameras(this._cameras);
 
         for (int channel = 1; channel <= this._channelAdaptor.size(); channel++) {
             imagingSetup.setChannel(channel, this._channelAdaptor.get("Channel " + channel).fromJSON());
         }
-
-        return imagingSetup;
     }
 
     private void _setFieldOfViewAdaptor(FourPolarImagingSetup imagingSetup) {

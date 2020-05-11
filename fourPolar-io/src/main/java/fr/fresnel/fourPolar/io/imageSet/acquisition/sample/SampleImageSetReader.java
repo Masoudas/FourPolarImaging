@@ -14,7 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.SampleImageNotFound;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.SampleSetExcelNotFound;
@@ -26,7 +26,7 @@ import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.ex
  * 0_params folder. See {@ SampleImageSetWriter}
  */
 public class SampleImageSetReader {
-    private FourPolarImagingSetup _imagingSetup;
+    private IFourPolarImagingSetup _imagingSetup;
     private SampleImageSet _sampleImageSet = null;
     private File _sampleSetFolder;
 
@@ -38,7 +38,7 @@ public class SampleImageSetReader {
      * @param imagingSetup
      * @param rootFolder
      */
-    public SampleImageSetReader(FourPolarImagingSetup imagingSetup, File rootFolder) {
+    public SampleImageSetReader(IFourPolarImagingSetup imagingSetup, File rootFolder) {
         this._imagingSetup = imagingSetup;
         this._sampleSetFolder = SampleImageSetWriter.getSampleSetFolder(rootFolder);
     }

@@ -6,10 +6,10 @@ import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 
 /**
- * This class is used for writing the fourPolar imaging setup to disk.
+ * This class is used for reading the fourPolar imaging setup from disk.
  */
 public class FourPolarImagingSetupFromYaml {
     private File _rootFolder;
@@ -18,7 +18,7 @@ public class FourPolarImagingSetupFromYaml {
         this._rootFolder = rootFolder;
     }
 
-    public FourPolarImagingSetup read() throws IOException{
+    public void read(IFourPolarImagingSetup imagingSetup) throws IOException{
         File destFile = new File(FourPolarImagingSetupToYaml.getDestinationFolder(this._rootFolder),
             FourPolarImagingSetupToYaml.getFileName());
 
@@ -27,7 +27,7 @@ public class FourPolarImagingSetupFromYaml {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         adaptor = mapper.readValue(destFile, adaptor.getClass());
 
-        return adaptor.fromYaml();
+        adaptor.fromYaml(imagingSetup);
     }
 
 }

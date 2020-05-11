@@ -9,9 +9,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
-import fr.fresnel.fourPolar.core.image.captured.ICapturedImageChecker;
+import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.CorruptSampleSetExcel;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.SampleSetExcelNotFound;
@@ -35,7 +35,7 @@ public class SampleImageSetReaderWriterTest {
                         throws IOException, CorruptSampleSetExcel, ExcelIncorrentRow, SampleSetExcelNotFound,
                         IncompatibleCapturedImage {
                 File rootOneCamera = new File(root, "OneCamera");
-                FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
+                IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new DummyTiffChecker());
 
                 SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootOneCamera);
@@ -57,7 +57,7 @@ public class SampleImageSetReaderWriterTest {
         public void writeThenRead_TwoCamera_ReturnsTheSameSampleSet() throws IOException, CorruptSampleSetExcel,
                         ExcelIncorrentRow, SampleSetExcelNotFound, IncompatibleCapturedImage {
                 File rootTwoCamera = new File(root, "TwoCamera");
-                FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
+                IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new DummyTiffChecker());
 
                 SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootTwoCamera,
@@ -78,7 +78,7 @@ public class SampleImageSetReaderWriterTest {
         public void writeThenRead_FourCamera_ReturnsTheSameSampleSet() throws IOException, CorruptSampleSetExcel,
                         ExcelIncorrentRow, SampleSetExcelNotFound, IncompatibleCapturedImage {
                 File rootFourCamera = new File(root, "FourCamera");
-                FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
+                IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
                 SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new DummyTiffChecker());
 
                 SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootFourCamera, "Pol0",

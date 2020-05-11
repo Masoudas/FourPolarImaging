@@ -8,17 +8,17 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.PathFactoryOfProject;
 
 /**
  * This class is used for writing the fourPolar imaging setup to disk.
  */
 public class FourPolarImagingSetupToYaml {
-    private FourPolarImagingSetup _imagingSetup;
+    private IFourPolarImagingSetup _imagingSetup;
     private File _rootFolder;
 
-    public FourPolarImagingSetupToYaml(FourPolarImagingSetup imagingSetup, File rootFolder) {
+    public FourPolarImagingSetupToYaml(IFourPolarImagingSetup imagingSetup, File rootFolder) {
         this._imagingSetup = imagingSetup;
         this._rootFolder = rootFolder;
     }

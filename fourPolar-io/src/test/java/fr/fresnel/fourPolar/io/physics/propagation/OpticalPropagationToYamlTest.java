@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.fourPolar.propagationdb.PropagationChannelNotInDatabase;
 import fr.fresnel.fourPolar.core.fourPolar.propagationdb.IOpticalPropagationDB;
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
@@ -32,7 +32,7 @@ public class OpticalPropagationToYamlTest {
         IOpticalPropagation propagation2 = createOpticalPropagation(channel2, na, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7,
                 0.8, 0.9, 0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16);
 
-        FourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.One);
+        IFourPolarImagingSetup setup = new FourPolarImagingSetup(2, Cameras.One);
         setup.setChannel(1, channel1);
         setup.setChannel(2, channel2);
         setup.setNumericalAperture(na);

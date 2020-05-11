@@ -40,15 +40,11 @@ public class FourPolarImagingSetup implements IFourPolarImagingSetup {
         this._channels = new HashMap<>();
     }
 
-    /**
-     * Set number of cameras.
-     * 
-     * @throws IllegalArgumentException if already set.
-     */
+    @Override
     public void setCameras(Cameras cameras) {
         Objects.requireNonNull(cameras, "cameras must not be null.");
 
-        if (this._cameras == null) {
+        if (this._cameras != null) {
             throw new IllegalArgumentException("Camera is already set");
         }
 
@@ -65,15 +61,11 @@ public class FourPolarImagingSetup implements IFourPolarImagingSetup {
         return this._channels.size();
     }
 
-    /**
-     * Set the field of view.
-     * 
-     * @throws IllegalArgumentException if already set.
-     */
+    @Override
     public void setFieldOfView(IFieldOfView fov) {
         Objects.requireNonNull(fov, "fov must not be null.");
 
-        if (this._fov == null) {
+        if (this._fov != null) {
             throw new IllegalArgumentException("FoV is already set");
         }
 
@@ -85,15 +77,11 @@ public class FourPolarImagingSetup implements IFourPolarImagingSetup {
         return this._fov;
     }
 
-    /**
-     * Sets the numerical aperture.
-     * 
-     * @throws IllegalArgumentException if already set.
-     */
+    @Override
     public void setNumericalAperture(INumericalAperture na) {
         Objects.requireNonNull(na, "na must not be null.");
 
-        if (this._numAperture == null) {
+        if (this._numAperture != null) {
             throw new IllegalArgumentException("NA is already set");
         }
 
@@ -105,15 +93,7 @@ public class FourPolarImagingSetup implements IFourPolarImagingSetup {
         return this._numAperture;
     }
 
-    /**
-     * Set propagation channel channel.
-     * 
-     * @param channel            channel number
-     * @param propagationChannel propagation channel data
-     * 
-     * @throws IllegalArgumentException in case of duplicate channel number or
-     *                                  channel parameters.
-     */
+    @Override
     public void setChannel(int channel, IChannel propagationChannel) {
         this._checkChannel(channel);
         if (this._channels.containsKey(channel)) {
@@ -133,7 +113,8 @@ public class FourPolarImagingSetup implements IFourPolarImagingSetup {
     public IChannel getChannel(int channel) {
         this._checkChannel(channel);
 
-        if (channel > this._channels.size()) {
+        int numChannels = this._channels.size();
+        if (channel > numChannels) {
             throw new IllegalArgumentException("Channel exceeds number of channels.");
         }
 

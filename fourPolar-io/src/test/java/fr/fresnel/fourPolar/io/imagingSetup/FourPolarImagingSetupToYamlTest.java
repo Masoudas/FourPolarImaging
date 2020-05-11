@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
 import fr.fresnel.fourPolar.core.util.DRectangle;
@@ -25,7 +25,7 @@ public class FourPolarImagingSetupToYamlTest {
     @Test
     public void write_WriteOneCameraThreeChannel_FileGeneratedinResourceFolder()
             throws JsonGenerationException, JsonMappingException, IOException {
-        FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
+        IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
 
         DRectangle rect0 = new DRectangle(1, 1, 128, 128);
         DRectangle rect45 = new DRectangle(128, 1, 128, 128);

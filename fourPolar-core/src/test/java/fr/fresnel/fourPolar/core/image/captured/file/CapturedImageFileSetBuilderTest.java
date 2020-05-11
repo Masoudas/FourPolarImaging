@@ -10,10 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
-import fr.fresnel.fourPolar.core.image.generic.IMetadata;
-import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import javassist.tools.reflect.CannotCreateException;
@@ -58,7 +55,7 @@ public class CapturedImageFileSetBuilderTest {
 
     @Test
     public void build_BuildWithInsufficientFiles_ThrowsException() {
-        FourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
         setup.setCameras(Cameras.Two);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -70,7 +67,7 @@ public class CapturedImageFileSetBuilderTest {
 
     @Test
     public void build_BuildWithInsufficientChannels_ThrowsException() {
-        FourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
         setup.setCameras(Cameras.One);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -82,7 +79,7 @@ public class CapturedImageFileSetBuilderTest {
 
     @Test
     public void build_BuildWithRepetitiveChannels_ThrowsException() {
-        FourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
         setup.setCameras(Cameras.One);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -96,7 +93,7 @@ public class CapturedImageFileSetBuilderTest {
     @Test
     public void build_createTwoSeparateSetsOneCamMultiChannel_ReturnsTwoSets()
             throws CannotCreateException, IncompatibleCapturedImage {
-        FourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
         setup.setCameras(Cameras.One);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -114,7 +111,7 @@ public class CapturedImageFileSetBuilderTest {
     @Test
     public void build_createTwoSeparateSetsOneCamSingleChannel_ReturnsTwoSets()
             throws CannotCreateException, IncompatibleCapturedImage {
-        FourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
         setup.setCameras(Cameras.One);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -134,7 +131,7 @@ public class CapturedImageFileSetBuilderTest {
     @Test
     public void build_createTwoSeparateSetsTwoCamSingleChannel_ReturnsTwoSets()
             throws CannotCreateException, IncompatibleCapturedImage {
-        FourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
         setup.setCameras(Cameras.Two);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -155,7 +152,7 @@ public class CapturedImageFileSetBuilderTest {
     @Test
     public void build_createTwoSeparateSetsTwoCamMultiChannel_ReturnsTwoSets()
             throws CannotCreateException, IncompatibleCapturedImage {
-        FourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
         setup.setCameras(Cameras.Two);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -174,7 +171,7 @@ public class CapturedImageFileSetBuilderTest {
     @Test
     public void build_createTwoSeparateSetsFourCamSingleChannel_ReturnsTwoSets() throws CannotCreateException,
             IncompatibleCapturedImage {
-        FourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
         setup.setCameras(Cameras.Four);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -198,7 +195,7 @@ public class CapturedImageFileSetBuilderTest {
     @Test
     public void build_createTwoSeparateSetsFourCamMultiChannel_ReturnsTwoSets() throws CannotCreateException,
             IncompatibleCapturedImage {
-        FourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
         setup.setCameras(Cameras.Four);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));

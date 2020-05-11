@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
 import fr.fresnel.fourPolar.core.util.DRectangle;
@@ -29,7 +29,7 @@ public class FourPolarImagingSetupFromYamlTest {
     @Test
     public void write_WriteOneCameraOneChannel_FileGeneratedinResourceFolder()
             throws JsonGenerationException, JsonMappingException, IOException {
-        FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
+        IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.One);
 
         DRectangle rect0 = new DRectangle(1, 1, 128, 128);
         DRectangle rect45 = new DRectangle(128, 1, 128, 128);
@@ -50,7 +50,7 @@ public class FourPolarImagingSetupFromYamlTest {
         writer.write();
 
         FourPolarImagingSetupFromYaml reader = new FourPolarImagingSetupFromYaml(rootFolder);
-        FourPolarImagingSetup diskImagingSetup = reader.read();
+        IFourPolarImagingSetup diskImagingSetup = reader.read();
 
         DRectangle diskRect0 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol0);
         DRectangle diskRect45 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol45);

@@ -10,8 +10,8 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
-import fr.fresnel.fourPolar.core.image.captured.ICapturedImageChecker;
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 public class SampleImageSetTest {
@@ -22,7 +22,7 @@ public class SampleImageSetTest {
     File pol90 = new File(root, "pol90.tiff");
     File pol135 = new File(root, "pol135.tiff");
 
-    FourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.Four);
+    IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.Four);
 
     SampleImageSet sampleSet = new SampleImageSet(imagingSetup, new DummyImageChecker());
 
@@ -57,19 +57,4 @@ public class SampleImageSetTest {
 
     }
 
-}
-
-class DummyImageChecker implements ICapturedImageChecker {
-
-    @Override
-    public String getExtension() {
-        return "tiff";
-    }
-
-    @Override
-    public void check(File imagePath) throws IncompatibleCapturedImage {
-
-    }
-
-    
 }

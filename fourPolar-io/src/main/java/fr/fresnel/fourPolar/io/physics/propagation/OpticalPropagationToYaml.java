@@ -10,7 +10,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 
 import fr.fresnel.fourPolar.core.exceptions.fourPolar.propagationdb.PropagationChannelNotInDatabase;
 import fr.fresnel.fourPolar.core.fourPolar.propagationdb.IOpticalPropagationDB;
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.core.PathFactoryOfProject;
 
@@ -20,7 +20,7 @@ import fr.fresnel.fourPolar.core.PathFactoryOfProject;
  */
 public class OpticalPropagationToYaml {
 
-    public void write(File rootFolder, FourPolarImagingSetup setup, IOpticalPropagationDB database)
+    public void write(File rootFolder, IFourPolarImagingSetup setup, IOpticalPropagationDB database)
             throws PropagationChannelNotInDatabase, IOException {
         ObjectMapper mapper = getYamlMapper();
         for (int channel = 1; channel <= setup.getNumChannel(); channel++) {
@@ -50,7 +50,7 @@ public class OpticalPropagationToYaml {
      * @param database
      * @throws PropagationChannelNotInDatabase
      */
-    private IOpticalPropagationJSONAdaptor getJSONAdaptor(FourPolarImagingSetup setup, IOpticalPropagationDB database,
+    private IOpticalPropagationJSONAdaptor getJSONAdaptor(IFourPolarImagingSetup setup, IOpticalPropagationDB database,
             int channel) throws PropagationChannelNotInDatabase {
         IOpticalPropagation optProp = database.search(setup.getChannel(channel), setup.getNumericalAperture());
 
