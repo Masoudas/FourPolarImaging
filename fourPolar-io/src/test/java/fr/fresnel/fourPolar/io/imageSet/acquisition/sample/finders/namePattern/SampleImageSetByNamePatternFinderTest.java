@@ -3,7 +3,8 @@ package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Iterator;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
@@ -11,118 +12,117 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
-import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
-import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.finders.namePattern.NoImageFoundOnRoot;
-import fr.fresnel.fourPolar.io.image.captured.tiff.checker.TiffCapturedImageChecker;
 
 public class SampleImageSetByNamePatternFinderTest {
-        private static File root;
+    private static File root;
 
-        @BeforeAll
-        private static void setRoot() {
-                root = new File(SampleImageSetByNamePatternFinderTest.class
-                                .getResource("SampleImageSetByNamePatternFinder").getPath());
-        }
+    @BeforeAll
+    private static void setRoot() {
+        root = new File(
+                SampleImageSetByNamePatternFinderTest.class.getResource("SampleImageSetByNamePatternFinder").getPath());
+    }
 
-        @Test
-        public void findChannelImages_OneCamera_ReturnsThreeCapturedSetsForEachChannel()
-                        throws NoImageFoundOnRoot, IncompatibleCapturedImage {
-                File rootOneCamera = new File(root, "OneCamera");
-                IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(2, Cameras.One);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
+    @Test
+    public void find_OneCameraTwoChannel_ReturnsThreeCapturedSetsForEachChannel() throws IncompatibleCapturedImage {
+        File rootOneCamera = new File(root, "OneCamera");
 
-                SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootOneCamera);
+        SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootOneCamera);
 
-                List<RejectedCapturedImage> rejectedChan1 = finder.findChannelImages(sampleImageSet, 1, "C1");
-                List<RejectedCapturedImage> rejectedChan2 = finder.findChannelImages(sampleImageSet, 2, "C2");
+        Iterator<File[]> channel1 = finder.find("C1");
+        Iterator<File[]> channel2 = finder.find("C2");
 
-                SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
-                actualSampleImageSet.addImage(1, new File(rootOneCamera, "Img1_C1.tif"));
-                actualSampleImageSet.addImage(1, new File(rootOneCamera, "Img2_C1.tif"));
-                actualSampleImageSet.addImage(2, new File(rootOneCamera, "Img1_C2.tif"));
-                actualSampleImageSet.addImage(2, new File(rootOneCamera, "Img2_C2.tif"));
+        File[] channel1Files = new File[] { new File(rootOneCamera, "Img1_C1.tif"),
+                new File(rootOneCamera, "Img2_C1.tif"), new File(rootOneCamera, "Img3_C1.tif"),
+                new File(rootOneCamera, "Img4_C1.tif") };
 
-                assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1))
-                                && actualSampleImageSet.getChannelImages(2).equals(sampleImageSet.getChannelImages(2))
-                                && rejectedChan1.size() == 2 && rejectedChan2.size() == 2);
+        File[] channel2Files = new File[] { new File(rootOneCamera, "Img1_C2.tif"),
+                new File(rootOneCamera, "Img2_C2.tif"), new File(rootOneCamera, "Img3_C2.tif"),
+                new File(rootOneCamera, "Img4_C2.tif") };
 
-        }
+        assertTrue(isInArray(channel1, channel1Files) && isInArray(channel2, channel2Files));
 
-        @Test
-        public void findChannelImages_TwoCamera_ReturnsThreeCapturedSets() throws NoImageFoundOnRoot,
-                        KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
-                File rootTwoCamera = new File(root, "TwoCamera");
+    }
 
-                IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Two);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
+    @Test
+    public void find_OneCameraFullChannel_ReturnsThreeCapturedSetsForEachChannel() throws IncompatibleCapturedImage {
+        File rootOneCamera = new File(root, "OneCameraFullChannel");
 
-                SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootTwoCamera,
-                                "Pol0_90", "Pol45_135");
+        SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootOneCamera);
 
-                List<RejectedCapturedImage> rejectedChan1 = finder.findChannelImages(sampleImageSet, 1, null);
+        Iterator<File[]> fullChannel = finder.find();
 
-                // Generate sets to see if found
-                SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
-                actualSampleImageSet.addImage(1, new File(rootTwoCamera, "Img1_C1_Pol0_90.tif"),
-                                new File(rootTwoCamera, "Img1_C1_Pol45_135.tif"));
-                actualSampleImageSet.addImage(1, new File(rootTwoCamera, "Img2_C1_Pol0_90.tif"),
-                                new File(rootTwoCamera, "Img2_C1_Pol45_135.tif"));
-                actualSampleImageSet.addImage(1, new File(rootTwoCamera, "Img3_C1_Pol0_90.tif"),
-                                new File(rootTwoCamera, "Img3_C1_Pol45_135.tif"));
-                assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1))
-                                && rejectedChan1.size() == 3);
-        }
+        File[] files = new File[] { new File(rootOneCamera, "Img1.tif"), new File(rootOneCamera, "Img2.tif"),
+                new File(rootOneCamera, "Img3.tif"), new File(rootOneCamera, "Img4.tif") };
 
-        @Test
-        public void findChannelImages_FourCamera_ReturnsThreeCapturedSets() throws NoImageFoundOnRoot,
-                        KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
-                File rootFourCamera = new File(root, "FourCamera");
+        assertTrue(isInArray(fullChannel, files));
 
-                IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
+    }
 
-                SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootFourCamera, "Pol0",
-                                "Pol45", "Pol90", "Pol135");
+    @Test
+    public void find_TwoCameraSingleChannel_ReturnsThreeCapturedSets()
+            throws KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
+        File rootTwoCamera = new File(root, "TwoCamera");
 
-                List<RejectedCapturedImage> rejectedChan1 = finder.findChannelImages(sampleImageSet, 1, null);
+        SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootTwoCamera, "Pol0_90",
+                "Pol45_135");
 
-                // Generate sets to see if found
-                SampleImageSet actualSampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
-                actualSampleImageSet.addImage(1, new File(rootFourCamera, "Img1_C1_Pol0.tif"),
-                                new File(rootFourCamera, "Img1_C1_Pol45.tif"),
-                                new File(rootFourCamera, "Img1_C1_Pol90.tif"),
-                                new File(rootFourCamera, "Img1_C1_Pol135.tif"));
-                actualSampleImageSet.addImage(1, new File(rootFourCamera, "Img2_C1_Pol0.tif"),
-                                new File(rootFourCamera, "Img2_C1_Pol45.tif"),
-                                new File(rootFourCamera, "Img2_C1_Pol90.tif"),
-                                new File(rootFourCamera, "Img2_C1_Pol135.tif"));
-                actualSampleImageSet.addImage(1, new File(rootFourCamera, "Img3_C1_Pol0.tif"),
-                                new File(rootFourCamera, "Img3_C1_Pol45.tif"),
-                                new File(rootFourCamera, "Img3_C1_Pol90.tif"),
-                                new File(rootFourCamera, "Img3_C1_Pol135.tif"));
-                assertTrue(actualSampleImageSet.getChannelImages(1).equals(sampleImageSet.getChannelImages(1))
-                                && rejectedChan1.size() == 3);
-        }
+        Iterator<File[]> channel1 = finder.find("C1");
 
-        @Test
-        public void findChannelImages_IncompleteFileSet_RejectsWithNoCorrespondence() {
-                File rootFourCamera = new File(root, "IncompleteFourCamera");
+        File[] files = new File[] { new File(rootTwoCamera, "Img1_C1_Pol0_90.tif"),
+                new File(rootTwoCamera, "Img1_C1_Pol45_135.tif"), new File(rootTwoCamera, "Img2_C1_Pol0_90.tif"),
+                new File(rootTwoCamera, "Img2_C1_Pol45_135.tif"), new File(rootTwoCamera, "Img3_C1_Pol0_90.tif"),
+                new File(rootTwoCamera, "Img3_C1_Pol45_135.tif") };
 
-                IFourPolarImagingSetup imagingSetup = new FourPolarImagingSetup(1, Cameras.Four);
-                SampleImageSet sampleImageSet = new SampleImageSet(imagingSetup, new TiffCapturedImageChecker());
+        assertTrue(isInArray(channel1, files));
+    }
 
-                SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootFourCamera, "Pol0",
-                                "Pol45", "Pol90", "Pol135");
+    @Test
+    public void findChannelImages_FourCamera_ReturnsThreeCapturedSets()
+            throws KeyAlreadyExistsException, IllegalArgumentException, IncompatibleCapturedImage {
+        File rootFourCamera = new File(root, "FourCamera");
+        SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootFourCamera, "Pol0",
+                "Pol45", "Pol90", "Pol135");
 
-                try {
-                        List<RejectedCapturedImage> rejectedChan1 = finder.findChannelImages(sampleImageSet, 1, null);
-                        System.out.println(rejectedChan1.get(0).getReason());
-                } catch (NoImageFoundOnRoot e) {
+        Iterator<File[]> channel1 = finder.find("C1");
+
+        File[] files = new File[] { new File(rootFourCamera, "Img1_C1_Pol0.tif"),
+                new File(rootFourCamera, "Img1_C1_Pol45.tif"), new File(rootFourCamera, "Img1_C1_Pol90.tif"),
+                new File(rootFourCamera, "Img1_C1_Pol135.tif"), new File(rootFourCamera, "Img2_C1_Pol0.tif"),
+                new File(rootFourCamera, "Img2_C1_Pol45.tif"), new File(rootFourCamera, "Img2_C1_Pol90.tif"),
+                new File(rootFourCamera, "Img2_C1_Pol135.tif"), new File(rootFourCamera, "Img3_C1_Pol0.tif"),
+                new File(rootFourCamera, "Img3_C1_Pol45.tif"), new File(rootFourCamera, "Img3_C1_Pol90.tif"),
+                new File(rootFourCamera, "Img3_C1_Pol135.tif"), };
+
+        assertTrue(isInArray(channel1, files));
+
+    }
+
+    @Test
+    public void find_FullChannelIncompleteFileSet_RejectsWithNoCorrespondence() {
+        File rootFourCamera = new File(root, "IncompleteFourCamera");
+
+        SampleImageSetByNamePatternFinder finder = new SampleImageSetByNamePatternFinder(rootFourCamera, "Pol0",
+                "Pol45", "Pol90", "Pol135");
+
+        Iterator<File[]> fullChannel = finder.find();
+        assertTrue(!fullChannel.hasNext());
+    }
+
+    /**
+     * check all inside files[].
+     */
+    private boolean isInArray(Iterator<File[]> itr, File testFiles[]) {
+        int counter = 0;
+        while (itr.hasNext()) {
+            File[] files = itr.next();
+            for (File file : testFiles) {
+                if (Arrays.stream(files).anyMatch((t) -> t.equals(file))) {
+                    counter++;
                 }
+            }
 
         }
+        return counter == testFiles.length;
+    }
 
 }
