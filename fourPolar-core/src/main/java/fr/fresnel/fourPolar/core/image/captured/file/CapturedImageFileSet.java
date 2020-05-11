@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.core.image.captured.file;
 
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
@@ -110,22 +111,18 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof ICapturedImageFileSet))
+        String setNameToCompare = null;
+        if (obj instanceof ICapturedImageFileSet) {
+            ICapturedImageFileSet fileset = (ICapturedImageFileSet) obj;
+            setNameToCompare = fileset.getSetName();
+        } else if (obj instanceof String) {
+            setNameToCompare = (String) obj;
+        } else {
             return false;
-
-        ICapturedImageFileSet fileSet = (ICapturedImageFileSet) obj;
-        String[] labels = Cameras.getLabels(cameras);
-
-        if (labels.length != this.fileSet.size())
-            return false;
-
-        for (String label : labels) {
-            if (!fileSet.getFile(label).equals(this.getFile(label))) {
-                return false;
-            }
         }
 
-        return true;
+        return this.getSetName().equals(setNameToCompare);
+
     }
 
     @Override
@@ -168,5 +165,22 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
         }
 
         return channelOneFile;
+    }
+
+    @Override
+    public boolean deepEquals(ICapturedImageFileSet fileset) {
+        Objects.requireNonNull(fileset, "fileset can't be null");
+
+        String[] labels = Cameras.getLabels(cameras);
+        if (labels.length != this.fileSet.size())
+            return false;
+
+        for (String label : labels) {
+            if (!fileSet.getFile(label).equals(this.getFile(label))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

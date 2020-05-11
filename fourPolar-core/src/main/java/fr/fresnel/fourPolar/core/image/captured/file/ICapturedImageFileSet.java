@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.core.image.captured.file;
 
-import java.io.File;
-
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 /**
@@ -54,10 +52,21 @@ public interface ICapturedImageFileSet {
      */
     public boolean hasLabel(String label);
 
+    /**
+     * For any object other than ICapturedImageFileSet or String returns false. With
+     * this equal method, we check whether the {@link #getSetName()} is equal for
+     * the two sets.
+     */
     @Override
     public boolean equals(Object obj);
 
     @Override
     public int hashCode();
+
+    /**
+     * With this method, we check that all files, together with labels and number of
+     * cameras are equal. Compare to {@link #equals(Object)}.
+     */
+    public boolean deepEquals(ICapturedImageFileSet fileset);
 
 }
