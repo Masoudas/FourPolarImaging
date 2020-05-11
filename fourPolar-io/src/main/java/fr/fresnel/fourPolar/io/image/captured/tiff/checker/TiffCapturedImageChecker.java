@@ -11,7 +11,6 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
 
-
 /**
  * A class for checking the compatibility of a tiff image with the software
  * criteria.
@@ -62,7 +61,7 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
         } catch (UnsupportedAxisOrder e) {
             throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), undefinedAxis));
         } catch (IOException e) {
-            // Exception already caught (if exists!)
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), corruptContent));
         }
 
         return metadata;
@@ -94,7 +93,7 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
      */
     private void _bitDepthAbove16(IMetadata metadata, ICapturedImageFile image) throws IncompatibleCapturedImage {
         if (metadata.bitPerPixel() != 16) {
-            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), badExtension));
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), incompatibleBitDepth));
         }
     }
 
@@ -102,10 +101,19 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
      * Using the metadata of the image, make sure that number of channels equal the
      * given number of channels;
      */
-    private void _NumImageChannelsCorrespond(IMetadata metadata, ICapturedImageFile image) throws IncompatibleCapturedImage {
-        if (metadata.numChannels() != image.channels().length) {
-            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), badExtension));
+    private void _NumImageChannelsCorrespond(IMetadata metadata, ICapturedImageFile image)
+            throws IncompatibleCapturedImage {
+        boolean tiffOneChannel = metadata.numChannels() == 0 || metadata.numChannels() == 1;
+        boolean userSpecifiedOneChannel = image.channels().length == 1;
+
+        boolean tiffAndUserSpecifiedSameNumChannels = metadata.numChannels() == image.channels().length;
+
+        if (tiffOneChannel && !userSpecifiedOneChannel) {
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), incompatipleChannels));
+        } else if (!tiffAndUserSpecifiedSameNumChannels) {
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), incompatipleChannels));
         }
+
     }
 
     @Override
