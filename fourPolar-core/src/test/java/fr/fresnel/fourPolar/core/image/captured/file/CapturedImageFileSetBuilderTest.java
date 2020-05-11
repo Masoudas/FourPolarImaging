@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,10 @@ import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCap
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
+import fr.fresnel.fourPolar.core.physics.channel.IChannel;
+import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import javassist.tools.reflect.CannotCreateException;
 
 public class CapturedImageFileSetBuilderTest {
@@ -55,7 +59,7 @@ public class CapturedImageFileSetBuilderTest {
 
     @Test
     public void build_BuildWithInsufficientFiles_ThrowsException() {
-        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = new DummyFPSetup();
         setup.setCameras(Cameras.Two);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -67,7 +71,7 @@ public class CapturedImageFileSetBuilderTest {
 
     @Test
     public void build_BuildWithInsufficientChannels_ThrowsException() {
-        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = new DummyFPSetup();
         setup.setCameras(Cameras.One);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -79,7 +83,7 @@ public class CapturedImageFileSetBuilderTest {
 
     @Test
     public void build_BuildWithRepetitiveChannels_ThrowsException() {
-        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = new DummyFPSetup();
         setup.setCameras(Cameras.One);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -93,7 +97,7 @@ public class CapturedImageFileSetBuilderTest {
     @Test
     public void build_createTwoSeparateSetsOneCamMultiChannel_ReturnsTwoSets()
             throws CannotCreateException, IncompatibleCapturedImage {
-        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = new DummyFPSetup();
         setup.setCameras(Cameras.One);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -111,7 +115,7 @@ public class CapturedImageFileSetBuilderTest {
     @Test
     public void build_createTwoSeparateSetsOneCamSingleChannel_ReturnsTwoSets()
             throws CannotCreateException, IncompatibleCapturedImage {
-        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = new DummyFPSetup();
         setup.setCameras(Cameras.One);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -131,7 +135,7 @@ public class CapturedImageFileSetBuilderTest {
     @Test
     public void build_createTwoSeparateSetsTwoCamSingleChannel_ReturnsTwoSets()
             throws CannotCreateException, IncompatibleCapturedImage {
-        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = new DummyFPSetup();
         setup.setCameras(Cameras.Two);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -152,7 +156,8 @@ public class CapturedImageFileSetBuilderTest {
     @Test
     public void build_createTwoSeparateSetsTwoCamMultiChannel_ReturnsTwoSets()
             throws CannotCreateException, IncompatibleCapturedImage {
-        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+        IFourPolarImagingSetup setup = new DummyFPSetup();
+
         setup.setCameras(Cameras.Two);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
@@ -169,19 +174,19 @@ public class CapturedImageFileSetBuilderTest {
     }
 
     @Test
-    public void build_createTwoSeparateSetsFourCamSingleChannel_ReturnsTwoSets() throws CannotCreateException,
-            IncompatibleCapturedImage {
-        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+    public void build_createTwoSeparateSetsFourCamSingleChannel_ReturnsTwoSets()
+            throws CannotCreateException, IncompatibleCapturedImage {
+        IFourPolarImagingSetup setup = new DummyFPSetup();
         setup.setCameras(Cameras.Four);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
 
         CapturedImageFileSetBuilder builder = new CapturedImageFileSetBuilder(setup, new DummyChecker());
 
-        ICapturedImageFileSet fileSet = builder.add(new int[]{1}, pol0, pol45, pol90, pol135)
-                .add(new int[]{2}, pol0_1, pol45_1, pol90_1, pol135_1).build();
-        ICapturedImageFileSet fileSet_1 = builder.add(new int[]{1}, pol0_2, pol45_2, pol90_2, pol135_2)
-                .add(new int[]{2}, pol0_3, pol45_3, pol90_3, pol135_3).build();
+        ICapturedImageFileSet fileSet = builder.add(new int[] { 1 }, pol0, pol45, pol90, pol135)
+                .add(new int[] { 2 }, pol0_1, pol45_1, pol90_1, pol135_1).build();
+        ICapturedImageFileSet fileSet_1 = builder.add(new int[] { 1 }, pol0_2, pol45_2, pol90_2, pol135_2)
+                .add(new int[] { 2 }, pol0_3, pol45_3, pol90_3, pol135_3).build();
 
         String[] labels = Cameras.getLabels(Cameras.Four);
         assertTrue(!Arrays.equals(fileSet.getFile(labels[0]), fileSet_1.getFile(labels[0]))
@@ -191,19 +196,19 @@ public class CapturedImageFileSetBuilderTest {
                 && !fileSet.getSetName().equals(fileSet_1.getSetName()));
     }
 
-
     @Test
-    public void build_createTwoSeparateSetsFourCamMultiChannel_ReturnsTwoSets() throws CannotCreateException,
-            IncompatibleCapturedImage {
-        IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
+    public void build_createTwoSeparateSetsFourCamMultiChannel_ReturnsTwoSets()
+            throws CannotCreateException, IncompatibleCapturedImage {
+        IFourPolarImagingSetup setup = new DummyFPSetup();
+
         setup.setCameras(Cameras.Four);
         setup.setChannel(1, new Channel(1, 1, 1, 1, 1));
         setup.setChannel(2, new Channel(2, 1, 1, 1, 1));
 
         CapturedImageFileSetBuilder builder = new CapturedImageFileSetBuilder(setup, new DummyChecker());
 
-        ICapturedImageFileSet fileSet = builder.add(new int[]{1, 2}, pol0, pol45, pol90, pol135).build();
-        ICapturedImageFileSet fileSet_1 = builder.add(new int[]{1, 2}, pol0_2, pol45_2, pol90_2, pol135_2).build();
+        ICapturedImageFileSet fileSet = builder.add(new int[] { 1, 2 }, pol0, pol45, pol90, pol135).build();
+        ICapturedImageFileSet fileSet_1 = builder.add(new int[] { 1, 2 }, pol0_2, pol45_2, pol90_2, pol135_2).build();
 
         String[] labels = Cameras.getLabels(Cameras.Four);
         assertTrue(!Arrays.equals(fileSet.getFile(labels[0]), fileSet_1.getFile(labels[0]))
@@ -226,6 +231,57 @@ class DummyChecker implements ICapturedImageChecker {
 
     @Override
     public void check(ICapturedImageFile capturedImageFile) throws IncompatibleCapturedImage {
+
+    }
+
+}
+
+class DummyFPSetup implements IFourPolarImagingSetup {
+    private Cameras cameras;
+    private ArrayList<IChannel> channels = new ArrayList<>();
+
+    @Override
+    public Cameras getCameras() {
+        return cameras;
+    }
+
+    @Override
+    public void setCameras(Cameras cameras) throws IllegalArgumentException {
+        this.cameras = cameras;
+    }
+
+    @Override
+    public IChannel getChannel(int channel) throws IllegalArgumentException {
+        return channels.get(channel);
+    }
+
+    @Override
+    public void setChannel(int channel, IChannel propagationChannel) throws IllegalArgumentException {
+        channels.add(propagationChannel);
+    }
+
+    @Override
+    public int getNumChannel() {
+        return this.channels.size();
+    }
+
+    @Override
+    public INumericalAperture getNumericalAperture() {
+        return null;
+    }
+
+    @Override
+    public void setNumericalAperture(INumericalAperture na) {
+
+    }
+
+    @Override
+    public IFieldOfView getFieldOfView() {
+        return null;
+    }
+
+    @Override
+    public void setFieldOfView(IFieldOfView fov) throws IllegalArgumentException {
 
     }
 
