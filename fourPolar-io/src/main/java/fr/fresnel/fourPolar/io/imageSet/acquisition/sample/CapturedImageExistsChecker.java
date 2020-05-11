@@ -3,7 +3,8 @@ package fr.fresnel.fourPolar.io.imageSet.acquisition.sample;
 import java.io.File;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
-import fr.fresnel.fourPolar.core.image.captured.ICapturedImageChecker;
+import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 
 /**
@@ -20,10 +21,11 @@ class CapturedImageExistsChecker implements ICapturedImageChecker {
     }
 
     @Override
-    public void check(File imagePath) throws IncompatibleCapturedImage {
-        if (!imagePath.exists()) {
-            throw new IncompatibleCapturedImage(new RejectedCapturedImage(imagePath, notExists));
+    public void check(ICapturedImageFile capturedImageFile) throws IncompatibleCapturedImage {
+        if (!capturedImageFile.file().exists()) {
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(capturedImageFile.file(), notExists));
         }
+
     }
 
 }
