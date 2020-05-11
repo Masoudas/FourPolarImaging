@@ -51,4 +51,13 @@ public class BeadImageSet implements AcquisitionSet {
         return Arrays.stream(new ICapturedImageFileSet[]{imageFileSet}).iterator();
     }
 
+    @Override
+    public int setSize() {
+        if (this.imageFileSet == null){
+            return 0;
+        } else{
+            return 1;
+        }
+    }
+
 }

@@ -1,14 +1,14 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition;
 
-import java.io.File;
 import java.security.KeyException;
 import java.util.Iterator;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
-import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.bead.BeadImageSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 
 /**
  * Servers as a model for image containters like {@link BeadImageSet} and
@@ -54,4 +54,9 @@ public interface AcquisitionSet {
      * @param setName
      */
     public void removeImageSet(String setName) throws KeyException;
+
+    /**
+     * Returns number of {@link ICapturedImageFileSet} in this set.
+     */
+    public int setSize();
 }
