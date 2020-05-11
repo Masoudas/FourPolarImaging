@@ -6,7 +6,6 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
 
 /**
  * Unit test for simple App.
@@ -37,6 +36,72 @@ public class CapturedImageFileSetTest {
         CapturedImageFileSet fileSet_1 = new CapturedImageFileSet(pol0_1, pol45_1, pol90_1, pol135_1);
 
         assertTrue(fileSet.getSetName().equals(fileSet_1.getSetName()));
+    }
+
+    @Test
+    public void equals_CheckEqualSets_ReturnsEqual() {
+        int[] channel = { 1 };
+
+        CapturedImageFile[] pol0 = { new CapturedImageFile(channel, new File(root, "pol0.tiff")) };
+        CapturedImageFile[] pol45 = { new CapturedImageFile(channel, new File(root, "pol45.tiff")) };
+        CapturedImageFile[] pol90 = { new CapturedImageFile(channel, new File(root, "pol90.tiff")) };
+        CapturedImageFile[] pol135 = { new CapturedImageFile(channel, new File(root, "pol135.tiff")) };
+
+        CapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
+
+        CapturedImageFile[] pol0_1 = { new CapturedImageFile(channel, new File(root, "pol0.tiff")) };
+        CapturedImageFile[] pol45_1 = { new CapturedImageFile(channel, new File(root, "pol45.tiff")) };
+        CapturedImageFile[] pol90_1 = { new CapturedImageFile(channel, new File(root, "pol90.tiff")) };
+        CapturedImageFile[] pol135_1 = { new CapturedImageFile(channel, new File(root, "pol135.tiff")) };
+
+        CapturedImageFileSet fileSet_1 = new CapturedImageFileSet(pol0_1, pol45_1, pol90_1, pol135_1);
+
+        assertTrue(fileSet.equals(fileSet_1));
+        
+    }
+
+    @Test
+    public void deepEquals_CheckUnEqualSets_ReturnsUnEqual() {
+        int[] channel = { 1 };
+
+        CapturedImageFile[] pol0 = { new CapturedImageFile(channel, new File(root, "pol0.tiff")) };
+        CapturedImageFile[] pol45 = { new CapturedImageFile(channel, new File(root, "pol45.tiff")) };
+        CapturedImageFile[] pol90 = { new CapturedImageFile(channel, new File(root, "pol90.tiff")) };
+        CapturedImageFile[] pol135 = { new CapturedImageFile(channel, new File(root, "pol135.tiff")) };
+
+        CapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
+
+        CapturedImageFile[] pol0_1 = { new CapturedImageFile(channel, new File(root, "pol0.tiff")) };
+        CapturedImageFile[] pol45_1 = { new CapturedImageFile(channel, new File(root, "pol45.tiff")) };
+        CapturedImageFile[] pol90_1 = { new CapturedImageFile(channel, new File(root, "pol90.tiff")) };
+        CapturedImageFile[] pol135_1 = { new CapturedImageFile(channel, new File(root, "pol135_1.tiff")) };
+
+        CapturedImageFileSet fileSet_1 = new CapturedImageFileSet(pol0_1, pol45_1, pol90_1, pol135_1);
+
+        assertTrue(!fileSet.deepEquals(fileSet_1));
+        
+    }
+
+    @Test
+    public void deepEquals_CheckEqualSets_ReturnsEqual() {
+        int[] channel = { 1 };
+
+        CapturedImageFile[] pol0 = { new CapturedImageFile(channel, new File(root, "pol0.tiff")) };
+        CapturedImageFile[] pol45 = { new CapturedImageFile(channel, new File(root, "pol45.tiff")) };
+        CapturedImageFile[] pol90 = { new CapturedImageFile(channel, new File(root, "pol90.tiff")) };
+        CapturedImageFile[] pol135 = { new CapturedImageFile(channel, new File(root, "pol135.tiff")) };
+
+        CapturedImageFileSet fileSet = new CapturedImageFileSet(pol0, pol45, pol90, pol135);
+
+        CapturedImageFile[] pol0_1 = { new CapturedImageFile(channel, new File(root, "pol0.tiff")) };
+        CapturedImageFile[] pol45_1 = { new CapturedImageFile(channel, new File(root, "pol45.tiff")) };
+        CapturedImageFile[] pol90_1 = { new CapturedImageFile(channel, new File(root, "pol90.tiff")) };
+        CapturedImageFile[] pol135_1 = { new CapturedImageFile(channel, new File(root, "pol135.tiff")) };
+
+        CapturedImageFileSet fileSet_1 = new CapturedImageFileSet(pol0_1, pol45_1, pol90_1, pol135_1);
+
+        assertTrue(!fileSet.deepEquals(fileSet_1));
+        
     }
 
 }

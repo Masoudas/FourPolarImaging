@@ -176,11 +176,13 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
             return false;
 
         for (String label : labels) {
-            if (!fileSet.getFile(label).equals(this.getFile(label))) {
+
+            if (Arrays.deepEquals(this.getFile(label), fileset.getFile(label))) {
                 return false;
             }
         }
 
         return true;
     }
+
 }
