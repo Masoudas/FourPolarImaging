@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * A class for iterating over the list of files in each row of excel file. 
+ */
 class SampleImageSetExcelFileRowIterator  {
     private ArrayList<File[]> _rowFiles = new ArrayList<>();
 
