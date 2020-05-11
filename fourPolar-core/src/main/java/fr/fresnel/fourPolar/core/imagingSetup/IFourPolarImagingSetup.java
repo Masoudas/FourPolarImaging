@@ -58,7 +58,7 @@ public interface IFourPolarImagingSetup {
      * 
      * @throws IllegalArgumentException if already set.
      */
-    public void setNumericalAperture(INumericalAperture na)
+    public void setNumericalAperture(INumericalAperture na);
 
     /**
      * Return the field of view for each polarization.
