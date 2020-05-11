@@ -30,4 +30,19 @@ class CapturedImageFile implements ICapturedImageFile {
         return _file;
     }
     
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ICapturedImageFile)){
+            return false;
+        }
+        
+        ICapturedImageFile compingFile = (ICapturedImageFile) obj;
+        return this._file.equals(compingFile.file());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.file().hashCode() + this._channels[0];
+    }
 }
