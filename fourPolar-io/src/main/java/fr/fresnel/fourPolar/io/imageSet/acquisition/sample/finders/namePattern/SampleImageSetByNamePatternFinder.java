@@ -26,7 +26,6 @@ public class SampleImageSetByNamePatternFinder {
     private String polLabel[] = null;
     private File rootFolder = null;
     private IChannelImageFinder channelImageFinder = null;
-    private Cameras _camera;
 
     /**
      * Used for finding the images in case of single camera.
@@ -36,7 +35,6 @@ public class SampleImageSetByNamePatternFinder {
      */
     public SampleImageSetByNamePatternFinder(File rootFolder) {
         this.rootFolder = rootFolder;
-        this._camera = Cameras.One;
 
         this.channelImageFinder = new OneCameraChannelImageFinder();
     }
@@ -51,7 +49,6 @@ public class SampleImageSetByNamePatternFinder {
      */
     public SampleImageSetByNamePatternFinder(File rootFolder, String labelPol0_90, String labelPol45_135) {
         this(rootFolder);
-        this._camera = Cameras.Two;
 
         polLabel = new String[2];
         polLabel[0] = labelPol0_90;
@@ -73,7 +70,6 @@ public class SampleImageSetByNamePatternFinder {
     public SampleImageSetByNamePatternFinder(File rootFolder, String labelPol0, String labelPol45, String labelPol90,
             String labelPol135) {
         this(rootFolder);
-        this._camera = Cameras.Four;
 
         polLabel = new String[4];
         polLabel[0] = labelPol0;
@@ -84,7 +80,23 @@ public class SampleImageSetByNamePatternFinder {
         this.channelImageFinder = new FourCameraChannelImageFinder();
     }
 
-    public Iterator<File[]> findChannelImages(String channelLabel) {
+    /**
+     * Using this method, we can find all full-channel images on the root.
+     * 
+     * @return an iterator on the detected sets of images .
+     */
+    public Iterator<File[]> find() {
+        return this.channelImageFinder.find(this, null);
+    }
+
+    /**
+     * Using this method, we can find all image files of a particular channel on the
+     * root, using the name tag of that channel.
+     * 
+     * @param channelLabel is the name tage of the channel.
+     * @return an iterator on the detected sets of images .
+     */
+    public Iterator<File[]> find(String channelLabel) {
         return this.channelImageFinder.find(this, channelLabel);
     }
 
