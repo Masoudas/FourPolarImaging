@@ -6,9 +6,9 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-public class PrivateFilterPolarizationFileTest {
+public class FilterPolarizationFileTest {
     private static File _root = new File(
-            PrivateFilterPolarizationFileTest.class.getResource("FilterPolarizationFile").getPath());
+            FilterPolarizationFileTest.class.getResource("FilterPolarizationFile").getPath());
 
     @Test    
     public void list_FilterPol90_ReturnsImg1_C1_Pol90() {
