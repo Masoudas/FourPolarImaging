@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.core.image.generic.imgLib2Model;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.types.ConverterNotFound;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
@@ -46,8 +47,8 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
         this._tConverter = tConverter;
         this._factory = factory;
         this._metadata = metadata;
-        this._isMetadataConsistentWithImage();
         this._dim = metadata.getDim();
+        this._isMetadataConsistentWithImage();
     }
 
     @Override
@@ -80,12 +81,15 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
 
     @Override
     public IPixelCursor<U> getCursor(long[] bottomCorner, long[] len) throws IllegalArgumentException {
+        Objects.requireNonNull(bottomCorner, "bottomCorner can't be null");
+        Objects.requireNonNull(len, "len can't be null");
+
         if (bottomCorner.length != this._dim.length || len.length != this._dim.length) {
             throw new IllegalArgumentException("start or end does not have same dimension as image.");
         }
 
         for (int i = 0; i < bottomCorner.length; i++) {
-            if (bottomCorner[i] + len[i] >= this._dim[i])
+            if (bottomCorner[i] < _dim[i] || bottomCorner[i] + len[i] >= this._dim[i])
                 throw new IllegalArgumentException("bottomCorner + len cannot exceed image dimension.");
         }
 
