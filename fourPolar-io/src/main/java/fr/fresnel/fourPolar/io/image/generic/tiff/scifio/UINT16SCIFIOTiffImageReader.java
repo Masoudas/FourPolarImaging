@@ -91,7 +91,7 @@ public class UINT16SCIFIOTiffImageReader implements ImageReader<UINT16> {
      * @throws IOException
      */
     private void _checkExtension(String fileName) throws IOException {
-        String extension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+        String extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
 
         if (!extension.equals("tiff") && !extension.equals("tif")) {
             throw new IOException("The given file is not tiff");

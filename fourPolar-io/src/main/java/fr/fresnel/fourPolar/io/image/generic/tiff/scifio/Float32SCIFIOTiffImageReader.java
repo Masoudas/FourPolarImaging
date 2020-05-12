@@ -91,7 +91,7 @@ public class Float32SCIFIOTiffImageReader implements ImageReader<Float32> {
      * @throws IOException
      */
     private void _checkExtension(String fileName) throws IOException {
-        String extension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+        String extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
 
         if (!extension.equals("tiff") && !extension.equals("tif")) {
             throw new IOException("The given file is not tiff");
