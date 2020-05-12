@@ -128,7 +128,7 @@ public class RGB16SCIFIOTiffImageReader implements ImageReader<RGB16> {
         String extension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
 
         if (!extension.equals("tiff") && !extension.equals("tif")) {
-            throw new IOException("The given file to tiff reader is not tiff");
+            throw new IOException("The given file is not tiff");
         }
 
     }
