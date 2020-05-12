@@ -7,14 +7,14 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
 
 public class SCIFIOMetadataReaderTest {
     @Test
-    public void reader_XYZT16BitImageJ1Image_ReturnsCorrectMetadata() throws IOException, UnsupportedAxisOrder {
+    public void reader_XYZT16BitImageJ1Image_ReturnsCorrectMetadata() throws IOException, MetadataParseError {
         File image = new File(SCIFIOMetadataReaderTest.class.getResource("").getPath(), "XYZT.tif");
 
         IMetadataReader reader = new SCIFIOMetadataReader();
@@ -25,7 +25,7 @@ public class SCIFIOMetadataReaderTest {
     }
 
     @Test
-    public void reader_XYZT16BitImageJ1ImageRepeatedUse_ReturnsCorrectMetadata() throws IOException, UnsupportedAxisOrder {
+    public void reader_XYZT16BitImageJ1ImageRepeatedUse_ReturnsCorrectMetadata() throws IOException, MetadataParseError {
         File image = new File(SCIFIOMetadataReaderTest.class.getResource("").getPath(), "XYZT.tif");
 
         IMetadataReader reader = new SCIFIOMetadataReader();
@@ -36,4 +36,5 @@ public class SCIFIOMetadataReaderTest {
         assertTrue(metadata.axisOrder() == AxisOrder.XYZT && metadata.bitPerPixel() == 8
         && metadata.numChannels() == 0);
     }
+
 }

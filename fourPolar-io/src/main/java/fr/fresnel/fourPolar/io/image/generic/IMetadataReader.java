@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 
 /**
  * An interface for reading the metadata of an image, without actually opening
@@ -17,7 +18,7 @@ public interface IMetadataReader {
      * @param imageFile
      * @return
      */
-    public IMetadata read(File imageFile) throws IOException, UnsupportedAxisOrder;
+    public IMetadata read(File imageFile) throws IOException, MetadataParseError;
 
     /**
      * Close all resources associated with this reader.
