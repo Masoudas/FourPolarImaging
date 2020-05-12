@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.io.image.generic.tiff.scifio;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
@@ -38,9 +39,9 @@ public class UINT16SCIFIOTiffImageReader implements ImageReader<UINT16> {
 
     @Override
     public Image<UINT16> read(File path) throws IOException, MetadataParseError {
-        if (!path.exists()) {
-            throw new IOException("The given Tiff file does not exist.");
-        }
+        Objects.requireNonNull(path, "path should not be null");
+        this._checkExtension(path.getName());
+        this._checkFileExists(path);
 
         this._reader.setSource(path.getAbsolutePath(), this._config);
 
@@ -81,6 +82,27 @@ public class UINT16SCIFIOTiffImageReader implements ImageReader<UINT16> {
         SCIFIOConfig config = new SCIFIOConfig();
         config.imgOpenerSetImgModes(SCIFIOConfig.ImgMode.AUTO);
         return config;
+    }
+
+    /**
+     * Check file extension is tif or tiff.
+     * 
+     * @param fileName
+     * @throws IOException
+     */
+    private void _checkExtension(String fileName) throws IOException {
+        String extension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+
+        if (!extension.equals("tiff") && !extension.equals("tif")) {
+            throw new IOException("The given file to tiff reader is not tiff");
+        }
+
+    }
+
+    private void _checkFileExists(File path) throws IOException {
+        if (!path.exists()) {
+            throw new IOException("The given Tiff file does not exist.");
+        }
     }
 
 }
