@@ -21,15 +21,6 @@ public interface ImageWriter<T extends PixelType> {
     public void write(final File path, final Image<T> image) throws IOException;
 
     /**
-     * Writes the given {@code Image} to the given destination, with the given Metadata. 
-     * 
-     * @param path
-     * @param image
-     * @throws IOException
-     */
-    public void write(final File path, final IMetadata metadata, final Image<T> image) throws IOException;
-
-    /**
      * Close any resources associated with the writer.
      * 
      * @throws IOException
