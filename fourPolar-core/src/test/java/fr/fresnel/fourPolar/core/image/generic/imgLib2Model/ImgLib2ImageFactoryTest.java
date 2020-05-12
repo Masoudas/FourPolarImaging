@@ -1,11 +1,16 @@
 package fr.fresnel.fourPolar.core.image.generic.imgLib2Model;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
@@ -17,74 +22,122 @@ import net.imglib2.type.numeric.real.FloatType;
 
 public class ImgLib2ImageFactoryTest {
     @Test
-    public void createByDimension_UINT16Image_CreatesImageOfSameDimension() {
-        long[] dimensions = new long[] { 1, 1, 1, 1, 1 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
-        
-        assertArrayEquals(image.getMetadata().getDim(), dimensions);
-    }
+    public void createByDimension_UINT16Image_CreatesImageOfSameDimension() throws ConverterToImgLib2NotFound {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 1, 1, 1 }).axisOrder(AxisOrder.XYZCT)
+                .build();
+        Image<UINT16> image = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
 
-    @Test
-    public void createByDimension_Float32Image_CreatesImageOfSameDimension() {
-        long[] dimensions = new long[] { 1, 1, 1, 1, 1 };
-        Image<Float32> image = new ImgLib2ImageFactory().create(dimensions, Float32.zero());
+        long[] dimensions = metadata.getDim().clone();
+        ImageToImgLib2Converter.getImg(image, UINT16.zero()).dimensions(dimensions);
 
         assertArrayEquals(image.getMetadata().getDim(), dimensions);
     }
 
     @Test
-    public void createByDimension_RGBImage_CreatesImageOfSameDimension() {
-        long[] dimensions = new long[] { 1, 1, 1, 1, 1 };
-        Image<RGB16> image = new ImgLib2ImageFactory().create(dimensions, RGB16.zero());
+    public void createByDimension_Float32Image_CreatesImageOfSameDimension() throws ConverterToImgLib2NotFound {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 1, 1, 1 }).axisOrder(AxisOrder.XYZCT)
+                .build();
+        Image<Float32> image = new ImgLib2ImageFactory().create(metadata, Float32.zero());
+
+        long[] dimensions = metadata.getDim().clone();
+        ImageToImgLib2Converter.getImg(image, Float32.zero()).dimensions(dimensions);
 
         assertArrayEquals(image.getMetadata().getDim(), dimensions);
+    }
+
+    @Test
+    public void createByDimension_RGBImage_CreatesImageOfSameDimension() throws ConverterToImgLib2NotFound {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 1, 1, }).axisOrder(AxisOrder.XYZT).build();
+        Image<RGB16> image = new ImgLib2ImageFactory().create(metadata, RGB16.zero());
+
+        long[] dimensions = metadata.getDim().clone();
+        ImageToImgLib2Converter.getImg(image, RGB16.zero()).dimensions(dimensions);
+
+        assertArrayEquals(image.getMetadata().getDim(), dimensions);
+    }
+
+    @Test
+    public void createByDimension_RGBImageWithChannel_ThrowsIllegalArgumentException()
+            throws ConverterToImgLib2NotFound {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 1, 1, }).axisOrder(AxisOrder.XYCT).build();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            Image<RGB16> image = new ImgLib2ImageFactory().create(metadata, RGB16.zero());
+        });
     }
 
     @Test
     public void checkImageType_SmallDimension_CreatesAnArrayImage() {
-        long[] dimensions = new long[] { 1, 1, 1, 1, 1 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 1, 1, }).axisOrder(AxisOrder.XYCT).build();
+        Image<UINT16> image = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
 
         assertTrue(image.toString().contains("ArrayImg"));
     }
 
     @Test
     public void checkImageType_LargeDimension_CreatesACellImage() {
-        long[] dimensions = new long[] { 1024, 1024, 1024, 2 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
-        
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1024, 1024, 1024, 2 }).axisOrder(AxisOrder.XYCT)
+                .build();
+        Image<UINT16> image = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
+
         assertTrue(image.toString().contains("CellImg"));
     }
 
     @Test
-    public void createFromImgInterface_UnsignedShortType_CreatesUINT16ImageWithSameDimension() {
-        long[] dimensions = new long[] { 1, 1, 1, 1 };
+    public void createFromImgInterface_UnsignedShortType_CreatesUINT16ImageWithSameDimension()
+            throws ConverterToImgLib2NotFound {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 1, 1 }).axisOrder(AxisOrder.XYCT).build();
+
         UnsignedShortType type = new UnsignedShortType();
-        Img<UnsignedShortType> img = new ArrayImgFactory<UnsignedShortType>(type).create(dimensions);
-        Image<UINT16> image = new ImgLib2ImageFactory().create(img, type);
+        Img<UnsignedShortType> img = new ArrayImgFactory<UnsignedShortType>(type).create(metadata.getDim());
+        Image<UINT16> image = new ImgLib2ImageFactory().create(img, type, metadata);
 
-        assertArrayEquals(image.getMetadata().getDim(), dimensions);        
+        long[] dimensions = metadata.getDim().clone();
+        ImageToImgLib2Converter.getImg(image, UINT16.zero()).dimensions(dimensions);
+
+        assertArrayEquals(image.getMetadata().getDim(), dimensions);
     }
 
     @Test
-    public void createFromImgInterface_FloatType_CreatesFloat32ImageWithSameDimension() {
-        long[] dimensions = new long[] { 1, 1, 1, 1 };
+    public void createFromImgInterface_FloatType_CreatesFloat32ImageWithSameDimension()
+            throws ConverterToImgLib2NotFound {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 1, 1 }).axisOrder(AxisOrder.XYCT).build();
+
         FloatType type = new FloatType();
-        Img<FloatType> img = new ArrayImgFactory<FloatType>(type).create(dimensions);
-        Image<Float32> image = new ImgLib2ImageFactory().create(img, type);
+        Img<FloatType> img = new ArrayImgFactory<FloatType>(type).create(metadata.getDim());
+        Image<Float32> image = new ImgLib2ImageFactory().create(img, type, metadata);
 
-        assertArrayEquals(image.getMetadata().getDim(), dimensions);        
+        long[] dimensions = metadata.getDim().clone();
+        ImageToImgLib2Converter.getImg(image, Float32.zero()).dimensions(dimensions);
+
+        assertArrayEquals(image.getMetadata().getDim(), dimensions);
     }
 
     @Test
-    public void createFromImgInterface_ARGBType_CreatesRGB16ImageWithSameDimension() {
-        long[] dimensions = new long[] { 1, 1, 1, 1 };
-        ARGBType type = new ARGBType();
-        Img<ARGBType> img = new ArrayImgFactory<ARGBType>(type).create(dimensions);
-        Image<RGB16> image = new ImgLib2ImageFactory().create(img, type);
+    public void createFromImgInterface_ARGBType_CreatesRGB16ImageWithSameDimension() throws ConverterToImgLib2NotFound {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 1, 1 }).axisOrder(AxisOrder.XYZT).build();
 
-        assertArrayEquals(image.getMetadata().getDim(), dimensions);        
+        ARGBType type = new ARGBType();
+        Img<ARGBType> img = new ArrayImgFactory<ARGBType>(type).create(metadata.getDim());
+        Image<RGB16> image = new ImgLib2ImageFactory().create(img, type, metadata);
+
+        long[] dimensions = metadata.getDim().clone();
+        ImageToImgLib2Converter.getImg(image, RGB16.zero()).dimensions(dimensions);
+
+        assertArrayEquals(image.getMetadata().getDim(), dimensions);
     }
 
+    @Test
+    public void createFromImgInterface_ARGBTypeWithChannel_ThrowsIllegalArgumentException()
+            throws ConverterToImgLib2NotFound {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 1, 1 }).axisOrder(AxisOrder.XYCT).build();
+
+        ARGBType type = new ARGBType();
+        Img<ARGBType> img = new ArrayImgFactory<ARGBType>(type).create(metadata.getDim());
+        assertThrows(IllegalArgumentException.class, () -> {
+            Image<RGB16> image = new ImgLib2ImageFactory().create(img, type, metadata);
+        });
+
+    }
 
 }
