@@ -27,25 +27,6 @@ import net.imglib2.util.Util;
  * @param <T> is the desired pixel type.
  */
 public class ImgLib2ImageFactory implements ImageFactory {
-    @Override
-    public <T extends PixelType> Image<T> create(long[] dim, T pixelType) {
-        IMetadata defaultMetadata = new Metadata.MetadataBuilder(dim).bitPerPixel(pixelType.getType()).build();
-        return this.create(defaultMetadata, pixelType);
-    }
-
-    /**
-     * Used for creating an {@link Image} from an existing ImgLib2 image.
-     * 
-     * @param img         is a {@link UnsignedShortType} image
-     * @param imgLib2Type is an instance of UnsignedShortType
-     * @param IMetadata   is the metadata associated with this image.
-     */
-    public Image<UINT16> create(Img<UnsignedShortType> img, UnsignedShortType imgLib2Type) {
-        long[] dim = _getDimFromImg(img);
-        IMetadata defaulMetadata = new Metadata.MetadataBuilder(dim).bitPerPixel(PixelTypes.UINT_16).build();
-        return this.create(img, imgLib2Type, defaulMetadata);
-    }
-
     /**
      * Used for creating an {@link Image} from an existing ImgLib2 image.
      * 
@@ -68,19 +49,6 @@ public class ImgLib2ImageFactory implements ImageFactory {
      * 
      * @param img         is a {@link FloatType} image
      * @param imgLib2Type is an instance of FloatType
-     */
-    public Image<Float32> create(Img<FloatType> img, FloatType imgLib2Type) {
-        long[] dim = _getDimFromImg(img);
-        IMetadata defaulMetadata = new Metadata.MetadataBuilder(dim).bitPerPixel(PixelTypes.FLOAT_32).build();
-
-        return this.create(img, imgLib2Type, defaulMetadata);
-    }
-
-    /**
-     * Used for creating an {@link Image} from an existing ImgLib2 image.
-     * 
-     * @param img         is a {@link FloatType} image
-     * @param imgLib2Type is an instance of FloatType
      * @param IMetadata   is the metadata associated with this image.
      */
     public Image<Float32> create(Img<FloatType> img, FloatType imgLib2Type, IMetadata metadata) {
@@ -91,18 +59,6 @@ public class ImgLib2ImageFactory implements ImageFactory {
             // Exception never caught due to proper type handling
         }
         return null;
-    }
-
-    /**
-     * Used for creating an {@link Image} from an existing ImgLib2 image.
-     * 
-     * @param img         is a {@link ARGBType} image
-     * @param imgLib2Type is an instance of ARGBType
-     */
-    public Image<RGB16> create(Img<ARGBType> img, ARGBType imgLib2Type) {
-        long[] dim = _getDimFromImg(img);
-        IMetadata defaulMetadata = new Metadata.MetadataBuilder(dim).bitPerPixel(PixelTypes.RGB_16).build();
-        return this.create(img, imgLib2Type, defaulMetadata);
     }
 
     /**
@@ -184,18 +140,6 @@ public class ImgLib2ImageFactory implements ImageFactory {
         }
 
         return _image;
-    }
-
-    /**
-     * Get image dimension from image interface.
-     * 
-     * @param img
-     */
-    private long[] _getDimFromImg(Img<?> img) {
-        long[] dim = new long[img.numDimensions()];
-        img.dimensions(dim);
-
-        return dim;
     }
 
 }
