@@ -3,7 +3,6 @@ package fr.fresnel.fourPolar.io.image.generic;
 import java.io.File;
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 
