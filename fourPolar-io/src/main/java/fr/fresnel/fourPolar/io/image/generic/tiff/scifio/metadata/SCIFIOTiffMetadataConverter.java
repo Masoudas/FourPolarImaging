@@ -21,8 +21,8 @@ public class SCIFIOTiffMetadataConverter {
     /**
      * Convert from SCIFIO metadata
      * 
-     * @throws UnsupportedAxisOrder in case the underlying image has an undefined axis
-     *                            order.
+     * @throws UnsupportedAxisOrder in case the underlying image has an undefined
+     *                              axis order.
      */
     public static IMetadata convertFrom(ImageMetadata SCIFIOMetadata) throws UnsupportedAxisOrder {
         long[] dim = SCIFIOMetadata.getAxesLengths();
@@ -33,20 +33,13 @@ public class SCIFIOTiffMetadataConverter {
     }
 
     /**
-     * Creates a blank {@link ImageMetadata}, and sets the Axis, axis length and
-     * bitPerPixel. Then it returns this metadata. Note that PixelType is not set 
-     * by this method.
+     * Fills the axis type, axis length and bitPerPixel of the given
+     * {@link ImageMetadata} from the given {@link IMetadata}. 
      * 
      */
-    public static ImageMetadata convertTo(IMetadata metadata) {
-        io.scif.formats.TIFFFormat.Metadata tiffMetadata = new io.scif.formats.TIFFFormat.Metadata();
-        tiffMetadata.createImageMetadata(1);
-
-        ImageMetadata imageMetadata = tiffMetadata.get(0);
-        _setImageMetadataAxis(metadata.axisOrder(), metadata.getDim(), imageMetadata);
-        imageMetadata.setBitsPerPixel(metadata.bitPerPixel());
-
-        return imageMetadata;
+    public static void convertTo(IMetadata metadata, ImageMetadata scifioMetadata) {
+        _setImageMetadataAxis(metadata.axisOrder(), metadata.getDim(), scifioMetadata);
+        scifioMetadata.setBitsPerPixel(metadata.bitPerPixel());
     }
 
     /**
@@ -62,7 +55,8 @@ public class SCIFIOTiffMetadataConverter {
                 axisOrder += "C";
             } else if (axisName.equals(Axes.TIME.getLabel())) {
                 axisOrder += "T";
-            } else if (axisName.equals(Axes.Z.getLabel()) || axisName.equals(Axes.X.getLabel()) || axisName.equals(Axes.Y.getLabel())) {
+            } else if (axisName.equals(Axes.Z.getLabel()) || axisName.equals(Axes.X.getLabel())
+                    || axisName.equals(Axes.Y.getLabel())) {
                 axisOrder += axisName;
             } else {
                 undefAxis = false;
