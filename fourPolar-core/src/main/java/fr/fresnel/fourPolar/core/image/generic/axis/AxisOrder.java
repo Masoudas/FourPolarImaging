@@ -8,7 +8,7 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOr
  * STRUCTURE, WHERE AXIS ORDER CONTRIBUTES.
  */
 public enum AxisOrder {
-    NoOrder, XY, XYC, XYCT, XYCZT, XYT, XYTC, XYZ, XYZC, XYZCT, XYZT, XYZTC;
+    NoOrder, XY, XYC, XYCT, XYCZT, XYT, XYTC, XYZ, XYZC, XYZCT, XYZT, XYZTC, XYTZC;
 
     /**
      * Returns the number of labeled axis corresponding to the given order.
@@ -33,31 +33,14 @@ public enum AxisOrder {
      * otherwise.
      */
     public static int getChannelAxis(AxisOrder axisOrder) {
-        if (axisOrder == XYC || axisOrder == XYCT || axisOrder == XYCZT) {
-            return 2;
-        } else if (axisOrder == XYZC || axisOrder == XYTC || axisOrder == XYZCT) {
-            return 3;
-        } else if (axisOrder == XYZTC) {
-            return 4;
-        } else {
-            return -1;
-        }
-
+        return axisOrder.name().indexOf('C');
     }
 
     /**
      * Returns the dimension (from zero) of z-axis (if exists) and -1 otherwise.
      */
     public static int getZAxis(AxisOrder axisOrder) {
-        if (axisOrder == XYCZT) {
-            return 3;
-        } else if (axisOrder == XYZ || axisOrder == XYZT || axisOrder == XYZC || axisOrder == XYZTC
-                || axisOrder == XYZCT) {
-            return 2;
-        } else {
-            return -1;
-        }
-
+        return axisOrder.name().indexOf('Z');
     }
 
     /**
@@ -89,7 +72,7 @@ public enum AxisOrder {
 
     public static AxisOrder fromString(String axisOrder) throws UnsupportedAxisOrder {
         try {
-            return AxisOrder.valueOf(axisOrder);     
+            return AxisOrder.valueOf(axisOrder);
         } catch (IllegalArgumentException e) {
             throw new UnsupportedAxisOrder();
         }
