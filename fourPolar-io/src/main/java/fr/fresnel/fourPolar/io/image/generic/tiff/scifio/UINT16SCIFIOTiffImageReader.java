@@ -28,7 +28,7 @@ public class UINT16SCIFIOTiffImageReader implements ImageReader<UINT16> {
     final private ImgOpener _imgOpener;
     final private ImgLib2ImageFactory _imgFactory;
 
-    UINT16SCIFIOTiffImageReader(ImgLib2ImageFactory factory) {
+    public UINT16SCIFIOTiffImageReader(ImgLib2ImageFactory factory) {
         this._config = _setSCFIOConfig();
         this._imgOpener = new ImgOpener();
         this._imgFactory = factory;
