@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.core.image.generic.axis;
 
+import java.util.Objects;
+
 import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 
 /**
@@ -68,6 +70,24 @@ public enum AxisOrder {
             return NoOrder;
         }
 
+    }
+
+    /**
+     * Throws exception if NoOrder is given. Does nothing if order with existing
+     * channel is given. Appends a channel axis to the end of this axis-order.
+     * 
+     */
+    public static AxisOrder appendChannelToEnd(AxisOrder axisOrder) {
+        Objects.requireNonNull(axisOrder, "axisOrder cannot be null.");
+        if (axisOrder == AxisOrder.NoOrder) {
+            throw new IllegalArgumentException("Can't append channel to NoOrder.");
+        }
+
+        if (AxisOrder.getChannelAxis(axisOrder) > 0) {
+            return axisOrder;
+        }
+
+        return AxisOrder.valueOf(axisOrder.name() + "C");
     }
 
     public static AxisOrder fromString(String axisOrder) throws UnsupportedAxisOrder {
