@@ -5,8 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
@@ -15,9 +18,9 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 public class ImgLib2PixelRandomAccessTest {
     @Test
     public void setPixel_UINT16Image_SetsPixelsToDefinedValues() {
-        long[] dimensions = new long[] { 2, 2 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2 }).axisOrder(AxisOrder.XY).build();
 
+        Image<UINT16> image = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
         IPixelRandomAccess<UINT16> rAccess = image.getRandomAccess();
 
         int pixelValue = 0;
@@ -51,8 +54,8 @@ public class ImgLib2PixelRandomAccessTest {
 
     @Test
     public void setPixel_Float32Image_SetsPixelsToDefinedValues() {
-        long[] dimensions = new long[] { 2, 2 };
-        Image<Float32> image = new ImgLib2ImageFactory().create(dimensions, Float32.zero());
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2 }).axisOrder(AxisOrder.XY).build();
+        Image<Float32> image = new ImgLib2ImageFactory().create(metadata, Float32.zero());
 
         IPixelRandomAccess<Float32> rAccess = image.getRandomAccess();
 
@@ -87,8 +90,8 @@ public class ImgLib2PixelRandomAccessTest {
 
     @Test
     public void setPixel_RGB16Image_SetsPixelsToDefinedValues() {
-        long[] dimensions = new long[] { 2, 2 };
-        Image<RGB16> image = new ImgLib2ImageFactory().create(dimensions, RGB16.zero());
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2 }).axisOrder(AxisOrder.XY).build();
+        Image<RGB16> image = new ImgLib2ImageFactory().create(metadata, RGB16.zero());
 
         IPixelRandomAccess<RGB16> rAccess = image.getRandomAccess();
 
@@ -123,8 +126,8 @@ public class ImgLib2PixelRandomAccessTest {
 
     @Test
     public void getPixel_OutOfBoundPixel_ThrowsArrayIndexOutOfBound() {
-        long[] dimensions = new long[] { 2, 2 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2 }).axisOrder(AxisOrder.XY).build();
+        Image<UINT16> image = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
 
         IPixelRandomAccess<UINT16> rAccess = image.getRandomAccess();
 
@@ -137,8 +140,8 @@ public class ImgLib2PixelRandomAccessTest {
 
     @Test
     public void setPixel_OutOfBoundPixel_ThrowsArrayIndexOutOfBound() {
-        long[] dimensions = new long[] { 2, 2 };
-        Image<UINT16> image = new ImgLib2ImageFactory().create(dimensions, UINT16.zero());
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2 }).axisOrder(AxisOrder.XY).build();
+        Image<UINT16> image = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
 
         IPixelRandomAccess<UINT16> rAccess = image.getRandomAccess();
 
