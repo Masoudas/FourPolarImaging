@@ -16,11 +16,11 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Conver
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
-import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageChecker;
 import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageReader;
+import fr.fresnel.fourPolar.io.image.captured.tiff.checker.TiffCapturedImageChecker;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 
 public class TiffCapturedImageReaderTest {
@@ -36,7 +36,7 @@ public class TiffCapturedImageReaderTest {
             KeyException, IncompatibleCapturedImage, NoReaderFoundForImage, ConverterToImgLib2NotFound {
         final File pol0_45_90_135 = new File(_testResource, "16bit.tif");
 
-        FourPolarImagingSetup setup = new FourPolarImagingSetup(1, Cameras.One);
+        IFourPolarImagingSetup setup = new FourPolarImagingSetup(1, Cameras.One);
         final SampleImageSet sImageSet = new SampleImageSet(setup, new TiffCapturedImageChecker());
         sImageSet.addImage(1, pol0_45_90_135);
 
