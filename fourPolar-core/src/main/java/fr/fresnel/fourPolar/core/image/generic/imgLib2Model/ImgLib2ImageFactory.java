@@ -4,6 +4,7 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.types.Con
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverterFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
@@ -128,7 +129,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
 
             case RGB_16:
                 try {
-                    if (metadata.numChannels() > 0) {
+                    if (AxisOrder.getChannelAxis(metadata.axisOrder()) > 0) {
                         throw new IllegalArgumentException("Can't create RGB16 image with channel.");
                     }
                     ARGBType type = new ARGBType();
