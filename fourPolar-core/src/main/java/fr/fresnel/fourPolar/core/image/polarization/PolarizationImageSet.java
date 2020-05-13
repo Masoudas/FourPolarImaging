@@ -10,16 +10,15 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
- * A concrete implementation of the {@link IPolarizationsIntensitySet}. In this
- * implementation, we assume that the underlying intensity set is represented by
- * an intensity image.
+ * A concrete implementation of the {@link IPolarizationImageSet}. 
  */
-public class PolarizationImageSet implements IPolarizationImageSet {
+class PolarizationImageSet implements IPolarizationImageSet {
     final private IPolarizationImage _pol0;
     final private IPolarizationImage _pol45;
     final private IPolarizationImage _pol90;
     final private IPolarizationImage _pol135;
     final private ICapturedImageFileSet _fileSet;
+    final private int _channel;
 
     /**
      * 
@@ -30,22 +29,22 @@ public class PolarizationImageSet implements IPolarizationImageSet {
      * @param pol135
      * @throws CannotFormPolarizationImageSet
      */
-    public PolarizationImageSet(ICapturedImageFileSet fileSet, Image<UINT16> pol0, Image<UINT16> pol45,
-            Image<UINT16> pol90, Image<UINT16> pol135) throws CannotFormPolarizationImageSet {
-        if (this._hasDuplicateImage(pol0, pol45, pol90, pol135)) {
+    public PolarizationImageSet(PolarizationImageSetBuilder builder) throws CannotFormPolarizationImageSet {
+        if (this._hasDuplicateImage(builder.getPol0(), builder.getPol45(), builder.getPol90(), builder.getPol135())) {
             throw new CannotFormPolarizationImageSet(
                     "Cannot form the polarization image set due to duplicate image for polarizations.");
         }
-        if (!this._hasEqualDimensions(pol0, pol45, pol90, pol135)) {
+        if (!this._hasEqualDimensions(builder.getPol0(), builder.getPol45(), builder.getPol90(), builder.getPol135())) {
             throw new CannotFormPolarizationImageSet(
                     "Cannot form the polarization image set because the given images don't have the same dimension.");
         }
 
-        this._pol0 = new PolarizationImage(Polarization.pol0, pol0);
-        this._pol45 = new PolarizationImage(Polarization.pol45, pol45);
-        this._pol90 = new PolarizationImage(Polarization.pol90, pol90);
-        this._pol135 = new PolarizationImage(Polarization.pol135, pol135);
-        this._fileSet = fileSet;
+        this._pol0 = new PolarizationImage(Polarization.pol0, builder.getPol0());
+        this._pol45 = new PolarizationImage(Polarization.pol45, builder.getPol45());
+        this._pol90 = new PolarizationImage(Polarization.pol90, builder.getPol90());
+        this._pol135 = new PolarizationImage(Polarization.pol135, builder.getPol135());
+        this._fileSet = builder.getFileSet();
+        this._channel = builder.getChannel();
     }
 
     @Override
@@ -103,6 +102,11 @@ public class PolarizationImageSet implements IPolarizationImageSet {
     private boolean _hasDuplicateImage(Image<UINT16> pol0, Image<UINT16> pol45, Image<UINT16> pol90,
             Image<UINT16> pol135) {
         return pol0 == pol45 || pol0 == pol90 || pol0 == pol135 || pol45 == pol90 || pol45 == pol135 || pol90 == pol135;
+    }
+
+    @Override
+    public int channel() {
+        return this._channel;
     }
 
 }
