@@ -7,7 +7,9 @@ import java.util.Objects;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
@@ -35,6 +37,9 @@ public class RGB16SCIFIOTiffImageReader implements ImageReader<RGB16> {
     final UnsignedByteType _readType = new UnsignedByteType();
     final ARGBType _argbType = new ARGBType();
 
+    public static String NOT_3CHANNEL_IMAGE = "RGB image does not have 3 channels.";
+    public static String NOT_8BIT = "Image is not 8 bit per pixel.";
+
     public RGB16SCIFIOTiffImageReader(ImgLib2ImageFactory factory) {
         this._config = _setSCFIOConfig();
         this._imgOpener = new ImgOpener();
@@ -53,13 +58,20 @@ public class RGB16SCIFIOTiffImageReader implements ImageReader<RGB16> {
     @Override
     public Image<RGB16> read(File path) throws IOException, MetadataParseError {
         Objects.requireNonNull(path, "path should not be null");
-        this._checkExtension(path.getName());
-        this._checkFileExists(path);
+        SCIFIOUtils.checkExtension(path.getName());
+        SCIFIOUtils.checkFileExists(path);
 
         this._reader.setSource(path.getAbsolutePath(), this._config);
 
-        // Read metadata
-        final IMetadata metadata = _readMetadata();
+        final IMetadata rawMetadata = _readMetadata();
+
+        // Apply checks
+        _checkImageIs8bit(rawMetadata);
+
+        // Check image has exactly 3 channels.
+        _checkImageHas3Channels(rawMetadata);
+
+        // Create a copy of metadata, indicating only a single channel.
 
         // Read the raw image, which holds R, G and B as channels.
         Img<UnsignedByteType> rawImage = this._imgOpener.openImgs(this._reader, this._readType, this._config).get(0);
@@ -67,7 +79,7 @@ public class RGB16SCIFIOTiffImageReader implements ImageReader<RGB16> {
         // Merger RGB channes to form ARGB image.
         Img<ARGBType> img = createARGBImage(rawImage);
 
-        return this._imgFactory.create(img, this._argbType, metadata);
+        return this._imgFactory.create(img, this._argbType, rawMetadata);
     }
 
     /**
@@ -118,25 +130,28 @@ public class RGB16SCIFIOTiffImageReader implements ImageReader<RGB16> {
         return config;
     }
 
+    private void _checkImageIs8bit(IMetadata metadata) throws IOException {
+        if (metadata.bitPerPixel() != 8) {
+            throw new IOException(NOT_8BIT);
+        }
+
+    }
+
+    private void _checkImageHas3Channels(IMetadata metadata) throws IOException {
+        if (metadata.axisOrder() == AxisOrder.NoOrder || metadata.numChannels() != 3) {
+            throw new IOException(NOT_3CHANNEL_IMAGE);
+        }
+
+    }
+
     /**
-     * Check file extension is tif or tiff.
+     * Create a version of metadata that contains only one channel (becuase this is 
+     * how the {@link Image} treats the image).
      * 
-     * @param fileName
-     * @throws IOException
+     * @param rawMetadata is the raw metadata read from the disk.
      */
-    private void _checkExtension(String fileName) throws IOException {
-        String extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-
-        if (!extension.equals("tiff") && !extension.equals("tif")) {
-            throw new IOException("The given file is not tiff");
-        }
-
-    }
-
-    private void _checkFileExists(File path) throws IOException {
-        if (!path.exists()) {
-            throw new IOException("The given Tiff file does not exist.");
-        }
-    }
+    // private _createSingleChannelMetadata(IMetadata rawMetadata){
+    //     new Metadata.MetadataBuilder()
+    // }
 
 }

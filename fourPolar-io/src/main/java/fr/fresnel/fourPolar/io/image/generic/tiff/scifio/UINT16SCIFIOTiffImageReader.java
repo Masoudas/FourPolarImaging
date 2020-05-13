@@ -40,9 +40,9 @@ public class UINT16SCIFIOTiffImageReader implements ImageReader<UINT16> {
     @Override
     public Image<UINT16> read(File path) throws IOException, MetadataParseError {
         Objects.requireNonNull(path, "path should not be null");
-        this._checkExtension(path.getName());
-        this._checkFileExists(path);
-
+        SCIFIOUtil.checkExtension(path.getName());
+        SCIFIOUtil.checkFileExists(path);
+?
         this._reader.setSource(path.getAbsolutePath(), this._config);
 
         final IMetadata metadata = _readMetadata();
@@ -84,25 +84,5 @@ public class UINT16SCIFIOTiffImageReader implements ImageReader<UINT16> {
         return config;
     }
 
-    /**
-     * Check file extension is tif or tiff.
-     * 
-     * @param fileName
-     * @throws IOException
-     */
-    private void _checkExtension(String fileName) throws IOException {
-        String extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-
-        if (!extension.equals("tiff") && !extension.equals("tif")) {
-            throw new IOException("The given file is not tiff");
-        }
-
-    }
-
-    private void _checkFileExists(File path) throws IOException {
-        if (!path.exists()) {
-            throw new IOException("The given Tiff file does not exist.");
-        }
-    }
 
 }

@@ -1,9 +1,11 @@
 package fr.fresnel.fourPolar.io.image.generic.tiff.scifio;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.KeyException;
-import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,10 +13,10 @@ import org.junit.jupiter.api.Test;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import net.imglib2.img.display.imagej.ImageJFunctions;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 
 public class UINT16ImgLib2TiffImageReaderTest {
     private static File _testResource;
@@ -26,30 +28,31 @@ public class UINT16ImgLib2TiffImageReaderTest {
 
     @Test
     public void read_UINT16Image_ShouldShowImage()
-            throws IOException, InterruptedException, ConverterToImgLib2NotFound {
-        File path = new File(_testResource, "UINT16Image.tif");   
+            throws IOException, InterruptedException, ConverterToImgLib2NotFound, MetadataParseError {
+        File path = new File(_testResource, "UINT16Image.tif");
         UINT16SCIFIOTiffImageReader reader = new UINT16SCIFIOTiffImageReader(new ImgLib2ImageFactory());
         Image<UINT16> img = reader.read(path);
-        
-        ImageJFunctions.show(ImageToImgLib2Converter.getImg(img, UINT16.zero()));
-        TimeUnit.SECONDS.sleep(10);
-                
+
+        assertTrue(img.getMetadata().axisOrder() == AxisOrder.XY
+                && Arrays.equals(img.getMetadata().getDim(), new long[] { 256, 256 }));
     }
 
     @Test
-    public void read_SameImageTenThousandTimes_ShouldNotRunOutOfResource()
-            throws IllegalArgumentException, IOException, InterruptedException, KeyException, IncompatibleCapturedImage {
-        File path = new File(_testResource, "UINT16Image.tif");   
+    public void read_SameImageTenThousandTimes_ShouldNotRunOutOfResource() throws IllegalArgumentException, IOException,
+            InterruptedException, KeyException, IncompatibleCapturedImage, MetadataParseError {
+        File path = new File(_testResource, "UINT16Image.tif");
         UINT16SCIFIOTiffImageReader reader = new UINT16SCIFIOTiffImageReader(new ImgLib2ImageFactory());
-        
+
+        Image<UINT16> img = null;
         for (int i = 0; i < 10000; i++) {
-            reader.read(path);
+            img = reader.read(path);
         }
-        
+
         reader.close();
 
+        assertTrue(img.getMetadata().axisOrder() == AxisOrder.XY
+                && Arrays.equals(img.getMetadata().getDim(), new long[] { 256, 256 }));
 
     }
-
 
 }

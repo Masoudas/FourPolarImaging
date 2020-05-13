@@ -21,6 +21,7 @@ import io.scif.formats.TIFFFormat.Metadata;
 import io.scif.formats.TIFFFormat.Writer;
 import io.scif.img.ImgSaver;
 import io.scif.util.FormatTools;
+import net.imagej.axis.Axes;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.converter.Converters;
 import net.imglib2.img.Img;
@@ -56,17 +57,37 @@ public class RGB16SCIFIOTiffImageWriter implements ImageWriter<RGB16> {
             path.delete();
         }
 
-        IMetadata diskMetadata = this._createMetadata(image.getMetadata());
-        io.scif.formats.TIFFFormat.Metadata scifioMetadata = this._createSCIFIOMetadata();
-
-        SCIFIOTiffMetadataConverter.convertTo(diskMetadata, scifioMetadata.get(0));
+        io.scif.formats.TIFFFormat.Metadata scifioMetadata = _createMultiChannelSCIFIOMetadata(image);
         try {
-            this._writer.setDest(path.getAbsolutePath());
-            this._writer.setMetadata(scifioMetadata);
-            Img<ARGBType> imgLib2Image = ImageToImgLib2Converter.getImg(image, RGB16.zero());
+            _setWriterConfig(path, scifioMetadata);
+            Img<UnsignedByteType> convertedImg = _convertToMultiChannelImage(image);
+            io.scif.formats.TIFFFormat.Metadata metadata = new io.scif.formats.TIFFFormat.Metadata();
+            metadata.createImageMetadata(1);
 
-            Img<UnsignedByteType> convertedImg = _convertRGBToChannelImage(imgLib2Image);
-            this._saver.saveImg(this._writer, convertedImg, this._config);
+            ImageMetadata imageMetadata = metadata.get(0);
+            imageMetadata.setBitsPerPixel(8);
+            imageMetadata.setFalseColor(true);
+            imageMetadata.setPixelType(FormatTools.UINT8);
+            imageMetadata.setPlanarAxisCount(2);
+            imageMetadata.setLittleEndian(false);
+            imageMetadata.setIndexed(false);
+            imageMetadata.setInterleavedAxisCount(0);
+            imageMetadata.setThumbnail(false);
+            imageMetadata.setOrderCertain(true);
+
+            imageMetadata.addAxis(Axes.X, convertedImg.dimension(0));
+            imageMetadata.addAxis(Axes.Y, convertedImg.dimension(1));
+            imageMetadata.addAxis(Axes.TIME, convertedImg.dimension(2));
+            imageMetadata.addAxis(Axes.CHANNEL, convertedImg.dimension(3));
+
+            io.scif.formats.TIFFFormat.Writer<io.scif.formats.TIFFFormat.Metadata> writer = new io.scif.formats.TIFFFormat.Writer<>();
+            writer.setContext(this._saver.context());
+            writer.setMetadata(metadata);
+            writer.setDest("/home/masoud/Documents/SampleImages/UnknownAxis.tif", new SCIFIOConfig());
+
+            new ImgSaver().saveImg(writer, convertedImg);
+
+            // this._saver.saveImg(this._writer, convertedImg);
 
         } catch (ConverterToImgLib2NotFound | FormatException e) {
             // This exception is never caught, because this class cannot be directly
@@ -75,6 +96,27 @@ public class RGB16SCIFIOTiffImageWriter implements ImageWriter<RGB16> {
             // Format exception is also not caught because extension is checked.
         }
 
+    }
+
+    private void _setWriterConfig(File path, io.scif.formats.TIFFFormat.Metadata scifioMetadata)
+            throws FormatException, IOException {
+        this._writer.setMetadata(scifioMetadata);
+        this._writer.setDest(path.getAbsolutePath(), this._config);
+    }
+
+    private io.scif.formats.TIFFFormat.Metadata _createMultiChannelSCIFIOMetadata(Image<RGB16> image) {
+        IMetadata diskMetadata = this._createMetadata(image.getMetadata());
+        io.scif.formats.TIFFFormat.Metadata scifioMetadata = this._createSCIFIOMetadata();
+
+        SCIFIOTiffMetadataConverter.convertTo(diskMetadata, scifioMetadata.get(0));
+        return scifioMetadata;
+    }
+
+    private Img<UnsignedByteType> _convertToMultiChannelImage(Image<RGB16> image) throws ConverterToImgLib2NotFound {
+        Img<ARGBType> imgLib2Image = ImageToImgLib2Converter.getImg(image, RGB16.zero());
+
+        Img<UnsignedByteType> convertedImg = _convertRGBToChannelImage(imgLib2Image);
+        return convertedImg;
     }
 
     private Img<UnsignedByteType> _convertRGBToChannelImage(Img<ARGBType> imgLib2Image) {
@@ -129,7 +171,7 @@ public class RGB16SCIFIOTiffImageWriter implements ImageWriter<RGB16> {
         metadata.createImageMetadata(1);
 
         ImageMetadata imageMetadata = metadata.get(0);
-        imageMetadata.setFalseColor(true);
+        imageMetadata.setFalseColor(false);
         imageMetadata.setPixelType(FormatTools.UINT8);
         imageMetadata.setPlanarAxisCount(2);
         imageMetadata.setLittleEndian(false);
