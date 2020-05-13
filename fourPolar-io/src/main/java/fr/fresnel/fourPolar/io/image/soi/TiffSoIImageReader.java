@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.image.soi.SoIImage;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
 import fr.fresnel.fourPolar.io.image.soi.file.ISoIImageFile;
@@ -22,14 +24,19 @@ public class TiffSoIImageReader implements ISoIImageReader {
 
     public TiffSoIImageReader(ImageFactory factory) throws NoReaderFoundForImage {
         this._reader = TiffImageReaderFactory.getReader(factory, UINT16.zero());
-
     }
 
     @Override
-    public ISoIImage read(File root4PProject, ICapturedImageFileSet fileSet) throws IOException {
-        ISoIImageFile file = new TiffSoIImageFile(root4PProject, fileSet);
+    public ISoIImage read(File root4PProject, ICapturedImageFileSet fileSet, int channel) throws IOException {
+        ISoIImageFile file = new TiffSoIImageFile(root4PProject, fileSet, channel);
 
-        return new SoIImage(fileSet, this._reader.read(file.getFile()));
+        Image<UINT16> soi = null;
+        try {
+            soi = this._reader.read(file.getFile());
+        } catch (MetadataParseError | IOException e) {
+            throw new IOException("SoI images doesn't exist or is corrupted");
+        }
+        return SoIImage.create(fileSet, soi, channel);
     }
 
     @Override
