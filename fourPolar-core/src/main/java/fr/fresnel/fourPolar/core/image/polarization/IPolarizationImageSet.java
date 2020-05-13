@@ -5,10 +5,8 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
- * An interface for accessing a group of polarization images (of the same
- * sample). A polarization image set contains {@link IPolarizationImage} of each
- * polarization of a particular frequency.
- * 
+ * An interface for accessing the four {@link IPolarizationImage} of the same
+ * sample for a particular channel.
  */
 public interface IPolarizationImageSet {
     /**
