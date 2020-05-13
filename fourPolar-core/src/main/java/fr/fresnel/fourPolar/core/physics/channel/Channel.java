@@ -71,4 +71,23 @@ public class Channel implements IChannel {
 
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode() + (int)_wavelength;
+    }
+
+    /**
+     * Check channel > 0 is in the range of numChannels and throws exception otherwise.
+     * @param channel is the channel number.
+     * @param numChannels is the total number of channels.
+     * 
+     * @throws IllegalArgumentException in case channel is not positive or greater than numChannels.
+     */
+    public static void checkChannel(int channel, int numChannels) {
+        if (channel <= 0 || channel > numChannels){
+            throw new IllegalArgumentException("Channel does not exist.");
+        }
+        
+    }
+
 }
