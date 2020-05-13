@@ -6,7 +6,9 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
  * An interface for accessing a group of polarization images (of the same
- * sample).
+ * sample). A polarization image set contains {@link IPolarizationImage} of each
+ * polarization of a particular frequency.
+ * 
  */
 public interface IPolarizationImageSet {
     /**
@@ -25,11 +27,16 @@ public interface IPolarizationImageSet {
     public ICapturedImageFileSet getFileSet();
 
     /**
-     * Returns the implementation of {@link IIntensityVectorIterator} for the
-     * given image set.
+     * Returns the implementation of {@link IIntensityVectorIterator} for the given
+     * image set.
      * 
      * @return
      */
     public IIntensityVectorIterator getIterator();
+
+    /**
+     * Returns the channel number.
+     */
+    public int channel();
 
 }
