@@ -26,10 +26,19 @@ public class SoIImage implements ISoIImage {
      * Create an SoI image that corresponds (in size) to a particular
      * {@link IPolarizationImage}
      * 
-     * @return
+     * @param polarizationImageSet is a polarization image set.
+     * 
+     * @param factory              is the desired image factory.
+     * 
      */
     public static ISoIImage create(IPolarizationImageSet polarizationImageSet, ImageFactory factory) {
-        SoIImage soiImage = new SoIImage(polarizationImageSet, factory);
+        long[] dim = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage().getMetadata().getDim();
+        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT)
+                .bitPerPixel(PixelTypes.UINT_16).build();
+
+        Image<UINT16> image = factory.create(metadata, UINT16.zero());
+
+        SoIImage soiImage = new SoIImage(polarizationImageSet.getFileSet(), image);
         soiImage.setChannel(polarizationImageSet.channel());
 
         return soiImage;
@@ -54,23 +63,6 @@ public class SoIImage implements ISoIImage {
         soiImage.setChannel(channel);
 
         return soiImage;
-    }
-
-    /**
-     * Create an empty SoI image, whose dimensions are equal to
-     * {@link IPolarizationsImageSet}, using the provided image factory.
-     * 
-     * @param polarizationImageSet is a polarization image set.
-     * @param factory              is the desired image factory.
-     */
-    private SoIImage(IPolarizationImageSet polarizationImageSet, ImageFactory factory) {
-        long[] dim = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage().getMetadata().getDim();
-        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT)
-                .bitPerPixel(PixelTypes.UINT_16).build();
-
-        this._image = factory.create(metadata, UINT16.zero());
-
-        this._fileSet = polarizationImageSet.getFileSet();
     }
 
     /**
@@ -103,7 +95,7 @@ public class SoIImage implements ISoIImage {
     }
 
     private void setChannel(int channel) {
-        if (channel != -1){
+        if (channel != -1) {
             throw new IllegalAccessError("Can't reset channel");
         }
 
