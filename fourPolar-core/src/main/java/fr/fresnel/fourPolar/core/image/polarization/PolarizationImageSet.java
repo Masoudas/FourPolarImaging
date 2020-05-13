@@ -30,15 +30,6 @@ class PolarizationImageSet implements IPolarizationImageSet {
      * @throws CannotFormPolarizationImageSet
      */
     public PolarizationImageSet(PolarizationImageSetBuilder builder) throws CannotFormPolarizationImageSet {
-        if (this._hasDuplicateImage(builder.getPol0(), builder.getPol45(), builder.getPol90(), builder.getPol135())) {
-            throw new CannotFormPolarizationImageSet(
-                    "Cannot form the polarization image set due to duplicate image for polarizations.");
-        }
-        if (!this._hasEqualDimensions(builder.getPol0(), builder.getPol45(), builder.getPol90(), builder.getPol135())) {
-            throw new CannotFormPolarizationImageSet(
-                    "Cannot form the polarization image set because the given images don't have the same dimension.");
-        }
-
         this._pol0 = new PolarizationImage(Polarization.pol0, builder.getPol0());
         this._pol45 = new PolarizationImage(Polarization.pol45, builder.getPol45());
         this._pol90 = new PolarizationImage(Polarization.pol90, builder.getPol90());
@@ -84,24 +75,6 @@ class PolarizationImageSet implements IPolarizationImageSet {
     @Override
     public ICapturedImageFileSet getFileSet() {
         return this._fileSet;
-    }
-
-    /**
-     * Checks that all images have the same dimension.
-     */
-    private boolean _hasEqualDimensions(Image<UINT16> pol0, Image<UINT16> pol45, Image<UINT16> pol90,
-            Image<UINT16> pol135) {
-        return Arrays.equals(pol0.getMetadata().getDim(), pol45.getMetadata().getDim())
-                && Arrays.equals(pol0.getMetadata().getDim(), pol90.getMetadata().getDim())
-                && Arrays.equals(pol0.getMetadata().getDim(), pol135.getMetadata().getDim());
-    }
-
-    /**
-     * checks for duplicate image reference.
-     */
-    private boolean _hasDuplicateImage(Image<UINT16> pol0, Image<UINT16> pol45, Image<UINT16> pol90,
-            Image<UINT16> pol135) {
-        return pol0 == pol45 || pol0 == pol90 || pol0 == pol135 || pol45 == pol90 || pol45 == pol135 || pol90 == pol135;
     }
 
     @Override

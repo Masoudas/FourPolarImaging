@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.image.polarization;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
@@ -102,6 +103,14 @@ public class PolarizationImageSetBuilder {
     }
 
     public IPolarizationImageSet build() throws CannotFormPolarizationImageSet {
+        if (this._hasDuplicateImage(this._pol0, this._pol45, this._pol90, this._pol135)) {
+            throw new CannotFormPolarizationImageSet(
+                    "Cannot form the polarization image set due to duplicate image for polarizations.");
+        }
+        if (!this._hasEqualDimensions(this._pol0, this._pol45, this._pol90, this._pol135)) {
+            throw new CannotFormPolarizationImageSet(
+                    "Cannot form the polarization image set because the given images don't have the same dimension.");
+        }
         IPolarizationImageSet imageSet = new PolarizationImageSet(this);
         this._resetBuilder();
 
@@ -119,6 +128,24 @@ public class PolarizationImageSetBuilder {
             throw new IllegalArgumentException("polarization image must have only one channel.");
         }
 
+    }
+
+    /**
+     * Checks that all images have the same dimension.
+     */
+    private boolean _hasEqualDimensions(Image<UINT16> pol0, Image<UINT16> pol45, Image<UINT16> pol90,
+            Image<UINT16> pol135) {
+        return Arrays.equals(pol0.getMetadata().getDim(), pol45.getMetadata().getDim())
+                && Arrays.equals(pol0.getMetadata().getDim(), pol90.getMetadata().getDim())
+                && Arrays.equals(pol0.getMetadata().getDim(), pol135.getMetadata().getDim());
+    }
+
+    /**
+     * checks for duplicate image reference.
+     */
+    private boolean _hasDuplicateImage(Image<UINT16> pol0, Image<UINT16> pol45, Image<UINT16> pol90,
+            Image<UINT16> pol135) {
+        return pol0 == pol45 || pol0 == pol90 || pol0 == pol135 || pol45 == pol90 || pol45 == pol135 || pol90 == pol135;
     }
 
     private void _resetBuilder() {
