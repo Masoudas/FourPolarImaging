@@ -6,7 +6,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
  * An interface for accessing the files corresponding to a set of polarization
- * images.
+ * images of a particular channel.
  */
 public interface IPolarizationImageFileSet {
     /**
