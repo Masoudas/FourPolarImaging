@@ -118,9 +118,8 @@ public class SingleDipoleStick2DPainterBuilder {
      * 
      */
     private IGaugeFigure _createGaugeFigure(long[] dim, IMetadata orientationImMetadata) {
-        IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(orientationImMetadata).axisOrder(AxisOrder.XY)
-                .build();
-        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dim, RGB16.zero(), gaugeFigMetadata);
+        IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XY).build();
+        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(gaugeFigMetadata, RGB16.zero());
         return GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
                 this._soiImage.getFileSet());
     }
