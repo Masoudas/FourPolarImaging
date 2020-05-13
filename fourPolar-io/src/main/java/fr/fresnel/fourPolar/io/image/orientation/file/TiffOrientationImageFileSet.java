@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 
 /**
  * A concrete implementation of the {@link IOrientationImageFileSet}. Note that
- * with this implementation, all images will have a tiff extension.
+ * with this implementation, all images will have a tif extension.
  */
 public class TiffOrientationImageFileSet implements IOrientationImageFileSet {
     private final static String _extension = "tif";
@@ -24,10 +24,10 @@ public class TiffOrientationImageFileSet implements IOrientationImageFileSet {
      * 
      * @param fileSet
      */
-    public TiffOrientationImageFileSet(File root4PProject, ICapturedImageFileSet fileSet) {
+    public TiffOrientationImageFileSet(File root4PProject, ICapturedImageFileSet fileSet, int channel) {
         this._setName = fileSet.getSetName();
 
-        File parentFolder = this._getSetParentFolder(root4PProject, fileSet.getChannel());
+        File parentFolder = this._getSetParentFolder(root4PProject, channel);
 
         if (!parentFolder.exists()){
             parentFolder.mkdirs();
@@ -59,11 +59,6 @@ public class TiffOrientationImageFileSet implements IOrientationImageFileSet {
                 break;
         }
         return imageFile;
-    }
-
-    @Override
-    public String getSetName() {
-        return this._setName;
     }
 
     private File _getSetParentFolder(File root4PProject, int channel) {
