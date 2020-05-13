@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.core.image.orientation;
 
+import java.util.Objects;
+
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
@@ -21,6 +23,9 @@ public class OrientationImageFactory {
      * 
      */
     public static IOrientationImage create(ImageFactory factory, IPolarizationImageSet polarizationImageSet) {
+        Objects.requireNonNull(factory, "factory should not be null");
+        Objects.requireNonNull(polarizationImageSet, "polarizationImageSet should not be null");
+
         long[] dimension = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage().getMetadata()
                 .getDim();
 

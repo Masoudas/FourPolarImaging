@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.core.image.orientation;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
@@ -37,6 +38,11 @@ class OrientationImage implements IOrientationImage {
      */
     public OrientationImage(ICapturedImageFileSet fileSet, int channel, Image<Float32> rho, Image<Float32> delta,
             Image<Float32> eta) throws CannotFormOrientationImage {
+        Objects.requireNonNull(fileSet);
+        Objects.requireNonNull(rho);
+        Objects.requireNonNull(delta);
+        Objects.requireNonNull(eta);
+
         if (this._hasDuplicateImage(rho, delta, eta)) {
             throw new CannotFormOrientationImage(
                     "Cannot form the orientation image due to duplicate image for angles.");
