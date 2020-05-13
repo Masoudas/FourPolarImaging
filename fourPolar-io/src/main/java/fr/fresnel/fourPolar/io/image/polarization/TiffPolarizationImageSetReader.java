@@ -39,9 +39,9 @@ public class TiffPolarizationImageSetReader implements IPolarizationImageSetRead
     }
 
     @Override
-    public IPolarizationImageSet read(File rootFolder, ICapturedImageFileSet fileSet, int channel)
+    public IPolarizationImageSet read(File root4PProject, ICapturedImageFileSet fileSet, int channel)
             throws IOException, CannotFormPolarizationImageSet {
-        IPolarizationImageFileSet polFileSet = new TiffPolarizationImageFileSet(rootFolder, fileSet, channel);
+        IPolarizationImageFileSet polFileSet = new TiffPolarizationImageFileSet(root4PProject, fileSet, channel);
 
         IPolarizationImageSet imageSet = null;
         try {

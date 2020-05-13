@@ -26,7 +26,7 @@ public interface IPolarizationImageSetReader {
      *                                        formed if images don't have the same
      *                                        dimension or are not XYCZT.
      */
-    public IPolarizationImageSet read(File rootFolder, ICapturedImageFileSet fileSet, int channel)
+    public IPolarizationImageSet read(File root4PProject, ICapturedImageFileSet fileSet, int channel)
             throws IOException, CannotFormPolarizationImageSet;
 
     /**

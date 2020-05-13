@@ -16,15 +16,15 @@ import fr.fresnel.fourPolar.core.PathFactoryOfProject;
  */
 public class FourPolarImagingSetupToYaml {
     private IFourPolarImagingSetup _imagingSetup;
-    private File _rootFolder;
+    private File _root4PProject;
 
-    public FourPolarImagingSetupToYaml(IFourPolarImagingSetup imagingSetup, File rootFolder) {
+    public FourPolarImagingSetupToYaml(IFourPolarImagingSetup imagingSetup, File root4PProject) {
         this._imagingSetup = imagingSetup;
-        this._rootFolder = rootFolder;
+        this._root4PProject = root4PProject;
     }
 
     public void write() throws IOException {
-        File destFile = new File(getDestinationFolder(this._rootFolder), getFileName());
+        File destFile = new File(getDestinationFolder(this._root4PProject), getFileName());
 
         FourPolarImagingSetupJSONAdaptor adaptor = new FourPolarImagingSetupJSONAdaptor();
         adaptor.toYaml(this._imagingSetup);
@@ -35,8 +35,8 @@ public class FourPolarImagingSetupToYaml {
         mapper.writeValue(destFile, adaptor);
     }
 
-    public static File getDestinationFolder(File rootFolder) {
-        return PathFactoryOfProject.getFolder_Params(rootFolder);
+    public static File getDestinationFolder(File root4PProject) {
+        return PathFactoryOfProject.getFolder_Params(root4PProject);
     }
 
     public static String getFileName() {

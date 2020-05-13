@@ -15,8 +15,8 @@ public class TiffSoIImageFile implements ISoIImageFile {
 
     private final File _SoIImageFile;
 
-    public TiffSoIImageFile(File rootFolder, ICapturedImageFileSet fileSet) {
-        File parentFolder = TiffPolarizationImageFileSet.formSetParentFolder(rootFolder, fileSet.getChannel(),
+    public TiffSoIImageFile(File root4PProject, ICapturedImageFileSet fileSet) {
+        File parentFolder = TiffPolarizationImageFileSet.formSetParentFolder(root4PProject, fileSet.getChannel(),
                 fileSet.getSetName());
 
         this._SoIImageFile = new File(parentFolder, _SoIImageName);

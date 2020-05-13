@@ -25,12 +25,12 @@ public class TemplateExcelFileGenerator {
      * Default constructor. Generate a template excel file, for defining the sample
      * set images. The second page is the example page.
      * 
-     * @param camera
-     * @param rootFolder
+     * @param camera is the number of cameras
+     * @param root4PProject is the location of the 4Polar folder of the project {@see PathFactoryOfProject}.
      */
-    public TemplateExcelFileGenerator(Cameras camera, File rootFolder) {
+    public TemplateExcelFileGenerator(Cameras camera, File root4PProject) {
         this.camera = camera;
-        this.folder = this._getFolder(rootFolder);
+        this.folder = this._getFolder(root4PProject);
         this._nCommentColumns = 8;
 
     }
@@ -92,11 +92,11 @@ public class TemplateExcelFileGenerator {
     /**
      * Creates and returns the folder that would contain the template excel files.
      * 
-     * @param rootFolder
+     * @param root4PProject
      * @return
      */
-    private File _getFolder(File rootFolder) {
-        return new File(rootFolder.getAbsolutePath());
+    private File _getFolder(File root4PProject) {
+        return new File(root4PProject.getAbsolutePath());
     }
 
     private File getFileName(int channel) {

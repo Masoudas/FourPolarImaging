@@ -20,13 +20,13 @@ import fr.fresnel.fourPolar.core.PathFactoryOfProject;
  */
 public class OpticalPropagationToYaml {
 
-    public void write(File rootFolder, IFourPolarImagingSetup setup, IOpticalPropagationDB database)
+    public void write(File root4PProject, IFourPolarImagingSetup setup, IOpticalPropagationDB database)
             throws PropagationChannelNotInDatabase, IOException {
         ObjectMapper mapper = getYamlMapper();
         for (int channel = 1; channel <= setup.getNumChannel(); channel++) {
             IOpticalPropagationJSONAdaptor adaptor = getJSONAdaptor(setup, database, channel);
 
-            File path = getFilePath(rootFolder, channel);
+            File path = getFilePath(root4PProject, channel);
 
             mapper.writeValue(path, adaptor);
         }
@@ -65,8 +65,8 @@ public class OpticalPropagationToYaml {
         return "OpticalPropagation_Channel" + channel + ".yaml";
     }
 
-    private File getFilePath(File rootFolder, int channel) {
-        return new File(PathFactoryOfProject.getFolder_Params(rootFolder),
+    private File getFilePath(File root4PProject, int channel) {
+        return new File(PathFactoryOfProject.getFolder_Params(root4PProject),
                 _getFileName(channel));
 
     }

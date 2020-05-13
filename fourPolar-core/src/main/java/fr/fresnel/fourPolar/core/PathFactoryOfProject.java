@@ -5,11 +5,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * By project we imply an analysis on a cetain number of images which are taken
- * using the same imaging setup parameters. This path factory generates all the
- * subfolders that are needed for accessing information of the project. Compare
- * to {@link PathFactoryOfGlobalInfo}. All these path are created once using the
- * root folder, and every time the same path is returned.
+ * By project we imply an analysis on a group of {@link ICapturedImageFileSet}
+ * of a particular {@link IFourPolarImagingSetup}.
+ * <p>
+ * The 4Polar is the root folder of the 4Polar project, where all the subsequent
+ * folders and files of the project are stored. The location where this folder
+ * is put is called root4PProject. The user determines the root4PProject.
+ * <p>
+ * This path factory generates all the subfolders that are needed for accessing
+ * information of the project. Compare to {@link PathFactoryOfGlobalInfo}.
  */
 public class PathFactoryOfProject {
     /**
@@ -38,17 +42,17 @@ public class PathFactoryOfProject {
     private static File _folder_orientationImagesPath = null;
 
     /**
-     * Creates and returns the project root folder.
+     * Creates and returns the 4Polar folder inside root4PProject.
      * 
-     * @param rootFolder
+     * @param root4PProject is the location of the 4Polar folder.
      * @return
      */
-    public static File getFolder_4Polar(File rootFolder) {
+    public static File getFolder_4Polar(File root4PProject) {
         if (_projectRootPath != null) {
             return _projectRootPath;
         }
 
-        Path path = Paths.get(rootFolder.getAbsolutePath(), _projectRoot);
+        Path path = Paths.get(root4PProject.getAbsolutePath(), _projectRoot);
         File _projectRootPath = path.toFile();
 
         if (!_projectRootPath.exists()) {
@@ -64,15 +68,14 @@ public class PathFactoryOfProject {
      * <p>
      * The folder that has all the imaging setup data, image information and etc.
      * 
-     * @param rootFolder
-     * @return
+     * @param root4PProject is the location of the 4Polar folder.
      */
-    public static File getFolder_Params(File rootFolder) {
+    public static File getFolder_Params(File root4PProject) {
         if (_folder_paramsPath != null) {
             return _folder_paramsPath;
         }
 
-        Path path = Paths.get(getFolder_4Polar(rootFolder).getAbsolutePath(), _folder_params);
+        Path path = Paths.get(getFolder_4Polar(root4PProject).getAbsolutePath(), _folder_params);
         File _folder_paramsPath = path.toFile();
 
         if (!_folder_paramsPath.exists()) {
@@ -85,15 +88,15 @@ public class PathFactoryOfProject {
     /**
      * Returns the folder that would contain the polarization images.
      * 
-     * @param rootFolder
+     * @param root4PProject is the location of the 4Polar folder.
      * @return
      */
-    public static File getFolder_PolarizationImages(File rootFolder) {
+    public static File getFolder_PolarizationImages(File root4PProject) {
         if (_folder_polarizationImagesPath != null) {
             return _folder_polarizationImagesPath;
         }
 
-        File _folder_polarizationImagesPath = new File(getFolder_4Polar(rootFolder).getAbsolutePath(),
+        File _folder_polarizationImagesPath = new File(getFolder_4Polar(root4PProject).getAbsolutePath(),
                 _folder_polarizationImages);
 
         if (!_folder_polarizationImagesPath.exists()) {
@@ -104,16 +107,16 @@ public class PathFactoryOfProject {
     }
 
     /**
-     * Returns the folder that would contain the polarization images.
+     * Returns the folder that would contain the orientation images.
      * 
-     * @param rootFolder
+     * @param root4PProject is the location of the 4Polar folder.
      * @return
      */
-    public static File getFolder_OrientationImages(File rootFolder) {
+    public static File getFolder_OrientationImages(File root4PProject) {
         if (_folder_orientationImagesPath != null) {
             return _folder_orientationImagesPath;
         }
-        File _folder_orientationImagesPath = new File(getFolder_4Polar(rootFolder).getAbsolutePath(),
+        File _folder_orientationImagesPath = new File(getFolder_4Polar(root4PProject).getAbsolutePath(),
                 _folder_orientationImages);
 
         if (!_folder_orientationImagesPath.exists()) {

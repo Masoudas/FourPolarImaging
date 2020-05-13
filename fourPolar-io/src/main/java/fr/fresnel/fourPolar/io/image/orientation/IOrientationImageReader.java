@@ -14,11 +14,11 @@ public interface IOrientationImageReader {
     /**
      * Read the orientation and return the corresponding {@link IOrientationImage}.
      * 
-     * @param rootFolder is the root folder of the captured images.
+     * @param root4PProject is the location of the 4Polar folder of the project {@see PathFactoryOfProject}.
      * @param fileSet is the captured file set corresponding to this orientation image.
      * @return
      */
-    public IOrientationImage read(File rootFolder, ICapturedImageFileSet fileSet) throws IOException, CannotFormOrientationImage;
+    public IOrientationImage read(File root4PProject, ICapturedImageFileSet fileSet) throws IOException, CannotFormOrientationImage;
 
     /**
      * Close all resources associated with this reader.

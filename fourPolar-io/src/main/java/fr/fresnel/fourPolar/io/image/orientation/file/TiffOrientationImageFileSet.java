@@ -24,10 +24,10 @@ public class TiffOrientationImageFileSet implements IOrientationImageFileSet {
      * 
      * @param fileSet
      */
-    public TiffOrientationImageFileSet(File rootFolder, ICapturedImageFileSet fileSet) {
+    public TiffOrientationImageFileSet(File root4PProject, ICapturedImageFileSet fileSet) {
         this._setName = fileSet.getSetName();
 
-        File parentFolder = this._getSetParentFolder(rootFolder, fileSet.getChannel());
+        File parentFolder = this._getSetParentFolder(root4PProject, fileSet.getChannel());
 
         if (!parentFolder.exists()){
             parentFolder.mkdirs();
@@ -66,8 +66,8 @@ public class TiffOrientationImageFileSet implements IOrientationImageFileSet {
         return this._setName;
     }
 
-    private File _getSetParentFolder(File rootFolder, int channel) {
-        return Paths.get(PathFactoryOfProject.getFolder_OrientationImages(rootFolder).getAbsolutePath(),
+    private File _getSetParentFolder(File root4PProject, int channel) {
+        return Paths.get(PathFactoryOfProject.getFolder_OrientationImages(root4PProject).getAbsolutePath(),
                 "Channel" + channel, this._setName).toFile();
     }
 

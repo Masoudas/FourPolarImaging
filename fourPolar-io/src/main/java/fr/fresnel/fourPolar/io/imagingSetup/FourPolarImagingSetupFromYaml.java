@@ -12,14 +12,14 @@ import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
  * This class is used for reading the fourPolar imaging setup from disk.
  */
 public class FourPolarImagingSetupFromYaml {
-    private File _rootFolder;
+    private File _root4PProject;
 
-    public FourPolarImagingSetupFromYaml(File rootFolder) {
-        this._rootFolder = rootFolder;
+    public FourPolarImagingSetupFromYaml(File root4PProject) {
+        this._root4PProject = root4PProject;
     }
 
     public void read(IFourPolarImagingSetup imagingSetup) throws IOException{
-        File destFile = new File(FourPolarImagingSetupToYaml.getDestinationFolder(this._rootFolder),
+        File destFile = new File(FourPolarImagingSetupToYaml.getDestinationFolder(this._root4PProject),
             FourPolarImagingSetupToYaml.getFileName());
 
         FourPolarImagingSetupJSONAdaptor adaptor = new FourPolarImagingSetupJSONAdaptor();

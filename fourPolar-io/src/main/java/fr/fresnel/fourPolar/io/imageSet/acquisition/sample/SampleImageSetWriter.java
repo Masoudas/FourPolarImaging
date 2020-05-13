@@ -30,11 +30,11 @@ public class SampleImageSetWriter {
     /**
      * Returns the folder where the SampleImageSet would be written.
      * 
-     * @param rootFolder
-     * @return
+     * @param root4PProject is the location of the 4Polar folder of the project
+     *                      {@see PathFactoryOfProject}.
      */
-    public static File getSampleSetFolder(File rootFolder) {
-        File zero_params_folder = PathFactoryOfProject.getFolder_Params(rootFolder);
+    public static File getSampleSetFolder(File root4PProject) {
+        File zero_params_folder = PathFactoryOfProject.getFolder_Params(root4PProject);
         return Paths.get(zero_params_folder.getAbsolutePath(), "Sample").toFile();
     }
 
@@ -53,17 +53,16 @@ public class SampleImageSetWriter {
      * excel files in the path provided by the {@link PathFactory} class for each
      * channel.
      * 
-     * @param sampleSet  : The sample set to be written.
-     * @param rootFolder : The root folder of the four polar images. Note that this
-     *                   file is written in the sampleSet subfolder of 0_Params
-     *                   provided by {@link PathFactory}
+     * @param sampleSet     : The sample set to be written.
+     * @param root4PProject is the location of the 4Polar folder of the project
+     *                      {@see PathFactoryOfProject}.
      */
-    public SampleImageSetWriter(SampleImageSet sampleSet, File rootFolder) {
+    public SampleImageSetWriter(SampleImageSet sampleSet, File root4PProject) {
         this.sampleSet = sampleSet;
 
         Cameras camera = sampleSet.getImagingSetup().getCameras();
         this.labels = Cameras.getLabels(camera);
-        this._sampleSetFolder = this._createFolder_SampleSet(rootFolder);
+        this._sampleSetFolder = this._createFolder_SampleSet(root4PProject);
 
     }
 
@@ -113,10 +112,10 @@ public class SampleImageSetWriter {
     /**
      * Creates and returns the folder that would contain the sample set excel files.
      * 
-     * @param rootFolder
+     * @param root4PProject
      */
-    private File _createFolder_SampleSet(File rootFolder) {
-        File sampleSetFolder = getSampleSetFolder(rootFolder);
+    private File _createFolder_SampleSet(File root4PProject) {
+        File sampleSetFolder = getSampleSetFolder(root4PProject);
         sampleSetFolder.mkdirs();
         return sampleSetFolder;
     }

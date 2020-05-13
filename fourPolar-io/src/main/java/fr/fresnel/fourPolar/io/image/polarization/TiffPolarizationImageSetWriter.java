@@ -33,9 +33,9 @@ public class TiffPolarizationImageSetWriter implements IPolarizationImageSetWrit
     }
 
     @Override
-    public void write(File rootFolder, IPolarizationImageSet imageSet) throws IOException {
+    public void write(File root4PProject, IPolarizationImageSet imageSet) throws IOException {
         IPolarizationImageFileSet polFileSet = new TiffPolarizationImageFileSet(
-            rootFolder, imageSet.getFileSet(), imageSet.channel());
+            root4PProject, imageSet.getFileSet(), imageSet.channel());
         _writePolarizationImage(Polarization.pol0, polFileSet, imageSet);
         _writePolarizationImage(Polarization.pol45, polFileSet, imageSet);
         _writePolarizationImage(Polarization.pol90, polFileSet, imageSet);

@@ -35,9 +35,9 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
     }
 
     @Override
-    public IOrientationImage read(File rootFolder, ICapturedImageFileSet fileSet)
+    public IOrientationImage read(File root4PProject, ICapturedImageFileSet fileSet)
             throws IOException, CannotFormOrientationImage {
-        TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(rootFolder, fileSet);
+        TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(root4PProject, fileSet);
 
         Image<Float32> rho = _reader.read(oSet.getFile(OrientationAngle.rho));
         Image<Float32> delta = _reader.read(oSet.getFile(OrientationAngle.delta));

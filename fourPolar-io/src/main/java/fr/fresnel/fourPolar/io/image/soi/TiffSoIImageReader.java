@@ -26,8 +26,8 @@ public class TiffSoIImageReader implements ISoIImageReader {
     }
 
     @Override
-    public ISoIImage read(File rootFolder, ICapturedImageFileSet fileSet) throws IOException {
-        ISoIImageFile file = new TiffSoIImageFile(rootFolder, fileSet);
+    public ISoIImage read(File root4PProject, ICapturedImageFileSet fileSet) throws IOException {
+        ISoIImageFile file = new TiffSoIImageFile(root4PProject, fileSet);
 
         return new SoIImage(fileSet, this._reader.read(file.getFile()));
     }

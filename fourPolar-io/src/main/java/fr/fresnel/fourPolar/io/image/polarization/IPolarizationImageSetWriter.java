@@ -14,7 +14,7 @@ public interface IPolarizationImageSetWriter {
      * Writes the image set to the destinations inherent in the {@link IPolarizationImageSet}.
      * @param imageSet
      */
-    public void write(File rootFolder, IPolarizationImageSet imageSet) throws IOException;
+    public void write(File root4PProject, IPolarizationImageSet imageSet) throws IOException;
     
     /**
      * Close all resources associated with this writer.

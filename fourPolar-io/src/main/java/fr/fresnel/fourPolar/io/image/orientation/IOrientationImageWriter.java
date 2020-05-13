@@ -12,11 +12,11 @@ public interface IOrientationImageWriter {
     /**
      * Write the orientation image to the {@link IOrientationImageFileSet} paths.
      * 
-     * @param rootFolder is the root folder of the captured images.
+     * @param root4PProject is the location of the 4Polar folder of the project {@see PathFactoryOfProject}.
      * @param image is the orientation image.
      * @throws IOException thrown in case of low-level problems.
      */
-    public void write(File rootFolder, IOrientationImage image) throws IOException;
+    public void write(File root4PProject, IOrientationImage image) throws IOException;
 
     /**
      * Close all resources associated with this writer.

@@ -23,8 +23,8 @@ public class TiffSoIImageWriter implements ISoIImageWriter {
     }
 
     @Override
-    public void write(File rootFolder, ISoIImage soiImage) throws IOException {
-        ISoIImageFile file = new TiffSoIImageFile(rootFolder, soiImage.getFileSet());
+    public void write(File root4PProject, ISoIImage soiImage) throws IOException {
+        ISoIImageFile file = new TiffSoIImageFile(root4PProject, soiImage.getFileSet());
 
         this._writer.write(file.getFile(), soiImage.getImage());
     }

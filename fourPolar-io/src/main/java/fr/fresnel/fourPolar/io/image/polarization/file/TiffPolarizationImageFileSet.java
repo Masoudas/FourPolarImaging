@@ -23,8 +23,8 @@ public class TiffPolarizationImageFileSet implements IPolarizationImageFileSet {
     final private File _pol90File;
     final private File _pol135File;
 
-    public TiffPolarizationImageFileSet(File rootFolder, ICapturedImageFileSet fileSet, int channel) {
-        File parentFolder = formSetParentFolder(rootFolder, channel, fileSet.getSetName());
+    public TiffPolarizationImageFileSet(File root4PProject, ICapturedImageFileSet fileSet, int channel) {
+        File parentFolder = formSetParentFolder(root4PProject, channel, fileSet.getSetName());
 
         if (!parentFolder.exists()) {
             parentFolder.mkdirs();
@@ -70,8 +70,8 @@ public class TiffPolarizationImageFileSet implements IPolarizationImageFileSet {
      * 
      * @return
      */
-    public static File formSetParentFolder(File rootFolder, int channel, String setName) {
-        Path path = Paths.get(PathFactoryOfProject.getFolder_PolarizationImages(rootFolder).getAbsolutePath(),
+    public static File formSetParentFolder(File root4PProject, int channel, String setName) {
+        Path path = Paths.get(PathFactoryOfProject.getFolder_PolarizationImages(root4PProject).getAbsolutePath(),
                 "Channel" + channel, setName);
         return path.toFile();
     }

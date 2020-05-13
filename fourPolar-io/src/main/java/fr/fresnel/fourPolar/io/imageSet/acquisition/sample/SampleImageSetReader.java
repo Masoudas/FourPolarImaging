@@ -36,11 +36,11 @@ public class SampleImageSetReader {
      * 0_params folder. See {@ SampleImageSetWriter}
      * 
      * @param imagingSetup
-     * @param rootFolder
+     * @param root4PProject is the location of the 4Polar folder of the project {@see PathFactoryOfProject}.
      */
-    public SampleImageSetReader(IFourPolarImagingSetup imagingSetup, File rootFolder) {
+    public SampleImageSetReader(IFourPolarImagingSetup imagingSetup, File root4PProject) {
         this._imagingSetup = imagingSetup;
-        this._sampleSetFolder = SampleImageSetWriter.getSampleSetFolder(rootFolder);
+        this._sampleSetFolder = SampleImageSetWriter.getSampleSetFolder(root4PProject);
     }
 
     /**
