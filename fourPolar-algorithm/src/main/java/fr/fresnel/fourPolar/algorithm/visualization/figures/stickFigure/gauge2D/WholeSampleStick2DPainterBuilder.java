@@ -48,7 +48,8 @@ public class WholeSampleStick2DPainterBuilder {
 
     /**
      * Initialize the painter with the given orientation and soi image, for the
-     * given angle gauge tpe.
+     * given angle gauge type. We assume that orientation and soi images are XYCZT
+     * with only one channel.
      * 
      * @param orientationImage is the orientation image
      * @param soiImage         is the corresponding soi Image of @param
@@ -61,17 +62,9 @@ public class WholeSampleStick2DPainterBuilder {
         Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
         Objects.requireNonNull(angleGaugeType, "gaugeType cannot be null");
 
-        long[] orientationImageDim = orientationImage.getAngleImage(OrientationAngle.rho).getImage().getMetadata().getDim();
-        if (orientationImageDim.length < 2) {
-            throw new IllegalArgumentException("The orientation image must be at least two dimensionsal.");
-        }
-
-        if (soiImage.getImage().getMetadata().axisOrder() == AxisOrder.NoOrder) {
-            throw new IllegalArgumentException("axisOrder is undefined in the metadata of soi and orientation image.");
-        }
-
-        if (AxisOrder.getChannelAxis(soiImage.getImage().getMetadata().axisOrder()) > 0) {
-            throw new IllegalArgumentException("The soi and orientation images must not have channels.");
+        if (!orientationImage.getCapturedSet().getSetName().equals(soiImage.getFileSet().getSetName())
+                || orientationImage.channel() != soiImage.channel()) {
+            throw new IllegalArgumentException("orientation and soi images don't belong to the same set or channel.");
         }
 
         this._gaugeType = angleGaugeType;
@@ -134,7 +127,7 @@ public class WholeSampleStick2DPainterBuilder {
 
     private IGaugeFigure _createGaugeFigure(long[] dim, IMetadata orientationImgMetadata) {
         IMetadata metadata = new Metadata.MetadataBuilder(orientationImgMetadata).build();
-        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dim, RGB16.zero(), metadata);
+        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(metadata, RGB16.zero());
         return GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
                 this._soiImage.getFileSet());
     }
