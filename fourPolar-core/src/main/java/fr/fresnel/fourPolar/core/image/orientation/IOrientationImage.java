@@ -34,4 +34,9 @@ public interface IOrientationImage {
      * @return
      */
     public IOrientationImageRandomAccess getRandomAccess();
+
+    /**
+     * @return channel number of this image.
+     */
+    public int channel();
 }
