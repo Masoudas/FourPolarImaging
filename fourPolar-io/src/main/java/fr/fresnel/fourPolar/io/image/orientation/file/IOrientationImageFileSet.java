@@ -17,13 +17,4 @@ public interface IOrientationImageFileSet {
      */
     public File getFile(OrientationAngle angle);
 
-    /**
-     * Returns the set name designated to this set of angle images that form the
-     * orientation image. This set name is exactly the same as the set name assigned
-     * by {@link ICapturedImageFileSet}.
-     * 
-     * @return
-     */
-    public String getSetName();
-
 }
