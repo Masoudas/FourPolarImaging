@@ -31,12 +31,13 @@ public class SoIImage implements ISoIImage {
      * @param factory              is the desired image factory.
      * 
      */
-    public static ISoIImage create(IPolarizationImageSet polarizationImageSet, ImageFactory factory) {
-        long[] dim = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage().getMetadata().getDim();
-        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT)
+    public static ISoIImage create(IPolarizationImageSet polarizationImageSet) {
+        Image<UINT16> pol0 = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage();
+
+        IMetadata soiMetadata = new Metadata.MetadataBuilder(pol0.getMetadata().getDim()).axisOrder(AxisOrder.XYCZT)
                 .bitPerPixel(PixelTypes.UINT_16).build();
 
-        Image<UINT16> image = factory.create(metadata, UINT16.zero());
+        Image<UINT16> image = pol0.getFactory().create(soiMetadata, UINT16.zero());
 
         SoIImage soiImage = new SoIImage(polarizationImageSet.getFileSet(), image);
         soiImage.setChannel(polarizationImageSet.channel());
