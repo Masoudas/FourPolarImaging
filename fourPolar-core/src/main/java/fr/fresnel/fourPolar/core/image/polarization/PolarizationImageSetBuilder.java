@@ -111,6 +111,13 @@ public class PolarizationImageSetBuilder {
             throw new CannotFormPolarizationImageSet(
                     "Cannot form the polarization image set because the given images don't have the same dimension.");
         }
+
+        try {
+            this._checkAllParamsSet();
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new CannotFormPolarizationImageSet(e.getMessage());
+        }
+        
         IPolarizationImageSet imageSet = new PolarizationImageSet(this);
         this._resetBuilder();
 
@@ -148,13 +155,23 @@ public class PolarizationImageSetBuilder {
         return pol0 == pol45 || pol0 == pol90 || pol0 == pol135 || pol45 == pol90 || pol45 == pol135 || pol90 == pol135;
     }
 
+    private void _checkAllParamsSet() {
+        Objects.requireNonNull(this._pol0, "pol0 image is not set.");
+        Objects.requireNonNull(this._pol45, "pol45 image is not set.");
+        Objects.requireNonNull(this._pol90, "pol90 image is not set.");
+        Objects.requireNonNull(this._pol90, "pol135 image is not set.");
+        Objects.requireNonNull(this._fileSet, "fileSet is not set.");
+
+        Channel.checkChannel(this._channel, this._numChannels);
+    }
+
     private void _resetBuilder() {
         this._pol0 = null;
         this._pol45 = null;
         this._pol90 = null;
         this._pol135 = null;
         this._channel = -1;
-
+        this._fileSet = null;
     }
 
     public int getChannel() {
