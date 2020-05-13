@@ -31,15 +31,16 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
     }
 
     @Override
-    public void write(File root4PProject, IOrientationImage image) throws IOException {
-        TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(root4PProject, image.getCapturedSet());
+    public void write(File root4PProject, IOrientationImage orientationImage) throws IOException {
+        TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(
+            root4PProject, orientationImage.getCapturedSet(), orientationImage.channel());
 
         _writer.write(
-            oSet.getFile(OrientationAngle.rho), image.getAngleImage(OrientationAngle.rho).getImage());
+            oSet.getFile(OrientationAngle.rho), orientationImage.getAngleImage(OrientationAngle.rho).getImage());
         _writer.write(
-            oSet.getFile(OrientationAngle.delta), image.getAngleImage(OrientationAngle.delta).getImage());
+            oSet.getFile(OrientationAngle.delta), orientationImage.getAngleImage(OrientationAngle.delta).getImage());
         _writer.write(
-            oSet.getFile(OrientationAngle.eta), image.getAngleImage(OrientationAngle.eta).getImage());
+            oSet.getFile(OrientationAngle.eta), orientationImage.getAngleImage(OrientationAngle.eta).getImage());
 
     }
 
