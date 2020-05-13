@@ -34,7 +34,8 @@ public class TiffPolarizationImageSetWriter implements IPolarizationImageSetWrit
 
     @Override
     public void write(File rootFolder, IPolarizationImageSet imageSet) throws IOException {
-        IPolarizationImageFileSet polFileSet = new TiffPolarizationImageFileSet(rootFolder, imageSet.getFileSet());
+        IPolarizationImageFileSet polFileSet = new TiffPolarizationImageFileSet(
+            rootFolder, imageSet.getFileSet(), imageSet.channel());
         _writePolarizationImage(Polarization.pol0, polFileSet, imageSet);
         _writePolarizationImage(Polarization.pol45, polFileSet, imageSet);
         _writePolarizationImage(Polarization.pol90, polFileSet, imageSet);
@@ -51,19 +52,6 @@ public class TiffPolarizationImageSetWriter implements IPolarizationImageSetWrit
     private void _writePolarizationImage(Polarization pol, IPolarizationImageFileSet polFileSet,
             IPolarizationImageSet imageSet) throws IOException {
         this._writer.write(polFileSet.getFile(pol), imageSet.getPolarizationImage(pol).getImage());
-    }
-
-    /**
-     * A method for writing for a polarization image with metadata.
-     * 
-     * @param pol
-     * @param imageSet
-     * @param metadata
-     * @throws IOException
-     */
-    private void _writePolarizationImage(Polarization pol, IPolarizationImageFileSet polFileSet,
-            IPolarizationImageSet imageSet, IMetadata metadata) throws IOException {
-        this._writer.write(polFileSet.getFile(pol), metadata, imageSet.getPolarizationImage(pol).getImage());
     }
 
     @Override
