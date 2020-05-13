@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.image.polarization.soi;
+package fr.fresnel.fourPolar.io.image.soi;
 
 import java.io.File;
 import java.io.IOException;
