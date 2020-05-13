@@ -17,10 +17,17 @@ public interface IPolarizationImageSetReader {
      * 
      * @param fileSet is the set of image files associated with the polarization
      *                images.
+     * @param channel is the channel number.
      * @return the polarization image set.
+     * 
+     * @throws IOException                    in case of low-level IO issues, or if
+     *                                        the image files don't exist.
+     * @throws CannotFormPolarizationImageSet in case the polarization set can't be
+     *                                        formed if images don't have the same
+     *                                        dimension or are not XYCZT.
      */
-    public IPolarizationImageSet read(File rootFolder, ICapturedImageFileSet fileSet) throws IOException,
-        CannotFormPolarizationImageSet;
+    public IPolarizationImageSet read(File rootFolder, ICapturedImageFileSet fileSet, int channel)
+            throws IOException, CannotFormPolarizationImageSet;
 
     /**
      * Close all resources associated with this reader.
