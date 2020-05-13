@@ -15,7 +15,7 @@ public interface ISoIImageWriter {
      * @param root4PProject is the location of the 4Polar folder of the project
      *                      {@see PathFactoryOfProject}.
      * 
-     * @param imageSet
+     * @param soiImage      is the image to be written to disk.
      */
     public void write(File root4PProject, ISoIImage soiImage) throws IOException;
 
