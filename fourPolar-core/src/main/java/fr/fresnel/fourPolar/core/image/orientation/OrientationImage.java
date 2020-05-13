@@ -58,6 +58,11 @@ class OrientationImage implements IOrientationImage {
             throw new CannotFormOrientationImage("Angle images are not XYCZT");
         }
 
+        if (rho.getMetadata().numChannels() != 1 || delta.getMetadata().numChannels() != 1
+                || eta.getMetadata().numChannels() != 1) {
+            throw new CannotFormOrientationImage("Angle images should have only one channel.");
+        }
+
         if (channel < 1) {
             throw new CannotFormOrientationImage("Channel number must be positive");
         }
