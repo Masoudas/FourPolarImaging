@@ -7,8 +7,11 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.fourPolar.IIntensityVectorIterator;
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
@@ -23,12 +26,13 @@ public class IntensityVectorIteratorTest {
     @Test
     public void next_RandomDataSet_ReturnsCorrectIntensityForEachElement() {
         long[] dim = { 10, 10, 10, 10, 3 };
+        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
 
-        IPixelCursor<UINT16> baseSetCursor = new ImgLib2ImageFactory().create(dim, UINT16.zero()).getCursor();
-        IPixelCursor<UINT16> pol0Cursor = new ImgLib2ImageFactory().create(dim, UINT16.zero()).getCursor();
-        IPixelCursor<UINT16> pol45Cursor = new ImgLib2ImageFactory().create(dim, UINT16.zero()).getCursor();
-        IPixelCursor<UINT16> pol90Cursor = new ImgLib2ImageFactory().create(dim, UINT16.zero()).getCursor();
-        IPixelCursor<UINT16> pol135Cursor = new ImgLib2ImageFactory().create(dim, UINT16.zero()).getCursor();
+        IPixelCursor<UINT16> baseSetCursor = new ImgLib2ImageFactory().create(metadata, UINT16.zero()).getCursor();
+        IPixelCursor<UINT16> pol0Cursor = new ImgLib2ImageFactory().create(metadata, UINT16.zero()).getCursor();
+        IPixelCursor<UINT16> pol45Cursor = new ImgLib2ImageFactory().create(metadata, UINT16.zero()).getCursor();
+        IPixelCursor<UINT16> pol90Cursor = new ImgLib2ImageFactory().create(metadata, UINT16.zero()).getCursor();
+        IPixelCursor<UINT16> pol135Cursor = new ImgLib2ImageFactory().create(metadata, UINT16.zero()).getCursor();
 
         Random random = new Random();
         UINT16 one = new UINT16(1);
