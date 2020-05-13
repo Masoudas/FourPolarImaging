@@ -13,16 +13,19 @@ public interface ISoIImageReader {
     /**
      * Reads the {@link ISoIImage} corresponding to this captured file set.
      * 
-     * @param fileSet is the set of image files associated with the polarization
-     *                images.
+     * @param root4PProject is the parent folder of the 4Polar project data.
+     * @param fileSet       is the set of image files associated with the
+     *                      polarization images.
      * @return the polarization image set.
+     * 
+     * @throws IOException in case of low-level IO issues, or if image file or
+     *                     metadata is corrupt.
      */
-    public ISoIImage read(File rootFolder, ICapturedImageFileSet fileSet) throws IOException;
+    public ISoIImage read(File root4PProject, ICapturedImageFileSet fileSet, int channel) throws IOException;
 
     /**
      * Close all resources associated with this reader.
      */
     public void close() throws IOException;
-
 
 }
