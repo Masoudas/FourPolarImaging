@@ -13,23 +13,23 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  * grouping a set of polariozation image files.
  */
 public class TiffPolarizationImageFileSet implements IPolarizationImageFileSet {
-    final private static String _pol0 = "Polarization0.tif";
-    final private static String _pol45 = "Polarization45.tif";
-    final private static String _pol90 = "Polarization90.tif";
-    final private static String _pol135 = "Polarization135.tif";
+    final private static String _pol0 = "Polarization_0.tif";
+    final private static String _pol45 = "Polarization_45.tif";
+    final private static String _pol90 = "Polarization_90.tif";
+    final private static String _pol135 = "Polarization_135.tif";
 
     final private File _pol0File;
     final private File _pol45File;
     final private File _pol90File;
     final private File _pol135File;
 
-    public TiffPolarizationImageFileSet(File rootFolder, ICapturedImageFileSet fileSet) {
-        File parentFolder = formSetParentFolder(rootFolder, fileSet.getChannel(), fileSet.getSetName());
+    public TiffPolarizationImageFileSet(File rootFolder, ICapturedImageFileSet fileSet, int channel) {
+        File parentFolder = formSetParentFolder(rootFolder, channel, fileSet.getSetName());
 
-        if (!parentFolder.exists()){
+        if (!parentFolder.exists()) {
             parentFolder.mkdirs();
         }
-        
+
         this._pol0File = new File(parentFolder, _pol0);
         this._pol45File = new File(parentFolder, _pol45);
         this._pol90File = new File(parentFolder, _pol90);
@@ -65,11 +65,9 @@ public class TiffPolarizationImageFileSet implements IPolarizationImageFileSet {
     }
 
     /**
-     * This method forms the parent folder for this set with the formula root/4Polar/polarizationImages/setName
+     * This method forms the parent folder for this set with the formula root +
+     * {@link PathFactoryOfProject#getFolder_PolarizationImages(File)} + setName
      * 
-     * @param rootFolder
-     * @param channel
-     * @param setName
      * @return
      */
     public static File formSetParentFolder(File rootFolder, int channel, String setName) {
