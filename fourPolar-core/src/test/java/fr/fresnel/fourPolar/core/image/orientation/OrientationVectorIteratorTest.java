@@ -7,8 +7,11 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
@@ -22,12 +25,13 @@ public class OrientationVectorIteratorTest {
      */
     @Test
     public void next_RandomDataSet_ReturnsCorrectOrientationVectorForEachElement() {
-        long[] dim = { 10, 10, 10, 10, 3 };
+        long[] dim = { 10, 10, 1, 10, 3 };
+        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
 
-        IPixelCursor<Float32> baseSetCursor = new ImgLib2ImageFactory().create(dim, Float32.zero()).getCursor();
-        IPixelCursor<Float32> rho = new ImgLib2ImageFactory().create(dim, Float32.zero()).getCursor();
-        IPixelCursor<Float32> delta = new ImgLib2ImageFactory().create(dim, Float32.zero()).getCursor();
-        IPixelCursor<Float32> eta = new ImgLib2ImageFactory().create(dim, Float32.zero()).getCursor();
+        IPixelCursor<Float32> baseSetCursor = new ImgLib2ImageFactory().create(metadata, Float32.zero()).getCursor();
+        IPixelCursor<Float32> rho = new ImgLib2ImageFactory().create(metadata, Float32.zero()).getCursor();
+        IPixelCursor<Float32> delta = new ImgLib2ImageFactory().create(metadata, Float32.zero()).getCursor();
+        IPixelCursor<Float32> eta = new ImgLib2ImageFactory().create(metadata, Float32.zero()).getCursor();
 
         Random random = new Random();
         Float32 one = new Float32((float) (Math.PI / 180));
