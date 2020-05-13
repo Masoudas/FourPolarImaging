@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.image.polarization.soi.ISoIImage;
+import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;

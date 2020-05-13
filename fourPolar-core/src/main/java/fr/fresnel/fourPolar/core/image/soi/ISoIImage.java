@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.image.polarization.soi;
+package fr.fresnel.fourPolar.core.image.soi;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;

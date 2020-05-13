@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
-import fr.fresnel.fourPolar.core.image.polarization.soi.ISoIImage;
+import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 
 /**
  * An interface for reading {@link ISoIImageReader}

@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.io.image.polarization.soi;
 import java.io.File;
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.core.image.polarization.soi.ISoIImage;
+import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 
 /**
  * An interface for writing {@link ISoIImageWriter}
