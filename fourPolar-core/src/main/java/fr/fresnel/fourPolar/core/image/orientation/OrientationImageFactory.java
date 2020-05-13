@@ -20,7 +20,7 @@ public class OrientationImageFactory {
      * Create the orientation image from an {@link IPolarizationImage}.
      * 
      */
-    public IOrientationImage create(ImageFactory factory, IPolarizationImageSet polarizationImageSet) {
+    public static IOrientationImage create(ImageFactory factory, IPolarizationImageSet polarizationImageSet) {
         long[] dimension = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage().getMetadata()
                 .getDim();
 
@@ -54,7 +54,7 @@ public class OrientationImageFactory {
      * @throws CannotFormOrientationImage if the images don't have the same
      *                                    dimension, or aren't XYCZT.
      */
-    public IOrientationImage create(ICapturedImageFileSet fileSet, int channel, Image<Float32> rho,
+    public static IOrientationImage create(ICapturedImageFileSet fileSet, int channel, Image<Float32> rho,
             Image<Float32> delta, Image<Float32> eta) throws CannotFormOrientationImage {
         return new OrientationImage(fileSet, channel, rho, delta, eta);
     }
