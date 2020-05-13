@@ -7,6 +7,7 @@ import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
@@ -16,30 +17,12 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  * A concrete implementation of the {@link IOrientationImage}, which contains
  * angle images as an implementation of the {@link IAngleImage}.
  */
-public class OrientationImage implements IOrientationImage {
+class OrientationImage implements IOrientationImage {
     private final ICapturedImageFileSet _fileSet;
     private final IAngleImage _rhoImage;
     private final IAngleImage _deltaImage;
     private final IAngleImage _etaImage;
-
-    /**
-     * Using this constructor, we can create an empty orientation image, where each
-     * {@link IAngleImage} has the same dimension as the {@link IPolarizationImage}.
-     * 
-     * @param fileSet
-     * @param factory
-     * @param polImage
-     */
-    public OrientationImage(ICapturedImageFileSet fileSet, ImageFactory factory, IPolarizationImageSet polImage) {
-        Float32 pixelType = Float32.zero();
-        long[] dimension = polImage.getPolarizationImage(Polarization.pol0).getImage().getMetadata().getDim();
-
-        _rhoImage = new AngleImage(OrientationAngle.rho, factory.create(dimension, pixelType));
-        _deltaImage = new AngleImage(OrientationAngle.delta, factory.create(dimension, pixelType));
-        _etaImage = new AngleImage(OrientationAngle.eta, factory.create(dimension, pixelType));
-
-        _fileSet = fileSet;
-    }
+    private final int _channel;
 
     /**
      * This constructor creates the orientation image based on three Float32 images.
@@ -50,10 +33,10 @@ public class OrientationImage implements IOrientationImage {
      * @param delta   is the delta angle image.
      * @param eta     is the eta angle image.
      * @throws CannotFormOrientationImage if the images don't have the same
-     *                                    dimension.
+     *                                    dimension, or aren't XYCZT.
      */
-    public OrientationImage(ICapturedImageFileSet fileSet, Image<Float32> rho, Image<Float32> delta, Image<Float32> eta)
-            throws CannotFormOrientationImage {
+    public OrientationImage(ICapturedImageFileSet fileSet, int channel, Image<Float32> rho, Image<Float32> delta,
+            Image<Float32> eta) throws CannotFormOrientationImage {
         if (this._hasDuplicateImage(rho, delta, eta)) {
             throw new CannotFormOrientationImage(
                     "Cannot form the orientation image due to duplicate image for angles.");
@@ -64,10 +47,20 @@ public class OrientationImage implements IOrientationImage {
                     "Cannot form the orientation image because the given images don't have the same dimension.");
         }
 
+        if (rho.getMetadata().axisOrder() != AxisOrder.XYCZT || delta.getMetadata().axisOrder() != AxisOrder.XYCZT
+                || eta.getMetadata().axisOrder() != AxisOrder.XYCZT) {
+            throw new CannotFormOrientationImage("Angle images are not XYCZT");
+        }
+
+        if (channel < 1) {
+            throw new CannotFormOrientationImage("Channel number must be positive");
+        }
+
         _rhoImage = new AngleImage(OrientationAngle.rho, rho);
         _deltaImage = new AngleImage(OrientationAngle.delta, delta);
         _etaImage = new AngleImage(OrientationAngle.eta, eta);
         _fileSet = fileSet;
+        _channel = channel;
     }
 
     @Override
@@ -117,6 +110,11 @@ public class OrientationImage implements IOrientationImage {
     public IOrientationImageRandomAccess getRandomAccess() {
         return new OrientationImageRandomAccess(_rhoImage.getImage().getRandomAccess(),
                 _deltaImage.getImage().getRandomAccess(), _etaImage.getImage().getRandomAccess());
+    }
+
+    @Override
+    public int channel() {
+        return this._channel;
     }
 
 }
