@@ -9,9 +9,11 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
-import fr.fresnel.fourPolar.core.image.orientation.OrientationImage;
+import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
+import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
 import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageFileSet;
@@ -22,6 +24,7 @@ import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageFileSe
  */
 public class TiffOrientationImageReader implements IOrientationImageReader {
     final private ImageReader<Float32> _reader;
+    final private int _numChannels;
 
     /**
      * Initialize the reader for the provided {@link Image} implementation. The same
@@ -30,20 +33,28 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
      * @param factory
      * @throws NoReaderFoundForImage
      */
-    public TiffOrientationImageReader(ImageFactory factory) throws NoReaderFoundForImage {
+    public TiffOrientationImageReader(ImageFactory factory, int numChannels) throws NoReaderFoundForImage {
         _reader = TiffImageReaderFactory.getReader(factory, Float32.zero());
+        _numChannels = numChannels;
     }
 
     @Override
-    public IOrientationImage read(File root4PProject, ICapturedImageFileSet fileSet)
+    public IOrientationImage read(File root4PProject, ICapturedImageFileSet fileSet, int channel)
             throws IOException, CannotFormOrientationImage {
-        TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(root4PProject, fileSet);
+        Channel.checkChannel(channel, this._numChannels);
+        TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(root4PProject, fileSet, channel);
 
-        Image<Float32> rho = _reader.read(oSet.getFile(OrientationAngle.rho));
-        Image<Float32> delta = _reader.read(oSet.getFile(OrientationAngle.delta));
-        Image<Float32> eta = _reader.read(oSet.getFile(OrientationAngle.eta));
+        IOrientationImage orientationImage = null;
+        try {
+            Image<Float32> rho = _reader.read(oSet.getFile(OrientationAngle.rho));
+            Image<Float32> delta = _reader.read(oSet.getFile(OrientationAngle.delta));
+            Image<Float32> eta = _reader.read(oSet.getFile(OrientationAngle.eta));
+            orientationImage = OrientationImageFactory.create(fileSet, channel, rho, delta, eta);
+        } catch (MetadataParseError | IOException e) {
+            throw new IOException("orientation image doesn't exist or is corrupted");
+        }
 
-        return new OrientationImage(fileSet, rho, delta, eta);
+        return orientationImage;
     }
 
     @Override
