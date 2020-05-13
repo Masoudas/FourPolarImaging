@@ -60,17 +60,9 @@ public class WholeSampleStick3DPainterBuilder {
         Objects.requireNonNull(soiImage, "soiImage cannot be null");
         Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
 
-        long[] orientationImageDim = orientationImage.getAngleImage(OrientationAngle.rho).getImage().getMetadata().getDim();
-        if (orientationImageDim.length < 2) {
-            throw new IllegalArgumentException("The orientation image must be at least two dimensionsal.");
-        }
-
-        if (soiImage.getImage().getMetadata().axisOrder() == AxisOrder.NoOrder) {
-            throw new IllegalArgumentException("axisOrder is undefined in the metadata of soi and orientation image.");
-        }
-
-        if (AxisOrder.getChannelAxis(soiImage.getImage().getMetadata().axisOrder()) > 0) {
-            throw new IllegalArgumentException("The soi and orientation images must not have channels.");
+        if (!orientationImage.getCapturedSet().getSetName().equals(soiImage.getFileSet().getSetName())
+                || orientationImage.channel() != soiImage.channel()) {
+            throw new IllegalArgumentException("orientation and soi images don't belong to the same set or channel.");
         }
 
         this._soiImage = soiImage;
@@ -108,7 +100,7 @@ public class WholeSampleStick3DPainterBuilder {
      * Define the length of each stick.
      */
     public WholeSampleStick3DPainterBuilder stickLen(int length) {
-        if (length < 1 || length % 2 == 1) {
+        if (length < 1) {
             throw new IllegalArgumentException("length must be at least one");
         }
 
@@ -124,52 +116,27 @@ public class WholeSampleStick3DPainterBuilder {
      *                                    cannot be converted to ImgLib2 image type.
      */
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
-        long[] orientationImageDim = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
-                .getMetadata().getDim();
         IMetadata orientImMetadata = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
                 .getMetadata();
-        this._gaugeFigure = this._createGaugeFigure(orientationImageDim, orientImMetadata);
+        this._gaugeFigure = this._createGaugeFigure(orientImMetadata);
         return new WholeSampleStick3DPainter(this);
     }
 
     /**
      * To create the gauge figure, the gauge figure interleaves the orientation
-     * image in the z-direction. For 2D orientation image, just add a z-axis,
-     * otherwise, keep axis order of orientation image.
+     * image in the z-direction by the stick length.
      */
-    private IGaugeFigure _createGaugeFigure(long[] dim, IMetadata orientImMetadata) {
-        AxisOrder orientImAxisOrder = orientImMetadata.axisOrder();
+    private IGaugeFigure _createGaugeFigure(IMetadata orientImMetadata) {
+        int zAxis = AxisOrder.getZAxis(orientImMetadata.axisOrder());
 
-        IMetadata gaugeMetadata;
-        long[] dimGaugeIm;
-        if (AxisOrder.getZAxis(orientImAxisOrder) < 0) // If image has no z.
-        {
-            AxisOrder newAxisOrder = AxisOrder.append_zAxis(orientImAxisOrder);
-            dimGaugeIm = _defineGaugeFigSizeNoZAxis(dim, newAxisOrder);
-            gaugeMetadata = new Metadata.MetadataBuilder(orientImMetadata).axisOrder(newAxisOrder).build();
-        } else {
-            int zAxis = AxisOrder.getZAxis(orientImAxisOrder);
-            dimGaugeIm = dim.clone();
-            dimGaugeIm[zAxis] = dimGaugeIm[zAxis] * this._length;
-            gaugeMetadata = new Metadata.MetadataBuilder(orientImMetadata).build();
-        }
+        long[] dimGaugeIm = orientImMetadata.getDim().clone();
+        dimGaugeIm[zAxis] = dimGaugeIm[zAxis] * this._length;
+        IMetadata gaugeMetadata = new Metadata.MetadataBuilder(dimGaugeIm).axisOrder(AxisOrder.XYCZT).build();
 
-        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(dimGaugeIm, RGB16.zero(),
-                gaugeMetadata);
+        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(gaugeMetadata, RGB16.zero());
+
         return GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D, gaugeImage,
                 this._soiImage.getFileSet());
-    }
-
-    /**
-     * Append the orientation image dimension with the z-axis, in the location defined 
-     * by the {@link AxisOrder#append_zAxis(AxisOrder)} 
-     */
-    private long[] _defineGaugeFigSizeNoZAxis(long[] dimOrientImg, AxisOrder newAxisOrder) {
-        List<Long> gaugeImDimAsList = Arrays.stream(dimOrientImg).boxed().collect(Collectors.toList());
-        gaugeImDimAsList.add(AxisOrder.getZAxis(newAxisOrder), (long)this._length);
-
-        return Arrays.stream(gaugeImDimAsList.toArray(new Long[0])).mapToLong((t) -> t).toArray();
-
     }
 
     public ColorMap getColorMap() {

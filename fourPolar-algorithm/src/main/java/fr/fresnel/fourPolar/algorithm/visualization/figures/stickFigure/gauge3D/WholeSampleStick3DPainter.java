@@ -30,7 +30,6 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     final private IGaugeFigure _stick3DFigure;
     final private IPixelRandomAccess<RGB16> _stick3DFigureRA;
     final private IOrientationImageRandomAccess _orientationRA;
-    final private AxisOrder _soiImageAxisOrder;
     final private IPixelRandomAccess<UINT16> _soiRA;
     final private ColorMap _colormap;
     final private IShape _soiImageBoundary;
@@ -48,7 +47,6 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
      */
     public WholeSampleStick3DPainter(WholeSampleStick3DPainterBuilder builder) {
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
-        this._soiImageAxisOrder = builder.getSoIImage().getImage().getMetadata().axisOrder();
         this._soiImageBoundary = _defineImageBoundaryAsBox(builder.getSoIImage().getImage());
 
         this._stick3DFigure = builder.getGaugeFigure();
@@ -153,35 +151,13 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     private void _transformStick(long[] dipolePosition, IOrientationVector orientationVector) {
         int z_axis = AxisOrder.getZAxis(this._stick.axisOrder());
 
-        long[] stickTranslation = null;
-        if (AxisOrder.getZAxis(this._soiImageAxisOrder) < 0) {
-            stickTranslation = _defineStickTranslationNoZAxis(dipolePosition, z_axis);
-
-        } else {
-            stickTranslation = dipolePosition.clone();
-            stickTranslation[z_axis] = dipolePosition[z_axis] * this._stickLength + this._stickLength / 2 - 1;
-        }
+        long[] stickTranslation = dipolePosition.clone();
+        stickTranslation[z_axis] = dipolePosition[z_axis] * this._stickLength + this._stickLength / 2 - 1;
 
         this._stick.resetToOriginalShape();
         this._stick.rotate3D(orientationVector.getAngle(OrientationAngle.eta),
                 -Math.PI / 2 + orientationVector.getAngle(OrientationAngle.rho), 0, Rotation3DOrder.XZY);
         this._stick.translate(stickTranslation);
-    }
-
-    /**
-     * In case the orientation image has no z-axis (it's planar), we need to put
-     * translation in the appended z-axis of the gauge image (as defined by the
-     * builder class).
-     * 
-     * @param dipolePosition is the dipole postion associated with this stick.
-     * @param z_axis         is the dimension of the appended z-axis
-     * @return
-     */
-    private long[] _defineStickTranslationNoZAxis(long[] dipolePosition, int z_axis) {
-        List<Long> transAList = Arrays.stream(dipolePosition).boxed().collect(Collectors.toList());
-        transAList.add(z_axis, (long) (this._stickLength / 2 - 1));
-
-        return Arrays.stream(transAList.toArray(new Long[0])).mapToLong((t) -> t).toArray();
     }
 
     private IOrientationVector _getOrientationVector(long[] stickCenterPosition) {

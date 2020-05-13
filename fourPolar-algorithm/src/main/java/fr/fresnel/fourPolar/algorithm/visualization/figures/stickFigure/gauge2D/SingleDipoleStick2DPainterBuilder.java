@@ -51,6 +51,11 @@ public class SingleDipoleStick2DPainterBuilder {
         Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
         Objects.requireNonNull(gaugeType, "gaugeType cannot be null");
 
+        if (!orientationImage.getCapturedSet().getSetName().equals(soiImage.getFileSet().getSetName())
+                || orientationImage.channel() != soiImage.channel()) {
+            throw new IllegalArgumentException("orientation and soi images don't belong to the same set or channel.");
+        }
+        
         this._gaugeType = gaugeType;
         this._soiImage = soiImage;
         this._orientationImage = orientationImage;
