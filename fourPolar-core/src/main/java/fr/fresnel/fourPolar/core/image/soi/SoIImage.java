@@ -96,7 +96,7 @@ public class SoIImage implements ISoIImage {
     }
 
     private void setChannel(int channel) {
-        if (channel != -1) {
+        if (this._channel > 0) {
             throw new IllegalAccessError("Can't reset channel");
         }
 
