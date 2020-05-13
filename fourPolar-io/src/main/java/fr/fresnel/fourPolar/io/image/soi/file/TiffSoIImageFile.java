@@ -14,11 +14,12 @@ public class TiffSoIImageFile implements ISoIImageFile {
     private final static String _SoIImageName = "SoI.tif";
 
     private final File _SoIImageFile;
+    private final int _channel;
 
-    public TiffSoIImageFile(File root4PProject, ICapturedImageFileSet fileSet) {
-        File parentFolder = TiffPolarizationImageFileSet.formSetParentFolder(root4PProject, fileSet.getChannel(),
+    public TiffSoIImageFile(File root4PProject, ICapturedImageFileSet fileSet, int channel) {
+        File parentFolder = TiffPolarizationImageFileSet.formSetParentFolder(root4PProject, channel,
                 fileSet.getSetName());
-
+        this._channel = channel;
         this._SoIImageFile = new File(parentFolder, _SoIImageName);
     }
 
@@ -27,4 +28,8 @@ public class TiffSoIImageFile implements ISoIImageFile {
         return this._SoIImageFile;
     }
 
+    @Override
+    public int channel() {
+        return this._channel;
+    }
 }
