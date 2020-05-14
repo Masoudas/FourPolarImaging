@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 
@@ -20,12 +21,19 @@ public class GaugeFigureFactory {
      * @param image          is the {@link Image} interface of the figure.
      * @param fileSet        is the fileSet associated with this gauge figure.
      * @return an gauge figure.
+     * 
+     * @throws IllegalArgumentException is thrown in case the givne @param image is
+     *                                  not an XYZT image.
      */
     public static IGaugeFigure create(GaugeFigureType figureType, AngleGaugeType angleGaugeType, Image<RGB16> image,
             ICapturedImageFileSet fileSet) {
         Objects.requireNonNull(angleGaugeType, "angleGaugeType cannot be null.");
         Objects.requireNonNull(image, "image cannot be null");
         Objects.requireNonNull(fileSet, "fileSet cannot be null");
+
+        if (image.getMetadata().axisOrder() != AxisOrder.XYZT) {
+            throw new IllegalArgumentException("The given soi image is not XYZT");
+        }
 
         return new GaugeFigure(figureType, angleGaugeType, image, fileSet);
     }

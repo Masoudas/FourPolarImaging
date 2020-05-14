@@ -6,7 +6,8 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 
 /**
- * An interface to model a gauge figure.
+ * An interface to model a gauge figure. A gague figure is an RGB16 image by default,
+ * that has no channel, and it's axis order is XYZT.
  */
 public interface IGaugeFigure {
     /**
