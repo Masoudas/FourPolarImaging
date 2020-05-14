@@ -17,13 +17,13 @@ class ScaledShape implements IShape {
     public ScaledShape(IShape originalShape, AxisOrder axisOrder, long[] max) {
         this._max = Objects.requireNonNull(max, "max cannot be null");
         if (Arrays.stream(max).min().getAsLong() <= 0) {
-            throw new IllegalArgumentException("Scale dimension must be nonzero");
+            throw new IllegalArgumentException("Scale dimension must be greater than one");
         }
 
         this._axisOrder = Objects.requireNonNull(axisOrder, "newAxisOrder cannot be null");
         if (!axisOrder.name().contains(originalShape.axisOrder().name())) {
             throw new IllegalArgumentException("newAxisOrder must contain shape axis");
-        }        
+        }
 
         this._originalShape = Objects.requireNonNull(originalShape, "Shape cannot be null");
     }

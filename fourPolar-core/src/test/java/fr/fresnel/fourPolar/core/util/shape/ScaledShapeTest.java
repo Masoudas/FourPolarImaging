@@ -9,11 +9,30 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 
 public class ScaledShapeTest {
     @Test
-    public void oneDim_returnUpToDimension() throws IllegalAccessException {
+    public void oneDimOnePoint_returnUpToDimension() throws IllegalAccessException {
         IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 1 }, AxisOrder.XY);
-        long[] max = { 1 };
+        long[] dim = { 1 };
 
-        IShapeIterator iterator = new ScaledShape(shape, AxisOrder.XYZ, max).getIterator();
+        IShapeIterator iterator = new ScaledShape(shape, AxisOrder.XYZ, dim).getIterator();
+
+        int counter = 0;
+        while (iterator.hasNext()) {
+            long[] pos = iterator.next();
+            counter++;
+            System.out.println(pos[0] + " " + pos[1] + " " + pos[2]);
+
+        }
+
+        assertTrue(counter == 4);
+
+    }
+
+    @Test
+    public void oneDimTwoPoints_returnUpToDimension() throws IllegalAccessException {
+        IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 1 }, AxisOrder.XY);
+        long[] dim = { 2 };
+
+        IShapeIterator iterator = new ScaledShape(shape, AxisOrder.XYZ, dim).getIterator();
 
         int counter = 0;
         while (iterator.hasNext()) {
@@ -31,8 +50,8 @@ public class ScaledShapeTest {
     @Test
     public void twoDim_returnUpToDimension() throws IllegalAccessException {
         IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 1 }, AxisOrder.XY);
-        long[] max = { 1, 1 };
-        IShapeIterator iterator = new ScaledShape(shape, AxisOrder.XYZ, max).getIterator();
+        long[] dim = { 2, 2 };
+        IShapeIterator iterator = new ScaledShape(shape, AxisOrder.XYZ, dim).getIterator();
 
         int counter = 0;
         while (iterator.hasNext()) {
@@ -49,9 +68,9 @@ public class ScaledShapeTest {
     @Test
     public void threeDimWithSingleDimInMiddle_returnUpToDimension() throws IllegalAccessException {
         IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 1 }, AxisOrder.XY);
-        long[] max = { 3, 2, 1 };
+        long[] dim = { 4, 3, 2 };
 
-        IShapeIterator iterator = new ScaledShape(shape, AxisOrder.XYZ, max).getIterator();
+        IShapeIterator iterator = new ScaledShape(shape, AxisOrder.XYZ, dim).getIterator();
 
         int counter = 0;
         while (iterator.hasNext()) {
@@ -69,8 +88,8 @@ public class ScaledShapeTest {
     public void getIterator_ScaleDimensionZero_ThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
             IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 1 }, AxisOrder.XY);
-            long[] max = { 0, 3, 2 };
-            IShapeIterator iterator = new ScaledShape(shape, AxisOrder.XYZ, max).getIterator();
+            long[] dim = { 0, 4, 3 };
+            IShapeIterator iterator = new ScaledShape(shape, AxisOrder.XYZ, dim).getIterator();
         });
     }
 
