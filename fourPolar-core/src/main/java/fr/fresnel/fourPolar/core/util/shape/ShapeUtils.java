@@ -11,12 +11,12 @@ public class ShapeUtils {
     }
 
     /**
-     * Add new axis to the given shape and iterates over all axis, from o point to
-     * max point (inclusive). max must correspond to the number of newly added dimensions.
+     * Adds new axis to the given shape, from 0 point to @param dim.
+     * @param dim must correspond to the number of newly added dimensions.
      * <p>
      * Example: We can add a new axis to a circle in XY, say Z (scaledAxisOrder =
-     * XYZ) starting from min = [0], to max[2], which turns circle into cylinder it
-     * into a cylinder.
+     * XYZ). if @param dim = [2], then the scaled shape would be a cylinder from z = 0 to
+     * z = 2;
      * 
      * @param shape           is the original shape.
      * @param scaledAxisOrder is the new axis order. Note that the unscaled axis
@@ -29,8 +29,8 @@ public class ShapeUtils {
      *                                  scaled dimension.
      */
 
-    public static IShape addNewDimension(IShape shape, AxisOrder newAxisOrder, long[] max) {
-        return new ScaledShape(shape, newAxisOrder, max);
+    public static IShape addNewDimension(IShape shape, AxisOrder newAxisOrder, long[] dim) {
+        return new ScaledShape(shape, newAxisOrder, dim);
     }
 
 }
