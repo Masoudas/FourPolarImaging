@@ -36,6 +36,8 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * space dimension is less than that of the orientation image, it's
  * automatically scaled to all higher dimensions. For example, the same 2D box
  * in region would be used for z = 0, 1, ... .
+ * <p>
+ * Note that the generated gauge figure is an XYZT image.
  */
 public class WholeSampleStick3DPainterBuilder {
     private final IOrientationImage _orientationImage;
@@ -116,22 +118,20 @@ public class WholeSampleStick3DPainterBuilder {
      *                                    cannot be converted to ImgLib2 image type.
      */
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
-        IMetadata orientImMetadata = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
-                .getMetadata();
-        this._gaugeFigure = this._createGaugeFigure(orientImMetadata);
+        this._gaugeFigure = this._createGaugeFigure();
         return new WholeSampleStick3DPainter(this);
     }
 
     /**
-     * To create the gauge figure, the gauge figure interleaves the orientation
-     * image in the z-direction by the stick length.
+     * The gauge figure is an XYZT image, that is interleaved in the z-direction by 
+     * the length of sticks.
      */
-    private IGaugeFigure _createGaugeFigure(IMetadata orientImMetadata) {
-        int zAxis = AxisOrder.getZAxis(orientImMetadata.axisOrder());
+    private IGaugeFigure _createGaugeFigure() {
+        IMetadata soiMetadata = this._soiImage.getImage().getMetadata();
+        long[] soiImgDim = soiMetadata.getDim();
 
-        long[] dimGaugeIm = orientImMetadata.getDim().clone();
-        dimGaugeIm[zAxis] = dimGaugeIm[zAxis] * this._length;
-        IMetadata gaugeMetadata = new Metadata.MetadataBuilder(dimGaugeIm).axisOrder(AxisOrder.XYCZT).build();
+        long[] dimGaugeIm = {soiImgDim[0], soiImgDim[1], soiImgDim[3] * this._length, soiImgDim[4]};
+        IMetadata gaugeMetadata = new Metadata.MetadataBuilder(dimGaugeIm).axisOrder(AxisOrder.XYZT).build();
 
         Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(gaugeMetadata, RGB16.zero());
 
