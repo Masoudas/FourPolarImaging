@@ -1,8 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge3D;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
@@ -72,17 +70,19 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
         return new ShapeFactory().closedBox(imageMin, imageMax, image.getMetadata().axisOrder());
     }
 
+    /**
+     * The base stick is an XYZT rectangle.
+     */
     private IShape _defineBaseStick(int len, int thickness, AxisOrder axisOrder) {
-        long[] stickMin = new long[AxisOrder.getNumDefinedAxis(axisOrder)];
-        long[] stickMax = new long[AxisOrder.getNumDefinedAxis(axisOrder)];
+        long[] stickMin = new long[4];
+        long[] stickMax = new long[4];
 
-        int zAxis = AxisOrder.getZAxis(axisOrder);
         stickMin[0] = -thickness / 2 + 1;
         stickMin[1] = -thickness / 2 + 1;
-        stickMin[zAxis] = -len / 2 + 1;
+        stickMin[2] = -len / 2 + 1;
         stickMax[0] = thickness / 2;
         stickMax[1] = thickness / 2;
-        stickMax[zAxis] = len / 2;
+        stickMax[2] = len / 2;
 
         return new ShapeFactory().closedBox(stickMin, stickMax, axisOrder);
     }
@@ -90,14 +90,13 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     @Override
     public void draw(IShape region, UINT16 soiThreshold) {
         if (region.axisOrder() != this._soiImageBoundary.axisOrder()) {
-            throw new IllegalArgumentException(
-                    "The region should be defined over the same axis order as orientation image.");
+            throw new IllegalArgumentException("The region should be XYCZT.");
         }
+
         int threshold = soiThreshold.get();
         Pixel<RGB16> pixel = new Pixel<>(RGB16.zero());
 
-        IShapeIterator iterator = region.getIterator();
-        while (iterator.hasNext()) {
+        for (IShapeIterator iterator = region.getIterator(); iterator.hasNext();) {
             long[] dipolePosition = iterator.next();
 
             if (_soiImageBoundary.isInside(dipolePosition)) {
@@ -134,10 +133,10 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     }
 
     /**
-     * To transform the base stick, suppose the dipole is located at x, y, z. Then
-     * because the gauge figure has been interleaved in the z direction, the dipole
-     * position would be in z + stick_len / 2, with stick stetching (possibly) from
-     * z to z + stick_len.
+     * To transform the base stick, suppose the dipole is located at x, y, z, t.
+     * Then because the gauge figure has been interleaved in the z direction, the
+     * dipole position would be in z + stick_len / 2, with stick stetching
+     * (possibly) from z to z + stick_len.
      * 
      * Regarding the rotations, note that based on the definition of the base stick
      * (it's parallel to the z axis), if eta = 90 and rho = 0, then the axis must be
@@ -149,10 +148,8 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
      * @param orientationVector is the orientation of the dipole.
      */
     private void _transformStick(long[] dipolePosition, IOrientationVector orientationVector) {
-        int z_axis = AxisOrder.getZAxis(this._stick.axisOrder());
-
-        long[] stickTranslation = dipolePosition.clone();
-        stickTranslation[z_axis] = dipolePosition[z_axis] * this._stickLength + this._stickLength / 2 - 1;
+        long[] stickTranslation = { dipolePosition[0], dipolePosition[1],
+                dipolePosition[3] * this._stickLength + this._stickLength / 2 - 1, dipolePosition[4] };
 
         this._stick.resetToOriginalShape();
         this._stick.rotate3D(orientationVector.getAngle(OrientationAngle.eta),
