@@ -57,7 +57,11 @@ public class SCIFIOTiffMetadataConverterTest {
         long[] dim = new long[] { 1, 2, 3, 4, 5 };
         IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).bitPerPixel(16).build();
 
-        ImageMetadata imageMetadata = SCIFIOTiffMetadataConverter.convertTo(metadata);
+        io.scif.formats.TIFFFormat.Metadata tiffMetadata = new io.scif.formats.TIFFFormat.Metadata();
+        tiffMetadata.createImageMetadata(1);
+        ImageMetadata imageMetadata = tiffMetadata.get(0);
+
+        SCIFIOTiffMetadataConverter.convertTo(metadata, imageMetadata);
 
         assertTrue(imageMetadata.getAxis(0).type().getLabel().equals("X")
                 && imageMetadata.getAxis(1).type().getLabel().equals("Y")
