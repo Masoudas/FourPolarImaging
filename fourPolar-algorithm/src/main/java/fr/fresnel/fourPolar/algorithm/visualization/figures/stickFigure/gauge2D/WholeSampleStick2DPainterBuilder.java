@@ -2,11 +2,13 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D
 
 import java.util.Objects;
 
+import fr.fresnel.fourPolar.algorithm.util.image.converters.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
@@ -33,6 +35,8 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * space dimension is less than that of the orientation image, it's
  * automatically scaled to all higher dimensions. For example, the same 2D box
  * in region would be used for z = 0, 1, ... .
+ * <p>
+ * Note that the generated gauge figure is an XYZT image.
  */
 public class WholeSampleStick2DPainterBuilder {
     private final IOrientationImage _orientationImage;
@@ -119,15 +123,21 @@ public class WholeSampleStick2DPainterBuilder {
      *                                    cannot be converted to ImgLib2 image type.
      */
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
-        IMetadata orientImMetadata = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
-                .getMetadata();
-        this._gaugeFigure = this._createGaugeFigure(this._soiImage.getImage().getMetadata().getDim(), orientImMetadata);
+        this._gaugeFigure = this._createGaugeFigure(this._soiImage);
         return new WholeSampleStick2DPainter(this);
     }
 
-    private IGaugeFigure _createGaugeFigure(long[] dim, IMetadata orientationImgMetadata) {
-        IMetadata metadata = new Metadata.MetadataBuilder(orientationImgMetadata).build();
-        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(metadata, RGB16.zero());
+    /**
+     * Create the gauge figure by creating a color version of SoI.
+     */
+    private IGaugeFigure _createGaugeFigure(ISoIImage soiImage) {
+        Image<RGB16> gaugeImage = null;
+        try {
+            gaugeImage = GrayScaleToColorConverter.useMaxEachPlane_ImageXYCZT(soiImage.getImage(), 1);
+        } catch (ConverterToImgLib2NotFound e) {
+            // We expect this exception to have been caught before the program arrives here!
+        }
+
         return GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
                 this._soiImage.getFileSet());
     }
