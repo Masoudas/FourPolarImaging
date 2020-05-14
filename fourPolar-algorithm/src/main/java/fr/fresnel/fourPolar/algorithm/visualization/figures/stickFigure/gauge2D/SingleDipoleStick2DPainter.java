@@ -58,16 +58,20 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
 
     }
 
+    /**
+     * Note that the gauge figure is an XYZT image, even though it has only one z
+     * and t.
+     */
     private IShape _defineBaseStick(int len, int thickness) {
-        long[] stickMin = new long[2];
-        long[] stickMax = new long[2];
+        long[] stickMin = new long[4];
+        long[] stickMax = new long[4];
 
         stickMin[0] = -thickness / 2 + 1;
         stickMin[1] = -len / 2 + 1;
         stickMax[0] = thickness / 2;
         stickMax[1] = len / 2;
 
-        return new ShapeFactory().closedBox(stickMin, stickMax, AxisOrder.XY);
+        return new ShapeFactory().closedBox(stickMin, stickMax, AxisOrder.XYZT);
     }
 
     /**
@@ -77,13 +81,8 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
         long[] imageMax = null;
         long[] imageMin = null;
 
-        if (imDimension.length == 1) {
-            imageMax = new long[] { imDimension[0] - 1, 0 };
-            imageMin = new long[2];
-        } else {
-            imageMax = Arrays.stream(imDimension).map((x) -> x - 1).toArray();
-            imageMin = new long[imDimension.length];
-        }
+        imageMax = Arrays.stream(imDimension).map((x) -> x - 1).toArray();
+        imageMin = new long[imDimension.length];
 
         return new ShapeFactory().closedBox(imageMin, imageMax, axisOrder);
     }
@@ -160,7 +159,7 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
 
         // Move the stick to the center of figure
         long stickCenter = this._dipoleFigure.getImage().getMetadata().getDim()[0];
-        this._stick.translate(new long[] { stickCenter / 2, stickCenter / 2 });
+        this._stick.translate(new long[] { stickCenter / 2, stickCenter / 2, 0, 0 });
     }
 
     /**

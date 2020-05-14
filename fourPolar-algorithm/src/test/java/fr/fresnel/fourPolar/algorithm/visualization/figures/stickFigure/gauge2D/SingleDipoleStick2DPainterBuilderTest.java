@@ -3,7 +3,6 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D
 import java.io.File;
 import java.util.Arrays;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 import org.scijava.ui.behaviour.ClickBehaviour;
@@ -98,7 +97,7 @@ public class SingleDipoleStick2DPainterBuilderTest {
     @Test
     public void draw_rho2DStick_InteractivelyShowDipole()
             throws CannotFormOrientationImage, ConverterToImgLib2NotFound, InterruptedException {
-        long[] dim = { 512, 512, 1, 2, 2 };
+        long[] dim = { 512, 512, 1, 3, 3 };
         AxisOrder axisOrder = AxisOrder.XYCZT;
         IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(axisOrder).build();
 
@@ -129,9 +128,9 @@ public class SingleDipoleStick2DPainterBuilderTest {
                 AngleGaugeType.Rho2D).stickLen(50).colorMap(cMap).stickThickness(8).build();
 
         // Viewer to show the soi.
-        bdv.util.AxisOrder aOrder = bdv.util.AxisOrder.XYCZT;
+        // bdv.util.AxisOrder aOrder = bdv.util.AxisOrder.XYCZT;
         Bdv bdv = BdvFunctions.show(ImageToImgLib2Converter.getImg(soiImage.getImage(), UINT16.zero()), "SoI",
-                BdvOptions.options().axisOrder(aOrder));
+                BdvOptions.options().is2D());
 
         // Viewer to show the stick.
         Bdv bdv1 = BdvFunctions.show(ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), RGB16.zero()),
@@ -184,13 +183,13 @@ class ShowDipoleUponClick implements ClickBehaviour {
 
     @Override
     public void click(int x, int y) {
-        final RealPoint pos = new RealPoint(3);
+        final RealPoint pos = new RealPoint(5);
         bdv.getBdvHandle().getViewerPanel().displayToGlobalCoordinates(x, y, pos);
 
-        double[] pos1 = new double[3];
+        double[] pos1 = new double[5];
         pos.localize(pos1);
-        long[] pos2 = Arrays.stream(pos1).mapToLong((t) -> (long) t).limit(2).toArray();
-        IShape shape = new ShapeFactory().point(pos2, AxisOrder.XY);
+        long[] pos2 = Arrays.stream(pos1).mapToLong((t) -> (long) t).limit(5).toArray();
+        IShape shape = new ShapeFactory().point(pos2, AxisOrder.XYCZT);
 
         painter.draw(shape, UINT16.zero());
         bdv.getBdvHandle().getViewerPanel().requestRepaint();

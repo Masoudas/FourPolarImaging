@@ -55,7 +55,7 @@ public class SingleDipoleStick2DPainterBuilder {
                 || orientationImage.channel() != soiImage.channel()) {
             throw new IllegalArgumentException("orientation and soi images don't belong to the same set or channel.");
         }
-        
+
         this._gaugeType = gaugeType;
         this._soiImage = soiImage;
         this._orientationImage = orientationImage;
@@ -112,18 +112,20 @@ public class SingleDipoleStick2DPainterBuilder {
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
         IMetadata orientImMetadata = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
                 .getMetadata();
-        this._gaugeFigure = this._createGaugeFigure(new long[] { this._length, this._length }, orientImMetadata);
+        this._gaugeFigure = this._createGaugeFigure(orientImMetadata);
         return new SingleDipoleStick2DPainter(this);
 
     }
 
     /**
-     * Create gauge figure, and set it's metadata to the orientation image metadata,
-     * except for the axis, which is just xy.
+     * Create a XYZT gauge figure, where (X,Y) = (lenStick, lenStick) and (Z,T) =
+     * (1,1). This is to make the gauge figure consistent with all the other gauge
+     * figures.
      * 
      */
-    private IGaugeFigure _createGaugeFigure(long[] dim, IMetadata orientationImMetadata) {
-        IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XY).build();
+    private IGaugeFigure _createGaugeFigure(IMetadata orientationImMetadata) {
+        long[] dim = { this._length, this._length, 1, 1 };
+        IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYZT).build();
         Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(gaugeFigMetadata, RGB16.zero());
         return GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
                 this._soiImage.getFileSet());
