@@ -29,9 +29,8 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * region that should be fed to it must be a single Point, otherwise an
  * exception is returned. Note that the same interface can be used to repaint
  * the stick for different dipole positions.
- * 
- * This stick figure is the most relaxed, in the sense that it does not impose
- * any conditions on the orientation image for defining axis order or otherwise.
+ * <p>
+ * Note that the generated gauge figure is an XYZT image.
  */
 public class SingleDipoleStick2DPainterBuilder {
     private final IOrientationImage _orientationImage;
