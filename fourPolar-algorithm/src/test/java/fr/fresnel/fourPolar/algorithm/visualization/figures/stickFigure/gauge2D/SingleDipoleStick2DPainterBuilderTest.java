@@ -15,7 +15,8 @@ import bdv.util.BdvFunctions;
 import bdv.util.BdvOptions;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
-import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
@@ -30,9 +31,10 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
-import fr.fresnel.fourPolar.core.image.orientation.OrientationImage;
+import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.image.soi.SoIImage;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
@@ -53,18 +55,17 @@ public class SingleDipoleStick2DPainterBuilderTest {
      */
     @Test
     public void draw_rho2DStick_DrawsEachStickProperly() throws ConverterToImgLib2NotFound, CannotFormOrientationImage {
-        int[] rhoAngles = { 0, 45, 90, 135 };
-        AxisOrder axisOrder = AxisOrder.XY;
-        IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(axisOrder).build();
+        long[] dim = { 4, 4, 1, 1, 1 };
+        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
 
-        long[] dim = { 4, 4 };
-        CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
-        Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
-        Image<Float32> deltaImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
-        Image<Float32> etaImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
+        ICapturedImageFileSet fileSet = new DummyFileSet();
+        Image<Float32> rhoImage = new ImgLib2ImageFactory().create(metadata, Float32.zero());
+        Image<Float32> deltaImage = new ImgLib2ImageFactory().create(metadata, Float32.zero());
+        Image<Float32> etaImage = new ImgLib2ImageFactory().create(metadata, Float32.zero());
 
         IPixelRandomAccess<Float32> ra = rhoImage.getRandomAccess();
 
+        int[] rhoAngles = { 0, 45, 90, 135 };
         IPixelCursor<Float32> rhoCursor = rhoImage.getCursor();
         while (rhoCursor.hasNext()) {
             IPixel<Float32> pixel = rhoCursor.next();
@@ -73,20 +74,21 @@ public class SingleDipoleStick2DPainterBuilderTest {
         }
 
         for (int i = 0; i < 4; i += 1) {
-            setPixel(ra, new long[] { i, i }, new Float32((float) Math.toRadians(rhoAngles[i])));
+            setPixel(ra, new long[] { i, i, 0, 0, 0 }, new Float32((float) Math.toRadians(rhoAngles[i])));
 
         }
 
-        IOrientationImage orientationImage = new OrientationImage(fileSet, rhoImage, deltaImage, etaImage);
-        Image<UINT16> soi = new ImgLib2ImageFactory().create(dim, UINT16.zero());
-        ISoIImage soiImage = new SoIImage(fileSet, soi);
+        IOrientationImage orientationImage = OrientationImageFactory.create(fileSet, 1, rhoImage, deltaImage, etaImage);
+        Image<UINT16> soi = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
+        ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
+
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
         IAngleGaugePainter painter = new SingleDipoleStick2DPainterBuilder(orientationImage, soiImage,
                 AngleGaugeType.Rho2D).stickLen(100).colorMap(cMap).stickThickness(8).build();
 
         for (int i = 0; i < 4; i++) {
-            IShape point = new ShapeFactory().point(new long[] { i, i }, axisOrder);
+            IShape point = new ShapeFactory().point(new long[] { i, i, 0, 0, 0 }, AxisOrder.XYCZT);
             painter.draw(point, UINT16.zero());
             _saveStickFigure(painter.getFigure(), "rho" + rhoAngles[i] + ".tif");
         }
@@ -96,41 +98,40 @@ public class SingleDipoleStick2DPainterBuilderTest {
     @Test
     public void draw_rho2DStick_InteractivelyShowDipole()
             throws CannotFormOrientationImage, ConverterToImgLib2NotFound, InterruptedException {
-        long[] dim = { 512, 512 };
-        AxisOrder axisOrder = AxisOrder.XY;
-        IMetadata metadata = new Metadata.MetadataBuilder().axisOrder(axisOrder).build();
+        long[] dim = { 512, 512, 1, 2, 2 };
+        AxisOrder axisOrder = AxisOrder.XYCZT;
+        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(axisOrder).build();
 
-        CapturedImageFileSet fileSet = new CapturedImageFileSet(1, new File("/aa/a.tif"));
-        Image<Float32> rhoImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
-        Image<Float32> deltaImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
-        Image<Float32> etaImage = new ImgLib2ImageFactory().create(dim, Float32.zero(), metadata);
-        Image<RGB16> soi = new ImgLib2ImageFactory().create(dim, RGB16.zero(), metadata);
+        ICapturedImageFileSet fileSet = new DummyFileSet();
+        Image<Float32> rhoImage = new ImgLib2ImageFactory().create(metadata, Float32.zero());
+        Image<Float32> deltaImage = new ImgLib2ImageFactory().create(metadata, Float32.zero());
+        Image<Float32> etaImage = new ImgLib2ImageFactory().create(metadata, Float32.zero());
+        Image<UINT16> soiGray = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
 
         Random random = new Random();
         IPixelCursor<Float32> rhoCursor = rhoImage.getCursor();
-        IPixelCursor<RGB16> soiCursor = soi.getCursor();
+        IPixelCursor<UINT16> soiCursor = soiGray.getCursor();
         while (rhoCursor.hasNext()) {
             IPixel<Float32> pixel = rhoCursor.next();
             pixel.value().set((float) Math.toRadians(random.nextInt(180)));
             rhoCursor.setPixel(pixel);
 
-            IPixel<RGB16> soiPixel = soiCursor.next();
-            int white = random.nextInt(255);
-            soiPixel.value().set(white, white, white);
-            soiCursor.setPixel(soiPixel);
+            IPixel<UINT16> pixelSoI = soiCursor.next();
+            pixelSoI.value().set(random.nextInt(180));
+            soiCursor.setPixel(pixelSoI);
         }
 
-        IOrientationImage orientationImage = new OrientationImage(fileSet, rhoImage, deltaImage, etaImage);
-        Image<UINT16> soiGray = new ImgLib2ImageFactory().create(dim, UINT16.zero());
-        ISoIImage soiImage = new SoIImage(fileSet, soiGray);
+        IOrientationImage orientationImage = OrientationImageFactory.create(fileSet, 1, rhoImage, deltaImage, etaImage);
+        ISoIImage soiImage = SoIImage.create(fileSet, soiGray, 1);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
         IAngleGaugePainter painter = new SingleDipoleStick2DPainterBuilder(orientationImage, soiImage,
                 AngleGaugeType.Rho2D).stickLen(50).colorMap(cMap).stickThickness(8).build();
 
         // Viewer to show the soi.
-        Bdv bdv = BdvFunctions.show(ImageToImgLib2Converter.getImg(soi, RGB16.zero()), "SoI",
-                BdvOptions.options().is2D());
+        bdv.util.AxisOrder aOrder = bdv.util.AxisOrder.XYCZT;
+        Bdv bdv = BdvFunctions.show(ImageToImgLib2Converter.getImg(soiImage.getImage(), UINT16.zero()), "SoI",
+                BdvOptions.options().axisOrder(aOrder));
 
         // Viewer to show the stick.
         Bdv bdv1 = BdvFunctions.show(ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), RGB16.zero()),
@@ -143,7 +144,7 @@ public class SingleDipoleStick2DPainterBuilderTest {
         behaviours.behaviour(doubleClick, "print global pos", "button1");
 
         while (bdv.getBdvHandle().getViewerPanel().isShowing()) {
-            
+
         }
     }
 
@@ -153,11 +154,16 @@ public class SingleDipoleStick2DPainterBuilderTest {
     }
 
     private void _saveStickFigure(IGaugeFigure stickFigure, String stickImageName) throws ConverterToImgLib2NotFound {
-        String root = SingleDipoleStick2DPainterBuilderTest.class.getResource("").getPath();
+        File root = new File(SingleDipoleStick2DPainterBuilderTest.class.getResource("").getPath() + "/SingleDipole");
+        root.delete();
+        root.mkdirs();
+
+        File path = new File(root, stickImageName);
+
         ImagePlus imp = ImageJFunctions.wrapRGB(ImageToImgLib2Converter.getImg(stickFigure.getImage(), RGB16.zero()),
                 "RGB");
         FileSaver impSaver = new FileSaver(imp);
-        impSaver.saveAsTiff(new File(root, stickImageName).getAbsolutePath());
+        impSaver.saveAsTiff(path.getAbsolutePath());
     }
 
     public void plotDipole(IAngleGaugePainter painter, long[] pos) throws ConverterToImgLib2NotFound {
@@ -189,6 +195,35 @@ class ShowDipoleUponClick implements ClickBehaviour {
         painter.draw(shape, UINT16.zero());
         bdv.getBdvHandle().getViewerPanel().requestRepaint();
 
+    }
+
+}
+
+class DummyFileSet implements ICapturedImageFileSet {
+
+    @Override
+    public ICapturedImageFile[] getFile(String label) {
+        return null;
+    }
+
+    @Override
+    public String getSetName() {
+        return "Set";
+    }
+
+    @Override
+    public Cameras getnCameras() {
+        return null;
+    }
+
+    @Override
+    public boolean hasLabel(String label) {
+        return false;
+    }
+
+    @Override
+    public boolean deepEquals(ICapturedImageFileSet fileset) {
+        return false;
     }
 
 }
