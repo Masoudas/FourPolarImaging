@@ -95,9 +95,8 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
             throw new IllegalArgumentException("Only point shape can be used to localize a dipole.");
         }
 
-        if (region.axisOrder() != this._orientationImageBoundary.axisOrder()) {
-            throw new IllegalArgumentException(
-                    "The given point should be defined over the same axis order as orientation image.");
+        if (region.axisOrder() != AxisOrder.XYCZT) {
+            throw new IllegalArgumentException("The given point should be XYCZT.");
         }
 
         if (!this._orientationImageBoundary.isInside(dipolePosition)) {
