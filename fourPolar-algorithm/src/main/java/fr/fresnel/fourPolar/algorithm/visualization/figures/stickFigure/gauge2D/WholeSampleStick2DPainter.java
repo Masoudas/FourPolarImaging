@@ -40,6 +40,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     private final double _maxColorAngle;
 
     private final IShape _stickFigureRegion;
+    private final IShape _soiImageRegion;
 
     public WholeSampleStick2DPainter(WholeSampleStick2DPainterBuilder builder) throws ConverterToImgLib2NotFound {
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
@@ -54,55 +55,46 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         this._colorAngle = getColorAngle(this._stick2DFigure.getGaugeType());
         this._maxColorAngle = OrientationVector.maxAngle(_colorAngle);
 
-        this._stick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness(),
-                this._stick2DFigure.getImage().getMetadata().axisOrder());
+        this._stick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness());
 
-        this._stickFigureRegion = this._defineGaugeImageBoundaryAsBoxShape(
+        this._stickFigureRegion = this._getImageBoundaryAsShape(
                 this._stick2DFigure.getImage().getMetadata().getDim(),
                 this._stick2DFigure.getImage().getMetadata().axisOrder());
-
-        this._fillGaugeFigureWithSoI(builder.getSoIImage().getImage(), this._stick2DFigure.getImage());
-    }
-
-    /**
-     * Place the soi of each dipole in the corresponding position in the gauge
-     * figure.
-     * 
-     * @throws ConverterToImgLib2NotFound
-     */
-    private void _fillGaugeFigureWithSoI(Image<UINT16> soiImage, Image<RGB16> gaugeFigure)
-            throws ConverterToImgLib2NotFound {
-        GrayScaleToColorConverter.useMaxEachPlane(soiImage, gaugeFigure);
+        
+        this._soiImageRegion = this._getImageBoundaryAsShape(
+            builder.getSoIImage().getImage().getMetadata().getDim(),
+            builder.getSoIImage().getImage().getMetadata().axisOrder());
     }
 
     /**
      * Define the image region from pixel zero to dim - 1;
      */
-    private IShape _defineGaugeImageBoundaryAsBoxShape(long[] imDimension, AxisOrder axisOrder) {
+    private IShape _getImageBoundaryAsShape(long[] imDimension, AxisOrder axisOrder) {
         long[] imageMax = Arrays.stream(imDimension).map((x) -> x - 1).toArray();
         long[] imageMin = new long[imDimension.length];
 
         return new ShapeFactory().closedBox(imageMin, imageMax, axisOrder);
     }
 
-    private IShape _defineBaseStick(int len, int thickness, AxisOrder axisOrder) {
-        long[] stickMin = new long[AxisOrder.getNumDefinedAxis(axisOrder)];
-        long[] stickMax = new long[AxisOrder.getNumDefinedAxis(axisOrder)];
+    /**
+     * Basic stick complies with the gauge figure, which is an XYZT image.
+     */
+    private IShape _defineBaseStick(int len, int thickness) {
+        long[] stickMin = new long[4];
+        long[] stickMax = new long[4];
 
         stickMin[0] = -len / 2 + 1;
         stickMin[1] = -thickness / 2 + 1;
         stickMax[0] = len / 2;
         stickMax[1] = thickness / 2;
 
-        return new ShapeFactory().closedBox(stickMin, stickMax, axisOrder);
+        return new ShapeFactory().closedBox(stickMin, stickMax, AxisOrder.XYZT);
     }
 
     @Override
     public void draw(IShape region, UINT16 soiThreshold) {
-        AxisOrder stickFigureAxis = this._stick2DFigure.getImage().getMetadata().axisOrder();
-        if (region.axisOrder() != stickFigureAxis) {
-            throw new IllegalArgumentException(
-                "The region should be defined over the same axis order as orientation image.");
+        if (region.axisOrder() != AxisOrder.XYCZT) {
+            throw new IllegalArgumentException("The region should be XYCZT.");
         }
 
         int threshold = soiThreshold.get();
@@ -112,7 +104,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         while (iterator.hasNext()) {
             long[] stickCenterPosition = iterator.next();
 
-            if (_stickFigureRegion.isInside(stickCenterPosition)) {
+            if (this._soiImageRegion.isInside(stickCenterPosition)) {
                 this._soiRA.setPosition(stickCenterPosition);
                 final IOrientationVector orientationVector = this._getOrientationVector(stickCenterPosition);
                 if (_isSoIAboveThreshold(threshold) && _slopeAndColorAngleExist(orientationVector)) {
@@ -148,10 +140,18 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         return this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
     }
 
+    /**
+     * To accommodate for the mismatch between XYCZT and XYZT, translation is
+     * redefined.
+     * 
+     * @param position          is the dipole position
+     * @param orientationVector is the orientation vector at the position
+     */
     private void _transformStick(long[] position, IOrientationVector orientationVector) {
+        long[] translation = { position[0], position[1], position[3], position[4] };
         this._stick.resetToOriginalShape();
         this._stick.rotate2D(-orientationVector.getAngle(_slopeAngle));
-        this._stick.translate(position);
+        this._stick.translate(translation);
     }
 
     private IOrientationVector _getOrientationVector(long[] stickCenterPosition) {
