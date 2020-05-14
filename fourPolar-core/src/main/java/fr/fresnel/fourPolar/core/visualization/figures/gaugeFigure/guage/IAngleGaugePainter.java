@@ -9,21 +9,21 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
  */
 public interface IAngleGaugePainter {
     /**
-     * Draw the sticks in the specified region, for positions where intensity >=
-     * soiThreshold.
+     * Draw the sticks in the specified region of the orientation image inside the
+     * gauge figure, for positions where intensity >= soiThreshold.
      * <p>
-     * For the region, note that the pixels start from 0 to image dimension - 1 of
-     * the orientation image (or equivalently the soi Image). The region must have
-     * same AxisOrder as the underlying orientation image.
+     * For @param region, note that pixels start from 0 to image dimension - 1 of
+     * the orientation image (or equivalently the soi Image). @param region must be
+     * an XYCZT shape, because the underlying orientation image is always XYCZT,
+     * otherwise an exception is thrown.
      * 
      * @param region       is the region over which we wish to draw sticks.
      * @param soiThreshold is the resired threshold for sum of intensity. For
      *                     positions below threshold, no stick is drawn.
      * 
-     * @throws IllegalArgumentException in case the provided region does not have
-     *                                  same axis order as underlying orientation
-     *                                  image or is not the desired shape type of
-     *                                  the specific implementation.
+     * @throws IllegalArgumentException in case the provided region is not XYCZT, or
+     *                                  is not the desired shape (e.g, point region
+     *                                  for {@link SingleDipoleStick2DPainterBuilder}).
      */
     public void draw(IShape region, UINT16 soiThreshold) throws IllegalArgumentException;
 
