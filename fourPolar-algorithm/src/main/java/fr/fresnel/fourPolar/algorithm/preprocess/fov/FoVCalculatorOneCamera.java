@@ -66,10 +66,10 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
 
     @Override
     public IFieldOfView calculate() {
-        IBoxShape pol0 = _defineFoVAsBox(_constellation.pol0);
-        IBoxShape pol45 = _defineFoVAsBox(_constellation.pol45);
-        IBoxShape pol90 = _defineFoVAsBox(_constellation.pol90);
-        IBoxShape pol135 = _defineFoVAsBox(_constellation.pol135);
+        IBoxShape pol0 = _defineFoVAsBox(_constellation.pol0());
+        IBoxShape pol45 = _defineFoVAsBox(_constellation.pol45());
+        IBoxShape pol90 = _defineFoVAsBox(_constellation.pol90());
+        IBoxShape pol135 = _defineFoVAsBox(_constellation.pol135());
 
         return new FieldOfView(pol0, pol45, pol90, pol135);
     }
