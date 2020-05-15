@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -12,17 +13,19 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
-import fr.fresnel.fourPolar.core.util.DRectangle;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
+import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
+import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
 /**
  * Note that in all the test, the files are created in the 4POLAR subfolder of
@@ -37,10 +40,11 @@ public class FourPolarImagingSetupFromYamlTest {
 
         imagingSetup.setCameras(Cameras.One);
 
-        DRectangle rect0 = new DRectangle(1, 1, 128, 128);
-        DRectangle rect45 = new DRectangle(128, 1, 128, 128);
-        DRectangle rect90 = new DRectangle(1, 128, 128, 128);
-        DRectangle rect135 = new DRectangle(128, 128, 128, 128);
+        IBoxShape rect0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 128, 128 }, AxisOrder.XY);
+        IBoxShape rect45 = new ShapeFactory().closedBox(new long[] { 128, 1 }, new long[] { 128, 128 }, AxisOrder.XY);
+        IBoxShape rect90 = new ShapeFactory().closedBox(new long[] { 1, 128 }, new long[] { 128, 128 }, AxisOrder.XY);
+        IBoxShape rect135 = new ShapeFactory().closedBox(new long[] { 128, 128 }, new long[] { 128, 128 },
+                AxisOrder.XY);
 
         FieldOfView fov = new FieldOfView(rect0, rect45, rect90, rect135);
         imagingSetup.setFieldOfView(fov);
@@ -62,10 +66,10 @@ public class FourPolarImagingSetupFromYamlTest {
         FourPolarImagingSetupFromYaml reader = new FourPolarImagingSetupFromYaml(rootFolder);
         reader.read(diskImagingSetup);
 
-        DRectangle diskRect0 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol0);
-        DRectangle diskRect45 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol45);
-        DRectangle diskRect90 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol90);
-        DRectangle diskRect135 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol135);
+        IBoxShape diskRect0 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol0);
+        IBoxShape diskRect45 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol45);
+        IBoxShape diskRect90 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol90);
+        IBoxShape diskRect135 = diskImagingSetup.getFieldOfView().getFoV(Polarization.pol135);
         INumericalAperture diskNA = diskImagingSetup.getNumericalAperture();
         IChannel channel = diskImagingSetup.getChannel(1);
 
@@ -75,9 +79,8 @@ public class FourPolarImagingSetupFromYamlTest {
 
     }
 
-    private boolean checkRectangle(DRectangle rect1, DRectangle rect2) {
-        return rect1.height == rect2.height && rect1.width == rect2.width && rect1.xtop == rect2.xtop
-                && rect1.ytop == rect2.ytop;
+    private boolean checkRectangle(IBoxShape rect1, IBoxShape rect2) {
+        return Arrays.equals(rect1.min(), rect2.min()) && Arrays.equals(rect1.max(), rect2.max());
     }
 
     private boolean checkNA(INumericalAperture na1, INumericalAperture na2) {
