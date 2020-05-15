@@ -88,6 +88,6 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
     }
 
     private long[] _getTop(long[] bottom) {
-        return new long[] { bottom[0] + _xlen_PolImg, bottom[0] + _ylen_PolImg };
+        return new long[] { bottom[0] + _xlen_PolImg, bottom[1] + _ylen_PolImg };
     }
 }
