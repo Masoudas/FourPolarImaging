@@ -4,9 +4,11 @@ import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RealType;
-import fr.fresnel.fourPolar.core.util.DPoint;
+import fr.fresnel.fourPolar.core.util.shape.IPointShape;
+import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
 public class ImageStatistics {
 
@@ -35,8 +37,8 @@ public class ImageStatistics {
         int nPlanes = getNPlanes(image);
         double[][] minMax = new double[2][nPlanes];
 
-        DPoint planeDim = getPlaneDim(image);
-        long planeSize = planeDim.x * planeDim.y;
+        IPointShape planeDim = getPlaneDim(image);
+        long planeSize = planeDim.point()[0] * planeDim.point()[1];
 
         IPixelCursor<T> cursor = image.getCursor();
         for (int plane = 0; plane < nPlanes; plane++) {
@@ -60,9 +62,9 @@ public class ImageStatistics {
 
     }
 
-    public static <T extends PixelType> DPoint getPlaneDim(Image<T> image) {
+    public static <T extends PixelType> IPointShape getPlaneDim(Image<T> image) {
         long[] dims = image.getMetadata().getDim();
-        return new DPoint((int) dims[0], (int) dims[1]);
+        return new ShapeFactory().point(new long[]{dims[0], dims[1]}, AxisOrder.XY);
     }
 
 }

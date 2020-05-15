@@ -15,7 +15,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RealType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.util.DPoint;
+import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 import net.imglib2.converter.Converter;
 import net.imglib2.converter.RealLUTConverter;
 import net.imglib2.display.ColorTable8;
@@ -73,8 +73,8 @@ public class GrayScaleToColorConverter {
 
         final double[][] minMax = _getPlaneMinMax(grayImage);
 
-        DPoint planeDim = ImageStatistics.getPlaneDim(grayImage);
-        final long planeSize = planeDim.x * planeDim.y;
+        IPointShape planeDim = ImageStatistics.getPlaneDim(grayImage);
+        final long planeSize = planeDim.point()[0] * planeDim.point()[1];
 
         int planeNo = 1;
         int planePixelCounter = 0;
