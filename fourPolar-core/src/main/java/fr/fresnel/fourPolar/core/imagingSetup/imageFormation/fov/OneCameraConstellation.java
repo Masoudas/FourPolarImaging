@@ -12,4 +12,11 @@ public class OneCameraConstellation {
     public Position pol45;
     public Position pol90;
     public Position pol135;
+
+    public OneCameraConstellation(Position pol0, Position pol45, Position pol90, Position pol135) {
+        this.pol0 = pol0;
+        this.pol45 = pol45;
+        this.pol90 = pol90;
+        this.pol135 = pol135;
+    }
 }
