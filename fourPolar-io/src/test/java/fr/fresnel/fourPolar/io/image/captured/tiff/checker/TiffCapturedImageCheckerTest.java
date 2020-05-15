@@ -54,7 +54,7 @@ public class TiffCapturedImageCheckerTest {
             tiffChecker.check(file);
         });
 
-        assertTrue(exception.getRejectedImage().getReason().equals(TiffCapturedImageChecker.incompatipleChannels));
+        assertTrue(exception.getRejectedImage().getReason().equals(TiffCapturedImageChecker.WRONG_NUM_CHANNEL));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class TiffCapturedImageCheckerTest {
             tiffChecker.check(file);
         });
 
-        assertTrue(TiffCapturedImageChecker.incompatibleBitDepth.equals(exception.getRejectedImage().getReason()));
+        assertTrue(TiffCapturedImageChecker.NOT_16_BIT.equals(exception.getRejectedImage().getReason()));
 
     }
 
@@ -79,7 +79,7 @@ public class TiffCapturedImageCheckerTest {
             tiffChecker.check(file);
         });
 
-        assertTrue(TiffCapturedImageChecker.corruptContent.equals(exception.getRejectedImage().getReason()));
+        assertTrue(TiffCapturedImageChecker.CONTENT_CORRUPT.equals(exception.getRejectedImage().getReason()));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class TiffCapturedImageCheckerTest {
             tiffChecker.check(file);
         });
 
-        assertTrue(TiffCapturedImageChecker.badExtension.equals(exception.getRejectedImage().getReason()));
+        assertTrue(TiffCapturedImageChecker.NOT_TIFF.equals(exception.getRejectedImage().getReason()));
     }
 
     @Test
@@ -105,7 +105,7 @@ public class TiffCapturedImageCheckerTest {
             tiffChecker.check(file);
         });
 
-        assertTrue(TiffCapturedImageChecker.notExist.equals(exception.getRejectedImage().getReason()));
+        assertTrue(TiffCapturedImageChecker.NOT_EXIST.equals(exception.getRejectedImage().getReason()));
     }
 
 }
