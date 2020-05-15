@@ -7,16 +7,17 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import io.scif.ImageMetadata;
 import net.imagej.axis.Axes;
+import net.imagej.axis.DefaultAxisType;
 
 public class SCIFIOTiffMetadataConverterTest {
     @Test
-    public void convertImageMetadata_fiveAxisMetadata_ReturnsCorrectMetadata() throws UnsupportedAxisOrder {
+    public void convertImageMetadata_fiveAxisMetadata_ReturnsCorrectMetadata() throws MetadataParseError {
         io.scif.formats.TIFFFormat.Metadata tiffMetadata = new io.scif.formats.TIFFFormat.Metadata();
         tiffMetadata.createImageMetadata(1);
         ImageMetadata imageMetadata = tiffMetadata.get(0);
@@ -47,9 +48,29 @@ public class SCIFIOTiffMetadataConverterTest {
         imageMetadata.addAxis(Axes.Z, dim[1]);
         imageMetadata.addAxis(Axes.Z, dim[2]);
 
-        assertThrows(UnsupportedAxisOrder.class, () -> {
+        MetadataParseError exception = assertThrows(MetadataParseError.class, () -> {
             SCIFIOTiffMetadataConverter.convertFrom(imageMetadata);
         });
+
+        assertTrue(exception.getMessage().equals(MetadataParseError.UNDEFINED_AXIS_ORDER));
+    }
+
+    @Test
+    public void convertImageMetadata_UndefinedAxis_ThrowsUnsupportedAxisOrder() {
+        io.scif.formats.TIFFFormat.Metadata tiffMetadata = new io.scif.formats.TIFFFormat.Metadata();
+        tiffMetadata.createImageMetadata(1);
+        ImageMetadata imageMetadata = tiffMetadata.get(0);
+
+        long[] dim = { 1, 2, 3 };
+        imageMetadata.addAxis(Axes.Z, dim[0]);
+        imageMetadata.addAxis(new DefaultAxisType(Axes.UNKNOWN_LABEL), dim[1]);
+        imageMetadata.addAxis(Axes.Z, dim[2]);
+
+        MetadataParseError exception = assertThrows(MetadataParseError.class, () -> {
+            SCIFIOTiffMetadataConverter.convertFrom(imageMetadata);
+        });
+
+        assertTrue(exception.getMessage().equals(MetadataParseError.UNDEFINED_AXIS));
     }
 
     @Test
