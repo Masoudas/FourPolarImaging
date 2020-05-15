@@ -24,9 +24,8 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
     public final static String NOT_16_BIT = "Bit depth != 16. The image should not be used.";
     public final static String NOT_TIFF = "Not a tiff (tif) file.";
     public final static String CONTENT_CORRUPT = "File IO issue or Corrupt tiff content.";
-    public final static String UNDEFINED_AXIS = "At least one axis of the image is undefined";
+    public final static String UNDEFINED_AXIS = "At least one axis is undefined or axis order is incompatible (e.g CXY)";
     public final static String WRONG_NUM_CHANNEL = "The number of image channels (wavelengths) don't match imaging wavelengths.";
-    public final static String METADATA_ERROR = "Can't parse the metadata of the image.";
     final private IMetadataReader _metaDataReader;
 
     public TiffCapturedImageChecker(IMetadataReader reader) {
@@ -60,11 +59,7 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
         try {
             metadata = this._metaDataReader.read(image.file());
         } catch (MetadataParseError e) {
-            if (e.getMessage().equals(MetadataParseError.UNDEFINED_AXIS_ORDER)) {
-                throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), UNDEFINED_AXIS));
-            } else {
-                throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), METADATA_ERROR));
-            }
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), UNDEFINED_AXIS));
         } catch (IOException e) {
             throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), CONTENT_CORRUPT));
         }
