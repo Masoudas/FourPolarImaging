@@ -40,8 +40,8 @@ public class Float32SCIFIOTiffImageReader implements ImageReader<Float32> {
     @Override
     public Image<Float32> read(File path) throws IOException, MetadataParseError {
         Objects.requireNonNull(path, "path should not be null");
-        SCIFIOUtil.checkExtension(path.getName());
-        SCIFIOUtil.checkFileExists(path);
+        SCIFIOUtils.checkExtension(path.getName());
+        SCIFIOUtils.checkFileExists(path);
 
         this._reader.setSource(path.getAbsolutePath(), this._config);
 ?
