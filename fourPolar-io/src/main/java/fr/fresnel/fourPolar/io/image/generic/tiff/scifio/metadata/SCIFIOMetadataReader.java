@@ -28,13 +28,9 @@ public class SCIFIOMetadataReader implements IMetadataReader {
     @Override
     public IMetadata read(File imageFile) throws IOException, MetadataParseError {
         this._reader.setSource(imageFile.getAbsolutePath(), this._config);
-        
+
         IMetadata metadata = null;
-        try {
-            metadata = SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
-        } catch (UnsupportedAxisOrder e) {
-            throw new MetadataParseError(MetadataParseError.UNDEFINED_AXIS_ORDER);
-        }
+        metadata = SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
 
         return metadata;
     }
