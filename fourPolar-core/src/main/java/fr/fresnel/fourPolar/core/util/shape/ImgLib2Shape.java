@@ -41,7 +41,7 @@ class ImgLib2Shape implements IShape {
      *                  defined.
      * 
      */
-    public ImgLib2Shape(final int shapeDim, RealMaskRealInterval shape,
+    protected ImgLib2Shape(final int shapeDim, RealMaskRealInterval shape,
             final AxisOrder axisOrder) {
         this._shapeDim = shapeDim;
         this._pointMask = GeomMasks.pointMask(new double[AxisOrder.getNumDefinedAxis(axisOrder)]);
