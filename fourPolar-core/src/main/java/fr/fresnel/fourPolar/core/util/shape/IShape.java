@@ -12,10 +12,6 @@ public interface IShape {
      */
     public IShapeIterator getIterator();
 
-    /**
-     * Returns the underlying type of the shape.
-     */
-    public ShapeType getType();
 
     /**
      * Returns the Axis order associated with the shape. 
