@@ -34,9 +34,8 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
 
     final private TwoCameraConstellation _constellation;
 
-    public FoVCalculatorTwoCamera(IMetadata beadImg_pol0_90, IMetadata beadImg_pol45_135,
-            IPointShape intersection_pol0_90, IPointShape intersection_pol45_135,
-            TwoCameraConstellation constellation) {
+    public FoVCalculatorTwoCamera(IMetadata beadImg_pol0_90, IPointShape intersection_pol0_90,
+            IMetadata beadImg_pol45_135, IPointShape intersection_pol45_135, TwoCameraConstellation constellation) {
         this._checkIntersectionPointInside(beadImg_pol0_90, intersection_pol0_90);
         this._checkIntersectionPointInside(beadImg_pol45_135, intersection_pol45_135);
 
@@ -74,9 +73,8 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
      * y min is the minimum of the two images.
      */
     private long _calculate_ylen() {
-        return Math.min(_dim_pol0_90[1], _dim_pol45_135[1]);
+        return Math.min(_dim_pol0_90[1] - 1, _dim_pol45_135[1]);
     }
-
 
     @Override
     public IFieldOfView calculate() {
@@ -94,7 +92,6 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
         return new ShapeFactory().closedBox(bottom, top, AxisOrder.XY);
     }
 
-
     private long[] _getBottom(Position position, long _xmax_beadImg) {
         if (position == Position.Left) {
             return new long[] { 1, 1 };
@@ -104,7 +101,7 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
     }
 
     private long[] _getTop(long[] bottom) {
-        return new long[] { bottom[0] + _xlen_PolImg, bottom[1] + _ylen_PolImg };
+        return new long[] { bottom[0] + _xlen_PolImg, bottom[1] + _ylen_PolImg};
     }
 
 }
