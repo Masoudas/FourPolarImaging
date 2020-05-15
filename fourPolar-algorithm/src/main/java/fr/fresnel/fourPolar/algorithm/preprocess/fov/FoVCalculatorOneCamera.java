@@ -34,7 +34,7 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
     /**
      * Calculate FoV using the metadata of the bead image.
      * 
-     * @param beadImageMetadata is the metadata of the bead image for one camera
+     * @param beadImg_pol0_45_90_135 is the metadata of the bead image for one camera
      *                          case.
      * @param intersectionPoint is the intersection point of polarizations in the
      *                          bead image.
@@ -43,9 +43,9 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
      *                                  intersectionPoint is not XY. Also if
      *                                  intersection point is not in the bead image.
      */
-    public FoVCalculatorOneCamera(IMetadata beadImageMetadata, IPointShape intersectionPoint,
+    public FoVCalculatorOneCamera(IMetadata beadImg_pol0_45_90_135, IPointShape intersectionPoint,
             OneCameraConstellation constellation) {
-        long[] beadImgDim = beadImageMetadata.getDim();
+        long[] beadImgDim = beadImg_pol0_45_90_135.getDim();
         long[] iPoint = intersectionPoint.point();
 
         if (beadImgDim[0] <= iPoint[0] || beadImgDim[1] <= iPoint[1]) {
