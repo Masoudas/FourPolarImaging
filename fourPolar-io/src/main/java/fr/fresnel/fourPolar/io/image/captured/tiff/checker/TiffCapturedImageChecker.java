@@ -9,6 +9,7 @@ import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
 
 /**
@@ -19,13 +20,13 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
     /**
      * List of all the conditions that are checked together with conditions.
      */
-    public final static String notExist = "The file does not exist or cannot be accessed.";
-    public final static String incompatibleBitDepth = "Bit depth != 16. The image should not be used.";
-    public final static String badExtension = "Not a tiff (tif) file.";
-    public final static String corruptContent = "File IO issue or Corrupt tiff content.";
-    public final static String undefinedAxis = "At least one axis of the image is undefined";
-    public final static String incompatipleChannels = "The number of image channels (wavelengths) don't match imaging wavelengths.";
-
+    public final static String NOT_EXIST = "The file does not exist or cannot be accessed.";
+    public final static String NOT_16_BIT = "Bit depth != 16. The image should not be used.";
+    public final static String NOT_TIFF = "Not a tiff (tif) file.";
+    public final static String CONTENT_CORRUPT = "File IO issue or Corrupt tiff content.";
+    public final static String UNDEFINED_AXIS = "At least one axis of the image is undefined";
+    public final static String WRONG_NUM_CHANNEL = "The number of image channels (wavelengths) don't match imaging wavelengths.";
+    public final static String METADATA_ERROR = "Can't parse the metadata of the image.";
     final private IMetadataReader _metaDataReader;
 
     public TiffCapturedImageChecker(IMetadataReader reader) {
@@ -58,10 +59,14 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
         IMetadata metadata = null;
         try {
             metadata = this._metaDataReader.read(image.file());
-        } catch (UnsupportedAxisOrder e) {
-            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), undefinedAxis));
+        } catch (MetadataParseError e) {
+            if (e.getMessage().equals(MetadataParseError.UNDEFINED_AXIS_ORDER)) {
+                throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), UNDEFINED_AXIS));
+            } else {
+                throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), METADATA_ERROR));
+            }
         } catch (IOException e) {
-            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), corruptContent));
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), CONTENT_CORRUPT));
         }
 
         return metadata;
@@ -70,10 +75,10 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
     private void _imageExistsAndReadable(ICapturedImageFile image) throws IncompatibleCapturedImage {
         try {
             if (!image.file().exists()) {
-                throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), notExist));
+                throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), NOT_EXIST));
             }
         } catch (SecurityException e) {
-            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), notExist));
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), NOT_EXIST));
         }
     }
 
@@ -83,7 +88,7 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
 
         if (extension == null
                 || (!extension.equals(this.getExtension()) && !extension.equals(this.getExtension() + 'f'))) {
-            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), badExtension));
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), NOT_TIFF));
         }
     }
 
@@ -93,7 +98,7 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
      */
     private void _bitDepthAbove16(IMetadata metadata, ICapturedImageFile image) throws IncompatibleCapturedImage {
         if (metadata.bitPerPixel() != 16) {
-            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), incompatibleBitDepth));
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), NOT_16_BIT));
         }
     }
 
@@ -103,16 +108,16 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
      */
     private void _NumImageChannelsCorrespond(IMetadata metadata, ICapturedImageFile image)
             throws IncompatibleCapturedImage {
-        boolean userSpecifiedOneChannel = image.channels().length == 1;     
+        boolean userSpecifiedOneChannel = image.channels().length == 1;
         boolean tiffOneChannel = metadata.numChannels() == 0 || metadata.numChannels() == 1;
 
         boolean userSpecifiedMultiChannel = !userSpecifiedOneChannel && image.channels().length > 1;
         boolean tiffAndUserHaveSameNumChannels = metadata.numChannels() == image.channels().length;
 
         if (userSpecifiedOneChannel && !tiffOneChannel) {
-            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), incompatipleChannels));
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), WRONG_NUM_CHANNEL));
         } else if (userSpecifiedMultiChannel && !tiffAndUserHaveSameNumChannels) {
-            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), incompatipleChannels));
+            throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), WRONG_NUM_CHANNEL));
         }
 
     }
