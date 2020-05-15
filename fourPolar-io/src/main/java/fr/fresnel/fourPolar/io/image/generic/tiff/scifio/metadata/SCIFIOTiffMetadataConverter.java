@@ -63,14 +63,12 @@ public class SCIFIOTiffMetadataConverter {
             }
         }
 
-        AxisOrder axisOrder = null;
         try {
             return AxisOrder.fromString(axisOrderAsString);
         } catch (UnsupportedAxisOrder e) {
-            throw new MetadataParseError(MetadataParseError.UNDEFINED_AXIS_ORDER)
+            throw new MetadataParseError(MetadataParseError.UNDEFINED_AXIS_ORDER);
         }
 
-        return axisOrder;
     }
 
     /**
