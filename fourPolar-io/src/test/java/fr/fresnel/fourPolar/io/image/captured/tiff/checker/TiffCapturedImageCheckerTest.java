@@ -108,6 +108,18 @@ public class TiffCapturedImageCheckerTest {
         assertTrue(TiffCapturedImageChecker.NOT_EXIST.equals(exception.getRejectedImage().getReason()));
     }
 
+    @Test
+    public void checkCompatible_AxisUndefined_ThrowsIncompatibleCapturedImage()
+            throws IncompatibleCapturedImage, IOException {
+        final File unknownAxis = new File(_root, "UnknownAxis.tif");
+        DummyCapturedImageFile file = new DummyCapturedImageFile(new int[] { 1 }, unknownAxis);
+
+        final IncompatibleCapturedImage exception = assertThrows(IncompatibleCapturedImage.class, () -> {
+            tiffChecker.check(file);
+        });
+
+        assertTrue(TiffCapturedImageChecker.UNDEFINED_AXIS.equals(exception.getRejectedImage().getReason()));
+    }
 }
 
 class DummyCapturedImageFile implements ICapturedImageFile {
