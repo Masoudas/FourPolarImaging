@@ -16,12 +16,12 @@ class ImgLib2BoxShape extends ImgLib2Shape implements IBoxShape {
 
     @Override
     public long[] min() {
-        return _min;
+        return _min.clone();
     }
 
     @Override
     public long[] max() {
-        return _max;
+        return _max.clone();
     }
 
 }

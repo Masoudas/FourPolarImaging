@@ -12,7 +12,7 @@ public class ImgLib2PointShape extends ImgLib2Shape implements IPointShape {
 
     @Override
     public long[] point() {
-        return _point;
+        return _point.clone();
     }
     
 }

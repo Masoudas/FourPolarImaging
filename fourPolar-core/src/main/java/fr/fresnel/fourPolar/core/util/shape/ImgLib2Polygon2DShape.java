@@ -16,12 +16,12 @@ public class ImgLib2Polygon2DShape extends ImgLib2Shape implements IPolygon2DSha
 
     @Override
     public long[] x_vertices() {
-        return _x_vertices;
+        return _x_vertices.clone();
     }
 
     @Override
     public long[] y_vertices() {
-        return _y_vertices;
+        return _y_vertices.clone();
     }
 
 }
