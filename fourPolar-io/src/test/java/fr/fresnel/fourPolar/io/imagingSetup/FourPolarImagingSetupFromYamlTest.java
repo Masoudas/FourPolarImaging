@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
@@ -41,9 +40,9 @@ public class FourPolarImagingSetupFromYamlTest {
         imagingSetup.setCameras(Cameras.One);
 
         IBoxShape rect0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 128, 128 }, AxisOrder.XY);
-        IBoxShape rect45 = new ShapeFactory().closedBox(new long[] { 128, 1 }, new long[] { 128, 128 }, AxisOrder.XY);
-        IBoxShape rect90 = new ShapeFactory().closedBox(new long[] { 1, 128 }, new long[] { 128, 128 }, AxisOrder.XY);
-        IBoxShape rect135 = new ShapeFactory().closedBox(new long[] { 128, 128 }, new long[] { 128, 128 },
+        IBoxShape rect45 = new ShapeFactory().closedBox(new long[] { 128, 1 }, new long[] { 256, 128 }, AxisOrder.XY);
+        IBoxShape rect90 = new ShapeFactory().closedBox(new long[] { 1, 128 }, new long[] { 128, 256 }, AxisOrder.XY);
+        IBoxShape rect135 = new ShapeFactory().closedBox(new long[] { 128, 128 }, new long[] { 256, 256 },
                 AxisOrder.XY);
 
         FieldOfView fov = new FieldOfView(rect0, rect45, rect90, rect135);
@@ -55,7 +54,8 @@ public class FourPolarImagingSetupFromYamlTest {
         Channel prop = new Channel(1e-9, 1.45, 1.54, 1.34, 3.11);
         imagingSetup.setChannel(1, prop);
 
-        File rootFolder = new File(FourPolarImagingSetupToYamlTest.class.getResource("").getPath());
+        File rootFolder = new File(FourPolarImagingSetupToYamlTest.class.getResource("").getPath(), "FromYaml");
+        rootFolder.mkdir();
         FourPolarImagingSetupToYaml writer = new FourPolarImagingSetupToYaml(imagingSetup, rootFolder);
         writer.write();
 

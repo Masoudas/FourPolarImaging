@@ -9,11 +9,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
-import fr.fresnel.fourPolar.core.util.DRectangle;
+import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
+import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
@@ -26,16 +28,17 @@ import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
 public class FourPolarImagingSetupToYamlTest {
 
     @Test
-    public void write_WriteOneCameraThreeChannel_FileGeneratedinResourceFolder()
+    public void write_WriteOneCameraTWoChannel_FileGeneratedinResourceFolder()
             throws JsonGenerationException, JsonMappingException, IOException {
-        IFourPolarImagingSetup imagingSetup = new DummyFPSetup();
+        IFourPolarImagingSetup imagingSetup = new DummyFPSetupForWrite();
 
         imagingSetup.setCameras(Cameras.One);
 
-        DRectangle rect0 = new DRectangle(1, 1, 128, 128);
-        DRectangle rect45 = new DRectangle(128, 1, 128, 128);
-        DRectangle rect90 = new DRectangle(1, 128, 128, 128);
-        DRectangle rect135 = new DRectangle(128, 128, 128, 128);
+        IBoxShape rect0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 128, 128 }, AxisOrder.XY);
+        IBoxShape rect45 = new ShapeFactory().closedBox(new long[] { 128, 1 }, new long[] { 256, 128 }, AxisOrder.XY);
+        IBoxShape rect90 = new ShapeFactory().closedBox(new long[] { 1, 128 }, new long[] { 128, 256 }, AxisOrder.XY);
+        IBoxShape rect135 = new ShapeFactory().closedBox(new long[] { 128, 128 }, new long[] { 256, 256 },
+                AxisOrder.XY);
 
         FieldOfView fov = new FieldOfView(rect0, rect45, rect90, rect135);
         imagingSetup.setFieldOfView(fov);
@@ -47,7 +50,8 @@ public class FourPolarImagingSetupToYamlTest {
         imagingSetup.setChannel(1, prop);
         imagingSetup.setChannel(2, prop);
 
-        File rootFolder = new File(FourPolarImagingSetupToYamlTest.class.getResource("").getPath());
+        File rootFolder = new File(FourPolarImagingSetupToYamlTest.class.getResource("").getPath(), "ToYaml");
+        rootFolder.mkdir();
         FourPolarImagingSetupToYaml writer = new FourPolarImagingSetupToYaml(imagingSetup, rootFolder);
         writer.write();
 
@@ -55,7 +59,7 @@ public class FourPolarImagingSetupToYamlTest {
 
 }
 
-class DummyFPSetup implements IFourPolarImagingSetup {
+class DummyFPSetupForWrite implements IFourPolarImagingSetup {
     private Cameras cameras;
     private Hashtable<Integer, IChannel> channels = new Hashtable<>();
     private INumericalAperture na;
