@@ -79,11 +79,11 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
         if (position == Position.TopLeft) {
             return new long[] { 1, 1 };
         } else if (position == Position.TopRight) {
-            return new long[] { _x_intersection, 1 };
+            return new long[] { _xmax_beadImg - _xlen_PolImg, 1 };
         } else if (position == Position.TopRight) {
-            return new long[] { 1, _y_intersection };
+            return new long[] { 1, _ymax_beadImg - _ylen_PolImg };
         } else {
-            return new long[] { _x_intersection, _y_intersection };
+            return new long[] { _xmax_beadImg - _xlen_PolImg, _ymax_beadImg - _ylen_PolImg };
         }
     }
 
