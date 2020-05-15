@@ -40,12 +40,17 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
      *                          bead image.
      * 
      * @throws IllegalArgumentException if the axis order of the @param
-     *                                  intersectionPoint is not XY.
+     *                                  intersectionPoint is not XY. Also if
+     *                                  intersection point is not in the bead image.
      */
     public FoVCalculatorOneCamera(IMetadata beadImageMetadata, IPointShape intersectionPoint,
             OneCameraConstellation constellation) {
         long[] beadImgDim = beadImageMetadata.getDim();
         long[] iPoint = intersectionPoint.point();
+
+        if (beadImgDim[0] <= iPoint[0] || beadImgDim[1] <= iPoint[1]) {
+            throw new IllegalArgumentException("Intersection point must be inside the image boundary.");
+        }
 
         _xmax_beadImg = beadImgDim[0];
         _ymax_beadImg = beadImgDim[1];
