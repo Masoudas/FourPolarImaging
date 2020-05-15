@@ -7,6 +7,7 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOr
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import io.scif.ImageMetadata;
 import net.imagej.axis.Axes;
 import net.imagej.axis.AxisType;
@@ -24,7 +25,7 @@ public class SCIFIOTiffMetadataConverter {
      * @throws UnsupportedAxisOrder in case the underlying image has an undefined
      *                              axis order.
      */
-    public static IMetadata convertFrom(ImageMetadata SCIFIOMetadata) throws UnsupportedAxisOrder {
+    public static IMetadata convertFrom(ImageMetadata SCIFIOMetadata) throws MetadataParseError {
         long[] dim = SCIFIOMetadata.getAxesLengths();
         int bitDepth = SCIFIOMetadata.getBitsPerPixel();
         AxisOrder axisOrder = _getAxisOrder(SCIFIOMetadata.getAxes());
@@ -34,7 +35,7 @@ public class SCIFIOTiffMetadataConverter {
 
     /**
      * Fills the axis type, axis length and bitPerPixel of the given
-     * {@link ImageMetadata} from the given {@link IMetadata}. 
+     * {@link ImageMetadata} from the given {@link IMetadata}.
      * 
      */
     public static void convertTo(IMetadata metadata, ImageMetadata scifioMetadata) {
@@ -45,25 +46,31 @@ public class SCIFIOTiffMetadataConverter {
     /**
      * Returns {@link AxisOrder} from the given axisList.
      */
-    private static AxisOrder _getAxisOrder(List<CalibratedAxis> axisList) throws UnsupportedAxisOrder {
-        String axisOrder = "";
+    private static AxisOrder _getAxisOrder(List<CalibratedAxis> axisList) throws MetadataParseError {
+        String axisOrderAsString = "";
 
-        boolean undefAxis = true;
-        for (Iterator<CalibratedAxis> itr = axisList.iterator(); itr.hasNext() && undefAxis;) {
+        for (Iterator<CalibratedAxis> itr = axisList.iterator(); itr.hasNext();) {
             String axisName = itr.next().type().getLabel();
             if (axisName.equals(Axes.CHANNEL.getLabel())) {
-                axisOrder += "C";
+                axisOrderAsString += "C";
             } else if (axisName.equals(Axes.TIME.getLabel())) {
-                axisOrder += "T";
+                axisOrderAsString += "T";
             } else if (axisName.equals(Axes.Z.getLabel()) || axisName.equals(Axes.X.getLabel())
                     || axisName.equals(Axes.Y.getLabel())) {
-                axisOrder += axisName;
+                axisOrderAsString += axisName;
             } else {
-                undefAxis = false;
-                axisOrder = "NoOrder";
+                throw new MetadataParseError(MetadataParseError.UNDEFINED_AXIS);
             }
         }
-        return AxisOrder.fromString(axisOrder);
+
+        AxisOrder axisOrder = null;
+        try {
+            return AxisOrder.fromString(axisOrderAsString);
+        } catch (UnsupportedAxisOrder e) {
+            throw new MetadataParseError(MetadataParseError.UNDEFINED_AXIS_ORDER)
+        }
+
+        return axisOrder;
     }
 
     /**
