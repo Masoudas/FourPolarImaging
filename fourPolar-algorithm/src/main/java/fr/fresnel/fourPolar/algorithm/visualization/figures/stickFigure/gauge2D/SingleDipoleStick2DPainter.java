@@ -13,10 +13,10 @@ import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
+import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
-import fr.fresnel.fourPolar.core.util.shape.ShapeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
@@ -91,7 +91,7 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
     public void draw(IShape region, UINT16 soiThreshold) throws IllegalArgumentException {
         long[] dipolePosition = region.getIterator().next();
 
-        if (region.getType() != ShapeType.Point) {
+        if (!(region instanceof IPointShape)) {
             throw new IllegalArgumentException("Only point shape can be used to localize a dipole.");
         }
 
