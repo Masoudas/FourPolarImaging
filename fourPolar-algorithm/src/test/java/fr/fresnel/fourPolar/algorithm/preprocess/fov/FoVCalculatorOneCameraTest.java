@@ -16,10 +16,10 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 public class FoVCalculatorOneCameraTest {
     @Test
     public void calculate_BrasseletConstellation_ReturnsCorrectFoV() {
-        long[] dim = { 1024, 1024, 10 };
+        long[] dim = { 1024, 512, 10 };
         IMetadata beadImageMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYC).build();
 
-        IPointShape intersectionPoint = new ShapeFactory().point(new long[] { 510, 520 }, AxisOrder.XY); // A
+        IPointShape intersectionPoint = new ShapeFactory().point(new long[] { 510, 257 }, AxisOrder.XY); // A
                                                                                                          // not-perfect
                                                                                                          // intersection.
         OneCameraConstellation constellation = new OneCameraConstellation(OneCameraConstellation.Position.TopLeft,
@@ -47,10 +47,10 @@ public class FoVCalculatorOneCameraTest {
 
     @Test
     public void calculate_ReverseBrasseletConstellation_ReturnsCorrectFoV() {
-        long[] dim = { 1024, 1024, 10 };
+        long[] dim = { 1024, 512, 10 };
         IMetadata beadImageMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYC).build();
 
-        IPointShape intersectionPoint = new ShapeFactory().point(new long[] { 510, 520 }, AxisOrder.XY); // A
+        IPointShape intersectionPoint = new ShapeFactory().point(new long[] { 510, 257 }, AxisOrder.XY); // A
                                                                                                          // not-perfect
                                                                                                          // intersection.
         OneCameraConstellation constellation = new OneCameraConstellation(OneCameraConstellation.Position.BottomLeft,
