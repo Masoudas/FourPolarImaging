@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.core.util.shape;
 /**
  * An interface for a two dimensional polygon.
  */
-public interface IPolygon2DShape {
+public interface IPolygon2DShape extends IShape{
     /**
      * Returns the x vertices of the shape.
      */
