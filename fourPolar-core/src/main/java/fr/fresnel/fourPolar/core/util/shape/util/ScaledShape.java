@@ -7,7 +7,6 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.Rotation3DOrder;
-import fr.fresnel.fourPolar.core.util.shape.ShapeType;
 
 /**
  * WARNING: When the time is right, this class should be rewritten using methods
@@ -37,10 +36,6 @@ class ScaledShape implements IShape {
         return new ScaledShapeIterator(_originalShape, _axisOrder, _max);
     }
 
-    @Override
-    public ShapeType getType() {
-        return ShapeType.Scaled;
-    }
 
     @Override
     public AxisOrder axisOrder() {
