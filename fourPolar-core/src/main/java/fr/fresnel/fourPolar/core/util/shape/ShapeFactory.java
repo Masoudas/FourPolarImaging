@@ -23,7 +23,7 @@ public class ShapeFactory {
      * @throws IllegalArgumentException in case min and max don't have equal
      *                                  dimension or shape dimension is less than 2.
      */
-    public IShape closedBox(long[] min, long[] max, AxisOrder axisOrder) {
+    public IBoxShape closedBox(long[] min, long[] max, AxisOrder axisOrder) {
         Objects.requireNonNull(min, "min should not be null");
         Objects.requireNonNull(max, "max should not be null");
 
@@ -54,11 +54,10 @@ public class ShapeFactory {
         double[] maxCopy = Arrays.stream(max).asDoubleStream().toArray();
         WritableBox box = GeomMasks.closedBox(minCopy, maxCopy);
 
-        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.ClosedBox, min.length, box, axisOrder);
-        return shape;
+        return new ImgLib2BoxShape(min.length, box, axisOrder, min, max);
     }
 
-    public IShape closedPolygon2D(long[] x, long[] y) {
+    public IPolygon2DShape closedPolygon2D(long[] x, long[] y) {
         Objects.requireNonNull(x, "x should not be null");
         Objects.requireNonNull(y, "y should not be null");
 
@@ -71,12 +70,10 @@ public class ShapeFactory {
 
         WritablePolygon2D polygon2D = GeomMasks.closedPolygon2D(xPoints, yPoints);
 
-        ImgLib2Shape shape = new ImgLib2Shape(ShapeType.ClosedPolygon2D, 2, polygon2D, AxisOrder.XY);
-
-        return shape;
+        return new ImgLib2Polygon2DShape(2, polygon2D, AxisOrder.XY, x, y);
     }
 
-    public IShape point(long[] point, AxisOrder axisOrder) {
+    public IPointShape point(long[] point, AxisOrder axisOrder) {
         Objects.requireNonNull(point, "location cannot be null.");
 
         if (axisOrder != AxisOrder.NoOrder && AxisOrder.getNumDefinedAxis(axisOrder) != point.length) {
@@ -84,7 +81,7 @@ public class ShapeFactory {
         }
 
         PointMask mask = GeomMasks.pointMask(Arrays.stream(point).asDoubleStream().toArray());
-        return new ImgLib2Shape(ShapeType.Point, 1, mask, axisOrder);
+        return new ImgLib2PointShape(1, mask, axisOrder, point);
     }
 
 }
