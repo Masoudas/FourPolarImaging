@@ -21,17 +21,16 @@ import net.imglib2.view.Views;
  * for other libraries. Use set methods.
  */
 class ImgLib2Shape implements IShape {
-    final private RealMaskRealInterval _originalShape;
-    private RealMaskRealInterval _shape;
+    final protected RealMaskRealInterval _originalShape;
+    protected RealMaskRealInterval _shape;
 
-    private final ShapeType _type;
-    private final int _shapeDim;
-    private final AxisOrder _axisOrder;
+    protected final int _shapeDim;
+    protected final AxisOrder _axisOrder;
 
     /**
      * A point mask instance to check whether a point is inside the shape.
      */
-    final private WritablePointMask _pointMask;
+    final protected WritablePointMask _pointMask;
 
     /**
      * Construct the shape, using ImgLib2 ROI. @See RealMaskRealInterval.
@@ -42,9 +41,8 @@ class ImgLib2Shape implements IShape {
      *                  defined.
      * 
      */
-    public ImgLib2Shape(final ShapeType shapeType, final int shapeDim, RealMaskRealInterval shape,
+    public ImgLib2Shape(final int shapeDim, RealMaskRealInterval shape,
             final AxisOrder axisOrder) {
-        this._type = shapeType;
         this._shapeDim = shapeDim;
         this._pointMask = GeomMasks.pointMask(new double[AxisOrder.getNumDefinedAxis(axisOrder)]);
         this._originalShape = shape;
@@ -59,11 +57,6 @@ class ImgLib2Shape implements IShape {
                         Intervals.largestContainedInterval(this._shape)));
 
         return new ShapeIterator(iterableRegion, this._axisOrder);
-    }
-
-    @Override
-    public ShapeType getType() {
-        return this._type;
     }
 
     @Override
