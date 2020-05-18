@@ -4,30 +4,61 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 
 class ReassingerToXYCZT {
+    private ReassingerToXYCZT() {
+        throw new AssertionError();
+    }
 
     /**
      * Reassigns the axis of an image. Note that if an axis does not exist, it's
-     * appended to the new image with dimension one.
+     * appended to the new image with dimension one. Returns the same image if it is
+     * XYCZT.
      * 
      * @throws IllegalArgumentException if the old or new axis don't start with XY.
      */
-    public <T extends PixelType> Image<T> reassign(Image<T> image, T t) {
-        if (!image.getMetadata().axisOrder().name().substring(0, 2).equals("XY")) {
+    public static <T extends PixelType> Image<T> reassign(Image<T> image, T t) {
+        if (image.getMetadata().axisOrder() == AxisOrder.XYCZT) {
+            return image;
+        }
+
+        return reassign(image.getCursor(), image.getMetadata(), image.getFactory(), t);
+
+    }
+
+    /**
+     * Reassigns the axis of an image using its cursor. Note that if an axis does
+     * not exist, it's appended to the new image with dimension one. Returns the
+     * same image if it is XYCZT.
+     * 
+     * @param cursor   is the cursor of the image.
+     * @param metadata is the metadata of the associated image.
+     * @param factory  is the factory for creating the image inteface.
+     * @param t        is the image pixel type.
+     * 
+     * @throws IllegalArgumentException if the old or new axis don't start with XY,
+     *                                  or if dimension of cursor and metadata don't
+     *                                  match.
+     */
+    public static <T extends PixelType> Image<T> reassign(IPixelCursor<T> cursor, IMetadata metadata,
+            ImageFactory factory, T t) {
+        if (!metadata.axisOrder().name().substring(0, 2).equals("XY")) {
             throw new IllegalArgumentException("Axis does not start with XY");
         }
 
-        IMetadata metadata_xyczt = _createMetadata(image.getMetadata());
-        Image<T> reassignedImage = image.getFactory().create(metadata_xyczt, t);
+        _cursorHasSameDimAsMetadata(cursor, metadata);
 
-        AxisOrder oldAxisOrder = image.getMetadata().axisOrder();
+        IMetadata metadata_xyczt = _createMetadata(metadata);
+        Image<T> reassignedImage = factory.create(metadata_xyczt, t);
+
+        AxisOrder oldAxisOrder = metadata.axisOrder();
         IPixelRandomAccess<T> ra = reassignedImage.getRandomAccess();
-        for (IPixelCursor<T> cursor = image.getCursor(); cursor.hasNext();) {
+        for (; cursor.hasNext();) {
             IPixel<T> pixel = cursor.next();
             long[] position_xyczt = _convertPositionToXYCZT(cursor.localize(), oldAxisOrder);
 
@@ -45,7 +76,7 @@ class ReassingerToXYCZT {
      * @param metadata
      * @return
      */
-    private IMetadata _createMetadata(IMetadata metadata) {
+    private static IMetadata _createMetadata(IMetadata metadata) {
         int z_axis = metadata.axisOrder().z_axis;
         int c_axis = metadata.axisOrder().c_axis;
         int t_axis = metadata.axisOrder().t_axis;
@@ -61,7 +92,7 @@ class ReassingerToXYCZT {
                 .build();
     }
 
-    private long[] _convertPositionToXYCZT(long[] position, AxisOrder oldAxisOrder) {
+    private static long[] _convertPositionToXYCZT(long[] position, AxisOrder oldAxisOrder) {
         long[] position_xyczt = { position[0], position[1], 0, 0, 0 };
 
         if (oldAxisOrder.c_axis > 0)
@@ -72,5 +103,13 @@ class ReassingerToXYCZT {
             position_xyczt[4] = position[oldAxisOrder.t_axis];
 
         return position_xyczt;
+    }
+
+    private static void _cursorHasSameDimAsMetadata(IPixelCursor<?> cursor, IMetadata metadata) {
+        cursor.next();
+        if (cursor.localize().length == metadata.getDim().length) {
+            throw new IllegalArgumentException("Dimension of cursor and metadata don't match");
+        }
+
     }
 }
