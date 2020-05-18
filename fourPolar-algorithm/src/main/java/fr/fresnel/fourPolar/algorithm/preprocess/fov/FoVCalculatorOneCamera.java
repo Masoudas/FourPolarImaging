@@ -34,10 +34,10 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
     /**
      * Calculate FoV using the metadata of the bead image.
      * 
-     * @param beadImg_pol0_45_90_135 is the metadata of the bead image for one camera
-     *                          case.
-     * @param intersectionPoint is the intersection point of polarizations in the
-     *                          bead image.
+     * @param beadImg_pol0_45_90_135 is the metadata of the bead image for one
+     *                               camera case.
+     * @param intersectionPoint      is the intersection point of polarizations in
+     *                               the bead image (starting from [1, 1, 1]).
      * 
      * @throws IllegalArgumentException if the axis order of the @param
      *                                  intersectionPoint is not XY. Also if
@@ -75,24 +75,22 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
     }
 
     private IBoxShape _defineFoVAsBox(OneCameraConstellation.Position position) {
-        long[] bottom = _getBottom(position);
-        long[] top = _getTop(bottom);
+        long[] bottom = null;
+        long[] top = null;
+        if (position == Position.TopLeft) {
+            bottom = new long[] { 1, 1 };
+            top = new long[] { _xlen_PolImg, _ylen_PolImg };
+        } else if (position == Position.TopRight) {
+            bottom = new long[] { _xmax_beadImg - _xlen_PolImg + 1, 1 };
+            top = new long[] { _xmax_beadImg, _ylen_PolImg };
+        } else if (position == Position.BottomLeft) {
+            bottom = new long[] { 1, _ymax_beadImg - _ylen_PolImg + 1 };
+            top = new long[] { _xlen_PolImg, _ymax_beadImg };
+        } else {
+            bottom = new long[] { _xmax_beadImg - _xlen_PolImg + 1, _ymax_beadImg - _ylen_PolImg + 1 };
+            top = new long[] { _xmax_beadImg, _ymax_beadImg };
+        }
         return new ShapeFactory().closedBox(bottom, top, AxisOrder.XY);
     }
 
-    private long[] _getBottom(OneCameraConstellation.Position position) {
-        if (position == Position.TopLeft) {
-            return new long[] { 1, 1 };
-        } else if (position == Position.TopRight) {
-            return new long[] { _xmax_beadImg - _xlen_PolImg, 1 };
-        } else if (position == Position.BottomLeft) {
-            return new long[] { 1, _ymax_beadImg - _ylen_PolImg };
-        } else {
-            return new long[] { _xmax_beadImg - _xlen_PolImg, _ymax_beadImg - _ylen_PolImg };
-        }
-    }
-
-    private long[] _getTop(long[] bottom) {
-        return new long[] { bottom[0] + _xlen_PolImg, bottom[1] + _ylen_PolImg };
-    }
 }

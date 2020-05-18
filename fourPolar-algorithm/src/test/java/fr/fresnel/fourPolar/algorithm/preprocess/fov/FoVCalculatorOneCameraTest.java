@@ -32,16 +32,16 @@ public class FoVCalculatorOneCameraTest {
         long y_len = Math.min(dim[1] - intersectionPoint.point()[1], intersectionPoint.point()[1] - 1);
 
         assertArrayEquals(fov.getFoV(Polarization.pol0).min(), new long[] { 1, 1 });
-        assertArrayEquals(fov.getFoV(Polarization.pol0).max(), new long[] { 1 + x_len , 1 + y_len });
+        assertArrayEquals(fov.getFoV(Polarization.pol0).max(), new long[] { x_len, y_len });
 
-        assertArrayEquals(fov.getFoV(Polarization.pol45).min(), new long[] { dim[0] - x_len, 1 });
-        assertArrayEquals(fov.getFoV(Polarization.pol45).max(), new long[] { dim[0] , 1 + y_len });
+        assertArrayEquals(fov.getFoV(Polarization.pol45).min(), new long[] { dim[0] - x_len + 1, 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol45).max(), new long[] { dim[0], y_len });
 
-        assertArrayEquals(fov.getFoV(Polarization.pol90).min(), new long[] { 1, dim[1] - y_len });
-        assertArrayEquals(fov.getFoV(Polarization.pol90).max(), new long[] { 1 + x_len , dim[1] });
+        assertArrayEquals(fov.getFoV(Polarization.pol90).min(), new long[] { 1, dim[1] - y_len + 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol90).max(), new long[] { x_len, dim[1] });
 
-        assertArrayEquals(fov.getFoV(Polarization.pol135).min(), new long[] { dim[0] - x_len, dim[1] - y_len });
-        assertArrayEquals(fov.getFoV(Polarization.pol135).max(), new long[] { dim[0] , dim[1] });
+        assertArrayEquals(fov.getFoV(Polarization.pol135).min(), new long[] { dim[0] - x_len + 1, dim[1] - y_len + 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol135).max(), new long[] { dim[0], dim[1] });
 
     }
 
@@ -63,16 +63,16 @@ public class FoVCalculatorOneCameraTest {
         long y_len = Math.min(dim[1] - intersectionPoint.point()[1], intersectionPoint.point()[1] - 1);
 
         assertArrayEquals(fov.getFoV(Polarization.pol45).min(), new long[] { 1, 1 });
-        assertArrayEquals(fov.getFoV(Polarization.pol45).max(), new long[] { 1 + x_len , 1 + y_len });
+        assertArrayEquals(fov.getFoV(Polarization.pol45).max(), new long[] { x_len, y_len });
 
-        assertArrayEquals(fov.getFoV(Polarization.pol135).min(), new long[] { dim[0] - x_len, 1 });
-        assertArrayEquals(fov.getFoV(Polarization.pol135).max(), new long[] { dim[0] , 1 + y_len });
+        assertArrayEquals(fov.getFoV(Polarization.pol135).min(), new long[] { dim[0] - x_len + 1, 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol135).max(), new long[] { dim[0], y_len });
 
-        assertArrayEquals(fov.getFoV(Polarization.pol0).min(), new long[] { 1, dim[1] - y_len });
-        assertArrayEquals(fov.getFoV(Polarization.pol0).max(), new long[] { 1 + x_len , dim[1] });
+        assertArrayEquals(fov.getFoV(Polarization.pol0).min(), new long[] { 1, dim[1] - y_len + 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol0).max(), new long[] { x_len, dim[1] });
 
-        assertArrayEquals(fov.getFoV(Polarization.pol90).min(), new long[] { dim[0] - x_len, dim[1] - y_len });
-        assertArrayEquals(fov.getFoV(Polarization.pol90).max(), new long[] { dim[0] , dim[1] });
+        assertArrayEquals(fov.getFoV(Polarization.pol90).min(), new long[] { dim[0] - x_len + 1, dim[1] - y_len + 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol90).max(), new long[] { dim[0], dim[1] });
 
     }
 

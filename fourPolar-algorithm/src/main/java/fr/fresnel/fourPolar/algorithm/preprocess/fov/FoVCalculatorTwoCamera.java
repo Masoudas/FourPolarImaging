@@ -73,7 +73,7 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
      * y min is the minimum of the two images.
      */
     private long _calculate_ylen() {
-        return Math.min(_dim_pol0_90[1] - 1, _dim_pol45_135[1]);
+        return Math.min(_dim_pol0_90[1], _dim_pol45_135[1]);
     }
 
     @Override
@@ -87,21 +87,21 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
     }
 
     private IBoxShape _defineFoVAsBox(Position position, long _xmax_beadImg) {
-        long[] bottom = _getBottom(position, _xmax_beadImg);
-        long[] top = _getTop(bottom);
+        long[] bottom = null;
+        long[] top = null;
+
+        if (position == Position.Left) {
+            bottom = new long[] { 1, 1 };
+            top = new long[] { _xlen_PolImg, _ylen_PolImg};
+        } else {
+            bottom = new long[] { _xmax_beadImg - _xlen_PolImg + 1, 1 };
+            top = new long[] { _xmax_beadImg, _ylen_PolImg};
+
+        }
+
         return new ShapeFactory().closedBox(bottom, top, AxisOrder.XY);
     }
 
-    private long[] _getBottom(Position position, long _xmax_beadImg) {
-        if (position == Position.Left) {
-            return new long[] { 1, 1 };
-        } else {
-            return new long[] { _xmax_beadImg - _xlen_PolImg, 1 };
-        }
-    }
 
-    private long[] _getTop(long[] bottom) {
-        return new long[] { bottom[0] + _xlen_PolImg, bottom[1] + _ylen_PolImg};
-    }
 
 }

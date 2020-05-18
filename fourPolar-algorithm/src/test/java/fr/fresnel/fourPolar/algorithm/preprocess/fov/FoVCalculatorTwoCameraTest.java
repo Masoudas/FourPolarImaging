@@ -31,21 +31,22 @@ public class FoVCalculatorTwoCameraTest {
         IFieldOfView fov = new FoVCalculatorTwoCamera(metadata_0_90, intersectionPoint_0_90, metadata_45_135,
                 intersectionPoint_45_135, twoCameraConstellation).calculate();
 
-                
-        long x_min = Arrays.stream(new long[]{ intersectionPoint_0_90.point()[0] - 1, dim[0] - intersectionPoint_0_90.point()[0],
-            intersectionPoint_45_135.point()[0] - 1, dim[0] - intersectionPoint_45_135.point()[0] }).summaryStatistics().getMin();
-        
-        assertArrayEquals(fov.getFoV(Polarization.pol0).min(), new long[]{1, 1});
-        assertArrayEquals(fov.getFoV(Polarization.pol0).max(), new long[]{x_min + 1 , dim[1]});
+        long x_len = Arrays
+                .stream(new long[] { intersectionPoint_0_90.point()[0] - 1, dim[0] - intersectionPoint_0_90.point()[0],
+                        intersectionPoint_45_135.point()[0] - 1, dim[0] - intersectionPoint_45_135.point()[0] })
+                .summaryStatistics().getMin();
 
-        assertArrayEquals(fov.getFoV(Polarization.pol90).min(), new long[]{dim[0] - x_min, 1});
-        assertArrayEquals(fov.getFoV(Polarization.pol90).max(), new long[]{dim[0], dim[1]});
+        assertArrayEquals(fov.getFoV(Polarization.pol0).min(), new long[] { 1, 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol0).max(), new long[] { x_len, dim[1] });
 
-        assertArrayEquals(fov.getFoV(Polarization.pol45).min(), new long[]{1, 1});
-        assertArrayEquals(fov.getFoV(Polarization.pol45).max(), new long[]{x_min + 1, dim[1]});
+        assertArrayEquals(fov.getFoV(Polarization.pol90).min(), new long[] { dim[0] - x_len + 1, 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol90).max(), new long[] { dim[0], dim[1] });
 
-        assertArrayEquals(fov.getFoV(Polarization.pol135).min(), new long[]{dim[0] - x_min, 1});
-        assertArrayEquals(fov.getFoV(Polarization.pol135).max(), new long[]{dim[0], dim[1]});
+        assertArrayEquals(fov.getFoV(Polarization.pol45).min(), new long[] { 1, 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol45).max(), new long[] { x_len, dim[1] });
+
+        assertArrayEquals(fov.getFoV(Polarization.pol135).min(), new long[] { dim[0] - x_len + 1, 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol135).max(), new long[] { dim[0], dim[1] });
     }
 
     @Test
@@ -62,21 +63,22 @@ public class FoVCalculatorTwoCameraTest {
         IFieldOfView fov = new FoVCalculatorTwoCamera(metadata_0_90, intersectionPoint_0_90, metadata_45_135,
                 intersectionPoint_45_135, twoCameraConstellation).calculate();
 
-                
-        long x_min = Arrays.stream(new long[]{ intersectionPoint_0_90.point()[0] - 1, dim[0] - intersectionPoint_0_90.point()[0],
-            intersectionPoint_45_135.point()[0] - 1, dim[0] - intersectionPoint_45_135.point()[0] }).summaryStatistics().getMin();
-        
-        assertArrayEquals(fov.getFoV(Polarization.pol90).min(), new long[]{1, 1});
-        assertArrayEquals(fov.getFoV(Polarization.pol90).max(), new long[]{x_min + 1 , dim[1]});
+        long x_len = Arrays
+                .stream(new long[] { intersectionPoint_0_90.point()[0] - 1, dim[0] - intersectionPoint_0_90.point()[0],
+                        intersectionPoint_45_135.point()[0] - 1, dim[0] - intersectionPoint_45_135.point()[0] })
+                .summaryStatistics().getMin();
 
-        assertArrayEquals(fov.getFoV(Polarization.pol0).min(), new long[]{dim[0] - x_min, 1});
-        assertArrayEquals(fov.getFoV(Polarization.pol0).max(), new long[]{dim[0], dim[1]});
+        assertArrayEquals(fov.getFoV(Polarization.pol90).min(), new long[] { 1, 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol90).max(), new long[] { x_len, dim[1] });
 
-        assertArrayEquals(fov.getFoV(Polarization.pol135).min(), new long[]{1, 1});
-        assertArrayEquals(fov.getFoV(Polarization.pol135).max(), new long[]{x_min + 1, dim[1]});
+        assertArrayEquals(fov.getFoV(Polarization.pol0).min(), new long[] { dim[0] - x_len + 1, 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol0).max(), new long[] { dim[0], dim[1] });
 
-        assertArrayEquals(fov.getFoV(Polarization.pol45).min(), new long[]{dim[0] - x_min, 1});
-        assertArrayEquals(fov.getFoV(Polarization.pol45).max(), new long[]{dim[0], dim[1]});
+        assertArrayEquals(fov.getFoV(Polarization.pol135).min(), new long[] { 1, 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol135).max(), new long[] { x_len, dim[1] });
+
+        assertArrayEquals(fov.getFoV(Polarization.pol45).min(), new long[] { dim[0] - x_len + 1, 1 });
+        assertArrayEquals(fov.getFoV(Polarization.pol45).max(), new long[] { dim[0], dim[1] });
     }
 
 }
