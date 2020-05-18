@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOr
  */
 public enum AxisOrder {
     NoOrder(-1, -1, -1), XY(-1, -1, -1), XYC(2, -1, -1), XYCT(2, -1, 3), XYCZT(2, 3, 4), XYT(-1, -1, 3), XYTC(3, -1, 2),
-    XYZ(2, -1, -1), XYZC(3, 2, -1), XYZCT(3, 2, 4), XYZT(-1, 2, 3), XYZTC(4, 2, 3), XYTZC(4, 3, 2);
+    XYZ(-1, 2, -1), XYZC(3, 2, -1), XYZCT(3, 2, 4), XYZT(-1, 2, 3), XYZTC(4, 2, 3), XYTZC(4, 3, 2);
 
     /**
      * Returns the number of labeled axis corresponding to the given order.
@@ -116,5 +116,4 @@ public enum AxisOrder {
         this.t_axis = t_axis;
     }
 
-    
 }
