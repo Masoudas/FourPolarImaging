@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.image.generic.imgLib2Model;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Objects;
 
@@ -85,11 +86,21 @@ public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implemen
         Objects.requireNonNull(len, "len can't be null");
 
         if (bottomCorner.length != this._dim.length || len.length != this._dim.length) {
-            throw new IllegalArgumentException("start or end does not have same dimension as image.");
+            throw new IllegalArgumentException("bottom corner or does not have same dimension as image.");
+        }
+
+        boolean bottomCornerHasNegative = Arrays.stream(bottomCorner).summaryStatistics().getMin() < 0;
+        if (bottomCornerHasNegative) {
+            throw new IllegalArgumentException("bottom corner or can't be negative.");
+        }
+
+        boolean lenIsPositiveNegative = Arrays.stream(len).summaryStatistics().getMin() > 0;
+        if (!lenIsPositiveNegative) {
+            throw new IllegalArgumentException("Length must be at least one");
         }
 
         for (int i = 0; i < bottomCorner.length; i++) {
-            if (bottomCorner[i] < _dim[i] || bottomCorner[i] + len[i] >= this._dim[i])
+            if (bottomCorner[i] + len[i] > this._dim[i])
                 throw new IllegalArgumentException("bottomCorner + len cannot exceed image dimension.");
         }
 
