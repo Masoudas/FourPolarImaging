@@ -107,7 +107,7 @@ class ReassingerToXYCZT {
 
     private static void _cursorHasSameDimAsMetadata(IPixelCursor<?> cursor, IMetadata metadata) {
         cursor.next();
-        if (cursor.localize().length == metadata.getDim().length) {
+        if (cursor.localize().length != metadata.getDim().length) {
             throw new IllegalArgumentException("Dimension of cursor and metadata don't match");
         }
 
