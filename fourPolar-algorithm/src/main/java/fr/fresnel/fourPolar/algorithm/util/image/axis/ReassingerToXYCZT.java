@@ -16,22 +16,6 @@ class ReassingerToXYCZT {
     }
 
     /**
-     * Reassigns the axis of an image. Note that if an axis does not exist, it's
-     * appended to the new image with dimension one. Returns the same image if it is
-     * XYCZT.
-     * 
-     * @throws IllegalArgumentException if the old or new axis don't start with XY.
-     */
-    public static <T extends PixelType> Image<T> reassign(Image<T> image, T t) {
-        if (image.getMetadata().axisOrder() == AxisOrder.XYCZT) {
-            return image;
-        }
-
-        return reassign(image.getCursor(), image.getMetadata(), image.getFactory(), t);
-
-    }
-
-    /**
      * Reassigns the axis of an image using its cursor. Note that if an axis does
      * not exist, it's appended to the new image with dimension one. Returns the
      * same image if it is XYCZT.
