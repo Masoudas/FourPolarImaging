@@ -10,7 +10,8 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOr
  * STRUCTURE, WHERE AXIS ORDER CONTRIBUTES.
  */
 public enum AxisOrder {
-    NoOrder, XY, XYC, XYCT, XYCZT, XYT, XYTC, XYZ, XYZC, XYZCT, XYZT, XYZTC, XYTZC;
+    NoOrder(-1, -1, -1), XY(-1, -1, -1), XYC(2, -1, -1), XYCT(2, -1, 3), XYCZT(2, 3, 4), XYT(-1, -1, 3), XYTC(3, -1, 2),
+    XYZ(2, -1, -1), XYZC(3, 2, -1), XYZCT(3, 2, 4), XYZT(-1, 2, 3), XYZTC(4, 2, 3), XYTZC(4, 3, 2);
 
     /**
      * Returns the number of labeled axis corresponding to the given order.
@@ -36,6 +37,13 @@ public enum AxisOrder {
      */
     public static int getChannelAxis(AxisOrder axisOrder) {
         return axisOrder.name().indexOf('C');
+    }
+
+    /**
+     * Returns the dimension (from zero) of time axis (if exists) and -1 otherwise.
+     */
+    public static int getTimeAxis(AxisOrder axisOrder) {
+        return axisOrder.name().indexOf('T');
     }
 
     /**
@@ -97,4 +105,16 @@ public enum AxisOrder {
             throw new UnsupportedAxisOrder();
         }
     }
+
+    public final int z_axis;
+    public final int c_axis;
+    public final int t_axis;
+
+    AxisOrder(int c_axis, int z_axis, int t_axis) {
+        this.z_axis = z_axis;
+        this.c_axis = c_axis;
+        this.t_axis = t_axis;
+    }
+
+    
 }
