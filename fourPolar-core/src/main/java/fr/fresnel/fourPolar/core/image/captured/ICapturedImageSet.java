@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
  * together (i.e, indicate different polarizations of a sample or different
  * wavelengths.)
  */
-public interface ICapturedImageFileSet {
+public interface ICapturedImageSet {
     /**
      * Returns the captured image associated with this label, where label is as
      * defined by {@link Cameras#getLabels(Cameras)}.
@@ -18,5 +18,5 @@ public interface ICapturedImageFileSet {
     /**
      * Returns the file set associated with this captured image.
      */
-    public ICapturedImageFileSet getFileSet();
+    public ICapturedImageSet getFileSet();
 }
