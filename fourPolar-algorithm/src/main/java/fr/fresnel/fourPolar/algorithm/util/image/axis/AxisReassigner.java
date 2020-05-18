@@ -20,20 +20,23 @@ public class AxisReassigner {
      * @throws IllegalArgumentException if the old or new axis don't start with XY.
      */
     public static <T extends PixelType> Image<T> reassignToXYCZT(Image<T> image, T t) {
-        return new ReassingerToXYCZT().reassign(image, t);
+        return ReassingerToXYCZT.reassign(image, t);
     }
 
 
-    // /**
-    //  * Breaks down the channels of the given image and returns an array of images, where each
-    //  * element is a channel image. Note that axis order of the new image would be that of 
-    //  * @param <T>
-    //  * @param image
-    //  * @param t
-    //  * @return
-    //  */
-    // public static <T extends PixelType> Image<T>[] breakChannels(Image<T> image, T t) {
+    /**
+     * Breaks down the channels of the given image and returns an array of images, where each
+     * element is a channel image. Note that axis order of the new image would be that of 
+     * @param <T>
+     * @param image
+     * @param t
+     * @return
+     */
+    public static <T extends PixelType> Image<T>[] breakChannels(Image<T> image, T t) {
+        if (image.getMetadata().numChannels() == 1){
+            return new Image[] {image};
+        }
         
-    // }
+    }
 
 }
