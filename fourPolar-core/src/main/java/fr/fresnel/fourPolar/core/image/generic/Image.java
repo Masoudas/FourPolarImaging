@@ -12,15 +12,19 @@ public interface Image<T extends PixelType> {
     public IPixelCursor<T> getCursor();
 
     /**
-     * Creates a cursor over the specified start and end interval.
+     * Creates a cursor over the specified start and end interval. Note that the
+     * {@link IPixelCursor#localize()} method offsets all the locations to [0, 0,
+     * 0]. Hence, the location of bottomCorner would be zero in the new iterator.
      * 
      * @param bottomCorner is the bottom corner of the interval, starting from
-     *                     [0,0,0, ...].
-     * @param len          is the length of the interval.
+     *                     [0,0,0, ...]. This is the actual address of the pixel
+     * @param len          is the length of the interval. The length includes the
+     *                     first pixel as well.
      * @return a cursor that iterates over this interval.
-     * @throws IllegalArgumentException is thrown in case dimension of bottomCorner
-     *                                  and len don't match that of image or
-     *                                  bottomCorner + len >= dimension image.
+     * @throws IllegalArgumentException if len or bottomCorner don't have same
+     *                                  dimension as image, or bottomCorner is
+     *                                  negative, or len is not at least one, or
+     *                                  that bottomCorner + len >= dimension image.
      */
     public IPixelCursor<T> getCursor(long[] bottomCorner, long[] len) throws IllegalArgumentException;
 
@@ -38,6 +42,7 @@ public interface Image<T extends PixelType> {
 
     /**
      * Returns the {@link IMetadata} associated with this image.
+     * 
      * @return
      */
     public IMetadata getMetadata();
