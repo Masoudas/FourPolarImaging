@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.util.image.axis;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ public class ReassignerToXYCZTTest {
             cursor.setPixel(new Pixel<UINT16>(new UINT16(val++)));
         }
 
-        Image<UINT16> reassignedImg = new ReassingerToXYCZT().reassign(img, UINT16.zero());
+        Image<UINT16> reassignedImg = ReassingerToXYCZT.reassign(img, UINT16.zero());
         IPixelRandomAccess<UINT16> ra = reassignedImg.getRandomAccess();
         for (IPixelCursor<UINT16> cursor = img.getCursor(); cursor.hasNext();) {
             IPixel<UINT16> pixel = cursor.next();
@@ -54,7 +53,7 @@ public class ReassignerToXYCZTTest {
             cursor.setPixel(new Pixel<UINT16>(new UINT16(val++)));
         }
 
-        Image<UINT16> reassignedImg = new ReassingerToXYCZT().reassign(img, UINT16.zero());
+        Image<UINT16> reassignedImg = ReassingerToXYCZT.reassign(img, UINT16.zero());
         assertArrayEquals(reassignedImg.getMetadata().getDim(), new long[] { 2, 2, 1, 2, 1 });
 
         IPixelRandomAccess<UINT16> ra = reassignedImg.getRandomAccess();
@@ -80,7 +79,7 @@ public class ReassignerToXYCZTTest {
             cursor.setPixel(new Pixel<UINT16>(new UINT16(val++)));
         }
 
-        Image<UINT16> reassignedImg = new ReassingerToXYCZT().reassign(img, UINT16.zero());
+        Image<UINT16> reassignedImg = ReassingerToXYCZT.reassign(img, UINT16.zero());
         assertArrayEquals(reassignedImg.getMetadata().getDim(), new long[] { 2, 2, 1, 1, 3 });
 
         IPixelRandomAccess<UINT16> ra = reassignedImg.getRandomAccess();
@@ -96,8 +95,8 @@ public class ReassignerToXYCZTTest {
     }
 
     @Test
-    public void reassign_XYCZTImage_ReturnsCorrectXYCZTImage() {
-        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2, 2, 2, 3 }).axisOrder(AxisOrder.XYCZT)
+    public void reassign_XYCZTImage_ReturnsCorrectXYZCTImage() {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2, 2, 2, 3 }).axisOrder(AxisOrder.XYZCT)
                 .build();
         Image<UINT16> img = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
 
@@ -107,7 +106,7 @@ public class ReassignerToXYCZTTest {
             cursor.setPixel(new Pixel<UINT16>(new UINT16(val++)));
         }
 
-        Image<UINT16> reassignedImg = new ReassingerToXYCZT().reassign(img, UINT16.zero());
+        Image<UINT16> reassignedImg = ReassingerToXYCZT.reassign(img, UINT16.zero());
         assertArrayEquals(reassignedImg.getMetadata().getDim(), new long[] { 2, 2, 2, 2, 3 });
 
         IPixelRandomAccess<UINT16> ra = reassignedImg.getRandomAccess();
@@ -115,7 +114,7 @@ public class ReassignerToXYCZTTest {
             IPixel<UINT16> pixel = cursor.next();
 
             long[] position = cursor.localize();
-            ra.setPosition(new long[] { position[0], position[1], position[2], position[3], position[4] });
+            ra.setPosition(new long[] { position[0], position[1], position[3], position[2], position[4] });
 
             assertTrue(ra.getPixel().value().get() == pixel.value().get());
         }
