@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.physics.channel.Channel;
+import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 
 /**
  * Builds an {@link IPolarizationImageSet} for the given channel of sample.
@@ -92,7 +92,7 @@ public class PolarizationImageSetBuilder {
     }
 
     public PolarizationImageSetBuilder channel(int channel) {
-        Channel.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannel(channel, this._numChannels);
 
         if (this._channel != -1) {
             throw new IllegalArgumentException("channel already set");
@@ -162,7 +162,7 @@ public class PolarizationImageSetBuilder {
         Objects.requireNonNull(this._pol90, "pol135 image is not set.");
         Objects.requireNonNull(this._fileSet, "fileSet is not set.");
 
-        Channel.checkChannel(this._channel, this._numChannels);
+        ChannelUtils.checkChannel(this._channel, this._numChannels);
     }
 
     private void _resetBuilder() {

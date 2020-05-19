@@ -10,7 +10,7 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
-import fr.fresnel.fourPolar.core.physics.channel.Channel;
+import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
@@ -41,7 +41,7 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
     @Override
     public IOrientationImage read(File root4PProject, ICapturedImageFileSet fileSet, int channel)
             throws IOException, CannotFormOrientationImage {
-        Channel.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannel(channel, this._numChannels);
         TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(root4PProject, fileSet, channel);
 
         IOrientationImage orientationImage = null;
