@@ -78,8 +78,8 @@ class MultiChannelPolarizationSegmenter extends PolarizationSegmenter {
         long[] max_fov = polFoV.max();
 
         long[] len = imageMetadata.getDim().clone();
-        len[0] = max_fov[0] - min_fov[0];
-        len[1] = max_fov[1] - min_fov[1];
+        len[0] = max_fov[0] - min_fov[0] + 1;
+        len[1] = max_fov[1] - min_fov[1] + 1;
         len[c_axis] = 1;
 
         return len;
