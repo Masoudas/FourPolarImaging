@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.image.captured;
 
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 /**
@@ -13,10 +14,15 @@ public interface ICapturedImageSet {
      * defined by {@link Cameras#getLabels(Cameras)}.
      * 
      */
-    public ICapturedImage getCapturedImage(String label);
+    public ICapturedImage[] getCapturedImage(String label);
 
     /**
      * Returns the file set associated with this captured image.
      */
-    public ICapturedImageSet getFileSet();
+    public ICapturedImageFileSet fileSet();
+
+    /**
+     * Returns true if there exists a multi-channel image in this set.
+     */
+    public boolean hasMultiChannelImage();
 }
