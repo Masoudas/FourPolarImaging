@@ -29,7 +29,7 @@ public class AxisReassigner {
             return image;
         }
 
-        return ReassingerToXYCZT.reassign(image.getCursor(), image.getMetadata(), image.getFactory(), t);
+        return ReassingerToXYCZT.reassign(image, t);
     }
 
 
