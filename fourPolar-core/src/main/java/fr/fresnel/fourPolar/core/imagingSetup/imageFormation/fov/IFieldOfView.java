@@ -9,6 +9,10 @@ import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
  * dimension of the image.
  */
 public interface IFieldOfView {
+    /**
+     * Return fov as an {@link IBoxShape}, where fov starts from {@link IBoxShape#min()} to
+     * {@link IBoxShape#max()} inclusive.
+     */
     public IBoxShape getFoV(Polarization pol);
 
 }
