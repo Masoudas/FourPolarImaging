@@ -65,8 +65,8 @@ class MultiChannelPolarizationSegmenter extends PolarizationSegmenter {
         long[] min_fov = polFoV.min();
 
         long[] bottomCorner = new long[imageMetadata.getDim().length];
-        bottomCorner[0] = min_fov[0];
-        bottomCorner[1] = min_fov[1];
+        bottomCorner[0] = min_fov[0] - 1;
+        bottomCorner[1] = min_fov[1] - 1;
         bottomCorner[imageMetadata.axisOrder().c_axis] = imageChannel;
 
         return bottomCorner;
