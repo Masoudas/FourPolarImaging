@@ -30,10 +30,10 @@ class OneCameraImageSegmenter implements CameraImageSegmenter {
     private final PolarizationSegmenter _singleChannelSegmenter;
     private final PolarizationSegmenter _multiChannelSegmenter;
 
-    private Image<UINT16>[] _pol0;
-    private Image<UINT16>[] _pol45;
-    private Image<UINT16>[] _pol90;
-    private Image<UINT16>[] _pol135;
+    private Image<UINT16>[] _pol0 = null;
+    private Image<UINT16>[] _pol45 = null;
+    private Image<UINT16>[] _pol90 = null;
+    private Image<UINT16>[] _pol135 = null;
 
     private ICapturedImageFileSet _fileSet;
 
@@ -66,17 +66,18 @@ class OneCameraImageSegmenter implements CameraImageSegmenter {
     }
 
     private PolarizationSegmenter _selectSegmenter(ICapturedImageSet capturedImageSet) {
-        PolarizationSegmenter segmenter;
         if (capturedImageSet.hasMultiChannelImage()) {
-            segmenter = _singleChannelSegmenter;
+            return _multiChannelSegmenter;
         } else {
-            segmenter = _multiChannelSegmenter;
+            return _singleChannelSegmenter;
         }
-        return segmenter;
     }
 
     @Override
     public IPolarizationImageSet segment(int channel) {
+        if (_pol0 == null) {
+            throw new IllegalAccessError("No captured image set has been provided.");
+        }
         ChannelUtils.checkChannel(channel, this._numChannels);
 
         Image<UINT16> pol0 = AxisReassigner.reassignToXYCZT(this._pol0[channel - 1], UINT16.zero());

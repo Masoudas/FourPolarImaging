@@ -63,13 +63,11 @@ public class FourCameraImageSegmenter implements CameraImageSegmenter {
     }
 
     private PolarizationSegmenter _selectSegmenter(ICapturedImageSet capturedImageSet) {
-        PolarizationSegmenter segmenter;
         if (capturedImageSet.hasMultiChannelImage()) {
-            segmenter = _singleChannelSegmenter;
+            return _multiChannelSegmenter;
         } else {
-            segmenter = _multiChannelSegmenter;
+            return _singleChannelSegmenter;
         }
-        return segmenter;
     }
 
     @Override
