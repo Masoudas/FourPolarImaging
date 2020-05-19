@@ -112,7 +112,7 @@ public class Metadata implements IMetadata {
 
     @Override
     public long[] getDim() {
-        return this._dim;
+        return this._dim.clone();
     }
 
     @Override
