@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.preprocess.segment;
+package fr.fresnel.fourPolar.algorithm.preprocess.segmentation;
 
 import fr.fresnel.fourPolar.algorithm.util.image.axis.AxisReassigner;
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;

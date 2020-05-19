@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.preprocess.segment;
+package fr.fresnel.fourPolar.algorithm.preprocess.segmentation;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
