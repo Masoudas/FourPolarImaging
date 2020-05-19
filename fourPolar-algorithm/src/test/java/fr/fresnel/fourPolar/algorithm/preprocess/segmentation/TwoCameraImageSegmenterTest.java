@@ -27,10 +27,10 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 public class TwoCameraImageSegmenterTest {
     @Test
     public void segment_OneSingleChannelXYImage_ReturnsCorrectPolImages() {
-        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 3, 5 }, AxisOrder.XY);
-        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 5, 5 }, AxisOrder.XY);
-        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 3, 5 }, AxisOrder.XY);
-        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 5, 5 }, AxisOrder.XY);
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
 
         FieldOfView fov = new FieldOfView(fov_pol0, fov_pol45, fov_pol90, fov_pol135);
 
@@ -47,10 +47,133 @@ public class TwoCameraImageSegmenterTest {
         segmenter.setCapturedImageSet(capturedImageSet);
         IPolarizationImageSet imageSet = segmenter.segment(1);
 
-        assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0));
-        assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1));
-        assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol90).getImage(), 2));
-        assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol135).getImage(), 3));
+        assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, 1));
+        assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1, 1));
+        assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol90).getImage(), 0, 1));
+        assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol135).getImage(), 1, 1));
+    }
+
+    @Test
+    public void segment_TwoSingleChannelXYImage_ReturnsCorrectPolImages() {
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
+
+        FieldOfView fov = new FieldOfView(fov_pol0, fov_pol45, fov_pol90, fov_pol135);
+
+        int numChannels = 2;
+        ICapturedImage capturedImage_pol0_90_c1 = new TCISDummyCapturedImage(AxisOrder.XY, new long[] { 4, 4 },
+                new int[] { 1 });
+        ICapturedImage capturedImage_pol45_135_c1 = new TCISDummyCapturedImage(AxisOrder.XY, new long[] { 4, 4 },
+                new int[] { 1 });
+
+        ICapturedImage capturedImage_pol0_90_c2 = new TCISDummyCapturedImage(AxisOrder.XY, new long[] { 4, 4 },
+                new int[] { 2 });
+        ICapturedImage capturedImage_pol45_135_c2 = new TCISDummyCapturedImage(AxisOrder.XY, new long[] { 4, 4 },
+                new int[] { 2 });
+
+        TCISDummyCapturedImageSet capturedImageSet = new TCISDummyCapturedImageSet(false, 2);
+        capturedImageSet.setFileSet(capturedImage_pol0_90_c1, capturedImage_pol45_135_c1);
+        capturedImageSet.setFileSet(capturedImage_pol0_90_c2, capturedImage_pol45_135_c2);
+
+        TwoCameraImageSegmenter segmenter = new TwoCameraImageSegmenter(fov, numChannels);
+        segmenter.setCapturedImageSet(capturedImageSet);
+
+        for (int c = 1; c <= numChannels; c++) {
+            IPolarizationImageSet imageSet = segmenter.segment(c);
+
+            assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, c));
+            assertTrue(
+                    TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1, c));
+            assertTrue(
+                    TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol90).getImage(), 0, c));
+            assertTrue(
+                    TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol135).getImage(), 1, c));
+
+        }
+    }
+
+    @Test
+    public void segment_OneSingleChannelXYCZTImage_ReturnsCorrectPolImages() {
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
+
+        FieldOfView fov = new FieldOfView(fov_pol0, fov_pol45, fov_pol90, fov_pol135);
+
+        int numChannels = 2;
+        ICapturedImage capturedImage_pol0_90_c1 = new TCISDummyCapturedImage(AxisOrder.XYCZT,
+                new long[] { 4, 4, 1, 1, 3 }, new int[] { 1 });
+        ICapturedImage capturedImage_pol45_135_c1 = new TCISDummyCapturedImage(AxisOrder.XYCZT,
+                new long[] { 4, 4, 1, 1, 3 }, new int[] { 1 });
+
+        ICapturedImage capturedImage_pol0_90_c2 = new TCISDummyCapturedImage(AxisOrder.XYCZT,
+                new long[] { 4, 4, 1, 1, 3 }, new int[] { 2 });
+        ICapturedImage capturedImage_pol45_135_c2 = new TCISDummyCapturedImage(AxisOrder.XYCZT,
+                new long[] { 4, 4, 1, 1, 3 }, new int[] { 2 });
+
+        TCISDummyCapturedImageSet capturedImageSet = new TCISDummyCapturedImageSet(false, 2);
+        capturedImageSet.setFileSet(capturedImage_pol0_90_c1, capturedImage_pol45_135_c1);
+        capturedImageSet.setFileSet(capturedImage_pol0_90_c2, capturedImage_pol45_135_c2);
+
+        TwoCameraImageSegmenter segmenter = new TwoCameraImageSegmenter(fov, numChannels);
+        segmenter.setCapturedImageSet(capturedImageSet);
+
+        for (int c = 1; c <= numChannels; c++) {
+            IPolarizationImageSet imageSet = segmenter.segment(c);
+
+            assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, c));
+            assertTrue(
+                    TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1, c));
+            assertTrue(
+                    TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol90).getImage(), 0, c));
+            assertTrue(
+                    TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol135).getImage(), 1, c));
+
+        }
+    }
+
+    @Test
+    public void segment_TwoMultiChannelXYCZTImage_ReturnsCorrectPolImages() {
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
+
+        FieldOfView fov = new FieldOfView(fov_pol0, fov_pol45, fov_pol90, fov_pol135);
+
+        int numChannels = 4;
+        ICapturedImage capturedImage_pol0_90_c1 = new TCISDummyCapturedImage(AxisOrder.XYCZT,
+                new long[] { 4, 4, 2, 1, 3 }, new int[] { 1, 2 });
+        ICapturedImage capturedImage_pol45_135_c1 = new TCISDummyCapturedImage(AxisOrder.XYCZT,
+                new long[] { 4, 4, 2, 1, 3 }, new int[] { 1, 2 });
+
+        ICapturedImage capturedImage_pol0_90_c2 = new TCISDummyCapturedImage(AxisOrder.XYCZT,
+                new long[] { 4, 4, 2, 1, 3 }, new int[] { 3, 4 });
+        ICapturedImage capturedImage_pol45_135_c2 = new TCISDummyCapturedImage(AxisOrder.XYCZT,
+                new long[] { 4, 4, 2, 1, 3 }, new int[] { 3, 4 });
+
+        TCISDummyCapturedImageSet capturedImageSet = new TCISDummyCapturedImageSet(true, 2);
+        capturedImageSet.setFileSet(capturedImage_pol0_90_c1, capturedImage_pol45_135_c1);
+        capturedImageSet.setFileSet(capturedImage_pol0_90_c2, capturedImage_pol45_135_c2);
+
+        TwoCameraImageSegmenter segmenter = new TwoCameraImageSegmenter(fov, numChannels);
+        segmenter.setCapturedImageSet(capturedImageSet);
+
+        for (int c = 1; c <= numChannels; c++) {
+            IPolarizationImageSet imageSet = segmenter.segment(c);
+
+            assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, c));
+            assertTrue(
+                    TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1, c));
+            assertTrue(
+                    TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol90).getImage(), 0, c));
+            assertTrue(
+                    TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol135).getImage(), 1, c));
+
+        }
     }
 
 }
@@ -60,36 +183,33 @@ class TCISImageChecker {
      * For each plane, sets (0,0)-> 0 + channelNo, (1,0)-> 1 + channelNo, (0,1)-> 2
      * + channelNo, (1,1)-> 3 + channelNo. If no channel, add zero.
      */
-    public static void _setImage(Image<UINT16> image) {
+    public static void _setImage(Image<UINT16> image, int[] channels) {
         int c_axis = image.getMetadata().axisOrder().c_axis;
         for (IPixelCursor<UINT16> cursor = image.getCursor(); cursor.hasNext();) {
             cursor.next();
             long[] position = cursor.localize();
-            int offset = c_axis > 0 ? (int) position[c_axis] : 0;
+            int offset = c_axis > 0 ? channels[(int) position[c_axis]] : channels[0];
             if (position[0] < 2) {
                 cursor.setPixel(new Pixel<UINT16>(new UINT16(0 + offset)));
             } else {
                 cursor.setPixel(new Pixel<UINT16>(new UINT16(1 + offset)));
-            } 
+            }
         }
     }
 
     /**
      * Checks all values equal value.
      */
-    public static boolean _checkImage(Image<UINT16> image, int value) {
+    public static boolean _checkImage(Image<UINT16> image, int value, int channels) {
         if (!image.getCursor().hasNext()) {
             return false;
         }
 
-        int c_axis = image.getMetadata().axisOrder().c_axis;
         boolean equals = true;
         for (IPixelCursor<UINT16> cursor = image.getCursor(); cursor.hasNext() && equals;) {
-            long[] position = cursor.localize();
-            int offset = c_axis > 0 ? (int) position[c_axis] : 0;
 
             IPixel<UINT16> pixel = cursor.next();
-            equals &= pixel.value().get() == value + offset;
+            equals &= pixel.value().get() == value + channels;
         }
         return equals;
     }
@@ -110,9 +230,9 @@ class TCISDummyCapturedImageSet implements ICapturedImageSet {
 
     }
 
-    public void setFileSet(ICapturedImage fileSet_pol0_90, ICapturedImage fileSet_pol45_135) {
-        fileSets_pol0_90[counter] = fileSet_pol0_90;
-        fileSets_pol45_135[counter++] = fileSet_pol45_135;
+    public void setFileSet(ICapturedImage pol0_90, ICapturedImage pol45_135) {
+        fileSets_pol0_90[counter] = pol0_90;
+        fileSets_pol45_135[counter++] = pol45_135;
     }
 
     @Override
@@ -144,7 +264,7 @@ class TCISDummyCapturedImage implements ICapturedImage {
     public TCISDummyCapturedImage(AxisOrder axisOrder, long[] dim, int[] channels) {
         metadata = new Metadata.MetadataBuilder(dim).axisOrder(axisOrder).build();
         image = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
-        SCPSImageChecker._setImage(image);
+        TCISImageChecker._setImage(image, channels);
         this.channels = channels;
     }
 

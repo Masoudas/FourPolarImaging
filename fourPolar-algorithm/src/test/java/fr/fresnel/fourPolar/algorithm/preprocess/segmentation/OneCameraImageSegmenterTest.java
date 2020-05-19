@@ -27,10 +27,10 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 public class OneCameraImageSegmenterTest {
     @Test
     public void segment_OneSingleChannelXYImage_ReturnsCorrectPolImages() {
-        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 3, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 5, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 3, 5 }, AxisOrder.XY);
-        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 5, 5 }, AxisOrder.XY);
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
 
         FieldOfView fov = new FieldOfView(fov_pol0, fov_pol45, fov_pol90, fov_pol135);
 
@@ -44,18 +44,18 @@ public class OneCameraImageSegmenterTest {
         segmenter.setCapturedImageSet(capturedImageSet);
         IPolarizationImageSet imageSet = segmenter.segment(1);
 
-        assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0));
-        assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1));
-        assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol90).getImage(), 2));
-        assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol135).getImage(), 3));
+        assertTrue(OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, 1));
+        assertTrue(OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1, 1));
+        assertTrue(OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol90).getImage(), 2, 1));
+        assertTrue(OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol135).getImage(), 3, 1));
     }
 
     @Test
     public void segment_TwoSingleChannelXYImage_ReturnsCorrectPolImages() {
-        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 3, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 5, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 3, 5 }, AxisOrder.XY);
-        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 5, 5 }, AxisOrder.XY);
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
 
         FieldOfView fov = new FieldOfView(fov_pol0, fov_pol45, fov_pol90, fov_pol135);
 
@@ -72,23 +72,26 @@ public class OneCameraImageSegmenterTest {
         OneCameraImageSegmenter segmenter = new OneCameraImageSegmenter(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
 
-        for (int c = 0; c < numChannels; c++) {
-            IPolarizationImageSet imageSet = segmenter.segment(c + 1);
+        for (int c = 1; c <= numChannels; c++) {
+            IPolarizationImageSet imageSet = segmenter.segment(c);
 
-            assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0));
-            assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1));
-            assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol90).getImage(), 2));
-            assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol135).getImage(), 3));
+            assertTrue(OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, c));
+            assertTrue(
+                    OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1, c));
+            assertTrue(
+                    OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol90).getImage(), 2, c));
+            assertTrue(
+                    OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol135).getImage(), 3, c));
 
         }
     }
 
     @Test
     public void segment_TwoSingleChannelXYCZTImage_ReturnsCorrectPolImages() {
-        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 3, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 5, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 3, 5 }, AxisOrder.XY);
-        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 5, 5 }, AxisOrder.XY);
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
 
         FieldOfView fov = new FieldOfView(fov_pol0, fov_pol45, fov_pol90, fov_pol135);
 
@@ -105,23 +108,26 @@ public class OneCameraImageSegmenterTest {
         OneCameraImageSegmenter segmenter = new OneCameraImageSegmenter(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
 
-        for (int c = 0; c < numChannels; c++) {
-            IPolarizationImageSet imageSet = segmenter.segment(c + 1);
+        for (int c = 1; c <= numChannels; c++) {
+            IPolarizationImageSet imageSet = segmenter.segment(c);
 
-            assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0));
-            assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1));
-            assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol90).getImage(), 2));
-            assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol135).getImage(), 3));
+            assertTrue(OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, c));
+            assertTrue(
+                    OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1, c));
+            assertTrue(
+                    OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol90).getImage(), 2, c));
+            assertTrue(
+                    OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol135).getImage(), 3, c));
 
         }
     }
 
     @Test
     public void segment_TwoMutliChannelXYCImage_ReturnsCorrectPolImages() {
-        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 3, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 5, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 3, 5 }, AxisOrder.XY);
-        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 5, 5 }, AxisOrder.XY);
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
 
         FieldOfView fov = new FieldOfView(fov_pol0, fov_pol45, fov_pol90, fov_pol135);
 
@@ -138,13 +144,16 @@ public class OneCameraImageSegmenterTest {
         OneCameraImageSegmenter segmenter = new OneCameraImageSegmenter(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
 
-        for (int c = 0; c < numChannels; c++) {
-            IPolarizationImageSet imageSet = segmenter.segment(c + 1);
+        for (int c = 1; c <= numChannels; c++) {
+            IPolarizationImageSet imageSet = segmenter.segment(c);
 
-            assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0));
-            assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1));
-            assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol90).getImage(), 2));
-            assertTrue(SCPSImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol135).getImage(), 3));
+            assertTrue(OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, c));
+            assertTrue(
+                    OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1, c));
+            assertTrue(
+                    OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol90).getImage(), 2, c));
+            assertTrue(
+                    OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol135).getImage(), 3, c));
 
         }
     }
@@ -156,12 +165,12 @@ class OCISImageChecker {
      * For each plane, sets (0,0)-> 0 + channelNo, (1,0)-> 1 + channelNo, (0,1)-> 2
      * + channelNo, (1,1)-> 3 + channelNo. If no channel, add zero.
      */
-    public static void _setImage(Image<UINT16> image) {
+    public static void _setImage(Image<UINT16> image, int[] channels) {
         int c_axis = image.getMetadata().axisOrder().c_axis;
         for (IPixelCursor<UINT16> cursor = image.getCursor(); cursor.hasNext();) {
             cursor.next();
             long[] position = cursor.localize();
-            int offset = c_axis > 0 ? (int) position[c_axis] : 0;
+            int offset = c_axis > 0 ? channels[(int) position[c_axis]] : channels[0];
             if (position[0] < 2 && position[1] < 2) {
                 cursor.setPixel(new Pixel<UINT16>(new UINT16(0 + offset)));
             } else if (position[0] >= 2 && position[1] < 2) {
@@ -177,19 +186,15 @@ class OCISImageChecker {
     /**
      * Checks all values equal value.
      */
-    public static boolean _checkImage(Image<UINT16> image, int value) {
+    public static boolean _checkImage(Image<UINT16> image, int value, int channel) {
         if (!image.getCursor().hasNext()) {
             return false;
         }
 
-        int c_axis = image.getMetadata().axisOrder().c_axis;
         boolean equals = true;
         for (IPixelCursor<UINT16> cursor = image.getCursor(); cursor.hasNext() && equals;) {
-            long[] position = cursor.localize();
-            int offset = c_axis > 0 ? (int) position[c_axis] : 0;
-
             IPixel<UINT16> pixel = cursor.next();
-            equals &= pixel.value().get() == value + offset;
+            equals &= pixel.value().get() == value + channel;
         }
         return equals;
     }
@@ -235,7 +240,7 @@ class OCISDummyCapturedImage implements ICapturedImage {
     public OCISDummyCapturedImage(AxisOrder axisOrder, long[] dim, int[] channels) {
         metadata = new Metadata.MetadataBuilder(dim).axisOrder(axisOrder).build();
         image = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
-        SCPSImageChecker._setImage(image);
+        OCISImageChecker._setImage(image, channels);
         this.channels = channels;
     }
 

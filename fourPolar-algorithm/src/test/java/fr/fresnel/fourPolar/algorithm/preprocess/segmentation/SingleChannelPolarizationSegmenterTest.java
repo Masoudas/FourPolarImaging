@@ -22,10 +22,10 @@ public class SingleChannelPolarizationSegmenterTest {
 
     @Test
     public void segment_OneSingleChannelXYImage_ReturnsCorrectPolImages() {
-        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 3, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 5, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 3, 5 }, AxisOrder.XY);
-        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 5, 5 }, AxisOrder.XY);
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
 
         ICapturedImage[] capturedImage = new ICapturedImage[] {
                 new SCPSDummyCapturedImage(AxisOrder.XY, new long[] { 4, 4 }, new int[] { 1 }) };
@@ -43,10 +43,10 @@ public class SingleChannelPolarizationSegmenterTest {
 
     @Test
     public void segment_TwoSingleChannelXYImageOneSingleChannel_ReturnsCorrectPolImages() {
-        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 3, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 5, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 3, 5 }, AxisOrder.XY);
-        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 5, 5 }, AxisOrder.XY);
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
 
         ICapturedImage[] capturedImage = new ICapturedImage[] {
                 new SCPSDummyCapturedImage(AxisOrder.XY, new long[] { 4, 4 }, new int[] { 1 }),
@@ -67,10 +67,10 @@ public class SingleChannelPolarizationSegmenterTest {
 
     @Test
     public void segment_TwoSingleChannelXYCZTImageOneSingleChannel_ReturnsCorrectPolImages() {
-        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 3, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 5, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 3, 5 }, AxisOrder.XY);
-        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 5, 5 }, AxisOrder.XY);
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
 
         ICapturedImage[] capturedImage = new ICapturedImage[] {
                 new SCPSDummyCapturedImage(AxisOrder.XYCZT, new long[] { 4, 4, 1, 3, 2 }, new int[] { 1 }),

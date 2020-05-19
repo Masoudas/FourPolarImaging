@@ -21,10 +21,10 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 public class MultiChannelPolarizationSegmenterTest {
     @Test
     public void segment_OneMultiChannelXYCImage_ReturnsCorrectPolImages() {
-        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 3, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 5, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 3, 5 }, AxisOrder.XY);
-        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 5, 5 }, AxisOrder.XY);
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
 
         int numChannels = 3;
         ICapturedImage[] capturedImage = new ICapturedImage[] {
@@ -50,10 +50,10 @@ public class MultiChannelPolarizationSegmenterTest {
 
     @Test
     public void segment_TwoMultiChannelXYCImage_ReturnsCorrectPolImages() {
-        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 3, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 5, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 3, 5 }, AxisOrder.XY);
-        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 5, 5 }, AxisOrder.XY);
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
 
         int numChannels = 6;
         ICapturedImage[] capturedImage = new ICapturedImage[] {
@@ -81,10 +81,10 @@ public class MultiChannelPolarizationSegmenterTest {
 
     @Test
     public void segment_TwoMultiChannelXYZCTImage_ReturnsCorrectPolImages() {
-        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 3, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 5, 3 }, AxisOrder.XY);
-        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 3, 5 }, AxisOrder.XY);
-        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 5, 5 }, AxisOrder.XY);
+        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { 3, 1 }, new long[] { 4, 2 }, AxisOrder.XY);
+        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 1, 3 }, new long[] { 2, 4 }, AxisOrder.XY);
+        IBoxShape fov_pol135 = new ShapeFactory().closedBox(new long[] { 3, 3 }, new long[] { 4, 4 }, AxisOrder.XY);
 
         int numChannels = 6;
         ICapturedImage[] capturedImage = new ICapturedImage[] {
