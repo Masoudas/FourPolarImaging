@@ -34,8 +34,9 @@ class MultiChannelPolarizationSegmenter extends PolarizationSegmenter {
         for (ICapturedImage iCapturedImage : capturedImages) {
             Image<UINT16>[] segmentedPolarizationImages = _createsSegmentedPolarizationImages(iCapturedImage, polFoV);
 
-            for (int channel = 0; channel < iCapturedImage.numChannels(); channel++) {
-                channelImages[channel - 1] = segmentedPolarizationImages[channel];
+            for (int image_c = 0; image_c < iCapturedImage.numChannels(); image_c++) {
+                int channel = iCapturedImage.channels()[image_c];
+                channelImages[channel - 1] = segmentedPolarizationImages[image_c];
             }
         }
 
@@ -83,6 +84,5 @@ class MultiChannelPolarizationSegmenter extends PolarizationSegmenter {
 
         return len;
     }
-
 
 }
