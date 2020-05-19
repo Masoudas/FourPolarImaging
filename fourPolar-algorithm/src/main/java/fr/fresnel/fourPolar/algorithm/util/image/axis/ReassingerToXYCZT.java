@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.algorithm.util.image.axis;
 
+import java.util.Objects;
+
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
@@ -16,8 +18,7 @@ class ReassingerToXYCZT {
 
     /**
      * Reassigns the axis of an image using its cursor. Note that if an axis does
-     * not exist, it's appended to the new image with dimension one. Returns the
-     * same image if it is XYCZT.
+     * not exist, it's appended to the new image with dimension one.
      * 
      * @param image is the image interface to be reassigned.
      * @param t     is the image pixel type.
@@ -27,6 +28,9 @@ class ReassingerToXYCZT {
      *                                  match.
      */
     public static <T extends PixelType> Image<T> reassign(Image<T> image, T t) {
+        Objects.requireNonNull(image, "image can't be null");
+        Objects.requireNonNull(t, "t can't be null");
+
         if (!image.getMetadata().axisOrder().name().substring(0, 2).equals("XY")) {
             throw new IllegalArgumentException("Axis does not start with XY");
         }

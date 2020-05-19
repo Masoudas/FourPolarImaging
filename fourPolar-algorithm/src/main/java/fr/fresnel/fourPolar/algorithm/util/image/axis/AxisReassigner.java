@@ -19,16 +19,11 @@ public class AxisReassigner {
 
     /**
      * Reassigns the axis of an image. Note that if an axis does not exist, it's
-     * appended to the new image with dimension one. Returns the same image if it is
-     * XYCZT.
+     * appended to the new image with dimension one. 
      * 
      * @throws IllegalArgumentException if the old or new axis don't start with XY.
      */
     public static <T extends PixelType> Image<T> reassignToXYCZT(Image<T> image, T t) {
-        if (image.getMetadata().axisOrder() == AxisOrder.XYCZT) {
-            return image;
-        }
-
         return ReassingerToXYCZT.reassign(image, t);
     }
 
