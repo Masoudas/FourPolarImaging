@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 
-class SingleChannelPolarizationSegmenter extends PolarizationSegmenter {
+class SingleChannelPolarizationSegmenter extends ChannelPolarizationSegmenter {
     /**
      * Creates an array of Image interfaces that correspond to the given fov of the
      * desired polarization over the given single channel captured images. To avoid

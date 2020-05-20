@@ -24,7 +24,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
-public class TwoCameraImageSegmenterTest {
+public class TwoCameraSegmenterTest {
     @Test
     public void segment_OneSingleChannelXYImage_ReturnsCorrectPolImages() {
         IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
@@ -43,7 +43,7 @@ public class TwoCameraImageSegmenterTest {
         TCISDummyCapturedImageSet capturedImageSet = new TCISDummyCapturedImageSet(false, 1);
         capturedImageSet.setFileSet(capturedImage_pol0_90, capturedImage_pol45_135);
 
-        TwoCameraImageSegmenter segmenter = new TwoCameraImageSegmenter(fov, numChannels);
+        TwoCameraSegmenter segmenter = new TwoCameraSegmenter(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
         IPolarizationImageSet imageSet = segmenter.segment(1);
 
@@ -77,7 +77,7 @@ public class TwoCameraImageSegmenterTest {
         capturedImageSet.setFileSet(capturedImage_pol0_90_c1, capturedImage_pol45_135_c1);
         capturedImageSet.setFileSet(capturedImage_pol0_90_c2, capturedImage_pol45_135_c2);
 
-        TwoCameraImageSegmenter segmenter = new TwoCameraImageSegmenter(fov, numChannels);
+        TwoCameraSegmenter segmenter = new TwoCameraSegmenter(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {
@@ -118,7 +118,7 @@ public class TwoCameraImageSegmenterTest {
         capturedImageSet.setFileSet(capturedImage_pol0_90_c1, capturedImage_pol45_135_c1);
         capturedImageSet.setFileSet(capturedImage_pol0_90_c2, capturedImage_pol45_135_c2);
 
-        TwoCameraImageSegmenter segmenter = new TwoCameraImageSegmenter(fov, numChannels);
+        TwoCameraSegmenter segmenter = new TwoCameraSegmenter(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {
@@ -159,7 +159,7 @@ public class TwoCameraImageSegmenterTest {
         capturedImageSet.setFileSet(capturedImage_pol0_90_c1, capturedImage_pol45_135_c1);
         capturedImageSet.setFileSet(capturedImage_pol0_90_c2, capturedImage_pol45_135_c2);
 
-        TwoCameraImageSegmenter segmenter = new TwoCameraImageSegmenter(fov, numChannels);
+        TwoCameraSegmenter segmenter = new TwoCameraSegmenter(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {

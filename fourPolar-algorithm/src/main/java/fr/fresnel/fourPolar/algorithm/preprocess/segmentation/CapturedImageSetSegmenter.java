@@ -10,8 +10,8 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
  * Segements the given {@link ICapturedImage} to yield a
  * {@link IPolarizationImageSet}
  */
-public class CapturedImageSegmenter {
-    private CameraImageSegmenter _segmenter = null;
+public class CapturedImageSetSegmenter {
+    private ConstellationSegmenter _segmenter = null;
 
     /**
      * 
@@ -19,17 +19,17 @@ public class CapturedImageSegmenter {
      * @param cameras     is the number of cameras for this setup.
      * @param numChannels is the number of channels.
      */
-    public CapturedImageSegmenter(IFieldOfView fov, Cameras cameras, int numChannels) {
+    public CapturedImageSetSegmenter(IFieldOfView fov, Cameras cameras, int numChannels) {
         this._segmenter = this._chooseCameraSegmenter(fov, cameras, numChannels);
     }
 
-    private CameraImageSegmenter _chooseCameraSegmenter(IFieldOfView fov, Cameras cameras, int numChannels) {
+    private ConstellationSegmenter _chooseCameraSegmenter(IFieldOfView fov, Cameras cameras, int numChannels) {
         if (cameras == Cameras.One) {
-            _segmenter = new OneCameraImageSegmenter(fov, numChannels);
+            _segmenter = new OneCameraSegmenter(fov, numChannels);
         } else if (cameras == Cameras.Two) {
-            _segmenter = new TwoCameraImageSegmenter(fov, numChannels);
+            _segmenter = new TwoCameraSegmenter(fov, numChannels);
         } else {
-            _segmenter = new FourCameraImageSegmenter(fov, numChannels);
+            _segmenter = new FourCameraSegmenter(fov, numChannels);
         }
 
         return _segmenter;

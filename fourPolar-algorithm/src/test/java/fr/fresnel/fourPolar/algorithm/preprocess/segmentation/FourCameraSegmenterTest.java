@@ -24,7 +24,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
-public class FourCameraImageSegmenterTest {
+public class FourCameraSegmenterTest {
     @Test
     public void segment_OneSingleChannelXYImage_ReturnsCorrectPolImages() {
         IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
@@ -47,7 +47,7 @@ public class FourCameraImageSegmenterTest {
         FCISDummyCapturedImageSet capturedImageSet = new FCISDummyCapturedImageSet(false, 1);
         capturedImageSet.setFileSet(capturedImage_pol0, capturedImage_pol45, capturedImage_pol90, capturedImage_pol135);
 
-        FourCameraImageSegmenter segmenter = new FourCameraImageSegmenter(fov, numChannels);
+        FourCameraSegmenter segmenter = new FourCameraSegmenter(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
         IPolarizationImageSet imageSet = segmenter.segment(1);
 
@@ -79,7 +79,7 @@ public class FourCameraImageSegmenterTest {
         FCISDummyCapturedImageSet capturedImageSet = new FCISDummyCapturedImageSet(true, 1);
         capturedImageSet.setFileSet(capturedImage_pol0, capturedImage_pol45, capturedImage_pol90, capturedImage_pol135);
 
-        FourCameraImageSegmenter segmenter = new FourCameraImageSegmenter(fov, numChannels);
+        FourCameraSegmenter segmenter = new FourCameraSegmenter(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {

@@ -15,14 +15,14 @@ import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 
-public class TwoCameraImageSegmenter implements CameraImageSegmenter {
+public class FourCameraSegmenter implements ConstellationSegmenter {
     /**
      * Holds the captured images of the corresponding channels in ascending order.
      */
     private final IFieldOfView _fov;
     private final int _numChannels;
-    private final PolarizationSegmenter _singleChannelSegmenter;
-    private final PolarizationSegmenter _multiChannelSegmenter;
+    private final ChannelPolarizationSegmenter _singleChannelSegmenter;
+    private final ChannelPolarizationSegmenter _multiChannelSegmenter;
 
     private Image<UINT16>[] _pol0;
     private Image<UINT16>[] _pol45;
@@ -31,7 +31,7 @@ public class TwoCameraImageSegmenter implements CameraImageSegmenter {
 
     private ICapturedImageFileSet _fileSet;
 
-    public TwoCameraImageSegmenter(IFieldOfView fov, int numChannels) {
+    public FourCameraSegmenter(IFieldOfView fov, int numChannels) {
         this._numChannels = numChannels;
         this._fov = fov;
         this._singleChannelSegmenter = new SingleChannelPolarizationSegmenter();
@@ -39,30 +39,32 @@ public class TwoCameraImageSegmenter implements CameraImageSegmenter {
     }
 
     public void setCapturedImageSet(ICapturedImageSet capturedImageSet) {
-        PolarizationSegmenter segmenter = _selectSegmenter(capturedImageSet);
+        ChannelPolarizationSegmenter segmenter = _selectSegmenter(capturedImageSet);
 
-        String[] imageLabels = Cameras.getLabels(Cameras.Two);
-        ICapturedImage[] capturedImages_pol0_90 = capturedImageSet.getCapturedImage(imageLabels[0]);
-        ICapturedImage[] capturedImages_pol45_135 = capturedImageSet.getCapturedImage(imageLabels[1]);
+        String[] imageLabels = Cameras.getLabels(Cameras.Four);
+        ICapturedImage[] capturedImages_pol0 = capturedImageSet.getCapturedImage(imageLabels[0]);
+        ICapturedImage[] capturedImages_pol45 = capturedImageSet.getCapturedImage(imageLabels[1]);
+        ICapturedImage[] capturedImages_pol90 = capturedImageSet.getCapturedImage(imageLabels[2]);
+        ICapturedImage[] capturedImages_pol135 = capturedImageSet.getCapturedImage(imageLabels[3]);
 
         IBoxShape pol0FoV = this._fov.getFoV(Polarization.pol0);
-        this._pol0 = segmenter.segment(capturedImages_pol0_90, pol0FoV, this._numChannels);
+        this._pol0 = segmenter.segment(capturedImages_pol0, pol0FoV, this._numChannels);
 
         IBoxShape pol45FoV = this._fov.getFoV(Polarization.pol45);
-        this._pol45 = segmenter.segment(capturedImages_pol45_135, pol45FoV, this._numChannels);
+        this._pol45 = segmenter.segment(capturedImages_pol45, pol45FoV, this._numChannels);
 
         IBoxShape pol90FoV = this._fov.getFoV(Polarization.pol90);
-        this._pol90 = segmenter.segment(capturedImages_pol0_90, pol90FoV, this._numChannels);
+        this._pol90 = segmenter.segment(capturedImages_pol90, pol90FoV, this._numChannels);
 
         IBoxShape pol135FoV = this._fov.getFoV(Polarization.pol135);
-        this._pol135 = segmenter.segment(capturedImages_pol45_135, pol135FoV, this._numChannels);
+        this._pol135 = segmenter.segment(capturedImages_pol135, pol135FoV, this._numChannels);
 
         this._fileSet = capturedImageSet.fileSet();
     }
 
-    private PolarizationSegmenter _selectSegmenter(ICapturedImageSet capturedImageSet) {
+    private ChannelPolarizationSegmenter _selectSegmenter(ICapturedImageSet capturedImageSet) {
         if (capturedImageSet.hasMultiChannelImage()) {
-            return _multiChannelSegmenter ;
+            return _multiChannelSegmenter;
         } else {
             return _singleChannelSegmenter;
         }
@@ -87,4 +89,5 @@ public class TwoCameraImageSegmenter implements CameraImageSegmenter {
 
         return polImageSet;
     }
+
 }

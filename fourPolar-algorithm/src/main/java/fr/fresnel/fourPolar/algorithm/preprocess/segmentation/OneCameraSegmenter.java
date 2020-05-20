@@ -21,14 +21,14 @@ import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 /**
  * Segments the images of a one camera setup.
  */
-class OneCameraImageSegmenter implements CameraImageSegmenter {
+class OneCameraSegmenter implements ConstellationSegmenter {
     /**
      * Holds the captured images of the corresponding channels in ascending order.
      */
     private final IFieldOfView _fov;
     private final int _numChannels;
-    private final PolarizationSegmenter _singleChannelSegmenter;
-    private final PolarizationSegmenter _multiChannelSegmenter;
+    private final ChannelPolarizationSegmenter _singleChannelSegmenter;
+    private final ChannelPolarizationSegmenter _multiChannelSegmenter;
 
     private Image<UINT16>[] _pol0 = null;
     private Image<UINT16>[] _pol45 = null;
@@ -37,7 +37,7 @@ class OneCameraImageSegmenter implements CameraImageSegmenter {
 
     private ICapturedImageFileSet _fileSet;
 
-    public OneCameraImageSegmenter(IFieldOfView fov, int numChannels) {
+    public OneCameraSegmenter(IFieldOfView fov, int numChannels) {
         _numChannels = numChannels;
         _fov = fov;
         this._singleChannelSegmenter = new SingleChannelPolarizationSegmenter();
@@ -46,7 +46,7 @@ class OneCameraImageSegmenter implements CameraImageSegmenter {
 
     @Override
     public void setCapturedImageSet(ICapturedImageSet capturedImageSet) {
-        PolarizationSegmenter segmenter = _selectSegmenter(capturedImageSet);
+        ChannelPolarizationSegmenter segmenter = _selectSegmenter(capturedImageSet);
 
         ICapturedImage[] capturedImages = capturedImageSet.getCapturedImage(Cameras.getLabels(Cameras.One)[0]);
 
@@ -65,7 +65,7 @@ class OneCameraImageSegmenter implements CameraImageSegmenter {
         this._fileSet = capturedImageSet.fileSet();
     }
 
-    private PolarizationSegmenter _selectSegmenter(ICapturedImageSet capturedImageSet) {
+    private ChannelPolarizationSegmenter _selectSegmenter(ICapturedImageSet capturedImageSet) {
         if (capturedImageSet.hasMultiChannelImage()) {
             return _multiChannelSegmenter;
         } else {

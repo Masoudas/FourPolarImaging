@@ -24,7 +24,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
-public class OneCameraImageSegmenterTest {
+public class OneCameraSegmenterTest {
     @Test
     public void segment_OneSingleChannelXYImage_ReturnsCorrectPolImages() {
         IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
@@ -40,7 +40,7 @@ public class OneCameraImageSegmenterTest {
         OCISDummyCapturedImageSet capturedImageSet = new OCISDummyCapturedImageSet(false, 1);
         capturedImageSet.setFileSet(capturedImage);
 
-        OneCameraImageSegmenter segmenter = new OneCameraImageSegmenter(fov, numChannels);
+        OneCameraSegmenter segmenter = new OneCameraSegmenter(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
         IPolarizationImageSet imageSet = segmenter.segment(1);
 
@@ -69,7 +69,7 @@ public class OneCameraImageSegmenterTest {
         capturedImageSet.setFileSet(capturedImage_c1);
         capturedImageSet.setFileSet(capturedImage_c2);
 
-        OneCameraImageSegmenter segmenter = new OneCameraImageSegmenter(fov, numChannels);
+        OneCameraSegmenter segmenter = new OneCameraSegmenter(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {
@@ -105,7 +105,7 @@ public class OneCameraImageSegmenterTest {
         capturedImageSet.setFileSet(capturedImage_c1);
         capturedImageSet.setFileSet(capturedImage_c2);
 
-        OneCameraImageSegmenter segmenter = new OneCameraImageSegmenter(fov, numChannels);
+        OneCameraSegmenter segmenter = new OneCameraSegmenter(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {
@@ -141,7 +141,7 @@ public class OneCameraImageSegmenterTest {
         capturedImageSet.setFileSet(capturedImage_c1);
         capturedImageSet.setFileSet(capturedImage_c2);
 
-        OneCameraImageSegmenter segmenter = new OneCameraImageSegmenter(fov, numChannels);
+        OneCameraSegmenter segmenter = new OneCameraSegmenter(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {
