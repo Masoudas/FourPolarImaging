@@ -209,7 +209,7 @@ class FCISDummyCapturedImage implements ICapturedImage {
 
     @Override
     public int numChannels() {
-        return this.metadata.numChannels();
+        return this.channels.length;
     }
 
     @Override

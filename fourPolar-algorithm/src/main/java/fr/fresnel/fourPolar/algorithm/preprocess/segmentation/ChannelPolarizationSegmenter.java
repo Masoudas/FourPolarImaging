@@ -10,11 +10,13 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 
 /**
- * An abstract class for segmenting captured images using the fov for different
- * channels.
+ * An abstract class for segmenting a paritcular polarization for different
+ * channels. Different channels might be containted inside a particular captured
+ * image {@see MultiChannelPolarizationSegmenter}, or they might be inside
+ * single channel images {@see SingleChannelPolarizationSegmenter}.
  */
 abstract class ChannelPolarizationSegmenter {
-    public abstract Image<UINT16>[] segment(ICapturedImage[] capturedImages, IBoxShape polFoV, int numChannels);
+    public abstract Image<UINT16>[] segment(ICapturedImage[] capturedImages, IBoxShape polFoV);
 
     protected Image<UINT16> _createSegmentedImageFromInterval(Image<UINT16> image, long[] bottomCorner, long[] len) {
         IPixelCursor<UINT16> segmentedImgCursor = image.getCursor(bottomCorner, len);
@@ -24,4 +26,13 @@ abstract class ChannelPolarizationSegmenter {
         return segmentedImage;
     }
 
+    protected int _getTotalNumChannels(ICapturedImage[] capturedImages){
+        int numChannels = 0;
+
+        for (ICapturedImage iCapturedImage : capturedImages) {
+            numChannels += iCapturedImage.numChannels();
+        }
+
+        return numChannels;
+    }
 }

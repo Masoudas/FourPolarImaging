@@ -24,12 +24,11 @@ class MultiChannelPolarizationSegmenter extends ChannelPolarizationSegmenter {
      * @param numChannels    is the total number of channels.
      */
     @Override
-    public Image<UINT16>[] segment(ICapturedImage[] capturedImages, IBoxShape polFoV, int numChannels) {
+    public Image<UINT16>[] segment(ICapturedImage[] capturedImages, IBoxShape polFoV) {
         Objects.requireNonNull(capturedImages);
         Objects.requireNonNull(polFoV);
 
-        ChannelUtils.checkNumChannelsNonZero(numChannels);
-
+        int numChannels = this._getTotalNumChannels(capturedImages);
         Image<UINT16>[] channelImages = new Image[numChannels];
         for (ICapturedImage iCapturedImage : capturedImages) {
             Image<UINT16>[] segmentedPolarizationImages = _createsSegmentedPolarizationImages(iCapturedImage, polFoV);

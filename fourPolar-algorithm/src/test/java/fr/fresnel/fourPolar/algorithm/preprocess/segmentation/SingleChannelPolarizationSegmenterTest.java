@@ -30,10 +30,10 @@ public class SingleChannelPolarizationSegmenterTest {
         ICapturedImage[] capturedImage = new ICapturedImage[] {
                 new SCPSDummyCapturedImage(AxisOrder.XY, new long[] { 4, 4 }, new int[] { 1 }) };
 
-        Image<UINT16>[] image_pol0 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol0, 1);
-        Image<UINT16>[] image_pol45 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol45, 1);
-        Image<UINT16>[] image_pol90 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol90, 1);
-        Image<UINT16>[] image_pol135 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol135, 1);
+        Image<UINT16>[] image_pol0 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
+        Image<UINT16>[] image_pol45 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
+        Image<UINT16>[] image_pol90 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
+        Image<UINT16>[] image_pol135 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         assertTrue(SCPSImageChecker._checkImage(image_pol0[0], 0));
         assertTrue(SCPSImageChecker._checkImage(image_pol45[0], 1));
@@ -52,10 +52,10 @@ public class SingleChannelPolarizationSegmenterTest {
                 new SCPSDummyCapturedImage(AxisOrder.XY, new long[] { 4, 4 }, new int[] { 1 }),
                 new SCPSDummyCapturedImage(AxisOrder.XY, new long[] { 4, 4 }, new int[] { 2 }) };
 
-        Image<UINT16>[] image_pol0 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol0, 2);
-        Image<UINT16>[] image_pol45 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol45, 2);
-        Image<UINT16>[] image_pol90 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol90, 2);
-        Image<UINT16>[] image_pol135 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol135, 2);
+        Image<UINT16>[] image_pol0 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
+        Image<UINT16>[] image_pol45 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
+        Image<UINT16>[] image_pol90 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
+        Image<UINT16>[] image_pol135 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         for (int i = 0; i < image_pol135.length; i++) {
             assertTrue(SCPSImageChecker._checkImage(image_pol0[i], 0));
@@ -76,10 +76,10 @@ public class SingleChannelPolarizationSegmenterTest {
                 new SCPSDummyCapturedImage(AxisOrder.XYCZT, new long[] { 4, 4, 1, 3, 2 }, new int[] { 1 }),
                 new SCPSDummyCapturedImage(AxisOrder.XYCZT, new long[] { 4, 4, 1, 3, 2 }, new int[] { 2 }) };
 
-        Image<UINT16>[] image_pol0 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol0, 2);
-        Image<UINT16>[] image_pol45 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol45, 2);
-        Image<UINT16>[] image_pol90 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol90, 2);
-        Image<UINT16>[] image_pol135 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol135, 2);
+        Image<UINT16>[] image_pol0 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
+        Image<UINT16>[] image_pol45 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
+        Image<UINT16>[] image_pol90 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
+        Image<UINT16>[] image_pol135 = new SingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         for (int i = 0; i < image_pol135.length; i++) {
             assertTrue(SCPSImageChecker._checkImage(image_pol0[i], 0));
@@ -157,7 +157,7 @@ class SCPSDummyCapturedImage implements ICapturedImage {
 
     @Override
     public int numChannels() {
-        return this.metadata.numChannels();
+        return this.channels.length;
     }
 
     @Override

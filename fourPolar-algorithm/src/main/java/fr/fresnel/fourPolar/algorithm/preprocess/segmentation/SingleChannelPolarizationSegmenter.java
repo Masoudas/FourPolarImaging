@@ -6,7 +6,6 @@ import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 
 class SingleChannelPolarizationSegmenter extends ChannelPolarizationSegmenter {
@@ -24,12 +23,11 @@ class SingleChannelPolarizationSegmenter extends ChannelPolarizationSegmenter {
      * @param numChannels    is the total number of channels.
      */
     @Override
-    public Image<UINT16>[] segment(ICapturedImage[] capturedImages, IBoxShape polFoV, int numChannels) {
+    public Image<UINT16>[] segment(ICapturedImage[] capturedImages, IBoxShape polFoV) {
         Objects.requireNonNull(capturedImages);
         Objects.requireNonNull(polFoV);
 
-        ChannelUtils.checkNumChannelsNonZero(numChannels);
-
+        int numChannels = this._getTotalNumChannels(capturedImages);
         Image<UINT16>[] channelImages = new Image[numChannels];
         for (ICapturedImage iCapturedImage : capturedImages) {
             Image<UINT16> segmentedPolarizationImage = _createsSegmentedPolarizationImage(iCapturedImage, polFoV);

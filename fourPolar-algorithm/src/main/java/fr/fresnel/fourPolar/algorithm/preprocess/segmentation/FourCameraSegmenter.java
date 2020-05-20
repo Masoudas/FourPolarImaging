@@ -48,16 +48,16 @@ public class FourCameraSegmenter implements ConstellationSegmenter {
         ICapturedImage[] capturedImages_pol135 = capturedImageSet.getCapturedImage(imageLabels[3]);
 
         IBoxShape pol0FoV = this._fov.getFoV(Polarization.pol0);
-        this._pol0 = segmenter.segment(capturedImages_pol0, pol0FoV, this._numChannels);
+        this._pol0 = segmenter.segment(capturedImages_pol0, pol0FoV);
 
         IBoxShape pol45FoV = this._fov.getFoV(Polarization.pol45);
-        this._pol45 = segmenter.segment(capturedImages_pol45, pol45FoV, this._numChannels);
+        this._pol45 = segmenter.segment(capturedImages_pol45, pol45FoV);
 
         IBoxShape pol90FoV = this._fov.getFoV(Polarization.pol90);
-        this._pol90 = segmenter.segment(capturedImages_pol90, pol90FoV, this._numChannels);
+        this._pol90 = segmenter.segment(capturedImages_pol90, pol90FoV);
 
         IBoxShape pol135FoV = this._fov.getFoV(Polarization.pol135);
-        this._pol135 = segmenter.segment(capturedImages_pol135, pol135FoV, this._numChannels);
+        this._pol135 = segmenter.segment(capturedImages_pol135, pol135FoV);
 
         this._fileSet = capturedImageSet.fileSet();
     }

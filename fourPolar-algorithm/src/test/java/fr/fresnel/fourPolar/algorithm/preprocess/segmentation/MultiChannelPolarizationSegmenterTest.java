@@ -30,14 +30,10 @@ public class MultiChannelPolarizationSegmenterTest {
         ICapturedImage[] capturedImage = new ICapturedImage[] {
                 new MCPSDummyCapturedImage(AxisOrder.XYC, new long[] { 4, 4, numChannels }, new int[] { 1, 2, 3 }) };
 
-        Image<UINT16>[] image_pol0 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol0,
-                numChannels);
-        Image<UINT16>[] image_pol45 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol45,
-                numChannels);
-        Image<UINT16>[] image_pol90 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol90,
-                numChannels);
-        Image<UINT16>[] image_pol135 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135,
-                numChannels);
+        Image<UINT16>[] image_pol0 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
+        Image<UINT16>[] image_pol45 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
+        Image<UINT16>[] image_pol90 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
+        Image<UINT16>[] image_pol135 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         for (int i = 0; i < numChannels; i++) {
             assertTrue(SCPSImageChecker._checkImage(image_pol0[i], 0));
@@ -61,14 +57,10 @@ public class MultiChannelPolarizationSegmenterTest {
                 new MCPSDummyCapturedImage(AxisOrder.XYC, new long[] { 4, 4, numChannels / 2 },
                         new int[] { 4, 5, 6 }) };
 
-        Image<UINT16>[] image_pol0 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol0,
-                numChannels);
-        Image<UINT16>[] image_pol45 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol45,
-                numChannels);
-        Image<UINT16>[] image_pol90 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol90,
-                numChannels);
-        Image<UINT16>[] image_pol135 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135,
-                numChannels);
+        Image<UINT16>[] image_pol0 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
+        Image<UINT16>[] image_pol45 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
+        Image<UINT16>[] image_pol90 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
+        Image<UINT16>[] image_pol135 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         for (int i = 0; i < numChannels; i++) {
             assertTrue(SCPSImageChecker._checkImage(image_pol0[i], 0));
@@ -93,14 +85,10 @@ public class MultiChannelPolarizationSegmenterTest {
                 new MCPSDummyCapturedImage(AxisOrder.XYZCT, new long[] { 4, 4, 3, numChannels / 2, 4 },
                         new int[] { 4, 5, 6 }) };
 
-        Image<UINT16>[] image_pol0 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol0,
-                numChannels);
-        Image<UINT16>[] image_pol45 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol45,
-                numChannels);
-        Image<UINT16>[] image_pol90 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol90,
-                numChannels);
-        Image<UINT16>[] image_pol135 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135,
-                numChannels);
+        Image<UINT16>[] image_pol0 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
+        Image<UINT16>[] image_pol45 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
+        Image<UINT16>[] image_pol90 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
+        Image<UINT16>[] image_pol135 = new MultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         for (int i = 0; i < numChannels; i++) {
             assertTrue(SCPSImageChecker._checkImage(image_pol0[i], 0));
@@ -184,7 +172,7 @@ class MCPSDummyCapturedImage implements ICapturedImage {
 
     @Override
     public int numChannels() {
-        return this.metadata.numChannels();
+        return this.channels.length;
     }
 
     @Override
