@@ -11,21 +11,30 @@
   <artifactId>fourPolar-algorithm</artifactId>
   <version>1.0.0</version>
   <packaging>jar</packaging>
- 
+
   <dependencies>
     <!-- Dependency on the core module -->
     <dependency>
       <groupId>fr.fresnel.fourPolar</groupId>
       <artifactId>fourPolar-core</artifactId>
       <version>${project.version}</version>
-    </dependency> 
+    </dependency>
 
     <!-- Basic math library -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-math3</artifactId>
       <version>3.6.1</version>
-  </dependency>
+    </dependency>
+
+    <!-- Descriptor based registration -->
+    <dependency>
+      <groupId>sc.fiji</groupId>
+      <artifactId>Descriptor_based_registration</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/Descriptor_based_registration-2.1.5-SNAPSHOT.jar</systemPath>
+    </dependency>
 
   </dependencies>
 
