@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.core.preprocess.registration;
 
-import java.io.File;
 import java.util.Map;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
