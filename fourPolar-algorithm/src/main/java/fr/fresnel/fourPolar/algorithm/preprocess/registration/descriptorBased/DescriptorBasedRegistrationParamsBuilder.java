@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.algorithm.preprocess.registration.descriptorBased;
 
 import java.util.Objects;
 
-import plugin.DescriptorParameters;
+import registration.descriptorBased.plugin.DescriptorParameters;
 
 class DescriptorBasedRegistrationParamsBuilder {
     /**
@@ -25,6 +25,9 @@ class DescriptorBasedRegistrationParamsBuilder {
     private int _numNeighborsRansac = 3;
     private int _redundancyRansac = 1;
 
+    /**
+     * Copy constructor.
+     */
     public DescriptorBasedRegistrationParamsBuilder(DescriptorParameters params) {
         Objects.requireNonNull(params);
 
@@ -32,6 +35,10 @@ class DescriptorBasedRegistrationParamsBuilder {
         _fpDetectionThr = params.threshold;
         _numNeighborsRansac = params.numNeighbors;
         _redundancyRansac = params.redundancy;
+    }
+
+    public DescriptorBasedRegistrationParamsBuilder() {
+
     }
 
     /**
