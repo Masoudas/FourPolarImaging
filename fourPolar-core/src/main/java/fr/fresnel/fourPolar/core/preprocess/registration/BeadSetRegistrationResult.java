@@ -8,65 +8,29 @@ import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
  */
 public class BeadSetRegistrationResult {
     private final int _numChannels;
-    private final IRegistrationResult[] _pol45_pol0;
-    private final IRegistrationResult[] _pol90_pol0;
-    private final IRegistrationResult[] _pol135_pol0;
+    private final IChannelRegistrationResult[] _channelResults;
 
     public BeadSetRegistrationResult(int numChannels) {
         ChannelUtils.checkNumChannelsNonZero(numChannels);
         this._numChannels = numChannels;
 
-        this._pol45_pol0 = new IRegistrationResult[numChannels];
-        this._pol90_pol0 = new IRegistrationResult[numChannels];
-        this._pol135_pol0 = new IRegistrationResult[numChannels];
+        this._channelResults = new IChannelRegistrationResult[numChannels];
     }
 
     /**
-     * Set the result of registration of pol45 to pol0 for the given channel.
+     * Set the result of registration of the given channel.
      */
-    public void setResultPol45(int channel, IRegistrationResult registrationResult) {
+    public void setResult(int channel, IChannelRegistrationResult registrationResult) {
         ChannelUtils.checkChannel(channel, this._numChannels);
-        this._pol45_pol0[channel - 1] = registrationResult;
+        this._channelResults[channel - 1] = registrationResult;
     }
 
     /**
-     * Set the result of registration of pol90 to pol0 for the given channel.
+     * Return the result of registration for the given channel.
      */
-    public void setResultPol90(int channel, IRegistrationResult registrationResult) {
+    public IChannelRegistrationResult getResult(int channel) {
         ChannelUtils.checkChannel(channel, this._numChannels);
-        this._pol90_pol0[channel - 1] = registrationResult;
-    }
-
-    /**
-     * Set the result of registration of pol135 to pol0 for the given channel.
-     */
-    public void setResultPol135(int channel, IRegistrationResult registrationResult) {
-        ChannelUtils.checkChannel(channel, this._numChannels);
-        this._pol135_pol0[channel - 1] = registrationResult;
-    }
-
-    /**
-     * Return the result of registration of pol45 to pol0 for the given channel.
-     */
-    public IRegistrationResult getResultPol45(int channel) {
-        ChannelUtils.checkChannel(channel, this._numChannels);
-        return this._pol45_pol0[channel - 1];
-    }
-
-    /**
-     * Return the result of registration of pol90 to pol0 for the given channel.
-     */
-    public IRegistrationResult getResultPol90(int channel) {
-        ChannelUtils.checkChannel(channel, this._numChannels);
-        return this._pol90_pol0[channel - 1];
-    }
-
-    /**
-     * Return the result of registration of pol90 to pol0 for the given channel.
-     */
-    public IRegistrationResult getResultPol135(int channel) {
-        ChannelUtils.checkChannel(channel, this._numChannels);
-        return this._pol135_pol0[channel - 1];
+        return this._channelResults[channel - 1];
     }
 
 }
