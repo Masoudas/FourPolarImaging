@@ -101,7 +101,7 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
      * 
      * @param result
      */
-    public boolean _isRegistrationSatisfactory(DescriptorBased2DResult result) {
+    private boolean _isRegistrationSatisfactory(DescriptorBased2DResult result) {
         if (result.isSuccessful() && result.error() < 1) {
             return true;
         } else {
