@@ -15,8 +15,8 @@ public class DescriptorBasedRegistrationResult implements IChannelRegistrationRe
     private final static String _COLORED_RESULT_REPRESENTATION = "Color Representation of Registration";
     private final static String _MARKERED_RESULT_REPRESENTATION = "Marker Representation of Registration";
 
-    private final static String _NOT_ENOUGH_FP_DESCRIPTION = "Not enough feature points found.";
-    private final static String _NO_TRANSFORMATION_DESCRIPTION = "No transformation found between images.";
+    public final static String _NOT_ENOUGH_FP_DESCRIPTION = "Not enough feature points found.";
+    public final static String _NO_TRANSFORMATION_DESCRIPTION = "No transformation found between images.";
 
     private HashMap<ChannelRegistrationOrder, Boolean> _isSuccessfulRegistration;
     private HashMap<ChannelRegistrationOrder, AffineTransform2D> _affineTransform;
