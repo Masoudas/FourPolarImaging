@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import registration.descriptorBased.plugin.DescriptorParameters;
 
-class DescriptorBasedRegistrationParamsBuilder {
+class DescriptorParamsBuilder {
     /**
      * Three sets of dog sigma values, starting from rather large (row one) to
      * rather small (row three) bead detection. The larger the detector, the lesser
@@ -28,7 +28,7 @@ class DescriptorBasedRegistrationParamsBuilder {
     /**
      * Copy constructor.
      */
-    public DescriptorBasedRegistrationParamsBuilder(DescriptorParameters params) {
+    public DescriptorParamsBuilder(DescriptorParameters params) {
         Objects.requireNonNull(params);
 
         _dog_sigma = new double[] { params.sigma1, params.sigma2 };
@@ -37,14 +37,14 @@ class DescriptorBasedRegistrationParamsBuilder {
         _redundancyRansac = params.redundancy;
     }
 
-    public DescriptorBasedRegistrationParamsBuilder() {
+    public DescriptorParamsBuilder() {
 
     }
 
     /**
      * Set DoG sigma values with a 2D row vector.
      */
-    public DescriptorBasedRegistrationParamsBuilder dog_sigma(double[] sigma) {
+    public DescriptorParamsBuilder dog_sigma(double[] sigma) {
         Objects.requireNonNull(sigma);
         if (sigma.length != 2) {
             throw new IllegalArgumentException("sigma must have two elements");
@@ -57,7 +57,7 @@ class DescriptorBasedRegistrationParamsBuilder {
     /**
      * Set the intensity threshold for detecting FPs.
      */
-    public DescriptorBasedRegistrationParamsBuilder detectionThresholdFP(double threshold) {
+    public DescriptorParamsBuilder detectionThresholdFP(double threshold) {
         if (threshold < 0) {
             throw new IllegalArgumentException("threshold must be greater than zero");
         }
@@ -70,7 +70,7 @@ class DescriptorBasedRegistrationParamsBuilder {
     /**
      * Increasing this parameter (from 3 upwards) relaxes the RANSAC.
      */
-    public DescriptorBasedRegistrationParamsBuilder numNeighborsRansac(int n) {
+    public DescriptorParamsBuilder numNeighborsRansac(int n) {
         if (n < 3) {
             throw new IllegalArgumentException("Number of RANSAC neighbors should be greater than equal 3.");
         }
@@ -81,7 +81,7 @@ class DescriptorBasedRegistrationParamsBuilder {
     /**
      * Increasing this parameter (from 1 upwards) relaxes the RANSAC.
      */
-    public DescriptorBasedRegistrationParamsBuilder redundancyRansac(int n) {
+    public DescriptorParamsBuilder redundancyRansac(int n) {
         if (n < 1) {
             throw new IllegalArgumentException("Redundancy of RANSAC should be greater than equal 1.");
         }
