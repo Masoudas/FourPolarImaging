@@ -16,19 +16,19 @@ public interface IChannelRegistrationResult {
      * 
      * @return
      */
-    public boolean registrationSuccessful(ChannelRegistrationOrder rule);
+    public boolean registrationSuccessful(RegistrationOrder rule);
 
     /**
      * Returns the equivalent affine transform of this registration.
      */
-    public AffineTransform getAffineTransform(ChannelRegistrationOrder rule);
+    public AffineTransform getAffineTransform(RegistrationOrder rule);
 
     /**
      * The registration error of the algorithm.
      * 
      * @return
      */
-    public double error(ChannelRegistrationOrder rule);
+    public double error(RegistrationOrder rule);
 
     /**
      * Returns a string representation of the result of the algorithm. (Example: For
@@ -37,7 +37,7 @@ public interface IChannelRegistrationResult {
      * 
      * @return
      */
-    public String getDescription(ChannelRegistrationOrder rule);
+    public String getDescription(RegistrationOrder rule);
 
     /**
      * Returns any possible resulting images that can be used to subjectively
@@ -45,6 +45,6 @@ public interface IChannelRegistrationResult {
      * what the image contains (Example: For the descripto based algorithm, the
      * description is "Color Image", which is simply the overlay of the two images).
      */
-    public Map<String, Image<RGB16>> getResultFiles(ChannelRegistrationOrder rule);
+    public Map<String, Image<RGB16>> getResultFiles(RegistrationOrder rule);
 
 }
