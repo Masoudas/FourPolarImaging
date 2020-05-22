@@ -13,7 +13,6 @@ import ij.ImagePlus;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import registration.descriptorBased.headless.HeadLess_Descriptor_based_registration;
 import registration.descriptorBased.headless.RegistrationParams;
-import registration.descriptorBased.plugin.DescriptorParameters;
 import registration.descriptorBased.result.DescriptorBased2DResult;
 import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
 
@@ -70,7 +69,7 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
         DescriptorBased2DResult result = null;
 
         ImagePlus imageBase = _wrapToImageJ1(pol0);
-        ImagePlus imageToRegister = _wrapToImageJ1(pol0);
+        ImagePlus imageToRegister = _wrapToImageJ1(otherPol);
 
         RegistrationParams registParams = new RegistrationParams();
 
