@@ -1,13 +1,12 @@
 package fr.fresnel.fourPolar.algorithm.preprocess.registration.descriptorBased;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
-import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
+import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
 import fr.fresnel.fourPolar.core.util.transform.AffineTransform;
 import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
 
