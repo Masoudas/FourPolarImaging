@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.preprocess.darkBackground;
+package fr.fresnel.fourPolar.core.preprocess.darkBackground;
 
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 

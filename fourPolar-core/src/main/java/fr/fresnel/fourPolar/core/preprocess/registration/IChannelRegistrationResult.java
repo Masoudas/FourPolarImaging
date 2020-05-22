@@ -4,7 +4,7 @@ import java.util.Map;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
-import fr.fresnel.fourPolar.core.util.transform.AffineTransform;
+import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
 
 /**
  * Represents the results of a registration algorithm for a channel.
@@ -21,7 +21,7 @@ public interface IChannelRegistrationResult {
     /**
      * Returns the equivalent affine transform of this registration.
      */
-    public AffineTransform getAffineTransform(RegistrationOrder rule);
+    public AffineTransform2D getAffineTransform(RegistrationOrder rule);
 
     /**
      * The registration error of the algorithm.
