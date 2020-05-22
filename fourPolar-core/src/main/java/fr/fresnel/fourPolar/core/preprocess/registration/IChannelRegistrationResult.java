@@ -39,12 +39,4 @@ public interface IChannelRegistrationResult {
      */
     public String getDescription(RegistrationOrder rule);
 
-    /**
-     * Returns any possible resulting images that can be used to subjectively
-     * qualify the result of registration. The string represents a discription of
-     * what the image contains (Example: For the descripto based algorithm, the
-     * description is "Color Image", which is simply the overlay of the two images).
-     */
-    public Map<String, Image<RGB16>> getResultFiles(RegistrationOrder rule);
-
 }

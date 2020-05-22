@@ -51,6 +51,7 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
 
     @Override
     public IChannelRegistrationResult register(IPolarizationImageSet polarizationImageSet) {
+       // ??? Who breaks down the bead image to be planar?
         Image<UINT16> pol0 = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage();
         Image<UINT16> pol45 = polarizationImageSet.getPolarizationImage(Polarization.pol45).getImage();
         Image<UINT16> pol90 = polarizationImageSet.getPolarizationImage(Polarization.pol90).getImage();
@@ -132,7 +133,7 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
      */
     private RegistrationParams _upadteRegistrationParameters(DescriptorBased2DResult result,
             RegistrationParams previous_itr, int itr) {
-        RegistrationParams updated = new RegistrationParams(previous_itr); 
+        RegistrationParams updated = new RegistrationParams(previous_itr);
         if (result.description() == FailureCause.NO_INLIER_AFTER_RANSAC) {
             updated.numNeighbors(previous_itr.getNumNeighbors() + 1).redundancy(previous_itr.getRedundancy() + 1);
         } else if (result.description() == FailureCause.NOT_ENOUGH_FP) {

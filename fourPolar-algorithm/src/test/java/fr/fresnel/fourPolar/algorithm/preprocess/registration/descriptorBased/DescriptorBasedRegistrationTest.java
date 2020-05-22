@@ -75,7 +75,6 @@ public class DescriptorBasedRegistrationTest {
         result.getResultFiles(RegistrationOrder.Pol45_to_Pol0).forEach((t, x) -> {
             try {
                 ImageJFunctions.show(ImageToImgLib2Converter.getImg(x, RGB16.zero()));
-
             } catch (ConverterToImgLib2NotFound e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

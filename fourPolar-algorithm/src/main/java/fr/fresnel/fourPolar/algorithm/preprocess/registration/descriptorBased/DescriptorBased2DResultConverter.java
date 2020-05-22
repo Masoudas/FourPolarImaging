@@ -2,19 +2,9 @@ package fr.fresnel.fourPolar.algorithm.preprocess.registration.descriptorBased;
 
 import java.util.Hashtable;
 
-import fr.fresnel.fourPolar.core.image.generic.IMetadata;
-import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata.MetadataBuilder;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
-import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
+import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
 import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
-import ij.ImagePlus;
-import net.imglib2.img.display.imagej.ImageJFunctions;
-import net.imglib2.type.numeric.ARGBType;
 import registration.descriptorBased.result.DescriptorBased2DResult;
 import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
 
@@ -46,11 +36,9 @@ class DescriptorBased2DResultConverter {
             if (polResult.isSuccessful()) {
                 result.setError(order, polResult.error());
                 result.setAffineTransform(order, this._getAffineTransform(polResult));
-                result.setColoredRegistrationResultImage(order, this._convertImage(polResult.compositeImage()));
             } else {
                 result.setError(order, -1);
                 result.setAffineTransform(order, null);
-                result.setColoredRegistrationResultImage(order, null);
             }
         }
 
@@ -74,15 +62,4 @@ class DescriptorBased2DResultConverter {
             return "";
         }
     }
-
-    private Image<RGB16> _convertImage(ImagePlus image) {
-        int[] dim = image.getDimensions();
-        long[] dimAsLong = { dim[0], dim[1], dim[2], dim[3], dim[4] };
-
-        IMetadata metadata = new MetadataBuilder(dimAsLong).axisOrder(AxisOrder.XYCZT).bitPerPixel(PixelTypes.RGB_16)
-                .build();
-        return new ImgLib2ImageFactory().create(ImageJFunctions.wrap(image), new ARGBType(), metadata);
-
-    }
-
 }
