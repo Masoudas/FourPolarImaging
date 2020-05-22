@@ -31,9 +31,7 @@
     <dependency>
       <groupId>sc.fiji</groupId>
       <artifactId>Descriptor_based_registration</artifactId>
-      <version>1.0</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/lib/Descriptor_based_registration-2.1.5-SNAPSHOT.jar</systemPath>
+      <version>2.1.5-SNAPSHOT</version>
     </dependency>
 
   </dependencies>
