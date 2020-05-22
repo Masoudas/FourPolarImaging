@@ -33,7 +33,7 @@ public class BeadSetProcessResult {
     }
 
     public void setDarkBackground(int channel, IChannelDarkBackground darkBackground) {
-        Objects.requireNonNull(background, "Channel dark background can't be null for channel + " + channel);
+        Objects.requireNonNull(darkBackground, "Channel dark background can't be null for channel + " + channel);
         ChannelUtils.checkChannel(channel, this._numChannels);
         this._channelDarkBackground[channel - 1] = darkBackground;
     }
