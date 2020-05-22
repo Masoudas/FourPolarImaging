@@ -9,9 +9,8 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata.MetadataBuilder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
-import fr.fresnel.fourPolar.core.preprocess.registration.ChannelRegistrationOrder;
+import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
-import fr.fresnel.fourPolar.core.preprocess.registration.descriptorBased.DescriptorBasedRegistrationResult;
 import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
 import ij.ImagePlus;
 import net.imglib2.img.display.imagej.ImageJFunctions;
@@ -21,31 +20,38 @@ import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
 
 /**
  * Wraps a {@link DescriptorBased2DResult} of the three polarizations into an
- * {@link DescriptorBasedRegistrationResult}.
+ * {@link DescriptorBasedChannelRegistrationResult}.
  */
 class DescriptorBased2DResultConverter {
-    Hashtable<ChannelRegistrationOrder, DescriptorBased2DResult> _results;
+    Hashtable<RegistrationOrder, DescriptorBased2DResult> _results;
 
     public DescriptorBased2DResultConverter() {
         _results = new Hashtable<>();
     }
 
-    public DescriptorBased2DResultConverter set(ChannelRegistrationOrder order, DescriptorBased2DResult result) {
+    public DescriptorBased2DResultConverter set(RegistrationOrder order, DescriptorBased2DResult result) {
         _results.put(order, result);
         return this;
     }
 
     public IChannelRegistrationResult convert() {
-        DescriptorBasedRegistrationResult result = new DescriptorBasedRegistrationResult();
+        DescriptorBasedChannelRegistrationResult result = new DescriptorBasedChannelRegistrationResult();
 
-        for (ChannelRegistrationOrder order : ChannelRegistrationOrder.values()) {
+        for (RegistrationOrder order : RegistrationOrder.values()) {
             DescriptorBased2DResult polResult = _results.get(order);
 
-            result.setError(order, polResult.error());
             result.setIsSuccessfulRegistration(order, polResult.isSuccessful());
-            result.setAffineTransform(order, this._getAffineTransform(polResult));
-            result.setColoredRegistrationResultImage(order, this._convertImage(polResult.compositeImage()));
             result.setDescription(order, this._getDescription(polResult));
+
+            if (polResult.isSuccessful()) {
+                result.setError(order, polResult.error());
+                result.setAffineTransform(order, this._getAffineTransform(polResult));
+                result.setColoredRegistrationResultImage(order, this._convertImage(polResult.compositeImage()));
+            } else {
+                result.setError(order, -1);
+                result.setAffineTransform(order, null);
+                result.setColoredRegistrationResultImage(order, null);
+            }
         }
 
         return result;
@@ -58,14 +64,15 @@ class DescriptorBased2DResultConverter {
     }
 
     public String _getDescription(DescriptorBased2DResult result) {
-        if (result.description() != FailureCause.NOT_ENOUGH_FP) {
-            return DescriptorBasedRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION;
-        } else if ((result.description() != FailureCause.NO_INLIER_AFTER_RANSAC)) {
-            return DescriptorBasedRegistrationResult._NO_TRANSFORMATION_DESCRIPTION;
+        if (result.description() == null) {
+            return "";
+        } else if (result.description() == FailureCause.NOT_ENOUGH_FP) {
+            return DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION;
+        } else if ((result.description() == FailureCause.NO_INLIER_AFTER_RANSAC)) {
+            return DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION;
         } else {
             return "";
         }
-
     }
 
     private Image<RGB16> _convertImage(ImagePlus image) {
