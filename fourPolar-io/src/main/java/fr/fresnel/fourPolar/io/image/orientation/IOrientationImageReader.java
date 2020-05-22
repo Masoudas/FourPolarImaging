@@ -25,6 +25,20 @@ public interface IOrientationImageReader {
             throws IOException, CannotFormOrientationImage;
 
     /**
+     * Read the orientation image that is in degrees (@see
+     * IOrientationImageWriter#writeInDegrees) and return the corresponding
+     * {@link IOrientationImage}, which would be in radian.
+     * 
+     * @param root4PProject is the location of the 4Polar folder of the project
+     *                      {@see PathFactoryOfProject}.
+     * @param fileSet       is the captured file set corresponding to this
+     *                      orientation image.
+     * @param channel       is the channel number.
+     * @return
+     */
+    public IOrientationImage readFromDegrees();
+
+    /**
      * Close all resources associated with this reader.
      * 
      * @throws IOException
