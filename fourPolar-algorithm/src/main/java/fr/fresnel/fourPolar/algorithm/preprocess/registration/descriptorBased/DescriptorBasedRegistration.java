@@ -7,11 +7,12 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Conver
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.core.preprocess.registration.ChannelRegistrationOrder;
+import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import ij.ImagePlus;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import registration.descriptorBased.headless.HeadLess_Descriptor_based_registration;
+import registration.descriptorBased.headless.RegistrationParams;
 import registration.descriptorBased.plugin.DescriptorParameters;
 import registration.descriptorBased.result.DescriptorBased2DResult;
 import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
@@ -25,6 +26,19 @@ import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
  * and is compiled as a jar in this project.
  */
 public class DescriptorBasedRegistration implements IChannelRegistrator {
+    /**
+     * Three sets of dog sigma values, starting from rather large (row one) to
+     * rather small (row three) bead detection. The larger the detector, the lesser
+     * the chances of detecting noise as FP.
+     */
+    private static double[][] DOG_SIGMA_CHOICES = { { 2.23, 2.65 }, { 2.04, 2.42 }, { 1.787, 2.21 } };
+
+    /**
+     * Three choices for intensity thresholding the image. Note that the smaller the
+     * threshold, the greater the chance of detecting noise.
+     */
+    private static double[] THRESHOLD_CHOICES = { 0.04, 0.02, 0.01 };
+
     /**
      * Number of tries for registering the given image.
      */
@@ -47,9 +61,9 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
         DescriptorBased2DResult pol90_pol0 = _registerPolarization(pol0, pol90);
         DescriptorBased2DResult pol135_pol0 = _registerPolarization(pol0, pol135);
 
-        return new DescriptorBased2DResultConverter().set(ChannelRegistrationOrder.Pol45_to_Pol0, pol45_pol0)
-                .set(ChannelRegistrationOrder.Pol90_to_Pol0, pol90_pol0)
-                .set(ChannelRegistrationOrder.Pol135_to_Pol0, pol135_pol0).convert();
+        return new DescriptorBased2DResultConverter().set(RegistrationOrder.Pol45_to_Pol0, pol45_pol0)
+                .set(RegistrationOrder.Pol90_to_Pol0, pol90_pol0).set(RegistrationOrder.Pol135_to_Pol0, pol135_pol0)
+                .convert();
     }
 
     private DescriptorBased2DResult _registerPolarization(Image<UINT16> pol0, Image<UINT16> otherPol) {
@@ -58,7 +72,7 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
         ImagePlus imageBase = _wrapToImageJ1(pol0);
         ImagePlus imageToRegister = _wrapToImageJ1(pol0);
 
-        DescriptorParameters registParams = new DescriptorParamsBuilder().build();
+        RegistrationParams registParams = new RegistrationParams();
 
         boolean registrationSatisfactory = false;
         for (int itr = 1; itr <= _ITERATION_MAX & !registrationSatisfactory; itr++) {
@@ -117,18 +131,18 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
      * @param previous_itr
      * @return
      */
-    private DescriptorParameters _upadteRegistrationParameters(DescriptorBased2DResult result,
-            DescriptorParameters previous_itr, int itr) {
-        DescriptorParameters dParameters = null;
+    private RegistrationParams _upadteRegistrationParameters(DescriptorBased2DResult result,
+            RegistrationParams previous_itr, int itr) {
+        RegistrationParams updated = new RegistrationParams(previous_itr);
         if (result.description() == FailureCause.NO_INLIER_AFTER_RANSAC) {
-            dParameters = new DescriptorParamsBuilder(previous_itr).numNeighborsRansac(previous_itr.numNeighbors++)
-                    .redundancyRansac(previous_itr.redundancy).build();
+            updated.numNeighbors(previous_itr.getNumNeighbors() + 1).redundancy(previous_itr.getRedundancy() + 1);
         } else if (result.description() == FailureCause.NOT_ENOUGH_FP) {
-            dParameters = new DescriptorParamsBuilder().dog_sigma(DescriptorParamsBuilder.DOG_SIGMA_CHOICES[itr])
-                    .detectionThresholdFP(DescriptorParamsBuilder.THRESHOLD_CHOICES[itr]).build();
+            updated.sigma1(DescriptorParamsBuilder.DOG_SIGMA_CHOICES[itr][0])
+                    .sigma2(DescriptorParamsBuilder.DOG_SIGMA_CHOICES[itr][1])
+                    .detectionThreshold(DescriptorParamsBuilder.THRESHOLD_CHOICES[itr]);
         }
 
-        return dParameters;
+        return updated;
     }
 
 }
