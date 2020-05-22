@@ -133,13 +133,12 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
      */
     private RegistrationParams _upadteRegistrationParameters(DescriptorBased2DResult result,
             RegistrationParams previous_itr, int itr) {
-        RegistrationParams updated = new RegistrationParams(previous_itr);
+        RegistrationParams updated = new RegistrationParams(previous_itr); 
         if (result.description() == FailureCause.NO_INLIER_AFTER_RANSAC) {
             updated.numNeighbors(previous_itr.getNumNeighbors() + 1).redundancy(previous_itr.getRedundancy() + 1);
         } else if (result.description() == FailureCause.NOT_ENOUGH_FP) {
-            updated.sigma1(DescriptorParamsBuilder.DOG_SIGMA_CHOICES[itr][0])
-                    .sigma2(DescriptorParamsBuilder.DOG_SIGMA_CHOICES[itr][1])
-                    .detectionThreshold(DescriptorParamsBuilder.THRESHOLD_CHOICES[itr]);
+            updated.sigma1(DOG_SIGMA_CHOICES[itr][0]).sigma2(DOG_SIGMA_CHOICES[itr][1])
+                    .detectionThreshold(THRESHOLD_CHOICES[itr]);
         }
 
         return updated;
