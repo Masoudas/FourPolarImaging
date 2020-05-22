@@ -69,10 +69,6 @@ public class ImgLib2ImageFactory implements ImageFactory {
      * @param IMetadata   is the metadata associated with this image.
      */
     public Image<RGB16> create(Img<ARGBType> img, ARGBType imgLib2Type, IMetadata metadata) {
-        if (metadata.numChannels() > 0) {
-            throw new IllegalArgumentException("Can't create RGB16 image with channel.");
-        }
-
         try {
             return new ImgLib2Image<RGB16, ARGBType>(img, TypeConverterFactory.getConverter(RGB16.zero(), imgLib2Type),
                     this, metadata);
@@ -129,9 +125,6 @@ public class ImgLib2ImageFactory implements ImageFactory {
 
             case RGB_16:
                 try {
-                    if (AxisOrder.getChannelAxis(metadata.axisOrder()) > 0) {
-                        throw new IllegalArgumentException("Can't create RGB16 image with channel.");
-                    }
                     ARGBType type = new ARGBType();
                     Img<ARGBType> img = _chooseImgFactory(metadataCP.getDim(), type);
                     TypeConverter<RGB16, ARGBType> converter = TypeConverterFactory.getConverter(RGB16.zero(), type);
