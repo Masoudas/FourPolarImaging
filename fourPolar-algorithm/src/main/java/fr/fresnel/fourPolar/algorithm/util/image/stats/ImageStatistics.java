@@ -15,10 +15,10 @@ public class ImageStatistics {
      *         maximums of each plane of the image.
      */
     public static <T extends RealType> double[][] getPlaneMinMax(Image<T> image) {
-        int nPlanes = MetadataUtil.getNPlanes(image);
+        int nPlanes = MetadataUtil.getNPlanes(image.getMetadata());
         double[][] minMax = new double[2][nPlanes];
 
-        IPointShape planeDim = MetadataUtil.getPlaneDim(image);
+        IPointShape planeDim = MetadataUtil.getPlaneDim(image.getMetadata());
         long planeSize = planeDim.point()[0] * planeDim.point()[1];
 
         IPixelCursor<T> cursor = image.getCursor();

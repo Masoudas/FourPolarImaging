@@ -74,7 +74,7 @@ public class GrayScaleToColorConverter {
 
         final double[][] minMax = _getPlaneMinMax(grayImage);
 
-        IPointShape planeDim = MetadataUtil.getPlaneDim(grayImage);
+        IPointShape planeDim = MetadataUtil.getPlaneDim(grayImage.getMetadata());
         final long planeSize = planeDim.point()[0] * planeDim.point()[1];
 
         int planeNo = 1;
