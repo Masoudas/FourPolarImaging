@@ -6,25 +6,20 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.fourPolar.IIntensityVectorIterator;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
+import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
 import io.scif.img.ImgOpener;
-import io.scif.img.ImgSaver;
 import net.imglib2.img.Img;
-import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 public class DescriptorBasedRegistrationTest {
@@ -71,18 +66,6 @@ public class DescriptorBasedRegistrationTest {
         assertTrue(result.error(RegistrationOrder.Pol45_to_Pol0) < 1);
         assertTrue(result.error(RegistrationOrder.Pol90_to_Pol0) < 1);
         assertTrue(result.error(RegistrationOrder.Pol135_to_Pol0) < 1);
-
-        result.getResultFiles(RegistrationOrder.Pol45_to_Pol0).forEach((t, x) -> {
-            try {
-                ImageJFunctions.show(ImageToImgLib2Converter.getImg(x, RGB16.zero()));
-            } catch (ConverterToImgLib2NotFound e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        });
-        System.out.println("x");
-
-
     }
 
 }

@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.algorithm.preprocess.registration.descriptorBased;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -47,10 +46,6 @@ public class DescriptorBased2DResultConverterTest {
                 .equals(DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION));
         assertTrue(result.registrationSuccessful(RegistrationOrder.Pol135_to_Pol0));
 
-        String[] description = result.getResultFiles(RegistrationOrder.Pol135_to_Pol0).keySet().toArray(new String[0]);
-        assertArrayEquals(
-                result.getResultFiles(RegistrationOrder.Pol135_to_Pol0).get(description[0]).getMetadata().getDim(),
-                new long[] { resultImageDim[0], resultImageDim[1], 1, 1, 1 });
         assertTrue(result.error(RegistrationOrder.Pol135_to_Pol0) == 0.9);
 
     }
