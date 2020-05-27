@@ -28,7 +28,7 @@ public class MetadataUtil {
 		long nZpoints = dim[metadata.axisOrder().z_axis];
 		long nTimepoints = dim[metadata.axisOrder().c_axis];
 
-		return nChannels < 1 && nZpoints < 1 && nTimepoints < 1;
+		return nChannels <= 1 && nZpoints <= 1 && nTimepoints <= 1;
 	}
 
 	/**
