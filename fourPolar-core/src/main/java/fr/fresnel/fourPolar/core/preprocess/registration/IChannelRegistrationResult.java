@@ -39,4 +39,11 @@ public interface IChannelRegistrationResult {
      */
     public String getDescription(RegistrationOrder rule);
 
+    /**
+     * The channel number this dark background is associated with.
+     * 
+     * @return
+     */
+    public int channel();
+
 }

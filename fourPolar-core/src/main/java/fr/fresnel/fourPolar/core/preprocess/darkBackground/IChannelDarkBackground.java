@@ -8,4 +8,11 @@ public interface IChannelDarkBackground {
      * Return the background level for the given polarization.
      */
     public double getBackgroundLevel(Polarization polarization);
+
+    /**
+     * The channel number this dark background is associated with.
+     * 
+     * @return
+     */
+    public int channel();
 }
