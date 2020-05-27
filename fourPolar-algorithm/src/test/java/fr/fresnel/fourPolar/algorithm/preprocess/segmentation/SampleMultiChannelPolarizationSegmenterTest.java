@@ -36,10 +36,10 @@ public class SampleMultiChannelPolarizationSegmenterTest {
         Image<UINT16>[] image_pol135 = new SampleMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         for (int i = 0; i < numChannels; i++) {
-            assertTrue(SCPSImageChecker._checkImage(image_pol0[i], 0));
-            assertTrue(SCPSImageChecker._checkImage(image_pol45[i], 1));
-            assertTrue(SCPSImageChecker._checkImage(image_pol90[i], 2));
-            assertTrue(SCPSImageChecker._checkImage(image_pol135[i], 3));
+            assertTrue(MCPSImageChecker._checkImage(image_pol0[i], 0, i + 1));
+            assertTrue(MCPSImageChecker._checkImage(image_pol45[i], 1, i + 1));
+            assertTrue(MCPSImageChecker._checkImage(image_pol90[i], 2, i + 1));
+            assertTrue(MCPSImageChecker._checkImage(image_pol135[i], 3, i + 1));
 
         }
     }
@@ -63,10 +63,10 @@ public class SampleMultiChannelPolarizationSegmenterTest {
         Image<UINT16>[] image_pol135 = new SampleMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         for (int i = 0; i < numChannels; i++) {
-            assertTrue(SCPSImageChecker._checkImage(image_pol0[i], 0));
-            assertTrue(SCPSImageChecker._checkImage(image_pol45[i], 1));
-            assertTrue(SCPSImageChecker._checkImage(image_pol90[i], 2));
-            assertTrue(SCPSImageChecker._checkImage(image_pol135[i], 3));
+            assertTrue(MCPSImageChecker._checkImage(image_pol0[i], 0, i + 1));
+            assertTrue(MCPSImageChecker._checkImage(image_pol45[i], 1, i + 1));
+            assertTrue(MCPSImageChecker._checkImage(image_pol90[i], 2, i + 1));
+            assertTrue(MCPSImageChecker._checkImage(image_pol135[i], 3, i + 1));
 
         }
     }
@@ -91,10 +91,10 @@ public class SampleMultiChannelPolarizationSegmenterTest {
         Image<UINT16>[] image_pol135 = new SampleMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         for (int i = 0; i < numChannels; i++) {
-            assertTrue(SCPSImageChecker._checkImage(image_pol0[i], 0));
-            assertTrue(SCPSImageChecker._checkImage(image_pol45[i], 1));
-            assertTrue(SCPSImageChecker._checkImage(image_pol90[i], 2));
-            assertTrue(SCPSImageChecker._checkImage(image_pol135[i], 3));
+            assertTrue(MCPSImageChecker._checkImage(image_pol0[i], 0, i + 1));
+            assertTrue(MCPSImageChecker._checkImage(image_pol45[i], 1, i + 1));
+            assertTrue(MCPSImageChecker._checkImage(image_pol90[i], 2, i + 1));
+            assertTrue(MCPSImageChecker._checkImage(image_pol135[i], 3, i + 1));
 
         }
     }
@@ -106,12 +106,12 @@ class MCPSImageChecker {
      * For each plane, sets (0,0)-> 0 + channelNo, (1,0)-> 1 + channelNo, (0,1)-> 2
      * + channelNo, (1,1)-> 3 + channelNo.
      */
-    public static void _setImage(Image<UINT16> image) {
+    public static void _setImage(Image<UINT16> image, int[] channels) {
         int c_axis = image.getMetadata().axisOrder().c_axis;
         for (IPixelCursor<UINT16> cursor = image.getCursor(); cursor.hasNext();) {
             cursor.next();
             long[] position = cursor.localize();
-            int channel = (int) position[c_axis];
+            int channel = channels[(int)position[c_axis]];
             if (position[0] < 2 && position[1] < 2) {
                 cursor.setPixel(new Pixel<UINT16>(new UINT16(0 + channel)));
             } else if (position[0] >= 2 && position[1] < 2) {
@@ -127,17 +127,15 @@ class MCPSImageChecker {
     /**
      * Checks all values equal value.
      */
-    public static boolean _checkImage(Image<UINT16> image, int value) {
+    public static boolean _checkImage(Image<UINT16> image, int value, int channel) {
         if (!image.getCursor().hasNext()) {
             return false;
         }
 
-        int c_axis = image.getMetadata().axisOrder().c_axis;
         boolean equals = true;
         for (IPixelCursor<UINT16> cursor = image.getCursor(); cursor.hasNext() && equals;) {
-            long[] position = cursor.localize();
             IPixel<UINT16> pixel = cursor.next();
-            equals &= pixel.value().get() == value + position[c_axis];
+            equals &= pixel.value().get() == value + channel;
         }
         return equals;
     }
@@ -151,7 +149,7 @@ class MCPSDummyCapturedImage implements ICapturedImage {
     public MCPSDummyCapturedImage(AxisOrder axisOrder, long[] dim, int[] channels) {
         metadata = new Metadata.MetadataBuilder(dim).axisOrder(axisOrder).build();
         image = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
-        SCPSImageChecker._setImage(image);
+        MCPSImageChecker._setImage(image, channels);
         this.channels = channels;
     }
 
