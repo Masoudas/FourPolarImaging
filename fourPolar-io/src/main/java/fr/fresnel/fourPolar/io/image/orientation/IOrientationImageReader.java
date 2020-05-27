@@ -44,7 +44,8 @@ public interface IOrientationImageReader {
      *                                    (for example, if images are not of the
      *                                    same size).
      */
-    public IOrientationImage readFromDegrees(File root4PProject, ICapturedImageFileSet fileSet, int channel);
+    public IOrientationImage readFromDegrees(File root4PProject, ICapturedImageFileSet fileSet, int channel)
+            throws IOException, CannotFormOrientationImage;
 
     /**
      * Close all resources associated with this reader.
