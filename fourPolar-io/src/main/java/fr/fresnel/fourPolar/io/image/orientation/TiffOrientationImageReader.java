@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.io.image.orientation;
 import java.io.File;
 import java.io.IOException;
 
+import fr.fresnel.fourPolar.algorithm.postprocess.orientation.OrientationAngleConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
@@ -16,7 +17,9 @@ import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
+import fr.fresnel.fourPolar.io.image.orientation.file.IOrientationImageFileSet;
 import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageFileSet;
+import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageInDegreeFileSet;
 
 /**
  * A concrete implementation of {@link IOrientationImageReader} to read tiff
@@ -44,12 +47,35 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
         ChannelUtils.checkChannel(channel, this._numChannels);
         TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(root4PProject, fileSet, channel);
 
+        return this._read(oSet, fileSet);
+    }
+
+    @Override
+    public IOrientationImage readFromDegrees(File root4PProject, ICapturedImageFileSet fileSet, int channel)
+            throws IOException, CannotFormOrientationImage {
+        ChannelUtils.checkChannel(channel, this._numChannels);
+        TiffOrientationImageInDegreeFileSet oSet = new TiffOrientationImageInDegreeFileSet(root4PProject, fileSet,
+                channel);
+
+        IOrientationImage orientationImage = this._read(oSet, fileSet);
+        converAnglesToRadian(orientationImage);
+        return orientationImage;
+    }
+
+    @Override
+    public void close() throws IOException {
+        _reader.close();
+    }
+
+    private IOrientationImage _read(IOrientationImageFileSet orientationSet, ICapturedImageFileSet capturedSet)
+            throws CannotFormOrientationImage, IOException {
         IOrientationImage orientationImage = null;
         try {
-            Image<Float32> rho = _reader.read(oSet.getFile(OrientationAngle.rho));
-            Image<Float32> delta = _reader.read(oSet.getFile(OrientationAngle.delta));
-            Image<Float32> eta = _reader.read(oSet.getFile(OrientationAngle.eta));
-            orientationImage = OrientationImageFactory.create(fileSet, channel, rho, delta, eta);
+            Image<Float32> rho = _reader.read(orientationSet.getFile(OrientationAngle.rho));
+            Image<Float32> delta = _reader.read(orientationSet.getFile(OrientationAngle.delta));
+            Image<Float32> eta = _reader.read(orientationSet.getFile(OrientationAngle.eta));
+            orientationImage = OrientationImageFactory.create(capturedSet, orientationSet.getChannel(), rho, delta,
+                    eta);
         } catch (MetadataParseError | IOException e) {
             throw new IOException("orientation image doesn't exist or is corrupted");
         }
@@ -57,9 +83,8 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
         return orientationImage;
     }
 
-    @Override
-    public void close() throws IOException {
-        _reader.close();
+    private void converAnglesToRadian(IOrientationImage orientationImage) {
+        OrientationAngleConverter.convertToRadian(orientationImage);
     }
 
 }
