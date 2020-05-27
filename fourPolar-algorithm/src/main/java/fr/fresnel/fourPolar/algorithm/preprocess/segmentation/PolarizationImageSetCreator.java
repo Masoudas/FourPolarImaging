@@ -12,11 +12,11 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 
 /**
- * An interface for segmenting the captured images that comply to a particular
- * constellation (i.e, four polarizations in one image, two polarizations in two
- * images, one polarization in four images).
+ * An interface for converting a {@link SegmentedImage} (which indicates the
+ * polarization 0, 45, 90 or 135 of a particular channel) of one, two or four
+ * cameras to an {@link IPolarizationImageSet}.
  */
-abstract class ConstellationSegmenter {
+abstract class PolarizationImageSetCreator {
     protected IFieldOfView _fov;
     protected int _numChannels;
 
@@ -30,7 +30,12 @@ abstract class ConstellationSegmenter {
      */
     protected ICapturedImageFileSet _fileSet;
 
-    public ConstellationSegmenter(IFieldOfView fov, int numChannels) {
+    /**
+     * The segmenter that is used for segmenting the capturd image.
+     */
+    protected ChannelPolarizationSegmenter _segmenter;
+
+    public PolarizationImageSetCreator(IFieldOfView fov, int numChannels) {
         this._numChannels = numChannels;
         this._fov = fov;
     }
@@ -40,12 +45,13 @@ abstract class ConstellationSegmenter {
      */
     public abstract void setCapturedImageSet(ICapturedImageSet capturedImageSet);
 
-    protected ChannelPolarizationSegmenter _selectSegmenter(ICapturedImageSet capturedImageSet) {
-        if (capturedImageSet.hasMultiChannelImage()) {
-            return new MultiChannelPolarizationSegmenter();
-        } else {
-            return new SingleChannelPolarizationSegmenter();
-        }
+    /**
+     * Set the segmenter to be used to create the polarization image.
+     * 
+     * @param segmenter
+     */
+    public void setSegmenter(ChannelPolarizationSegmenter segmenter) {
+        this._segmenter = segmenter;
     }
 
     /**
@@ -54,7 +60,7 @@ abstract class ConstellationSegmenter {
      * @param channel
      * @return
      */
-    public IPolarizationImageSet segment(int channel) {
+    public IPolarizationImageSet create(int channel) {
         ChannelUtils.checkChannel(channel, this._numChannels);
 
         Image<UINT16> pol0 = AxisReassigner.reassignToXYCZT(this._pol0[channel - 1], UINT16.zero());

@@ -47,9 +47,9 @@ public class FourCameraSegmenterTest {
         FCISDummyCapturedImageSet capturedImageSet = new FCISDummyCapturedImageSet(false, 1);
         capturedImageSet.setFileSet(capturedImage_pol0, capturedImage_pol45, capturedImage_pol90, capturedImage_pol135);
 
-        FourCameraSegmenter segmenter = new FourCameraSegmenter(fov, numChannels);
+        FourCameraPolararizationImageSetCreator segmenter = new FourCameraPolararizationImageSetCreator(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
-        IPolarizationImageSet imageSet = segmenter.segment(1);
+        IPolarizationImageSet imageSet = segmenter.create(1);
 
         assertTrue(FCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 1));
         assertTrue(FCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1));
@@ -79,11 +79,11 @@ public class FourCameraSegmenterTest {
         FCISDummyCapturedImageSet capturedImageSet = new FCISDummyCapturedImageSet(true, 1);
         capturedImageSet.setFileSet(capturedImage_pol0, capturedImage_pol45, capturedImage_pol90, capturedImage_pol135);
 
-        FourCameraSegmenter segmenter = new FourCameraSegmenter(fov, numChannels);
+        FourCameraPolararizationImageSetCreator segmenter = new FourCameraPolararizationImageSetCreator(fov, numChannels);
         segmenter.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {
-            IPolarizationImageSet imageSet = segmenter.segment(c);
+            IPolarizationImageSet imageSet = segmenter.create(c);
 
             assertTrue(FCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), c));
             assertTrue(FCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), c));
