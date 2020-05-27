@@ -24,7 +24,13 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
-public class OneCameraSegmenterTest {
+/**
+ * Tests are done only for sample images.
+ */
+public class OneCameraPolararizationImageSetCreatorTest {
+    ChannelPolarizationSegmenter _singleChannelSegmenter = new SampleSingleChannelPolarizationSegmenter();
+    ChannelPolarizationSegmenter _multiChannelSegmenter = new SampleMultiChannelPolarizationSegmenter();
+
     @Test
     public void segment_OneSingleChannelXYImage_ReturnsCorrectPolImages() {
         IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
@@ -40,9 +46,10 @@ public class OneCameraSegmenterTest {
         OCISDummyCapturedImageSet capturedImageSet = new OCISDummyCapturedImageSet(false, 1);
         capturedImageSet.setFileSet(capturedImage);
 
-        OneCameraSegmenter segmenter = new OneCameraSegmenter(fov, numChannels);
-        segmenter.setCapturedImageSet(capturedImageSet);
-        IPolarizationImageSet imageSet = segmenter.segment(1);
+        OneCameraPolararizationImageSetCreator creator = new OneCameraPolararizationImageSetCreator(fov, numChannels);
+        creator.setSegmenter(_singleChannelSegmenter);
+        creator.setCapturedImageSet(capturedImageSet);
+        IPolarizationImageSet imageSet = creator.create(1);
 
         assertTrue(OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, 1));
         assertTrue(OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1, 1));
@@ -69,11 +76,12 @@ public class OneCameraSegmenterTest {
         capturedImageSet.setFileSet(capturedImage_c1);
         capturedImageSet.setFileSet(capturedImage_c2);
 
-        OneCameraSegmenter segmenter = new OneCameraSegmenter(fov, numChannels);
-        segmenter.setCapturedImageSet(capturedImageSet);
+        OneCameraPolararizationImageSetCreator creator = new OneCameraPolararizationImageSetCreator(fov, numChannels);
+        creator.setSegmenter(_singleChannelSegmenter);
+        creator.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {
-            IPolarizationImageSet imageSet = segmenter.segment(c);
+            IPolarizationImageSet imageSet = creator.create(c);
 
             assertTrue(OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, c));
             assertTrue(
@@ -105,11 +113,12 @@ public class OneCameraSegmenterTest {
         capturedImageSet.setFileSet(capturedImage_c1);
         capturedImageSet.setFileSet(capturedImage_c2);
 
-        OneCameraSegmenter segmenter = new OneCameraSegmenter(fov, numChannels);
-        segmenter.setCapturedImageSet(capturedImageSet);
+        OneCameraPolararizationImageSetCreator creator = new OneCameraPolararizationImageSetCreator(fov, numChannels);
+        creator.setSegmenter(_singleChannelSegmenter);
+        creator.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {
-            IPolarizationImageSet imageSet = segmenter.segment(c);
+            IPolarizationImageSet imageSet = creator.create(c);
 
             assertTrue(OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, c));
             assertTrue(
@@ -141,11 +150,12 @@ public class OneCameraSegmenterTest {
         capturedImageSet.setFileSet(capturedImage_c1);
         capturedImageSet.setFileSet(capturedImage_c2);
 
-        OneCameraSegmenter segmenter = new OneCameraSegmenter(fov, numChannels);
-        segmenter.setCapturedImageSet(capturedImageSet);
+        OneCameraPolararizationImageSetCreator creator = new OneCameraPolararizationImageSetCreator(fov, numChannels);
+        creator.setSegmenter(_multiChannelSegmenter);
+        creator.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {
-            IPolarizationImageSet imageSet = segmenter.segment(c);
+            IPolarizationImageSet imageSet = creator.create(c);
 
             assertTrue(OCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, c));
             assertTrue(

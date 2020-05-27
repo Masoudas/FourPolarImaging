@@ -24,7 +24,13 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
-public class FourCameraSegmenterTest {
+/**
+ * Tests are done only for sample images.
+ */
+public class FourCameraPolararizationImageSetCreatorTest {
+    ChannelPolarizationSegmenter _singleChannelSegmenter = new SampleSingleChannelPolarizationSegmenter();
+    ChannelPolarizationSegmenter _multiChannelSegmenter = new SampleMultiChannelPolarizationSegmenter();
+
     @Test
     public void segment_OneSingleChannelXYImage_ReturnsCorrectPolImages() {
         IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
@@ -47,9 +53,10 @@ public class FourCameraSegmenterTest {
         FCISDummyCapturedImageSet capturedImageSet = new FCISDummyCapturedImageSet(false, 1);
         capturedImageSet.setFileSet(capturedImage_pol0, capturedImage_pol45, capturedImage_pol90, capturedImage_pol135);
 
-        FourCameraPolararizationImageSetCreator segmenter = new FourCameraPolararizationImageSetCreator(fov, numChannels);
-        segmenter.setCapturedImageSet(capturedImageSet);
-        IPolarizationImageSet imageSet = segmenter.create(1);
+        FourCameraPolararizationImageSetCreator creator = new FourCameraPolararizationImageSetCreator(fov, numChannels);
+        creator.setSegmenter(this._singleChannelSegmenter);
+        creator.setCapturedImageSet(capturedImageSet);
+        IPolarizationImageSet imageSet = creator.create(1);
 
         assertTrue(FCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 1));
         assertTrue(FCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1));
@@ -79,11 +86,12 @@ public class FourCameraSegmenterTest {
         FCISDummyCapturedImageSet capturedImageSet = new FCISDummyCapturedImageSet(true, 1);
         capturedImageSet.setFileSet(capturedImage_pol0, capturedImage_pol45, capturedImage_pol90, capturedImage_pol135);
 
-        FourCameraPolararizationImageSetCreator segmenter = new FourCameraPolararizationImageSetCreator(fov, numChannels);
-        segmenter.setCapturedImageSet(capturedImageSet);
+        FourCameraPolararizationImageSetCreator creator = new FourCameraPolararizationImageSetCreator(fov, numChannels);
+        creator.setSegmenter(this._multiChannelSegmenter);
+        creator.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {
-            IPolarizationImageSet imageSet = segmenter.create(c);
+            IPolarizationImageSet imageSet = creator.create(c);
 
             assertTrue(FCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), c));
             assertTrue(FCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), c));

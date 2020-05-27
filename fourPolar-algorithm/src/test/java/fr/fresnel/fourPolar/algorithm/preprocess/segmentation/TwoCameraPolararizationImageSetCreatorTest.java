@@ -24,7 +24,13 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
-public class TwoCameraSegmenterTest {
+/**
+ * Tests are done only for sample images.
+ */
+public class TwoCameraPolararizationImageSetCreatorTest {
+    ChannelPolarizationSegmenter _singleChannelSegmenter = new SampleSingleChannelPolarizationSegmenter();
+    ChannelPolarizationSegmenter _multiChannelSegmenter = new SampleMultiChannelPolarizationSegmenter();
+
     @Test
     public void segment_OneSingleChannelXYImage_ReturnsCorrectPolImages() {
         IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
@@ -43,9 +49,11 @@ public class TwoCameraSegmenterTest {
         TCISDummyCapturedImageSet capturedImageSet = new TCISDummyCapturedImageSet(false, 1);
         capturedImageSet.setFileSet(capturedImage_pol0_90, capturedImage_pol45_135);
 
-        TwoCameraSegmenter segmenter = new TwoCameraSegmenter(fov, numChannels);
-        segmenter.setCapturedImageSet(capturedImageSet);
-        IPolarizationImageSet imageSet = segmenter.segment(1);
+        TwoCameraPolararizationImageSetCreator creator = new TwoCameraPolararizationImageSetCreator(fov, numChannels);
+        creator.setSegmenter(this._singleChannelSegmenter);
+        creator.setCapturedImageSet(capturedImageSet);
+        creator.setCapturedImageSet(capturedImageSet);
+        IPolarizationImageSet imageSet = creator.create(1);
 
         assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, 1));
         assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol45).getImage(), 1, 1));
@@ -77,11 +85,12 @@ public class TwoCameraSegmenterTest {
         capturedImageSet.setFileSet(capturedImage_pol0_90_c1, capturedImage_pol45_135_c1);
         capturedImageSet.setFileSet(capturedImage_pol0_90_c2, capturedImage_pol45_135_c2);
 
-        TwoCameraSegmenter segmenter = new TwoCameraSegmenter(fov, numChannels);
-        segmenter.setCapturedImageSet(capturedImageSet);
+        TwoCameraPolararizationImageSetCreator creator = new TwoCameraPolararizationImageSetCreator(fov, numChannels);
+        creator.setSegmenter(this._singleChannelSegmenter);
+        creator.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {
-            IPolarizationImageSet imageSet = segmenter.segment(c);
+            IPolarizationImageSet imageSet = creator.create(c);
 
             assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, c));
             assertTrue(
@@ -118,11 +127,12 @@ public class TwoCameraSegmenterTest {
         capturedImageSet.setFileSet(capturedImage_pol0_90_c1, capturedImage_pol45_135_c1);
         capturedImageSet.setFileSet(capturedImage_pol0_90_c2, capturedImage_pol45_135_c2);
 
-        TwoCameraSegmenter segmenter = new TwoCameraSegmenter(fov, numChannels);
-        segmenter.setCapturedImageSet(capturedImageSet);
+        TwoCameraPolararizationImageSetCreator creator = new TwoCameraPolararizationImageSetCreator(fov, numChannels);
+        creator.setSegmenter(this._singleChannelSegmenter);
+        creator.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {
-            IPolarizationImageSet imageSet = segmenter.segment(c);
+            IPolarizationImageSet imageSet = creator.create(c);
 
             assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, c));
             assertTrue(
@@ -159,11 +169,12 @@ public class TwoCameraSegmenterTest {
         capturedImageSet.setFileSet(capturedImage_pol0_90_c1, capturedImage_pol45_135_c1);
         capturedImageSet.setFileSet(capturedImage_pol0_90_c2, capturedImage_pol45_135_c2);
 
-        TwoCameraSegmenter segmenter = new TwoCameraSegmenter(fov, numChannels);
-        segmenter.setCapturedImageSet(capturedImageSet);
+        TwoCameraPolararizationImageSetCreator creator = new TwoCameraPolararizationImageSetCreator(fov, numChannels);
+        creator.setSegmenter(this._multiChannelSegmenter);
+        creator.setCapturedImageSet(capturedImageSet);
 
         for (int c = 1; c <= numChannels; c++) {
-            IPolarizationImageSet imageSet = segmenter.segment(c);
+            IPolarizationImageSet imageSet = creator.create(c);
 
             assertTrue(TCISImageChecker._checkImage(imageSet.getPolarizationImage(Polarization.pol0).getImage(), 0, c));
             assertTrue(
