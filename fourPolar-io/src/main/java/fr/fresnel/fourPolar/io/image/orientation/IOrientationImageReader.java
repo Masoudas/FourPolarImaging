@@ -19,7 +19,11 @@ public interface IOrientationImageReader {
      * @param fileSet       is the captured file set corresponding to this
      *                      orientation image.
      * @param channel       is the channel number.
-     * @return
+     * 
+     * @throws IOException                in case of IO issues.
+     * @throws CannotFormOrientationImage if orientation image cannot be created
+     *                                    (for example, if images are not of the
+     *                                    same size).
      */
     public IOrientationImage read(File root4PProject, ICapturedImageFileSet fileSet, int channel)
             throws IOException, CannotFormOrientationImage;
@@ -34,9 +38,13 @@ public interface IOrientationImageReader {
      * @param fileSet       is the captured file set corresponding to this
      *                      orientation image.
      * @param channel       is the channel number.
-     * @return
+     * 
+     * @throws IOException                in case of IO issues.
+     * @throws CannotFormOrientationImage if orientation image cannot be created
+     *                                    (for example, if images are not of the
+     *                                    same size).
      */
-    public IOrientationImage readFromDegrees();
+    public IOrientationImage readFromDegrees(File root4PProject, ICapturedImageFileSet fileSet, int channel);
 
     /**
      * Close all resources associated with this reader.
