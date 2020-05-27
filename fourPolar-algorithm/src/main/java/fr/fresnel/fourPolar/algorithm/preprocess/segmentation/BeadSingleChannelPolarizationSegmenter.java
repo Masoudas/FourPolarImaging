@@ -89,6 +89,10 @@ class BeadSingleChannelPolarizationSegmenter extends ChannelPolarizationSegmente
             len[imageMetadata.axisOrder().t_axis] = 1;
         }
 
+        if (imageMetadata.axisOrder().c_axis > 0) {
+            len[imageMetadata.axisOrder().c_axis] = 1;
+        }
+
         return len;
     }
 }
