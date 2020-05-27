@@ -53,4 +53,13 @@ public class MetadataUtil {
 		return new ShapeFactory().point(new long[] { dims[0], dims[1] }, AxisOrder.XY);
 	}
 
+	/**
+	 * Returns the plane size of the metadata.
+	 * 
+	 * @return
+	 */
+	public static long getPlaneSize(IMetadata metadata) {
+		long[] planeDim = getPlaneDim(metadata).point();
+		return planeDim[0] * planeDim[1];
+	}
 }
