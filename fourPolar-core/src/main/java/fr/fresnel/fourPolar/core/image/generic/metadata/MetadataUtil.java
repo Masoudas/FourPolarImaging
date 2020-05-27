@@ -24,9 +24,9 @@ public class MetadataUtil {
 	public static boolean isImagePlanar(IMetadata metadata) {
 		long[] dim = metadata.getDim();
 
-		long nChannels = dim[metadata.axisOrder().t_axis];
-		long nZpoints = dim[metadata.axisOrder().z_axis];
-		long nTimepoints = dim[metadata.axisOrder().c_axis];
+		long nChannels = metadata.axisOrder().c_axis > 0 ? dim[metadata.axisOrder().c_axis] : 0;
+		long nZpoints = metadata.axisOrder().z_axis > 0 ? dim[metadata.axisOrder().z_axis] : 0;
+		long nTimepoints = metadata.axisOrder().t_axis > 0 ? dim[metadata.axisOrder().t_axis] : 0;
 
 		return nChannels <= 1 && nZpoints <= 1 && nTimepoints <= 1;
 	}
