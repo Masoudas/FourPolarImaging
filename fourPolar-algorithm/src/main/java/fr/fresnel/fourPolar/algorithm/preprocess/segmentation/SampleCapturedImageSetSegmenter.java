@@ -17,8 +17,8 @@ public class SampleCapturedImageSetSegmenter {
      * To avoid creating the segmenter every time a new CapturedImageSet is
      * provided, we cache an instance of both.
      */
-    private ChannelPolarizationSegmenter _singleChannelSegmenter = new SingleChannelPolarizationSegmenter();
-    private ChannelPolarizationSegmenter _multiChannelSegmenter = new MultiChannelPolarizationSegmenter();
+    private ChannelPolarizationSegmenter _singleChannelSegmenter = new SampleSingleChannelPolarizationSegmenter();
+    private ChannelPolarizationSegmenter _multiChannelSegmenter = new SampleMultiChannelPolarizationSegmenter();
 
     /**
      * 
