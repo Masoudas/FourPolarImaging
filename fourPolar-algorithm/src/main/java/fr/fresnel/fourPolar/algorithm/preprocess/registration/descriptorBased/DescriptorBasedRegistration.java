@@ -2,8 +2,10 @@ package fr.fresnel.fourPolar.algorithm.preprocess.registration.descriptorBased;
 
 import fr.fresnel.fourPolar.algorithm.preprocess.registration.IChannelRegistrator;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
+import fr.fresnel.fourPolar.core.image.generic.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
@@ -51,7 +53,8 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
 
     @Override
     public IChannelRegistrationResult register(IPolarizationImageSet polarizationImageSet) {
-       // ??? Who breaks down the bead image to be planar?
+        this._checkPolarizationImageIsPlanar(polarizationImageSet);
+
         Image<UINT16> pol0 = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage();
         Image<UINT16> pol45 = polarizationImageSet.getPolarizationImage(Polarization.pol45).getImage();
         Image<UINT16> pol90 = polarizationImageSet.getPolarizationImage(Polarization.pol90).getImage();
@@ -64,6 +67,13 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
         return new DescriptorBased2DResultConverter().set(RegistrationOrder.Pol45_to_Pol0, pol45_pol0)
                 .set(RegistrationOrder.Pol90_to_Pol0, pol90_pol0).set(RegistrationOrder.Pol135_to_Pol0, pol135_pol0)
                 .convert();
+    }
+
+    private void _checkPolarizationImageIsPlanar(IPolarizationImageSet polarizationImageSet) {
+        IMetadata metadata = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage().getMetadata();
+        if (MetadataUtil.isImagePlanar(metadata)) {
+            throw new IllegalArgumentException("Polarization (bead) image must be planar to be registered.");
+        }
     }
 
     private DescriptorBased2DResult _registerPolarization(Image<UINT16> pol0, Image<UINT16> otherPol) {
