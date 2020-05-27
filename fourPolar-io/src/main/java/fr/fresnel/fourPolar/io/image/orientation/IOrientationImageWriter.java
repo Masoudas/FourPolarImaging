@@ -23,7 +23,8 @@ public interface IOrientationImageWriter {
      * Write the orientation image to the {@link IOrientationImageFileSet}, but
      * before doing so, converts the angles to degrees. The stored
      * {@link IAngleImage} on the disk would have an additional "inDegrees" to
-     * indicate this transformation.
+     * indicate this transformation. Note the orientation angles of @param image
+     * would remain in radian after write.
      * 
      * @param root4PProject is the location of the 4Polar folder of the project
      *                      {@see PathFactoryOfProject}.
