@@ -17,4 +17,9 @@ public interface IOrientationImageFileSet {
      */
     public File getFile(OrientationAngle angle);
 
+    /**
+     * Returns the channel this orientation image belongs to.
+     */
+    public int getChannel();
+
 }
