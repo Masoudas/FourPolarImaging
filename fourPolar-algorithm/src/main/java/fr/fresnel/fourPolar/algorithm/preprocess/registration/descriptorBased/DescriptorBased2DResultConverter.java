@@ -13,10 +13,12 @@ import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
  * {@link DescriptorBasedChannelRegistrationResult}.
  */
 class DescriptorBased2DResultConverter {
-    Hashtable<RegistrationOrder, DescriptorBased2DResult> _results;
+    private Hashtable<RegistrationOrder, DescriptorBased2DResult> _results;
+    private final int _channelNum;
 
-    public DescriptorBased2DResultConverter() {
+    public DescriptorBased2DResultConverter(int channelNum) {
         _results = new Hashtable<>();
+        this._channelNum = channelNum;
     }
 
     public DescriptorBased2DResultConverter set(RegistrationOrder order, DescriptorBased2DResult result) {
@@ -26,7 +28,7 @@ class DescriptorBased2DResultConverter {
 
     public IChannelRegistrationResult convert() {
         DescriptorBasedChannelRegistrationResult result = new DescriptorBasedChannelRegistrationResult();
-
+        result.setChannel(this._channelNum);
         for (RegistrationOrder order : RegistrationOrder.values()) {
             DescriptorBased2DResult polResult = _results.get(order);
 

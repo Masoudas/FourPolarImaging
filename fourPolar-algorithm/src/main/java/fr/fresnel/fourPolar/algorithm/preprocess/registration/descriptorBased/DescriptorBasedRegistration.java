@@ -54,6 +54,7 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
     @Override
     public IChannelRegistrationResult register(IPolarizationImageSet polarizationImageSet) {
         this._checkPolarizationImageIsPlanar(polarizationImageSet);
+        int channel = polarizationImageSet.channel();
 
         Image<UINT16> pol0 = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage();
         Image<UINT16> pol45 = polarizationImageSet.getPolarizationImage(Polarization.pol45).getImage();
@@ -64,7 +65,7 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
         DescriptorBased2DResult pol90_pol0 = _registerPolarization(pol0, pol90);
         DescriptorBased2DResult pol135_pol0 = _registerPolarization(pol0, pol135);
 
-        return new DescriptorBased2DResultConverter().set(RegistrationOrder.Pol45_to_Pol0, pol45_pol0)
+        return new DescriptorBased2DResultConverter(channel).set(RegistrationOrder.Pol45_to_Pol0, pol45_pol0)
                 .set(RegistrationOrder.Pol90_to_Pol0, pol90_pol0).set(RegistrationOrder.Pol135_to_Pol0, pol135_pol0)
                 .convert();
     }

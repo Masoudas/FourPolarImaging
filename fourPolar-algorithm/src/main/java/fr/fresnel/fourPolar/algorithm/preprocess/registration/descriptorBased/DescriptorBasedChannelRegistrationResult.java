@@ -14,6 +14,7 @@ class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationRe
     private HashMap<RegistrationOrder, AffineTransform2D> _affineTransform;
     private HashMap<RegistrationOrder, String> _description;
     private HashMap<RegistrationOrder, Double> _error;
+    private int _channelNum = 0;
 
     public DescriptorBasedChannelRegistrationResult() {
         this._isSuccessfulRegistration = new HashMap<>();
@@ -38,6 +39,10 @@ class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationRe
         this._isSuccessfulRegistration.put(order, isSuccessful);
     }
 
+    public void setChannel(int channelNum) {
+        this._channelNum = channelNum;
+    }
+
     @Override
     public AffineTransform2D getAffineTransform(RegistrationOrder order) {
         return _affineTransform.get(order);
@@ -56,6 +61,11 @@ class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationRe
     @Override
     public boolean registrationSuccessful(RegistrationOrder order) {
         return this._isSuccessfulRegistration.get(order);
+    }
+
+    @Override
+    public int channel() {
+        return this._channelNum;
     }
 
 }
