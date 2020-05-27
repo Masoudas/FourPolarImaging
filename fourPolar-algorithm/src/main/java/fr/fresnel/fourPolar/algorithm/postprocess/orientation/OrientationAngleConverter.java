@@ -12,10 +12,14 @@ import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
  * Contains a set of utility methods for post-processing the orientation images.
  */
 public class OrientationAngleConverter {
+    private OrientationAngleConverter() {
+        throw new AssertionError();
+    }
+
     /**
      * Converts each {@link OrientationAngle} to degrees in place.
      */
-    public void convertToDegree(IOrientationImage orientationImage) {
+    public static void convertToDegree(IOrientationImage orientationImage) {
         for (OrientationAngle orientationAngle : EnumSet.allOf(OrientationAngle.class)) {
             IPixelCursor<Float32> angleCursor = orientationImage.getAngleImage(orientationAngle).getImage().getCursor();
 
@@ -33,7 +37,7 @@ public class OrientationAngleConverter {
     /**
      * Converts each {@link OrientationAngle} to radian in place.
      */
-    public void convertToRadian(IOrientationImage orientationImage) {
+    public static void convertToRadian(IOrientationImage orientationImage) {
         for (OrientationAngle orientationAngle : EnumSet.allOf(OrientationAngle.class)) {
             IPixelCursor<Float32> angleCursor = orientationImage.getAngleImage(orientationAngle).getImage().getCursor();
 
