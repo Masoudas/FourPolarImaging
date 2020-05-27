@@ -6,10 +6,9 @@ import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 
-class MultiChannelPolarizationSegmenter extends ChannelPolarizationSegmenter {
+class SampleMultiChannelPolarizationSegmenter extends ChannelPolarizationSegmenter {
     /**
      * Creates an array of Image interfaces that correspond to the given fov of the
      * desired polarization over the given multi-channel captured images. To avoid

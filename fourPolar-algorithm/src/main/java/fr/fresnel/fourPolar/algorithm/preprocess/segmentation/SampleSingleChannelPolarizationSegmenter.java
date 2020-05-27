@@ -8,7 +8,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 
-class SingleChannelPolarizationSegmenter extends ChannelPolarizationSegmenter {
+class SampleSingleChannelPolarizationSegmenter extends ChannelPolarizationSegmenter {
     /**
      * Creates an array of Image interfaces that correspond to the given fov of the
      * desired polarization over the given single channel captured images. To avoid
@@ -30,7 +30,7 @@ class SingleChannelPolarizationSegmenter extends ChannelPolarizationSegmenter {
         int numChannels = this._getTotalNumChannels(capturedImages);
         Image<UINT16>[] channelImages = new Image[numChannels];
         for (ICapturedImage iCapturedImage : capturedImages) {
-            Image<UINT16> segmentedPolarizationImage = _createsSegmentedPolarizationImage(iCapturedImage, polFoV);
+            Image<UINT16> segmentedPolarizationImage = _createsPolarizationImage(iCapturedImage, polFoV);
 
             int channel = iCapturedImage.channels()[0];
             channelImages[channel - 1] = segmentedPolarizationImage;
@@ -44,7 +44,7 @@ class SingleChannelPolarizationSegmenter extends ChannelPolarizationSegmenter {
      * image, using an interval cursor over the captured image.
      * 
      */
-    private Image<UINT16> _createsSegmentedPolarizationImage(ICapturedImage capturedImage, IBoxShape polFoV) {
+    private Image<UINT16> _createsPolarizationImage(ICapturedImage capturedImage, IBoxShape polFoV) {
         Image<UINT16> image = capturedImage.getImage();
 
         long[] bottomCorner = _createBottomCorner(polFoV, image.getMetadata());
