@@ -19,7 +19,7 @@ public interface Image<T extends PixelType> {
      * @param bottomCorner is the bottom corner of the interval, starting from
      *                     [0,0,0, ...]. This is the actual address of the pixel
      * @param len          is the length of the interval. The length includes the
-     *                     first pixel as well.
+     *                     first pixel as well, hence it can't be zero.
      * @return a cursor that iterates over this interval.
      * @throws IllegalArgumentException if len or bottomCorner don't have same
      *                                  dimension as image, or bottomCorner is
