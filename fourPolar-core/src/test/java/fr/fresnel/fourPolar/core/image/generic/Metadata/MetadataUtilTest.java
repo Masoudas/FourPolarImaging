@@ -17,7 +17,7 @@ public class MetadataUtilTest {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2, 2, 2, 2, 2 }).build();
         Image<UINT16> image = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
 
-        assertTrue(MetadataUtil.getNPlanes(image) == 16);
+        assertTrue(MetadataUtil.getNPlanes(image.getMetadata()) == 16);
 
     }
 }
