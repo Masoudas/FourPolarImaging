@@ -1,7 +1,11 @@
 package fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.percentile;
 
+import java.util.Objects;
+
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChannelBackgroundEstimator;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageSet;
+import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackground;
 
 /**
@@ -19,15 +23,35 @@ public class PercentileDarkBackgroundEstimator implements IChannelBackgroundEsti
      * The percentile in the histogram of intensity values that corresponds to
      * noise.
      */
-    private static int _backgroundPercentile = 10;
+    private static int PERCENTILE_THRESHOLD = 10;
 
-    public PercentileDarkBackgroundEstimator(ICapturedImageSet imageSet) {
+    private final IChannelBackgroundEstimator _estimator;
 
+    public PercentileDarkBackgroundEstimator(Cameras cameras) {
+        Objects.requireNonNull(cameras, "cameras can't be null");
+
+        this._estimator = this._chooseSegmenter(cameras);
+    }
+
+    private IChannelBackgroundEstimator _chooseSegmenter(Cameras cameras) {
+        switch (cameras) {
+            case One:
+                return new OneCameraPercentileDarkBackgroundEstimator(PERCENTILE_THRESHOLD);
+
+            case Two:
+                return new TwoCameraPercentileDarkBackgroundEstimator(PERCENTILE_THRESHOLD);
+
+            case Four:
+                return new FourCameraPercentileDarkBackgroundEstimator(PERCENTILE_THRESHOLD);
+
+            default:
+                return null;
+        }
     }
 
     @Override
-    public IChannelDarkBackground estimate(int channel) {
-        return null;
+    public IChannelDarkBackground estimate(IPolarizationImageSet imageSet) {
+        return this._estimator.estimate(imageSet);
     }
 
 }
