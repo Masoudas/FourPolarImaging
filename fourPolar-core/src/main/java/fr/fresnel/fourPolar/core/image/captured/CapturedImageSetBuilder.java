@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 public class CapturedImageSetBuilder extends ICapturedImageSetBuilder {
@@ -28,8 +31,8 @@ public class CapturedImageSetBuilder extends ICapturedImageSetBuilder {
         return table;
     }
 
-    public void setCapturedImage(String label, ICapturedImage capturedImage) {
-        this._images.get(label).add(capturedImage);
+    public void setCapturedImage(String label, ICapturedImageFile capturedImageFile, Image<UINT16> image) {
+        this._images.get(label).add(new CapturedImage(capturedImageFile, label, image));
     }
 
     public void setFileSet(ICapturedImageFileSet fileSet) {
