@@ -27,9 +27,9 @@ public class Float32ImgLib2TiffImageReaderTest {
     }
 
     @Test
-    public void read_Float32Image_ShouldShowImage()
+    public void read_Float32XYImage_ShouldShowImage()
             throws IOException, InterruptedException, ConverterToImgLib2NotFound, MetadataParseError {
-        File path = new File(_testResource, "Float32Image.tif");
+        File path = new File(_testResource, "Float32XYImage.tif");
         Float32SCIFIOTiffImageReader reader = new Float32SCIFIOTiffImageReader(new ImgLib2ImageFactory());
         Image<Float32> img = reader.read(path);
 
@@ -38,9 +38,20 @@ public class Float32ImgLib2TiffImageReaderTest {
     }
 
     @Test
+    public void read_Float32XYCZTImage_ShouldShowImage()
+            throws IOException, InterruptedException, ConverterToImgLib2NotFound, MetadataParseError {
+        File path = new File(_testResource, "Float32XYCZTImage.tif");
+        Float32SCIFIOTiffImageReader reader = new Float32SCIFIOTiffImageReader(new ImgLib2ImageFactory());
+        Image<Float32> img = reader.read(path);
+
+        assertTrue(img.getMetadata().axisOrder() == AxisOrder.XYCZT
+                && Arrays.equals(img.getMetadata().getDim(), new long[] { 10, 10, 1, 2, 2 }));
+    }
+
+    @Test
     public void read_SameImageTenThousandTimes_ShouldNotRunOutOfResource() throws IllegalArgumentException, IOException,
             InterruptedException, KeyException, IncompatibleCapturedImage, MetadataParseError {
-        File path = new File(_testResource, "Float32Image.tif");
+        File path = new File(_testResource, "Float32XYImage.tif");
         Float32SCIFIOTiffImageReader reader = new Float32SCIFIOTiffImageReader(new ImgLib2ImageFactory());
 
         Image<Float32> img = null;
