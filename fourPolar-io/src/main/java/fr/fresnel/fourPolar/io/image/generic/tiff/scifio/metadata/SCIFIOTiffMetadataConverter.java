@@ -37,6 +37,10 @@ public class SCIFIOTiffMetadataConverter {
      * Fills the axis type, axis length and bitPerPixel of the given
      * {@link ImageMetadata} from the given {@link IMetadata}.
      * 
+     * @param metadata       is a metadata interface
+     * @param scifioMetadata is a SCIFIO metadata instance. This convert method
+     *                       fills the axis type, axis length and bitPerPixel of
+     *                       this metadata.
      */
     public static void convertTo(IMetadata metadata, ImageMetadata scifioMetadata) {
         _setImageMetadataAxis(metadata.axisOrder(), metadata.getDim(), scifioMetadata);
