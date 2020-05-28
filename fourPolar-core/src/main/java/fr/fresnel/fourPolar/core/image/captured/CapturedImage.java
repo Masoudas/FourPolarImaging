@@ -3,7 +3,6 @@ package fr.fresnel.fourPolar.core.image.captured;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
-import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
