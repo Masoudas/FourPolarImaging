@@ -6,6 +6,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 
 /**
@@ -20,10 +21,10 @@ public class GaugeFigureFactory {
      * @param angleGaugeType is the angle gauge type of this gauge figure.
      * @param image          is the {@link Image} interface of the figure.
      * @param fileSet        is the fileSet associated with this gauge figure.
-     * @return an gauge figure.
+     * @return a gauge figure.
      * 
      * @throws IllegalArgumentException is thrown in case the givne @param image is
-     *                                  not an XYZT image.
+     *                                  not an XYCZT image.
      */
     public static IGaugeFigure create(GaugeFigureType figureType, AngleGaugeType angleGaugeType, Image<RGB16> image,
             ICapturedImageFileSet fileSet) {
@@ -31,8 +32,8 @@ public class GaugeFigureFactory {
         Objects.requireNonNull(image, "image cannot be null");
         Objects.requireNonNull(fileSet, "fileSet cannot be null");
 
-        if (image.getMetadata().axisOrder() != AxisOrder.XYZT) {
-            throw new IllegalArgumentException("The given soi image is not XYZT");
+        if (image.getMetadata().axisOrder() != ISoIImage.AXIS_ORDER) {
+            throw new IllegalArgumentException("The given soi image does not have the same axis order as ISoIImage.");
         }
 
         return new GaugeFigure(figureType, angleGaugeType, image, fileSet);
