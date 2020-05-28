@@ -16,6 +16,8 @@ import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
 public class DescriptorBased2DResultConverterTest {
     @Test
     public void convert_ThreeScenariosForEachPol_ReturnsCorrectResult() {
+        int channel = 1;
+
         DescriptorBased2DResult pol45 = new DescriptorBased2DResult();
         pol45.setFailureDescription(FailureCause.NOT_ENOUGH_FP);
         pol45.setIsSuccessful(false);
@@ -32,7 +34,7 @@ public class DescriptorBased2DResultConverterTest {
         pol135.setPercentInliers(0.90);
         pol135.setRegistrationError(0.9);
 
-        DescriptorBased2DResultConverter converter = new DescriptorBased2DResultConverter();
+        DescriptorBased2DResultConverter converter = new DescriptorBased2DResultConverter(channel);
 
         converter.set(RegistrationOrder.Pol45_to_Pol0, pol45);
         converter.set(RegistrationOrder.Pol90_to_Pol0, pol90);
