@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.io.image.generic.tiff.scifio;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -16,9 +17,9 @@ import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadataReader;
 
 public class Float32ImgLib2TiffImageWriterTest {
-    private static long[] _dim = { 10, 10, 1, 3, 3 };
     private static File _root;
     private static ImgLib2ImageFactory _factory = new ImgLib2ImageFactory();
 
@@ -28,25 +29,78 @@ public class Float32ImgLib2TiffImageWriterTest {
     }
 
     @Test
-    public void write_Float32Image_DiskImageHasSameDimensions() throws IOException, MetadataParseError {
+    public void write_Float32XYImage_DiskImageHasSameMetadata() throws IOException, MetadataParseError {
+        long[] dim = { 10, 10 };
+
         File destination = new File(_root, "Float32Image.tif");
 
-        IMetadata metadata = new Metadata.MetadataBuilder(_dim).axisOrder(AxisOrder.XYCZT)
-                .bitPerPixel(PixelTypes.FLOAT_32).build();
+        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XY).bitPerPixel(PixelTypes.FLOAT_32)
+                .build();
         Image<Float32> image = _factory.create(metadata, Float32.zero());
-        
+
         Float32SCIFIOTiffImageWriter writer = new Float32SCIFIOTiffImageWriter();
         writer.write(destination, image);
         writer.close();
 
-        Image<Float32> diskImage = new Float32SCIFIOTiffImageReader(_factory).read(destination);
+        SCIFIOMetadataReader metadataReader = new SCIFIOMetadataReader();
+        IMetadata diskMetadata = metadataReader.read(destination);
 
-        assertTrue(diskImage.getMetadata().getDim()[0] == _dim[0] && diskImage.getMetadata().getDim()[1] == _dim[1]);
+        assertArrayEquals(diskMetadata.getDim(), metadata.getDim());
+        assertTrue(diskMetadata.axisOrder() == metadata.axisOrder());
     }
 
     @Test
-    public void write_WriteMultipleFiles_DiskImageHasSameDimensions() throws IOException {
-        Image<Float32> image = _factory.create(_dim, Float32.zero());
+    public void write_Float32XYCZTImage_DiskImageHasSameMetadata() throws IOException, MetadataParseError {
+        long[] dim = { 10, 10, 1, 2, 2 };
+
+        File destination = new File(_root, "Float32Image.tif");
+
+        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT)
+                .bitPerPixel(PixelTypes.FLOAT_32).build();
+        Image<Float32> image = _factory.create(metadata, Float32.zero());
+
+        Float32SCIFIOTiffImageWriter writer = new Float32SCIFIOTiffImageWriter();
+        writer.write(destination, image);
+        writer.close();
+
+        SCIFIOMetadataReader metadataReader = new SCIFIOMetadataReader();
+        IMetadata diskMetadata = metadataReader.read(destination);
+
+        assertArrayEquals(diskMetadata.getDim(), metadata.getDim());
+        assertTrue(diskMetadata.axisOrder() == metadata.axisOrder());
+    }
+
+    // @Test
+    // public void write_Float32XYCZTImageSingleZAndT_DiskImageHasSameMetadata()
+    // throws IOException, MetadataParseError {
+    // long[] dim = { 10, 10, 1, 1, 1 };
+
+    // File destination = new File(_root, "Float32Image.tif");
+
+    // IMetadata metadata = new
+    // Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT)
+    // .bitPerPixel(PixelTypes.FLOAT_32).build();
+    // Image<Float32> image = _factory.create(metadata, Float32.zero());
+
+    // Float32SCIFIOTiffImageWriter writer = new Float32SCIFIOTiffImageWriter();
+    // writer.write(destination, image);
+    // writer.close();
+
+    // SCIFIOMetadataReader metadataReader = new SCIFIOMetadataReader();
+    // IMetadata diskMetadata = metadataReader.read(destination);
+
+    // assertArrayEquals(diskMetadata.getDim(), metadata.getDim());
+    // assertTrue(diskMetadata.axisOrder() == metadata.axisOrder());
+    // }
+
+    @Test
+    public void write_WriteMultipleFiles_DiskImageHasSameMetadata() throws IOException, MetadataParseError {
+        long[] dim = { 10, 10, 1, 2, 2 };
+
+        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT)
+                .bitPerPixel(PixelTypes.FLOAT_32).build();
+        Image<Float32> image = _factory.create(metadata, Float32.zero());
+
         Float32SCIFIOTiffImageWriter writer = new Float32SCIFIOTiffImageWriter();
         File destination = new File(_root, "Float32Image.tif");
 
@@ -56,9 +110,11 @@ public class Float32ImgLib2TiffImageWriterTest {
         }
         writer.close();
 
-        Image<Float32> diskImage = new Float32SCIFIOTiffImageReader(_factory).read(destination);
+        SCIFIOMetadataReader metadataReader = new SCIFIOMetadataReader();
+        IMetadata diskMetadata = metadataReader.read(destination);
 
-        assertTrue(diskImage.getMetadata().getDim()[0] == _dim[0] && diskImage.getMetadata().getDim()[1] == _dim[1]);
+        assertArrayEquals(diskMetadata.getDim(), metadata.getDim());
+        assertTrue(diskMetadata.axisOrder() == metadata.axisOrder());
 
     }
 
