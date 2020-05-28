@@ -4,6 +4,7 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.Converter
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
@@ -34,7 +35,8 @@ public class ChannelRealigner implements IChannelRealigner {
      * 
      * @return
      */
-    public static IChannelRealigner create(final IChannelRegistrationResult channelRegistrationResult) {
+    public static IChannelRealigner create(final IChannelRegistrationResult channelRegistrationResult,
+            ImageFactory factory) {
         return new ChannelRealigner(channelRegistrationResult);
     }
 
