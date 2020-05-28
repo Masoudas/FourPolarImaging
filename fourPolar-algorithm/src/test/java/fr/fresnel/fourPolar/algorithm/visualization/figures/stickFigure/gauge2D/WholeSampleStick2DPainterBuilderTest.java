@@ -3,6 +3,8 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.util.Iterator;
+
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
@@ -310,7 +312,7 @@ public class WholeSampleStick2DPainterBuilderTest {
 
         IShape smallerRegionOfImage1 = new ShapeFactory().closedPolygon2D(new long[] { 100, 500, 400, 300, 200 },
                 new long[] { 100, 100, 500, 200, 500 });
-        
+
         IShape smallerRegionOfImage2 = new ShapeFactory().closedBox(new long[] { 600, 300 }, new long[] { 800, 500 },
                 AxisOrder.XY);
 
@@ -379,6 +381,12 @@ class DummyWholeSampleFileSet implements ICapturedImageFileSet {
     @Override
     public boolean deepEquals(ICapturedImageFileSet fileset) {
         return false;
+    }
+
+    @Override
+    public Iterator<ICapturedImageFile> getIterator() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

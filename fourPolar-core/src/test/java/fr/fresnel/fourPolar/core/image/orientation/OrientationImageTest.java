@@ -3,6 +3,8 @@ package fr.fresnel.fourPolar.core.image.orientation;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Iterator;
+
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
@@ -122,6 +124,12 @@ class DummyPolFileSet implements ICapturedImageFileSet {
     @Override
     public boolean deepEquals(ICapturedImageFileSet fileset) {
         return false;
+    }
+
+    @Override
+    public Iterator<ICapturedImageFile> getIterator() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

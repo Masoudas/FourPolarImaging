@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.algorithm.postProcess;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.EnumSet;
+import java.util.Iterator;
 
 import org.junit.jupiter.api.Test;
 
@@ -126,6 +127,12 @@ class DummySet implements ICapturedImageFileSet {
     public boolean deepEquals(ICapturedImageFileSet fileset) {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public Iterator<ICapturedImageFile> getIterator() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

@@ -3,6 +3,8 @@ package fr.fresnel.fourPolar.core.image.soi;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Iterator;
+
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.fourPolar.IIntensityVectorIterator;
@@ -47,9 +49,9 @@ public class SoIImageTest {
         IPolarizationImageSet polarizationImageSet = new DummyPolImgSet();
         ISoIImage soiImage = SoIImage.create(polarizationImageSet);
 
-    
-        assertArrayEquals(polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage().getMetadata().getDim(), 
-            soiImage.getImage().getMetadata().getDim());
+        assertArrayEquals(
+                polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage().getMetadata().getDim(),
+                soiImage.getImage().getMetadata().getDim());
     }
 }
 
@@ -119,6 +121,12 @@ class DummyFileSet implements ICapturedImageFileSet {
     @Override
     public boolean deepEquals(ICapturedImageFileSet fileset) {
         return false;
+    }
+
+    @Override
+    public Iterator<ICapturedImageFile> getIterator() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

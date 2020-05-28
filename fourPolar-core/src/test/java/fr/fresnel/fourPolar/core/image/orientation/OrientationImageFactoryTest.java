@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.core.image.orientation;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 import org.junit.jupiter.api.Test;
 
@@ -34,8 +35,8 @@ public class OrientationImageFactoryTest {
         Image<UINT16> pol90 = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
         Image<UINT16> pol135 = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
 
-        IPolarizationImageSet polImage = new PolarizationImageSetBuilder(1).fileSet(new DummyFileSet()).channel(1).pol0(pol0)
-                .pol45(pol45).pol90(pol90).pol135(pol135).build();
+        IPolarizationImageSet polImage = new PolarizationImageSetBuilder(1).fileSet(new DummyFileSet()).channel(1)
+                .pol0(pol0).pol45(pol45).pol90(pol90).pol135(pol135).build();
 
         IOrientationImage orientationImage = OrientationImageFactory.create(factory, polImage);
         assertTrue(Arrays.equals(orientationImage.getAngleImage(OrientationAngle.rho).getImage().getMetadata().getDim(),
@@ -74,6 +75,12 @@ class DummyFileSet implements ICapturedImageFileSet {
     @Override
     public boolean deepEquals(ICapturedImageFileSet fileset) {
         return false;
+    }
+
+    @Override
+    public Iterator<ICapturedImageFile> getIterator() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

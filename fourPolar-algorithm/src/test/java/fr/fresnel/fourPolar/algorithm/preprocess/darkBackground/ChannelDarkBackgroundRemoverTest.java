@@ -2,6 +2,8 @@ package fr.fresnel.fourPolar.algorithm.preprocess.darkBackground;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Iterator;
+
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.ChannelDarkBackground;
@@ -26,8 +28,8 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 public class ChannelDarkBackgroundRemoverTest {
     /**
      * Intentially, to test if pixels that have intensity below dark background are
-     * set to zero, pol0 image has noise greater than all pixels, to ensure that it's
-     * set to zero after background removal.
+     * set to zero, pol0 image has noise greater than all pixels, to ensure that
+     * it's set to zero after background removal.
      * 
      * @throws CannotFormPolarizationImageSet
      */
@@ -110,6 +112,12 @@ class CDummyFileSet implements ICapturedImageFileSet {
     @Override
     public boolean deepEquals(ICapturedImageFileSet fileset) {
         return false;
+    }
+
+    @Override
+    public Iterator<ICapturedImageFile> getIterator() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

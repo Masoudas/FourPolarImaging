@@ -2,6 +2,8 @@ package fr.fresnel.fourPolar.algorithm.preprocess.segmentation;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Iterator;
+
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
@@ -257,6 +259,12 @@ class FCISDummyFileSet implements ICapturedImageFileSet {
     public boolean deepEquals(ICapturedImageFileSet fileset) {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public Iterator<ICapturedImageFile> getIterator() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

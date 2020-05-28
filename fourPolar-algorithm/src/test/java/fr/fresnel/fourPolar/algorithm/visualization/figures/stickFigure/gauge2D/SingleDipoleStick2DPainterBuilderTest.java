@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -223,6 +224,12 @@ class DummyFileSet implements ICapturedImageFileSet {
     @Override
     public boolean deepEquals(ICapturedImageFileSet fileset) {
         return false;
+    }
+
+    @Override
+    public Iterator<ICapturedImageFile> getIterator() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

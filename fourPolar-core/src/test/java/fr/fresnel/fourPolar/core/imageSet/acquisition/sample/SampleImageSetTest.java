@@ -146,4 +146,10 @@ class DummyCapturedSet implements ICapturedImageFileSet {
         return file[0].file().getAbsolutePath().equals(fileset.getFile("")[0].file().getAbsolutePath());
     }
 
+    @Override
+    public Iterator<ICapturedImageFile> getIterator() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
