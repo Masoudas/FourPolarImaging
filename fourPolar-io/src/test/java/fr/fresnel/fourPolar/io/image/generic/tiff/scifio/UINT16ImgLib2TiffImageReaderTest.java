@@ -27,31 +27,41 @@ public class UINT16ImgLib2TiffImageReaderTest {
     }
 
     @Test
-    public void read_UINT16Image_ShouldShowImage()
+    public void read_UINT16XYImage_ShouldShowImage()
             throws IOException, InterruptedException, ConverterToImgLib2NotFound, MetadataParseError {
-        File path = new File(_testResource, "UINT16Image.tif");
+        File path = new File(_testResource, "UINT16XYImage.tif");
         UINT16SCIFIOTiffImageReader reader = new UINT16SCIFIOTiffImageReader(new ImgLib2ImageFactory());
         Image<UINT16> img = reader.read(path);
 
         assertTrue(img.getMetadata().axisOrder() == AxisOrder.XY
-                && Arrays.equals(img.getMetadata().getDim(), new long[] { 256, 256 }));
+                && Arrays.equals(img.getMetadata().getDim(), new long[] { 10, 10 }));
+    }
+
+    @Test
+    public void read_UINT16XYCZTImage_ShouldShowImage()
+            throws IOException, InterruptedException, ConverterToImgLib2NotFound, MetadataParseError {
+        File path = new File(_testResource, "UINT16XYCZTImage.tif");
+        UINT16SCIFIOTiffImageReader reader = new UINT16SCIFIOTiffImageReader(new ImgLib2ImageFactory());
+        Image<UINT16> img = reader.read(path);
+
+        assertTrue(img.getMetadata().axisOrder() == AxisOrder.XYCZT
+                && Arrays.equals(img.getMetadata().getDim(), new long[] { 10, 10, 1, 2, 2 }));
     }
 
     @Test
     public void read_SameImageTenThousandTimes_ShouldNotRunOutOfResource() throws IllegalArgumentException, IOException,
             InterruptedException, KeyException, IncompatibleCapturedImage, MetadataParseError {
-        File path = new File(_testResource, "UINT16Image.tif");
+        File path = new File(_testResource, "UINT16XYImage.tif");
         UINT16SCIFIOTiffImageReader reader = new UINT16SCIFIOTiffImageReader(new ImgLib2ImageFactory());
 
         Image<UINT16> img = null;
         for (int i = 0; i < 10000; i++) {
             img = reader.read(path);
         }
-
         reader.close();
 
         assertTrue(img.getMetadata().axisOrder() == AxisOrder.XY
-                && Arrays.equals(img.getMetadata().getDim(), new long[] { 256, 256 }));
+                && Arrays.equals(img.getMetadata().getDim(), new long[] { 10, 10 }));
 
     }
 
