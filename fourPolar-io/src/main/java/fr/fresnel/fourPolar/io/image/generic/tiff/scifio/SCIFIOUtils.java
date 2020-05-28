@@ -25,4 +25,10 @@ class SCIFIOUtils {
         }
     }
 
+    public static void deleteFileIfExists(File path) {
+        if (path.exists()) {
+            path.delete();
+        }
+    }
+
 }
