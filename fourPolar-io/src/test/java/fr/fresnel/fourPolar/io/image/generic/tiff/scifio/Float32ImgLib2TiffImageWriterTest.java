@@ -32,7 +32,7 @@ public class Float32ImgLib2TiffImageWriterTest {
     public void write_Float32XYImage_DiskImageHasSameMetadata() throws IOException, MetadataParseError {
         long[] dim = { 10, 10 };
 
-        File destination = new File(_root, "Float32Image.tif");
+        File destination = new File(_root, "Float32XYImage.tif");
 
         IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XY).bitPerPixel(PixelTypes.FLOAT_32)
                 .build();
@@ -53,7 +53,7 @@ public class Float32ImgLib2TiffImageWriterTest {
     public void write_Float32XYCZTImage_DiskImageHasSameMetadata() throws IOException, MetadataParseError {
         long[] dim = { 10, 10, 1, 2, 2 };
 
-        File destination = new File(_root, "Float32Image.tif");
+        File destination = new File(_root, "Float32XYCZTImage.tif");
 
         IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT)
                 .bitPerPixel(PixelTypes.FLOAT_32).build();
