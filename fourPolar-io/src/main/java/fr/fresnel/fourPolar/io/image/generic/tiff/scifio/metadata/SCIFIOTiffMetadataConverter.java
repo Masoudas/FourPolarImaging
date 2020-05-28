@@ -83,15 +83,19 @@ public class SCIFIOTiffMetadataConverter {
 
         String orderAsString = axisOrder.name();
         for (int n = 0; n < dim.length; n++) {
-            AxisType axis;
+            AxisType axis = null;
             if (axisOrder == AxisOrder.NoOrder) {
                 axis = new DefaultAxisType(Axes.UNKNOWN_LABEL);
             } else if (orderAsString.charAt(n) == 'C') {
                 axis = Axes.CHANNEL;
             } else if (orderAsString.charAt(n) == 'T') {
                 axis = Axes.TIME;
-            } else {
-                axis = new DefaultAxisType(String.valueOf(orderAsString.charAt(n)));
+            } else if (orderAsString.charAt(n) == 'X') {
+                axis = Axes.X;
+            } else if (orderAsString.charAt(n) == 'Y') {
+                axis = Axes.Y;
+            } else if (orderAsString.charAt(n) == 'Z') {
+                axis = Axes.Z;
             }
 
             imageMetadata.addAxis(axis, dim[n]);
