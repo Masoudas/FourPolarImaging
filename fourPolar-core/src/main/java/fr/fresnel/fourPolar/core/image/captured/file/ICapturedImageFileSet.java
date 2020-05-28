@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.core.image.captured.file;
 
+import java.util.Iterator;
+
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 /**
@@ -68,5 +70,10 @@ public interface ICapturedImageFileSet {
      * cameras are equal. Compare to {@link #equals(Object)}.
      */
     public boolean deepEquals(ICapturedImageFileSet fileset);
+
+    /**
+     * Returns an iterator for iterating over all files in this set.
+     */
+    public Iterator<ICapturedImageFile> getIterator();
 
 }

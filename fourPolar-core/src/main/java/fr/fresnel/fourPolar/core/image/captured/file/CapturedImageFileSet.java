@@ -2,7 +2,9 @@ package fr.fresnel.fourPolar.core.image.captured.file;
 
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
@@ -183,6 +185,17 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
         }
 
         return true;
+    }
+
+    @Override
+    public Iterator<ICapturedImageFile> getIterator() {
+        Stream<ICapturedImageFile> concatStream = Stream.empty();
+        for (Iterator<ICapturedImageFile[]> iterator = this.fileSet.values().iterator(); iterator.hasNext(); ) {
+            concatStream = Stream.concat(concatStream, Arrays.stream(iterator.next()));
+        }
+        
+        return concatStream.iterator();
+
     }
 
 }
