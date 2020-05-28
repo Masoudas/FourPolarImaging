@@ -19,6 +19,7 @@ public class CapturedImageSetBuilder extends ICapturedImageSetBuilder {
     public CapturedImageSetBuilder(Cameras cameras) {
         this._images = this._createImageTable(cameras);
         this._fileSet = null;
+
     }
 
     private Map<String, List<ICapturedImage>> _createImageTable(Cameras cameras) {
@@ -31,12 +32,26 @@ public class CapturedImageSetBuilder extends ICapturedImageSetBuilder {
         return table;
     }
 
-    public void setCapturedImage(String label, ICapturedImageFile capturedImageFile, Image<UINT16> image) {
+    public CapturedImageSetBuilder setCapturedImage(String label, ICapturedImageFile capturedImageFile,
+            Image<UINT16> image) {
+        Objects.requireNonNull(this._fileSet, "A fileSet has to be provided for the builder.");
+        if (!this._fileSet.hasLabel(label)) {
+            throw new IllegalArgumentException("The given label does not belong to this camera");
+        }
+
         this._images.get(label).add(new CapturedImage(capturedImageFile, label, image));
+        return this;
     }
 
-    public void setFileSet(ICapturedImageFileSet fileSet) {
+    public CapturedImageSetBuilder setFileSet(ICapturedImageFileSet fileSet) {
+        Objects.requireNonNull(fileSet, "fileSet can't be null");
+
+        if (this._fileSet != null) {
+            throw new IllegalArgumentException("Can't set new fileSet until the image set is built.");
+        }
+        
         this._fileSet = fileSet;
+        return this;
     }
 
     @Override
