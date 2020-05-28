@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.core.image.polarization;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
@@ -10,6 +11,11 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  * channel.
  */
 public interface IPolarizationImage {
+    /**
+     * Axis order of the image.
+     */
+    public static final AxisOrder AXIS_ORDER = AxisOrder.XYCZT;
+
     /**
      * Returns the polarization of this image.
      * 

@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.core.image.orientation;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 
@@ -11,6 +12,11 @@ import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
  * location. Note that the underlying angles are in radians.
  */
 public interface IAngleImage {
+    /**
+     * Axis order of the image.
+     */
+    public static final AxisOrder AXIS_ORDER = AxisOrder.XYCZT;
+
     /**
      * Returns the orientation angle image interface.
      * 
