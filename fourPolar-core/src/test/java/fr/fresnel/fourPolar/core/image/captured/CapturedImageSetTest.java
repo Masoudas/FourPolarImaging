@@ -19,6 +19,7 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
  */
 public class CapturedImageSetTest {
     private String root = "/";
+
     @Test
     public void hasMultiChannelImage_FourCamASetWithOneMultiChannelFile_ReturnsTrue() {
         Cameras camera = Cameras.Four;
@@ -34,7 +35,7 @@ public class CapturedImageSetTest {
         ICapturedImageFile[] pol135 = { new DummyCapturedImageFile(channel1, new File(root, "pol135.tiff")),
                 new DummyCapturedImageFile(channel2, new File(root, "pol1351.tiff")) };
 
-                DummyCapturedImageFileSet fileSet = new DummyCapturedImageFileSet();
+        DummyCapturedImageFileSet fileSet = new DummyCapturedImageFileSet();
         fileSet.setFileSet(Cameras.getLabels(camera)[0], pol0);
         fileSet.setFileSet(Cameras.getLabels(camera)[1], pol45);
         fileSet.setFileSet(Cameras.getLabels(camera)[2], pol90);
@@ -46,7 +47,6 @@ public class CapturedImageSetTest {
         CapturedImageSet capturedImageSet = new CapturedImageSet(builder);
         assertTrue(capturedImageSet.hasMultiChannelImage());
     }
-
 
     @Test
     public void hasMultiChannelImage_FourCamASetWithNoMultiChannelFile_ReturnsFalse() {
@@ -63,7 +63,7 @@ public class CapturedImageSetTest {
         ICapturedImageFile[] pol135 = { new DummyCapturedImageFile(channel1, new File(root, "pol135.tiff")),
                 new DummyCapturedImageFile(channel2, new File(root, "pol1351.tiff")) };
 
-                DummyCapturedImageFileSet fileSet = new DummyCapturedImageFileSet();
+        DummyCapturedImageFileSet fileSet = new DummyCapturedImageFileSet();
         fileSet.setFileSet(Cameras.getLabels(camera)[0], pol0);
         fileSet.setFileSet(Cameras.getLabels(camera)[1], pol45);
         fileSet.setFileSet(Cameras.getLabels(camera)[2], pol90);
@@ -106,13 +106,14 @@ class DummyCapturedImageFileSet implements ICapturedImageFileSet {
     private Hashtable<String, ICapturedImageFile[]> files = new Hashtable<>();
     private Cameras _cameras;
 
-    public void setFileSet(String label, ICapturedImageFile[] file){
+    public void setFileSet(String label, ICapturedImageFile[] file) {
         this.files.put(label, file);
     }
 
-    public void setCameras(Cameras cameras){
+    public void setCameras(Cameras cameras) {
         this._cameras = cameras;
     }
+
     @Override
     public ICapturedImageFile[] getFile(String label) {
         return this.files.get(label);
@@ -141,10 +142,10 @@ class DummyCapturedImageFileSet implements ICapturedImageFileSet {
     @Override
     public Iterator<ICapturedImageFile> getIterator() {
         Stream<ICapturedImageFile> concatStream = Stream.empty();
-        for (Iterator<ICapturedImageFile[]> iterator = this.files.values().iterator(); iterator.hasNext(); ) {
+        for (Iterator<ICapturedImageFile[]> iterator = this.files.values().iterator(); iterator.hasNext();) {
             concatStream = Stream.concat(concatStream, Arrays.stream(iterator.next()));
         }
-        
+
         return concatStream.iterator();
     }
 
