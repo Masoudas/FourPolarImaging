@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
@@ -40,9 +39,9 @@ public class UINT16SCIFIOTiffImageReader implements ImageReader<UINT16> {
     @Override
     public Image<UINT16> read(File path) throws IOException, MetadataParseError {
         Objects.requireNonNull(path, "path should not be null");
-        SCIFIOUtil.checkExtension(path.getName());
-        SCIFIOUtil.checkFileExists(path);
-?
+        SCIFIOUtils.checkExtension(path.getName());
+        SCIFIOUtils.checkFileExists(path);
+
         this._reader.setSource(path.getAbsolutePath(), this._config);
 
         final IMetadata metadata = _readMetadata();
@@ -62,14 +61,7 @@ public class UINT16SCIFIOTiffImageReader implements ImageReader<UINT16> {
      * @throws MetadataParseError if there are problems parsing the metadata.
      */
     private IMetadata _readMetadata() throws IOException, MetadataParseError {
-        IMetadata metadata = null;
-        try {
-            metadata = SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
-        } catch (UnsupportedAxisOrder e) {
-            throw new MetadataParseError(MetadataParseError.UNDEFINED_AXIS_ORDER);
-        }
-
-        return metadata;
+        return SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
     }
 
     /**
@@ -83,6 +75,5 @@ public class UINT16SCIFIOTiffImageReader implements ImageReader<UINT16> {
         config.imgOpenerSetImgModes(SCIFIOConfig.ImgMode.AUTO);
         return config;
     }
-
 
 }
