@@ -4,9 +4,10 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 /**
- * An interface for accessing a set of {@link ICapturedImage} that belong to
+ * An interface for accessing a set of {@link ICapturedImage} that belong
  * together (i.e, indicate different polarizations of a sample or different
- * wavelengths.)
+ * wavelengths, for a paricular number of cameras). See also
+ * {@link AcquisitionSet}.
  */
 public interface ICapturedImageSet {
     /**
@@ -23,6 +24,12 @@ public interface ICapturedImageSet {
 
     /**
      * Returns true if there exists a multi-channel image in this set.
+     * <p>
+     * 
+     * @apiNote It is the case that the user either provides single channel images,
+     *          or one image containing all channels. It's yet to be seen whether
+     *          they provide several files each of which may be multi-channel.
      */
     public boolean hasMultiChannelImage();
+
 }
