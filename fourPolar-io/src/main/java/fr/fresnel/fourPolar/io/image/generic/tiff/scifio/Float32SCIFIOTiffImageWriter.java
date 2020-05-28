@@ -23,7 +23,6 @@ import io.scif.util.FormatTools;
  * 
  */
 public class Float32SCIFIOTiffImageWriter implements ImageWriter<Float32> {
-    final private Float32 _pixelType = Float32.zero();
     final private SCIFIOConfig _config;
     final private Writer<Metadata> _writer;
     final private ImgSaver _imgSaver;
@@ -50,7 +49,7 @@ public class Float32SCIFIOTiffImageWriter implements ImageWriter<Float32> {
             this._writer.setMetadata(scifioMetadata);
             this._writer.setDest(path.getAbsolutePath(), this._config);
 
-            this._imgSaver.saveImg(this._writer, ImageToImgLib2Converter.getImg(image, this._pixelType));
+            this._imgSaver.saveImg(this._writer, ImageToImgLib2Converter.getImg(image, Float32.zero()));
         } catch (ConverterToImgLib2NotFound e) {
         } catch (FormatException e) {
             // This exception is not caught, because we've used tiff formater.
