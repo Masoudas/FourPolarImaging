@@ -2,22 +2,25 @@ package fr.fresnel.fourPolar.io.image.captured.tiff;
 
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.core.image.captured.CapturedImage;
-import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
+import fr.fresnel.fourPolar.core.image.captured.CapturedImageSetBuilder;
+import fr.fresnel.fourPolar.core.image.captured.ICapturedImageSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
-import fr.fresnel.fourPolar.io.image.captured.ICapturedImageReader;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
 
 /**
- * Used for reading a (16 bit tiff) captured images. An instance of this object
- * is enough to read several images.
+ * Used for reading a (16 bit tiff) captured image set. An instance of this
+ * object is enough to read several images.
  */
-public class TiffCapturedImageReader implements ICapturedImageReader {
+public class TiffCapturedImageReader implements ICapturedImageSetReader {
     final private ImageReader<UINT16> _reader;
 
     /**
@@ -31,13 +34,25 @@ public class TiffCapturedImageReader implements ICapturedImageReader {
     }
 
     @Override
-    public ICapturedImage read(final ICapturedImageFileSet fileSet, final String fileLabel)
-            throws IllegalArgumentException, IOException {
-        _checkFileLabel(fileSet, fileLabel);
+    public ICapturedImageSet read(final ICapturedImageFileSet fileSet) throws IOException {
+        CapturedImageSetBuilder builder = new CapturedImageSetBuilder(fileSet.getnCameras());
+        builder.setFileSet(fileSet);
 
-        Image<UINT16> img = _reader.read(fileSet.getFile(fileLabel));
+        try {
+            String[] labels = Cameras.getLabels(fileSet.getnCameras());
+            for (String label : labels) {
+                ICapturedImageFile[] labelCapturedFiles = fileSet.getFile(label);
+                for (ICapturedImageFile capturedImageFile : labelCapturedFiles) {
+                    Image<UINT16> img = _reader.read(capturedImageFile.file());
+                    builder.setCapturedImage(label, capturedImageFile, img);
+                }
 
-        return new CapturedImage(fileSet, fileLabel, img);
+            }
+        } catch (IOException | MetadataParseError e) {
+            throw new IOException("Captured images don't exist or are corrupted");
+        }
+
+        return builder.build();
     }
 
     /**
@@ -47,12 +62,6 @@ public class TiffCapturedImageReader implements ICapturedImageReader {
      */
     public void close() throws IOException {
         _reader.close();
-    }
-
-    private void _checkFileLabel(ICapturedImageFileSet fileSet, String fileLabel) {
-        if (!fileSet.hasLabel(fileLabel)) {
-            throw new IllegalArgumentException("The given file label is not in the file set.");
-        }
     }
 
 }
