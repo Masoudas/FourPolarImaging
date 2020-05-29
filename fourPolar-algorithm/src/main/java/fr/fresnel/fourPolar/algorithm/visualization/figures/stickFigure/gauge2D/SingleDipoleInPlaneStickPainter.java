@@ -33,7 +33,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * dimensions of the said axis order, even though only the xy direction is used.
  */
 class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
-    private static final int STICK_DIM = IGaugeFigure.AXIS_ORDER.numAxis;
+    private static final int FIGURE_DIM = IGaugeFigure.AXIS_ORDER.numAxis;
 
     final private IGaugeFigure _dipoleFigure;
     final private IOrientationImageRandomAccess _orientationRA;
@@ -94,11 +94,11 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
     }
 
     /**
-     * Base stick complies with the {@link STICK_DIM}
+     * Base stick complies with the {@link FIGURE_DIM}
      */
     private IShape _defineBaseStick(int len, int thickness) {
-        long[] stickMin = new long[STICK_DIM];
-        long[] stickMax = new long[STICK_DIM];
+        long[] stickMin = new long[FIGURE_DIM];
+        long[] stickMax = new long[FIGURE_DIM];
 
         // Base stick is at the origin of the xy plane.
         stickMin[0] = -thickness / 2 + 1;
@@ -129,7 +129,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
      * @return
      */
     private long[] _setStickTranslationToDipoleCenterPosition() {
-        long[] centerOfDipoleFigure = new long[STICK_DIM];
+        long[] centerOfDipoleFigure = new long[FIGURE_DIM];
         centerOfDipoleFigure[0] = this._dipoleFigure.getImage().getMetadata().getDim()[0] / 2;
         centerOfDipoleFigure[1] = this._dipoleFigure.getImage().getMetadata().getDim()[1] / 2;
         return centerOfDipoleFigure;
