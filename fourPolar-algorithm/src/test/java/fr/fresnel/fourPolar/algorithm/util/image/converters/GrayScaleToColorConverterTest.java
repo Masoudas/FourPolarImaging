@@ -8,15 +8,12 @@ import org.junit.jupiter.api.Test;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
-import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
-import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import io.scif.config.SCIFIOConfig;
@@ -41,7 +38,7 @@ public class GrayScaleToColorConverterTest {
             cursor.setPixel(pixel);
         }
 
-        Image<RGB16> colorImage = GrayScaleToColorConverter.useMaxEachPlane_ImageXYCZT(grayImage, 1);
+        Image<RGB16> colorImage = GrayScaleToColorConverter.useMaxEachPlane(grayImage);
 
         ImageJFunctions.show(ImageToImgLib2Converter.getImg(colorImage, RGB16.zero()));
 
@@ -50,7 +47,7 @@ public class GrayScaleToColorConverterTest {
     }
 
     @Test
-    public void useMaxEachPlane_() throws ConverterToImgLib2NotFound, InterruptedException {
+    public void useMaxEachPlane_AGrayImageFromDisk_KeepsGrayValuesAfterColoring() throws ConverterToImgLib2NotFound, InterruptedException {
         File grayImageFile = new File(GrayScaleToColorConverterTest.class.getResource("Example1.tif").getFile());
         ImgLib2ImageFactory factory = new ImgLib2ImageFactory();
 
@@ -72,7 +69,7 @@ public class GrayScaleToColorConverterTest {
 
         }
 
-        Image<RGB16> colorImage = GrayScaleToColorConverter.useMaxEachPlane_ImageXYCZT(grayImage, 1);
+        Image<RGB16> colorImage = GrayScaleToColorConverter.useMaxEachPlane(grayImage);
 
         ImageJFunctions.show(ImageToImgLib2Converter.getImg(colorImage, RGB16.zero()));
 

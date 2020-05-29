@@ -38,29 +38,14 @@ public class GrayScaleToColorConverter {
      * 
      * @throws ConverterToImgLib2NotFound if the image model can't be converted to
      *                                    ImgLib2 model.
-     * @throws IllegalArgumentException   if the @param grayImage is not XYCZT, or
-     *                                    channel is not in the image.
      * 
      */
-    public static <T extends RealType> Image<RGB16> useMaxEachPlane_ImageXYCZT(final Image<T> grayImage, int channel)
+    public static <T extends RealType> Image<RGB16> useMaxEachPlane(final Image<T> grayImage)
             throws ConverterToImgLib2NotFound {
         Objects.requireNonNull(grayImage, "grayImage cannot be null");
         Objects.requireNonNull(grayImage, "colorImage cannot be null");
 
-        if (grayImage.getMetadata().axisOrder() != AxisOrder.XYCZT) {
-            throw new IllegalArgumentException("Cannot convert, because the grayImage is not XYCZT");
-        }
-
-        if (grayImage.getMetadata().getDim()[2] < channel) {
-            throw new IllegalArgumentException(
-                    "Cannot convert, because gray image does not have the specified channel. ");
-        }
-
-        long[] grayImgDim = grayImage.getMetadata().getDim();
-
-        long[] colorImgDim = { grayImgDim[0], grayImgDim[1], grayImgDim[3], grayImgDim[4] };
-        IMetadata colorMetadata = new Metadata.MetadataBuilder(colorImgDim).axisOrder(AxisOrder.XYZT)
-                .bitPerPixel(PixelTypes.RGB_16).build();
+        IMetadata colorMetadata = _copyGaryMetadataForColorImage(grayImage.getMetadata());
         Image<RGB16> colorImage = grayImage.getFactory().create(colorMetadata, RGB16.zero());
 
         // We use ImgLib2 classes, i.e, we convert to Img. Then we convert the Image.
@@ -74,9 +59,8 @@ public class GrayScaleToColorConverter {
 
         final double[][] minMax = _getPlaneMinMax(grayImage);
 
-        IPointShape planeDim = MetadataUtil.getPlaneDim(grayImage.getMetadata());
-        final long planeSize = planeDim.point()[0] * planeDim.point()[1];
-
+        final long planeSize = MetadataUtil.getPlaneSize(grayImage.getMetadata());
+        
         int planeNo = 1;
         int planePixelCounter = 0;
         while (grayCursor.hasNext()) {
@@ -108,5 +92,13 @@ public class GrayScaleToColorConverter {
             }
         }
         return minMax;
+    }
+
+    /**
+     * Except for the obvious parameters, copy all the metadata of the gray image
+     * for color.
+     */
+    private static IMetadata _copyGaryMetadataForColorImage(IMetadata grayMetadata) {
+        return new Metadata.MetadataBuilder(grayMetadata).bitPerPixel(PixelTypes.RGB_16).build();
     }
 }
