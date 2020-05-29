@@ -84,8 +84,9 @@ public class WholeSampleStick2DPainterBuilderTest {
         int thickness = 4;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IAngleGaugePainter painter = new WholeSampleStick2DPainterBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D).colorMap(cMap).stickThickness(thickness).stickLen(length).build();
+        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
+                AngleGaugeType.Rho2D, cMap, thickness, length);
+        IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1024, 512, 0, 3, 80 }, axisOrder);
@@ -142,8 +143,12 @@ public class WholeSampleStick2DPainterBuilderTest {
         ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
-        IAngleGaugePainter painter = new WholeSampleStick2DPainterBuilder(orientationImage, soiImage,
-                AngleGaugeType.Delta2D).colorMap(cMap).stickThickness(2).stickLen(20).build();
+        int length = 20;
+        int thickness = 2;
+
+        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
+                AngleGaugeType.Rho2D, cMap, thickness, length);
+        IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1024, 512, 0, 0, 0 }, axisOrder);
@@ -207,8 +212,9 @@ public class WholeSampleStick2DPainterBuilderTest {
         int thickness = 5;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IAngleGaugePainter painter = new WholeSampleStick2DPainterBuilder(orientationImage, soiImage,
-                AngleGaugeType.Eta2D).colorMap(cMap).stickThickness(thickness).stickLen(length).build();
+        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
+                AngleGaugeType.Rho2D, cMap, thickness, length);
+        IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1024, 512, 0, 0, 0 }, axisOrder);
@@ -255,9 +261,12 @@ public class WholeSampleStick2DPainterBuilderTest {
         ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
+        int length = 20;
+        int thickness = 5;
 
-        IAngleGaugePainter painter = new WholeSampleStick2DPainterBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D).colorMap(cMap).stickThickness(2).stickLen(20).build();
+        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
+                AngleGaugeType.Rho2D, cMap, thickness, length);
+        IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1024, 512, 0, 0, 0 }, axisOrder);
@@ -306,9 +315,12 @@ public class WholeSampleStick2DPainterBuilderTest {
         ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
-
-        IAngleGaugePainter painter = new WholeSampleStick2DPainterBuilder(orientationImage, soiImage,
-                AngleGaugeType.Eta2D).colorMap(cMap).stickThickness(2).stickLen(20).build();
+        int length = 20;
+        int thickness = 5;
+        
+        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
+                AngleGaugeType.Rho2D, cMap, thickness, length);
+        IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape smallerRegionOfImage1 = new ShapeFactory().closedPolygon2D(new long[] { 100, 500, 400, 300, 200 },
                 new long[] { 100, 100, 500, 200, 500 });
@@ -387,6 +399,57 @@ class DummyWholeSampleFileSet implements ICapturedImageFileSet {
     public Iterator<ICapturedImageFile> getIterator() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+}
+
+class DummyWholeSampleBuilder extends IWholeSampleStick2DPainterBuilder {
+    private final IOrientationImage _orientationImage;
+    private final ISoIImage _soiImage;
+    private final AngleGaugeType _gaugeType;
+
+    private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
+    private int _thickness = 4;
+    private int _length = 50;
+
+    @Override
+    ColorMap getColorMap() {
+        return this._colorMap;
+    }
+
+    @Override
+    int getSticklength() {
+        return this._length;
+    }
+
+    @Override
+    IOrientationImage getOrientationImage() {
+        return this._orientationImage;
+    }
+
+    @Override
+    ISoIImage getSoIImage() {
+        return this._soiImage;
+    }
+
+    @Override
+    int getStickThickness() {
+        return this._thickness;
+    }
+
+    public DummyWholeSampleBuilder(IOrientationImage _orientationImage, ISoIImage _soiImage, AngleGaugeType _gaugeType,
+            ColorMap _colorMap, int _thickness, int _length) {
+        this._orientationImage = _orientationImage;
+        this._soiImage = _soiImage;
+        this._gaugeType = _gaugeType;
+        this._colorMap = _colorMap;
+        this._thickness = _thickness;
+        this._length = _length;
+    }
+
+    @Override
+    AngleGaugeType getAngleGaugeType() {
+        return this._gaugeType;
     }
 
 }
