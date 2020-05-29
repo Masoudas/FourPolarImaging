@@ -87,7 +87,7 @@ public class SingleDipoleInPlaneStickPainterTest {
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        ISingleDipoleStick2DPainterBuilder builder = new DummyStick2DBuilder(orientationImage, soiImage,
+        ISingleDipoleStick2DPainterBuilder builder = new DummySingleDipoleBuilder(orientationImage, soiImage,
                 AngleGaugeType.Rho2D, cMap, 8, 100);
 
         SingleDipoleInPlaneStickPainter painter = new SingleDipoleInPlaneStickPainter(builder);
@@ -131,7 +131,7 @@ public class SingleDipoleInPlaneStickPainterTest {
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        ISingleDipoleStick2DPainterBuilder builder = new DummyStick2DBuilder(orientationImage, soiImage,
+        ISingleDipoleStick2DPainterBuilder builder = new DummySingleDipoleBuilder(orientationImage, soiImage,
                 AngleGaugeType.Rho2D, cMap, 8, 50);
         SingleDipoleInPlaneStickPainter painter = new SingleDipoleInPlaneStickPainter(builder);
 
@@ -241,7 +241,7 @@ class DummyFileSet implements ICapturedImageFileSet {
 
 }
 
-class DummyStick2DBuilder extends ISingleDipoleStick2DPainterBuilder {
+class DummySingleDipoleBuilder extends ISingleDipoleStick2DPainterBuilder {
     private final IOrientationImage _orientationImage;
     private final ISoIImage _soiImage;
     private final AngleGaugeType _gaugeType;
@@ -275,7 +275,7 @@ class DummyStick2DBuilder extends ISingleDipoleStick2DPainterBuilder {
         return this._thickness;
     }
 
-    public DummyStick2DBuilder(IOrientationImage _orientationImage, ISoIImage _soiImage, AngleGaugeType _gaugeType,
+    public DummySingleDipoleBuilder(IOrientationImage _orientationImage, ISoIImage _soiImage, AngleGaugeType _gaugeType,
             ColorMap _colorMap, int _thickness, int _length) {
         this._orientationImage = _orientationImage;
         this._soiImage = _soiImage;
