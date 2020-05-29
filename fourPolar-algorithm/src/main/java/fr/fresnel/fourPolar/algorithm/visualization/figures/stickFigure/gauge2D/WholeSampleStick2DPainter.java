@@ -104,7 +104,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         stickMax[0] = len / 2;
         stickMax[1] = thickness / 2;
 
-        return new ShapeFactory().closedBox(stickMin, stickMax, AxisOrder.XYZT);
+        return new ShapeFactory().closedBox(stickMin, stickMax, AxisOrder.XYCZT);
     }
 
     @Override
@@ -152,8 +152,8 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     }
 
     /**
-     * To accommodate for the mismatch between XYCZT and XYZT, translation is
-     * redefined.
+     * Translate the stick to the position in the gauge figure that corresponds to
+     * the dipole position.
      * 
      * @param position          is the dipole position
      * @param orientationVector is the orientation vector at the position
