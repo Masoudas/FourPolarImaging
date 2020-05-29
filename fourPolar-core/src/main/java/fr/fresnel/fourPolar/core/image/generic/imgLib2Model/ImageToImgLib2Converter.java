@@ -13,7 +13,9 @@ import net.imglib2.type.numeric.real.FloatType;
 
 /**
  * Using this class, we can convert an {@code Image} interface to a {@code Img}
- * interface.
+ * interface. Note that converters only generate an interface for access using
+ * the new interface, in other words, no new image type is created underneath.
+ * 
  */
 public class ImageToImgLib2Converter {
     /**
