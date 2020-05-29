@@ -250,19 +250,13 @@ class DummyStick2DBuilder extends ISingleDipoleStick2DPainterBuilder {
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
     private int _length = 50;
-    private GaugeFigureType _gaugeFigureType = GaugeFigureType.SingleDipole;
 
-    private IGaugeFigure _gaugeFigure;
 
     @Override
     ColorMap getColorMap() {
         return this._colorMap;
     }
 
-    @Override
-    IGaugeFigure getGaugeFigure() {
-        return this._gaugeFigure;
-    }
 
     @Override
     int getSticklength() {
@@ -285,27 +279,14 @@ class DummyStick2DBuilder extends ISingleDipoleStick2DPainterBuilder {
     }
 
     public DummyStick2DBuilder(IOrientationImage _orientationImage, ISoIImage _soiImage, AngleGaugeType _gaugeType,
-            ColorMap _colorMap, int _thickness, int _length, GaugeFigureType _gaugeFigureType) {
+            ColorMap _colorMap, int _thickness, int _length) {
         this._orientationImage = _orientationImage;
         this._soiImage = _soiImage;
         this._gaugeType = _gaugeType;
         this._colorMap = _colorMap;
         this._thickness = _thickness;
         this._length = _length;
-        this._gaugeFigureType = _gaugeFigureType;
-        this._gaugeFigure = _createGaugeFigure(
-                _orientationImage.getAngleImage(OrientationAngle.rho).getImage().getMetadata());
     }
 
-    private IGaugeFigure _createGaugeFigure(IMetadata orientationImMetadata) {
-        long[] dim = new long[IGaugeFigure.AXIS_ORDER.numAxis];
-        dim[0] = this._length;
-        dim[1] = this._length;
-
-        IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
-        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(gaugeFigMetadata, RGB16.zero());
-        return GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
-                this._soiImage.getFileSet());
-    }
 
 }

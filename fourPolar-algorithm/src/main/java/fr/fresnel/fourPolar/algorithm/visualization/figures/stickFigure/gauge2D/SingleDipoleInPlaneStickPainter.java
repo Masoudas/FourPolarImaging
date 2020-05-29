@@ -56,7 +56,8 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
     private final long[] _stickTranslation;
 
     public SingleDipoleInPlaneStickPainter(ISingleDipoleStick2DPainterBuilder builder) {
-        this._dipoleFigure = this._createDipoleFigure(builder.getSticklength(), builder.getSoIImage());
+        this._dipoleFigure = this._createDipoleFigure(builder.getSticklength(), builder.getSoIImage(),
+                builder.getAngleGaugeType());
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
 
@@ -82,14 +83,14 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
      * falls inside after translation and rotation
      * 
      */
-    private IGaugeFigure _createDipoleFigure(int stickLength, ISoIImage soiImage) {
+    private IGaugeFigure _createDipoleFigure(int stickLength, ISoIImage soiImage, AngleGaugeType angleGaugeType) {
         long[] dim = new long[IGaugeFigure.AXIS_ORDER.numAxis];
         dim[0] = (long) (stickLength * 1.1);
         dim[1] = dim[0];
 
         IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
         Image<RGB16> gaugeImage = soiImage.getImage().getFactory().create(gaugeFigMetadata, RGB16.zero());
-        return GaugeFigureFactory.create(GaugeFigureType.SingleDipole, AngleGaugeType.Rho2D, gaugeImage,
+        return GaugeFigureFactory.create(GaugeFigureType.SingleDipole, angleGaugeType, gaugeImage,
                 soiImage.getFileSet());
     }
 

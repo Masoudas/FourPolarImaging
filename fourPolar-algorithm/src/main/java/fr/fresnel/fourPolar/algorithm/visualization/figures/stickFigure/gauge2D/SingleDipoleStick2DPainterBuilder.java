@@ -29,6 +29,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
 public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPainterBuilder {
     private final IOrientationImage _orientationImage;
     private final ISoIImage _soiImage;
+    private final AngleGaugeType _angleGaugeType;
 
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
@@ -48,6 +49,7 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
 
         this._soiImage = soiImage;
         this._orientationImage = orientationImage;
+        this._angleGaugeType = gaugeType;
     }
 
     /**
@@ -126,6 +128,11 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
     @Override
     int getStickThickness() {
         return _thickness;
+    }
+
+    @Override
+    AngleGaugeType getAngleGaugeType() {
+        return this._angleGaugeType;
     }
 
 }
