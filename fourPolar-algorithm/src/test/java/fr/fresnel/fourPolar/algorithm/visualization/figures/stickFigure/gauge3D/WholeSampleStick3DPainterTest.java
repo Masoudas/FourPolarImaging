@@ -43,7 +43,7 @@ import net.imglib2.img.display.imagej.ImageJFunctions;
  * Note that when creating Image for gauge figure in this text, the number of z
  * planes must soi_z * sticklen.
  */
-public class WholeSampleStick3DPainterBuilderTest {
+public class WholeSampleStick3DPainterTest {
     /**
      * The figure generated in this example would be the same as the Delta2DStick,
      * because all sticks would be in the same plane.
@@ -104,12 +104,16 @@ public class WholeSampleStick3DPainterBuilderTest {
         ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
+        int length = 20;
+        int thickness = 4;
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1024, 512, 0, 0, 0 }, axisOrder);
 
-        IAngleGaugePainter painter = new WholeSampleStick3DPainterBuilder(orientationImage, soiImage).stickLen(20)
-                .stickThickness(4).colorMap(cMap).build();
+        IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
+                thickness, length);
+
+        IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
         painter.draw(entireImageRegion, new UINT16(0));
 
         IGaugeFigure stickFigure = painter.getFigure();
@@ -176,12 +180,16 @@ public class WholeSampleStick3DPainterBuilderTest {
         ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
+        int length = 20;
+        int thickness = 4;
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1021, 511, 0, 0, 2 }, axisOrder);
 
-        IAngleGaugePainter painter = new WholeSampleStick3DPainterBuilder(orientationImage, soiImage).stickLen(20)
-                .stickThickness(4).colorMap(cMap).build();
+        IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
+                thickness, length);
+
+        IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
         painter.draw(entireImageRegion, new UINT16(0));
 
         IGaugeFigure stickFigure = painter.getFigure();
@@ -255,8 +263,12 @@ public class WholeSampleStick3DPainterBuilderTest {
         ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
-        IAngleGaugePainter painter = new WholeSampleStick3DPainterBuilder(orientationImage, soiImage).stickLen(20)
-                .stickThickness(4).colorMap(cMap).build();
+        int length = 20;
+        int thickness = 4;
+
+        IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
+                thickness, length);
+        IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1024, 512, 0, 3, 2 }, axisOrder);
@@ -323,8 +335,12 @@ public class WholeSampleStick3DPainterBuilderTest {
         ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
-        IAngleGaugePainter painter = new WholeSampleStick3DPainterBuilder(orientationImage, soiImage).stickLen(20)
-                .stickThickness(10).colorMap(cMap).build();
+        int length = 20;
+        int thickness = 4;
+
+        IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
+                thickness, length);
+        IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1023, 511, 0, 2, 0 }, AxisOrder.XYCZT);
@@ -390,8 +406,12 @@ public class WholeSampleStick3DPainterBuilderTest {
         ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
-        IAngleGaugePainter painter = new WholeSampleStick3DPainterBuilder(orientationImage, soiImage).stickLen(20)
-                .stickThickness(4).colorMap(cMap).build();
+        int length = 20;
+        int thickness = 4;
+
+        IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
+                thickness, length);
+        IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
 
         // Notice the region is out of image dimensions.
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
@@ -458,9 +478,12 @@ public class WholeSampleStick3DPainterBuilderTest {
         ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
+        int length = 20;
+        int thickness = 4;
 
-        IAngleGaugePainter painter = new WholeSampleStick3DPainterBuilder(orientationImage, soiImage).stickLen(20)
-                .stickThickness(4).colorMap(cMap).build();
+        IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
+                thickness, length);
+        IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1023, 511, 0, 0, 0 }, axisOrder);
@@ -479,11 +502,12 @@ public class WholeSampleStick3DPainterBuilderTest {
     }
 
     private void _saveStickFigure(IGaugeFigure stickFigure, String stickImageName) throws ConverterToImgLib2NotFound {
-        String root = WholeSampleStick3DPainterBuilderTest.class.getResource("").getPath();
+        String root = WholeSampleStick3DPainterTest.class.getResource("").getPath();
         ImagePlus imp = ImageJFunctions.wrapRGB(ImageToImgLib2Converter.getImg(stickFigure.getImage(), RGB16.zero()),
                 "RGB");
         FileSaver impSaver = new FileSaver(imp);
-        impSaver.saveAsTiff(new File(root, stickImageName).getAbsolutePath());
+        File path = new File(root, stickImageName);
+        impSaver.saveAsTiff(path.getAbsolutePath());
     }
 
 }
@@ -519,6 +543,50 @@ class DummyWholeSample3DFileSet implements ICapturedImageFileSet {
     public Iterator<ICapturedImageFile> getIterator() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+}
+
+class DummyWholeSampleStick3DBuilder extends IWholeSampleStick3DPainterBuilder {
+    private final IOrientationImage _orientationImage;
+    private final ISoIImage _soiImage;
+
+    private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
+    private int _thickness = 4;
+    private int _length = 50;
+
+    @Override
+    ColorMap getColorMap() {
+        return this._colorMap;
+    }
+
+    @Override
+    int getSticklength() {
+        return this._length;
+    }
+
+    @Override
+    IOrientationImage getOrientationImage() {
+        return this._orientationImage;
+    }
+
+    @Override
+    ISoIImage getSoIImage() {
+        return this._soiImage;
+    }
+
+    @Override
+    int getStickThickness() {
+        return this._thickness;
+    }
+
+    public DummyWholeSampleStick3DBuilder(IOrientationImage _orientationImage, ISoIImage _soiImage, ColorMap _colorMap,
+            int _thickness, int _length) {
+        this._orientationImage = _orientationImage;
+        this._soiImage = _soiImage;
+        this._colorMap = _colorMap;
+        this._thickness = _thickness;
+        this._length = _length;
     }
 
 }
