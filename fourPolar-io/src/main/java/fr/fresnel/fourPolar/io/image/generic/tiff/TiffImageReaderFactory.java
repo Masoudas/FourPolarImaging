@@ -29,19 +29,17 @@ public class TiffImageReaderFactory {
             throws NoReaderFoundForImage {
         ImageReader<T> reader;
 
-        if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.UINT_16){
-            reader = (ImageReader<T>) new SCIFIOUINT16TiffReader((ImgLib2ImageFactory)factory);
-        }
-        else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.FLOAT_32){
-            reader = (ImageReader<T>) new SCIFIOFloat32TiffReader((ImgLib2ImageFactory)factory); 
-        } 
-        else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.RGB_16){
-            reader = (ImageReader<T>) new SCIFIORGB16TiffReader((ImgLib2ImageFactory)factory); 
-        }
-        else{
+        if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.UINT_16) {
+            reader = (ImageReader<T>) new SCIFIOUINT16TiffReader((ImgLib2ImageFactory) factory);
+        } else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.FLOAT_32) {
+            reader = (ImageReader<T>) new SCIFIOFloat32TiffReader((ImgLib2ImageFactory) factory);
+        } else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.RGB_16) {
+            // TODO: Which reader here?
+            reader = (ImageReader<T>) new SCIFIORGB16TiffReader((ImgLib2ImageFactory) factory);
+        } else {
             throw new NoReaderFoundForImage();
         }
-        
+
         return reader;
     }
 
