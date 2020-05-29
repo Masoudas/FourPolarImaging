@@ -19,13 +19,13 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadataReader;
 
-public class UINT16ImgLib2TiffImageWriterTest {
+public class SCIFIOUINT16TiffWriterTest {
     private static File _root;
     private static ImgLib2ImageFactory _factory = new ImgLib2ImageFactory();
 
     @BeforeAll
     private static void setRoot() {
-        _root = new File(UINT16ImgLib2TiffImageWriterTest.class.getResource("Writers").getPath());
+        _root = new File(SCIFIOUINT16TiffWriterTest.class.getResource("Writers").getPath());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class UINT16ImgLib2TiffImageWriterTest {
                 .build();
         Image<UINT16> image = _factory.create(metadata, UINT16.zero());
 
-        UINT16SCIFIOTiffImageWriter writer = new UINT16SCIFIOTiffImageWriter();
+        SCIFIOUINT16TiffWriter writer = new SCIFIOUINT16TiffWriter();
         writer.write(destination, image);
         writer.close();
 
@@ -59,7 +59,7 @@ public class UINT16ImgLib2TiffImageWriterTest {
                 .bitPerPixel(PixelTypes.FLOAT_32).build();
         Image<UINT16> image = _factory.create(metadata, UINT16.zero());
 
-        UINT16SCIFIOTiffImageWriter writer = new UINT16SCIFIOTiffImageWriter();
+        SCIFIOUINT16TiffWriter writer = new SCIFIOUINT16TiffWriter();
         writer.write(destination, image);
         writer.close();
 
@@ -101,7 +101,7 @@ public class UINT16ImgLib2TiffImageWriterTest {
                 .bitPerPixel(PixelTypes.FLOAT_32).build();
         Image<UINT16> image = _factory.create(metadata, UINT16.zero());
 
-        UINT16SCIFIOTiffImageWriter writer = new UINT16SCIFIOTiffImageWriter();
+        SCIFIOUINT16TiffWriter writer = new SCIFIOUINT16TiffWriter();
         File destination = new File(_root, "UINT16Image.tif");
 
         for (int i = 0; i < 10000; i++) {

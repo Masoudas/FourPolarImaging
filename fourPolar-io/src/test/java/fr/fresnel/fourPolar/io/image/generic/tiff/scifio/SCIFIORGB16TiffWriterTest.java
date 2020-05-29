@@ -17,13 +17,13 @@ import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 
-public class RGB16ImgLib2TiffImageWriterTest {
+public class SCIFIORGB16TiffWriterTest {
     private static File _root;
     private static ImgLib2ImageFactory _factory = new ImgLib2ImageFactory();
 
     @BeforeAll
     private static void setRoot() {
-        _root = new File(RGB16ImgLib2TiffImageWriterTest.class.getResource("Writers").getPath());
+        _root = new File(SCIFIORGB16TiffWriterTest.class.getResource("Writers").getPath());
     }
 
     @Test
@@ -37,7 +37,7 @@ public class RGB16ImgLib2TiffImageWriterTest {
             cursor.setPixel(new Pixel<RGB16>(new RGB16(255, 0, 255)));
         }
 
-        RGB16SCIFIOTiffImageWriter writer = new RGB16SCIFIOTiffImageWriter();
+        SCIFIORGB16TiffWriter writer = new SCIFIORGB16TiffWriter();
 
         File destination = new File(_root, "RGB16Image.tif");
         writer.write(destination, image);

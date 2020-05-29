@@ -28,7 +28,7 @@ import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.util.Util;
 
-public class RGB16SCIFIOTiffImageReader implements ImageReader<RGB16> {
+public class SCIFIORGB16TiffReader implements ImageReader<RGB16> {
     final private SCIFIOConfig _config;
     private Reader _reader;
     final private ImgOpener _imgOpener;
@@ -40,7 +40,7 @@ public class RGB16SCIFIOTiffImageReader implements ImageReader<RGB16> {
     public static String NOT_3CHANNEL_IMAGE = "RGB image does not have 3 channels.";
     public static String NOT_8BIT = "Image is not 8 bit per pixel.";
 
-    public RGB16SCIFIOTiffImageReader(ImgLib2ImageFactory factory) {
+    public SCIFIORGB16TiffReader(ImgLib2ImageFactory factory) {
         this._config = _setSCFIOConfig();
         this._imgOpener = new ImgOpener();
         this._imgFactory = factory;

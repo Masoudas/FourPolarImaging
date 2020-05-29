@@ -15,15 +15,15 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 
-public class RGB16ImgLib2TiffImageReaderTest {
+public class SCIFIORGB16TiffReaderTest {
 
     @Test
     public void read_PreDefinedDiskRGBImg_ReadPixelsAreEqual() throws IOException, MetadataParseError {
-        File path = new File(RGB16ImgLib2TiffImageReaderTest.class.getResource("Readers").getFile(), "RGB16Image.tif");
+        File path = new File(SCIFIORGB16TiffReaderTest.class.getResource("Readers").getFile(), "RGB16Image.tif");
 
         ImgLib2ImageFactory factory = new ImgLib2ImageFactory();
 
-        Image<RGB16> img = new RGB16SCIFIOTiffImageReader(factory).read(path);
+        Image<RGB16> img = new SCIFIORGB16TiffReader(factory).read(path);
 
         IPixelCursor<RGB16> cursor = img.getCursor();
 

@@ -7,7 +7,7 @@ import java.util.Objects;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOTiffMetadataConverter;
 import io.scif.FormatException;
@@ -22,12 +22,12 @@ import io.scif.util.FormatTools;
  * Class for writing grayscale tiffs to disk.
  * 
  */
-public class Float32SCIFIOTiffImageWriter implements ImageWriter<Float32> {
+public class SCIFIOUINT16TiffWriter implements ImageWriter<UINT16> {
     final private SCIFIOConfig _config;
     final private Writer<Metadata> _writer;
     final private ImgSaver _imgSaver;
 
-    public Float32SCIFIOTiffImageWriter() {
+    public SCIFIOUINT16TiffWriter() {
         this._config = _setSCFIOConfig();
         this._imgSaver = new ImgSaver();
         this._writer = new Writer<>();
@@ -35,7 +35,7 @@ public class Float32SCIFIOTiffImageWriter implements ImageWriter<Float32> {
     }
 
     @Override
-    public void write(File path, Image<Float32> image) throws IOException {
+    public void write(File path, Image<UINT16> image) throws IOException {
         Objects.requireNonNull(path, "path should not be null");
         Objects.requireNonNull(image, "image should not be null");
 
@@ -44,12 +44,12 @@ public class Float32SCIFIOTiffImageWriter implements ImageWriter<Float32> {
 
         Metadata scifioMetadata = this._createSCIFIOMetadata();
         SCIFIOTiffMetadataConverter.convertTo(image.getMetadata(), scifioMetadata);
-        
+
         try {
             this._writer.setMetadata(scifioMetadata);
             this._writer.setDest(path.getAbsolutePath(), this._config);
 
-            this._imgSaver.saveImg(this._writer, ImageToImgLib2Converter.getImg(image, Float32.zero()));
+            this._imgSaver.saveImg(this._writer, ImageToImgLib2Converter.getImg(image, UINT16.zero()));
         } catch (ConverterToImgLib2NotFound e) {
         } catch (FormatException e) {
             // This exception is not caught, because we've used tiff formater.
@@ -83,7 +83,7 @@ public class Float32SCIFIOTiffImageWriter implements ImageWriter<Float32> {
 
         ImageMetadata imageMetadata = metadata.get(0);
         imageMetadata.setFalseColor(true);
-        imageMetadata.setPixelType(FormatTools.FLOAT);
+        imageMetadata.setPixelType(FormatTools.UINT16);
         imageMetadata.setPlanarAxisCount(2);
         imageMetadata.setLittleEndian(false);
         imageMetadata.setIndexed(false);

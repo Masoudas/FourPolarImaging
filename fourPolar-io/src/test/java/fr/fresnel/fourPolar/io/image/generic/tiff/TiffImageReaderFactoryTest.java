@@ -10,9 +10,9 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.Float32SCIFIOTiffImageReader;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.RGB16SCIFIOTiffImageReader;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.UINT16SCIFIOTiffImageReader;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOFloat32TiffReader;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIORGB16TiffReader;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOUINT16TiffReader;
 
 public class TiffImageReaderFactoryTest {
 
@@ -20,21 +20,21 @@ public class TiffImageReaderFactoryTest {
     public void getReader_UINT16ImgLib2Implementation_ReturnsCorrectWriter() throws NoReaderFoundForImage {
         ImageReader<UINT16> reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), UINT16.zero());
 
-        assertTrue(reader instanceof UINT16SCIFIOTiffImageReader);
+        assertTrue(reader instanceof SCIFIOUINT16TiffReader);
     }
     
     @Test
     public void getReader_Float32ImgLib2Implementation_ReturnsCorrectWriter() throws NoReaderFoundForImage {
         ImageReader<Float32> reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), Float32.zero());
 
-        assertTrue(reader instanceof Float32SCIFIOTiffImageReader);
+        assertTrue(reader instanceof SCIFIOFloat32TiffReader);
     }
 
     @Test
     public void getReader_RGB16ImgLib2Implementation_ReturnsCorrectWriter() throws NoReaderFoundForImage {
         ImageReader<RGB16> reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), RGB16.zero());
 
-        assertTrue(reader instanceof RGB16SCIFIOTiffImageReader);
+        assertTrue(reader instanceof SCIFIORGB16TiffReader);
     }
     
 }

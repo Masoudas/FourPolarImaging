@@ -15,34 +15,34 @@ import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCap
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 
-public class Float32ImgLib2TiffImageReaderTest {
+public class SCIFIOUINT16TiffReaderTest {
     private static File _testResource;
 
     @BeforeAll
     private static void setTestResouce() {
-        _testResource = new File(Float32ImgLib2TiffImageReaderTest.class.getResource("Readers").getPath());
+        _testResource = new File(SCIFIOUINT16TiffReaderTest.class.getResource("Readers").getPath());
     }
 
     @Test
-    public void read_Float32XYImage_ShouldShowImage()
+    public void read_UINT16XYImage_ShouldShowImage()
             throws IOException, InterruptedException, ConverterToImgLib2NotFound, MetadataParseError {
-        File path = new File(_testResource, "Float32XYImage.tif");
-        Float32SCIFIOTiffImageReader reader = new Float32SCIFIOTiffImageReader(new ImgLib2ImageFactory());
-        Image<Float32> img = reader.read(path);
+        File path = new File(_testResource, "UINT16XYImage.tif");
+        SCIFIOUINT16TiffReader reader = new SCIFIOUINT16TiffReader(new ImgLib2ImageFactory());
+        Image<UINT16> img = reader.read(path);
 
         assertTrue(img.getMetadata().axisOrder() == AxisOrder.XY
                 && Arrays.equals(img.getMetadata().getDim(), new long[] { 10, 10 }));
     }
 
     @Test
-    public void read_Float32XYCZTImage_ShouldShowImage()
+    public void read_UINT16XYCZTImage_ShouldShowImage()
             throws IOException, InterruptedException, ConverterToImgLib2NotFound, MetadataParseError {
-        File path = new File(_testResource, "Float32XYCZTImage.tif");
-        Float32SCIFIOTiffImageReader reader = new Float32SCIFIOTiffImageReader(new ImgLib2ImageFactory());
-        Image<Float32> img = reader.read(path);
+        File path = new File(_testResource, "UINT16XYCZTImage.tif");
+        SCIFIOUINT16TiffReader reader = new SCIFIOUINT16TiffReader(new ImgLib2ImageFactory());
+        Image<UINT16> img = reader.read(path);
 
         assertTrue(img.getMetadata().axisOrder() == AxisOrder.XYCZT
                 && Arrays.equals(img.getMetadata().getDim(), new long[] { 10, 10, 1, 2, 2 }));
@@ -51,10 +51,10 @@ public class Float32ImgLib2TiffImageReaderTest {
     @Test
     public void read_SameImageTenThousandTimes_ShouldNotRunOutOfResource() throws IllegalArgumentException, IOException,
             InterruptedException, KeyException, IncompatibleCapturedImage, MetadataParseError {
-        File path = new File(_testResource, "Float32XYImage.tif");
-        Float32SCIFIOTiffImageReader reader = new Float32SCIFIOTiffImageReader(new ImgLib2ImageFactory());
+        File path = new File(_testResource, "UINT16XYImage.tif");
+        SCIFIOUINT16TiffReader reader = new SCIFIOUINT16TiffReader(new ImgLib2ImageFactory());
 
-        Image<Float32> img = null;
+        Image<UINT16> img = null;
         for (int i = 0; i < 10000; i++) {
             img = reader.read(path);
         }

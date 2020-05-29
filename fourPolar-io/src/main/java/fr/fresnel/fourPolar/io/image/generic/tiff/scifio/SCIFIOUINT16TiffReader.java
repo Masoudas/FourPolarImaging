@@ -21,14 +21,14 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
 /**
  * This class reads a 16 bit unsigned image using SCIFIO library.
  */
-public class UINT16SCIFIOTiffImageReader implements ImageReader<UINT16> {
+public class SCIFIOUINT16TiffReader implements ImageReader<UINT16> {
     final private UnsignedShortType imgLib2Type = new UnsignedShortType();
     final private SCIFIOConfig _config;
     final private Reader<Metadata> _reader;
     final private ImgOpener _imgOpener;
     final private ImgLib2ImageFactory _imgFactory;
 
-    public UINT16SCIFIOTiffImageReader(ImgLib2ImageFactory factory) {
+    public SCIFIOUINT16TiffReader(ImgLib2ImageFactory factory) {
         this._config = _setSCFIOConfig();
         this._imgOpener = new ImgOpener();
         this._imgFactory = factory;
