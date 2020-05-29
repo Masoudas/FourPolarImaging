@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
@@ -57,29 +55,30 @@ public class SCIFIORGB16TiffReader implements ImageReader<RGB16> {
 
     @Override
     public Image<RGB16> read(File path) throws IOException, MetadataParseError {
-        Objects.requireNonNull(path, "path should not be null");
-        SCIFIOUtils.checkExtension(path.getName());
-        SCIFIOUtils.checkFileExists(path);
+        throw new AssertionError("This reader has not been refactored to consider ARGB images with channel.");
+        // Objects.requireNonNull(path, "path should not be null");
+        // SCIFIOUtils.checkExtension(path.getName());
+        // SCIFIOUtils.checkFileExists(path);
 
-        this._reader.setSource(path.getAbsolutePath(), this._config);
+        // this._reader.setSource(path.getAbsolutePath(), this._config);
 
-        final IMetadata rawMetadata = _readMetadata();
+        // final IMetadata rawMetadata = _readMetadata();
 
-        // Apply checks
-        _checkImageIs8bit(rawMetadata);
+        // // Apply checks
+        // _checkImageIs8bit(rawMetadata);
 
-        // Check image has exactly 3 channels.
-        _checkImageHas3Channels(rawMetadata);
+        // // Check image has exactly 3 channels.
+        // _checkImageHas3Channels(rawMetadata);
 
-        // Create a copy of metadata, indicating only a single channel.
+        // // Create a copy of metadata, indicating only a single channel.
 
-        // Read the raw image, which holds R, G and B as channels.
-        Img<UnsignedByteType> rawImage = this._imgOpener.openImgs(this._reader, this._readType, this._config).get(0);
+        // // Read the raw image, which holds R, G and B as channels.
+        // Img<UnsignedByteType> rawImage = this._imgOpener.openImgs(this._reader, this._readType, this._config).get(0);
 
-        // Merger RGB channes to form ARGB image.
-        Img<ARGBType> img = createARGBImage(rawImage);
+        // // Merger RGB channes to form ARGB image.
+        // Img<ARGBType> img = createARGBImage(rawImage);
 
-        return this._imgFactory.create(img, this._argbType, rawMetadata);
+        // return this._imgFactory.create(img, this._argbType, rawMetadata);
     }
 
     /**
@@ -108,14 +107,7 @@ public class SCIFIORGB16TiffReader implements ImageReader<RGB16> {
      * @throws MetadataParseError if there are problems parsing the metadata.
      */
     private IMetadata _readMetadata() throws IOException, MetadataParseError {
-        IMetadata metadata = null;
-        try {
-            metadata = SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
-        } catch (UnsupportedAxisOrder e) {
-            throw new MetadataParseError(MetadataParseError.UNDEFINED_AXIS_ORDER);
-        }
-
-        return metadata;
+        return SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
     }
 
     /**
@@ -145,13 +137,13 @@ public class SCIFIORGB16TiffReader implements ImageReader<RGB16> {
     }
 
     /**
-     * Create a version of metadata that contains only one channel (becuase this is 
+     * Create a version of metadata that contains only one channel (becuase this is
      * how the {@link Image} treats the image).
      * 
      * @param rawMetadata is the raw metadata read from the disk.
      */
     // private _createSingleChannelMetadata(IMetadata rawMetadata){
-    //     new Metadata.MetadataBuilder()
+    // new Metadata.MetadataBuilder()
     // }
 
 }

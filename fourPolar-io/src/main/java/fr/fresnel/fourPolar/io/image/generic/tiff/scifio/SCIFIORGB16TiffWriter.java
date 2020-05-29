@@ -48,53 +48,59 @@ public class SCIFIORGB16TiffWriter implements ImageWriter<RGB16> {
 
     @Override
     public void write(File path, Image<RGB16> image) throws IOException {
-        Objects.requireNonNull(path, "path cannot be null");
-        Objects.requireNonNull(image, "Image cannot be null");
+        throw new AssertionError("This writer has not been refactored to consider ARGB images with channel.");
 
-        SCIFIOUtils.checkExtension(path.getName());
+        // Objects.requireNonNull(path, "path cannot be null");
+        // Objects.requireNonNull(image, "Image cannot be null");
 
-        if (path.exists()) {
-            path.delete();
-        }
+        // SCIFIOUtils.checkExtension(path.getName());
 
-        io.scif.formats.TIFFFormat.Metadata scifioMetadata = _createMultiChannelSCIFIOMetadata(image);
-        try {
-            _setWriterConfig(path, scifioMetadata);
-            Img<UnsignedByteType> convertedImg = _convertToMultiChannelImage(image);
-            io.scif.formats.TIFFFormat.Metadata metadata = new io.scif.formats.TIFFFormat.Metadata();
-            metadata.createImageMetadata(1);
+        // if (path.exists()) {
+        // path.delete();
+        // }
 
-            ImageMetadata imageMetadata = metadata.get(0);
-            imageMetadata.setBitsPerPixel(8);
-            imageMetadata.setFalseColor(true);
-            imageMetadata.setPixelType(FormatTools.UINT8);
-            imageMetadata.setPlanarAxisCount(2);
-            imageMetadata.setLittleEndian(false);
-            imageMetadata.setIndexed(false);
-            imageMetadata.setInterleavedAxisCount(0);
-            imageMetadata.setThumbnail(false);
-            imageMetadata.setOrderCertain(true);
+        // io.scif.formats.TIFFFormat.Metadata scifioMetadata =
+        // _createMultiChannelSCIFIOMetadata(image);
+        // try {
+        // _setWriterConfig(path, scifioMetadata);
+        // Img<UnsignedByteType> convertedImg = _convertToMultiChannelImage(image);
+        // io.scif.formats.TIFFFormat.Metadata metadata = new
+        // io.scif.formats.TIFFFormat.Metadata();
+        // metadata.createImageMetadata(1);
 
-            imageMetadata.addAxis(Axes.X, convertedImg.dimension(0));
-            imageMetadata.addAxis(Axes.Y, convertedImg.dimension(1));
-            imageMetadata.addAxis(Axes.TIME, convertedImg.dimension(2));
-            imageMetadata.addAxis(Axes.CHANNEL, convertedImg.dimension(3));
+        // ImageMetadata imageMetadata = metadata.get(0);
+        // imageMetadata.setBitsPerPixel(8);
+        // imageMetadata.setFalseColor(true);
+        // imageMetadata.setPixelType(FormatTools.UINT8);
+        // imageMetadata.setPlanarAxisCount(2);
+        // imageMetadata.setLittleEndian(false);
+        // imageMetadata.setIndexed(false);
+        // imageMetadata.setInterleavedAxisCount(0);
+        // imageMetadata.setThumbnail(false);
+        // imageMetadata.setOrderCertain(true);
 
-            io.scif.formats.TIFFFormat.Writer<io.scif.formats.TIFFFormat.Metadata> writer = new io.scif.formats.TIFFFormat.Writer<>();
-            writer.setContext(this._saver.context());
-            writer.setMetadata(metadata);
-            writer.setDest("/home/masoud/Documents/SampleImages/UnknownAxis.tif", new SCIFIOConfig());
+        // imageMetadata.addAxis(Axes.X, convertedImg.dimension(0));
+        // imageMetadata.addAxis(Axes.Y, convertedImg.dimension(1));
+        // imageMetadata.addAxis(Axes.TIME, convertedImg.dimension(2));
+        // imageMetadata.addAxis(Axes.CHANNEL, convertedImg.dimension(3));
 
-            new ImgSaver().saveImg(writer, convertedImg);
+        // io.scif.formats.TIFFFormat.Writer<io.scif.formats.TIFFFormat.Metadata> writer
+        // = new io.scif.formats.TIFFFormat.Writer<>();
+        // writer.setContext(this._saver.context());
+        // writer.setMetadata(metadata);
+        // writer.setDest("/home/masoud/Documents/SampleImages/UnknownAxis.tif", new
+        // SCIFIOConfig());
 
-            // this._saver.saveImg(this._writer, convertedImg);
+        // new ImgSaver().saveImg(writer, convertedImg);
 
-        } catch (ConverterToImgLib2NotFound | FormatException e) {
-            // This exception is never caught, because this class cannot be directly
-            // instantiated,
-            // and the factory ensures that converter exists.
-            // Format exception is also not caught because extension is checked.
-        }
+        // // this._saver.saveImg(this._writer, convertedImg);
+
+        // } catch (ConverterToImgLib2NotFound | FormatException e) {
+        // // This exception is never caught, because this class cannot be directly
+        // // instantiated,
+        // // and the factory ensures that converter exists.
+        // // Format exception is also not caught because extension is checked.
+        // }
 
     }
 
@@ -108,7 +114,7 @@ public class SCIFIORGB16TiffWriter implements ImageWriter<RGB16> {
         IMetadata diskMetadata = this._createMetadata(image.getMetadata());
         io.scif.formats.TIFFFormat.Metadata scifioMetadata = this._createSCIFIOMetadata();
 
-        SCIFIOTiffMetadataConverter.convertTo(diskMetadata, scifioMetadata.get(0));
+        SCIFIOTiffMetadataConverter.convertTo(diskMetadata, scifioMetadata);
         return scifioMetadata;
     }
 
