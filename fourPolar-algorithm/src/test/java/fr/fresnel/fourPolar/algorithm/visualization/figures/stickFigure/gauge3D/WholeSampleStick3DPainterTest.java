@@ -275,7 +275,7 @@ public class WholeSampleStick3DPainterTest {
         painter.draw(entireImageRegion, new UINT16(0));
         IGaugeFigure stickFigure = painter.getFigure();
 
-        _saveStickFigure(stickFigure, "3DStick_SingleChannel.tiff");
+        _saveStickFigure(stickFigure, "3DStick_MultipleTimeAndZ.tiff");
 
         assertTrue(true);
 
