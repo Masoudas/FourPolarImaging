@@ -88,7 +88,7 @@ public class SingleDipoleInPlaneStickPainterTest {
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
         ISingleDipoleStick2DPainterBuilder builder = new DummyStick2DBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D, cMap, 8, 100, GaugeFigureType.SingleDipole);
+                AngleGaugeType.Rho2D, cMap, 8, 100);
 
         SingleDipoleInPlaneStickPainter painter = new SingleDipoleInPlaneStickPainter(builder);
 
@@ -132,7 +132,7 @@ public class SingleDipoleInPlaneStickPainterTest {
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
         ISingleDipoleStick2DPainterBuilder builder = new DummyStick2DBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D, cMap, 8, 50, GaugeFigureType.SingleDipole);
+                AngleGaugeType.Rho2D, cMap, 8, 50);
         SingleDipoleInPlaneStickPainter painter = new SingleDipoleInPlaneStickPainter(builder);
 
         // Viewer to show the soi.
@@ -161,8 +161,7 @@ public class SingleDipoleInPlaneStickPainterTest {
     }
 
     private void _saveStickFigure(IGaugeFigure stickFigure, String stickImageName) throws ConverterToImgLib2NotFound {
-        File root = new File(
-                SingleDipoleInPlaneStickPainterTest.class.getResource("").getPath() + "/SingleDipole");
+        File root = new File(SingleDipoleInPlaneStickPainterTest.class.getResource("").getPath() + "/SingleDipole");
         root.delete();
         root.mkdirs();
 
@@ -251,12 +250,10 @@ class DummyStick2DBuilder extends ISingleDipoleStick2DPainterBuilder {
     private int _thickness = 4;
     private int _length = 50;
 
-
     @Override
     ColorMap getColorMap() {
         return this._colorMap;
     }
-
 
     @Override
     int getSticklength() {
@@ -288,5 +285,9 @@ class DummyStick2DBuilder extends ISingleDipoleStick2DPainterBuilder {
         this._length = _length;
     }
 
+    @Override
+    AngleGaugeType getAngleGaugeType() {
+        return this._gaugeType;
+    }
 
 }

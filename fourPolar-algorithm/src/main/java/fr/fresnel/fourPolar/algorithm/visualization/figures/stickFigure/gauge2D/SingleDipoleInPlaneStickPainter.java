@@ -85,6 +85,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
      */
     private IGaugeFigure _createDipoleFigure(int stickLength, ISoIImage soiImage, AngleGaugeType angleGaugeType) {
         long[] dim = new long[IGaugeFigure.AXIS_ORDER.numAxis];
+        Arrays.setAll(dim, (i)->1);
         dim[0] = (long) (stickLength * 1.1);
         dim[1] = dim[0];
 
