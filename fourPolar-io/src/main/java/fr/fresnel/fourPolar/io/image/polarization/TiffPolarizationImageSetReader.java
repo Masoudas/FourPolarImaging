@@ -3,11 +3,13 @@ package fr.fresnel.fourPolar.io.image.polarization;
 import java.io.File;
 import java.io.IOException;
 
+import fr.fresnel.fourPolar.algorithm.util.image.axis.AxisReassigner;
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSetBuilder;
 import fr.fresnel.fourPolar.io.image.polarization.file.IPolarizationImageFileSet;
@@ -46,9 +48,16 @@ public class TiffPolarizationImageSetReader implements IPolarizationImageSetRead
         IPolarizationImageSet imageSet = null;
         try {
             Image<UINT16> pol0 = _readPolarizationImage(Polarization.pol0, polFileSet);
+            this._reassignPolarizationImageToXYCZT(pol0);
+
             Image<UINT16> pol45 = _readPolarizationImage(Polarization.pol45, polFileSet);
+            this._reassignPolarizationImageToXYCZT(pol45);
+
             Image<UINT16> pol90 = _readPolarizationImage(Polarization.pol90, polFileSet);
+            this._reassignPolarizationImageToXYCZT(pol90);
+
             Image<UINT16> pol135 = _readPolarizationImage(Polarization.pol90, polFileSet);
+            this._reassignPolarizationImageToXYCZT(pol135);
 
             imageSet = new PolarizationImageSetBuilder(this._numChannels).channel(1).fileSet(fileSet).pol0(pol0)
                     .pol45(pol45).pol90(pol90).pol135(pol135).build();
@@ -64,6 +73,23 @@ public class TiffPolarizationImageSetReader implements IPolarizationImageSetRead
             throws IOException, MetadataParseError {
         File imageFile = fileSet.getFile(pol);
         return this._reader.read(imageFile);
+    }
+
+    /**
+     * It may happen that if the t dimension of the image is 1 (or z for that
+     * matter), when we read it from disk, it would appear as xy. Hence, we need to
+     * reassign if necessary.
+     */
+    private Image<UINT16> _reassignPolarizationImageToXYCZT(Image<UINT16> angleImage) {
+        // TODO we need to get rid of this method, by making sure that when image is
+        // written,
+        // z and t with dimension 1 are properly written to the disk.
+        if (angleImage.getMetadata().axisOrder() == IPolarizationImage.AXIS_ORDER) {
+            return angleImage;
+        } else {
+            return AxisReassigner.reassignToXYCZT(angleImage, UINT16.zero());
+        }
+
     }
 
     @Override
