@@ -35,10 +35,13 @@ import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.image.soi.SoIImage;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
@@ -47,7 +50,7 @@ import ij.io.FileSaver;
 import net.imglib2.RealPoint;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 
-public class SingleDipoleInPlaneStickPainterBuilderTest {
+public class SingleDipoleInPlaneStickPainterTest {
 
     /**
      * We store the sticks for 0, 45, 90 and 135 in separate figures.
@@ -84,8 +87,10 @@ public class SingleDipoleInPlaneStickPainterBuilderTest {
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IAngleGaugePainter painter = new SingleDipoleInPlaneStickPainterBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D).stickLen(100).colorMap(cMap).stickThickness(8).build();
+        ISingleDipoleStick2DPainterBuilder builder = new DummyStick2DBuilder(orientationImage, soiImage,
+                AngleGaugeType.Rho2D, cMap, 8, 100, GaugeFigureType.SingleDipole);
+
+        SingleDipoleInPlaneStickPainter painter = new SingleDipoleInPlaneStickPainter(builder);
 
         for (int i = 0; i < 4; i++) {
             IShape point = new ShapeFactory().point(new long[] { i, i, 0, 0, 0 }, AxisOrder.XYCZT);
@@ -125,8 +130,10 @@ public class SingleDipoleInPlaneStickPainterBuilderTest {
         ISoIImage soiImage = SoIImage.create(fileSet, soiGray, 1);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
-        IAngleGaugePainter painter = new SingleDipoleInPlaneStickPainterBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D).stickLen(50).colorMap(cMap).stickThickness(8).build();
+
+        ISingleDipoleStick2DPainterBuilder builder = new DummyStick2DBuilder(orientationImage, soiImage,
+                AngleGaugeType.Rho2D, cMap, 8, 50, GaugeFigureType.SingleDipole);
+        SingleDipoleInPlaneStickPainter painter = new SingleDipoleInPlaneStickPainter(builder);
 
         // Viewer to show the soi.
         // bdv.util.AxisOrder aOrder = bdv.util.AxisOrder.XYCZT;
@@ -154,7 +161,8 @@ public class SingleDipoleInPlaneStickPainterBuilderTest {
     }
 
     private void _saveStickFigure(IGaugeFigure stickFigure, String stickImageName) throws ConverterToImgLib2NotFound {
-        File root = new File(SingleDipoleInPlaneStickPainterBuilderTest.class.getResource("").getPath() + "/SingleDipole");
+        File root = new File(
+                SingleDipoleInPlaneStickPainterTest.class.getResource("").getPath() + "/SingleDipole");
         root.delete();
         root.mkdirs();
 
@@ -230,6 +238,74 @@ class DummyFileSet implements ICapturedImageFileSet {
     public Iterator<ICapturedImageFile> getIterator() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+}
+
+class DummyStick2DBuilder extends ISingleDipoleStick2DPainterBuilder {
+    private final IOrientationImage _orientationImage;
+    private final ISoIImage _soiImage;
+    private final AngleGaugeType _gaugeType;
+
+    private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
+    private int _thickness = 4;
+    private int _length = 50;
+    private GaugeFigureType _gaugeFigureType = GaugeFigureType.SingleDipole;
+
+    private IGaugeFigure _gaugeFigure;
+
+    @Override
+    ColorMap getColorMap() {
+        return this._colorMap;
+    }
+
+    @Override
+    IGaugeFigure getGaugeFigure() {
+        return this._gaugeFigure;
+    }
+
+    @Override
+    int getSticklength() {
+        return this._length;
+    }
+
+    @Override
+    IOrientationImage getOrientationImage() {
+        return this._orientationImage;
+    }
+
+    @Override
+    ISoIImage getSoIImage() {
+        return this._soiImage;
+    }
+
+    @Override
+    int getStickThickness() {
+        return this._thickness;
+    }
+
+    public DummyStick2DBuilder(IOrientationImage _orientationImage, ISoIImage _soiImage, AngleGaugeType _gaugeType,
+            ColorMap _colorMap, int _thickness, int _length, GaugeFigureType _gaugeFigureType) {
+        this._orientationImage = _orientationImage;
+        this._soiImage = _soiImage;
+        this._gaugeType = _gaugeType;
+        this._colorMap = _colorMap;
+        this._thickness = _thickness;
+        this._length = _length;
+        this._gaugeFigureType = _gaugeFigureType;
+        this._gaugeFigure = _createGaugeFigure(
+                _orientationImage.getAngleImage(OrientationAngle.rho).getImage().getMetadata());
+    }
+
+    private IGaugeFigure _createGaugeFigure(IMetadata orientationImMetadata) {
+        long[] dim = new long[IGaugeFigure.AXIS_ORDER.numAxis];
+        dim[0] = this._length;
+        dim[1] = this._length;
+
+        IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
+        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(gaugeFigMetadata, RGB16.zero());
+        return GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
+                this._soiImage.getFileSet());
     }
 
 }
