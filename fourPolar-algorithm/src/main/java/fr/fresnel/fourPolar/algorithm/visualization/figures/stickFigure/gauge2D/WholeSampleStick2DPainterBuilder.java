@@ -129,7 +129,7 @@ public class WholeSampleStick2DPainterBuilder {
     private IGaugeFigure _createGaugeFigure(ISoIImage soiImage) {
         Image<RGB16> gaugeImage = null;
         try {
-            gaugeImage = GrayScaleToColorConverter.useMaxEachPlane_ImageXYCZT(soiImage.getImage(), 1);
+            gaugeImage = GrayScaleToColorConverter.useMaxEachPlane(soiImage.getImage());
         } catch (ConverterToImgLib2NotFound e) {
             // We expect this exception to have been caught before the program arrives here!
         }
