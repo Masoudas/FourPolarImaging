@@ -25,7 +25,7 @@ import net.imglib2.view.Views;
  * @param <U> is our pixel data type.
  * @param <V> is the ImgLib2 data type.
  */
-public class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Image<U> {
+class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Image<U> {
     private final Img<V> _img;
     private final IMetadata _metadata;
     private final TypeConverter<U, V> _tConverter;
