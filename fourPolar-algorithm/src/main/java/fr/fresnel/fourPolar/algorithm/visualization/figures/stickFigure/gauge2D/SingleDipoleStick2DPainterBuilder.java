@@ -32,7 +32,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * <p>
  * Note that the generated gauge figure is an XYZT image.
  */
-public class SingleDipoleStick2DPainterBuilder {
+public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPainterBuilder {
     private final IOrientationImage _orientationImage;
     private final ISoIImage _soiImage;
     private final AngleGaugeType _gaugeType;
@@ -117,40 +117,49 @@ public class SingleDipoleStick2DPainterBuilder {
     }
 
     /**
-     * Create a XYZT gauge figure, where (X,Y) = (lenStick, lenStick) and (Z,T) =
-     * (1,1). This is to make the gauge figure consistent with all the other gauge
+     * Create a XYCZT gauge figure, where (X,Y) = (lenStick, lenStick) and (C,Z,T) =
+     * (1,1,1). This is to make the gauge figure consistent with all the other gauge
      * figures.
      * 
      */
     private IGaugeFigure _createGaugeFigure(IMetadata orientationImMetadata) {
-        long[] dim = { this._length, this._length, 1, 1 };
-        IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYZT).build();
+        long[] dim = new long[IGaugeFigure.AXIS_ORDER.numAxis];
+        dim[0] = this._length;
+        dim[1] = this._length;
+
+        IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
         Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(gaugeFigMetadata, RGB16.zero());
         return GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
                 this._soiImage.getFileSet());
     }
 
-    public ColorMap getColorMap() {
+    @Override
+    ColorMap getColorMap() {
         return this._colorMap;
     }
 
-    public IGaugeFigure getGaugeFigure() {
+    @Override
+    IGaugeFigure getGaugeFigure() {
         return _gaugeFigure;
     }
 
-    public int getSticklength() {
+    @Override
+    int getSticklength() {
         return _length;
     }
 
-    public IOrientationImage getOrientationImage() {
+    @Override
+    IOrientationImage getOrientationImage() {
         return _orientationImage;
     }
 
-    public ISoIImage getSoIImage() {
+    @Override
+    ISoIImage getSoIImage() {
         return _soiImage;
     }
 
-    public int getStickThickness() {
+    @Override
+    int getStickThickness() {
         return _thickness;
     }
 

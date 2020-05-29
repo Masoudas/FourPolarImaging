@@ -47,7 +47,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
     private final IShape _orientationImageBoundary;
 
-    public SingleDipoleInPlaneStickPainter(SingleDipoleStick2DPainterBuilder builder) {
+    public SingleDipoleInPlaneStickPainter(ISingleDipoleStick2DPainterBuilder builder) {
         this._dipoleFigure = builder.getGaugeFigure();
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
