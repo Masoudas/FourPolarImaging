@@ -35,7 +35,20 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
     private int _thickness = 4;
     private int _length = 50;
 
-
+    /**
+     * Initialize the painter with the given orientation and soi image, for the
+     * given angle gauge type.
+     * 
+     * @param orientationImage         is the orientation image
+     * @param soiImage                 is the corresponding soi Image of @param
+     *                                 orientationImage.
+     * @param gaugeType                is the angle gauge type to be painted.
+     * 
+     * @param IllegalArgumentException is thrown in case soi and orientation image
+     *                                 are not from the same set, or that soi or
+     *                                 orientation image have channels.
+     * 
+     */
     public SingleDipoleStick2DPainterBuilder(IOrientationImage orientationImage, ISoIImage soiImage,
             AngleGaugeType gaugeType) {
         Objects.requireNonNull(soiImage, "soiImage cannot be null");

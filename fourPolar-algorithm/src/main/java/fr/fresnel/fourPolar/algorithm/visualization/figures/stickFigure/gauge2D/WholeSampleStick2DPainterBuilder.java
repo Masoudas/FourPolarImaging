@@ -2,16 +2,11 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D
 
 import java.util.Objects;
 
-import fr.fresnel.fourPolar.algorithm.util.image.converters.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
-import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
@@ -45,13 +40,16 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
 
     /**
      * Initialize the painter with the given orientation and soi image, for the
-     * given angle gauge type. We assume that orientation and soi images are XYCZT
-     * with only one channel.
+     * given angle gauge type.
      * 
-     * @param orientationImage is the orientation image
-     * @param soiImage         is the corresponding soi Image of @param
-     *                         orientationImage.
-     * @param angleGaugeType   is the angle gauge type to be painted.
+     * @param orientationImage         is the orientation image
+     * @param soiImage                 is the corresponding soi Image of @param
+     *                                 orientationImage.
+     * @param angleGaugeType           is the angle gauge type to be painted.
+     * 
+     * @param IllegalArgumentException is thrown in case soi and orientation image
+     *                                 are not from the same set, or that soi or
+     *                                 orientation image have channels.
      */
     public WholeSampleStick2DPainterBuilder(IOrientationImage orientationImage, ISoIImage soiImage,
             AngleGaugeType angleGaugeType) {
