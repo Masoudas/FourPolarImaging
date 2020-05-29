@@ -10,8 +10,9 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOr
  * STRUCTURE, WHERE AXIS ORDER CONTRIBUTES.
  */
 public enum AxisOrder {
-    NoOrder(-1, -1, -1), XY(-1, -1, -1), XYC(2, -1, -1), XYCT(2, -1, 3), XYCZT(2, 3, 4), XYT(-1, -1, 3), XYTC(3, -1, 2),
-    XYZ(-1, 2, -1), XYZC(3, 2, -1), XYZCT(3, 2, 4), XYZT(-1, 2, 3), XYZTC(4, 2, 3), XYTZC(4, 3, 2);
+    NoOrder(-1, -1, -1, -1), XY(-1, -1, -1, 2), XYC(2, -1, -1, 3), XYCT(2, -1, 3, 4), XYCZT(2, 3, 4, 5),
+    XYT(-1, -1, 3, 3), XYTC(3, -1, 2, 4), XYZ(-1, 2, -1, 3), XYZC(3, 2, -1, 4), XYZCT(3, 2, 4, 5), XYZT(-1, 2, 3, 4),
+    XYZTC(4, 2, 3, 5), XYTZC(4, 3, 2, 5);
 
     /**
      * Returns the number of labeled axis corresponding to the given order.
@@ -109,11 +110,13 @@ public enum AxisOrder {
     public final int z_axis;
     public final int c_axis;
     public final int t_axis;
+    public final int numAxis;
 
-    AxisOrder(int c_axis, int z_axis, int t_axis) {
+    AxisOrder(int c_axis, int z_axis, int t_axis, int numAxis) {
         this.z_axis = z_axis;
         this.c_axis = c_axis;
         this.t_axis = t_axis;
+        this.numAxis = numAxis;
     }
 
 }
