@@ -282,7 +282,7 @@ public class WholeSampleStick3DPainterTest {
     }
 
     /**
-     * The figure generated is a straight line regardless of rho and delta values.
+     * The figure generated is a straight line regardless of rho and delta values for all z values.
      * 
      * @throws InterruptedException
      */
@@ -317,7 +317,7 @@ public class WholeSampleStick3DPainterTest {
             etaCursor.setPixel(pixel);
         }
 
-        for (int z = 0; z < dim[2]; z++) {
+        for (int z = 0; z < dim[3]; z++) {
             int j = 0;
             for (int i = 0; i <= 180; i += 1) {
                 j = i % 20 >= 1 ? j : j + 2;
