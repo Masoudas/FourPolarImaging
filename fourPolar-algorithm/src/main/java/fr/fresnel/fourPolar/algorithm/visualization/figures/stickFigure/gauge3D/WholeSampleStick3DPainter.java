@@ -175,9 +175,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     private void _transformStick(long[] dipolePosition, IOrientationVector orientationVector) {
         int z_axis = IAngleImage.AXIS_ORDER.z_axis;
         int t_axis = IAngleImage.AXIS_ORDER.t_axis;
-        int c_axis = IAngleImage.AXIS_ORDER.t_axis;
-
-        long[] stickTranslation = { dipolePosition[0], dipolePosition[1], dipolePosition[c_axis],
+        long[] stickTranslation = { dipolePosition[0], dipolePosition[1], 0,
                 dipolePosition[z_axis] * this._stickLength + this._stickLength / 2 - 1, dipolePosition[t_axis] };
 
         this._stick.resetToOriginalShape();
