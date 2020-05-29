@@ -3,17 +3,10 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
-import fr.fresnel.fourPolar.core.image.generic.IMetadata;
-import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
-import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
@@ -30,19 +23,17 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * exception is returned. Note that the same interface can be used to repaint
  * the stick for different dipole positions.
  * <p>
- * Note that the generated gauge figure is an XYZT image.
+ * Note that the axis order of the generated gauge figure is as defined in
+ * {@link IGaugeFigure#AXIS_ORDER}.
  */
 public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPainterBuilder {
     private final IOrientationImage _orientationImage;
     private final ISoIImage _soiImage;
-    private final AngleGaugeType _gaugeType;
 
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
     private int _length = 50;
-    private GaugeFigureType _gaugeFigureType = GaugeFigureType.WholeSample;
 
-    private IGaugeFigure _gaugeFigure;
 
     public SingleDipoleStick2DPainterBuilder(IOrientationImage orientationImage, ISoIImage soiImage,
             AngleGaugeType gaugeType) {
@@ -55,7 +46,6 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
             throw new IllegalArgumentException("orientation and soi images don't belong to the same set or channel.");
         }
 
-        this._gaugeType = gaugeType;
         this._soiImage = soiImage;
         this._orientationImage = orientationImage;
     }
@@ -109,38 +99,13 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
      *                                    cannot be converted to ImgLib2 image type.
      */
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
-        IMetadata orientImMetadata = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
-                .getMetadata();
-        this._gaugeFigure = this._createGaugeFigure(orientImMetadata);
         return new SingleDipoleInPlaneStickPainter(this);
 
-    }
-
-    /**
-     * Create a XYCZT gauge figure, where (X,Y) = (lenStick, lenStick) and (C,Z,T) =
-     * (1,1,1). This is to make the gauge figure consistent with all the other gauge
-     * figures.
-     * 
-     */
-    private IGaugeFigure _createGaugeFigure(IMetadata orientationImMetadata) {
-        long[] dim = new long[IGaugeFigure.AXIS_ORDER.numAxis];
-        dim[0] = this._length;
-        dim[1] = this._length;
-
-        IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
-        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(gaugeFigMetadata, RGB16.zero());
-        return GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
-                this._soiImage.getFileSet());
     }
 
     @Override
     ColorMap getColorMap() {
         return this._colorMap;
-    }
-
-    @Override
-    IGaugeFigure getGaugeFigure() {
-        return _gaugeFigure;
     }
 
     @Override

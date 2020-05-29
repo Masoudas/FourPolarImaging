@@ -2,9 +2,12 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D
 
 import java.util.Arrays;
 
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
+import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
@@ -18,7 +21,10 @@ import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
 /**
@@ -47,8 +53,10 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
     private final IShape _orientationImageBoundary;
 
+    private final long[] _stickTranslation;
+
     public SingleDipoleInPlaneStickPainter(ISingleDipoleStick2DPainterBuilder builder) {
-        this._dipoleFigure = builder.getGaugeFigure();
+        this._dipoleFigure = this._createDipoleFigure(builder.getSticklength(), builder.getSoIImage());
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
 
@@ -64,11 +72,29 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
                 builder.getOrientationImage().getAngleImage(OrientationAngle.rho).getImage().getMetadata().getDim(),
                 builder.getOrientationImage().getAngleImage(OrientationAngle.rho).getImage().getMetadata().axisOrder());
 
+        this._stickTranslation = this._setStickTranslationToDipoleCenterPosition();
     }
 
     /**
-     * Note that the gauge figure is an XYZT image, even though it has only one z
-     * and t.
+     * Create a XYCZT gauge figure, where (X,Y) = (lenStick, lenStick) and (C,Z,T) =
+     * (1,1,1). This is to make the gauge figure consistent with all the other gauge
+     * figures. We give the figure a 10 percent margin to make sure that the stick
+     * falls inside after translation and rotation
+     * 
+     */
+    private IGaugeFigure _createDipoleFigure(int stickLength, ISoIImage soiImage) {
+        long[] dim = new long[IGaugeFigure.AXIS_ORDER.numAxis];
+        dim[0] = (long) (stickLength * 1.1);
+        dim[1] = dim[0];
+
+        IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
+        Image<RGB16> gaugeImage = soiImage.getImage().getFactory().create(gaugeFigMetadata, RGB16.zero());
+        return GaugeFigureFactory.create(GaugeFigureType.SingleDipole, AngleGaugeType.Rho2D, gaugeImage,
+                soiImage.getFileSet());
+    }
+
+    /**
+     * Base stick complies with the {@link STICK_DIM}
      */
     private IShape _defineBaseStick(int len, int thickness) {
         long[] stickMin = new long[STICK_DIM];
@@ -94,6 +120,19 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
         imageMin = new long[imDimension.length];
 
         return new ShapeFactory().closedBox(imageMin, imageMax, axisOrder);
+    }
+
+    /**
+     * Each time the base stick is rotated, it must be moved to the center of the
+     * dipole position.
+     * 
+     * @return
+     */
+    private long[] _setStickTranslationToDipoleCenterPosition() {
+        long[] centerOfDipoleFigure = new long[STICK_DIM];
+        centerOfDipoleFigure[0] = this._dipoleFigure.getImage().getMetadata().getDim()[0] / 2;
+        centerOfDipoleFigure[1] = this._dipoleFigure.getImage().getMetadata().getDim()[1] / 2;
+        return centerOfDipoleFigure;
     }
 
     @Override
@@ -157,15 +196,8 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
     private void _transformStick(long[] position, IOrientationVector orientationVector) {
         this._stick.resetToOriginalShape();
-
         this._stick.rotate2D(Math.PI / 2 + orientationVector.getAngle(_slopeAngle));
-
-        // Move the stick to the center of dipole figure
-        long[] centerOfDipoleFigure = new long[STICK_DIM];
-        centerOfDipoleFigure[0] = this._dipoleFigure.getImage().getMetadata().getDim()[0];
-        centerOfDipoleFigure[1] = this._dipoleFigure.getImage().getMetadata().getDim()[1];
-
-        this._stick.translate(centerOfDipoleFigure);
+        this._stick.translate(this._stickTranslation);
     }
 
     /**
