@@ -2,10 +2,8 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D
 
 import java.util.Arrays;
 
-import fr.fresnel.fourPolar.algorithm.util.image.converters.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
-import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
@@ -23,6 +21,10 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGa
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
 class WholeSampleStick2DPainter implements IAngleGaugePainter {
+    private static final int FIG_C_AXIS = IGaugeFigure.AXIS_ORDER.c_axis;
+    private static final int FIG_T_AXIS = IGaugeFigure.AXIS_ORDER.t_axis;
+    private static final int FIG_Z_AXIS = IGaugeFigure.AXIS_ORDER.z_axis;
+
     final private IGaugeFigure _stick2DFigure;
 
     final private IOrientationImageRandomAccess _orientationRA;
@@ -80,8 +82,9 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
      * Basic stick complies with the gauge figure, which is an XYZT image.
      */
     private IShape _defineBaseStick(int len, int thickness) {
-        long[] stickMin = new long[4];
-        long[] stickMax = new long[4];
+        int numAxis = AxisOrder.getNumDefinedAxis(GAUGE_FIGURE_AXIS_ORDER);
+        long[] stickMin = new long[numAxis];
+        long[] stickMax = new long[numAxis];
 
         stickMin[0] = -len / 2 + 1;
         stickMin[1] = -thickness / 2 + 1;
