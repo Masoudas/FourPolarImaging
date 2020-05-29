@@ -2,13 +2,16 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D
 
 import java.util.Arrays;
 
+import fr.fresnel.fourPolar.algorithm.util.image.converters.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
+import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImageRandomAccess;
+import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
@@ -16,15 +19,13 @@ import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
 class WholeSampleStick2DPainter implements IAngleGaugePainter {
-    private static final int FIG_C_AXIS = IGaugeFigure.AXIS_ORDER.c_axis;
-    private static final int FIG_T_AXIS = IGaugeFigure.AXIS_ORDER.t_axis;
-    private static final int FIG_Z_AXIS = IGaugeFigure.AXIS_ORDER.z_axis;
-
     final private IGaugeFigure _stick2DFigure;
 
     final private IOrientationImageRandomAccess _orientationRA;
@@ -44,10 +45,10 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     private final IShape _stickFigureRegion;
     private final IShape _soiImageRegion;
 
-    public WholeSampleStick2DPainter(WholeSampleStick2DPainterBuilder builder) throws ConverterToImgLib2NotFound {
+    public WholeSampleStick2DPainter(IWholeSampleStick2DPainterBuilder builder) throws ConverterToImgLib2NotFound {
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
 
-        this._stick2DFigure = builder.getGaugeFigure();
+        this._stick2DFigure = this._createGaugeFigure(builder.getSoIImage(), builder.getAngleGaugeType());
 
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
 
@@ -59,13 +60,25 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
 
         this._stick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness());
 
-        this._stickFigureRegion = this._getImageBoundaryAsShape(
-                this._stick2DFigure.getImage().getMetadata().getDim(),
+        this._stickFigureRegion = this._getImageBoundaryAsShape(this._stick2DFigure.getImage().getMetadata().getDim(),
                 this._stick2DFigure.getImage().getMetadata().axisOrder());
-        
-        this._soiImageRegion = this._getImageBoundaryAsShape(
-            builder.getSoIImage().getImage().getMetadata().getDim(),
-            builder.getSoIImage().getImage().getMetadata().axisOrder());
+
+        this._soiImageRegion = this._getImageBoundaryAsShape(builder.getSoIImage().getImage().getMetadata().getDim(),
+                builder.getSoIImage().getImage().getMetadata().axisOrder());
+    }
+
+    /**
+     * Create the gauge figure by creating a color version of SoI.
+     */
+    private IGaugeFigure _createGaugeFigure(ISoIImage soiImage, AngleGaugeType gaugeType) {
+        Image<RGB16> gaugeImage = null;
+        try {
+            gaugeImage = GrayScaleToColorConverter.useMaxEachPlane(soiImage.getImage());
+        } catch (ConverterToImgLib2NotFound e) {
+            // We expect this exception to have been caught before the program arrives here!
+        }
+
+        return GaugeFigureFactory.create(GaugeFigureType.WholeSample, gaugeType, gaugeImage, soiImage.getFileSet());
     }
 
     /**
@@ -79,10 +92,10 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     }
 
     /**
-     * Basic stick complies with the gauge figure, which is an XYZT image.
+     * Basic stick complies with the gauge figure in number of dimensions.
      */
     private IShape _defineBaseStick(int len, int thickness) {
-        int numAxis = AxisOrder.getNumDefinedAxis(GAUGE_FIGURE_AXIS_ORDER);
+        int numAxis = IGaugeFigure.AXIS_ORDER.numAxis;
         long[] stickMin = new long[numAxis];
         long[] stickMax = new long[numAxis];
 
@@ -96,8 +109,8 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
 
     @Override
     public void draw(IShape region, UINT16 soiThreshold) {
-        if (region.axisOrder() != AxisOrder.XYCZT) {
-            throw new IllegalArgumentException("The region should be XYCZT.");
+        if (region.axisOrder() != ISoIImage.AXIS_ORDER) {
+            throw new IllegalArgumentException("The region should comply with the soi image axis order.");
         }
 
         int threshold = soiThreshold.get();
@@ -128,8 +141,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         _transformStick(stickCenterPosition, orientationVector);
         this._stick.and(this._stickFigureRegion);
 
-        final RGB16 pixelColor = _getStickColor(orientationVector);
-        Pixel<RGB16> pixelValue = new Pixel<RGB16>(pixelColor); // Use the same pixel for every pixel of stick.
+        Pixel<RGB16> pixelValue = _getStickColor(orientationVector);
 
         IShapeIterator stickIterator = this._stick.getIterator();
         while (stickIterator.hasNext()) {
@@ -137,10 +149,6 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
             stickFigureRA.setPosition(stickPosition);
             stickFigureRA.setPixel(pixelValue);
         }
-    }
-
-    private RGB16 _getStickColor(IOrientationVector orientationVector) {
-        return this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
     }
 
     /**
@@ -151,10 +159,9 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
      * @param orientationVector is the orientation vector at the position
      */
     private void _transformStick(long[] position, IOrientationVector orientationVector) {
-        long[] translation = { position[0], position[1], position[3], position[4] };
         this._stick.resetToOriginalShape();
         this._stick.rotate2D(-orientationVector.getAngle(_slopeAngle));
-        this._stick.translate(translation);
+        this._stick.translate(position.clone());
     }
 
     private IOrientationVector _getOrientationVector(long[] stickCenterPosition) {
@@ -171,52 +178,47 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
                 && !Double.isNaN(orientationVector.getAngle(_colorAngle));
     }
 
+    private Pixel<RGB16> _getStickColor(IOrientationVector orientationVector) {
+        RGB16 pixelColor = this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
+        return new Pixel<RGB16>(pixelColor);
+    }
+
     @Override
     public IGaugeFigure getFigure() {
         return _stick2DFigure;
     }
 
     public static OrientationAngle getSlopeAngle(AngleGaugeType type) {
-        OrientationAngle angle = null;
         switch (type) {
             case Rho2D:
-                angle = OrientationAngle.rho;
-                break;
+                return OrientationAngle.rho;
 
             case Delta2D:
-                angle = OrientationAngle.rho;
-                break;
+                return OrientationAngle.rho;
 
             case Eta2D:
-                angle = OrientationAngle.rho;
-                break;
+                return OrientationAngle.rho;
 
             default:
-                break;
+                return null;
         }
 
-        return angle;
     }
 
     public static OrientationAngle getColorAngle(AngleGaugeType type) {
-        OrientationAngle angle = null;
         switch (type) {
             case Rho2D:
-                angle = OrientationAngle.rho;
-                break;
+                return OrientationAngle.rho;
 
             case Delta2D:
-                angle = OrientationAngle.delta;
-                break;
+                return OrientationAngle.delta;
 
             case Eta2D:
-                angle = OrientationAngle.eta;
-                break;
+                return OrientationAngle.eta;
 
             default:
-                break;
+                return null;
         }
 
-        return angle;
     }
 }
