@@ -10,6 +10,7 @@ import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.image.orientation.IAngleImage;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImageRandomAccess;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
@@ -92,7 +93,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     }
 
     /**
-     * The base stick is an XYZT rectangle.
+     * The base stick is an XYCZT rectangle.
      */
     private IShape _defineBaseStick(int len, int thickness, AxisOrder axisOrder) {
         long[] stickMin = new long[IGaugeFigure.AXIS_ORDER.numAxis];
@@ -101,9 +102,14 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
         stickMin[0] = -thickness / 2 + 1;
         stickMin[1] = -thickness / 2 + 1;
         stickMin[IGaugeFigure.AXIS_ORDER.z_axis] = -len / 2 + 1;
+        stickMin[IGaugeFigure.AXIS_ORDER.t_axis] = 0;
+        stickMin[IGaugeFigure.AXIS_ORDER.c_axis] = 0;
+
         stickMax[0] = thickness / 2;
         stickMax[1] = thickness / 2;
         stickMax[IGaugeFigure.AXIS_ORDER.z_axis] = len / 2;
+        stickMax[IGaugeFigure.AXIS_ORDER.t_axis] = 0;
+        stickMax[IGaugeFigure.AXIS_ORDER.c_axis] = 0;
 
         return new ShapeFactory().closedBox(stickMin, stickMax, axisOrder);
     }
@@ -131,10 +137,10 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
 
     private void _drawStick(IOrientationVector orientationVector, long[] dipolePosition) {
         _transformStick(dipolePosition, orientationVector);
-        Pixel<RGB16> stickPixel = new Pixel<>(RGB16.zero());
-
         final RGB16 color = _getStickColor(orientationVector);
 
+        Pixel<RGB16> stickPixel = new Pixel<>(RGB16.zero()); // Create one pixel instance, to avoid creating many
+                                                             // objects.
         IShapeIterator stickIterator = this._stick.getIterator();
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
@@ -167,10 +173,11 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
      * @param orientationVector is the orientation of the dipole.
      */
     private void _transformStick(long[] dipolePosition, IOrientationVector orientationVector) {
-        int z_axis = IGaugeFigure.AXIS_ORDER.z_axis;
-        int t_axis = IGaugeFigure.AXIS_ORDER.t_axis;
+        int z_axis = IAngleImage.AXIS_ORDER.z_axis;
+        int t_axis = IAngleImage.AXIS_ORDER.t_axis;
+        int c_axis = IAngleImage.AXIS_ORDER.t_axis;
 
-        long[] stickTranslation = { dipolePosition[0], dipolePosition[1], 1,
+        long[] stickTranslation = { dipolePosition[0], dipolePosition[1], dipolePosition[c_axis],
                 dipolePosition[z_axis] * this._stickLength + this._stickLength / 2 - 1, dipolePosition[t_axis] };
 
         this._stick.resetToOriginalShape();
