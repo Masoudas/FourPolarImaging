@@ -2,13 +2,16 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge3D
 
 import java.util.Arrays;
 
+import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImageRandomAccess;
+import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
@@ -17,7 +20,10 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.Rotation3DOrder;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
 /**
@@ -43,11 +49,11 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     /**
      * Create the 3D painter using the builder parameters.
      */
-    public WholeSampleStick3DPainter(WholeSampleStick3DPainterBuilder builder) {
+    public WholeSampleStick3DPainter(IWholeSampleStick3DPainterBuilder builder) {
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
         this._soiImageBoundary = _defineImageBoundaryAsBox(builder.getSoIImage().getImage());
 
-        this._stick3DFigure = builder.getGaugeFigure();
+        this._stick3DFigure = this._createGaugeFigure(builder.getSoIImage(), builder.getSticklength());
         this._stick3DFigureRA = this._stick3DFigure.getImage().getRandomAccess();
         this._stick3DFigureBoundary = _defineImageBoundaryAsBox(this._stick3DFigure.getImage());
 
@@ -58,6 +64,21 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
 
         this._stick = _defineBaseStick(this._stickLength, builder.getStickThickness(),
                 this._stick3DFigure.getImage().getMetadata().axisOrder());
+    }
+
+    /**
+     * The gauge figure is interleaved in the z-direction by the length of sticks.
+     */
+    private IGaugeFigure _createGaugeFigure(ISoIImage soiImage, int stickLength) {
+        IMetadata soiMetadata = soiImage.getImage().getMetadata();
+        long[] soiImgDim = soiMetadata.getDim();
+
+        long[] dimGaugeIm = { soiImgDim[0], soiImgDim[1], 1, soiImgDim[3] * stickLength, soiImgDim[4] };
+        IMetadata gaugeMetadata = new Metadata.MetadataBuilder(dimGaugeIm).axisOrder(IGaugeFigure.AXIS_ORDER).build();
+
+        Image<RGB16> gaugeImage = soiImage.getImage().getFactory().create(gaugeMetadata, RGB16.zero());
+        return GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D, gaugeImage,
+                soiImage.getFileSet());
     }
 
     /**
@@ -74,27 +95,24 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
      * The base stick is an XYZT rectangle.
      */
     private IShape _defineBaseStick(int len, int thickness, AxisOrder axisOrder) {
-        long[] stickMin = new long[4];
-        long[] stickMax = new long[4];
+        long[] stickMin = new long[IGaugeFigure.AXIS_ORDER.numAxis];
+        long[] stickMax = new long[IGaugeFigure.AXIS_ORDER.numAxis];
 
         stickMin[0] = -thickness / 2 + 1;
         stickMin[1] = -thickness / 2 + 1;
-        stickMin[2] = -len / 2 + 1;
+        stickMin[IGaugeFigure.AXIS_ORDER.z_axis] = -len / 2 + 1;
         stickMax[0] = thickness / 2;
         stickMax[1] = thickness / 2;
-        stickMax[2] = len / 2;
+        stickMax[IGaugeFigure.AXIS_ORDER.z_axis] = len / 2;
 
         return new ShapeFactory().closedBox(stickMin, stickMax, axisOrder);
     }
 
     @Override
     public void draw(IShape region, UINT16 soiThreshold) {
-        if (region.axisOrder() != this._soiImageBoundary.axisOrder()) {
-            throw new IllegalArgumentException("The region should be XYCZT.");
+        if (region.axisOrder() != ISoIImage.AXIS_ORDER) {
+            throw new IllegalArgumentException("The region should have the same axis order as the soi image.");
         }
-
-        int threshold = soiThreshold.get();
-        Pixel<RGB16> pixel = new Pixel<>(RGB16.zero());
 
         for (IShapeIterator iterator = region.getIterator(); iterator.hasNext();) {
             long[] dipolePosition = iterator.next();
@@ -103,16 +121,18 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
                 this._soiRA.setPosition(dipolePosition);
                 final IOrientationVector orientationVector = this._getOrientationVector(dipolePosition);
 
-                if (_isSoIAboveThreshold(threshold) && orientationVector.isWellDefined()) {
-                    _drawStick(pixel, orientationVector, dipolePosition);
+                if (_isSoIAboveThreshold(soiThreshold.get()) && orientationVector.isWellDefined()) {
+                    _drawStick(orientationVector, dipolePosition);
                 }
             }
 
         }
     }
 
-    private void _drawStick(Pixel<RGB16> pixel, IOrientationVector orientationVector, long[] dipolePosition) {
+    private void _drawStick(IOrientationVector orientationVector, long[] dipolePosition) {
         _transformStick(dipolePosition, orientationVector);
+        Pixel<RGB16> stickPixel = new Pixel<>(RGB16.zero());
+
         final RGB16 color = _getStickColor(orientationVector);
 
         IShapeIterator stickIterator = this._stick.getIterator();
@@ -120,20 +140,19 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
             long[] stickPosition = stickIterator.next();
             if (this._stick3DFigureBoundary.isInside(stickPosition)) {
                 this._stick3DFigureRA.setPosition(stickPosition);
-                pixel.value().set(color.getR(), color.getG(), color.getB());
-                this._stick3DFigureRA.setPixel(pixel);
+                stickPixel.value().set(color.getR(), color.getG(), color.getB());
+                this._stick3DFigureRA.setPixel(stickPixel);
             }
         }
     }
 
     private RGB16 _getStickColor(IOrientationVector orientationVector) {
-        final RGB16 color = this._colormap.getColor(0, OrientationVector.maxAngle(OrientationAngle.delta),
+        return this._colormap.getColor(0, OrientationVector.maxAngle(OrientationAngle.delta),
                 orientationVector.getAngle(OrientationAngle.delta));
-        return color;
     }
 
     /**
-     * To transform the base stick, suppose the dipole is located at x, y, z, t.
+     * To transform the base stick, suppose the dipole is located at x, y, c, z, t.
      * Then because the gauge figure has been interleaved in the z direction, the
      * dipole position would be in z + stick_len / 2, with stick stetching
      * (possibly) from z to z + stick_len.
@@ -148,8 +167,11 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
      * @param orientationVector is the orientation of the dipole.
      */
     private void _transformStick(long[] dipolePosition, IOrientationVector orientationVector) {
-        long[] stickTranslation = { dipolePosition[0], dipolePosition[1],
-                dipolePosition[3] * this._stickLength + this._stickLength / 2 - 1, dipolePosition[4] };
+        int z_axis = IGaugeFigure.AXIS_ORDER.z_axis;
+        int t_axis = IGaugeFigure.AXIS_ORDER.t_axis;
+
+        long[] stickTranslation = { dipolePosition[0], dipolePosition[1], 1,
+                dipolePosition[z_axis] * this._stickLength + this._stickLength / 2 - 1, dipolePosition[t_axis] };
 
         this._stick.resetToOriginalShape();
         this._stick.rotate3D(orientationVector.getAngle(OrientationAngle.eta),
