@@ -82,7 +82,7 @@ public class SCIFIOTiffMetadataConverterTest {
         tiffMetadata.createImageMetadata(1);
         ImageMetadata imageMetadata = tiffMetadata.get(0);
 
-        SCIFIOTiffMetadataConverter.convertTo(metadata, imageMetadata);
+        SCIFIOTiffMetadataConverter.convertTo(metadata, tiffMetadata);
 
         assertTrue(imageMetadata.getAxis(0).type().getLabel().equals("X")
                 && imageMetadata.getAxis(1).type().getLabel().equals("Y")
