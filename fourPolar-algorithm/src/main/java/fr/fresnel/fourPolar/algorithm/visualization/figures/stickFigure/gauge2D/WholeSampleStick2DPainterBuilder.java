@@ -34,7 +34,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * <p>
  * Note that the generated gauge figure is an XYZT image.
  */
-public class WholeSampleStick2DPainterBuilder {
+public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainterBuilder {
     private final IOrientationImage _orientationImage;
     private final ISoIImage _soiImage;
     private final AngleGaugeType _gaugeType;
@@ -42,9 +42,6 @@ public class WholeSampleStick2DPainterBuilder {
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
     private int _length = 50;
-    private GaugeFigureType _gaugeFigureType = GaugeFigureType.WholeSample;
-
-    private IGaugeFigure _gaugeFigure;
 
     /**
      * Initialize the painter with the given orientation and soi image, for the
@@ -119,47 +116,37 @@ public class WholeSampleStick2DPainterBuilder {
      *                                    cannot be converted to ImgLib2 image type.
      */
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
-        this._gaugeFigure = this._createGaugeFigure(this._soiImage);
         return new WholeSampleStick2DPainter(this);
     }
 
-    /**
-     * Create the gauge figure by creating a color version of SoI.
-     */
-    private IGaugeFigure _createGaugeFigure(ISoIImage soiImage) {
-        Image<RGB16> gaugeImage = null;
-        try {
-            gaugeImage = GrayScaleToColorConverter.useMaxEachPlane(soiImage.getImage());
-        } catch (ConverterToImgLib2NotFound e) {
-            // We expect this exception to have been caught before the program arrives here!
-        }
-
-        return GaugeFigureFactory.create(this._gaugeFigureType, this._gaugeType, gaugeImage,
-                this._soiImage.getFileSet());
-    }
-
-    public ColorMap getColorMap() {
+    @Override
+    ColorMap getColorMap() {
         return this._colorMap;
     }
 
-    public IGaugeFigure getGaugeFigure() {
-        return _gaugeFigure;
-    }
-
-    public int getSticklength() {
+    @Override
+    int getSticklength() {
         return _length;
     }
 
-    public IOrientationImage getOrientationImage() {
+    @Override
+    IOrientationImage getOrientationImage() {
         return _orientationImage;
     }
 
-    public ISoIImage getSoIImage() {
+    @Override
+    ISoIImage getSoIImage() {
         return _soiImage;
     }
 
-    public int getStickThickness() {
+    @Override
+    int getStickThickness() {
         return _thickness;
+    }
+
+    @Override
+    AngleGaugeType getAngleGaugeType() {
+        return this._gaugeType;
     }
 
 }
