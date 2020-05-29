@@ -20,7 +20,14 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
-class SingleDipoleStick2DPainter implements IAngleGaugePainter {
+/**
+ * Paints the dipole that represents the in plane orientation of a dipole. Note
+ * that to accommodate {@link IGaugeFigure#AXIS_ORDER}, the dipole has as many
+ * dimensions of the said axis order, even though only the xy direction is used.
+ */
+class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
+    private static final int STICK_DIM = IGaugeFigure.AXIS_ORDER.numAxis;
+
     final private IGaugeFigure _dipoleFigure;
     final private IOrientationImageRandomAccess _orientationRA;
     final private IPixelRandomAccess<UINT16> _soiRA;
@@ -39,7 +46,7 @@ class SingleDipoleStick2DPainter implements IAngleGaugePainter {
 
     private final IShape _orientationImageBoundary;
 
-    public SingleDipoleStick2DPainter(SingleDipoleStick2DPainterBuilder builder) {
+    public SingleDipoleInPlaneStickPainter(SingleDipoleStick2DPainterBuilder builder) {
         this._dipoleFigure = builder.getGaugeFigure();
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();

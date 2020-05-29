@@ -112,7 +112,7 @@ public class SingleDipoleStick2DPainterBuilder {
         IMetadata orientImMetadata = this._orientationImage.getAngleImage(OrientationAngle.rho).getImage()
                 .getMetadata();
         this._gaugeFigure = this._createGaugeFigure(orientImMetadata);
-        return new SingleDipoleStick2DPainter(this);
+        return new SingleDipoleInPlaneStickPainter(this);
 
     }
 

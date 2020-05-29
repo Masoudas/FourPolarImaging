@@ -11,7 +11,7 @@ import org.scijava.ui.behaviour.util.Behaviours;
 import bdv.util.Bdv;
 import bdv.util.BdvFunctions;
 import bdv.util.BdvOptions;
-import fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D.SingleDipoleStick2DPainterBuilder;
+import fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D.SingleDipoleInPlaneStickPainterBuilder;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
@@ -123,7 +123,7 @@ public class SophiesChoiceIII {
         IAngleGaugePainter gaugePainters = null;
 
         try {
-            gaugePainters = new SingleDipoleStick2DPainterBuilder(orientationImage, soiImage, angleGaugeType)
+            gaugePainters = new SingleDipoleInPlaneStickPainterBuilder(orientationImage, soiImage, angleGaugeType)
                     .colorMap(cMap).stickThickness(thickness).stickLen(length).build();
         } catch (ConverterToImgLib2NotFound e) {
 

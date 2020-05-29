@@ -47,7 +47,7 @@ import ij.io.FileSaver;
 import net.imglib2.RealPoint;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 
-public class SingleDipoleStick2DPainterBuilderTest {
+public class SingleDipoleInPlaneStickPainterBuilderTest {
 
     /**
      * We store the sticks for 0, 45, 90 and 135 in separate figures.
@@ -84,7 +84,7 @@ public class SingleDipoleStick2DPainterBuilderTest {
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IAngleGaugePainter painter = new SingleDipoleStick2DPainterBuilder(orientationImage, soiImage,
+        IAngleGaugePainter painter = new SingleDipoleInPlaneStickPainterBuilder(orientationImage, soiImage,
                 AngleGaugeType.Rho2D).stickLen(100).colorMap(cMap).stickThickness(8).build();
 
         for (int i = 0; i < 4; i++) {
@@ -125,7 +125,7 @@ public class SingleDipoleStick2DPainterBuilderTest {
         ISoIImage soiImage = SoIImage.create(fileSet, soiGray, 1);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
-        IAngleGaugePainter painter = new SingleDipoleStick2DPainterBuilder(orientationImage, soiImage,
+        IAngleGaugePainter painter = new SingleDipoleInPlaneStickPainterBuilder(orientationImage, soiImage,
                 AngleGaugeType.Rho2D).stickLen(50).colorMap(cMap).stickThickness(8).build();
 
         // Viewer to show the soi.
@@ -154,7 +154,7 @@ public class SingleDipoleStick2DPainterBuilderTest {
     }
 
     private void _saveStickFigure(IGaugeFigure stickFigure, String stickImageName) throws ConverterToImgLib2NotFound {
-        File root = new File(SingleDipoleStick2DPainterBuilderTest.class.getResource("").getPath() + "/SingleDipole");
+        File root = new File(SingleDipoleInPlaneStickPainterBuilderTest.class.getResource("").getPath() + "/SingleDipole");
         root.delete();
         root.mkdirs();
 
