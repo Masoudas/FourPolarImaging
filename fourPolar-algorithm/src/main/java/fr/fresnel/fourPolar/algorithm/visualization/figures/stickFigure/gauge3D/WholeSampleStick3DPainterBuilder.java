@@ -1,9 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge3D;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
@@ -13,7 +10,6 @@ import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
-import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
@@ -37,9 +33,8 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * automatically scaled to all higher dimensions. For example, the same 2D box
  * in region would be used for z = 0, 1, ... .
  * <p>
- * Note that the generated gauge figure is an XYZT image.
  */
-public class WholeSampleStick3DPainterBuilder {
+public class WholeSampleStick3DPainterBuilder extends IWholeSampleStick3DPainterBuilder {
     private final IOrientationImage _orientationImage;
     private final ISoIImage _soiImage;
 
@@ -50,13 +45,15 @@ public class WholeSampleStick3DPainterBuilder {
     private IGaugeFigure _gaugeFigure;
 
     /**
-     * Initiate builder from orientation and soi images.
+     * Initialize the painter with the given orientation and soi image, for the
+     * given angle gauge type.
      * 
-     * @param IllegalArgumentException is thrown in case orientation image is not at
-     *                                 least two dimensionsal, or soi and
-     *                                 orientation image are not from the same set,
-     *                                 or that soi or orientation image have
-     *                                 channels.
+     * @param orientationImage         is the orientation image
+     * @param soiImage                 is the corresponding soi Image of @param
+     *                                 orientationImage.
+     * @param IllegalArgumentException is thrown in case soi and orientation image
+     *                                 are not from the same set, or that soi or
+     *                                 orientation image have channels.
      */
     public WholeSampleStick3DPainterBuilder(IOrientationImage orientationImage, ISoIImage soiImage) {
         Objects.requireNonNull(soiImage, "soiImage cannot be null");
@@ -118,48 +115,31 @@ public class WholeSampleStick3DPainterBuilder {
      *                                    cannot be converted to ImgLib2 image type.
      */
     public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
-        this._gaugeFigure = this._createGaugeFigure();
         return new WholeSampleStick3DPainter(this);
     }
 
-    /**
-     * The gauge figure is an XYZT image, that is interleaved in the z-direction by 
-     * the length of sticks.
-     */
-    private IGaugeFigure _createGaugeFigure() {
-        IMetadata soiMetadata = this._soiImage.getImage().getMetadata();
-        long[] soiImgDim = soiMetadata.getDim();
-
-        long[] dimGaugeIm = {soiImgDim[0], soiImgDim[1], soiImgDim[3] * this._length, soiImgDim[4]};
-        IMetadata gaugeMetadata = new Metadata.MetadataBuilder(dimGaugeIm).axisOrder(AxisOrder.XYZT).build();
-
-        Image<RGB16> gaugeImage = this._soiImage.getImage().getFactory().create(gaugeMetadata, RGB16.zero());
-
-        return GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D, gaugeImage,
-                this._soiImage.getFileSet());
-    }
-
-    public ColorMap getColorMap() {
+    @Override
+    ColorMap getColorMap() {
         return this._colorMap;
     }
 
-    public IGaugeFigure getGaugeFigure() {
-        return _gaugeFigure;
-    }
-
-    public int getSticklength() {
+    @Override
+    int getSticklength() {
         return _length;
     }
 
-    public IOrientationImage getOrientationImage() {
+    @Override
+    IOrientationImage getOrientationImage() {
         return _orientationImage;
     }
 
-    public ISoIImage getSoIImage() {
+    @Override
+    ISoIImage getSoIImage() {
         return _soiImage;
     }
 
-    public int getStickThickness() {
+    @Override
+    int getStickThickness() {
         return _thickness;
     }
 
