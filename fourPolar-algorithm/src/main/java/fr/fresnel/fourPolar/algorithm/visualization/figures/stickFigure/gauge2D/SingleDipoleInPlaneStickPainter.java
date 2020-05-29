@@ -9,6 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImageRandomAccess;
+import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
@@ -70,15 +71,16 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
      * and t.
      */
     private IShape _defineBaseStick(int len, int thickness) {
-        long[] stickMin = new long[4];
-        long[] stickMax = new long[4];
+        long[] stickMin = new long[STICK_DIM];
+        long[] stickMax = new long[STICK_DIM];
 
+        // Base stick is at the origin of the xy plane.
         stickMin[0] = -thickness / 2 + 1;
         stickMin[1] = -len / 2 + 1;
         stickMax[0] = thickness / 2;
         stickMax[1] = len / 2;
 
-        return new ShapeFactory().closedBox(stickMin, stickMax, AxisOrder.XYZT);
+        return new ShapeFactory().closedBox(stickMin, stickMax, AxisOrder.XYCZT);
     }
 
     /**
@@ -102,8 +104,8 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
             throw new IllegalArgumentException("Only point shape can be used to localize a dipole.");
         }
 
-        if (region.axisOrder() != AxisOrder.XYCZT) {
-            throw new IllegalArgumentException("The given point should be XYCZT.");
+        if (region.axisOrder() != ISoIImage.AXIS_ORDER) {
+            throw new IllegalArgumentException("The axis order of the point must be the same as soi image axis order.");
         }
 
         if (!this._orientationImageBoundary.isInside(dipolePosition)) {
@@ -113,24 +115,18 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
         this._paintStickFigureBlack();
 
-        int threshold = soiThreshold.get();
-        IPixelRandomAccess<RGB16> stickFigureRA = this._dipoleFigure.getImage().getRandomAccess();
-
-        this._soiRA.setPosition(dipolePosition);
-        final IOrientationVector orientationVector = this._getOrientationVector(dipolePosition);
-
-        if (_isSoIAboveThreshold(threshold) && _slopeAndColorAngleExist(orientationVector)) {
+        final IOrientationVector orientationVector = this._getOrientationOfThePosition(dipolePosition);
+        if (_isSoIAboveThreshold(soiThreshold.get()) && _slopeAndColorAngleExist(orientationVector)) {
             _transformStick(dipolePosition, orientationVector);
 
-            final RGB16 pixelColor = _getStickColor(orientationVector);
-            Pixel<RGB16> pixelValue = new Pixel<RGB16>(pixelColor); // Use the same pixel for every pixel of stick.
+            // Use the same pixel for every pixel of stick.
+            final Pixel<RGB16> pixelColor = this._getStickColor(orientationVector);
+            IPixelRandomAccess<RGB16> stickFigureRA = this._dipoleFigure.getImage().getRandomAccess();
 
-            IShapeIterator stickIterator = this._stick.getIterator();
-            while (stickIterator.hasNext()) {
+            for (IShapeIterator stickIterator = this._stick.getIterator(); stickIterator.hasNext();) {
                 long[] stickPosition = stickIterator.next();
                 stickFigureRA.setPosition(stickPosition);
-                stickFigureRA.setPixel(pixelValue);
-
+                stickFigureRA.setPixel(pixelColor);
             }
         }
     }
@@ -140,8 +136,9 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
         return this._dipoleFigure;
     }
 
-    private RGB16 _getStickColor(IOrientationVector orientationVector) {
-        return this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
+    private Pixel<RGB16> _getStickColor(IOrientationVector orientationVector) {
+        RGB16 pixelColor = this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
+        return new Pixel<RGB16>(pixelColor);
     }
 
     private IOrientationVector _getOrientationVector(long[] stickCenterPosition) {
@@ -163,9 +160,12 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
         this._stick.rotate2D(Math.PI / 2 + orientationVector.getAngle(_slopeAngle));
 
-        // Move the stick to the center of figure
-        long stickCenter = this._dipoleFigure.getImage().getMetadata().getDim()[0];
-        this._stick.translate(new long[] { stickCenter / 2, stickCenter / 2, 0, 0 });
+        // Move the stick to the center of dipole figure
+        long[] centerOfDipoleFigure = new long[STICK_DIM];
+        centerOfDipoleFigure[0] = this._dipoleFigure.getImage().getMetadata().getDim()[0];
+        centerOfDipoleFigure[1] = this._dipoleFigure.getImage().getMetadata().getDim()[1];
+
+        this._stick.translate(centerOfDipoleFigure);
     }
 
     /**
@@ -180,6 +180,11 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
             cursor.next();
             cursor.setPixel(pixel);
         }
+    }
+
+    private IOrientationVector _getOrientationOfThePosition(long[] dipolePosition) {
+        this._soiRA.setPosition(dipolePosition);
+        return this._getOrientationVector(dipolePosition);
     }
 
 }
