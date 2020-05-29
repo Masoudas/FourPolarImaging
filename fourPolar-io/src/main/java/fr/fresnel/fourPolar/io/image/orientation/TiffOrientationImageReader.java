@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.algorithm.postprocess.orientation.OrientationAngleConverter;
+import fr.fresnel.fourPolar.algorithm.util.image.axis.AxisReassigner;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
+import fr.fresnel.fourPolar.core.image.orientation.IAngleImage;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
@@ -72,8 +74,14 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
         IOrientationImage orientationImage = null;
         try {
             Image<Float32> rho = _reader.read(orientationSet.getFile(OrientationAngle.rho));
+            this._reassignAngleImageToXYCZT(rho);
+
             Image<Float32> delta = _reader.read(orientationSet.getFile(OrientationAngle.delta));
+            this._reassignAngleImageToXYCZT(delta);
+
             Image<Float32> eta = _reader.read(orientationSet.getFile(OrientationAngle.eta));
+            this._reassignAngleImageToXYCZT(eta);
+            
             orientationImage = OrientationImageFactory.create(capturedSet, orientationSet.getChannel(), rho, delta,
                     eta);
         } catch (MetadataParseError | IOException e) {
@@ -81,6 +89,21 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
         }
 
         return orientationImage;
+    }
+
+    /**
+     * It may happen that if the t dimension of the image is 1 (or z for that matter), when we 
+     * read it from disk, it would appear as xy. Hence, we need to reassign if necessary.
+     */
+    private Image<Float32> _reassignAngleImageToXYCZT(Image<Float32> angleImage){
+        // TODO we need to get rid of this method, by making sure that when image is written,
+        // z and t with dimension 1 are properly written to the disk.
+        if (angleImage.getMetadata().axisOrder() == IAngleImage.AXIS_ORDER){
+            return angleImage;
+        } else {
+            return AxisReassigner.reassignToXYCZT(angleImage, Float32.zero());
+        }
+
     }
 
     private void converAnglesToRadian(IOrientationImage orientationImage) {
