@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D
 
 import java.util.Arrays;
 
-import fr.fresnel.fourPolar.algorithm.util.image.converters.GrayScaleToColorConverter;
+import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;

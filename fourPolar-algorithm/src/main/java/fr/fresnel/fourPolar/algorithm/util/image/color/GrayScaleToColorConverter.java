@@ -1,6 +1,5 @@
-package fr.fresnel.fourPolar.algorithm.util.image.converters;
+package fr.fresnel.fourPolar.algorithm.util.image.color;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.algorithm.util.image.stats.ImageStatistics;
@@ -8,7 +7,6 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.Converter
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
@@ -16,7 +14,6 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RealType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 import net.imglib2.converter.Converter;
 import net.imglib2.converter.RealLUTConverter;
 import net.imglib2.display.ColorTable8;
