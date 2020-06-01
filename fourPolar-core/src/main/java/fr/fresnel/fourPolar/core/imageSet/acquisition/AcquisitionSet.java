@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition;
 
+import java.io.File;
 import java.security.KeyException;
 import java.util.Iterator;
 
@@ -59,4 +60,10 @@ public interface AcquisitionSet {
      * Returns number of {@link ICapturedImageFileSet} in this set.
      */
     public int setSize();
+
+    /**
+     * Get the root folder of where all the images are located.
+     */
+    public File rootFolder();
+
 }

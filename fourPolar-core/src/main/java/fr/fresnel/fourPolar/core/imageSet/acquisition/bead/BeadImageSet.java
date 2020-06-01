@@ -1,8 +1,10 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition.bead;
 
+import java.io.File;
 import java.security.KeyException;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
@@ -10,10 +12,21 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 
 /**
- * Defines the bead image set, which accompanies the sample image set. 
+ * Defines the bead image set, which accompanies the sample image set.
  */
 public class BeadImageSet implements AcquisitionSet {
     private ICapturedImageFileSet imageFileSet = null;
+    private final File _rootFolder;
+
+    /**
+     * Create set for the given project. See {@link PathFactoryOfProject}.
+     * 
+     * @param rootFolder is the root folder of where all the images are located.
+     */
+    public BeadImageSet(File rootFolder) {
+        Objects.requireNonNull(rootFolder);
+        this._rootFolder = rootFolder;
+    }
 
     @Override
     public void addImageSet(ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
@@ -48,16 +61,21 @@ public class BeadImageSet implements AcquisitionSet {
 
     @Override
     public Iterator<ICapturedImageFileSet> getIterator() {
-        return Arrays.stream(new ICapturedImageFileSet[]{imageFileSet}).iterator();
+        return Arrays.stream(new ICapturedImageFileSet[] { imageFileSet }).iterator();
     }
 
     @Override
     public int setSize() {
-        if (this.imageFileSet == null){
+        if (this.imageFileSet == null) {
             return 0;
-        } else{
+        } else {
             return 1;
         }
+    }
+
+    @Override
+    public File rootFolder() {
+        return this._rootFolder;
     }
 
 }

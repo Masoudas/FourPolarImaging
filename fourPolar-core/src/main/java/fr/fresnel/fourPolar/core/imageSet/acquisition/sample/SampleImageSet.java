@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.imageSet.acquisition.sample;
 
+import java.io.File;
 import java.security.KeyException;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -14,9 +15,15 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
  */
 public class SampleImageSet implements AcquisitionSet {
     private Hashtable<String, ICapturedImageFileSet> _fileSuperSet;
+    private File _rootFolder;
 
-    public SampleImageSet() {
+    /**
+     * Create set for the given project. See {@link PathFactoryOfProject}.
+     * @param rootFolder is the root folder of where all the images are located.
+     */
+    public SampleImageSet(File rootFolder) {
         _fileSuperSet = new Hashtable<>();
+        _rootFolder = rootFolder;
     }
 
     @Override
@@ -54,5 +61,10 @@ public class SampleImageSet implements AcquisitionSet {
     @Override
     public int setSize() {
         return _fileSuperSet.size();
+    }
+
+    @Override
+    public File rootFolder() {
+        return this._rootFolder;
     }
 }
