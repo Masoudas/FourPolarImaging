@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
@@ -21,6 +22,7 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
     private String setName = "";
     final private Hashtable<String, ICapturedImageFile[]> fileSet = new Hashtable<String, ICapturedImageFile[]>();
     final private Cameras cameras;
+    final private int[] channels;
 
     /**
      * Used for the case when only one camera is present.
@@ -36,6 +38,8 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
 
         File flagFile = _getFlagFile(pol0_45_90_135);
         setName = defineSetName(flagFile); // Use the first file as flag to define a set name.
+
+        this.channels = this._setChannels(pol0_45_90_135);
     }
 
     /**
@@ -54,6 +58,8 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
 
         File flagFile = _getFlagFile(pol0_90);
         setName = defineSetName(flagFile);
+
+        this.channels = this._setChannels(pol0_90);
     }
 
     /**
@@ -76,6 +82,8 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
 
         File flagFile = _getFlagFile(pol0);
         setName = defineSetName(flagFile);
+
+        this.channels = this._setChannels(pol0);
     }
 
     /**
@@ -190,12 +198,32 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
     @Override
     public Iterator<ICapturedImageFile> getIterator() {
         Stream<ICapturedImageFile> concatStream = Stream.empty();
-        for (Iterator<ICapturedImageFile[]> iterator = this.fileSet.values().iterator(); iterator.hasNext(); ) {
+        for (Iterator<ICapturedImageFile[]> iterator = this.fileSet.values().iterator(); iterator.hasNext();) {
             concatStream = Stream.concat(concatStream, Arrays.stream(iterator.next()));
         }
-        
+
         return concatStream.iterator();
 
     }
 
+    @Override
+    public int[] getChannels() {
+        return this.channels;
+    }
+
+    /**
+     * Determines what channels this file set correspond to, by looking at the
+     * channels of a particular camera.
+     * 
+     * @param cameraFiles
+     * @return
+     */
+    private int[] _setChannels(ICapturedImageFile[] cameraFiles) {
+        IntStream channels = IntStream.empty();
+        for (ICapturedImageFile capturedImageFile : cameraFiles) {
+            IntStream.concat(channels, Arrays.stream(capturedImageFile.channels()));
+        }
+
+        return channels.toArray();
+    }
 }

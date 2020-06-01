@@ -76,4 +76,11 @@ public interface ICapturedImageFileSet {
      */
     public Iterator<ICapturedImageFile> getIterator();
 
+    /**
+     * Return the channels this set corresponds to.
+     * 
+     * @return
+     */
+    public int[] getChannels();
+
 }
