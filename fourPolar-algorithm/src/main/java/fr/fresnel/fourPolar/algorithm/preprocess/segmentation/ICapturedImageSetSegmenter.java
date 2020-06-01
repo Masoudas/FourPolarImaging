@@ -8,7 +8,7 @@ import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
  * implementations must use separate resources to segment each
  * {ICapturedImageSet}.
  */
-public interface CapturedImageSetSegmenter {
+public interface ICapturedImageSetSegmenter {
     /**
      * Set the captured image set
      * 

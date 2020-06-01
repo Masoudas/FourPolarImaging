@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
  * used for registration) to yield a {@link IPolarizationImageSet}. See
  * {@link IChannelRegistrator} for a discussion on how the images are segmented.
  */
-public class BeadCapturedImageSetSegmenter implements CapturedImageSetSegmenter{
+public class BeadCapturedImageSetSegmenter implements ICapturedImageSetSegmenter{
     private PolarizationImageSetCreator _poleImageCreator = null;
 
     /**
