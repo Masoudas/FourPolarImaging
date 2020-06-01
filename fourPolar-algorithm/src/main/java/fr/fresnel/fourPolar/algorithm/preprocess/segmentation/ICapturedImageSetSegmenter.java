@@ -4,9 +4,7 @@ import fr.fresnel.fourPolar.core.image.captured.ICapturedImageSet;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 
 /**
- * An interface for segmenting captured images (be it bead or sample). The
- * implementations must use separate resources to segment each
- * {ICapturedImageSet}.
+ * An interface for segmenting captured images (be it bead or sample).
  */
 public interface ICapturedImageSetSegmenter {
     /**
