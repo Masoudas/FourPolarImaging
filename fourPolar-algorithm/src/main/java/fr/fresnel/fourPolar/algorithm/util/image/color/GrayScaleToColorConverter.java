@@ -11,6 +11,10 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
  * color types {@link RGB16}.
  */
 public class GrayScaleToColorConverter {
+    public enum Color {
+        Red, Green, Blue
+    };
+
     /**
      * Convertes the given channel of {@link UINT16} image to an {@link RGB16}
      * image. Note that an 8 bit lookup table is used for the conversion, hence
@@ -26,5 +30,19 @@ public class GrayScaleToColorConverter {
     public static <T extends RealType> Image<RGB16> useMaxEachPlane(final Image<T> grayImage)
             throws ConverterToImgLib2NotFound {
         return MaxPlaneGrayScaleToColorConverter.convert(grayImage);
+    }
+
+    /**
+     * Merge to images, by coloring each image with a single color from
+     * {@link Color}.
+     * 
+     * @param image1 is the first image.
+     * @param color1 is the mono color for image 1.
+     * @param image2 is the second image.
+     * @param color2 is the mono color for image 1.
+     * @return is the merged colord images.
+     */
+    public Image<RGB16> mergeAsMonoColor(Image<UINT16> image1, Color color1, Image<UINT16> image2, Color color2) {
+        return MergeGrayImagesAsMonoColor.convert(image1, color1, image2, color2);
     }
 }
