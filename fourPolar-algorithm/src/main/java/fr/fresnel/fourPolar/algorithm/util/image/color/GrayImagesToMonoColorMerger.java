@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.algorithm.util.image.color;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter.Color;
+import fr.fresnel.fourPolar.algorithm.util.image.stats.ImageStatistics;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
@@ -14,6 +15,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessible;
 import net.imglib2.converter.ChannelARGBConverter;
@@ -21,6 +23,8 @@ import net.imglib2.converter.ChannelARGBConverter.Channel;
 import net.imglib2.converter.Converter;
 import net.imglib2.converter.Converters;
 import net.imglib2.converter.RealUnsignedByteConverter;
+import net.imglib2.img.Img;
+import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
@@ -28,8 +32,8 @@ import net.imglib2.type.numeric.integer.UnsignedShortType;
 /**
  * Merge two single color images
  */
-class MergeGrayImagesAsMonoColor {
-    public MergeGrayImagesAsMonoColor() {
+class GrayImagesToMonoColorMerger {
+    public GrayImagesToMonoColorMerger() {
         new AssertionError();
     }
 
@@ -53,20 +57,53 @@ class MergeGrayImagesAsMonoColor {
 
     private static RandomAccess<ARGBType> _createMonoColorCopy(Image<UINT16> image, Color color) {
         Channel channelColor = _getImgLib2ColorChannel(color);
-        RandomAccessible<UnsignedShortType> imgLib2Image = null;
-        try {
-            imgLib2Image = ImageToImgLib2Converter.getImg(image, UINT16.zero());
-        } catch (ConverterToImgLib2NotFound e) {
-            // TODO: get rid of this.
-        }
 
-        Converter<UnsignedShortType, UnsignedByteType> toByteImageConverter = new RealUnsignedByteConverter<UnsignedShortType>();
-        RandomAccessible<UnsignedByteType> unsignedByteImgRA = Converters.convert(imgLib2Image, toByteImageConverter,
-                new UnsignedByteType());
+        RandomAccessible<UnsignedByteType> unsignedByteImgRA = _getUnsignedByteImage(image);
 
         Converter<UnsignedByteType, ARGBType> toColorConverter = new ChannelARGBConverter(channelColor);
         return Converters.convert(unsignedByteImgRA, toColorConverter, new ARGBType()).randomAccess();
+    }
 
+    public static RandomAccessible<UnsignedByteType> _getUnsignedByteImage(final Image<UINT16> uint16Image) {
+        Img<UnsignedByteType> byteImg = new ArrayImgFactory<UnsignedByteType>(new UnsignedByteType())
+                .create(uint16Image.getMetadata().getDim());
+        final double[][] minMax = _getPlaneMinMax(uint16Image);
+
+        Cursor<UnsignedShortType> grayCursor = null;
+        try {
+            grayCursor = ImageToImgLib2Converter.getImg(uint16Image, UINT16.zero()).cursor();
+        } catch (ConverterToImgLib2NotFound e) {
+            // TODO get rid of this.
+        }
+        final Cursor<UnsignedByteType> byteCursor = byteImg.cursor();
+
+        final long planeSize = MetadataUtil.getPlaneSize(uint16Image.getMetadata());
+
+        int planeNo = 1;
+        int planePixelCounter = 0;
+        Converter<UnsignedShortType, UnsignedByteType> converter = new RealUnsignedByteConverter<>(
+                minMax[0][planeNo - 1], minMax[1][planeNo - 1]);
+        while (grayCursor.hasNext()) {
+            if (++planePixelCounter > planeSize) {
+                planePixelCounter = 0;
+                planeNo++;
+                converter = new RealUnsignedByteConverter<>(minMax[0][planeNo - 1], minMax[1][planeNo - 1]);
+            }
+            converter.convert(grayCursor.next(), byteCursor.next());
+
+        }
+
+        return byteImg;
+    }
+
+    private static double[][] _getPlaneMinMax(final Image<UINT16> grayImage) {
+        final double[][] minMax = ImageStatistics.getPlaneMinMax(grayImage);
+        for (int i = 0; i < minMax[0].length; i++) {
+            if (minMax[0][i] == minMax[1][i]) {
+                minMax[1][i]++;
+            }
+        }
+        return minMax;
     }
 
     private static Channel _getImgLib2ColorChannel(Color color) {
@@ -106,6 +143,8 @@ class MergeGrayImagesAsMonoColor {
 
             pixel.value().set(ARGBType.red(sumColors.get()), ARGBType.green(sumColors.get()),
                     ARGBType.blue(sumColors.get()));
+
+            monochromeCursor.setPixel(pixel);
 
         }
     }
