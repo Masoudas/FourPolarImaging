@@ -61,14 +61,15 @@ class MaxPlaneGrayScaleToColorConverter {
 
         int planeNo = 1;
         int planePixelCounter = 0;
+        Converter<DoubleType, ARGBType> converter = new RealLUTConverter<DoubleType>(minMax[0][planeNo - 1],
+                minMax[1][planeNo - 1], cTable8);
         while (grayCursor.hasNext()) {
             if (++planePixelCounter > planeSize) {
                 planePixelCounter = 0;
                 planeNo++;
+                converter = new RealLUTConverter<DoubleType>(minMax[0][planeNo - 1], minMax[1][planeNo - 1], cTable8);
             }
 
-            final Converter<DoubleType, ARGBType> converter = new RealLUTConverter<DoubleType>(minMax[0][planeNo - 1],
-                    minMax[1][planeNo - 1], cTable8);
             final IPixel<RGB16> pixel = colorCursor.next();
 
             doubleType.set(grayCursor.next().value().getRealValue());

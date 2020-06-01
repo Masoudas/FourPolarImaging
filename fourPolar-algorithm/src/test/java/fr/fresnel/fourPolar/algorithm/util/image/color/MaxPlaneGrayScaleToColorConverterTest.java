@@ -23,7 +23,7 @@ import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 
-public class MaxPlaneGrayScaleToColorConverterTest {
+public class MaxPlaneGrayScaleToColorConverter {
     @Test
     public void useMaxEachPlane_ImageXYCZT_PlaneWithNoMaximum_DrawsBlackImage()
             throws ConverterToImgLib2NotFound, InterruptedException {
@@ -49,7 +49,7 @@ public class MaxPlaneGrayScaleToColorConverterTest {
     @Test
     public void useMaxEachPlane_AGrayImageFromDisk_KeepsGrayValuesAfterColoring()
             throws ConverterToImgLib2NotFound, InterruptedException {
-        File grayImageFile = new File(MaxPlaneGrayScaleToColorConverterTest.class.getResource("Example1.tif").getFile());
+        File grayImageFile = new File(MaxPlaneGrayScaleToColorConverter.class.getResource("Example1.tif").getFile());
         ImgLib2ImageFactory factory = new ImgLib2ImageFactory();
 
         Img<UnsignedShortType> diskImage = new ImgOpener()
