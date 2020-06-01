@@ -11,10 +11,14 @@ import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackgroun
 /**
  * Removes the dark background from the given polarization set.
  */
-public class ChannelDarkBackgroundRemover {
+public class ChannelDarkBackgroundRemover implements IChannelDarkBackgroundRemover {
     private final IChannelDarkBackground _darkBackground;
 
-    public ChannelDarkBackgroundRemover(IChannelDarkBackground darkBackground) {
+    public static IChannelDarkBackgroundRemover create(IChannelDarkBackground darkBackground) {
+        return new ChannelDarkBackgroundRemover(darkBackground);
+    }
+
+    private ChannelDarkBackgroundRemover(IChannelDarkBackground darkBackground) {
         this._darkBackground = darkBackground;
     }
 
@@ -23,6 +27,7 @@ public class ChannelDarkBackgroundRemover {
      * 
      * @param imageSet
      */
+    @Override
     public void remove(IPolarizationImageSet imageSet) {
         Image<UINT16> pol0 = imageSet.getPolarizationImage(Polarization.pol0).getImage();
         int backgroundPol0 = (int) this._darkBackground.getBackgroundLevel(Polarization.pol0);

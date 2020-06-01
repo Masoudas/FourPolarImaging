@@ -54,7 +54,7 @@ public class ChannelDarkBackgroundRemoverTest {
         IPolarizationImageSet imageSet = new PolarizationImageSetBuilder(1).channel(1).fileSet(new CDummyFileSet())
                 .pol0(pol0).pol45(pol45).pol90(pol90).pol135(pol135).build();
 
-        ChannelDarkBackgroundRemover remover = new ChannelDarkBackgroundRemover(darkBackground);
+        IChannelDarkBackgroundRemover remover = ChannelDarkBackgroundRemover.create(darkBackground);
         remover.remove(imageSet);
 
         assertTrue(this._checkPixel(pol0, 0));
