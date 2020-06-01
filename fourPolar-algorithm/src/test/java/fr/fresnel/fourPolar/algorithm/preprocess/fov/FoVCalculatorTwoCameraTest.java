@@ -10,8 +10,8 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.TwoCameraConstellation;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.TwoCameraConstellation.Position;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.TwoCameraPolarizationConstellation;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.TwoCameraPolarizationConstellation.Position;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
@@ -26,7 +26,7 @@ public class FoVCalculatorTwoCameraTest {
         IPointShape intersectionPoint_0_90 = new ShapeFactory().point(new long[] { 250, 250 }, AxisOrder.XY);
         IPointShape intersectionPoint_45_135 = new ShapeFactory().point(new long[] { 270, 255 }, AxisOrder.XY);
 
-        TwoCameraConstellation twoCameraConstellation = new TwoCameraConstellation(Position.Left, Position.Left,
+        TwoCameraPolarizationConstellation twoCameraConstellation = new TwoCameraPolarizationConstellation(Position.Left, Position.Left,
                 Position.Right, Position.Right);
         IFieldOfView fov = new FoVCalculatorTwoCamera(metadata_0_90, intersectionPoint_0_90, metadata_45_135,
                 intersectionPoint_45_135, twoCameraConstellation).calculate();
@@ -58,7 +58,7 @@ public class FoVCalculatorTwoCameraTest {
         IPointShape intersectionPoint_0_90 = new ShapeFactory().point(new long[] { 250, 250 }, AxisOrder.XY);
         IPointShape intersectionPoint_45_135 = new ShapeFactory().point(new long[] { 270, 255 }, AxisOrder.XY);
 
-        TwoCameraConstellation twoCameraConstellation = new TwoCameraConstellation(Position.Right, Position.Right,
+        TwoCameraPolarizationConstellation twoCameraConstellation = new TwoCameraPolarizationConstellation(Position.Right, Position.Right,
                 Position.Left, Position.Left);
         IFieldOfView fov = new FoVCalculatorTwoCamera(metadata_0_90, intersectionPoint_0_90, metadata_45_135,
                 intersectionPoint_45_135, twoCameraConstellation).calculate();

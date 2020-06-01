@@ -6,8 +6,8 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.TwoCameraConstellation;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.TwoCameraConstellation.Position;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.TwoCameraPolarizationConstellation;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.TwoCameraPolarizationConstellation.Position;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
@@ -32,10 +32,10 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
     final private long _xlen_PolImg;
     final private long _ylen_PolImg;
 
-    final private TwoCameraConstellation _constellation;
+    final private TwoCameraPolarizationConstellation _constellation;
 
     public FoVCalculatorTwoCamera(IMetadata beadImg_pol0_90, IPointShape intersection_pol0_90,
-            IMetadata beadImg_pol45_135, IPointShape intersection_pol45_135, TwoCameraConstellation constellation) {
+            IMetadata beadImg_pol45_135, IPointShape intersection_pol45_135, TwoCameraPolarizationConstellation constellation) {
         this._checkIntersectionPointInside(beadImg_pol0_90, intersection_pol0_90);
         this._checkIntersectionPointInside(beadImg_pol45_135, intersection_pol45_135);
 

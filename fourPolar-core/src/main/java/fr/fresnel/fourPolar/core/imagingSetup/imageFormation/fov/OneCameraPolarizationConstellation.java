@@ -6,7 +6,7 @@ import java.util.TreeSet;
  * Defines the placement of polarization in the bead (or sample) image for the
  * one camera case.
  */
-public class OneCameraConstellation {
+public class OneCameraPolarizationConstellation {
     public enum Position {
         TopLeft, TopRight, BottomLeft, BottomRight
     };
@@ -21,7 +21,7 @@ public class OneCameraConstellation {
      * @throws IllegalArgumentException if duplicate position is given for a
      *                                  polarization.
      */
-    public OneCameraConstellation(Position pol0, Position pol45, Position pol90, Position pol135) {
+    public OneCameraPolarizationConstellation(Position pol0, Position pol45, Position pol90, Position pol135) {
         this._checkNoDuplicate(pol0, pol45, pol90, pol135);
 
         this._pol0 = pol0;

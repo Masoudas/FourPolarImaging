@@ -4,8 +4,8 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.OneCameraConstellation;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.OneCameraConstellation.Position;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.OneCameraPolarizationConstellation;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.OneCameraPolarizationConstellation.Position;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
@@ -29,7 +29,7 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
     final private long _xlen_PolImg;
     final private long _ylen_PolImg;
 
-    private final OneCameraConstellation _constellation;
+    private final OneCameraPolarizationConstellation _constellation;
 
     /**
      * Calculate FoV using the metadata of the bead image.
@@ -44,7 +44,7 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
      *                                  intersection point is not in the bead image.
      */
     public FoVCalculatorOneCamera(IMetadata beadImg_pol0_45_90_135, IPointShape intersectionPoint,
-            OneCameraConstellation constellation) {
+            OneCameraPolarizationConstellation constellation) {
         long[] beadImgDim = beadImg_pol0_45_90_135.getDim();
         long[] iPoint = intersectionPoint.point();
 
@@ -74,7 +74,7 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
         return new FieldOfView(pol0, pol45, pol90, pol135);
     }
 
-    private IBoxShape _defineFoVAsBox(OneCameraConstellation.Position position) {
+    private IBoxShape _defineFoVAsBox(OneCameraPolarizationConstellation.Position position) {
         long[] bottom = null;
         long[] top = null;
         if (position == Position.TopLeft) {

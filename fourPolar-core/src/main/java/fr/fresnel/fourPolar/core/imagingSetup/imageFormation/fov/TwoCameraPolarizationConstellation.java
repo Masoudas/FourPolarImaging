@@ -4,7 +4,7 @@ package fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov;
  * Defines the placement of polarization in the bead (or sample) image for the
  * two camera case.
  */
-public class TwoCameraConstellation {
+public class TwoCameraPolarizationConstellation {
     public enum Position {
         Left, Right
     };
@@ -19,7 +19,7 @@ public class TwoCameraConstellation {
      * @throws IllegalArgumentException position for pol0 and pol90, and pol45 and
      *                                  pol135 must be unequal.
      */
-    public TwoCameraConstellation(Position pol0, Position pol45, Position pol90, Position pol135) {
+    public TwoCameraPolarizationConstellation(Position pol0, Position pol45, Position pol90, Position pol135) {
         if (pol0 == pol90 || pol45 == pol135) {
             throw new IllegalArgumentException("position for pol0 and pol90, and pol45 and pol135 must be unequal.");
         }
