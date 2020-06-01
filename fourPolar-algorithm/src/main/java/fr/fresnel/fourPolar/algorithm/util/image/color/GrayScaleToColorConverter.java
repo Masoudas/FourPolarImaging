@@ -43,6 +43,6 @@ public class GrayScaleToColorConverter {
      * @return is the merged colord images.
      */
     public Image<RGB16> mergeAsMonoColor(Image<UINT16> image1, Color color1, Image<UINT16> image2, Color color2) {
-        return MergeGrayImagesAsMonoColor.convert(image1, color1, image2, color2);
+        return GrayImagesToMonoColorMerger.convert(image1, color1, image2, color2);
     }
 }
