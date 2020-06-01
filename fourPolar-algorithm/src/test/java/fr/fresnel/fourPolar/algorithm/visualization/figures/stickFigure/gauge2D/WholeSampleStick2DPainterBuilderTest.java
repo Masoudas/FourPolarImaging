@@ -401,6 +401,12 @@ class DummyWholeSampleFileSet implements ICapturedImageFileSet {
         return null;
     }
 
+    @Override
+    public int[] getChannels() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
 
 class DummyWholeSampleBuilder extends IWholeSampleStick2DPainterBuilder {

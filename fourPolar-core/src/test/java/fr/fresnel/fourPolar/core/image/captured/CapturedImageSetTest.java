@@ -149,6 +149,12 @@ class DummyCapturedImageFileSet implements ICapturedImageFileSet {
         return concatStream.iterator();
     }
 
+    @Override
+    public int[] getChannels() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
 
 class DummyCapturedImageFile implements ICapturedImageFile {

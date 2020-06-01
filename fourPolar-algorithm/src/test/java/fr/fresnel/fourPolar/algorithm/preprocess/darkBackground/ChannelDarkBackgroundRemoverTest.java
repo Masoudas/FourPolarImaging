@@ -120,4 +120,10 @@ class CDummyFileSet implements ICapturedImageFileSet {
         return null;
     }
 
+    @Override
+    public int[] getChannels() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

@@ -545,6 +545,12 @@ class DummyWholeSample3DFileSet implements ICapturedImageFileSet {
         return null;
     }
 
+    @Override
+    public int[] getChannels() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
 
 class DummyWholeSampleStick3DBuilder extends IWholeSampleStick3DPainterBuilder {
