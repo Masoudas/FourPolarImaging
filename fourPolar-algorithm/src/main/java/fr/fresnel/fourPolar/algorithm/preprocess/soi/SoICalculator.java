@@ -11,14 +11,8 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  * Using this class, we can calculate the sum of intensity of polarizations, for
  * a {@link IPolarizationsImageSet}, and using it's iterator.
  */
-public class SoICalculator {
-    /**
-     * Calculates SoI and returns a discrete sum, as {@link UINT16} pixels. This
-     * method must ONLY be used when we know the underlying intensities are
-     * themselves {@link UINT16} (when intensities are captured rather than
-     * computed), and we want the outcome as integers. This ensures that no rounding
-     * error occurs. Otherwise, we get rounding errors.
-     */
+public class SoICalculator implements ISoICalculator {
+    @Override
     public void calculateUINT16Sum(IIntensityVectorIterator intensityIterator, IPixelCursor<UINT16> pixelCursor) {
         while (intensityIterator.hasNext()) {
             IntensityVector intensity = intensityIterator.next();
