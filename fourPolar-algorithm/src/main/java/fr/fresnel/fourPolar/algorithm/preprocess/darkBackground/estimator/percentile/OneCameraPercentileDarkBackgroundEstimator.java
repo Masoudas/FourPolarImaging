@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.percentile;
 
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.ChannelDarkBackground;
-import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChannelBackgroundEstimator;
+import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChannelDarkBackgroundEstimator;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
@@ -13,7 +13,7 @@ import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackgroun
  * this constellation, the background of polarization is equal to the rest of
  * polarizations.
  */
-public class OneCameraPercentileDarkBackgroundEstimator implements IChannelBackgroundEstimator {
+public class OneCameraPercentileDarkBackgroundEstimator implements IChannelDarkBackgroundEstimator {
     private final int _percentileThreshold;
 
     public OneCameraPercentileDarkBackgroundEstimator(int percentileThreshold) {

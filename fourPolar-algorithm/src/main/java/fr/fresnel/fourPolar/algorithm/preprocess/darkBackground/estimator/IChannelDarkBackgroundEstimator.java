@@ -6,7 +6,7 @@ import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackgroun
 /**
  * An interface for estimating the dark background of a channel.
  */
-public interface IChannelBackgroundEstimator {
+public interface IChannelDarkBackgroundEstimator {
     /**
      * Estimate the background for the given channel using the (bead) captured image
      * set that channel.

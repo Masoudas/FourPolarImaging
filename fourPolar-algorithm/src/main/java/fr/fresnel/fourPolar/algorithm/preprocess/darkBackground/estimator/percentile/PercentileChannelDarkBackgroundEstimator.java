@@ -2,8 +2,7 @@ package fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.perce
 
 import java.util.Objects;
 
-import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChannelBackgroundEstimator;
-import fr.fresnel.fourPolar.core.image.captured.ICapturedImageSet;
+import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChannelDarkBackgroundEstimator;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackground;
@@ -18,22 +17,22 @@ import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackgroun
  * plane of an image. This is because the noise does not change for possible z
  * or t points.
  */
-public class PercentileDarkBackgroundEstimator implements IChannelBackgroundEstimator {
+public class PercentileChannelDarkBackgroundEstimator implements IChannelDarkBackgroundEstimator {
     /**
      * The percentile in the histogram of intensity values that corresponds to
      * noise.
      */
     private static int PERCENTILE_THRESHOLD = 10;
 
-    private final IChannelBackgroundEstimator _estimator;
+    private final IChannelDarkBackgroundEstimator _estimator;
 
-    public PercentileDarkBackgroundEstimator(Cameras cameras) {
+    public PercentileChannelDarkBackgroundEstimator(Cameras cameras) {
         Objects.requireNonNull(cameras, "cameras can't be null");
 
         this._estimator = this._chooseSegmenter(cameras);
     }
 
-    private IChannelBackgroundEstimator _chooseSegmenter(Cameras cameras) {
+    private IChannelDarkBackgroundEstimator _chooseSegmenter(Cameras cameras) {
         switch (cameras) {
             case One:
                 return new OneCameraPercentileDarkBackgroundEstimator(PERCENTILE_THRESHOLD);
