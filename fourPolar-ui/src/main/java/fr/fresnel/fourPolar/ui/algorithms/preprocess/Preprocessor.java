@@ -47,6 +47,7 @@ public class Preprocessor {
     private final ArrayList<ICapturedImageSetReader> _readers;
     private final IChannelRegistrator[] _registrators;
     private final IChannelDarkBackgroundEstimator[] _darkBackgroundEstimator;
+    private final int _numChannels;
 
     /**
      * Create a processor for processing the following set. It's checked that the
@@ -64,6 +65,7 @@ public class Preprocessor {
         this._capturedFileSets = this._setCapturedImages(acquisitionSet);
         this._segmenters = new ArrayList<>();
         this._readers = new ArrayList<>();
+        this._numChannels = numChannels;
         this._registrators = new IChannelRegistrator[numChannels];
         this._darkBackgroundEstimator = new IChannelDarkBackgroundEstimator[numChannels];
     }
@@ -139,7 +141,7 @@ public class Preprocessor {
 
     public PreprocessResult process() throws IOException {
         // TODO use multi-threading here.
-        PreprocessResult preprocessResult = new PreprocessResult(this._getNumChannels());
+        PreprocessResult preprocessResult = new PreprocessResult(this._numChannels);
 
         for (int cSet_ctr = 0; cSet_ctr < this._capturedFileSets.size(); cSet_ctr++) {
             ICapturedImageFileSet fileSet = this._capturedFileSets.get(0);
@@ -160,6 +162,18 @@ public class Preprocessor {
             }
         }
 
+        this._closeReaderResources();
         return preprocessResult;
+    }
+
+    /**
+     * Close any resources associated with the readers.
+     * @throws IOException
+     */
+    private void _closeReaderResources() throws IOException {
+        for (ICapturedImageSetReader reader : this._readers) {
+            reader.close();
+        }
+        
     }
 }
