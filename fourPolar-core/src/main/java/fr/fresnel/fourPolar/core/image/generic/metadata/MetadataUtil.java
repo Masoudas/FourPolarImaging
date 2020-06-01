@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.image.generic.metadata;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
@@ -61,5 +62,14 @@ public class MetadataUtil {
 	public static long getPlaneSize(IMetadata metadata) {
 		long[] planeDim = getPlaneDim(metadata).point();
 		return planeDim[0] * planeDim[1];
+	}
+
+	public static boolean isDimensionEqual(IMetadata metadata1, IMetadata metadata2) {
+		return Arrays.equals(metadata1.getDim(), metadata2.getDim());	
+	}
+
+	public static boolean isAxisOrderEqual(IMetadata metadata1, IMetadata metadata2) {
+		return metadata1.axisOrder() == metadata2.axisOrder();
+		
 	}
 }
