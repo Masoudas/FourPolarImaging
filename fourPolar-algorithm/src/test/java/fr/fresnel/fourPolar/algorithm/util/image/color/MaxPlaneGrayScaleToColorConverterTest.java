@@ -1,11 +1,10 @@
-package fr.fresnel.fourPolar.algorithm.util.image.converters;
+package fr.fresnel.fourPolar.algorithm.util.image.color;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
@@ -24,7 +23,7 @@ import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 
-public class GrayScaleToColorConverterTest {
+public class MaxPlaneGrayScaleToColorConverterTest {
     @Test
     public void useMaxEachPlane_ImageXYCZT_PlaneWithNoMaximum_DrawsBlackImage()
             throws ConverterToImgLib2NotFound, InterruptedException {
@@ -48,20 +47,23 @@ public class GrayScaleToColorConverterTest {
     }
 
     @Test
-    public void useMaxEachPlane_AGrayImageFromDisk_KeepsGrayValuesAfterColoring() throws ConverterToImgLib2NotFound, InterruptedException {
-        File grayImageFile = new File(GrayScaleToColorConverterTest.class.getResource("Example1.tif").getFile());
+    public void useMaxEachPlane_AGrayImageFromDisk_KeepsGrayValuesAfterColoring()
+            throws ConverterToImgLib2NotFound, InterruptedException {
+        File grayImageFile = new File(MaxPlaneGrayScaleToColorConverterTest.class.getResource("Example1.tif").getFile());
         ImgLib2ImageFactory factory = new ImgLib2ImageFactory();
 
-        Img<UnsignedShortType> diskImage = new ImgOpener().openImgs(grayImageFile.getAbsolutePath(), new UnsignedShortType(), new SCIFIOConfig()).get(0);
+        Img<UnsignedShortType> diskImage = new ImgOpener()
+                .openImgs(grayImageFile.getAbsolutePath(), new UnsignedShortType(), new SCIFIOConfig()).get(0);
 
         // Build metadata, appending z, c and t.
-        IMetadata grayMetadata = new Metadata.MetadataBuilder(new long[]{1024, 1024, 1, 1, 1}).axisOrder(AxisOrder.XYCZT).build(); 
+        IMetadata grayMetadata = new Metadata.MetadataBuilder(new long[] { 1024, 1024, 1, 1, 1 })
+                .axisOrder(AxisOrder.XYCZT).build();
         Image<UINT16> grayImage = factory.create(grayMetadata, UINT16.zero());
 
         IPixelCursor<UINT16> grayCursor = grayImage.getCursor();
-        for (Cursor<UnsignedShortType> cursor = diskImage.cursor(); cursor.hasNext();){
+        for (Cursor<UnsignedShortType> cursor = diskImage.cursor(); cursor.hasNext();) {
             UnsignedShortType val = cursor.next();
-            long[] pos = {0,0,0,0,0};
+            long[] pos = { 0, 0, 0, 0, 0 };
             cursor.localize(pos);
 
             IPixel<UINT16> pixel = grayCursor.next();
