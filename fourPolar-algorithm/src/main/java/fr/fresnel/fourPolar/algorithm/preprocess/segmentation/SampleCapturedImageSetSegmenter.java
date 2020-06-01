@@ -10,7 +10,7 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
  * Segements the given {@link ICapturedImage} of a sample (an image that is not
  * used for registration) to yield a {@link IPolarizationImageSet}.
  */
-public class SampleCapturedImageSetSegmenter {
+public class SampleCapturedImageSetSegmenter implements CapturedImageSetSegmenter {
     private PolarizationImageSetCreator _poleImageCreator = null;
 
     /**
@@ -42,6 +42,7 @@ public class SampleCapturedImageSetSegmenter {
         return _poleImageCreator;
     }
 
+    @Override
     public void setCapturedImage(ICapturedImageSet capturedImageSet) {
         if (capturedImageSet.hasMultiChannelImage()) {
             this._poleImageCreator.setSegmenter(this._multiChannelSegmenter);
@@ -57,6 +58,7 @@ public class SampleCapturedImageSetSegmenter {
      * Segements the given channel of the captured images and returns the
      * corresponding polarization set.
      */
+    @Override
     public IPolarizationImageSet segment(int channel) {
         return this._poleImageCreator.create(channel);
     }
