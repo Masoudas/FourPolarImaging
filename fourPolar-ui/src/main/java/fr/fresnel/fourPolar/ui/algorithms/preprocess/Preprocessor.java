@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChannelDarkBackgroundEstimator;
@@ -16,6 +17,7 @@ import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.bead.BeadImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
+import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.PreprocessResult;
 import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackground;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
@@ -30,8 +32,8 @@ import javassist.tools.reflect.CannotCreateException;
  * set. By preprocess we imply:
  * <ol>
  * <li>Loading each {@link ICapturedImageSet}</li>
- * <li>Segmenting each captured set using {@link BeadCapturedImageSetSegmenter}
- * to its corresponding channels (one or several), and creating a
+ * <li>Segmenting each captured set using {@link ICapturedImageSetSegmenter} to
+ * its corresponding channels (one or several), and creating a
  * {@link IPolarizationImageSet} for each channel.</li>
  * <li>Registering each channel using an {@link IChannelRegistrator}</li>
  * <li>Calculates the dark background for each channel</li>
@@ -55,13 +57,13 @@ public class Preprocessor {
      * @throws CannotCreateException in case the acquisition set has multiple images
      *                               for a given channel.
      */
-    public Preprocessor(AcquisitionSet acquisitionSet) throws CannotCreateException {
+    public Preprocessor(AcquisitionSet acquisitionSet, int numChannels) throws CannotCreateException {
+        Objects.requireNonNull(acquisitionSet, "acquisitionSet can't be null");
+        ChannelUtils.checkNumChannelsNonZero(numChannels);
+
         this._capturedFileSets = this._setCapturedImages(acquisitionSet);
         this._segmenters = new ArrayList<>();
         this._readers = new ArrayList<>();
-
-        int numChannels = this._getNumChannels();
-
         this._registrators = new IChannelRegistrator[numChannels];
         this._darkBackgroundEstimator = new IChannelDarkBackgroundEstimator[numChannels];
     }
@@ -89,18 +91,12 @@ public class Preprocessor {
         }
     }
 
-    private int _getNumChannels() {
-        IntStream channels = IntStream.empty();
-        for (ICapturedImageFileSet capturedImageFileSet : _capturedFileSets) {
-            channels = IntStream.concat(channels, Arrays.stream(capturedImageFileSet.getChannels()));
-        }
-        return channels.max().getAsInt();
-    }
-
     /**
      * Set the channel registrator used for registering the images of each channel.
      */
     public void setRegistrator(IChannelRegistrator registrator) {
+        Objects.requireNonNull(registrator);
+
         // TODO Create a copy, so as to be used for multi-thread if needed.
         for (int i = 0; i < _registrators.length; i++) {
             this._registrators[i] = registrator;
@@ -111,6 +107,8 @@ public class Preprocessor {
      * Set the segmenter used for segmentation of each captured image set.
      */
     public void setSegmenter(ICapturedImageSetSegmenter segmenter) {
+        Objects.requireNonNull(segmenter);
+
         // TODO Create a copy, so as to be used for multi-thread if needed.
         for (int i = 0; i < this._capturedFileSets.size(); i++) {
             this._segmenters.add(segmenter);
@@ -121,6 +119,8 @@ public class Preprocessor {
      * Set the reader for each captured image set.
      */
     public void setCapturedImageSetReader(ICapturedImageSetReader reader) {
+        Objects.requireNonNull(reader);
+
         // TODO Create a copy, so as to be used for multi-thread if needed.
         for (int i = 0; i < this._capturedFileSets.size(); i++) {
             this._readers.add(reader);
@@ -129,6 +129,8 @@ public class Preprocessor {
     }
 
     public void setDarkBackgroundCalculator(IChannelDarkBackgroundEstimator backgroundEstimator) {
+        Objects.requireNonNull(backgroundEstimator);
+
         // TODO Create a copy, so as to be used for multi-thread if needed.
         for (int i = 0; i < this._capturedFileSets.size(); i++) {
             this._darkBackgroundEstimator[i] = backgroundEstimator;
