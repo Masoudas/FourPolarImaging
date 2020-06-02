@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
+import fr.fresnel.fourPolar.core.image.captured.ICapturedImageSet;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
@@ -25,7 +26,7 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
-import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageReader;
+import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.captured.tiff.checker.TiffCapturedImageChecker;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 
@@ -44,17 +45,22 @@ public class TiffCapturedImageReaderTest {
         final File pol0_45_90_135 = new File(_testResource, "OneCam.tif");
         ImageFactory factory = new ImgLib2ImageFactory();
 
-        final TiffCapturedImageReader imgReader = new TiffCapturedImageReader(factory);
+        final TiffCapturedImageSetReader imgReader = new TiffCapturedImageSetReader(factory);
 
-        final ICapturedImage capturedImage = imgReader.read();
+        DummyCapturedImageFileSetBuilder fileSet = new DummyCapturedImageFileSetBuilder();
+        fileSet.setCameras(Cameras.One);
+        fileSet.setFileSet(Cameras.getLabels(Cameras.One)[0],
+                new ICapturedImageFile[] { new DummyCapturedImageFile(new int[] { 1 }, pol0_45_90_135) });
+        final ICapturedImageSet capturedImageSet = imgReader.read(fileSet);
 
-        ImageJFunctions.show(ImageToImgLib2Converter.getImg(capturedImage.getImage(), UINT16.zero()));
+        ImageJFunctions.show(ImageToImgLib2Converter.getImg(
+                capturedImageSet.getCapturedImage(Cameras.getLabels(Cameras.One)[0])[0].getImage(), UINT16.zero()));
         TimeUnit.SECONDS.sleep(10);
 
     }
 }
 
-class BuilderDummyCapturedImageFileSet implements ICapturedImageFileSet {
+class DummyCapturedImageFileSetBuilder implements ICapturedImageFileSet {
     private Hashtable<String, ICapturedImageFile[]> files = new Hashtable<>();
     private Cameras _cameras;
 
@@ -101,13 +107,19 @@ class BuilderDummyCapturedImageFileSet implements ICapturedImageFileSet {
         return concatStream.iterator();
     }
 
+    @Override
+    public int[] getChannels() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
 
-class BuilderDummyCapturedImageFile implements ICapturedImageFile {
+class DummyCapturedImageFile implements ICapturedImageFile {
     private int[] _channels;
     private File _file;
 
-    public BuilderDummyCapturedImageFile(int[] channels, File file) {
+    public DummyCapturedImageFile(int[] channels, File file) {
         _channels = channels;
         _file = file;
     }
