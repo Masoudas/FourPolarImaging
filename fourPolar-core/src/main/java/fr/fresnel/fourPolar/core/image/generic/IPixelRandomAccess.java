@@ -14,6 +14,9 @@ public interface IPixelRandomAccess<U extends PixelType> {
      * range, the iterator position is not set.
      * 
      * @param position
+     * 
+     * @throws IllegalArgumentException if the position does not have the same
+     *                                  dimension as the image.
      */
     public void setPosition(long[] position);
 
@@ -21,7 +24,8 @@ public interface IPixelRandomAccess<U extends PixelType> {
      * Sets the pixel associated with the position.
      * 
      * @param pixel is the pixel at this location
-     * @throws ArrayIndexOutOfBoundsException in case the provided position does not exist.
+     * @throws ArrayIndexOutOfBoundsException in case the provided position does not
+     *                                        exist.
      */
     public void setPixel(IPixel<U> pixel) throws ArrayIndexOutOfBoundsException;
 
@@ -29,7 +33,8 @@ public interface IPixelRandomAccess<U extends PixelType> {
      * Returns the pixel associated with the position.
      * 
      * @param pixel is the pixel at this location
-     * @throws ArrayIndexOutOfBoundsException in case the provided position does not exist.
+     * @throws ArrayIndexOutOfBoundsException in case the provided position does not
+     *                                        exist.
      */
     public IPixel<U> getPixel() throws ArrayIndexOutOfBoundsException;
 }
