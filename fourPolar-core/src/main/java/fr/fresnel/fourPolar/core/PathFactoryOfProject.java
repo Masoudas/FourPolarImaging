@@ -139,9 +139,10 @@ public class PathFactoryOfProject {
      * @return
      */
     public static File getFolder_ProcessedBeadImages(File root4PProject) {
-        if (_FOLDER_PROCCESSED_BEAD_IMAGES != null) {
+        if (_FOLDER_PROCCESSED_BEAD_IMAGES_PATH != null) {
             return _FOLDER_PROCCESSED_BEAD_IMAGES_PATH;
         }
+
         _FOLDER_PROCCESSED_BEAD_IMAGES_PATH = new File(getFolder_4Polar(root4PProject).getAbsolutePath(),
                 _FOLDER_PROCCESSED_BEAD_IMAGES);
 
