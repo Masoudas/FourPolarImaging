@@ -36,5 +36,13 @@
       <version>${project.version}</version>
     </dependency>
 
+    <!-- Descriptor based registration -->
+    <dependency>
+      <groupId>sc.fiji</groupId>
+      <artifactId>Descriptor_based_registration</artifactId>
+      <version>2.1.5-SNAPSHOT</version>
+    </dependency>
+
+
   </dependencies>
 </project>
