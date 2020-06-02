@@ -3,17 +3,17 @@ package fr.fresnel.fourPolar.algorithm.preprocess.registration.descriptorBased;
 import java.util.HashMap;
 
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
-import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
+import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
 
 class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationResult {
     public final static String _NOT_ENOUGH_FP_DESCRIPTION = "Not enough feature points found.";
     public final static String _NO_TRANSFORMATION_DESCRIPTION = "No transformation found between images.";
 
-    private HashMap<RegistrationOrder, Boolean> _isSuccessfulRegistration;
-    private HashMap<RegistrationOrder, AffineTransform2D> _affineTransform;
-    private HashMap<RegistrationOrder, String> _description;
-    private HashMap<RegistrationOrder, Double> _error;
+    private HashMap<RegistrationRule, Boolean> _isSuccessfulRegistration;
+    private HashMap<RegistrationRule, AffineTransform2D> _affineTransform;
+    private HashMap<RegistrationRule, String> _description;
+    private HashMap<RegistrationRule, Double> _error;
     private int _channelNum = 0;
 
     public DescriptorBasedChannelRegistrationResult() {
@@ -23,19 +23,19 @@ class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationRe
         this._description = new HashMap<>();
     }
 
-    public void setAffineTransform(RegistrationOrder order, AffineTransform2D affineTransform) {
+    public void setAffineTransform(RegistrationRule order, AffineTransform2D affineTransform) {
         this._affineTransform.put(order, affineTransform);
     }
 
-    public void setError(RegistrationOrder order, double error) {
+    public void setError(RegistrationRule order, double error) {
         this._error.put(order, error);
     }
 
-    public void setDescription(RegistrationOrder order, String description) {
+    public void setDescription(RegistrationRule order, String description) {
         this._description.put(order, description);
     }
 
-    public void setIsSuccessfulRegistration(RegistrationOrder order, boolean isSuccessful) {
+    public void setIsSuccessfulRegistration(RegistrationRule order, boolean isSuccessful) {
         this._isSuccessfulRegistration.put(order, isSuccessful);
     }
 
@@ -44,22 +44,22 @@ class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationRe
     }
 
     @Override
-    public AffineTransform2D getAffineTransform(RegistrationOrder order) {
+    public AffineTransform2D getAffineTransform(RegistrationRule order) {
         return _affineTransform.get(order);
     }
 
     @Override
-    public double error(RegistrationOrder order) {
+    public double error(RegistrationRule order) {
         return this._error.get(order);
     }
 
     @Override
-    public String getDescription(RegistrationOrder order) {
+    public String getDescription(RegistrationRule order) {
         return this._description.get(order);
     }
 
     @Override
-    public boolean registrationSuccessful(RegistrationOrder order) {
+    public boolean registrationSuccessful(RegistrationRule order) {
         return this._isSuccessfulRegistration.get(order);
     }
 

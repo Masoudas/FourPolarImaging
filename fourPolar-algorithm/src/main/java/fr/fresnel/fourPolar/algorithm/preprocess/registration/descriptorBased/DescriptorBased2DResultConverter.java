@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.algorithm.preprocess.registration.descriptorBased;
 import java.util.Hashtable;
 
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
-import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
+import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
 import registration.descriptorBased.result.DescriptorBased2DResult;
 import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
@@ -13,7 +13,7 @@ import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
  * {@link DescriptorBasedChannelRegistrationResult}.
  */
 class DescriptorBased2DResultConverter {
-    private Hashtable<RegistrationOrder, DescriptorBased2DResult> _results;
+    private Hashtable<RegistrationRule, DescriptorBased2DResult> _results;
     private final int _channelNum;
 
     public DescriptorBased2DResultConverter(int channelNum) {
@@ -21,7 +21,7 @@ class DescriptorBased2DResultConverter {
         this._channelNum = channelNum;
     }
 
-    public DescriptorBased2DResultConverter set(RegistrationOrder order, DescriptorBased2DResult result) {
+    public DescriptorBased2DResultConverter set(RegistrationRule order, DescriptorBased2DResult result) {
         _results.put(order, result);
         return this;
     }
@@ -29,7 +29,7 @@ class DescriptorBased2DResultConverter {
     public IChannelRegistrationResult convert() {
         DescriptorBasedChannelRegistrationResult result = new DescriptorBasedChannelRegistrationResult();
         result.setChannel(this._channelNum);
-        for (RegistrationOrder order : RegistrationOrder.values()) {
+        for (RegistrationRule order : RegistrationRule.values()) {
             DescriptorBased2DResult polResult = _results.get(order);
 
             result.setIsSuccessfulRegistration(order, polResult.isSuccessful());

@@ -17,7 +17,7 @@ import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
-import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
+import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import io.scif.img.ImgOpener;
 import net.imglib2.img.Img;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
@@ -37,13 +37,13 @@ public class DescriptorBasedRegistrationTest {
         DummyPolSet polSet = new DummyPolSet(pol0, pol45, pol90, pol135);
         IChannelRegistrationResult result = registrator.register(polSet);
 
-        assertTrue(result.registrationSuccessful(RegistrationOrder.Pol45_to_Pol0));
-        assertTrue(result.registrationSuccessful(RegistrationOrder.Pol90_to_Pol0));
-        assertTrue(result.registrationSuccessful(RegistrationOrder.Pol135_to_Pol0));
+        assertTrue(result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0));
+        assertTrue(result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0));
+        assertTrue(result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
 
-        assertTrue(result.error(RegistrationOrder.Pol45_to_Pol0) < 1);
-        assertTrue(result.error(RegistrationOrder.Pol90_to_Pol0) < 1);
-        assertTrue(result.error(RegistrationOrder.Pol135_to_Pol0) < 1);
+        assertTrue(result.error(RegistrationRule.Pol45_to_Pol0) < 1);
+        assertTrue(result.error(RegistrationRule.Pol90_to_Pol0) < 1);
+        assertTrue(result.error(RegistrationRule.Pol135_to_Pol0) < 1);
 
     }
 
@@ -59,13 +59,13 @@ public class DescriptorBasedRegistrationTest {
         DummyPolSet polSet = new DummyPolSet(pol0, pol45, pol90, pol135);
         IChannelRegistrationResult result = registrator.register(polSet);
 
-        assertTrue(result.registrationSuccessful(RegistrationOrder.Pol45_to_Pol0));
-        assertTrue(result.registrationSuccessful(RegistrationOrder.Pol90_to_Pol0));
-        assertTrue(result.registrationSuccessful(RegistrationOrder.Pol135_to_Pol0));
+        assertTrue(result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0));
+        assertTrue(result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0));
+        assertTrue(result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
 
-        assertTrue(result.error(RegistrationOrder.Pol45_to_Pol0) < 1);
-        assertTrue(result.error(RegistrationOrder.Pol90_to_Pol0) < 1);
-        assertTrue(result.error(RegistrationOrder.Pol135_to_Pol0) < 1);
+        assertTrue(result.error(RegistrationRule.Pol45_to_Pol0) < 1);
+        assertTrue(result.error(RegistrationRule.Pol90_to_Pol0) < 1);
+        assertTrue(result.error(RegistrationRule.Pol135_to_Pol0) < 1);
     }
 
 }

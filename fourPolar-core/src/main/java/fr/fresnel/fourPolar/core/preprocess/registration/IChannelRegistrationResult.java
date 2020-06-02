@@ -1,9 +1,5 @@
 package fr.fresnel.fourPolar.core.preprocess.registration;
 
-import java.util.Map;
-
-import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
 
 /**
@@ -16,19 +12,19 @@ public interface IChannelRegistrationResult {
      * 
      * @return
      */
-    public boolean registrationSuccessful(RegistrationOrder rule);
+    public boolean registrationSuccessful(RegistrationRule rule);
 
     /**
      * Returns the equivalent affine transform of this registration.
      */
-    public AffineTransform2D getAffineTransform(RegistrationOrder rule);
+    public AffineTransform2D getAffineTransform(RegistrationRule rule);
 
     /**
      * The registration error of the algorithm.
      * 
      * @return
      */
-    public double error(RegistrationOrder rule);
+    public double error(RegistrationRule rule);
 
     /**
      * Returns a string representation of the result of the algorithm. (Example: For
@@ -37,7 +33,7 @@ public interface IChannelRegistrationResult {
      * 
      * @return
      */
-    public String getDescription(RegistrationOrder rule);
+    public String getDescription(RegistrationRule rule);
 
     /**
      * The channel number this dark background is associated with.

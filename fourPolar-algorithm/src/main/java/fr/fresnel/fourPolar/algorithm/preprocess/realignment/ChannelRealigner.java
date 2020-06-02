@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
-import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
+import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
 import net.imglib2.Cursor;
 import net.imglib2.RealRandomAccessible;
@@ -51,15 +51,15 @@ public class ChannelRealigner implements IChannelRealigner {
     public void realign(final IPolarizationImageSet imageSet) {
         final Image<UINT16> pol45 = imageSet.getPolarizationImage(Polarization.pol45).getImage();
         this._realignPolarization(pol45,
-                this._channelRegistrationResult.getAffineTransform(RegistrationOrder.Pol45_to_Pol0));
+                this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol45_to_Pol0));
 
         final Image<UINT16> pol90 = imageSet.getPolarizationImage(Polarization.pol90).getImage();
         this._realignPolarization(pol90,
-                this._channelRegistrationResult.getAffineTransform(RegistrationOrder.Pol90_to_Pol0));
+                this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol90_to_Pol0));
 
         final Image<UINT16> pol135 = imageSet.getPolarizationImage(Polarization.pol135).getImage();
         this._realignPolarization(pol135,
-                this._channelRegistrationResult.getAffineTransform(RegistrationOrder.Pol135_to_Pol0));
+                this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol135_to_Pol0));
     }
 
     private void _realignPolarization(final Image<UINT16> image, final AffineTransform2D transform) {

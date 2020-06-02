@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
+import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import ij.ImagePlus;
 import net.imglib2.img.display.imagej.ImageJFunctions;
@@ -65,8 +65,8 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
         DescriptorBased2DResult pol90_pol0 = _registerPolarization(pol0, pol90);
         DescriptorBased2DResult pol135_pol0 = _registerPolarization(pol0, pol135);
 
-        return new DescriptorBased2DResultConverter(channel).set(RegistrationOrder.Pol45_to_Pol0, pol45_pol0)
-                .set(RegistrationOrder.Pol90_to_Pol0, pol90_pol0).set(RegistrationOrder.Pol135_to_Pol0, pol135_pol0)
+        return new DescriptorBased2DResultConverter(channel).set(RegistrationRule.Pol45_to_Pol0, pol45_pol0)
+                .set(RegistrationRule.Pol90_to_Pol0, pol90_pol0).set(RegistrationRule.Pol135_to_Pol0, pol135_pol0)
                 .convert();
     }
 

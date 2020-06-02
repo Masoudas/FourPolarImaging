@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
-import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationOrder;
+import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import ij.ImagePlus;
 import net.imglib2.img.cell.CellImgFactory;
 import net.imglib2.img.display.imagej.ImageJFunctions;
@@ -36,19 +36,19 @@ public class DescriptorBased2DResultConverterTest {
 
         DescriptorBased2DResultConverter converter = new DescriptorBased2DResultConverter(channel);
 
-        converter.set(RegistrationOrder.Pol45_to_Pol0, pol45);
-        converter.set(RegistrationOrder.Pol90_to_Pol0, pol90);
-        converter.set(RegistrationOrder.Pol135_to_Pol0, pol135);
+        converter.set(RegistrationRule.Pol45_to_Pol0, pol45);
+        converter.set(RegistrationRule.Pol90_to_Pol0, pol90);
+        converter.set(RegistrationRule.Pol135_to_Pol0, pol135);
 
         IChannelRegistrationResult result = converter.convert();
 
-        assertTrue(result.getDescription(RegistrationOrder.Pol45_to_Pol0)
+        assertTrue(result.getDescription(RegistrationRule.Pol45_to_Pol0)
                 .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
-        assertTrue(result.getDescription(RegistrationOrder.Pol90_to_Pol0)
+        assertTrue(result.getDescription(RegistrationRule.Pol90_to_Pol0)
                 .equals(DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION));
-        assertTrue(result.registrationSuccessful(RegistrationOrder.Pol135_to_Pol0));
+        assertTrue(result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
 
-        assertTrue(result.error(RegistrationOrder.Pol135_to_Pol0) == 0.9);
+        assertTrue(result.error(RegistrationRule.Pol135_to_Pol0) == 0.9);
 
     }
 
