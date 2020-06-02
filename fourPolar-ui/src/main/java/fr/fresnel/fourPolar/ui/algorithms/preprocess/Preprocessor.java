@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.ui.algorithms.preprocess;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +12,8 @@ import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChann
 import fr.fresnel.fourPolar.algorithm.preprocess.registration.IChannelRegistrator;
 import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.BeadCapturedImageSetSegmenter;
 import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.ICapturedImageSetSegmenter;
+import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter.Color;
+import fr.fresnel.fourPolar.algorithm.visualization.figures.registration.RegistrationCompositeFigureCreator;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageSet;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
@@ -18,10 +21,15 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.bead.BeadImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
+import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.PreprocessResult;
 import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackground;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
+import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
+import fr.fresnel.fourPolar.core.visualization.figures.registration.IRegistrationCompositeFigures;
+import fr.fresnel.fourPolar.core.visualization.figures.registration.RegistrationCompositeFigures;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
+import fr.fresnel.fourPolar.io.visualization.figures.registration.IRegistrationCompositeFiguresWriter;
 import javassist.tools.reflect.CannotCreateException;
 
 /**
@@ -46,8 +54,13 @@ public class Preprocessor {
     private final ArrayList<ICapturedImageSetSegmenter> _segmenters;
     private final ArrayList<ICapturedImageSetReader> _readers;
     private final IChannelRegistrator[] _registrators;
+    private final IRegistrationCompositeFiguresWriter[] _compositeWriters;
     private final IChannelDarkBackgroundEstimator[] _darkBackgroundEstimator;
     private final int _numChannels;
+
+    private final File _root4PProject;
+    private Color _compositeBaseImageColor = null;
+    private Color _compositeImageToRegisterColor = null;
 
     /**
      * Create a processor for processing the following set. It's checked that the
@@ -68,6 +81,8 @@ public class Preprocessor {
         this._numChannels = numChannels;
         this._registrators = new IChannelRegistrator[numChannels];
         this._darkBackgroundEstimator = new IChannelDarkBackgroundEstimator[numChannels];
+        this._compositeWriters = new IRegistrationCompositeFiguresWriter[numChannels];
+        this._root4PProject = acquisitionSet.rootFolder();
     }
 
     private ArrayList<ICapturedImageFileSet> _setCapturedImages(AcquisitionSet acquisitionSet)
@@ -139,7 +154,22 @@ public class Preprocessor {
         }
     }
 
+    public void setRegistratonCompositeWriter(IRegistrationCompositeFiguresWriter compositeWriter) {
+        Objects.requireNonNull(compositeWriter);
+
+        // TODO Create a copy, so as to be used for multi-thread if needed.
+        for (int i = 0; i < this._capturedFileSets.size(); i++) {
+            this._compositeWriters[i] = compositeWriter;
+        }
+    }
+
+    public void setRegistrationCompositeColor(Color baseImage, Color imageToRegister) {
+        this._compositeBaseImageColor = baseImage;
+        this._compositeImageToRegisterColor = imageToRegister;
+    }
+
     public PreprocessResult process() throws IOException {
+        // TODO check every parameter is set before process
         // TODO use multi-threading here.
         PreprocessResult preprocessResult = new PreprocessResult(this._numChannels);
 
@@ -159,21 +189,61 @@ public class Preprocessor {
                 IChannelDarkBackground darkBackground = this._darkBackgroundEstimator[channel - 1]
                         .estimate(polarizationImageSet);
                 preprocessResult.setDarkBackground(channel, darkBackground);
+
+                IRegistrationCompositeFigures compositeFigures = this
+                        ._createChannelCompositeImages(polarizationImageSet);
+                this._writeChannelCompositeImages(compositeFigures);
             }
         }
 
-        this._closeReaderResources();
+        this._closeIOResources();
         return preprocessResult;
+    }
+
+    private IRegistrationCompositeFigures _createChannelCompositeImages(IPolarizationImageSet polImageSet) {
+        RegistrationCompositeFigures compositeFigures = new RegistrationCompositeFigures(polImageSet.channel());
+
+        RegistrationCompositeFigureCreator creator = new RegistrationCompositeFigureCreator(compositeFigures,
+                this._compositeBaseImageColor, this._compositeImageToRegisterColor);
+
+        for (RegistrationRule rule : RegistrationRule.values()) {
+            Polarization polBaseImage = rule.getBaseImagePolarization();
+            Polarization polToRegisterImage = rule.getToRegisterImagePolarization();
+            creator.createComposite(polImageSet.getPolarizationImage(polBaseImage).getImage(),
+                    polImageSet.getPolarizationImage(polToRegisterImage).getImage(), rule);
+        }
+
+        return compositeFigures;
+
+    }
+
+    private void _writeChannelCompositeImages(IRegistrationCompositeFigures compositeFigures) throws IOException {
+        IRegistrationCompositeFiguresWriter writer = this._compositeWriters[compositeFigures.channel()];
+
+        writer.write(this._root4PProject, compositeFigures);
+    }
+
+    private void _closeIOResources() throws IOException {
+        this._closeCapturedImageReaderResources();
+        this._closeCompositeWriterResources();
     }
 
     /**
      * Close any resources associated with the readers.
+     * 
      * @throws IOException
      */
-    private void _closeReaderResources() throws IOException {
+    private void _closeCapturedImageReaderResources() throws IOException {
         for (ICapturedImageSetReader reader : this._readers) {
             reader.close();
         }
-        
+
+    }
+
+    private void _closeCompositeWriterResources() throws IOException {
+        for (IRegistrationCompositeFiguresWriter writer : this._compositeWriters) {
+            writer.close();
+        }
+
     }
 }
