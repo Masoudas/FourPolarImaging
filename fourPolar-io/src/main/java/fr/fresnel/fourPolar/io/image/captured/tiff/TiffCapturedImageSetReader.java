@@ -20,7 +20,7 @@ import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
  * Used for reading a (16 bit tiff) captured image set. An instance of this
  * object is enough to read several images.
  */
-public class TiffCapturedImageReader implements ICapturedImageSetReader {
+public class TiffCapturedImageSetReader implements ICapturedImageSetReader {
     final private ImageReader<UINT16> _reader;
 
     /**
@@ -29,7 +29,7 @@ public class TiffCapturedImageReader implements ICapturedImageSetReader {
      * 
      * @throws NoReaderFoundForImage
      */
-    public TiffCapturedImageReader(ImageFactory factory) throws NoReaderFoundForImage {
+    public TiffCapturedImageSetReader(ImageFactory factory) throws NoReaderFoundForImage {
         _reader = TiffImageReaderFactory.getReader(factory, UINT16.zero());
     }
 
