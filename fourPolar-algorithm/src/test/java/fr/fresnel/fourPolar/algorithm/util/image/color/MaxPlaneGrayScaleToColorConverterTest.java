@@ -23,7 +23,7 @@ import net.imglib2.img.Img;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 
-public class MaxPlaneGrayScaleToColorConverter {
+public class MaxPlaneGrayScaleToColorConverterTest {
     @Test
     public void useMaxEachPlane_ImageXYCZT_PlaneWithNoMaximum_DrawsBlackImage()
             throws ConverterToImgLib2NotFound, InterruptedException {
