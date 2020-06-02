@@ -9,6 +9,8 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChannelDarkBackgroundEstimator;
+import fr.fresnel.fourPolar.algorithm.preprocess.realignment.ChannelRealigner;
+import fr.fresnel.fourPolar.algorithm.preprocess.realignment.IChannelRealigner;
 import fr.fresnel.fourPolar.algorithm.preprocess.registration.IChannelRegistrator;
 import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.BeadCapturedImageSetSegmenter;
 import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.ICapturedImageSetSegmenter;
@@ -91,14 +93,15 @@ public class Preprocessor {
         for (Iterator<ICapturedImageFileSet> fileSetIterator = acquisitionSet.getIterator(); fileSetIterator
                 .hasNext();) {
             ICapturedImageFileSet fileSet = fileSetIterator.next();
-            this._checkChannelCapturedImageIsNotSet(fileSet);
+            // TODO how to write this check properly.
+            // this._checkSingleImageForEachChannel(fileSet);
 
-            _capturedFileSets.add(fileSet);
+            capturedFileSets.add(fileSet);
         }
         return capturedFileSets;
     }
 
-    private void _checkChannelCapturedImageIsNotSet(ICapturedImageFileSet fileSet) throws CannotCreateException {
+    private void _checkSingleImageForEachChannel(ICapturedImageFileSet fileSet) throws CannotCreateException {
         for (ICapturedImageFileSet capturedImageFileSet : _capturedFileSets) {
             if (Arrays.equals(capturedImageFileSet.getChannels(), fileSet.getChannels())) {
                 throw new CannotCreateException(
@@ -190,6 +193,7 @@ public class Preprocessor {
                         .estimate(polarizationImageSet);
                 preprocessResult.setDarkBackground(channel, darkBackground);
 
+                // this._realignChannel(polarizationImageSet, registrationResult);
                 IRegistrationCompositeFigures compositeFigures = this
                         ._createChannelCompositeImages(polarizationImageSet);
                 this._writeChannelCompositeImages(compositeFigures);
@@ -198,6 +202,11 @@ public class Preprocessor {
 
         this._closeIOResources();
         return preprocessResult;
+    }
+
+    private void _realignChannel(IPolarizationImageSet polImageSet, IChannelRegistrationResult registrationResult){
+        IChannelRealigner channelRealigner = ChannelRealigner.create(registrationResult);
+        channelRealigner.realign(polImageSet);
     }
 
     private IRegistrationCompositeFigures _createChannelCompositeImages(IPolarizationImageSet polImageSet) {
@@ -218,7 +227,7 @@ public class Preprocessor {
     }
 
     private void _writeChannelCompositeImages(IRegistrationCompositeFigures compositeFigures) throws IOException {
-        IRegistrationCompositeFiguresWriter writer = this._compositeWriters[compositeFigures.channel()];
+        IRegistrationCompositeFiguresWriter writer = this._compositeWriters[compositeFigures.channel() - 1];
 
         writer.write(this._root4PProject, compositeFigures);
     }
