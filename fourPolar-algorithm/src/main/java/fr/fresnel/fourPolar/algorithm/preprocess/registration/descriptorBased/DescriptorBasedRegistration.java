@@ -72,7 +72,7 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
 
     private void _checkPolarizationImageIsPlanar(IPolarizationImageSet polarizationImageSet) {
         IMetadata metadata = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage().getMetadata();
-        if (MetadataUtil.isImagePlanar(metadata)) {
+        if (!MetadataUtil.isImageQuasiPlanar(metadata)) {
             throw new IllegalArgumentException("Polarization (bead) image must be planar to be registered.");
         }
     }
