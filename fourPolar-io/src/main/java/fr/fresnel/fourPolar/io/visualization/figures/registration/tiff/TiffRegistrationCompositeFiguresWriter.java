@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
+import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.registration.IRegistrationCompositeFigures;
@@ -26,10 +27,9 @@ public class TiffRegistrationCompositeFiguresWriter implements IRegistrationComp
      * @param image
      * @throws NoWriterFoundForImage
      */
-    public TiffRegistrationCompositeFiguresWriter(IRegistrationCompositeFigures composites)
+    public TiffRegistrationCompositeFiguresWriter(ImageFactory factory)
             throws NoWriterFoundForImage {
-        _writer = TiffImageWriterFactory.getWriter(composites.getCompositeImage(RegistrationRule.values()[0]),
-                RGB16.zero());
+        _writer = TiffImageWriterFactory.getWriter(factory, RGB16.zero());
     }
 
     @Override
