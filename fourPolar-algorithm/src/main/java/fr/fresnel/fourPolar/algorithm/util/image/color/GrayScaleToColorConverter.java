@@ -27,7 +27,7 @@ public class GrayScaleToColorConverter {
      *                                    ImgLib2 model.
      * 
      */
-    public static <T extends RealType> Image<RGB16> useMaxEachPlane(final Image<T> grayImage)
+    public static <T extends RealType> Image<RGB16> colorUsingMaxEachPlane(final Image<T> grayImage)
             throws ConverterToImgLib2NotFound {
         return MaxPlaneGrayScaleToColorConverter.convert(grayImage);
     }
@@ -42,7 +42,7 @@ public class GrayScaleToColorConverter {
      * @param color2 is the mono color for image 1.
      * @return is the merged colord images.
      */
-    public Image<RGB16> mergeAsMonoColor(Image<UINT16> image1, Color color1, Image<UINT16> image2, Color color2) {
+    public static Image<RGB16> mergeAsMonoColor(Image<UINT16> image1, Color color1, Image<UINT16> image2, Color color2) {
         return GrayImagesToMonoColorMerger.convert(image1, color1, image2, color2);
     }
 }

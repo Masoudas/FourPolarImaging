@@ -73,7 +73,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     private IGaugeFigure _createGaugeFigure(ISoIImage soiImage, AngleGaugeType gaugeType) {
         Image<RGB16> gaugeImage = null;
         try {
-            gaugeImage = GrayScaleToColorConverter.useMaxEachPlane(soiImage.getImage());
+            gaugeImage = GrayScaleToColorConverter.colorUsingMaxEachPlane(soiImage.getImage());
         } catch (ConverterToImgLib2NotFound e) {
             // We expect this exception to have been caught before the program arrives here!
         }

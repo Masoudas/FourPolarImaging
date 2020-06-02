@@ -38,7 +38,7 @@ public class MaxPlaneGrayScaleToColorConverterTest {
             cursor.setPixel(pixel);
         }
 
-        Image<RGB16> colorImage = GrayScaleToColorConverter.useMaxEachPlane(grayImage);
+        Image<RGB16> colorImage = GrayScaleToColorConverter.colorUsingMaxEachPlane(grayImage);
 
         ImageJFunctions.show(ImageToImgLib2Converter.getImg(colorImage, RGB16.zero()));
 
@@ -72,7 +72,7 @@ public class MaxPlaneGrayScaleToColorConverterTest {
 
         }
 
-        Image<RGB16> colorImage = GrayScaleToColorConverter.useMaxEachPlane(grayImage);
+        Image<RGB16> colorImage = GrayScaleToColorConverter.colorUsingMaxEachPlane(grayImage);
 
         ImageJFunctions.show(ImageToImgLib2Converter.getImg(colorImage, RGB16.zero()));
 
