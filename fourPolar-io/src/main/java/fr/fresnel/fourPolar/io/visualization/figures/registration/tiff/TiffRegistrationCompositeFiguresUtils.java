@@ -15,6 +15,8 @@ class TiffRegistrationCompositeFiguresUtils {
     public static File getRuleFile(File root4PProject, int channel, RegistrationRule rule) {
         File rootOfChannel = new File(PathFactoryOfProject.getFolder_ProcessedBeadImages(root4PProject),
                 "Channel" + channel);
+
+        rootOfChannel.mkdir();
         return new File(rootOfChannel, rule.toString() + ".tif");
     }
 }
