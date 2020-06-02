@@ -28,7 +28,7 @@ public class SampleImageSetTest {
     @Test
     public void addImage_DuplicateImage_ShouldThrowException()
             throws IllegalArgumentException, IncompatibleCapturedImage, KeyException {
-        SampleImageSet sampleSet = new SampleImageSet();
+        SampleImageSet sampleSet = new SampleImageSet(new File("/"));
         sampleSet.addImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }));
 
         assertThrows(KeyAlreadyExistsException.class, () -> {
@@ -38,7 +38,7 @@ public class SampleImageSetTest {
 
     @Test
     public void removeImage_fileSet_ReturnsZeroLengthForChannelOne() throws IllegalArgumentException, KeyException {
-        SampleImageSet sampleSet = new SampleImageSet();
+        SampleImageSet sampleSet = new SampleImageSet(new File("/"));
         sampleSet.addImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }));
 
         sampleSet.removeImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }).getSetName());
@@ -47,7 +47,7 @@ public class SampleImageSetTest {
 
     @Test
     public void removeImage_nonExistentfileSet_ShouldThrowException() throws KeyException {
-        SampleImageSet sampleSet = new SampleImageSet();
+        SampleImageSet sampleSet = new SampleImageSet(new File("/"));
         sampleSet.addImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }));
 
         assertThrows(KeyException.class, () -> {
@@ -57,7 +57,7 @@ public class SampleImageSetTest {
 
     @Test
     public void getIterator_TwoFileSets_ReturnsIteratorProperSize() {
-        SampleImageSet sampleSet = new SampleImageSet();
+        SampleImageSet sampleSet = new SampleImageSet(new File("/"));
 
         ICapturedImageFileSet set1 = new DummyCapturedSet(pol0, new int[] { 1, 2 });
         ICapturedImageFileSet set2 = new DummyCapturedSet(pol45, new int[] { 1, 2 });
