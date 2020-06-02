@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.core.physics.channel;
 /** Utility methods for channel */
 public class ChannelUtils {
     /**
-     * Checks the number of channels is greater than zero, and throws
+     * Checks the number of channels is greater than zero, and throw exception if not.
      */
     public static void checkNumChannelsNonZero(int numChannels) {
         if (numChannels <= 0) {
@@ -12,6 +12,16 @@ public class ChannelUtils {
 
     }
 
+	/**
+     * Checks channel number is zero, and throw exception if not.
+     */
+    public static void checkChannelNumberIsNonZero(int channelNo) {
+        if (channelNo <= 0) {
+            throw new IllegalArgumentException("Channel number must be greater than zero.");
+        }
+
+	}
+	
 	/**
 	 * Check channel > 0 is in the range of numChannels and throws exception otherwise.
 	 * @param channel is the channel number.
