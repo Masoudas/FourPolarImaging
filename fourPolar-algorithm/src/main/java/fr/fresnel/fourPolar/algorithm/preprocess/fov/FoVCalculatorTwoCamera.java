@@ -36,6 +36,7 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
 
     public FoVCalculatorTwoCamera(IMetadata beadImg_pol0_90, IPointShape intersection_pol0_90,
             IMetadata beadImg_pol45_135, IPointShape intersection_pol45_135, TwoCameraPolarizationConstellation constellation) {
+                // TODO Use Box to indicate region.
         this._checkIntersectionPointInside(beadImg_pol0_90, intersection_pol0_90);
         this._checkIntersectionPointInside(beadImg_pol45_135, intersection_pol45_135);
 

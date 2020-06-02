@@ -45,6 +45,7 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
      */
     public FoVCalculatorOneCamera(IMetadata beadImg_pol0_45_90_135, IPointShape intersectionPoint,
             OneCameraPolarizationConstellation constellation) {
+        // TODO Use Box to indicate region.
         long[] beadImgDim = beadImg_pol0_45_90_135.getDim();
         long[] iPoint = intersectionPoint.point();
 

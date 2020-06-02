@@ -21,6 +21,7 @@ public class FoVCalculatorFourCamera implements IFoVCalculator {
 
     public FoVCalculatorFourCamera(IMetadata beadImg_pol0, IMetadata beadImg_pol45, IMetadata beadImg_pol90,
             IMetadata beadImg_pol135) {
+        // TODO Use Box to indicate region.
         this._x_len_min = Arrays.stream(new long[] { beadImg_pol0.getDim()[0], beadImg_pol45.getDim()[0],
                 beadImg_pol90.getDim()[0], beadImg_pol135.getDim()[0] }).summaryStatistics().getMin();
         this._y_len_min = Arrays.stream(new long[] { beadImg_pol0.getDim()[1], beadImg_pol45.getDim()[1],
