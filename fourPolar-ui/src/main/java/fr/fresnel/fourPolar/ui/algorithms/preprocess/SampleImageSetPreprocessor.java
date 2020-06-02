@@ -145,6 +145,8 @@ public class SampleImageSetPreprocessor {
      *                     {@ICapturedImageChecker} when creating sample set.
      */
     public void process(File projectRootFolder) throws IOException {
+        //  TODO check every parameter is set before process
+
         for (Iterator<ICapturedImageFileSet> fileSetItr = this._sampleImageSet.getIterator(); fileSetItr.hasNext();) {
             ICapturedImageFileSet fileSet = fileSetItr.next();
 
