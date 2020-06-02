@@ -42,6 +42,12 @@ public class PathFactoryOfProject {
     private static File _folder_orientationImagesPath = null;
 
     /**
+     * The folder that holds the processed (bead) images of the project.
+     */
+    private static String _FOLDER_PROCCESSED_BEAD_IMAGES = "1_ProcessedBeadImages";
+    private static File _FOLDER_PROCCESSED_BEAD_IMAGES_PATH = null;
+
+    /**
      * Creates and returns the 4Polar folder inside root4PProject.
      * 
      * @param root4PProject is the location of the 4Polar folder.
@@ -53,7 +59,7 @@ public class PathFactoryOfProject {
         }
 
         Path path = Paths.get(root4PProject.getAbsolutePath(), _projectRoot);
-        File _projectRootPath = path.toFile();
+        _projectRootPath = path.toFile();
 
         if (!_projectRootPath.exists()) {
             _projectRootPath.mkdir();
@@ -76,7 +82,7 @@ public class PathFactoryOfProject {
         }
 
         Path path = Paths.get(getFolder_4Polar(root4PProject).getAbsolutePath(), _folder_params);
-        File _folder_paramsPath = path.toFile();
+        _folder_paramsPath = path.toFile();
 
         if (!_folder_paramsPath.exists()) {
             _folder_paramsPath.mkdirs();
@@ -96,7 +102,7 @@ public class PathFactoryOfProject {
             return _folder_polarizationImagesPath;
         }
 
-        File _folder_polarizationImagesPath = new File(getFolder_4Polar(root4PProject).getAbsolutePath(),
+        _folder_polarizationImagesPath = new File(getFolder_4Polar(root4PProject).getAbsolutePath(),
                 _folder_polarizationImages);
 
         if (!_folder_polarizationImagesPath.exists()) {
@@ -116,7 +122,7 @@ public class PathFactoryOfProject {
         if (_folder_orientationImagesPath != null) {
             return _folder_orientationImagesPath;
         }
-        File _folder_orientationImagesPath = new File(getFolder_4Polar(root4PProject).getAbsolutePath(),
+        _folder_orientationImagesPath = new File(getFolder_4Polar(root4PProject).getAbsolutePath(),
                 _folder_orientationImages);
 
         if (!_folder_orientationImagesPath.exists()) {
@@ -124,6 +130,26 @@ public class PathFactoryOfProject {
         }
 
         return _folder_orientationImagesPath;
+    }
+
+    /**
+     * Returns the folder that would contain the orientation images.
+     * 
+     * @param root4PProject is the location of the 4Polar folder.
+     * @return
+     */
+    public static File getFolder_ProcessedBeadImages(File root4PProject) {
+        if (_FOLDER_PROCCESSED_BEAD_IMAGES != null) {
+            return _FOLDER_PROCCESSED_BEAD_IMAGES_PATH;
+        }
+        _FOLDER_PROCCESSED_BEAD_IMAGES_PATH = new File(getFolder_4Polar(root4PProject).getAbsolutePath(),
+                _FOLDER_PROCCESSED_BEAD_IMAGES);
+
+        if (!_FOLDER_PROCCESSED_BEAD_IMAGES_PATH.exists()) {
+            _FOLDER_PROCCESSED_BEAD_IMAGES_PATH.mkdirs();
+        }
+
+        return _FOLDER_PROCCESSED_BEAD_IMAGES_PATH;
     }
 
 }
