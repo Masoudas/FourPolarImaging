@@ -48,16 +48,9 @@ public class TiffPolarizationImageSetReader implements IPolarizationImageSetRead
         IPolarizationImageSet imageSet = null;
         try {
             Image<UINT16> pol0 = _readPolarizationImage(Polarization.pol0, polFileSet);
-            this._reassignPolarizationImageToXYCZT(pol0);
-
             Image<UINT16> pol45 = _readPolarizationImage(Polarization.pol45, polFileSet);
-            this._reassignPolarizationImageToXYCZT(pol45);
-
             Image<UINT16> pol90 = _readPolarizationImage(Polarization.pol90, polFileSet);
-            this._reassignPolarizationImageToXYCZT(pol90);
-
             Image<UINT16> pol135 = _readPolarizationImage(Polarization.pol90, polFileSet);
-            this._reassignPolarizationImageToXYCZT(pol135);
 
             imageSet = new PolarizationImageSetBuilder(this._numChannels).channel(1).fileSet(fileSet).pol0(pol0)
                     .pol45(pol45).pol90(pol90).pol135(pol135).build();
@@ -72,7 +65,8 @@ public class TiffPolarizationImageSetReader implements IPolarizationImageSetRead
     private Image<UINT16> _readPolarizationImage(Polarization pol, IPolarizationImageFileSet fileSet)
             throws IOException, MetadataParseError {
         File imageFile = fileSet.getFile(pol);
-        return this._reader.read(imageFile);
+        Image<UINT16> diskImageFile = this._reader.read(imageFile);
+        return this._reassignPolarizationImageToXYCZT(diskImageFile);
     }
 
     /**

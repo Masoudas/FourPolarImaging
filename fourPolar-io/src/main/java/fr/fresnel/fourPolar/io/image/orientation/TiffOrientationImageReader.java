@@ -69,21 +69,16 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
         _reader.close();
     }
 
-    private IOrientationImage _read(IOrientationImageFileSet orientationSet, ICapturedImageFileSet capturedSet)
+    private IOrientationImage _read(IOrientationImageFileSet orientationImageFileSet, ICapturedImageFileSet capturedSet)
             throws CannotFormOrientationImage, IOException {
         IOrientationImage orientationImage = null;
         try {
-            Image<Float32> rho = _reader.read(orientationSet.getFile(OrientationAngle.rho));
-            this._reassignAngleImageToXYCZT(rho);
+            Image<Float32> rho = this._readAngleImage(OrientationAngle.rho, orientationImageFileSet);
+            Image<Float32> delta = this._readAngleImage(OrientationAngle.delta, orientationImageFileSet);
+            Image<Float32> eta = this._readAngleImage(OrientationAngle.eta, orientationImageFileSet);
 
-            Image<Float32> delta = _reader.read(orientationSet.getFile(OrientationAngle.delta));
-            this._reassignAngleImageToXYCZT(delta);
-
-            Image<Float32> eta = _reader.read(orientationSet.getFile(OrientationAngle.eta));
-            this._reassignAngleImageToXYCZT(eta);
-            
-            orientationImage = OrientationImageFactory.create(capturedSet, orientationSet.getChannel(), rho, delta,
-                    eta);
+            orientationImage = OrientationImageFactory.create(capturedSet, orientationImageFileSet.getChannel(), rho,
+                    delta, eta);
         } catch (MetadataParseError | IOException e) {
             throw new IOException("orientation image doesn't exist or is corrupted");
         }
@@ -91,14 +86,21 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
         return orientationImage;
     }
 
+    private Image<Float32> _readAngleImage(OrientationAngle angle, IOrientationImageFileSet orientationImageFileSet)
+            throws IOException, MetadataParseError {
+        Image<Float32> diskAngleImage = _reader.read(orientationImageFileSet.getFile(OrientationAngle.rho));
+        return this._reassignAngleImageToXYCZT(diskAngleImage);
+    }
+
     /**
-     * It may happen that if the t dimension of the image is 1 (or z for that matter), when we 
-     * read it from disk, it would appear as xy. Hence, we need to reassign if necessary.
+     * It may happen that if the t dimension of the image is 1 (or z for that
+     * matter), when we read it from disk, it would appear as xy. Hence, we need to
+     * reassign if necessary.
      */
-    private Image<Float32> _reassignAngleImageToXYCZT(Image<Float32> angleImage){
-        // TODO we need to get rid of this method, by making sure that when image is written,
-        // z and t with dimension 1 are properly written to the disk.
-        if (angleImage.getMetadata().axisOrder() == IAngleImage.AXIS_ORDER){
+    private Image<Float32> _reassignAngleImageToXYCZT(Image<Float32> angleImage) {
+        // TODO we need to get rid of this method, by making sure that when image is
+        // written, z and t with dimension 1 are properly written to the disk.
+        if (angleImage.getMetadata().axisOrder() == IAngleImage.AXIS_ORDER) {
             return angleImage;
         } else {
             return AxisReassigner.reassignToXYCZT(angleImage, Float32.zero());
