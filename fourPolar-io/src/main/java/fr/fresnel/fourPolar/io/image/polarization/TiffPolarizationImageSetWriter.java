@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
+import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
@@ -32,10 +33,21 @@ public class TiffPolarizationImageSetWriter implements IPolarizationImageSetWrit
                 UINT16.zero());
     }
 
+    /**
+     * Initialize the writer for the provided image type. The same class can write
+     * several orientation images to the disk.
+     *
+     * @param imageSet
+     * @throws NoWriterFoundForImage
+     */
+    public TiffPolarizationImageSetWriter(ImageFactory imageFactory) throws NoWriterFoundForImage {
+        this._writer = TiffImageWriterFactory.getWriter(imageFactory, UINT16.zero());
+    }
+
     @Override
     public void write(File root4PProject, IPolarizationImageSet imageSet) throws IOException {
-        IPolarizationImageFileSet polFileSet = new TiffPolarizationImageFileSet(
-            root4PProject, imageSet.getFileSet(), imageSet.channel());
+        IPolarizationImageFileSet polFileSet = new TiffPolarizationImageFileSet(root4PProject, imageSet.getFileSet(),
+                imageSet.channel());
         _writePolarizationImage(Polarization.pol0, polFileSet, imageSet);
         _writePolarizationImage(Polarization.pol45, polFileSet, imageSet);
         _writePolarizationImage(Polarization.pol90, polFileSet, imageSet);
