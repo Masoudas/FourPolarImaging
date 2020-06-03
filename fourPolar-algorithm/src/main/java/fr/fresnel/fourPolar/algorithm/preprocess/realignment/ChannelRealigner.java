@@ -4,7 +4,6 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.Converter
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
@@ -15,8 +14,12 @@ import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
 import net.imglib2.Cursor;
 import net.imglib2.RealRandomAccessible;
+import net.imglib2.util.ImgUtil;
+import net.imglib2.util.Util;
 import net.imglib2.img.Img;
+import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.interpolation.randomaccess.NLinearInterpolatorFactory;
+import net.imglib2.loops.LoopBuilder;
 import net.imglib2.realtransform.AffineGet;
 import net.imglib2.realtransform.AffineRandomAccessible;
 import net.imglib2.realtransform.RealViews;
@@ -35,8 +38,7 @@ public class ChannelRealigner implements IChannelRealigner {
      * 
      * @return
      */
-    public static IChannelRealigner create(final IChannelRegistrationResult channelRegistrationResult,
-            ImageFactory factory) {
+    public static IChannelRealigner create(final IChannelRegistrationResult channelRegistrationResult) {
         return new ChannelRealigner(channelRegistrationResult);
     }
 
@@ -53,13 +55,15 @@ public class ChannelRealigner implements IChannelRealigner {
         this._realignPolarization(pol45,
                 this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol45_to_Pol0));
 
-        final Image<UINT16> pol90 = imageSet.getPolarizationImage(Polarization.pol90).getImage();
+        final Image<UINT16> pol90 =
+        imageSet.getPolarizationImage(Polarization.pol90).getImage();
         this._realignPolarization(pol90,
-                this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol90_to_Pol0));
+        this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol90_to_Pol0));
 
-        final Image<UINT16> pol135 = imageSet.getPolarizationImage(Polarization.pol135).getImage();
+        final Image<UINT16> pol135 =
+        imageSet.getPolarizationImage(Polarization.pol135).getImage();
         this._realignPolarization(pol135,
-                this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol135_to_Pol0));
+        this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol135_to_Pol0));
     }
 
     private void _realignPolarization(final Image<UINT16> image, final AffineTransform2D transform) {
@@ -69,31 +73,43 @@ public class ChannelRealigner implements IChannelRealigner {
         } catch (final ConverterToImgLib2NotFound e) {
             // TODO Get rid of this!
         }
-        final AffineGet expandedTransform = _expandTransfromToAffineOfImageSize(image.getMetadata(), transform);
 
         final RealRandomAccessible<UnsignedShortType> field = Views.interpolate(Views.extendZero(imageAsImgLib2),
                 new NLinearInterpolatorFactory<>());
+
+        final AffineGet expandedTransform = _expandTransfromToAffineOfImageSize(image.getMetadata(), transform);
 
         final AffineRandomAccessible<UnsignedShortType, AffineGet> sheared = RealViews.affine(field, expandedTransform);
 
         // apply the original bounding box to the transformed image
         final IntervalView<UnsignedShortType> bounded = Views.interval(sheared, imageAsImgLib2);
 
-        _setImageToTransformedPixels(image, bounded);
+        _copyTransformedImageToOriginalImage(imageAsImgLib2, bounded);
     }
 
     /**
      * Using the cursor of ImgLib2, set the content of the original image to the
      * transformed image.
      */
-    private void _setImageToTransformedPixels(final Image<UINT16> image,
-            final IntervalView<UnsignedShortType> bounded) {
-        final Cursor<UnsignedShortType> transformedCursor = bounded.cursor();
-        for (final IPixelCursor<UINT16> cursor = image.getCursor(); cursor.hasNext();) {
-            final IPixel<UINT16> pixel = cursor.next();
-            pixel.value().set(transformedCursor.get().get());
-            cursor.setPixel(pixel);
-        }
+    private void _copyTransformedImageToOriginalImage(final Img<UnsignedShortType> originalImg,
+            final IntervalView<UnsignedShortType> transformedImg) {
+        Img<UnsignedShortType> concreteTransformedImg = this._createAnImgInstanceOfTransformed(transformedImg);
+        ImgUtil.copy(concreteTransformedImg, originalImg);
+    }
+
+    /**
+     * Realize the transformed image as a concrete instance of img.
+     * 
+     * @param transformedImg
+     * @return
+     */
+    private Img<UnsignedShortType> _createAnImgInstanceOfTransformed(
+            final IntervalView<UnsignedShortType> transformedImg) {
+        Img<UnsignedShortType> img = Util.getSuitableImgFactory(transformedImg, new UnsignedShortType())
+                .create(transformedImg);
+
+        LoopBuilder.setImages(img, transformedImg).forEachPixel(UnsignedShortType::set);
+        return img;
     }
 
     /**
