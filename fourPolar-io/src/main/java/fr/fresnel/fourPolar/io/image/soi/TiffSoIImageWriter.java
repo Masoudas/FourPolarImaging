@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.io.image.soi;
 import java.io.File;
 import java.io.IOException;
 
+import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
@@ -20,6 +21,10 @@ public class TiffSoIImageWriter implements ISoIImageWriter {
 
     public TiffSoIImageWriter(ISoIImage soiImage) throws NoWriterFoundForImage {
         this._writer = TiffImageWriterFactory.getWriter(soiImage.getImage(), UINT16.zero());
+    }
+
+    public TiffSoIImageWriter(ImageFactory imageFactory) throws NoWriterFoundForImage {
+        this._writer = TiffImageWriterFactory.getWriter(imageFactory, UINT16.zero());
     }
 
     @Override
