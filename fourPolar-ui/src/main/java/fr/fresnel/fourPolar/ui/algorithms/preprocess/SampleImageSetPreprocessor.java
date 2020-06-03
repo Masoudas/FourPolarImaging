@@ -138,6 +138,11 @@ public class SampleImageSetPreprocessor {
 
     }
 
+    public void setSegmenter(ICapturedImageSetSegmenter segmenter) {
+        Objects.requireNonNull(segmenter);
+        this._segmenter = segmenter;
+    }
+
     /**
      * Process each captured image set.
      * 
@@ -175,6 +180,7 @@ public class SampleImageSetPreprocessor {
      */
     private IPolarizationImageSet[] _createChannelPolarizationImages(ICapturedImageSet capturedImageSet) {
         this._segmenter.setCapturedImage(capturedImageSet);
+
         IPolarizationImageSet[] channelsPolImageSet = new IPolarizationImageSet[this._numChannels];
         for (int channel = 1; channel <= this._numChannels; channel++) {
             channelsPolImageSet[channel - 1] = this._segmenter.segment(channel);
@@ -198,7 +204,7 @@ public class SampleImageSetPreprocessor {
     private ISoIImage[] _createChannelSoIImages(IPolarizationImageSet[] channelsPolImageSet) {
         ISoIImage[] channelsSoIImage = new ISoIImage[this._numChannels];
         for (int channel = 1; channel <= this._numChannels; channel++) {
-            SoIImage.create(channelsPolImageSet[channel - 1]);
+            channelsSoIImage[channel - 1] = SoIImage.create(channelsPolImageSet[channel - 1]);
         }
 
         return channelsSoIImage;
@@ -214,13 +220,13 @@ public class SampleImageSetPreprocessor {
     private void _writeChannelPolarizationImages(IPolarizationImageSet[] channelsPolImageSet) throws IOException {
         for (int channel = 1; channel <= this._numChannels; channel++) {
             this._polarizationWriters[channel - 1].write(this._sampleImageSet.rootFolder(),
-                    channelsPolImageSet[channel]);
+                    channelsPolImageSet[channel - 1]);
         }
     }
 
     private void _writeChannelSoIImages(ISoIImage[] channelsSoIImage) throws IOException {
         for (int channel = 1; channel <= this._numChannels; channel++) {
-            this._soiImageWriters[channel - 1].write(this._sampleImageSet.rootFolder(), channelsSoIImage[channel]);
+            this._soiImageWriters[channel - 1].write(this._sampleImageSet.rootFolder(), channelsSoIImage[channel - 1]);
         }
     }
 
