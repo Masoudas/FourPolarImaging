@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.algorithm.postprocess.orientation.OrientationAngleConverter;
+import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
@@ -31,6 +32,17 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
     public TiffOrientationImageWriter(IOrientationImage image) throws NoWriterFoundForImage {
         _writer = TiffImageWriterFactory.getWriter(image.getAngleImage(OrientationAngle.rho).getImage(),
                 Float32.zero());
+    }
+
+    /**
+     * Initialize the writer for the given type of image factory. The same class can
+     * write several orientation images to the disk.
+     * 
+     * @param image
+     * @throws NoWriterFoundForImage
+     */
+    public TiffOrientationImageWriter(ImageFactory imageFactory) throws NoWriterFoundForImage {
+        _writer = TiffImageWriterFactory.getWriter(imageFactory, Float32.zero());
     }
 
     @Override
