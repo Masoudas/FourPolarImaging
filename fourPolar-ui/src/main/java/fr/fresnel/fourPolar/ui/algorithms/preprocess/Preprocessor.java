@@ -193,7 +193,7 @@ public class Preprocessor {
                         .estimate(polarizationImageSet);
                 preprocessResult.setDarkBackground(channel, darkBackground);
 
-                // this._realignChannel(polarizationImageSet, registrationResult);
+                this._realignChannel(polarizationImageSet, registrationResult);
                 IRegistrationCompositeFigures compositeFigures = this
                         ._createChannelCompositeImages(polarizationImageSet);
                 this._writeChannelCompositeImages(compositeFigures);
