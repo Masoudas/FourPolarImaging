@@ -16,6 +16,7 @@ import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.image.soi.SoIImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
+import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.polarization.IPolarizationImageSetWriter;
 import fr.fresnel.fourPolar.io.image.soi.ISoIImageWriter;
@@ -86,8 +87,8 @@ public class SampleImageSetPreprocessor {
         Objects.requireNonNull(writer);
 
         // TODO Create a copy, so as to be used for multi-thread if needed.
-        for (int channel = 0; channel < this._numChannels; channel++) {
-            this._polarizationWriters[channel] = writer;
+        for (int channel = 1; channel < this._numChannels; channel++) {
+            this._polarizationWriters[channel - 1] = writer;
         }
 
     }
@@ -97,7 +98,8 @@ public class SampleImageSetPreprocessor {
      */
     public void setChannelRealigner(int channel, IChannelRealigner realigner) {
         Objects.requireNonNull(realigner);
-        this._realigners[channel] = realigner;
+        ChannelUtils.checkChannel(channel, this._numChannels);
+        this._realigners[channel - 1] = realigner;
     }
 
     /**
@@ -105,7 +107,8 @@ public class SampleImageSetPreprocessor {
      */
     public void setChannelDarkBackgroundRemover(int channel, IChannelDarkBackgroundRemover darkBackgroundRemover) {
         Objects.requireNonNull(darkBackgroundRemover);
-        this._backgroundRemovers[channel] = darkBackgroundRemover;
+        ChannelUtils.checkChannel(channel, this._numChannels);
+        this._backgroundRemovers[channel - 1] = darkBackgroundRemover;
 
     }
 
@@ -116,8 +119,8 @@ public class SampleImageSetPreprocessor {
         Objects.requireNonNull(soiImageWriter);
 
         // TODO Create a copy, so as to be used for multi-thread if needed.
-        for (int channel = 0; channel < this._numChannels; channel++) {
-            this._soiImageWriters[channel] = soiImageWriter;
+        for (int channel = 1; channel < this._numChannels; channel++) {
+            this._soiImageWriters[channel - 1] = soiImageWriter;
         }
 
     }
@@ -129,8 +132,8 @@ public class SampleImageSetPreprocessor {
         Objects.requireNonNull(calculator);
 
         // TODO Create a copy, so as to be used for multi-thread if needed.
-        for (int channel = 0; channel < this._numChannels; channel++) {
-            this._soiCalculators[channel] = calculator;
+        for (int channel = 1; channel <= this._numChannels; channel++) {
+            this._soiCalculators[channel - 1] = calculator;
         }
 
     }
@@ -145,7 +148,7 @@ public class SampleImageSetPreprocessor {
      *                     {@ICapturedImageChecker} when creating sample set.
      */
     public void process() throws IOException {
-        //  TODO check every parameter is set before process
+        // TODO check every parameter is set before process
 
         for (Iterator<ICapturedImageFileSet> fileSetItr = this._sampleImageSet.getIterator(); fileSetItr.hasNext();) {
             ICapturedImageFileSet fileSet = fileSetItr.next();
