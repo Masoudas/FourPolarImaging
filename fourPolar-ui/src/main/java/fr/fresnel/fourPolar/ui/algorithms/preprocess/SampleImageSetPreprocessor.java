@@ -87,7 +87,7 @@ public class SampleImageSetPreprocessor {
         Objects.requireNonNull(writer);
 
         // TODO Create a copy, so as to be used for multi-thread if needed.
-        for (int channel = 1; channel < this._numChannels; channel++) {
+        for (int channel = 1; channel <= this._numChannels; channel++) {
             this._polarizationWriters[channel - 1] = writer;
         }
 
@@ -119,7 +119,7 @@ public class SampleImageSetPreprocessor {
         Objects.requireNonNull(soiImageWriter);
 
         // TODO Create a copy, so as to be used for multi-thread if needed.
-        for (int channel = 1; channel < this._numChannels; channel++) {
+        for (int channel = 1; channel <= this._numChannels; channel++) {
             this._soiImageWriters[channel - 1] = soiImageWriter;
         }
 
