@@ -8,7 +8,6 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
 import fr.fresnel.fourPolar.io.image.orientation.file.IOrientationImageFileSet;
@@ -20,33 +19,26 @@ import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageInDegr
  * orientation image as tiff files.
  */
 public class TiffOrientationImageWriter implements IOrientationImageWriter {
-    final private ImageWriter<Float32> _writer;
+    private ImageWriter<Float32> _writer;
 
     /**
-     * Initialize the writer for the provided type of orientation image. The same
-     * class can write several orientation images to the disk.
-     * 
-     * @param image
-     * @throws NoWriterFoundForImage
+     * Caches the image type supplied the last time. This would allow us to create
+     * only one instance of writer if image type does not change.
      */
-    public TiffOrientationImageWriter(IOrientationImage image) {
-        _writer = TiffImageWriterFactory.getWriter(image.getAngleImage(OrientationAngle.rho).getImage(),
-                Float32.zero());
-    }
+    private ImageFactory _cachedImageType;
 
     /**
-     * Initialize the writer for the given type of image factory. The same class can
-     * write several orientation images to the disk.
-     * 
-     * @param image
-     * @throws NoWriterFoundForImage
+     * Initialize the writer. The same class can write several orientation images to
+     * the disk.
      */
-    public TiffOrientationImageWriter(ImageFactory imageFactory) throws NoWriterFoundForImage {
-        _writer = TiffImageWriterFactory.getWriter(imageFactory, Float32.zero());
+    public TiffOrientationImageWriter() {
+        _cachedImageType = null;
     }
 
     @Override
     public void write(File root4PProject, IOrientationImage orientationImage) throws IOException {
+        this._createWriter(orientationImage);
+
         TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(root4PProject,
                 orientationImage.getCapturedSet(), orientationImage.channel());
 
@@ -83,6 +75,19 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
 
     private void _converAnglesToDegrees(IOrientationImage orientationImage) {
         OrientationAngleConverter.convertToDegree(orientationImage);
+    }
+
+    /**
+     * If image type has not changed, use the previous writer instance. Otherwise,
+     * create a new one.
+     */
+    private void _createWriter(IOrientationImage orientationImage) {
+        ImageFactory factoryType = orientationImage.getAngleImage(OrientationAngle.rho).getImage().getFactory();
+
+        if (factoryType != this._cachedImageType) {
+            _writer = TiffImageWriterFactory.getWriter(factoryType, Float32.zero());
+
+        }
     }
 
 }

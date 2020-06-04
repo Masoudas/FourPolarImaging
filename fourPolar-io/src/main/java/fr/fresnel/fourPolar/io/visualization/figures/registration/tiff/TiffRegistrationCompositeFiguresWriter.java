@@ -8,7 +8,6 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.registration.IRegistrationCompositeFigures;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
 import fr.fresnel.fourPolar.io.visualization.figures.registration.IRegistrationCompositeFiguresWriter;
@@ -21,19 +20,21 @@ public class TiffRegistrationCompositeFiguresWriter implements IRegistrationComp
     private ImageWriter<RGB16> _writer;
 
     /**
-     * Initialize the writer for the provided type of composites. The same class can
-     * write several orientation images to the disk.
-     * 
-     * @param image
-     * @throws NoWriterFoundForImage
+     * Caches the image type supplied the last time. This would allow us to create
+     * only one instance of writer if image type does not change.
      */
-    public TiffRegistrationCompositeFiguresWriter(ImageFactory factory)
-            throws NoWriterFoundForImage {
-        _writer = TiffImageWriterFactory.getWriter(factory, RGB16.zero());
+    private ImageFactory _cachedImageType;
+
+    /**
+     * Initialize the writer. The same class can write several composite instances
+     * to the disk.
+     */
+    public TiffRegistrationCompositeFiguresWriter() {
     }
 
     @Override
     public void write(File root4PProject, IRegistrationCompositeFigures composites) throws IOException {
+        this._createWriter(composites);
         int channel = composites.channel();
         for (RegistrationRule rule : RegistrationRule.values()) {
             File rulePath = TiffRegistrationCompositeFiguresUtils.getRuleFile(root4PProject, channel, rule);
@@ -47,6 +48,19 @@ public class TiffRegistrationCompositeFiguresWriter implements IRegistrationComp
     public void close() throws IOException {
         this._writer.close();
 
+    }
+
+    /**
+     * If image type has not changed, use the previous writer instance. Otherwise,
+     * create a new one.
+     */
+    private void _createWriter(IRegistrationCompositeFigures compositeFigure) {
+        ImageFactory factoryType = compositeFigure.getCompositeImage(RegistrationRule.values()[0]).getFactory();
+
+        if (factoryType != this._cachedImageType) {
+            _writer = TiffImageWriterFactory.getWriter(factoryType, RGB16.zero());
+
+        }
     }
 
 }

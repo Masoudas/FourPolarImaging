@@ -6,7 +6,6 @@ import java.io.IOException;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
 import fr.fresnel.fourPolar.io.image.soi.file.ISoIImageFile;
@@ -17,18 +16,20 @@ import fr.fresnel.fourPolar.io.image.soi.file.TiffSoIImageFile;
  * as tiff file.
  */
 public class TiffSoIImageWriter implements ISoIImageWriter {
-    final private ImageWriter<UINT16> _writer;
+    private ImageWriter<UINT16> _writer;
 
-    public TiffSoIImageWriter(ISoIImage soiImage) {
-        this._writer = TiffImageWriterFactory.getWriter(soiImage.getImage(), UINT16.zero());
-    }
+    /**
+     * Caches the image type supplied the last time. This would allow us to create
+     * only one instance of writer if image type does not change.
+     */
+    private ImageFactory _cachedImageType;
 
-    public TiffSoIImageWriter(ImageFactory imageFactory) throws NoWriterFoundForImage {
-        this._writer = TiffImageWriterFactory.getWriter(imageFactory, UINT16.zero());
+    public TiffSoIImageWriter() {
     }
 
     @Override
     public void write(File root4PProject, ISoIImage soiImage) throws IOException {
+        this._createWriter(soiImage);
         ISoIImageFile file = new TiffSoIImageFile(root4PProject, soiImage.getFileSet(), soiImage.channel());
 
         this._writer.write(file.getFile(), soiImage.getImage());
@@ -37,6 +38,19 @@ public class TiffSoIImageWriter implements ISoIImageWriter {
     @Override
     public void close() throws IOException {
         this._writer.close();
+    }
+
+    /**
+     * If image type has not changed, use the previous writer instance. Otherwise,
+     * create a new one.
+     */
+    private void _createWriter(ISoIImage soiImage) {
+        ImageFactory factoryType = soiImage.getImage().getFactory();
+
+        if (factoryType != this._cachedImageType) {
+            _writer = TiffImageWriterFactory.getWriter(factoryType, UINT16.zero());
+
+        }
     }
 
 }
