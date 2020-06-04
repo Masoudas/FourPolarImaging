@@ -2,8 +2,10 @@ package fr.fresnel.fourPolar.io.visualization.figures.polarization.tiff;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Objects;
 
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
@@ -11,9 +13,11 @@ import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.PolarizationImageSetComposites;
+import fr.fresnel.fourPolar.core.visualization.figures.polarization.PolarizationImageSetCompositesBuilder;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
+import fr.fresnel.fourPolar.io.image.polarization.file.IPolarizationImageFileSet;
 import fr.fresnel.fourPolar.io.visualization.figures.polarization.IRegistrationCompositeFiguresReader;
 
 /**
@@ -23,6 +27,7 @@ import fr.fresnel.fourPolar.io.visualization.figures.polarization.IRegistrationC
 public class TiffRegistrationCompositeFiguresReader implements IRegistrationCompositeFiguresReader {
     final private ImageReader<RGB16> _reader;
     final private int _numChannels;
+    final private PolarizationImageSetCompositesBuilder _compositeSetBuilder;
 
     /**
      * Initialize the reader for the provided {@link Image} implementation. The same
@@ -37,29 +42,80 @@ public class TiffRegistrationCompositeFiguresReader implements IRegistrationComp
 
         _reader = TiffImageReaderFactory.getReader(factory, RGB16.zero());
         _numChannels = numChannels;
+        _compositeSetBuilder = new PolarizationImageSetCompositesBuilder(this._numChannels);
     }
 
-    @Override
-    public IPolarizationImageSetComposites read(File root4PProject, int channel) throws IOException {
-        ChannelUtils.checkChannel(channel, this._numChannels);
-        IPolarizationImageSetComposites compositeFigures = new PolarizationImageSetComposites(channel);
+    /**
+     * Read all composite images on the given root. fileSet is allowed to be null if
+     * this is a registration image set.
+     */
+    private IPolarizationImageSetComposites _read(File rootCompositeImages, ICapturedImageFileSet fileSet, int channel)
+            throws IOException {
+        HashMap<RegistrationRule, Image<RGB16>> compositeFigures = _readRules(rootCompositeImages);
+        _buildCompositionSet(fileSet, channel, compositeFigures);
 
-        try {
-            for (RegistrationRule rule : RegistrationRule.values()) {
-                File rulePath = TiffRegistrationCompositeFiguresUtils.getRuleFile(root4PProject, channel, rule);
-                Image<RGB16> compositeImage = this._reader.read(rulePath);
-                compositeFigures.setCompositeImage(rule, compositeImage);
-            }
-        } catch (MetadataParseError | IOException e) {
-            throw new IOException("composite images don't exist or are corrupted");
+        return this._compositeSetBuilder.build();
+    }
+
+    private HashMap<RegistrationRule, Image<RGB16>> _readRules(File rootCompositeImages) throws IOException {
+        HashMap<RegistrationRule, Image<RGB16>> compositeFigures = new HashMap<>();
+
+        for (RegistrationRule rule : RegistrationRule.values()) {
+            compositeFigures.put(rule, this._readRule(rootCompositeImages, rule));
         }
-
         return compositeFigures;
     }
+
+    private Image<RGB16> _readRule(File rootCompositeImages, RegistrationRule rule) throws IOException {
+        File ruleFile = TiffRegistrationCompositeFiguresUtils.getRuleFile(rootCompositeImages, rule);
+
+        Image<RGB16> ruleImage = null;
+        try {
+            ruleImage = this._reader.read(ruleFile);
+        } catch (MetadataParseError | IOException e) {
+            throw new IOException("composite images does not exist or is corrupted");
+        }
+
+        return ruleImage;
+    }
+
+
+    private void _buildCompositionSet(ICapturedImageFileSet fileSet, int channel,
+            HashMap<RegistrationRule, Image<RGB16>> compositeFigures) {
+        this._compositeSetBuilder.setChannel(channel);
+        this._compositeSetBuilder.setFileSet(fileSet);
+
+        for (RegistrationRule rule : RegistrationRule.values()) {
+            this._compositeSetBuilder.setCompositeImage(rule, compositeFigures.get(rule));
+        }
+    }
+
 
     @Override
     public void close() throws IOException {
         _reader.close();
+    }
+
+    @Override
+    public IPolarizationImageSetComposites readRegistrationComposite(File root4PProject, int channel)
+            throws IOException {
+        Objects.requireNonNull(root4PProject);
+        ChannelUtils.checkChannel(channel, this._numChannels);
+        File rootCompositeImages = TiffRegistrationCompositeFiguresUtils
+                .getRootFolderRegistrationComposites(root4PProject, channel);
+        return this._read(rootCompositeImages, null, channel);
+    }
+
+    @Override
+    public IPolarizationImageSetComposites read(File root4PProject, String visualizationSession, int channel,
+            ICapturedImageFileSet fileSet) throws IOException {
+        Objects.requireNonNull(fileSet);
+        Objects.requireNonNull(root4PProject);
+        ChannelUtils.checkChannel(channel, this._numChannels);
+        
+        File rootCompositeImages = TiffRegistrationCompositeFiguresUtils.getRootFolder(root4PProject,
+                visualizationSession, channel, fileSet);
+        return this._read(rootCompositeImages, fileSet, channel);
     }
 
 }

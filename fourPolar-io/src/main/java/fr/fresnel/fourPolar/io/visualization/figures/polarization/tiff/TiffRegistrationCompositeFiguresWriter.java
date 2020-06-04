@@ -2,11 +2,14 @@ package fr.fresnel.fourPolar.io.visualization.figures.polarization.tiff;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
+import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageComposite;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
@@ -33,15 +36,50 @@ public class TiffRegistrationCompositeFiguresWriter implements IRegistrationComp
     }
 
     @Override
-    public void write(File root4PProject, IPolarizationImageSetComposites composites) throws IOException {
-        this._createWriter(composites);
-        int channel = composites.channel();
-        for (RegistrationRule rule : RegistrationRule.values()) {
-            File rulePath = TiffRegistrationCompositeFiguresUtils.getRuleFile(root4PProject, channel, rule);
-            Image<RGB16> compositeImage = composites.getCompositeImage(rule);
+    public void write(File root4PProject, String visualizationSession, IPolarizationImageSetComposites compositeFigures)
+            throws IOException {
+        Objects.requireNonNull(root4PProject);
+        Objects.requireNonNull(visualizationSession);
+        Objects.requireNonNull(compositeFigures);
 
-            this._writer.write(rulePath, compositeImage);
+        int channel = compositeFigures.channel();
+        ICapturedImageFileSet fileSet = compositeFigures.getFileSet().get();
+
+        File rootCompositeImages = TiffRegistrationCompositeFiguresUtils.getRootFolder(root4PProject,
+                visualizationSession, channel, fileSet);
+
+        this._writeRules(rootCompositeImages, compositeFigures);
+    }
+
+    @Override
+    public void writeAsRegistrationComposite(File root4PProject, IPolarizationImageSetComposites compositeFigures)
+            throws IOException {
+        Objects.requireNonNull(root4PProject);
+        Objects.requireNonNull(compositeFigures);
+
+        int channel = compositeFigures.channel();
+        File rootCompositeImages = TiffRegistrationCompositeFiguresUtils
+                .getRootFolderRegistrationComposites(root4PProject, channel);
+
+        this._writeRules(rootCompositeImages, compositeFigures);
+    }
+
+    /**
+     * Write all the rules of this composite to the disk.
+     */
+    private void _writeRules(File rootCompositeImages, IPolarizationImageSetComposites compositeFigures)
+            throws IOException {
+        this._createWriter(compositeFigures);
+        for (RegistrationRule rule : RegistrationRule.values()) {
+            this._writeRule(rootCompositeImages, compositeFigures.getCompositeImage(rule));
         }
+    }
+
+    private void _writeRule(File rootCompositeImages, IPolarizationImageComposite composite) throws IOException {
+        File ruleFile = TiffRegistrationCompositeFiguresUtils.getRuleFile(rootCompositeImages,
+                composite.getRegistrationRule());
+
+        this._writer.write(ruleFile, composite.getImage());
     }
 
     @Override
@@ -55,7 +93,8 @@ public class TiffRegistrationCompositeFiguresWriter implements IRegistrationComp
      * create a new one.
      */
     private void _createWriter(IPolarizationImageSetComposites compositeFigure) {
-        ImageFactory factoryType = compositeFigure.getCompositeImage(RegistrationRule.values()[0]).getFactory();
+        ImageFactory factoryType = compositeFigure.getCompositeImage(RegistrationRule.values()[0]).getImage()
+                .getFactory();
 
         if (factoryType != this._cachedImageType) {
             _writer = TiffImageWriterFactory.getWriter(factoryType, RGB16.zero());
