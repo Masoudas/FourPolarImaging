@@ -42,10 +42,10 @@ public class PathFactoryOfProject {
     private static File _folder_orientationImagesPath = null;
 
     /**
-     * The folder that holds the processed (bead) images of the project.
+     * The folder that holds the processed registration images of the project.
      */
-    private static String _FOLDER_PROCCESSED_BEAD_IMAGES = "1_ProcessedBeadImages";
-    private static File _FOLDER_PROCCESSED_BEAD_IMAGES_PATH = null;
+    private static String _FOLDER_PROCCESSED_REGISTRATION_IMAGES = "1_ProcessedRegistrationImages";
+    private static File _FOLDER_PROCCESSED_REGISTRATION_IMAGES_PATH = null;
 
     /**
      * Creates and returns the 4Polar folder inside root4PProject.
@@ -138,19 +138,19 @@ public class PathFactoryOfProject {
      * @param root4PProject is the location of the 4Polar folder.
      * @return
      */
-    public static File getFolder_ProcessedBeadImages(File root4PProject) {
-        if (_FOLDER_PROCCESSED_BEAD_IMAGES_PATH != null) {
-            return _FOLDER_PROCCESSED_BEAD_IMAGES_PATH;
+    public static File getFolder_ProcessedRegistrationImages(File root4PProject) {
+        if (_FOLDER_PROCCESSED_REGISTRATION_IMAGES_PATH != null) {
+            return _FOLDER_PROCCESSED_REGISTRATION_IMAGES_PATH;
         }
 
-        _FOLDER_PROCCESSED_BEAD_IMAGES_PATH = new File(getFolder_4Polar(root4PProject).getAbsolutePath(),
-                _FOLDER_PROCCESSED_BEAD_IMAGES);
+        _FOLDER_PROCCESSED_REGISTRATION_IMAGES_PATH = new File(getFolder_4Polar(root4PProject).getAbsolutePath(),
+                _FOLDER_PROCCESSED_REGISTRATION_IMAGES);
 
-        if (!_FOLDER_PROCCESSED_BEAD_IMAGES_PATH.exists()) {
-            _FOLDER_PROCCESSED_BEAD_IMAGES_PATH.mkdirs();
+        if (!_FOLDER_PROCCESSED_REGISTRATION_IMAGES_PATH.exists()) {
+            _FOLDER_PROCCESSED_REGISTRATION_IMAGES_PATH.mkdirs();
         }
 
-        return _FOLDER_PROCCESSED_BEAD_IMAGES_PATH;
+        return _FOLDER_PROCCESSED_REGISTRATION_IMAGES_PATH;
     }
 
 }
