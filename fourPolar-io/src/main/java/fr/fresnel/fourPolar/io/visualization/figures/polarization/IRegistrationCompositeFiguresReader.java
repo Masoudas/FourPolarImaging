@@ -34,7 +34,7 @@ public interface IRegistrationCompositeFiguresReader {
      * @throws IOException
      */
     public IPolarizationImageSetComposites read(File root4PProject, String visualizationSession,
-            ICapturedImageFileSet fileSet) throws IOException;
+            int channel, ICapturedImageFileSet fileSet) throws IOException;
 
     /**
      * Close all resources associated with this reader.
