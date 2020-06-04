@@ -28,7 +28,7 @@ public class TiffPolarizationImageSetWriter implements IPolarizationImageSetWrit
      * @param imageSet
      * @throws NoWriterFoundForImage
      */
-    public TiffPolarizationImageSetWriter(IPolarizationImageSet imageSet) throws NoWriterFoundForImage {
+    public TiffPolarizationImageSetWriter(IPolarizationImageSet imageSet) {
         this._writer = TiffImageWriterFactory.getWriter(imageSet.getPolarizationImage(Polarization.pol0).getImage(),
                 UINT16.zero());
     }

@@ -29,7 +29,7 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
      * @param image
      * @throws NoWriterFoundForImage
      */
-    public TiffOrientationImageWriter(IOrientationImage image) throws NoWriterFoundForImage {
+    public TiffOrientationImageWriter(IOrientationImage image) {
         _writer = TiffImageWriterFactory.getWriter(image.getAngleImage(OrientationAngle.rho).getImage(),
                 Float32.zero());
     }

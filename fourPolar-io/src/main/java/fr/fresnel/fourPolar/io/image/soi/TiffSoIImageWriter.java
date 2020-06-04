@@ -19,7 +19,7 @@ import fr.fresnel.fourPolar.io.image.soi.file.TiffSoIImageFile;
 public class TiffSoIImageWriter implements ISoIImageWriter {
     final private ImageWriter<UINT16> _writer;
 
-    public TiffSoIImageWriter(ISoIImage soiImage) throws NoWriterFoundForImage {
+    public TiffSoIImageWriter(ISoIImage soiImage) {
         this._writer = TiffImageWriterFactory.getWriter(soiImage.getImage(), UINT16.zero());
     }
 

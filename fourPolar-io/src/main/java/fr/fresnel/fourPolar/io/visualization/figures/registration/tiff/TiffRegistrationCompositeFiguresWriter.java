@@ -18,7 +18,7 @@ import fr.fresnel.fourPolar.io.visualization.figures.registration.IRegistrationC
  * write the tiff composite images.
  */
 public class TiffRegistrationCompositeFiguresWriter implements IRegistrationCompositeFiguresWriter {
-    final private ImageWriter<RGB16> _writer;
+    private ImageWriter<RGB16> _writer;
 
     /**
      * Initialize the writer for the provided type of composites. The same class can
