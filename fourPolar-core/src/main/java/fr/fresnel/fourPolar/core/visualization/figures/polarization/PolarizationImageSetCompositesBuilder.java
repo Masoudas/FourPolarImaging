@@ -28,7 +28,7 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
     /**
      * Set the composite image of the given registration rule.
      */
-    public PolarizationImageSetCompositesBuilder setCompositeImage(RegistrationRule rule, Image<RGB16> image) {
+    public PolarizationImageSetCompositesBuilder compositeImage(RegistrationRule rule, Image<RGB16> image) {
         Objects.requireNonNull(rule);
         Objects.requireNonNull(image);
 
@@ -37,14 +37,14 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
         return this;
     }
 
-    public PolarizationImageSetCompositesBuilder setChannel(int channel) {
+    public PolarizationImageSetCompositesBuilder channel(int channel) {
         ChannelUtils.checkChannel(channel, this._numChannels);
 
         this._channel = channel;
         return this;
     }
 
-    public PolarizationImageSetCompositesBuilder setFileSet(ICapturedImageFileSet fileSet) {
+    public PolarizationImageSetCompositesBuilder fileSet(ICapturedImageFileSet fileSet) {
         Objects.requireNonNull(fileSet);
 
         this._fileSet = fileSet;

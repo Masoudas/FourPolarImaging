@@ -80,11 +80,10 @@ public class TiffPolarizationImageSetCompositesReader implements IPolarizationIm
 
     private void _buildCompositionSet(ICapturedImageFileSet fileSet, int channel,
             HashMap<RegistrationRule, Image<RGB16>> compositeFigures) {
-        this._compositeSetBuilder.setChannel(channel);
-        this._compositeSetBuilder.setFileSet(fileSet);
+        this._compositeSetBuilder.channel(channel).fileSet(fileSet);
 
         for (RegistrationRule rule : RegistrationRule.values()) {
-            this._compositeSetBuilder.setCompositeImage(rule, compositeFigures.get(rule));
+            this._compositeSetBuilder.compositeImage(rule, compositeFigures.get(rule));
         }
     }
 
