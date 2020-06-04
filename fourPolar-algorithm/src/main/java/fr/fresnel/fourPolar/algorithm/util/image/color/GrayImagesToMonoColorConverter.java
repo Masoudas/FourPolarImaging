@@ -7,8 +7,10 @@ import fr.fresnel.fourPolar.algorithm.util.image.stats.ImageStatistics;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
+import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2RandomAccessConverter;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
@@ -30,38 +32,26 @@ import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 /**
- * Merge two single color images
+ * Returns a mono color view of a gray scale image.
  */
-class GrayImagesToMonoColorMerger {
-    public GrayImagesToMonoColorMerger() {
+class GrayImagesToMonoColorConverter {
+    public GrayImagesToMonoColorConverter() {
         new AssertionError();
     }
 
-    public static Image<RGB16> convert(Image<UINT16> image1, Color color1, Image<UINT16> image2, Color color2) {
-        Objects.requireNonNull(image1);
-        Objects.requireNonNull(image2);
-        Objects.requireNonNull(color1);
-        Objects.requireNonNull(color2);
+    public static IPixelRandomAccess<RGB16> convert(Image<UINT16> image, Color color) {
+        Objects.requireNonNull(image);
+        Objects.requireNonNull(color);
 
-        MetadataUtil.isAxisOrderEqual(image1.getMetadata(), image2.getMetadata());
-        MetadataUtil.isDimensionEqual(image1.getMetadata(), image2.getMetadata());
-
-        RandomAccess<ARGBType> image1AsARGB = _createMonoColorCopy(image1, color1);
-        RandomAccess<ARGBType> image2AsARGB = _createMonoColorCopy(image2, color2);
-
-        Image<RGB16> monochromeImage = _createOutputRGBImage(image1);
-        _fillMonochromImage(monochromeImage, image1AsARGB, image2AsARGB);
-
-        return monochromeImage;
-    }
-
-    private static RandomAccess<ARGBType> _createMonoColorCopy(Image<UINT16> image, Color color) {
-        Channel channelColor = _getImgLib2ColorChannel(color);
+        Channel imageColor = _getImgLib2ColorChannel(color);
 
         RandomAccessible<UnsignedByteType> unsignedByteImgRA = _getUnsignedByteImage(image);
 
-        Converter<UnsignedByteType, ARGBType> toColorConverter = new ChannelARGBConverter(channelColor);
-        return Converters.convert(unsignedByteImgRA, toColorConverter, new ARGBType()).randomAccess();
+        Converter<UnsignedByteType, ARGBType> toColorConverter = new ChannelARGBConverter(imageColor);
+        RandomAccess<ARGBType> monochromeImageView = Converters
+                .convert(unsignedByteImgRA, toColorConverter, new ARGBType()).randomAccess();
+
+        return ImgLib2RandomAccessConverter.convertARGBType(monochromeImageView);
     }
 
     public static RandomAccessible<UnsignedByteType> _getUnsignedByteImage(final Image<UINT16> uint16Image) {
@@ -123,29 +113,4 @@ class GrayImagesToMonoColorMerger {
 
     }
 
-    private static Image<RGB16> _createOutputRGBImage(Image<UINT16> image) {
-        IMetadata metadata = new Metadata.MetadataBuilder(image.getMetadata()).bitPerPixel(PixelTypes.RGB_16).build();
-
-        return image.getFactory().create(metadata, RGB16.zero());
-    }
-
-    private static void _fillMonochromImage(Image<RGB16> monochromImage, RandomAccess<ARGBType> raImage1RGB,
-            RandomAccess<ARGBType> raImage2RGB) {
-        for (IPixelCursor<RGB16> monochromeCursor = monochromImage.getCursor(); monochromeCursor.hasNext();) {
-            IPixel<RGB16> pixel = monochromeCursor.next();
-            final long[] position = monochromeCursor.localize();
-
-            raImage1RGB.setPosition(position);
-            raImage2RGB.setPosition(position);
-
-            ARGBType sumColors = raImage1RGB.get();
-            sumColors.add(raImage2RGB.get());
-
-            pixel.value().set(ARGBType.red(sumColors.get()), ARGBType.green(sumColors.get()),
-                    ARGBType.blue(sumColors.get()));
-
-            monochromeCursor.setPixel(pixel);
-
-        }
-    }
 }
