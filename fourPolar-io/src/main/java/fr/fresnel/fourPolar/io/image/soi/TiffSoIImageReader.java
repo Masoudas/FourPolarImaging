@@ -10,7 +10,6 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.image.soi.SoIImage;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
@@ -24,7 +23,7 @@ public class TiffSoIImageReader implements ISoIImageReader {
     final private ImageReader<UINT16> _reader;
     final private int _numChannels;
 
-    public TiffSoIImageReader(ImageFactory factory, int numChannels) throws NoReaderFoundForImage {
+    public TiffSoIImageReader(ImageFactory factory, int numChannels) {
         this._reader = TiffImageReaderFactory.getReader(factory, UINT16.zero());
         this._numChannels = numChannels;
     }

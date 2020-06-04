@@ -11,7 +11,6 @@ import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.registration.IRegistrationCompositeFigures;
 import fr.fresnel.fourPolar.core.visualization.figures.registration.RegistrationCompositeFigures;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
@@ -32,7 +31,7 @@ public class TiffRegistrationCompositeFiguresReader implements IRegistrationComp
      * @param factory
      * @throws NoReaderFoundForImage
      */
-    public TiffRegistrationCompositeFiguresReader(ImageFactory factory, int numChannels) throws NoReaderFoundForImage {
+    public TiffRegistrationCompositeFiguresReader(ImageFactory factory, int numChannels) {
         Objects.requireNonNull(factory);
         ChannelUtils.checkNumChannelsNonZero(numChannels);
 

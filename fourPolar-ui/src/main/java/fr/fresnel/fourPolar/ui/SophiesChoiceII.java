@@ -123,13 +123,9 @@ public class SophiesChoiceII {
     private static SoIImage readSoIImage(final File rhoFile) throws IOException {
         ImageReader<UINT16> reader;
         SoIImage soiImage = null;
-        try {
-            reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), UINT16.zero());
-            final Image<UINT16> soi = reader.read(rhoFile);
-            soiImage = new SoIImage(new CapturedImageFileSet(1, new File("1.tif")), soi);
-
-        } catch (final NoReaderFoundForImage e) {
-        }
+        reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), UINT16.zero());
+        final Image<UINT16> soi = reader.read(rhoFile);
+        soiImage = new SoIImage(new CapturedImageFileSet(1, new File("1.tif")), soi);
 
         return soiImage;
     }

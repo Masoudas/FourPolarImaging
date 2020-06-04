@@ -2,7 +2,6 @@ package fr.fresnel.fourPolar.io.image.captured;
 
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageSet;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 

@@ -4,7 +4,6 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOFloat32TiffReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIORGB16TiffReader;
@@ -21,12 +20,13 @@ public class TiffImageReaderFactory {
      * 
      * @param <T>     is the {@code PixelType}
      * @param factory is the factory for {@code Image}
+     * 
+     * @throws IllegalArgumentException in case no reader is found for the given
+     *                                  image type.
      * @return
-     * @throws NoReaderFoundForImage
      */
     @SuppressWarnings("unchecked")
-    public static <T extends PixelType> ImageReader<T> getReader(ImageFactory factory, T pixelType)
-            throws NoReaderFoundForImage {
+    public static <T extends PixelType> ImageReader<T> getReader(ImageFactory factory, T pixelType) {
         ImageReader<T> reader;
 
         if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.UINT_16) {
@@ -37,7 +37,7 @@ public class TiffImageReaderFactory {
             // TODO: Which reader here?
             reader = (ImageReader<T>) new SCIFIORGB16TiffReader((ImgLib2ImageFactory) factory);
         } else {
-            throw new NoReaderFoundForImage();
+            throw new IllegalArgumentException("No reader was found for the given image type.");
         }
 
         return reader;

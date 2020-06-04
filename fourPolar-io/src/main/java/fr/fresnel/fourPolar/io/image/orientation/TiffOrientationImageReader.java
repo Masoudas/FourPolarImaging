@@ -15,7 +15,6 @@ import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
@@ -38,7 +37,7 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
      * @param factory
      * @throws NoReaderFoundForImage
      */
-    public TiffOrientationImageReader(ImageFactory factory, int numChannels) throws NoReaderFoundForImage {
+    public TiffOrientationImageReader(ImageFactory factory, int numChannels) {
         _reader = TiffImageReaderFactory.getReader(factory, Float32.zero());
         _numChannels = numChannels;
     }

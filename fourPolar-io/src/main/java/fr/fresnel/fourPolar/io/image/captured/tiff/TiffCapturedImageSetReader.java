@@ -10,7 +10,6 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
@@ -27,9 +26,8 @@ public class TiffCapturedImageSetReader implements ICapturedImageSetReader {
      * Used for reading a (16 bit tiff) captured images. An instance of this object
      * is enough to read several images.
      * 
-     * @throws NoReaderFoundForImage
      */
-    public TiffCapturedImageSetReader(ImageFactory factory) throws NoReaderFoundForImage {
+    public TiffCapturedImageSetReader(ImageFactory factory) {
         _reader = TiffImageReaderFactory.getReader(factory, UINT16.zero());
     }
 

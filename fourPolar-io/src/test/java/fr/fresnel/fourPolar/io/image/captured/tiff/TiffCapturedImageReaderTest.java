@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
-import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageSet;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
@@ -22,12 +21,7 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
-import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
-import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageSetReader;
-import fr.fresnel.fourPolar.io.image.captured.tiff.checker.TiffCapturedImageChecker;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 
 public class TiffCapturedImageReaderTest {
@@ -39,9 +33,8 @@ public class TiffCapturedImageReaderTest {
     }
 
     @Test
-    public void read_OneCamOneSingleChannel_ShouldShowImage()
-            throws IllegalArgumentException, IOException, InterruptedException, KeyException, IncompatibleCapturedImage,
-            NoReaderFoundForImage, ConverterToImgLib2NotFound {
+    public void read_OneCamOneSingleChannel_ShouldShowImage() throws IllegalArgumentException, IOException,
+            InterruptedException, KeyException, IncompatibleCapturedImage, ConverterToImgLib2NotFound {
         final File pol0_45_90_135 = new File(_testResource, "OneCam.tif");
         ImageFactory factory = new ImgLib2ImageFactory();
 

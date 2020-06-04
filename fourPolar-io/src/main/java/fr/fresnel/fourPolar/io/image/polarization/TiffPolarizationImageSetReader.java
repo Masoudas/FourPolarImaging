@@ -14,7 +14,6 @@ import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSetBuilder;
 import fr.fresnel.fourPolar.io.image.polarization.file.IPolarizationImageFileSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
@@ -35,7 +34,7 @@ public class TiffPolarizationImageSetReader implements IPolarizationImageSetRead
      * @param factory
      * @throws NoReaderFoundForImage
      */
-    public TiffPolarizationImageSetReader(ImageFactory factory, int numChannels) throws NoReaderFoundForImage {
+    public TiffPolarizationImageSetReader(ImageFactory factory, int numChannels) {
         this._reader = TiffImageReaderFactory.getReader(factory, UINT16.zero());
         this._numChannels = numChannels;
     }
