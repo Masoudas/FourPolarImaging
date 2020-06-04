@@ -56,7 +56,7 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
 
         PolarizationImageSetComposites composites = new PolarizationImageSetComposites(this);
 
-        _resetBuilder();
+        this._resetBuilder();
 
         return composites;
     }
@@ -70,13 +70,6 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
     private void _checkAllBuildParamsAreGiven() {
         this._checkAllCompositesAreGiven();
         this._checkChannelIsGiven();
-        this._checkFileSetIsGiven();
-    }
-
-    private void _checkFileSetIsGiven() {
-        if (this._fileSet == null) {
-            throw new IllegalArgumentException("A file set has not been provided for the composite.");
-        }
     }
 
     private void _checkAllCompositesAreGiven() {

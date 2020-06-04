@@ -1,12 +1,9 @@
 package fr.fresnel.fourPolar.core.visualization.figures.polarization;
 
 import java.util.HashMap;
-import java.util.Objects;
+import java.util.Optional;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
-import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
-import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 
 /**
@@ -45,8 +42,8 @@ public class PolarizationImageSetComposites implements IPolarizationImageSetComp
     }
 
     @Override
-    public ICapturedImageFileSet getFileSet() {
-        return this._fileSet;
+    public Optional<ICapturedImageFileSet> getFileSet() {
+        return Optional.of(this._fileSet);
     }
 
 }

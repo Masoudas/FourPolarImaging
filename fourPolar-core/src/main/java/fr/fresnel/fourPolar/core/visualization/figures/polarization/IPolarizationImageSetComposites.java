@@ -1,8 +1,8 @@
 package fr.fresnel.fourPolar.core.visualization.figures.polarization;
 
+import java.util.Optional;
+
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
-import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 
 /**
@@ -19,7 +19,7 @@ public interface IPolarizationImageSetComposites {
     /**
      * Get the captured file set associated with this composite set.
      */
-    public ICapturedImageFileSet getFileSet();
+    public Optional<ICapturedImageFileSet> getFileSet();
 
     /**
      * Get the composite image corresponding to the given rule.
