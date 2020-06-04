@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.visualization.figures.registration.tiff;
+package fr.fresnel.fourPolar.io.visualization.figures.polarization.tiff;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.polarization.Polarization
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
-import fr.fresnel.fourPolar.io.visualization.figures.registration.IRegistrationCompositeFiguresReader;
+import fr.fresnel.fourPolar.io.visualization.figures.polarization.IRegistrationCompositeFiguresReader;
 
 /**
  * A concrete implementation of {@link IRegistrationCompositeFiguresReader} to

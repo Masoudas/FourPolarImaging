@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.visualization.figures.registration.tiff;
+package fr.fresnel.fourPolar.io.visualization.figures.polarization.tiff;
 
 import java.io.File;
 
@@ -13,7 +13,7 @@ class TiffRegistrationCompositeFiguresUtils {
      * Get the composite associated with this rule.
      */
     public static File getRuleFile(File root4PProject, int channel, RegistrationRule rule) {
-        File rootOfChannel = new File(PathFactoryOfProject.getFolder_ProcessedBeadImages(root4PProject),
+        File rootOfChannel = new File(PathFactoryOfProject.getFolder_ProcessedRegistrationImages(root4PProject),
                 "Channel" + channel);
 
         rootOfChannel.mkdir();

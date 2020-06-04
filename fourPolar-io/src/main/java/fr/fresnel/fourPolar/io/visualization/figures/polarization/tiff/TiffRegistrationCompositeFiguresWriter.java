@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.visualization.figures.registration.tiff;
+package fr.fresnel.fourPolar.io.visualization.figures.polarization.tiff;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
-import fr.fresnel.fourPolar.io.visualization.figures.registration.IRegistrationCompositeFiguresWriter;
+import fr.fresnel.fourPolar.io.visualization.figures.polarization.IRegistrationCompositeFiguresWriter;
 
 /**
  * A concrete implementation of {@link IRegistrationCompositeFiguresWriter} to

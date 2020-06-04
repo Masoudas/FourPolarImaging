@@ -1,8 +1,9 @@
-package fr.fresnel.fourPolar.io.visualization.figures.registration;
+package fr.fresnel.fourPolar.io.visualization.figures.polarization;
 
 import java.io.File;
 import java.io.IOException;
 
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 
 /**
@@ -11,8 +12,8 @@ import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizatio
  */
 public interface IRegistrationCompositeFiguresReader {
     /**
-     * Write the given composites to the folder designated to the processed (bead)
-     * images, as defined by
+     * Read the composites of registration image corresponding to the given channel,
+     * with the path defined by
      * {@link PathFactoryOfProject#getFolder_ProcessedBeadImages}.
      * 
      * @param root4PProject is the location of the 4Polar folder of the project
@@ -22,7 +23,18 @@ public interface IRegistrationCompositeFiguresReader {
      * 
      * @return the composites for the given channel number.
      */
-    public IPolarizationImageSetComposites read(File root4PProject, int channel) throws IOException;
+    public IPolarizationImageSetComposites readRegistrationComposite(File root4PProject, int channel)
+            throws IOException;
+
+    /**
+     * Read the composite corresponding to the given fileSet from the given
+     * visualization session.
+     * 
+     * @return
+     * @throws IOException
+     */
+    public IPolarizationImageSetComposites read(File root4PProject, String visualizationSession,
+            ICapturedImageFileSet fileSet) throws IOException;
 
     /**
      * Close all resources associated with this reader.

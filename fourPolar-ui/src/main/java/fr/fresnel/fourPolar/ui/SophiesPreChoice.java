@@ -57,7 +57,7 @@ import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadataReader;
 import fr.fresnel.fourPolar.io.image.polarization.TiffPolarizationImageSetWriter;
 import fr.fresnel.fourPolar.io.image.soi.TiffSoIImageWriter;
-import fr.fresnel.fourPolar.io.visualization.figures.registration.tiff.TiffRegistrationCompositeFiguresWriter;
+import fr.fresnel.fourPolar.io.visualization.figures.polarization.tiff.TiffRegistrationCompositeFiguresWriter;
 import fr.fresnel.fourPolar.ui.algorithms.preprocess.Preprocessor;
 import fr.fresnel.fourPolar.ui.algorithms.preprocess.SampleImageSetPreprocessor;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOUINT16TiffReader;

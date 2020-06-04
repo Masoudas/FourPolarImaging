@@ -31,7 +31,7 @@ import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.PolarizationImageSetComposites;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
-import fr.fresnel.fourPolar.io.visualization.figures.registration.IRegistrationCompositeFiguresWriter;
+import fr.fresnel.fourPolar.io.visualization.figures.polarization.IRegistrationCompositeFiguresWriter;
 import javassist.tools.reflect.CannotCreateException;
 
 /**
