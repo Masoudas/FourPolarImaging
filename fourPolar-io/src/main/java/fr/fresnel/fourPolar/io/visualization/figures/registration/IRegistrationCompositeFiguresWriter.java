@@ -3,10 +3,10 @@ package fr.fresnel.fourPolar.io.visualization.figures.registration;
 import java.io.File;
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.core.visualization.figures.registration.IRegistrationCompositeFigures;
+import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 
 /**
- * An interface for writing the {@link IRegistrationCompositeFigures} to disk.
+ * An interface for writing the {@link IPolarizationImageSetComposites} to disk.
  */
 public interface IRegistrationCompositeFiguresWriter {
     /**
@@ -18,7 +18,7 @@ public interface IRegistrationCompositeFiguresWriter {
      * @param composites    are the composites of registered to be written to disk.
      * @throws IOException thrown in case of low-level problems.
      */
-    public void write(File root4PProject, IRegistrationCompositeFigures composites) throws IOException;
+    public void write(File root4PProject, IPolarizationImageSetComposites composites) throws IOException;
 
     /**
      * Close all resources associated with this reader.

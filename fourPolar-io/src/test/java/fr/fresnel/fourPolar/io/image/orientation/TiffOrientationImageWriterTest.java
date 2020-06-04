@@ -8,14 +8,11 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
-import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
-import fr.fresnel.fourPolar.core.image.orientation.OrientationImage;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
 import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageFileSet;
 
 public class TiffOrientationImageWriterTest {
@@ -24,7 +21,7 @@ public class TiffOrientationImageWriterTest {
 
     @Test
     public void write_ImgLib2ORientationImage_WritesIntoTheTargetFolder()
-            throws CannotFormOrientationImage, NoWriterFoundForImage, IOException {
+            throws CannotFormOrientationImage, IOException {
         File pol0_45_90_135_File = new File(_root, "testFile.tif");
 
         CapturedImageFileSet fileSet = new CapturedImageFileSet(
@@ -37,7 +34,7 @@ public class TiffOrientationImageWriterTest {
 
         IOrientationImage imageSet = new OrientationImage(fileSet, rho, delta, eta);
 
-        IOrientationImageWriter writer = new TiffOrientationImageWriter(imageSet);
+        IOrientationImageWriter writer = new TiffOrientationImageWriter();
         writer.write(_root, imageSet);    
 
         TiffOrientationImageFileSet fSet = new TiffOrientationImageFileSet(_root, fileSet);

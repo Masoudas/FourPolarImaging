@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
-import fr.fresnel.fourPolar.core.visualization.figures.registration.IRegistrationCompositeFigures;
+import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
 import fr.fresnel.fourPolar.io.visualization.figures.registration.IRegistrationCompositeFiguresWriter;
@@ -33,7 +33,7 @@ public class TiffRegistrationCompositeFiguresWriter implements IRegistrationComp
     }
 
     @Override
-    public void write(File root4PProject, IRegistrationCompositeFigures composites) throws IOException {
+    public void write(File root4PProject, IPolarizationImageSetComposites composites) throws IOException {
         this._createWriter(composites);
         int channel = composites.channel();
         for (RegistrationRule rule : RegistrationRule.values()) {
@@ -54,7 +54,7 @@ public class TiffRegistrationCompositeFiguresWriter implements IRegistrationComp
      * If image type has not changed, use the previous writer instance. Otherwise,
      * create a new one.
      */
-    private void _createWriter(IRegistrationCompositeFigures compositeFigure) {
+    private void _createWriter(IPolarizationImageSetComposites compositeFigure) {
         ImageFactory factoryType = compositeFigure.getCompositeImage(RegistrationRule.values()[0]).getFactory();
 
         if (factoryType != this._cachedImageType) {

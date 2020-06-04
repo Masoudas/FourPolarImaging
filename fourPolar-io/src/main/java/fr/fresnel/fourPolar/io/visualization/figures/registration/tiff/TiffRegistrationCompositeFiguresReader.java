@@ -9,8 +9,8 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
-import fr.fresnel.fourPolar.core.visualization.figures.registration.IRegistrationCompositeFigures;
-import fr.fresnel.fourPolar.core.visualization.figures.registration.RegistrationCompositeFigures;
+import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
+import fr.fresnel.fourPolar.core.visualization.figures.polarization.PolarizationImageSetComposites;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
@@ -40,9 +40,9 @@ public class TiffRegistrationCompositeFiguresReader implements IRegistrationComp
     }
 
     @Override
-    public IRegistrationCompositeFigures read(File root4PProject, int channel) throws IOException {
+    public IPolarizationImageSetComposites read(File root4PProject, int channel) throws IOException {
         ChannelUtils.checkChannel(channel, this._numChannels);
-        IRegistrationCompositeFigures compositeFigures = new RegistrationCompositeFigures(channel);
+        IPolarizationImageSetComposites compositeFigures = new PolarizationImageSetComposites(channel);
 
         try {
             for (RegistrationRule rule : RegistrationRule.values()) {

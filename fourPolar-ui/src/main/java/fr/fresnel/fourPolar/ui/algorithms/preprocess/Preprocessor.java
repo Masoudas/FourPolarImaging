@@ -28,8 +28,8 @@ import fr.fresnel.fourPolar.core.preprocess.PreprocessResult;
 import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackground;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
-import fr.fresnel.fourPolar.core.visualization.figures.registration.IRegistrationCompositeFigures;
-import fr.fresnel.fourPolar.core.visualization.figures.registration.RegistrationCompositeFigures;
+import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
+import fr.fresnel.fourPolar.core.visualization.figures.polarization.PolarizationImageSetComposites;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.visualization.figures.registration.IRegistrationCompositeFiguresWriter;
 import javassist.tools.reflect.CannotCreateException;
@@ -194,7 +194,7 @@ public class Preprocessor {
                 preprocessResult.setDarkBackground(channel, darkBackground);
 
                 this._realignChannel(polarizationImageSet, registrationResult);
-                IRegistrationCompositeFigures compositeFigures = this
+                IPolarizationImageSetComposites compositeFigures = this
                         ._createChannelCompositeImages(polarizationImageSet);
                 this._writeChannelCompositeImages(compositeFigures);
             }
@@ -209,8 +209,8 @@ public class Preprocessor {
         channelRealigner.realign(polImageSet);
     }
 
-    private IRegistrationCompositeFigures _createChannelCompositeImages(IPolarizationImageSet polImageSet) {
-        RegistrationCompositeFigures compositeFigures = new RegistrationCompositeFigures(polImageSet.channel());
+    private IPolarizationImageSetComposites _createChannelCompositeImages(IPolarizationImageSet polImageSet) {
+        PolarizationImageSetComposites compositeFigures = new PolarizationImageSetComposites(polImageSet.channel());
 
         RegistrationCompositeFigureCreator creator = new RegistrationCompositeFigureCreator(compositeFigures,
                 this._compositeBaseImageColor, this._compositeImageToRegisterColor);
@@ -226,7 +226,7 @@ public class Preprocessor {
 
     }
 
-    private void _writeChannelCompositeImages(IRegistrationCompositeFigures compositeFigures) throws IOException {
+    private void _writeChannelCompositeImages(IPolarizationImageSetComposites compositeFigures) throws IOException {
         IRegistrationCompositeFiguresWriter writer = this._compositeWriters[compositeFigures.channel() - 1];
 
         writer.write(this._root4PProject, compositeFigures);

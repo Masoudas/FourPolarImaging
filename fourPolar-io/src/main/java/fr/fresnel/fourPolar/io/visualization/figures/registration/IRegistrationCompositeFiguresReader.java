@@ -3,10 +3,10 @@ package fr.fresnel.fourPolar.io.visualization.figures.registration;
 import java.io.File;
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.core.visualization.figures.registration.IRegistrationCompositeFigures;
+import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 
 /**
- * An interface for reading the {@link IRegistrationCompositeFigures} from the
+ * An interface for reading the {@link IPolarizationImageSetComposites} from the
  * disk.
  */
 public interface IRegistrationCompositeFiguresReader {
@@ -22,7 +22,7 @@ public interface IRegistrationCompositeFiguresReader {
      * 
      * @return the composites for the given channel number.
      */
-    public IRegistrationCompositeFigures read(File root4PProject, int channel) throws IOException;
+    public IPolarizationImageSetComposites read(File root4PProject, int channel) throws IOException;
 
     /**
      * Close all resources associated with this reader.

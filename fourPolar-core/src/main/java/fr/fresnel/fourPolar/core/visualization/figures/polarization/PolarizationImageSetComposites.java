@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.visualization.figures.registration;
+package fr.fresnel.fourPolar.core.visualization.figures.polarization;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -8,11 +8,11 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 
-public class RegistrationCompositeFigures implements IRegistrationCompositeFigures {
+public class PolarizationImageSetComposites implements IPolarizationImageSetComposites {
     private final int _channel;
     private final HashMap<RegistrationRule, Image<RGB16>> _compositeImages;
 
-    public RegistrationCompositeFigures(int channel) {
+    public PolarizationImageSetComposites(int channel) {
         ChannelUtils.checkChannelNumberIsNonZero(channel);
 
         this._channel = channel;

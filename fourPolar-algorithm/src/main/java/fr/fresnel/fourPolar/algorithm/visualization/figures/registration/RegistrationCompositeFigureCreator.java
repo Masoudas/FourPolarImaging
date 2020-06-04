@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
-import fr.fresnel.fourPolar.core.visualization.figures.registration.IRegistrationCompositeFigures;
+import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 
 /**
  * Using this class, we can create a composite figure
@@ -18,7 +18,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.registration.IRegistratio
 public class RegistrationCompositeFigureCreator {
     private final Color _baseImageColor;
     private final Color _registeredImageColor;
-    private final IRegistrationCompositeFigures _compositeFigures;
+    private final IPolarizationImageSetComposites _compositeFigures;
 
     /**
      * Define compisition image creator by assigning colors to base and registered
@@ -29,7 +29,7 @@ public class RegistrationCompositeFigureCreator {
      * @param registeredImageColor is the color to be used for the registered image
      *                             of every rule.
      */
-    public RegistrationCompositeFigureCreator(IRegistrationCompositeFigures compositeFigures, Color baseImageColor,
+    public RegistrationCompositeFigureCreator(IPolarizationImageSetComposites compositeFigures, Color baseImageColor,
             Color registeredImageColor) {
         _baseImageColor = baseImageColor;
         _registeredImageColor = registeredImageColor;

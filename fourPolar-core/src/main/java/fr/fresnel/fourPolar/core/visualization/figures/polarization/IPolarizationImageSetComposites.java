@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.visualization.figures.registration;
+package fr.fresnel.fourPolar.core.visualization.figures.polarization;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
  * registered image together with the base image, using to different colors, for
  * each {@link RegstrationOrder}, for a given channel.
  */
-public interface IRegistrationCompositeFigures {
+public interface IPolarizationImageSetComposites {
     /**
      * The channel number the composite figures belong to.
      */
