@@ -5,7 +5,6 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.ImageJ1.ImageJ1RGB16TiffWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOFloat32TiffWriter;
@@ -22,8 +21,7 @@ public class TiffImageWriterFactory {
      * 
      */
     @SuppressWarnings("unchecked")
-    public static <T extends PixelType> ImageWriter<T> getWriter(Image<T> image, T pixelType)
-            throws NoWriterFoundForImage {
+    public static <T extends PixelType> ImageWriter<T> getWriter(Image<T> image, T pixelType) {
         ImageWriter<T> writer;
 
         if (image.getFactory() instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.UINT_16) {
@@ -33,7 +31,7 @@ public class TiffImageWriterFactory {
         } else if (image instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.RGB_16) {
             writer = (ImageWriter<T>) new ImageJ1RGB16TiffWriter();
         } else {
-            throw new NoWriterFoundForImage();
+            throw new IllegalArgumentException("No writer was found for the given image type.");
         }
 
         return writer;
@@ -45,8 +43,7 @@ public class TiffImageWriterFactory {
      * 
      */
     @SuppressWarnings("unchecked")
-    public static <T extends PixelType> ImageWriter<T> getWriter(ImageFactory factory, T pixelType)
-            throws NoWriterFoundForImage {
+    public static <T extends PixelType> ImageWriter<T> getWriter(ImageFactory factory, T pixelType) {
         ImageWriter<T> writer;
 
         if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.UINT_16) {
@@ -56,7 +53,7 @@ public class TiffImageWriterFactory {
         } else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.RGB_16) {
             writer = (ImageWriter<T>) new ImageJ1RGB16TiffWriter();
         } else {
-            throw new NoWriterFoundForImage();
+            throw new IllegalArgumentException("No writer was found for the given image type.");
         }
 
         return writer;
