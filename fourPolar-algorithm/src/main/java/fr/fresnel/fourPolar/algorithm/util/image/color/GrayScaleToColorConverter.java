@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.algorithm.util.image.color;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
+import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RealType;
@@ -33,16 +34,14 @@ public class GrayScaleToColorConverter {
     }
 
     /**
-     * Merge to images, by coloring each image with a single color from
-     * {@link Color}.
+     * Returns a mono color view of the given image. Note that no new image instance
+     * is created with this method.
      * 
-     * @param image1 is the first image.
-     * @param color1 is the mono color for image 1.
-     * @param image2 is the second image.
-     * @param color2 is the mono color for image 1.
-     * @return is the merged colord images.
+     * @param image is the first image.
+     * @param color is the mono color for image 1.
+     * @return a random accessible mono color view of the gray image.
      */
-    public static Image<RGB16> mergeAsMonoColor(Image<UINT16> image1, Color color1, Image<UINT16> image2, Color color2) {
-        return GrayImagesToMonoColorMerger.convert(image1, color1, image2, color2);
+    public static IPixelRandomAccess<RGB16> createMonochromeView(Image<UINT16> image, Color color) {
+        return GrayImagesToMonoColorConverter.convert(image, color);
     }
 }
