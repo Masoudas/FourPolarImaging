@@ -47,6 +47,9 @@ public class PathFactoryOfProject {
     private static String _FOLDER_PROCCESSED_REGISTRATION_IMAGES = "1_ProcessedRegistrationImages";
     private static File _FOLDER_PROCCESSED_REGISTRATION_IMAGES_PATH = null;
 
+    private static String _FOLDER_VISUALIZATION = "3_Visualization";
+    private static File _FOLDER_VISUALIZATION_PATH = null;
+
     /**
      * Creates and returns the 4Polar folder inside root4PProject.
      * 
@@ -151,6 +154,27 @@ public class PathFactoryOfProject {
         }
 
         return _FOLDER_PROCCESSED_REGISTRATION_IMAGES_PATH;
+    }
+
+        /**
+     * Returns the folder that would contain the visualization sessions.
+     * 
+     * @param root4PProject is the location of the 4Polar folder.
+     * @return
+     */
+    public static File getFolder_Visualization(File root4PProject) {
+        if (_FOLDER_VISUALIZATION_PATH != null) {
+            return _FOLDER_VISUALIZATION_PATH;
+        }
+
+        _FOLDER_VISUALIZATION_PATH = new File(getFolder_4Polar(root4PProject).getAbsolutePath(),
+                _FOLDER_VISUALIZATION);
+
+        if (!_FOLDER_VISUALIZATION_PATH.exists()) {
+            _FOLDER_VISUALIZATION_PATH.mkdirs();
+        }
+
+        return _FOLDER_VISUALIZATION_PATH;
     }
 
 }
