@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.visualization.figures.polarization;
 
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
@@ -16,12 +17,12 @@ public interface IPolarizationImageSetComposites {
     public int channel();
 
     /**
-     * Set the composite image corresponding to the given rule.
+     * Get the captured file set associated with this composite set.
      */
-    public void setCompositeImage(RegistrationRule rule, Image<RGB16> compositeImage);
+    public ICapturedImageFileSet getFileSet();
 
     /**
      * Get the composite image corresponding to the given rule.
      */
-    public Image<RGB16> getCompositeImage(RegistrationRule rule);
+    public IPolarizationImageComposite getCompositeImage(RegistrationRule rule);
 }
