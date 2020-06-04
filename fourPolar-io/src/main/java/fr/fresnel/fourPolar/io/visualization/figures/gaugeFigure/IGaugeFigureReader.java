@@ -19,13 +19,15 @@ public interface IGaugeFigureReader {
      *                             project {@see PathFactoryOfProject}.
      * @param visualizationSession is the name of the visualization session to which
      *                             this gauge figure belong.
+     * @param channel              is the channel number of this image.
      * @param capturedImageFileSet is the captured image set to which this gauge
      *                             figure belong.
      * @throws IOException thrown in case of low-level problems.
      * 
      * @return the composites for the given channel number.
      */
-    public IGaugeFigure read(File root4PProject, String visualizationSession, ICapturedImageFileSet capturedImageFileSet);
+    public IGaugeFigure read(File root4PProject, String visualizationSession, int channel,
+            ICapturedImageFileSet capturedImageFileSet);
 
     /**
      * Close all resources associated with the reader.
