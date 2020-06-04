@@ -34,6 +34,15 @@ public class ChannelUtils {
 	        throw new IllegalArgumentException("Channel does not exist.");
 	    }
 	    
-	}
+    }
+    
+    /**
+     * Returns "Channel " + channel.
+     */
+    public static String channelAsString(int channel) {
+        ChannelUtils.checkChannelNumberIsNonZero(channel);
+        return "Channel " + channel;
+        
+    }
 
 }
