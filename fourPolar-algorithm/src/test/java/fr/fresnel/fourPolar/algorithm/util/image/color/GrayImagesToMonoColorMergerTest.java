@@ -27,7 +27,7 @@ public class GrayImagesToMonoColorMergerTest {
         _setPixel(image1, new long[] { 0, 0 }, UINT16.MAX_VAL);
         _setPixel(image2, new long[] { 0, 0 }, UINT16.MAX_VAL);
 
-        Image<RGB16> monochromeImage = GrayImagesToMonoColorMerger.convert(image1, Color.Red, image2, Color.Green);
+        Image<RGB16> monochromeImage = GrayImagesToMonoColorConverter.convert(image1, Color.Red, image2, Color.Green);
         RGB16 color = _getPixel(monochromeImage, new long[] { 0, 0 });
 
         assertTrue(color.getB() == 0 && color.getG() == 255 && color.getR() == 255);
@@ -53,7 +53,7 @@ public class GrayImagesToMonoColorMergerTest {
         _setPixel(image1, position2, UINT16.MAX_VAL);
         _setPixel(image2, position2, UINT16.MAX_VAL);
 
-        Image<RGB16> monochromeImage = GrayImagesToMonoColorMerger.convert(image1, Color.Red, image2, Color.Blue);
+        Image<RGB16> monochromeImage = GrayImagesToMonoColorConverter.convert(image1, Color.Red, image2, Color.Blue);
         RGB16 color0 = _getPixel(monochromeImage, position0);
         RGB16 color1 = _getPixel(monochromeImage, position1);
         RGB16 color2 = _getPixel(monochromeImage, position2);
