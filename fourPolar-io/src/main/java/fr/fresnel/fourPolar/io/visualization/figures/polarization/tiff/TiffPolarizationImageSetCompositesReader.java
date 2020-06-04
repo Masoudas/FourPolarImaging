@@ -12,19 +12,17 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
-import fr.fresnel.fourPolar.core.visualization.figures.polarization.PolarizationImageSetComposites;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.PolarizationImageSetCompositesBuilder;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
-import fr.fresnel.fourPolar.io.image.polarization.file.IPolarizationImageFileSet;
-import fr.fresnel.fourPolar.io.visualization.figures.polarization.IRegistrationCompositeFiguresReader;
+import fr.fresnel.fourPolar.io.visualization.figures.polarization.IPolarizationImageSetCompositesReader;
 
 /**
- * A concrete implementation of {@link IRegistrationCompositeFiguresReader} to
+ * A concrete implementation of {@link IPolarizationImageSetCompositesReader} to
  * read tiff composite images.
  */
-public class TiffRegistrationCompositeFiguresReader implements IRegistrationCompositeFiguresReader {
+public class TiffPolarizationImageSetCompositesReader implements IPolarizationImageSetCompositesReader {
     final private ImageReader<RGB16> _reader;
     final private int _numChannels;
     final private PolarizationImageSetCompositesBuilder _compositeSetBuilder;
@@ -36,7 +34,7 @@ public class TiffRegistrationCompositeFiguresReader implements IRegistrationComp
      * @param factory
      * @throws NoReaderFoundForImage
      */
-    public TiffRegistrationCompositeFiguresReader(ImageFactory factory, int numChannels) {
+    public TiffPolarizationImageSetCompositesReader(ImageFactory factory, int numChannels) {
         Objects.requireNonNull(factory);
         ChannelUtils.checkNumChannelsNonZero(numChannels);
 
@@ -67,7 +65,7 @@ public class TiffRegistrationCompositeFiguresReader implements IRegistrationComp
     }
 
     private Image<RGB16> _readRule(File rootCompositeImages, RegistrationRule rule) throws IOException {
-        File ruleFile = TiffRegistrationCompositeFiguresUtils.getRuleFile(rootCompositeImages, rule);
+        File ruleFile = TiffPolarizationImageSetCompositesUtil.getRuleFile(rootCompositeImages, rule);
 
         Image<RGB16> ruleImage = null;
         try {
@@ -101,7 +99,7 @@ public class TiffRegistrationCompositeFiguresReader implements IRegistrationComp
             throws IOException {
         Objects.requireNonNull(root4PProject);
         ChannelUtils.checkChannel(channel, this._numChannels);
-        File rootCompositeImages = TiffRegistrationCompositeFiguresUtils
+        File rootCompositeImages = TiffPolarizationImageSetCompositesUtil
                 .getRootFolderRegistrationComposites(root4PProject, channel);
         return this._read(rootCompositeImages, null, channel);
     }
@@ -113,7 +111,7 @@ public class TiffRegistrationCompositeFiguresReader implements IRegistrationComp
         Objects.requireNonNull(root4PProject);
         ChannelUtils.checkChannel(channel, this._numChannels);
         
-        File rootCompositeImages = TiffRegistrationCompositeFiguresUtils.getRootFolder(root4PProject,
+        File rootCompositeImages = TiffPolarizationImageSetCompositesUtil.getRootFolder(root4PProject,
                 visualizationSession, channel, fileSet);
         return this._read(rootCompositeImages, fileSet, channel);
     }

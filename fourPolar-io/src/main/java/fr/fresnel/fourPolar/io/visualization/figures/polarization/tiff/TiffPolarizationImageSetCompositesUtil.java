@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 /**
  * Utility methods.
  */
-class TiffRegistrationCompositeFiguresUtils {
+class TiffPolarizationImageSetCompositesUtil {
     /**
      * This is the name of the folder inside a visualization session, where the
      * composite images will be stored.

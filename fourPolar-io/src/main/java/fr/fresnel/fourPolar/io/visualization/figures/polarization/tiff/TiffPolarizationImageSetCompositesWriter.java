@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
-import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
@@ -13,13 +12,13 @@ import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizatio
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
-import fr.fresnel.fourPolar.io.visualization.figures.polarization.IRegistrationCompositeFiguresWriter;
+import fr.fresnel.fourPolar.io.visualization.figures.polarization.IPolarizationImageSetCompositesWriter;
 
 /**
- * A concrete implementation of {@link IRegistrationCompositeFiguresWriter} to
+ * A concrete implementation of {@link IPolarizationImageSetCompositesWriter} to
  * write the tiff composite images.
  */
-public class TiffRegistrationCompositeFiguresWriter implements IRegistrationCompositeFiguresWriter {
+public class TiffPolarizationImageSetCompositesWriter implements IPolarizationImageSetCompositesWriter {
     private ImageWriter<RGB16> _writer;
 
     /**
@@ -32,7 +31,7 @@ public class TiffRegistrationCompositeFiguresWriter implements IRegistrationComp
      * Initialize the writer. The same class can write several composite instances
      * to the disk.
      */
-    public TiffRegistrationCompositeFiguresWriter() {
+    public TiffPolarizationImageSetCompositesWriter() {
     }
 
     @Override
@@ -45,7 +44,7 @@ public class TiffRegistrationCompositeFiguresWriter implements IRegistrationComp
         int channel = compositeFigures.channel();
         ICapturedImageFileSet fileSet = compositeFigures.getFileSet().get();
 
-        File rootCompositeImages = TiffRegistrationCompositeFiguresUtils.getRootFolder(root4PProject,
+        File rootCompositeImages = TiffPolarizationImageSetCompositesUtil.getRootFolder(root4PProject,
                 visualizationSession, channel, fileSet);
 
         this._writeRules(rootCompositeImages, compositeFigures);
@@ -58,7 +57,7 @@ public class TiffRegistrationCompositeFiguresWriter implements IRegistrationComp
         Objects.requireNonNull(compositeFigures);
 
         int channel = compositeFigures.channel();
-        File rootCompositeImages = TiffRegistrationCompositeFiguresUtils
+        File rootCompositeImages = TiffPolarizationImageSetCompositesUtil
                 .getRootFolderRegistrationComposites(root4PProject, channel);
 
         this._writeRules(rootCompositeImages, compositeFigures);
@@ -76,7 +75,7 @@ public class TiffRegistrationCompositeFiguresWriter implements IRegistrationComp
     }
 
     private void _writeRule(File rootCompositeImages, IPolarizationImageComposite composite) throws IOException {
-        File ruleFile = TiffRegistrationCompositeFiguresUtils.getRuleFile(rootCompositeImages,
+        File ruleFile = TiffPolarizationImageSetCompositesUtil.getRuleFile(rootCompositeImages,
                 composite.getRegistrationRule());
 
         this._writer.write(ruleFile, composite.getImage());

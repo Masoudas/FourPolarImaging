@@ -31,7 +31,7 @@ import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.PolarizationImageSetComposites;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
-import fr.fresnel.fourPolar.io.visualization.figures.polarization.IRegistrationCompositeFiguresWriter;
+import fr.fresnel.fourPolar.io.visualization.figures.polarization.IPolarizationImageSetCompositesWriter;
 import javassist.tools.reflect.CannotCreateException;
 
 /**
@@ -56,7 +56,7 @@ public class Preprocessor {
     private final ArrayList<ICapturedImageSetSegmenter> _segmenters;
     private final ArrayList<ICapturedImageSetReader> _readers;
     private final IChannelRegistrator[] _registrators;
-    private final IRegistrationCompositeFiguresWriter[] _compositeWriters;
+    private final IPolarizationImageSetCompositesWriter[] _compositeWriters;
     private final IChannelDarkBackgroundEstimator[] _darkBackgroundEstimator;
     private final int _numChannels;
 
@@ -83,7 +83,7 @@ public class Preprocessor {
         this._numChannels = numChannels;
         this._registrators = new IChannelRegistrator[numChannels];
         this._darkBackgroundEstimator = new IChannelDarkBackgroundEstimator[numChannels];
-        this._compositeWriters = new IRegistrationCompositeFiguresWriter[numChannels];
+        this._compositeWriters = new IPolarizationImageSetCompositesWriter[numChannels];
         this._root4PProject = acquisitionSet.rootFolder();
     }
 
@@ -157,7 +157,7 @@ public class Preprocessor {
         }
     }
 
-    public void setRegistratonCompositeWriter(IRegistrationCompositeFiguresWriter compositeWriter) {
+    public void setRegistratonCompositeWriter(IPolarizationImageSetCompositesWriter compositeWriter) {
         Objects.requireNonNull(compositeWriter);
 
         // TODO Create a copy, so as to be used for multi-thread if needed.
@@ -227,7 +227,7 @@ public class Preprocessor {
     }
 
     private void _writeChannelCompositeImages(IPolarizationImageSetComposites compositeFigures) throws IOException {
-        IRegistrationCompositeFiguresWriter writer = this._compositeWriters[compositeFigures.channel() - 1];
+        IPolarizationImageSetCompositesWriter writer = this._compositeWriters[compositeFigures.channel() - 1];
 
         writer.write(this._root4PProject, compositeFigures);
     }
@@ -250,7 +250,7 @@ public class Preprocessor {
     }
 
     private void _closeCompositeWriterResources() throws IOException {
-        for (IRegistrationCompositeFiguresWriter writer : this._compositeWriters) {
+        for (IPolarizationImageSetCompositesWriter writer : this._compositeWriters) {
             writer.close();
         }
 

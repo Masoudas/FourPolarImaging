@@ -10,7 +10,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizatio
  * An interface for reading the {@link IPolarizationImageSetComposites} from the
  * disk.
  */
-public interface IRegistrationCompositeFiguresReader {
+public interface IPolarizationImageSetCompositesReader {
     /**
      * Read the composites of registration image corresponding to the given channel,
      * with the path defined by

@@ -8,7 +8,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizatio
 /**
  * An interface for writing the {@link IPolarizationImageSetComposites} to disk.
  */
-public interface IRegistrationCompositeFiguresWriter {
+public interface IPolarizationImageSetCompositesWriter {
     /**
      * Write the given composite in a visualization session.
      * 
