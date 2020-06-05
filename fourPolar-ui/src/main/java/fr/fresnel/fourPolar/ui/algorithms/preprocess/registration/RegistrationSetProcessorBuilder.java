@@ -150,4 +150,9 @@ public class RegistrationSetProcessorBuilder extends IRegistrationSetProcessorBu
         return this._compositeImageCreator;
     }
 
+    @Override
+    int getNumChannels() {
+        return this._numChannels;
+    }
+
 }

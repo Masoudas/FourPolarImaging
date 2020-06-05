@@ -17,4 +17,5 @@ abstract class IRegistrationSetProcessorBuilder {
     abstract ICapturedImageSetReader getRegistrationImageReader();
     abstract IChannelRegistrator getRegistrator();
     abstract ICapturedImageSetSegmenter getSegmenter();
+    abstract int getNumChannels();
 }
