@@ -35,8 +35,6 @@ public class WholeSampleStick3DPainterBuilder extends IWholeSampleStick3DPainter
     private int _thickness = 4;
     private int _length = 50;
 
-    private IGaugeFigure _gaugeFigure;
-
     /**
      * Initialize the painter with the given orientation and soi image, for the
      * given angle gauge type.
