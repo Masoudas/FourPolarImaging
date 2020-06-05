@@ -37,6 +37,10 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
         return this;
     }
 
+    /**
+     * Set the channel for this composite. The {@link build} method returns an error
+     * if the channel is not set.
+     */
     public PolarizationImageSetCompositesBuilder channel(int channel) {
         ChannelUtils.checkChannel(channel, this._numChannels);
 
@@ -44,6 +48,11 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
         return this;
     }
 
+    /**
+     * Optionally, set a file set that corresponds to this polarization image set.
+     * This fileSet is optional, given that for registration images, we don't
+     * necessarily need a file set, given that they are unique for a channel.
+     */
     public PolarizationImageSetCompositesBuilder fileSet(ICapturedImageFileSet fileSet) {
         Objects.requireNonNull(fileSet);
 
@@ -51,6 +60,12 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
         return this;
     }
 
+    /**
+     * Build the composite set using the set parameters. Note that after built, all
+     * parameters are reset.
+     * 
+     * @return
+     */
     public IPolarizationImageSetComposites build() {
         this._checkAllBuildParamsAreGiven();
 

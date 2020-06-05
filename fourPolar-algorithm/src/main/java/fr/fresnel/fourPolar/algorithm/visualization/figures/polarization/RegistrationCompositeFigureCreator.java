@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.visualization.figures.registration;
+package fr.fresnel.fourPolar.algorithm.visualization.figures.polarization;
 
 import java.util.HashMap;
 
