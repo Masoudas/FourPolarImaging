@@ -14,18 +14,36 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 /**
  * Defines the bead image set, which accompanies the sample image set.
  */
-public class BeadImageSet implements AcquisitionSet {
+public class RegistrationImageSet implements AcquisitionSet {
+    /**
+     * Determines the type of image being used for registration.
+     */
+    public enum RegistrationImageType {
+        /** A bead image is being used for registration */
+        BEAD,
+
+        /**
+         * A sample image (from all the sample the sample sets) is being used for
+         * registration
+         */
+        SAMPLE
+    };
+
     private ICapturedImageFileSet imageFileSet = null;
     private final File _rootFolder;
+    private final RegistrationImageType _imageType;
 
     /**
      * Create set for the given project. See {@link PathFactoryOfProject}.
      * 
      * @param rootFolder is the root folder of where all the images are located.
      */
-    public BeadImageSet(File rootFolder) {
+    public RegistrationImageSet(File rootFolder, RegistrationImageType imageType) {
         Objects.requireNonNull(rootFolder);
+        Objects.requireNonNull(imageType);
+
         this._rootFolder = rootFolder;
+        this._imageType = imageType;
     }
 
     @Override
@@ -78,4 +96,10 @@ public class BeadImageSet implements AcquisitionSet {
         return this._rootFolder;
     }
 
+    /**
+     * Returns the type of registration image being used.
+     */
+    public RegistrationImageType getType() {
+        return this._imageType;
+    }
 }
