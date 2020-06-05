@@ -8,7 +8,7 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.bead.BeadImageSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.BeadImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 
 /**

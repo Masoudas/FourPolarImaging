@@ -35,7 +35,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Conver
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.bead.BeadImageSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.BeadImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;

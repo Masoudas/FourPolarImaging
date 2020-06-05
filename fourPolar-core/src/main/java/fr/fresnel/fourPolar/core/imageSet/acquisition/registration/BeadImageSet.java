@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.imageSet.acquisition.bead;
+package fr.fresnel.fourPolar.core.imageSet.acquisition.registration;
 
 import java.io.File;
 import java.security.KeyException;

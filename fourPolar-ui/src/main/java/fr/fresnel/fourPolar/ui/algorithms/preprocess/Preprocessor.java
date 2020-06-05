@@ -20,7 +20,7 @@ import fr.fresnel.fourPolar.core.image.captured.ICapturedImageSet;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.bead.BeadImageSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.BeadImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
