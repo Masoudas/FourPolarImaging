@@ -41,10 +41,8 @@ public class RegistrationSetProcessorBuilder extends IRegistrationSetProcessorBu
      * image instances will have ImgLib2 implementation.
      * 
      * @param imagingSetup is the imaging setup.
-     * @throws CannotCreateException in case the acquisition set has multiple images
-     *                               for a given channel.
      */
-    public RegistrationSetProcessorBuilder(IFourPolarImagingSetup imagingSetup) throws CannotCreateException {
+    public RegistrationSetProcessorBuilder(IFourPolarImagingSetup imagingSetup) {
         Objects.requireNonNull(imagingSetup);
 
         this._numChannels = imagingSetup.getNumChannel();
