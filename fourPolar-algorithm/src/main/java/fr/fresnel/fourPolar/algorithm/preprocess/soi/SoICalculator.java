@@ -12,6 +12,14 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  * a {@link IPolarizationsImageSet}, and using it's iterator.
  */
 public class SoICalculator implements ISoICalculator {
+
+    public static ISoICalculator create() {
+        return new SoICalculator();
+    }
+
+    private SoICalculator() {
+    }
+
     @Override
     public void calculateUINT16Sum(IIntensityVectorIterator intensityIterator, IPixelCursor<UINT16> pixelCursor) {
         while (intensityIterator.hasNext()) {
