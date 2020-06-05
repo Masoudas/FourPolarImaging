@@ -13,16 +13,14 @@ import bdv.util.BdvFunctions;
 import bdv.util.BdvOptions;
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.ChannelDarkBackgroundRemover;
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.IChannelDarkBackgroundRemover;
-import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.percentile.PercentileChannelDarkBackgroundEstimator;
 import fr.fresnel.fourPolar.algorithm.preprocess.fov.FoVCalculatorOneCamera;
 import fr.fresnel.fourPolar.algorithm.preprocess.realignment.ChannelRealigner;
 import fr.fresnel.fourPolar.algorithm.preprocess.realignment.IChannelRealigner;
-import fr.fresnel.fourPolar.algorithm.preprocess.registration.descriptorBased.DescriptorBasedRegistration;
-import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.BeadCapturedImageSetSegmenter;
 import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.SampleCapturedImageSetSegmenter;
 import fr.fresnel.fourPolar.algorithm.preprocess.soi.SoICalculator;
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter.Color;
+import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.RegistrationCompositeFigureCreator;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSetBuilder;
@@ -33,9 +31,13 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.BeadImageSet;
+import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
+import fr.fresnel.fourPolar.core.image.soi.SoIImage;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet.RegistrationImageType;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
@@ -44,7 +46,8 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.OneCameraPolarizationConstellation;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.OneCameraPolarizationConstellation.Position;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
-import fr.fresnel.fourPolar.core.preprocess.PreprocessResult;
+import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
+import fr.fresnel.fourPolar.core.preprocess.RegistrationSetProcessResult;
 import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
@@ -54,15 +57,14 @@ import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseEr
 import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.captured.tiff.checker.TiffCapturedImageChecker;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
+import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOUINT16TiffReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadataReader;
 import fr.fresnel.fourPolar.io.image.polarization.TiffPolarizationImageSetWriter;
 import fr.fresnel.fourPolar.io.image.soi.TiffSoIImageWriter;
-import fr.fresnel.fourPolar.io.visualization.figures.polarization.tiff.TiffPolarizationImageSetCompositesWriter;
-import fr.fresnel.fourPolar.ui.algorithms.preprocess.Preprocessor;
-import fr.fresnel.fourPolar.ui.algorithms.preprocess.SampleImageSetPreprocessor;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOUINT16TiffReader;
+import fr.fresnel.fourPolar.ui.algorithms.preprocess.registration.IRegistrationSetProcessor;
+import fr.fresnel.fourPolar.ui.algorithms.preprocess.registration.RegistrationSetPreprocessor;
+import fr.fresnel.fourPolar.ui.algorithms.preprocess.registration.RegistrationSetProcessorBuilder;
 import javassist.tools.reflect.CannotCreateException;
-
 import net.imglib2.RealPoint;
 
 /**
@@ -79,8 +81,11 @@ public class SophiesPreChoice {
     // RootFolder
     public static String rootFolder = "/home/masoud/Documents/SampleImages/A4PolarDataSet";
 
-    // Bead image
-    public static String beadImage = "Sample_OneCamera.tif";
+    // Registration image
+    public static String registrationImage = "Sample_OneCamera.tif";
+
+    // Registration image type
+    public static RegistrationImageType registrationImageType = RegistrationImageType.SAMPLE;
 
     // Sample image
     public static String sampleImage = "Sample_OneCamera.tif";
@@ -118,14 +123,11 @@ public class SophiesPreChoice {
     // -------------------------------------------------------------------
     // YOU DON'T NEED TO CHANGE ANYTHING FROM HERE ON!
     // -------------------------------------------------------------------
-    // FoV
-    private static IFieldOfView fov;
-
     // Imaging setup
     private static IFourPolarImagingSetup setup = initializeImagingSetup();
 
     // Bead image set
-    private static BeadImageSet beadImageSet = null;
+    private static RegistrationImageSet beadImageSet = null;
 
     // Sample image set.
     private static SampleImageSet sampleImageSet = null;
@@ -144,10 +146,10 @@ public class SophiesPreChoice {
         return setup;
     }
 
-    public static BeadImageSet createBeadImageSet() throws CannotCreateException, IncompatibleCapturedImage {
-        BeadImageSet beadImageSet = new BeadImageSet(new File(rootFolder));
+    public static RegistrationImageSet createBeadImageSet() throws CannotCreateException, IncompatibleCapturedImage {
+        RegistrationImageSet beadImageSet = new RegistrationImageSet(new File(rootFolder), registrationImageType);
 
-        File beadImagePath = new File(rootFolder, beadImage);
+        File beadImagePath = new File(rootFolder, registrationImage);
         ICapturedImageFileSet beadCapturedImageFileSet = createFileSet(beadImagePath);
 
         beadImageSet.addImageSet(beadCapturedImageFileSet);
@@ -213,50 +215,33 @@ public class SophiesPreChoice {
         FoVCalculatorOneCamera fovCalculator = new FoVCalculatorOneCamera(metadata, intersectionPoint,
                 polConstellation);
 
-        fov = fovCalculator.calculate();
+        setup.setFieldOfView(fovCalculator.calculate());
 
     }
 
-    public static Preprocessor createBeadSetProcessor() {
-        Preprocessor preprocessor = null;
-        try {
-            preprocessor = new Preprocessor(beadImageSet, channels.length);
-
-            ImageFactory factory = new ImgLib2ImageFactory();
-            preprocessor.setCapturedImageSetReader(new TiffCapturedImageSetReader(factory));
-            preprocessor.setDarkBackgroundCalculator(new PercentileChannelDarkBackgroundEstimator(camera));
-            preprocessor.setRegistrationCompositeColor(baseImageColor, toRegisterImageColor);
-            preprocessor.setRegistrator(new DescriptorBasedRegistration());
-            preprocessor.setSegmenter(new BeadCapturedImageSetSegmenter(fov, camera, channels.length));
-            preprocessor.setRegistratonCompositeWriter(new TiffPolarizationImageSetCompositesWriter(factory));
-
-        } catch (NoReaderFoundForImage | CannotCreateException | NoWriterFoundForImage e) {
-            // Never caught
-        }
-        return preprocessor;
+    public static IRegistrationSetProcessor createBeadSetProcessor() {
+        RegistrationCompositeFigureCreator compositeCreator = new RegistrationCompositeFigureCreator(
+                setup.getNumChannel(), baseImageColor, toRegisterImageColor);
+        return new RegistrationSetProcessorBuilder(setup).registrationCompositeCreator(compositeCreator).build();
     }
 
-    public static SampleImageSetPreprocessor createSampleImageSetPreprocessor(PreprocessResult result) {
-        SampleImageSetPreprocessor preprocessor = new SampleImageSetPreprocessor(sampleImageSet, channels.length);
+    public static RegistrationSetPreprocessor createSampleImageSetPreprocessor(RegistrationSetProcessResult result) {
+        RegistrationSetPreprocessor preprocessor = new RegistrationSetPreprocessor(sampleImageSet, channels.length);
 
-        try {
-            ImageFactory factory = new ImgLib2ImageFactory();
-            preprocessor.setCapturedImageSetLoader(new TiffCapturedImageSetReader(factory));
-            preprocessor.setSegmenter(new SampleCapturedImageSetSegmenter(fov, camera, channels.length));
-            _setChannelDarkBackgroundRemovers(preprocessor, result);
-            _setChannelRealigners(preprocessor, result);
-            preprocessor.setPolarizationImageSetWriter(new TiffPolarizationImageSetWriter(factory));
-            preprocessor.setSoICalculator(new SoICalculator());
-            preprocessor.setSoIImageWriter(new TiffSoIImageWriter(factory));
-
-        } catch (NoReaderFoundForImage | NoWriterFoundForImage e) {
-        }
+        ImageFactory factory = new ImgLib2ImageFactory();
+        preprocessor.setCapturedImageSetLoader(new TiffCapturedImageSetReader(factory));
+        preprocessor.setSegmenter(new SampleCapturedImageSetSegmenter(setup.getFieldOfView(), camera, channels.length));
+        _setChannelDarkBackgroundRemovers(preprocessor, result);
+        _setChannelRealigners(preprocessor, result);
+        preprocessor.setPolarizationImageSetWriter(new TiffPolarizationImageSetWriter(factory));
+        preprocessor.setSoICalculator(new SoICalculator());
+        preprocessor.setSoIImageWriter(new TiffSoIImageWriter(factory));
 
         return preprocessor;
     }
 
-    private static void _setChannelDarkBackgroundRemovers(SampleImageSetPreprocessor preprocessor,
-            PreprocessResult result) {
+    private static void _setChannelDarkBackgroundRemovers(RegistrationSetPreprocessor preprocessor,
+            RegistrationSetProcessResult result) {
         for (int channel = 0; channel < channels.length; channel++) {
             IChannelDarkBackgroundRemover remover = ChannelDarkBackgroundRemover
                     .create(result.getDarkBackground(channels[channel]));
@@ -265,7 +250,8 @@ public class SophiesPreChoice {
 
     }
 
-    private static void _setChannelRealigners(SampleImageSetPreprocessor preprocessor, PreprocessResult result) {
+    private static void _setChannelRealigners(RegistrationSetPreprocessor preprocessor,
+            RegistrationSetProcessResult result) {
         for (int channel = 0; channel < channels.length; channel++) {
             IChannelRealigner realigner = ChannelRealigner.create(result.getRegistrationResult(channels[channel]));
             preprocessor.setChannelRealigner(channels[channel], realigner);
@@ -299,14 +285,14 @@ class CalculateFoVAndContinue implements ClickBehaviour {
         SophiesPreChoice.createFieldOfView((IPointShape) shape);
 
         // Call preprocessor here
-        Preprocessor preprocessor = SophiesPreChoice.createBeadSetProcessor();
-        PreprocessResult result = null;
+        RegistrationSetProcessorBuilder preprocessor = SophiesPreChoice.createBeadSetProcessor();
+        RegistrationSetProcessResult result = null;
         try {
             result = preprocessor.process();
         } catch (IOException e) {
         }
         // Call processor here.
-        SampleImageSetPreprocessor processor = SophiesPreChoice.createSampleImageSetPreprocessor(result);
+        RegistrationSetPreprocessor processor = SophiesPreChoice.createSampleImageSetPreprocessor(result);
         try {
             processor.process();
         } catch (IOException e) {
@@ -331,6 +317,5 @@ class CalculateFoVAndContinue implements ClickBehaviour {
 
         }
     }
-
 
 }
