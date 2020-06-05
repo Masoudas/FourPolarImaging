@@ -17,11 +17,11 @@ public interface IGaugeFigureWriter {
      *                             this gauge figure belong.
      * @param capturedImageFileSet is the captured image set to which this gauge
      *                             figure belong.
-     * @throws IOException thrown in case of low-level problems.
+     * @throws IOException thrown in case of low-level IO problems.
      * 
      * @return the composites for the given channel number.
      */
-    public void write(File root4PProject, String visualizationSession, IGaugeFigure gaugeFigure);
+    public void write(File root4PProject, String visualizationSession, IGaugeFigure gaugeFigure) throws IOException;
 
     /**
      * Close all resources associated with this writer.

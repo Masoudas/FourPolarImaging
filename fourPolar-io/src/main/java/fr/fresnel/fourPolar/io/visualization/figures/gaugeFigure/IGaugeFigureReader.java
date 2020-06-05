@@ -27,7 +27,7 @@ public interface IGaugeFigureReader {
      * @return the composites for the given channel number.
      */
     public IGaugeFigure read(File root4PProject, String visualizationSession, int channel,
-            ICapturedImageFileSet capturedImageFileSet);
+            ICapturedImageFileSet capturedImageFileSet) throws IOException;
 
     /**
      * Close all resources associated with the reader.
