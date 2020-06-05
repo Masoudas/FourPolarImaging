@@ -19,7 +19,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
-public class BeadSingleChannelPolarizationSegmenterTest {
+public class RegistrationSingleChannelPolarizationSegmenterTest {
 
     @Test
     public void segment_OneSingleChannelXYImage_ReturnsCorrectPolImages() {
@@ -31,10 +31,10 @@ public class BeadSingleChannelPolarizationSegmenterTest {
         ICapturedImage[] capturedImage = new ICapturedImage[] {
                 new BSCPSDummyCapturedImage(AxisOrder.XY, new long[] { 4, 4 }, new int[] { 1 }) };
 
-        Image<UINT16>[] image_pol0 = new BeadSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
-        Image<UINT16>[] image_pol45 = new BeadSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
-        Image<UINT16>[] image_pol90 = new BeadSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
-        Image<UINT16>[] image_pol135 = new BeadSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
+        Image<UINT16>[] image_pol0 = new RegistrationSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
+        Image<UINT16>[] image_pol45 = new RegistrationSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
+        Image<UINT16>[] image_pol90 = new RegistrationSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
+        Image<UINT16>[] image_pol135 = new RegistrationSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         assertTrue(BSCPSImageChecker._checkImage(image_pol0[0], 0));
         assertTrue(BSCPSImageChecker._checkImage(image_pol45[0], 1));
@@ -53,10 +53,10 @@ public class BeadSingleChannelPolarizationSegmenterTest {
                 new BSCPSDummyCapturedImage(AxisOrder.XY, new long[] { 4, 4 }, new int[] { 1 }),
                 new BSCPSDummyCapturedImage(AxisOrder.XY, new long[] { 4, 4 }, new int[] { 2 }) };
 
-        Image<UINT16>[] image_pol0 = new BeadSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
-        Image<UINT16>[] image_pol45 = new BeadSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
-        Image<UINT16>[] image_pol90 = new BeadSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
-        Image<UINT16>[] image_pol135 = new BeadSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
+        Image<UINT16>[] image_pol0 = new RegistrationSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
+        Image<UINT16>[] image_pol45 = new RegistrationSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
+        Image<UINT16>[] image_pol90 = new RegistrationSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
+        Image<UINT16>[] image_pol135 = new RegistrationSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         for (int i = 0; i < image_pol135.length; i++) {
             assertTrue(BSCPSImageChecker._checkImage(image_pol0[i], 0));
@@ -77,10 +77,10 @@ public class BeadSingleChannelPolarizationSegmenterTest {
                 new BSCPSDummyCapturedImage(AxisOrder.XYCZT, new long[] { 4, 4, 1, 3, 2 }, new int[] { 1 }),
                 new BSCPSDummyCapturedImage(AxisOrder.XYCZT, new long[] { 4, 4, 1, 3, 2 }, new int[] { 2 }) };
 
-        Image<UINT16>[] image_pol0 = new BeadSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
-        Image<UINT16>[] image_pol45 = new BeadSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
-        Image<UINT16>[] image_pol90 = new BeadSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
-        Image<UINT16>[] image_pol135 = new BeadSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
+        Image<UINT16>[] image_pol0 = new RegistrationSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
+        Image<UINT16>[] image_pol45 = new RegistrationSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
+        Image<UINT16>[] image_pol90 = new RegistrationSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
+        Image<UINT16>[] image_pol135 = new RegistrationSingleChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         for (int i = 0; i < image_pol135.length; i++) {
             assertTrue(BSCPSImageChecker._checkImage(image_pol0[i], 0));

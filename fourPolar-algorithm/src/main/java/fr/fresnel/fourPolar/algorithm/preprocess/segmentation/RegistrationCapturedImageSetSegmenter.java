@@ -11,15 +11,15 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
  * used for registration) to yield a {@link IPolarizationImageSet}. See
  * {@link IChannelRegistrator} for a discussion on how the images are segmented.
  */
-public class BeadCapturedImageSetSegmenter implements ICapturedImageSetSegmenter{
+public class RegistrationCapturedImageSetSegmenter implements ICapturedImageSetSegmenter{
     private PolarizationImageSetCreator _poleImageCreator = null;
 
     /**
      * To avoid creating the segmenter every time a new CapturedImageSet is
      * provided, we cache an instance of both.
      */
-    private ChannelPolarizationSegmenter _singleChannelSegmenter = new BeadSingleChannelPolarizationSegmenter();
-    private ChannelPolarizationSegmenter _multiChannelSegmenter = new BeadMultiChannelPolarizationSegmenter();
+    private ChannelPolarizationSegmenter _singleChannelSegmenter = new RegistrationSingleChannelPolarizationSegmenter();
+    private ChannelPolarizationSegmenter _multiChannelSegmenter = new RegistrationMultiChannelPolarizationSegmenter();
 
     /**
      * 
@@ -27,7 +27,7 @@ public class BeadCapturedImageSetSegmenter implements ICapturedImageSetSegmenter
      * @param cameras     is the number of cameras for this setup.
      * @param numChannels is the number of channels.
      */
-    public BeadCapturedImageSetSegmenter(IFieldOfView fov, Cameras cameras, int numChannels) {
+    public RegistrationCapturedImageSetSegmenter(IFieldOfView fov, Cameras cameras, int numChannels) {
         this._poleImageCreator = this._chooseCameraSegmenter(fov, cameras, numChannels);
     }
 

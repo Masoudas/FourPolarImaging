@@ -19,7 +19,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
-public class BeadMultiChannelPolarizationSegmenterTest {
+public class RegistrationMultiChannelPolarizationSegmenterTest {
     @Test
     public void segment_OneMultiChannelXYCImage_ReturnsCorrectPolImages() {
         IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 2, 2 }, AxisOrder.XY);
@@ -31,10 +31,10 @@ public class BeadMultiChannelPolarizationSegmenterTest {
         ICapturedImage[] capturedImage = new ICapturedImage[] {
                 new BMCPSDummyCapturedImage(AxisOrder.XYC, new long[] { 4, 4, numChannels }, new int[] { 1, 2, 3 }) };
 
-        Image<UINT16>[] image_pol0 = new BeadMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
-        Image<UINT16>[] image_pol45 = new BeadMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
-        Image<UINT16>[] image_pol90 = new BeadMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
-        Image<UINT16>[] image_pol135 = new BeadMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
+        Image<UINT16>[] image_pol0 = new RegistrationMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
+        Image<UINT16>[] image_pol45 = new RegistrationMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
+        Image<UINT16>[] image_pol90 = new RegistrationMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
+        Image<UINT16>[] image_pol135 = new RegistrationMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         for (int i = 0; i < numChannels; i++) {
             assertTrue(BMCPSImageChecker._checkImage(image_pol0[i], 0, i + 1));
@@ -58,10 +58,10 @@ public class BeadMultiChannelPolarizationSegmenterTest {
                 new BMCPSDummyCapturedImage(AxisOrder.XYC, new long[] { 4, 4, numChannels / 2 },
                         new int[] { 4, 5, 6 }) };
 
-        Image<UINT16>[] image_pol0 = new BeadMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
-        Image<UINT16>[] image_pol45 = new BeadMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
-        Image<UINT16>[] image_pol90 = new BeadMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
-        Image<UINT16>[] image_pol135 = new BeadMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
+        Image<UINT16>[] image_pol0 = new RegistrationMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
+        Image<UINT16>[] image_pol45 = new RegistrationMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
+        Image<UINT16>[] image_pol90 = new RegistrationMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
+        Image<UINT16>[] image_pol135 = new RegistrationMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         for (int i = 0; i < numChannels; i++) {
             assertTrue(BMCPSImageChecker._checkImage(image_pol0[i], 0, i + 1));
@@ -86,10 +86,10 @@ public class BeadMultiChannelPolarizationSegmenterTest {
                 new BMCPSDummyCapturedImage(AxisOrder.XYZCT, new long[] { 4, 4, 3, numChannels / 2, 4 },
                         new int[] { 4, 5, 6 }) };
 
-        Image<UINT16>[] image_pol0 = new BeadMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
-        Image<UINT16>[] image_pol45 = new BeadMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
-        Image<UINT16>[] image_pol90 = new BeadMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
-        Image<UINT16>[] image_pol135 = new BeadMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
+        Image<UINT16>[] image_pol0 = new RegistrationMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol0);
+        Image<UINT16>[] image_pol45 = new RegistrationMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol45);
+        Image<UINT16>[] image_pol90 = new RegistrationMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol90);
+        Image<UINT16>[] image_pol135 = new RegistrationMultiChannelPolarizationSegmenter().segment(capturedImage, fov_pol135);
 
         for (int i = 0; i < numChannels; i++) {
             assertTrue(BMCPSImageChecker._checkImage(image_pol0[i], 0, i + 1));
