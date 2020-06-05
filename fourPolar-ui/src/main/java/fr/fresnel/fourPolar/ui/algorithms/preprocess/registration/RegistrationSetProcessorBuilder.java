@@ -12,6 +12,7 @@ import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter
 import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.IPolarizationImageSetCompositesCreater;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.RegistrationCompositeFigureCreator;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
@@ -36,18 +37,15 @@ public class RegistrationSetProcessorBuilder extends IRegistrationSetProcessorBu
     /**
      * Start the build process. Note that using this constructor, all processor
      * parameters are set to defaults. Moreover, the composite images would have Red
-     * for base and Green for to register image color.
+     * for base and Green for to register image color. With this constructor, all
+     * image instances will have ImgLib2 implementation.
      * 
-     * @param factory      is the factory to be used for creating the images read
-     *                     from the disk.
      * @param imagingSetup is the imaging setup.
      * @throws CannotCreateException in case the acquisition set has multiple images
      *                               for a given channel.
      */
-    public RegistrationSetProcessorBuilder(IFourPolarImagingSetup imagingSetup, ImageFactory factory)
-            throws CannotCreateException {
+    public RegistrationSetProcessorBuilder(IFourPolarImagingSetup imagingSetup) throws CannotCreateException {
         Objects.requireNonNull(imagingSetup);
-        Objects.requireNonNull(factory);
 
         this._numChannels = imagingSetup.getNumChannel();
 
@@ -57,7 +55,7 @@ public class RegistrationSetProcessorBuilder extends IRegistrationSetProcessorBu
         this._darkBackgroundEstimator = new PercentileChannelDarkBackgroundEstimator(imagingSetup.getCameras());
         this._compositeImageCreator = new RegistrationCompositeFigureCreator(this._numChannels, Color.Red, Color.Green);
 
-        this._registrationImageReader = new TiffCapturedImageSetReader(factory);
+        this._registrationImageReader = new TiffCapturedImageSetReader(new ImgLib2ImageFactory());
     }
 
     /**
