@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 public class SoICalculatorTest {
     @Test
     public void calculateUINT16Sum_MAX_VAL_ReturnsMAX_VALForAllCases() {
-        SoICalculator calculator = new SoICalculator();
+        ISoICalculator calculator = SoICalculator.create();
 
         IPixelCursor<UINT16> pixelCursor = new TestPixelCursor();
         calculator.calculateUINT16Sum(new TestIntensityIterator(), pixelCursor);
