@@ -90,8 +90,7 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
     }
 
     /**
-     * Returns polarization image of each channel as an array. Note that at the end
-     * of this operation, the captured image is nullified to free the associated
+     * Returns polarization image of each channel as an array.
      * memory.
      */
     private IPolarizationImageSet[] _segmentRegistrationImageIntoChannels(ICapturedImageSet registrationImageSet) {
