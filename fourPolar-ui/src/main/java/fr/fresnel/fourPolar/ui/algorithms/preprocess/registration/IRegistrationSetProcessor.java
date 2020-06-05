@@ -7,6 +7,7 @@ import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.ICapturedImageSetS
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet;
 import fr.fresnel.fourPolar.core.preprocess.RegistrationSetProcessResult;
+import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 
 /**
  * An interface for processing the given {@link RegistrationImageSet}, that
@@ -39,4 +40,12 @@ public interface IRegistrationSetProcessor {
      * 
      */
     public RegistrationSetProcessResult process(RegistrationImageSet registrationImageSet) throws IOException;
+
+    /**
+     * Get the generated composite image by the processor for the given channel.
+     * This method should be called after the {@link process} method.
+     * 
+     * @param channel is the channel number.
+     */
+    public IPolarizationImageSetComposites getRegistrationComposite(int channel);
 }

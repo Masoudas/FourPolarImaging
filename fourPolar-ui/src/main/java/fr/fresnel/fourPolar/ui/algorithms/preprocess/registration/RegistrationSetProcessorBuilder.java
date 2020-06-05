@@ -32,7 +32,6 @@ public class RegistrationSetProcessorBuilder extends IRegistrationSetProcessorBu
     private IPolarizationImageSetCompositesCreater _compositeImageCreator;
 
     private ICapturedImageSetReader _registrationImageReader;
-    private IPolarizationImageSetCompositesWriter _compositeWriter;
 
     /**
      * Start the build process. Note that using this constructor, all processor
@@ -59,7 +58,6 @@ public class RegistrationSetProcessorBuilder extends IRegistrationSetProcessorBu
         this._compositeImageCreator = new RegistrationCompositeFigureCreator(this._numChannels, Color.Red, Color.Green);
 
         this._registrationImageReader = new TiffCapturedImageSetReader(factory);
-        this._compositeWriter = new TiffPolarizationImageSetCompositesWriter();
     }
 
     /**
@@ -94,18 +92,6 @@ public class RegistrationSetProcessorBuilder extends IRegistrationSetProcessorBu
     }
 
     /**
-     * Set registration composite writers.
-     */
-    public RegistrationSetProcessorBuilder registratonCompositeWriter(
-            IPolarizationImageSetCompositesWriter compositeWriter) {
-        Objects.requireNonNull(compositeWriter);
-
-        this._compositeWriter = compositeWriter;
-        return this;
-
-    }
-
-    /**
      * Set registration composite creator.
      */
     public RegistrationSetProcessorBuilder registrationCompositeCreator(
@@ -115,14 +101,8 @@ public class RegistrationSetProcessorBuilder extends IRegistrationSetProcessorBu
         return this;
     }
 
-
     public IRegistrationSetProcessor build() {
-        return new RegistrationSetProcessor(this); 
-    }
-
-    @Override
-    IPolarizationImageSetCompositesWriter getCompositeWriter() {
-        return this._compositeWriter;
+        return new RegistrationSetProcessor(this);
     }
 
     @Override

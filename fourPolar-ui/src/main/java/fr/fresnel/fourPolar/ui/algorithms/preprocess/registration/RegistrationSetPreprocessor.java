@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.ui.algorithms.preprocess.registration;
 
-import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChannelDarkBackgroundEstimator;
@@ -13,23 +12,24 @@ import fr.fresnel.fourPolar.core.image.captured.ICapturedImageSet;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet;
+import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.RegistrationSetProcessResult;
 import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackground;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
-import fr.fresnel.fourPolar.io.visualization.figures.polarization.IPolarizationImageSetCompositesWriter;
 
 class RegistrationSetProcessor implements IRegistrationSetProcessor {
     private final int _numChannels;
 
     private final ICapturedImageSetReader _registrationImageReader;
-    private final IPolarizationImageSetCompositesWriter _compositeWriter;
 
     private final IChannelRegistrator _registrator;
     private final ICapturedImageSetSegmenter _segmenter;
     private final IChannelDarkBackgroundEstimator _darkBackgroundEstimator;
     private final IPolarizationImageSetCompositesCreater _compositeImageCreator;
+
+    private IPolarizationImageSetComposites[] _channelComposites;
 
     public RegistrationSetProcessor(IRegistrationSetProcessorBuilder builder) {
         this._numChannels = builder.getNumChannels();
@@ -41,7 +41,7 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
         this._darkBackgroundEstimator = builder.getDarkBackgroundEstimator();
         this._compositeImageCreator = builder.getCompositeImageCreator();
 
-        this._compositeWriter = builder.getCompositeWriter();
+        this._channelComposites = null;
     }
 
     /**
@@ -50,24 +50,29 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
     @Override
     public RegistrationSetProcessResult process(RegistrationImageSet registrationImageSet) throws IOException {
         // TODO use multi-threading here.
-
         ICapturedImageSet registrationImage = this._readRegistrationImage(registrationImageSet.getIterator().next());
+
         IPolarizationImageSet[] channelImages = this._segmentRegistrationImageIntoChannels(registrationImage);
 
         RegistrationSetProcessResult preprocessResult = _processChannels(channelImages);
 
-        _createAndWriteCompositeImagesToDisk(registrationImageSet, channelImages, preprocessResult);
+        this._channelComposites = this._createCompositeImages(registrationImageSet, channelImages, preprocessResult);
 
-        this._closeIOResources();
         return preprocessResult;
     }
 
-    private void _createAndWriteCompositeImagesToDisk(RegistrationImageSet registrationImageSet,
+    private IPolarizationImageSetComposites[] _createCompositeImages(RegistrationImageSet registrationImageSet,
             IPolarizationImageSet[] channelImages, RegistrationSetProcessResult preprocessResult) throws IOException {
-        IPolarizationImageSetComposites[] channelCompositeImages = this
-                ._createRegistrationCompositesOfChannels(channelImages, preprocessResult);
+        this._realignPolarizationImageOfChannels(channelImages, preprocessResult);
 
-        this._writeChannelCompositeImages(registrationImageSet.rootFolder(), channelCompositeImages);
+        IPolarizationImageSetComposites[] composites = new IPolarizationImageSetComposites[this._numChannels];
+
+        for (int channel = 1; channel <= this._numChannels; channel++) {
+            this._compositeImageCreator.create(channelImages[channel - 1]);
+        }
+
+        return composites;
+
     }
 
     private RegistrationSetProcessResult _processChannels(IPolarizationImageSet[] channelImages) {
@@ -78,7 +83,10 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
     }
 
     private ICapturedImageSet _readRegistrationImage(ICapturedImageFileSet fileSet) throws IOException {
-        return this._registrationImageReader.read(fileSet);
+        ICapturedImageSet imageSet = this._registrationImageReader.read(fileSet);
+        this._closeCapturedImageReaderResources();
+
+        return imageSet;
     }
 
     /**
@@ -121,22 +129,6 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
     }
 
     /**
-     * Create composite images by first realigning the registration images.
-     */
-    private IPolarizationImageSetComposites[] _createRegistrationCompositesOfChannels(
-            IPolarizationImageSet[] channelImages, RegistrationSetProcessResult preprocessResult) {
-        this._realignPolarizationImageOfChannels(channelImages, preprocessResult);
-
-        IPolarizationImageSetComposites[] composites = new IPolarizationImageSetComposites[this._numChannels];
-
-        for (int channel = 1; channel <= this._numChannels; channel++) {
-            this._compositeImageCreator.create(channelImages[channel - 1]);
-        }
-
-        return composites;
-    }
-
-    /**
      * Realign the polarization image set equivalent of each channel registration
      * image set.
      * 
@@ -152,19 +144,6 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
         }
     }
 
-    private void _writeChannelCompositeImages(File root4PProject,
-            IPolarizationImageSetComposites[] channelCompositeImages) throws IOException {
-        for (int channel = 1; channel <= this._numChannels; channel++) {
-            this._compositeWriter.writeAsRegistrationComposite(root4PProject, channelCompositeImages[channel - 1]);
-        }
-
-    }
-
-    private void _closeIOResources() throws IOException {
-        this._closeCapturedImageReaderResources();
-        this._closeCompositeWriterResources();
-    }
-
     /**
      * Close any resources associated with the readers.
      * 
@@ -174,8 +153,10 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
         this._registrationImageReader.close();
     }
 
-    private void _closeCompositeWriterResources() throws IOException {
-        this._compositeWriter.close();
+    @Override
+    public IPolarizationImageSetComposites getRegistrationComposite(int channel) {
+        ChannelUtils.checkChannel(channel, this._numChannels);
+        return this._channelComposites[channel - 1];
     }
 
 }
