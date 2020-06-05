@@ -8,25 +8,25 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.BeadImageSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 
 /**
- * Servers as a model for image containters like {@link BeadImageSet} and
- * {@link SampleImageSet}
+ * Servers as a container for a set of {@linkplain ICapturedImageFileSets} that
+ * are supposed to be analyzed together. These captured images are linked
+ * together, in the sense that they were taken by the same setup, hence the
+ * properties of the imaging setup has remained the same for all of them. We
+ * normally require a {@link RegistrationImageSet} for a set of
+ * {@link SampleImageSet} of arbitrary number of sample images.
  */
 public interface AcquisitionSet {
 
     /**
-     * Creates the set of images for the given imaging setup. All images are checker
-     * against the imageChecker to ensure they satisfy the imposed checks.
+     * Adds a captured file set to this set, where every file is checked against
+     * {@link ICapturedImageChecker} provided for the class.
      * 
-     * @param imagingSetup is the image setup associated with this acquired image
-     *                     set.
+     * @param fileSet is the file set to be added.
      * 
-     *                     /** Add a captured file set to this set, where every file
-     *                     is checked against {@link ICapturedImageChecker} provided
-     *                     for the class.
      *
      * @throws KeyAlreadyExistsException in case the file set has already been
      *                                   added.
@@ -34,7 +34,7 @@ public interface AcquisitionSet {
     public void addImageSet(ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException;
 
     /**
-     * Returns a particular image set using the channel number and set name.
+     * Returns a particular image set file using its set name.
      * 
      * @param setName
      * 
@@ -43,13 +43,13 @@ public interface AcquisitionSet {
     public ICapturedImageFileSet getImageSet(String setName) throws KeyException;
 
     /**
-     * Return an iterator that contains all image sets.
+     * Return an iterator that over all file sets inside this set.
      * 
      */
     public Iterator<ICapturedImageFileSet> getIterator();
 
     /**
-     * Remove an image using channel number and set name.
+     * Removes an image using set name.
      * 
      * @param channel
      * @param setName
@@ -57,7 +57,7 @@ public interface AcquisitionSet {
     public void removeImageSet(String setName) throws KeyException;
 
     /**
-     * Returns number of {@link ICapturedImageFileSet} in this set.
+     * Returns the number of {@link ICapturedImageFileSet} in this set.
      */
     public int setSize();
 
