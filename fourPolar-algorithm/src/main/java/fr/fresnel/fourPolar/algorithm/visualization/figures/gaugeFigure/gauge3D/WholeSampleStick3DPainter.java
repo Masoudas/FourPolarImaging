@@ -71,6 +71,8 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
      * The gauge figure is interleaved in the z-direction by the length of sticks.
      */
     private IGaugeFigure _createGaugeFigure(ISoIImage soiImage, int stickLength) {
+        int channel = soiImage.channel();
+
         IMetadata soiMetadata = soiImage.getImage().getMetadata();
         long[] soiImgDim = soiMetadata.getDim();
 
@@ -79,7 +81,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
 
         Image<RGB16> gaugeImage = soiImage.getImage().getFactory().create(gaugeMetadata, RGB16.zero());
         return GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D, gaugeImage,
-                soiImage.getFileSet());
+                soiImage.getFileSet(), channel);
     }
 
     /**

@@ -71,6 +71,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
      * Create the gauge figure by creating a color version of SoI.
      */
     private IGaugeFigure _createGaugeFigure(ISoIImage soiImage, AngleGaugeType gaugeType) {
+        int channel = soiImage.channel();
         Image<RGB16> gaugeImage = null;
         try {
             gaugeImage = GrayScaleToColorConverter.colorUsingMaxEachPlane(soiImage.getImage());
@@ -78,7 +79,8 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
             // We expect this exception to have been caught before the program arrives here!
         }
 
-        return GaugeFigureFactory.create(GaugeFigureType.WholeSample, gaugeType, gaugeImage, soiImage.getFileSet());
+        return GaugeFigureFactory.create(GaugeFigureType.WholeSample, gaugeType, gaugeImage, soiImage.getFileSet(),
+                channel);
     }
 
     /**

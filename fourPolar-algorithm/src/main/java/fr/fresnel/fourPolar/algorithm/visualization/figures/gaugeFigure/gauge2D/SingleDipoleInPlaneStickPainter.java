@@ -84,6 +84,8 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
      * 
      */
     private IGaugeFigure _createDipoleFigure(int stickLength, ISoIImage soiImage, AngleGaugeType angleGaugeType) {
+        int channel = soiImage.channel();
+
         long[] dim = new long[IGaugeFigure.AXIS_ORDER.numAxis];
         Arrays.setAll(dim, (i)->1);
         dim[0] = (long) (stickLength * 1.1);
@@ -92,7 +94,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
         IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
         Image<RGB16> gaugeImage = soiImage.getImage().getFactory().create(gaugeFigMetadata, RGB16.zero());
         return GaugeFigureFactory.create(GaugeFigureType.SingleDipole, angleGaugeType, gaugeImage,
-                soiImage.getFileSet());
+                soiImage.getFileSet(), channel);
     }
 
     /**
