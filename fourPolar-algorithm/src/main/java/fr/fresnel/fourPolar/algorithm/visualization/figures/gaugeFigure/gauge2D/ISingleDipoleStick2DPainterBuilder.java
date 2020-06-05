@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D;
+package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D;
 
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
@@ -8,7 +8,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGa
 /**
  * A simple private interface for accessing the parameters of the builder.
  */
-abstract class IWholeSampleStick2DPainterBuilder {
+abstract class ISingleDipoleStick2DPainterBuilder {
     abstract ColorMap getColorMap();
 
     abstract int getSticklength();
@@ -20,5 +20,4 @@ abstract class IWholeSampleStick2DPainterBuilder {
     abstract int getStickThickness();
 
     abstract AngleGaugeType getAngleGaugeType();
-
 }

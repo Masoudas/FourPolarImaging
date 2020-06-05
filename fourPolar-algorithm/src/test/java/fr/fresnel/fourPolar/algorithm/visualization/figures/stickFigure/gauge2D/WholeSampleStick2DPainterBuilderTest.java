@@ -7,6 +7,8 @@ import java.util.Iterator;
 
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D.IWholeSampleStick2DPainterBuilder;
+import fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D.WholeSampleStick2DPainter;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;

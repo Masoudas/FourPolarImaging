@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D;
+package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D;
 
 import java.util.Objects;
 

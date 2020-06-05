@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.ui;
 import java.io.File;
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.algorithm.visualization.figures.stickFigure.gauge2D.WholeSampleStick2DPainterBuilder;
+import fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D.WholeSampleStick2DPainterBuilder;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSet;
