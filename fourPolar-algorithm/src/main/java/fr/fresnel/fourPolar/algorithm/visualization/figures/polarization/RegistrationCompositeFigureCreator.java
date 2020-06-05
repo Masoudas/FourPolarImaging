@@ -15,7 +15,6 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
-import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSetBuilder;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
@@ -30,7 +29,6 @@ import fr.fresnel.fourPolar.core.visualization.figures.polarization.Polarization
 public class RegistrationCompositeFigureCreator implements IPolarizationImageSetCompositesCreater {
     private final Color _baseImageColor;
     private final Color _registeredImageColor;
-    private final int _numChannels;
     private final PolarizationImageSetCompositesBuilder _builder;
 
     /**
@@ -46,7 +44,6 @@ public class RegistrationCompositeFigureCreator implements IPolarizationImageSet
     public RegistrationCompositeFigureCreator(int numChannels, Color baseImageColor, Color registeredImageColor) {
         this._baseImageColor = baseImageColor;
         this._registeredImageColor = registeredImageColor;
-        this._numChannels = numChannels;
         this._builder = new PolarizationImageSetCompositesBuilder(numChannels);
     }
 
