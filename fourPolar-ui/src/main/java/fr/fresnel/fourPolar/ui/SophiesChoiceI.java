@@ -17,25 +17,30 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
+import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.physics.propagation.IInverseOpticalPropagation;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoWriterFoundForImage;
 import fr.fresnel.fourPolar.io.image.orientation.IOrientationImageWriter;
 import fr.fresnel.fourPolar.io.image.orientation.TiffOrientationImageWriter;
 import fr.fresnel.fourPolar.io.image.polarization.IPolarizationImageSetReader;
 import fr.fresnel.fourPolar.io.image.polarization.TiffPolarizationImageSetReader;
+import fr.fresnel.fourPolar.io.image.soi.ISoIImageWriter;
+import fr.fresnel.fourPolar.io.image.soi.TiffSoIImageWriter;
+import fr.fresnel.fourPolar.ui.algorithms.preprocess.soi.ISoIImageCreator;
+import fr.fresnel.fourPolar.ui.algorithms.preprocess.soi.SoIImageCreator;
 import javassist.tools.reflect.CannotCreateException;
 
 /**
  * With this choice, Sophie (AKA Boss) can construct an orientation image
  * together with the SoI image from a polarization image. To employ this choice,
- * Sophie has to run SophiesPreChoice.
+ * Sophie has to run SophiesPreChoice first.
  * 
+ * To use this snippet, Sophie just have to set the propagation factors below,
+ * and then run the code.
  */
 public class SophiesChoiceI {
     /**
@@ -62,14 +67,17 @@ public class SophiesChoiceI {
     private static double _propFactor_zz_135 = 1.55973262275;
     private static double _propFactor_xy_135 = -2.9701544558;
 
-    public static void main(String[] args) throws IOException, CannotCreateException, IncompatibleCapturedImage,
-            NoReaderFoundForImage, NoWriterFoundForImage {
-        polarizationImageSetReader = new TiffPolarizationImageSetReader(new ImgLib2ImageFactory(),
-                SophiesPreChoice.channels.length);
-        orientationImageWriter = new TiffOrientationImageWriter(new ImgLib2ImageFactory());
-
+    public static void main(String[] args) throws IOException, CannotCreateException, IncompatibleCapturedImage {
         SampleImageSet sampleImageSet = SophiesPreChoice.createSampleImageSet();
         int[] channels = SophiesPreChoice.channels;
+
+        ISoIImageCreator soiImageCreator = SoIImageCreator.create(channels.length);
+
+        polarizationImageSetReader = new TiffPolarizationImageSetReader(new ImgLib2ImageFactory(),
+                SophiesPreChoice.channels.length);
+
+        orientationImageWriter = new TiffOrientationImageWriter();
+        soiImageWriter = new TiffSoIImageWriter();
 
         for (Iterator<ICapturedImageFileSet> capFilesItr = sampleImageSet.getIterator(); capFilesItr.hasNext();) {
             ICapturedImageFileSet fileSet = capFilesItr.next();
@@ -79,8 +87,10 @@ public class SophiesChoiceI {
 
                 IOrientationImage orientationImage = createOrientationImage(polarizationImageSet);
                 mapIntensityToOrientation(polarizationImageSet, orientationImage);
-
                 saveOrientationImage(orientationImage, sampleImageSet.rootFolder());
+
+                ISoIImage soiImage = soiImageCreator.create(polarizationImageSet);
+                soiImageWriter.write(sampleImageSet.rootFolder(), soiImage);
             }
         }
 
@@ -90,6 +100,7 @@ public class SophiesChoiceI {
 
     private static IPolarizationImageSetReader polarizationImageSetReader = null;
     private static IOrientationImageWriter orientationImageWriter = null;
+    private static ISoIImageWriter soiImageWriter = null;
 
     private static IPolarizationImageSet readPolarizationImages(File rootFolder, ICapturedImageFileSet fileSet,
             int channel) throws IOException {
@@ -128,6 +139,11 @@ public class SophiesChoiceI {
             IOrientationImageWriter orientationImageWriter) throws IOException {
         polarizationImageSetReader.close();
         orientationImageWriter.close();
+    }
+
+    private static void saveSoIImage(ISoIImage soiImage, File rootFolder) throws IOException {
+        soiImageWriter.write(rootFolder, soiImage);
+
     }
 
     private static IInverseOpticalPropagation _getInverseOpticalPropagation() {
