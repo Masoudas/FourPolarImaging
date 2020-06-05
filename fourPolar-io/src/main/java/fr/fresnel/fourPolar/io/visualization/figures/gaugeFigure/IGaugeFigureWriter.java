@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.io.visualization.figures.gaugeFigure;
 
 import java.io.File;
+import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 
@@ -25,6 +26,6 @@ public interface IGaugeFigureWriter {
     /**
      * Close all resources associated with this writer.
      */
-    public void close();
+    public void close() throws IOException;
 
 }

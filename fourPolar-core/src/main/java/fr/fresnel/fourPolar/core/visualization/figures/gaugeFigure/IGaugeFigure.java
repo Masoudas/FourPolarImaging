@@ -38,4 +38,9 @@ public interface IGaugeFigure {
      */
     public ICapturedImageFileSet getFileSet();
 
+    /**
+     * Get channel number.
+     */
+    public int getChannel();
+
 }

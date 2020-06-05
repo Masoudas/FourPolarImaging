@@ -13,6 +13,7 @@ class GaugeFigure implements IGaugeFigure {
     private final AngleGaugeType _type;
     private final ICapturedImageFileSet _fileSet;
     private final GaugeFigureType _figureType;
+    private final int _channel;
 
     /**
      * Create an stick figure using the interface of colored {@link ISoIImage}.
@@ -21,11 +22,13 @@ class GaugeFigure implements IGaugeFigure {
      * @param image   is the colored SoI image.
      * @param fileSet is the captured file set this stick image corresponds to.
      */
-    public GaugeFigure(GaugeFigureType figureType, AngleGaugeType type, Image<RGB16> image, ICapturedImageFileSet fileSet) {
+    public GaugeFigure(GaugeFigureType figureType, AngleGaugeType type, Image<RGB16> image,
+            ICapturedImageFileSet fileSet, int channel) {
         this._image = image;
         this._type = type;
         this._fileSet = fileSet;
         this._figureType = figureType;
+        this._channel = channel;
     }
 
     @Override
@@ -46,6 +49,11 @@ class GaugeFigure implements IGaugeFigure {
     @Override
     public GaugeFigureType getFigureType() {
         return this._figureType;
+    }
+
+    @Override
+    public int getChannel() {
+        return this._channel;
     }
 
 }
