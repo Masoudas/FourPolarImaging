@@ -53,6 +53,10 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
             throw new IllegalArgumentException("Intersection point must be inside the image boundary.");
         }
 
+        if (iPoint[0] <= 0 || iPoint[1] <= 0) {
+            throw new IllegalArgumentException("Intersection point must be greater than equal zero.");
+        }
+
         _xmax_beadImg = beadImgDim[0];
         _ymax_beadImg = beadImgDim[1];
 

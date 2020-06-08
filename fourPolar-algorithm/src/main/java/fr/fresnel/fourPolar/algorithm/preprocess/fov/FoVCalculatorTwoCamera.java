@@ -35,8 +35,9 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
     final private TwoCameraPolarizationConstellation _constellation;
 
     public FoVCalculatorTwoCamera(IMetadata beadImg_pol0_90, IPointShape intersection_pol0_90,
-            IMetadata beadImg_pol45_135, IPointShape intersection_pol45_135, TwoCameraPolarizationConstellation constellation) {
-                // TODO Use Box to indicate region.
+            IMetadata beadImg_pol45_135, IPointShape intersection_pol45_135,
+            TwoCameraPolarizationConstellation constellation) {
+        // TODO Use Box to indicate region.
         this._checkIntersectionPointInside(beadImg_pol0_90, intersection_pol0_90);
         this._checkIntersectionPointInside(beadImg_pol45_135, intersection_pol45_135);
 
@@ -59,6 +60,11 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
         if (dim[0] <= iPoint[0] || dim[1] <= iPoint[1]) {
             throw new IllegalArgumentException("Intersection point must be inside the image boundary.");
         }
+
+        if (iPoint[0] <= 0 || iPoint[1] <= 0) {
+            throw new IllegalArgumentException("Intersection point must be greater than equal zero.");
+        }
+
     }
 
     /**
@@ -93,16 +99,14 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
 
         if (position == Position.Left) {
             bottom = new long[] { 1, 1 };
-            top = new long[] { _xlen_PolImg, _ylen_PolImg};
+            top = new long[] { _xlen_PolImg, _ylen_PolImg };
         } else {
             bottom = new long[] { _xmax_beadImg - _xlen_PolImg + 1, 1 };
-            top = new long[] { _xmax_beadImg, _ylen_PolImg};
+            top = new long[] { _xmax_beadImg, _ylen_PolImg };
 
         }
 
         return new ShapeFactory().closedBox(bottom, top, AxisOrder.XY);
     }
-
-
 
 }
