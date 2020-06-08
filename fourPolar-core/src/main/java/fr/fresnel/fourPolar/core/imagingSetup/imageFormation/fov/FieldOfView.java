@@ -13,10 +13,10 @@ public class FieldOfView implements IFieldOfView {
     private Hashtable<Polarization, IBoxShape> _fov = new Hashtable<Polarization, IBoxShape>(4);
 
     public FieldOfView(IBoxShape pol0, IBoxShape pol45, IBoxShape pol90, IBoxShape pol135) {
-        _checkNonZero(pol0);
-        _checkNonZero(pol45);
-        _checkNonZero(pol90);
-        _checkNonZero(pol135);
+        _checkPositive(pol0);
+        _checkPositive(pol45);
+        _checkPositive(pol90);
+        _checkPositive(pol135);
 
         _fov.put(Polarization.pol0, pol0);
         _fov.put(Polarization.pol45, pol45);
@@ -32,8 +32,8 @@ public class FieldOfView implements IFieldOfView {
     /**
      * Check to make sure that pixels don't start from zero.
      */
-    public void _checkNonZero(IBoxShape pol) {
-        if (Arrays.stream(pol.min()).summaryStatistics().getMin() == 0) {
+    public void _checkPositive(IBoxShape pol) {
+        if (Arrays.stream(pol.min()).summaryStatistics().getMin() < 0) {
             throw new IllegalArgumentException("Pixels must start from one, and not zero");
         }
 
