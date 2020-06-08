@@ -11,15 +11,11 @@ import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.RegistrationCaptur
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter.Color;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.IPolarizationImageSetCompositesCreater;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.RegistrationCompositeFigureCreator;
-import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageSetReader;
-import fr.fresnel.fourPolar.io.visualization.figures.polarization.IPolarizationImageSetCompositesWriter;
-import fr.fresnel.fourPolar.io.visualization.figures.polarization.tiff.TiffPolarizationImageSetCompositesWriter;
-import javassist.tools.reflect.CannotCreateException;
 
 /**
  * Processes a given {@link RegistrationImageSet} and
@@ -79,7 +75,7 @@ public class RegistrationSetProcessorBuilder extends IRegistrationSetProcessorBu
     /**
      * Set dark background estimator.
      */
-    public RegistrationSetProcessorBuilder darkBackgroundCalculator(
+    public RegistrationSetProcessorBuilder darkBackgroundEstimator(
             IChannelDarkBackgroundEstimator backgroundEstimator) {
         Objects.requireNonNull(backgroundEstimator);
 
