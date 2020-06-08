@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.ui.algorithms.preprocess.registration;
+package fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet;
 
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChannelDarkBackgroundEstimator;
 import fr.fresnel.fourPolar.algorithm.preprocess.registration.IChannelRegistrator;

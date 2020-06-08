@@ -61,9 +61,9 @@ import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOUINT16TiffReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadataReader;
 import fr.fresnel.fourPolar.io.image.polarization.TiffPolarizationImageSetWriter;
 import fr.fresnel.fourPolar.io.image.soi.TiffSoIImageWriter;
-import fr.fresnel.fourPolar.ui.algorithms.preprocess.registration.IRegistrationSetProcessor;
-import fr.fresnel.fourPolar.ui.algorithms.preprocess.registration.RegistrationSetPreprocessor;
-import fr.fresnel.fourPolar.ui.algorithms.preprocess.registration.RegistrationSetProcessorBuilder;
+import fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet.IRegistrationSetProcessor;
+import fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet.RegistrationSetPreprocessor;
+import fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet.RegistrationSetProcessorBuilder;
 import javassist.tools.reflect.CannotCreateException;
 import net.imglib2.RealPoint;
 
