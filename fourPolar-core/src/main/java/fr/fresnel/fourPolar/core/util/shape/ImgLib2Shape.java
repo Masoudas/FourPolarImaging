@@ -109,22 +109,13 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public void rotate3D(double angle1, double angle2, double angle3, Rotation3DOrder rotation3dOrder) {
-        int z_axis = AxisOrder.getZAxis(this._axisOrder);
         if (AxisOrder.getZAxis(this._axisOrder) < 2) {
             throw new IllegalArgumentException("Impossible to rotate 3D because no z-axis exists.");
         }
 
-        int[] axis = Rotation3DOrder.getAxisOrder(rotation3dOrder);
+        this._appliedAffineTransform = _createAffine3DMatrix(angle1, angle2, angle3, rotation3dOrder);
 
-        AffineTransform3D affine3D = new AffineTransform3D();
-        affine3D.rotate(axis[2], -angle3);
-        affine3D.rotate(axis[1], -angle2);
-        affine3D.rotate(axis[0], -angle1);
-
-        this._appliedAffineTransform = _createAffine3DMatrix(z_axis, affine3D);
-
-        this._shape = this._shape.transform(this._appliedAffineTransform);
-
+        _transformShape();
     }
 
     @Override
@@ -137,21 +128,26 @@ class ImgLib2Shape implements IShape {
 
         this._appliedAffineTransform = _createAffineTranslation(translation, numAxis);
 
+        _transformShape();
+    }
+
+    /**
+     * The access point for all transformations of the original shape.
+     */
+    protected void _transformShape() {
         this._shape = this._shape.transform(this._appliedAffineTransform);
     }
 
     @Override
     public void rotate2D(double angle) {
+        this._appliedAffineTransform = _createAffine2DRotation(angle);
+        _transformShape();
+    }
+
+    private AffineGet _createAffine2DRotation(double angle) {
         AffineTransform2D affine2D = new AffineTransform2D();
         affine2D.rotate(-angle);
 
-        this._appliedAffineTransform = _createAffine2DRotation(affine2D);
-
-        this._shape = this._shape.transform(this._appliedAffineTransform);
-
-    }
-
-    private AffineGet _createAffine2DRotation(AffineTransform2D affine2D) {
         AffineTransform fTransform = new AffineTransform(AxisOrder.getNumDefinedAxis(this._axisOrder));
         for (int row = 0; row < 2; row++) {
             for (int column = 0; column < 2; column++) {
@@ -161,7 +157,16 @@ class ImgLib2Shape implements IShape {
         return fTransform;
     }
 
-    private AffineGet _createAffine3DMatrix(int z_axis, AffineTransform3D affine3D) {
+    private AffineGet _createAffine3DMatrix(double angle1, double angle2, double angle3,
+            Rotation3DOrder rotation3dOrder) {
+        int z_axis = AxisOrder.getZAxis(this._axisOrder);
+        int[] axis = Rotation3DOrder.getAxisOrder(rotation3dOrder);
+
+        AffineTransform3D affine3D = new AffineTransform3D();
+        affine3D.rotate(axis[2], -angle3);
+        affine3D.rotate(axis[1], -angle2);
+        affine3D.rotate(axis[0], -angle1);
+
         int[] rowsToFill = { 0, 1, z_axis }; // Row, columns to be filled in the affine transform.
         AffineTransform fTransform = new AffineTransform(AxisOrder.getNumDefinedAxis(this._axisOrder));
         for (int row = 0; row < 3; row++) {
