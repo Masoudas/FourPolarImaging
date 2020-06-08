@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.ui.algorithms.preprocess.registration;
+package fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +8,6 @@ import java.util.HashMap;
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChannelDarkBackgroundEstimator;
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.percentile.PercentileChannelDarkBackgroundEstimator;
 import fr.fresnel.fourPolar.algorithm.preprocess.fov.FoVCalculatorOneCamera;
-import fr.fresnel.fourPolar.algorithm.preprocess.fov.IFoVCalculator;
 import fr.fresnel.fourPolar.algorithm.preprocess.registration.IChannelRegistrator;
 import fr.fresnel.fourPolar.algorithm.preprocess.registration.descriptorBased.DescriptorBasedRegistration;
 import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.ICapturedImageSetSegmenter;
@@ -34,8 +33,6 @@ import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseEr
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadataReader;
-import fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet.IRegistrationSetProcessorBuilder;
-import fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet.RegistrationSetProcessor;
 
 public class RegistrationSetProcessorTest {
     private static String _root = RegistrationSetProcessor.class.getResource("").getPath();
