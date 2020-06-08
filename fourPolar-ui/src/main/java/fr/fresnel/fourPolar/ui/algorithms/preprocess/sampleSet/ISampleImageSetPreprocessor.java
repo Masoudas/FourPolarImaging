@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.ui.algorithms.preprocess.sample;
+package fr.fresnel.fourPolar.ui.algorithms.preprocess.sampleSet;
 
 import java.io.IOException;
 

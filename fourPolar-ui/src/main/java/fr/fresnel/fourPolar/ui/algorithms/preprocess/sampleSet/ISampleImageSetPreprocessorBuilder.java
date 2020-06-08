@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.ui.algorithms.preprocess.sample;
+package fr.fresnel.fourPolar.ui.algorithms.preprocess.sampleSet;
 
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.IChannelDarkBackgroundRemover;
 import fr.fresnel.fourPolar.algorithm.preprocess.realignment.IChannelRealigner;
