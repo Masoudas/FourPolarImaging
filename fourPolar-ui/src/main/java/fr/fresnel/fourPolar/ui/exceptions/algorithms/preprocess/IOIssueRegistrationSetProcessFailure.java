@@ -1,15 +1,17 @@
 package fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess;
 
+import java.util.Arrays;
+
 /**
- * An exception that is thrown in case of failure while processing the
- * {@link RegistrationImageSet} using {@link IRegistrationSetProcessor}.
+ * Thrown in case of failure while reading a {@link RegistrationImageSet} from
+ * the disk.
  */
 public class IOIssueRegistrationSetProcessFailure extends RegistrationSetProcessFailure {
     private static final long serialVersionUID = -384382905714233075L;
-    private final int _channel;
+    private final int[] _channel;
     private final String _message;
 
-    public static IOIssueRegistrationSetProcessFailure failedReadingChannel(int channel) {
+    public static IOIssueRegistrationSetProcessFailure failedReadingChannel(int[] channel) {
         return new IOIssueRegistrationSetProcessFailure(channel);
     }
 
@@ -18,13 +20,13 @@ public class IOIssueRegistrationSetProcessFailure extends RegistrationSetProcess
     }
 
     private IOIssueRegistrationSetProcessFailure(String reason) {
-        _channel = -1;
+        _channel = new int[0];
         _message = reason;
     }
 
-    private IOIssueRegistrationSetProcessFailure(int channel) {
+    private IOIssueRegistrationSetProcessFailure(int[] channel) {
         _channel = channel;
-        _message = "Can't load captured image of channel " + channel;
+        _message = "Can't load captured image of channel " + Arrays.toString(channel);
     }
 
     @Override
