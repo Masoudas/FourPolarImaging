@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.ui.algorithms.preprocess.registration;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChannelDarkBackgroundEstimator;
 import fr.fresnel.fourPolar.algorithm.preprocess.realignment.ChannelRealigner;
@@ -16,8 +17,13 @@ import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.RegistrationSetProcessResult;
 import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackground;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
+import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
+import fr.fresnel.fourPolar.io.exceptions.image.captured.CapturedImageReadFailure;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
+import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.IOIssueRegistrationSetProcessFailure;
+import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.RegistrationIssueRegistrationSetProcessFailure;
+import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.RegistrationSetProcessFailure;
 
 class RegistrationSetProcessor implements IRegistrationSetProcessor {
     private final int _numChannels;
@@ -48,7 +54,8 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
      * Process the given registration captured image set.
      */
     @Override
-    public RegistrationSetProcessResult process(RegistrationImageSet registrationImageSet) throws IOException {
+    public RegistrationSetProcessResult process(RegistrationImageSet registrationImageSet)
+            throws RegistrationSetProcessFailure {
         // TODO use multi-threading here.
         ICapturedImageSet registrationImage = this._readRegistrationImage(registrationImageSet.getIterator().next());
 
@@ -62,7 +69,7 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
     }
 
     private IPolarizationImageSetComposites[] _createCompositeImages(RegistrationImageSet registrationImageSet,
-            IPolarizationImageSet[] channelImages, RegistrationSetProcessResult preprocessResult) throws IOException {
+            IPolarizationImageSet[] channelImages, RegistrationSetProcessResult preprocessResult) {
         this._realignPolarizationImageOfChannels(channelImages, preprocessResult);
 
         IPolarizationImageSetComposites[] composites = new IPolarizationImageSetComposites[this._numChannels];
@@ -75,23 +82,30 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
 
     }
 
-    private RegistrationSetProcessResult _processChannels(IPolarizationImageSet[] channelImages) {
+    private RegistrationSetProcessResult _processChannels(IPolarizationImageSet[] channelImages)
+            throws RegistrationIssueRegistrationSetProcessFailure {
         RegistrationSetProcessResult preprocessResult = new RegistrationSetProcessResult(this._numChannels);
         this._registerChannels(channelImages, preprocessResult);
+        this._checkRegistrationIsSuccessful(preprocessResult);
         this._estimateChannelsDarkBackground(channelImages, preprocessResult);
         return preprocessResult;
     }
 
-    private ICapturedImageSet _readRegistrationImage(ICapturedImageFileSet fileSet) throws IOException {
-        ICapturedImageSet imageSet = this._registrationImageReader.read(fileSet);
+    private ICapturedImageSet _readRegistrationImage(ICapturedImageFileSet fileSet)
+            throws RegistrationSetProcessFailure {
+        ICapturedImageSet imageSet;
+        try {
+            imageSet = this._registrationImageReader.read(fileSet);
+        } catch (CapturedImageReadFailure e) {
+            throw new IOIssueRegistrationSetProcessFailure(e.getMessage());
+        }
         this._closeCapturedImageReaderResources();
 
         return imageSet;
     }
 
     /**
-     * Returns polarization image of each channel as an array.
-     * memory.
+     * Returns polarization image of each channel as an array. 
      */
     private IPolarizationImageSet[] _segmentRegistrationImageIntoChannels(ICapturedImageSet registrationImageSet) {
         IPolarizationImageSet[] channelImages = new IPolarizationImageSet[this._numChannels];
@@ -114,6 +128,25 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
             preprocessResult.setRegistrationResult(channel, registrationResult);
         }
 
+    }
+
+    /**
+     * Checks whether registration was successful for all {@link RegistrationRule}s
+     * of every channel. The exception thrown contains all registration rules for
+     * which failure has occured.
+     */
+    private void _checkRegistrationIsSuccessful(RegistrationSetProcessResult preprocessResult)
+            throws RegistrationIssueRegistrationSetProcessFailure {
+        RegistrationIssueRegistrationSetProcessFailure failure = new RegistrationIssueRegistrationSetProcessFailure();
+        for (int channel = 1; channel <= this._numChannels; channel++) {
+            for (RegistrationRule rule : RegistrationRule.values()) {
+                failure.setRuleFailure(rule, channel);
+            }
+        }
+
+        if (failure.hasFailure()) {
+            throw failure;
+        }
     }
 
     /**
@@ -148,14 +181,18 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
      * 
      * @throws IOException
      */
-    private void _closeCapturedImageReaderResources() throws IOException {
-        this._registrationImageReader.close();
+    private void _closeCapturedImageReaderResources() throws RegistrationSetProcessFailure {
+        try {
+            this._registrationImageReader.close();
+        } catch (IOException e) {
+            throw new IOIssueRegistrationSetProcessFailure(e.getMessage());
+        }
     }
 
     @Override
-    public IPolarizationImageSetComposites getRegistrationComposite(int channel) {
+    public Optional<IPolarizationImageSetComposites> getRegistrationComposite(int channel) {
         ChannelUtils.checkChannel(channel, this._numChannels);
-        return this._channelComposites[channel - 1];
+        return Optional.ofNullable(this._channelComposites[channel - 1]);
     }
 
 }
