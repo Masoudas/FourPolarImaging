@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.core.util.shape;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
+import net.imglib2.realtransform.AffineGet;
 import net.imglib2.realtransform.AffineTransform;
 import net.imglib2.realtransform.AffineTransform2D;
 import net.imglib2.realtransform.AffineTransform3D;
@@ -28,6 +29,13 @@ class ImgLib2Shape implements IShape {
     protected final AxisOrder _axisOrder;
 
     /**
+     * This filed indicates the affine transform that is applied to the shape.
+     * Derived classes can use this transform to transfer the characteristics of the
+     * particular shape (like min and max in box).
+     */
+    protected AffineGet _appliedAffineTransform;
+
+    /**
      * A point mask instance to check whether a point is inside the shape.
      */
     final protected WritablePointMask _pointMask;
@@ -41,8 +49,7 @@ class ImgLib2Shape implements IShape {
      *                  defined.
      * 
      */
-    protected ImgLib2Shape(final int shapeDim, RealMaskRealInterval shape,
-            final AxisOrder axisOrder) {
+    protected ImgLib2Shape(final int shapeDim, RealMaskRealInterval shape, final AxisOrder axisOrder) {
         this._shapeDim = shapeDim;
         this._pointMask = GeomMasks.pointMask(new double[AxisOrder.getNumDefinedAxis(axisOrder)]);
         this._originalShape = shape;
@@ -114,15 +121,9 @@ class ImgLib2Shape implements IShape {
         affine3D.rotate(axis[1], -angle2);
         affine3D.rotate(axis[0], -angle1);
 
-        int[] rowsToFill = { 0, 1, z_axis }; // Row, columns to be filled in the affine transform.
-        AffineTransform fTransform = new AffineTransform(AxisOrder.getNumDefinedAxis(this._axisOrder));
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 3; column++) {
-                fTransform.set(affine3D.get(row, column), rowsToFill[row], rowsToFill[column]);
-            }
-        }
+        this._appliedAffineTransform = _createAffine3DMatrix(z_axis, affine3D);
 
-        this._shape = this._shape.transform(fTransform);
+        this._shape = this._shape.transform(this._appliedAffineTransform);
 
     }
 
@@ -134,13 +135,9 @@ class ImgLib2Shape implements IShape {
                     "Translation must occur over all axis. Consider using zero for undesired axis.");
         }
 
-        AffineTransform fTransform = new AffineTransform(numAxis);
-        // Set translation
-        for (int row = 0; row < numAxis; row++) {
-            fTransform.set(-translation[row], row, numAxis);
-        }
+        this._appliedAffineTransform = _createAffineTranslation(translation, numAxis);
 
-        this._shape = this._shape.transform(fTransform);
+        this._shape = this._shape.transform(this._appliedAffineTransform);
     }
 
     @Override
@@ -148,15 +145,40 @@ class ImgLib2Shape implements IShape {
         AffineTransform2D affine2D = new AffineTransform2D();
         affine2D.rotate(-angle);
 
+        this._appliedAffineTransform = _createAffine2DRotation(affine2D);
+
+        this._shape = this._shape.transform(this._appliedAffineTransform);
+
+    }
+
+    private AffineGet _createAffine2DRotation(AffineTransform2D affine2D) {
         AffineTransform fTransform = new AffineTransform(AxisOrder.getNumDefinedAxis(this._axisOrder));
         for (int row = 0; row < 2; row++) {
             for (int column = 0; column < 2; column++) {
                 fTransform.set(affine2D.get(row, column), row, column);
             }
         }
+        return fTransform;
+    }
 
-        this._shape = this._shape.transform(fTransform);
+    private AffineGet _createAffine3DMatrix(int z_axis, AffineTransform3D affine3D) {
+        int[] rowsToFill = { 0, 1, z_axis }; // Row, columns to be filled in the affine transform.
+        AffineTransform fTransform = new AffineTransform(AxisOrder.getNumDefinedAxis(this._axisOrder));
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < 3; column++) {
+                fTransform.set(affine3D.get(row, column), rowsToFill[row], rowsToFill[column]);
+            }
+        }
+        return fTransform;
+    }
 
+    private AffineTransform _createAffineTranslation(long[] translation, int numAxis) {
+        AffineTransform fTransform = new AffineTransform(numAxis);
+        // Set translation
+        for (int row = 0; row < numAxis; row++) {
+            fTransform.set(-translation[row], row, numAxis);
+        }
+        return fTransform;
     }
 
 }
