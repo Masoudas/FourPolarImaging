@@ -25,12 +25,13 @@ public class SCIFIOUINT16TiffWriterTest {
 
     @BeforeAll
     private static void setRoot() {
-        _root = new File(SCIFIOUINT16TiffWriterTest.class.getResource("Writers").getPath());
+        _root = new File(SCIFIOUINT16TiffWriterTest.class.getResource("").getPath(), "Writers");
+        _root.mkdir();
     }
 
     @Test
     public void write_UINT16XYImage_DiskImageHasSameMetadata() throws IOException, MetadataParseError {
-        long[] dim = { 10, 10 };
+        long[] dim = { 2, 2 };
 
         File destination = new File(_root, "UINT16XYImage.tif");
 
