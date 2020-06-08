@@ -10,6 +10,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.io.exceptions.image.captured.CapturedImageReadFailure;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
@@ -32,25 +33,33 @@ public class TiffCapturedImageSetReader implements ICapturedImageSetReader {
     }
 
     @Override
-    public ICapturedImageSet read(final ICapturedImageFileSet fileSet) throws IOException {
+    public ICapturedImageSet read(final ICapturedImageFileSet fileSet) throws CapturedImageReadFailure {
         CapturedImageSetBuilder builder = new CapturedImageSetBuilder(fileSet.getnCameras());
         builder.setFileSet(fileSet);
 
-        try {
-            String[] labels = Cameras.getLabels(fileSet.getnCameras());
-            for (String label : labels) {
-                ICapturedImageFile[] labelCapturedFiles = fileSet.getFile(label);
-                for (ICapturedImageFile capturedImageFile : labelCapturedFiles) {
-                    Image<UINT16> img = _reader.read(capturedImageFile.file());
-                    builder.setCapturedImage(label, capturedImageFile, img);
-                }
-
+        String[] labels = Cameras.getLabels(fileSet.getnCameras());
+        for (String label : labels) {
+            ICapturedImageFile[] labelCapturedFiles = fileSet.getFile(label);
+            for (ICapturedImageFile capturedImageFile : labelCapturedFiles) {
+                Image<UINT16> capturedImage = this._readCapturedImage(capturedImageFile);
+                builder.setCapturedImage(label, capturedImageFile, capturedImage);
             }
-        } catch (IOException | MetadataParseError e) {
-            throw new IOException("Captured images don't exist or are corrupted");
+
         }
 
         return builder.build();
+
+    }
+
+    private Image<UINT16> _readCapturedImage(ICapturedImageFile capturedImageFile) throws CapturedImageReadFailure {
+        Image<UINT16> img = null;
+        try {
+            img = _reader.read(capturedImageFile.file());
+        } catch (IOException | MetadataParseError e) {
+            throw new CapturedImageReadFailure(capturedImageFile.channels());
+        }
+
+        return img;
     }
 
     /**
