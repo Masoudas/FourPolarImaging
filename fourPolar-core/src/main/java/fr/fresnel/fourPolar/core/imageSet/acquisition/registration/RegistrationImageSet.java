@@ -12,7 +12,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 
 /**
- * Defines the bead image set, which accompanies the sample image set.
+ * Defines the registration image set (bead or otherwise), that accompanies the sample image set.
  */
 public class RegistrationImageSet implements AcquisitionSet {
     /**
