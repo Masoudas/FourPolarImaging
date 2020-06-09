@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
-import java.util.Objects;
-
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import net.imglib2.realtransform.AffineGet;
 import net.imglib2.realtransform.AffineTransform;
@@ -91,15 +89,12 @@ class ImgLib2Shape implements IShape {
     }
 
     @Override
-    public void and(IShape shape) {
-        Objects.requireNonNull(shape, "shape should not be null.");
-
-        if (shape.axisOrder() != this.axisOrder()) {
-            throw new IllegalArgumentException("The two shapes are not defined over the same axis.");
+    public IShape and(IShape shape) {
+        if (shape instanceof ImgLib2Shape) {
+            return ImgLib2LogicalShape.create(this, shape);
+        } else {
+            throw new IllegalArgumentException("Can't And this shape");
         }
-
-        ImgLib2Shape shapeRef = (ImgLib2Shape) shape;
-        this._shape = this._shape.and(shapeRef.getImgLib2Shape());
     }
 
     @Override
