@@ -8,15 +8,16 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 public class ShapeFactory {
     /**
      * Generates a box from min to max. The box is closed in the sense that it
-     * contains the boundary. Note that the dimension of the shape can be less than
-     * the space (min = [0, 0, 1], max = [2, 2, 1]);
+     * contains the boundary. Note min and max and axisOrder must have the same
+     * dimension. Moreover, 1D box is not acceptable.
+     * 
      * 
      * @param min       is the minimum coordinate.
      * @param max       is the maximum coordinate.
      * @param axisOrder is the axis composition associated with the shape.
      * 
-     * @throws IllegalArgumentException in case min and max don't have equal
-     *                                  dimension or shape dimension is less than 2.
+     * @throws IllegalArgumentException for any violation of conditions mentioned
+     *                                  above.
      */
     public IBoxShape closedBox(long[] min, long[] max, AxisOrder axisOrder) {
         Objects.requireNonNull(min, "min should not be null");
