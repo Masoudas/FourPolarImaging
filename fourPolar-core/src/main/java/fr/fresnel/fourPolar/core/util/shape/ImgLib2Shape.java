@@ -20,18 +20,10 @@ import net.imglib2.view.Views;
  * for other libraries. Use set methods.
  */
 class ImgLib2Shape implements IShape {
-    final protected RealMaskRealInterval _originalShape;
     protected RealMaskRealInterval _shape;
 
     protected final int _shapeDim;
     protected final AxisOrder _axisOrder;
-
-    /**
-     * This filed indicates the affine transform that is applied to the shape.
-     * Derived classes can use this transform to transfer the characteristics of the
-     * particular shape (like min and max in box).
-     */
-    protected AffineGet _appliedAffineTransform;
 
     /**
      * A point mask instance to check whether a point is inside the shape.
@@ -50,9 +42,9 @@ class ImgLib2Shape implements IShape {
     protected ImgLib2Shape(final int shapeDim, RealMaskRealInterval shape, final AxisOrder axisOrder) {
         this._shapeDim = shapeDim;
         this._pointMask = GeomMasks.pointMask(new double[AxisOrder.getNumDefinedAxis(axisOrder)]);
-        this._originalShape = shape;
-        this._shape = _copyOriginalShape(shapeDim, shape);
         this._axisOrder = axisOrder;
+        this._shape = _copyOriginalShape(shapeDim, shape);
+
     }
 
     /**
@@ -60,7 +52,7 @@ class ImgLib2Shape implements IShape {
      * original shape
      */
     private RealMaskRealInterval _copyOriginalShape(int shapeDim, RealMaskRealInterval shape) {
-        return shape.transform(new AffineTransform(shapeDim));
+        return shape;
     }
 
     @Override
@@ -106,45 +98,36 @@ class ImgLib2Shape implements IShape {
     }
 
     @Override
-    public void resetToOriginalShape() {
-        this._shape = this._originalShape;
-    }
-
-    @Override
-    public void rotate3D(double angle1, double angle2, double angle3, Rotation3DOrder rotation3dOrder) {
+    public IShape rotate3D(double angle1, double angle2, double angle3, Rotation3DOrder rotation3dOrder) {
         if (AxisOrder.getZAxis(this._axisOrder) < 2) {
             throw new IllegalArgumentException("Impossible to rotate 3D because no z-axis exists.");
         }
 
-        this._appliedAffineTransform = _createAffine3DMatrix(angle1, angle2, angle3, rotation3dOrder);
-
-        _transformShape();
+        return this._transformShape(this._createAffine3DMatrix(angle1, angle2, angle3, rotation3dOrder));
     }
 
     @Override
-    public void translate(long[] translation) {
+    public IShape translate(long[] translation) {
         int numAxis = AxisOrder.getNumDefinedAxis(this._axisOrder);
         if (translation.length != numAxis) {
             throw new IllegalArgumentException(
                     "Translation must occur over all axis. Consider using zero for undesired axis.");
         }
 
-        this._appliedAffineTransform = _createAffineTranslation(translation, numAxis);
+        return this._transformShape(this._createAffineTranslation(translation, numAxis));
+    }
 
-        _transformShape();
+    @Override
+    public IShape rotate2D(double angle) {
+        return _transformShape(this._createAffine2DRotation(angle));
     }
 
     /**
      * The access point for all transformations of the original shape.
      */
-    protected void _transformShape() {
-        this._shape = this._shape.transform(this._appliedAffineTransform);
-    }
-
-    @Override
-    public void rotate2D(double angle) {
-        this._appliedAffineTransform = _createAffine2DRotation(angle);
-        _transformShape();
+    protected IShape _transformShape(AffineGet appliedAffineTransform) {
+        RealMaskRealInterval transformedShape = this._shape.transform(appliedAffineTransform);
+        return new ImgLib2Shape(this._shapeDim, transformedShape, this._axisOrder);
     }
 
     private AffineGet _createAffine2DRotation(double angle) {
