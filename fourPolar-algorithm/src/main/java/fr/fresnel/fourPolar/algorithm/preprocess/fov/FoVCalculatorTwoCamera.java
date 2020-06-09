@@ -20,8 +20,8 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
  * each image.
  */
 public class FoVCalculatorTwoCamera implements IFoVCalculator {
-    final private long[] _dim_pol0_90;
-    final private long[] _dim_pol45_135;
+    final private long[] _laxtPixel_pol0_90;
+    final private long[] _lixtPixel_pol45_135;
 
     final private long[] _intersection_pol0_90;
     final private long[] _intersection_pol45_135;
@@ -54,8 +54,8 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
         this._checkIntersectionPointInside(registrationImg_pol0_90, intersection_pol0_90);
         this._checkIntersectionPointInside(registrationImg_pol45_135, intersection_pol45_135);
 
-        this._dim_pol0_90 = MetadataUtil.getImageLastPixel(registrationImg_pol0_90);
-        this._dim_pol45_135 = MetadataUtil.getImageLastPixel(registrationImg_pol45_135);
+        this._laxtPixel_pol0_90 = MetadataUtil.getImageLastPixel(registrationImg_pol0_90);
+        this._lixtPixel_pol45_135 = MetadataUtil.getImageLastPixel(registrationImg_pol45_135);
 
         this._intersection_pol0_90 = intersection_pol0_90.point();
         this._intersection_pol45_135 = intersection_pol45_135.point();
@@ -84,8 +84,8 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
      * x len is maximum length from the intersection of both images.
      */
     private long _calculate_xlen() {
-        long[] _xlen = { _intersection_pol0_90[0], _dim_pol0_90[0] - _intersection_pol0_90[0],
-                _intersection_pol45_135[0], _dim_pol45_135[0] - _intersection_pol45_135[0] };
+        long[] _xlen = { _intersection_pol0_90[0], _laxtPixel_pol0_90[0] - _intersection_pol0_90[0],
+                _intersection_pol45_135[0], _lixtPixel_pol45_135[0] - _intersection_pol45_135[0] };
         return Arrays.stream(_xlen).summaryStatistics().getMax();
     }
 
@@ -93,15 +93,15 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
      * y max is the minimum of the two images.
      */
     private long _calculate_ylen() {
-        return Math.max(_dim_pol0_90[1], _dim_pol45_135[1]);
+        return Math.max(_laxtPixel_pol0_90[1], _lixtPixel_pol45_135[1]);
     }
 
     @Override
     public IFieldOfView calculate() {
-        IBoxShape pol0 = _defineFoVAsBox(_constellation.pol0(), _dim_pol0_90[0]);
-        IBoxShape pol45 = _defineFoVAsBox(_constellation.pol45(), _dim_pol45_135[0]);
-        IBoxShape pol90 = _defineFoVAsBox(_constellation.pol90(), _dim_pol0_90[0]);
-        IBoxShape pol135 = _defineFoVAsBox(_constellation.pol135(), _dim_pol45_135[0]);
+        IBoxShape pol0 = _defineFoVAsBox(_constellation.pol0(), _laxtPixel_pol0_90[0]);
+        IBoxShape pol45 = _defineFoVAsBox(_constellation.pol45(), _lixtPixel_pol45_135[0]);
+        IBoxShape pol90 = _defineFoVAsBox(_constellation.pol90(), _laxtPixel_pol0_90[0]);
+        IBoxShape pol135 = _defineFoVAsBox(_constellation.pol135(), _lixtPixel_pol45_135[0]);
 
         return new FieldOfView(pol0, pol45, pol90, pol135);
     }
