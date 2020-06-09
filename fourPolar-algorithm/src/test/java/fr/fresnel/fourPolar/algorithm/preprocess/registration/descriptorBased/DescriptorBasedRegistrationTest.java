@@ -85,6 +85,23 @@ public class DescriptorBasedRegistrationTest {
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
     }
 
+    @Test
+    public void register_NonSymmetricSet_ReturnsRegistrationUnsuccessful() {
+        DescriptorBasedRegistration registrator = new DescriptorBasedRegistration();
+
+        File pol0 = new File(root, "/NonSymmetricSet/Pol0.tif");
+        File pol45 = new File(root, "/NonSymmetricSet/Pol45.tif");
+        File pol90 = new File(root, "/NonSymmetricSet/Pol90.tif");
+        File pol135 = new File(root, "/NonSymmetricSet/Pol135.tif");
+
+        DummyPolSet polSet = new DummyPolSet(pol0, pol45, pol90, pol135);
+        IChannelRegistrationResult result = registrator.register(polSet);
+
+        assertTrue(!result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0));
+        assertTrue(!result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0));
+        assertTrue(!result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
+    }
+
 }
 
 class DummyPolSet implements IPolarizationImageSet {
