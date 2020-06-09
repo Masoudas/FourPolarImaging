@@ -76,7 +76,7 @@ class ScaledShape implements IShape {
     }
 
     @Override
-    public void and(IShape shape) {
+    public IShape and(IShape shape) {
         throw new IllegalArgumentException("Can't and scaled shape.");
 
     }
