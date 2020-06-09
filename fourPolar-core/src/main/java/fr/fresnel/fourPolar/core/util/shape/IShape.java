@@ -34,27 +34,21 @@ public interface IShape {
      * @param angle3        is the rotation over the second axis in radian.
      * @param rotationOrder is the desired order of rotation
      */
-    public void rotate3D(double angle1, double angle2, double angle3, Rotation3DOrder rotation3dOrder);
+    public IShape rotate3D(double angle1, double angle2, double angle3, Rotation3DOrder rotation3dOrder);
 
     /**
      * Apply a 2d rotation to the shape (which applies to the first two dimensions).
      * 
      * @param angle is the rotation over the first axis in radian.
      */
-    public void rotate2D(double angle);
+    public IShape rotate2D(double angle);
 
     /**
      * Translate this shape by the given vector. The vector dimension should equal
      * the space dimension. Translation after rotation is guaranteed to work
      * properly.
      */
-    public void translate(long[] translation);
-
-    /**
-     * Using this method, we can reset the shape to it's original untransformed
-     * formation.
-     */
-    public void resetToOriginalShape();
+    public IShape translate(long[] translation);
 
     /**
      * Checks whether the given point is inside the shape. If the point dimension is
