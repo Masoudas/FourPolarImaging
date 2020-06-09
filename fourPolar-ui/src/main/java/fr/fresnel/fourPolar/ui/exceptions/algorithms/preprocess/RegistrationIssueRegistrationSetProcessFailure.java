@@ -40,7 +40,7 @@ public class RegistrationIssueRegistrationSetProcessFailure extends Registration
 
     @Override
     protected String _createMessage() {
-        return "Registration failed for the following: " + this._failedRegistrations.toString();
+        return "Registration failed for the following channels: " + this._failedRegistrations.toString();
     }
 
     public List<Integer> getRuleFailure(RegistrationRule rule) {
@@ -49,6 +49,7 @@ public class RegistrationIssueRegistrationSetProcessFailure extends Registration
 
     /**
      * Returns true if at least one rule has failed among all channels.
+     * 
      * @return
      */
     public boolean hasFailure() {
