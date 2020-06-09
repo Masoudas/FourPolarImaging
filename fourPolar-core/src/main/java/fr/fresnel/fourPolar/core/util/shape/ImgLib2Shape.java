@@ -51,8 +51,16 @@ class ImgLib2Shape implements IShape {
         this._shapeDim = shapeDim;
         this._pointMask = GeomMasks.pointMask(new double[AxisOrder.getNumDefinedAxis(axisOrder)]);
         this._originalShape = shape;
-        this._shape = shape.and(shape); // Just a bogus operation to get a new copy of the shape.
+        this._shape = _copyOriginalShape(shapeDim, shape);
         this._axisOrder = axisOrder;
+    }
+
+    /**
+     * Just a bogus operation to get a new copy of the shape, different from
+     * original shape
+     */
+    private RealMaskRealInterval _copyOriginalShape(int shapeDim, RealMaskRealInterval shape) {
+        return shape.transform(new AffineTransform(shapeDim));
     }
 
     @Override
