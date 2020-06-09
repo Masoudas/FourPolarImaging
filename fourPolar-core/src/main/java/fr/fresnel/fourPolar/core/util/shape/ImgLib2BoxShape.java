@@ -7,6 +7,9 @@ import net.imglib2.roi.geom.GeomMasks;
 import net.imglib2.roi.geom.real.WritableBox;
 
 class ImgLib2BoxShape extends ImgLib2Shape implements IBoxShape {
+    private final long[] _min;
+    private final long[] _max;
+
     public static IBoxShape create(long[] min, long[] max, AxisOrder axisOrder) {
         int shapeDim = 0;
         while (shapeDim < min.length && min[shapeDim] < max[shapeDim]) {
@@ -22,38 +25,19 @@ class ImgLib2BoxShape extends ImgLib2Shape implements IBoxShape {
 
     private ImgLib2BoxShape(final int shapeDim, WritableBox shape, final AxisOrder axisOrder, long[] min, long[] max) {
         super(shapeDim, shape, axisOrder);
+        this._min = min;
+        this._max = max;
     }
 
     @Override
     public long[] min() {
-        long[] min = new long[this._shapeDim];
-        for (int i = 0; i < min.length; i++) {
-            min[i] = this._getMinDimension(i);
-        }
-        return min;
+        return this._min;
     }
 
     @Override
     public long[] max() {
-        long[] max = new long[this._shapeDim];
-        for (int i = 0; i < max.length; i++) {
-            max[i] = this._getMaxDimension(i);
-        }
-        return max;
+        return this._max;
     }
 
-    private long _getMinDimension(int d) {
-        WritableBox box = this._getShapeAsBox();
-        return (long) (box.center().getDoublePosition(d) - box.sideLength(d));
-    }
-
-    private long _getMaxDimension(int d) {
-        WritableBox box = this._getShapeAsBox();
-        return (long) (box.center().getDoublePosition(d) + box.sideLength(d));
-    }
-
-    private WritableBox _getShapeAsBox() {
-        return (WritableBox) super.getImgLib2Shape();
-    }
 
 }
