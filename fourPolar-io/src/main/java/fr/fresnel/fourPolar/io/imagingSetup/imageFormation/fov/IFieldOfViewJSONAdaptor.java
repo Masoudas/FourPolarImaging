@@ -53,50 +53,58 @@ public class IFieldOfViewJSONAdaptor {
      */
     public IFieldOfView fromJSON() {
         IBoxShape pol0 = this._pol0.fromYaml();
-        _shiftFoV(pol0, -_FOV_SHIFT);
+        IBoxShape shiftedPol0 = _shiftFoV(pol0, -_FOV_SHIFT);
 
         IBoxShape pol45 = this._pol45.fromYaml();
-        _shiftFoV(pol45, -_FOV_SHIFT);
+        IBoxShape shiftedPol45 = _shiftFoV(pol45, -_FOV_SHIFT);
 
         IBoxShape pol90 = this._pol90.fromYaml();
-        _shiftFoV(pol90, -_FOV_SHIFT);
+        IBoxShape shiftedPol90 = _shiftFoV(pol90, -_FOV_SHIFT);
 
         IBoxShape pol135 = this._pol135.fromYaml();
-        _shiftFoV(pol135, -_FOV_SHIFT);
+        IBoxShape shiftedPol134 = _shiftFoV(pol135, -_FOV_SHIFT);
 
-        return new FieldOfView(pol0, pol45, pol90, pol135);
-    }
-
-    private void _shiftFoV(IBoxShape fov, long shift) {
-        fov.translate(new long[] { shift, shift });
+        return new FieldOfView(shiftedPol0, shiftedPol45, shiftedPol90, shiftedPol134);
     }
 
     private void _setPol0(IFieldOfView fov) {
-        _pol0 = new IBoxShape2DJSONAdaptor();
         IBoxShape pol0AsBox = fov.getFoV(Polarization.pol0);
-        this._shiftFoV(pol0AsBox, _FOV_SHIFT);
-        _pol0.toYaml(pol0AsBox);
+        IBoxShape shiftedPol0AsBox = this._shiftFoV(pol0AsBox, _FOV_SHIFT);
+
+        _pol0 = new IBoxShape2DJSONAdaptor();
+        _pol0.toYaml(shiftedPol0AsBox);
     }
 
     private void _setPol45(IFieldOfView fov) {
-        _pol45 = new IBoxShape2DJSONAdaptor();
         IBoxShape pol45AsBox = fov.getFoV(Polarization.pol45);
-        this._shiftFoV(pol45AsBox, _FOV_SHIFT);
-        _pol45.toYaml(pol45AsBox);
+        IBoxShape shiftedPol45AsBox = this._shiftFoV(pol45AsBox, _FOV_SHIFT);
+
+        _pol45 = new IBoxShape2DJSONAdaptor();
+        _pol45.toYaml(shiftedPol45AsBox);
     }
 
     private void _setPol90(IFieldOfView fov) {
-        _pol90 = new IBoxShape2DJSONAdaptor();
         IBoxShape pol90AsBox = fov.getFoV(Polarization.pol90);
-        this._shiftFoV(pol90AsBox, _FOV_SHIFT);
-        _pol90.toYaml(pol90AsBox);
+        IBoxShape shiftedPol90AsBox = this._shiftFoV(pol90AsBox, _FOV_SHIFT);
+
+        _pol90 = new IBoxShape2DJSONAdaptor();
+        _pol90.toYaml(shiftedPol90AsBox);
     }
 
     private void _setPol135(IFieldOfView fov) {
-        _pol135 = new IBoxShape2DJSONAdaptor();
         IBoxShape pol135AsBox = fov.getFoV(Polarization.pol135);
-        this._shiftFoV(pol135AsBox, _FOV_SHIFT);
-        _pol135.toYaml(pol135AsBox);
+        IBoxShape shiftedPol135AsBox = this._shiftFoV(pol135AsBox, _FOV_SHIFT);
+
+        _pol135 = new IBoxShape2DJSONAdaptor();
+        _pol135.toYaml(shiftedPol135AsBox);
     }
+
+    private IBoxShape _shiftFoV(IBoxShape fov, long shift) {
+        long[] shiftedMin = Arrays.stream(fov.min()).map((t) -> t + shift).toArray();
+        long[] shiftedMax = Arrays.stream(fov.max()).map((t) -> t + shift).toArray();
+
+        return new ShapeFactory().closedBox(shiftedMin, shiftedMax, fov.axisOrder());
+    }
+
 
 }
