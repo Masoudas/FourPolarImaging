@@ -30,11 +30,11 @@ public class FieldOfView implements IFieldOfView {
     }
 
     /**
-     * Check to make sure that pixels don't start from zero.
+     * Check to make sure that pixels are positive.
      */
     public void _checkPositive(IBoxShape pol) {
         if (Arrays.stream(pol.min()).summaryStatistics().getMin() < 0) {
-            throw new IllegalArgumentException("Pixels must start from one, and not zero");
+            throw new IllegalArgumentException("Pixels must be positive");
         }
 
     }
