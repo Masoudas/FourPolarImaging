@@ -48,26 +48,21 @@ class ScaledShape implements IShape {
     }
 
     @Override
-    public void rotate3D(double angle1, double angle2, double angle3, Rotation3DOrder rotation3dOrder) {
+    public IShape rotate3D(double angle1, double angle2, double angle3, Rotation3DOrder rotation3dOrder) {
         throw new IllegalArgumentException("Can't rotate 3d shape.");
 
     }
 
     @Override
-    public void rotate2D(double angle) {
+    public IShape rotate2D(double angle) {
         throw new IllegalArgumentException("Can't rotate scaled shape.");
 
     }
 
     @Override
-    public void translate(long[] translation) {
+    public IShape translate(long[] translation) {
         throw new IllegalArgumentException("Can't translate scaled shape.");
 
-    }
-
-    @Override
-    public void resetToOriginalShape() {
-        throw new IllegalArgumentException("Can't reset for scaled shape.");
     }
 
     @Override
