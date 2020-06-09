@@ -86,4 +86,9 @@ public class MetadataUtil {
 		return metadata1.axisOrder() == metadata2.axisOrder();
 
 	}
+
+	public static long[] getImageLastPixel(IMetadata metadata) {
+		return Arrays.stream(metadata.getDim()).map((t) -> t - 1).toArray();
+	}
+
 }
