@@ -138,12 +138,11 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     }
 
     private void _drawStick(IOrientationVector orientationVector, long[] dipolePosition) {
-        _transformStick(dipolePosition, orientationVector);
         final RGB16 color = _getStickColor(orientationVector);
-
         Pixel<RGB16> stickPixel = new Pixel<>(RGB16.zero()); // Create one pixel instance, to avoid creating many
                                                              // objects.
-        IShapeIterator stickIterator = this._stick.getIterator();
+
+        IShapeIterator stickIterator = _createStickIteratorForThisDipole(orientationVector, dipolePosition);
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
             if (this._stick3DFigureBoundary.isInside(stickPosition)) {
@@ -152,6 +151,13 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
                 this._stick3DFigureRA.setPixel(stickPixel);
             }
         }
+    }
+
+    private IShapeIterator _createStickIteratorForThisDipole(IOrientationVector orientationVector,
+            long[] dipolePosition) {
+        IShape transformedShape = _transformStick(dipolePosition, orientationVector);
+        IShapeIterator stickIterator = transformedShape.getIterator();
+        return stickIterator;
     }
 
     private RGB16 _getStickColor(IOrientationVector orientationVector) {
@@ -174,16 +180,15 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
      * @param dipolePosition    is the dipole position in the orientation image.
      * @param orientationVector is the orientation of the dipole.
      */
-    private void _transformStick(long[] dipolePosition, IOrientationVector orientationVector) {
+    private IShape _transformStick(long[] dipolePosition, IOrientationVector orientationVector) {
         int z_axis = IAngleImage.AXIS_ORDER.z_axis;
         int t_axis = IAngleImage.AXIS_ORDER.t_axis;
         long[] stickTranslation = { dipolePosition[0], dipolePosition[1], 0,
                 dipolePosition[z_axis] * this._stickLength + this._stickLength / 2 - 1, dipolePosition[t_axis] };
 
-        this._stick.resetToOriginalShape();
-        this._stick.rotate3D(orientationVector.getAngle(OrientationAngle.eta),
+        IShape transformedShape = this._stick.rotate3D(orientationVector.getAngle(OrientationAngle.eta),
                 -Math.PI / 2 + orientationVector.getAngle(OrientationAngle.rho), 0, Rotation3DOrder.XZY);
-        this._stick.translate(stickTranslation);
+        return transformedShape.translate(stickTranslation);
     }
 
     private IOrientationVector _getOrientationVector(long[] stickCenterPosition) {
