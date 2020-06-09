@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 
@@ -18,8 +17,8 @@ import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
-import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
+import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
@@ -39,10 +38,10 @@ public class FourPolarImagingSetupFromYamlTest {
 
         imagingSetup.setCameras(Cameras.One);
 
-        IBoxShape rect0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 128, 128 }, AxisOrder.XY);
-        IBoxShape rect45 = new ShapeFactory().closedBox(new long[] { 128, 1 }, new long[] { 256, 128 }, AxisOrder.XY);
-        IBoxShape rect90 = new ShapeFactory().closedBox(new long[] { 1, 128 }, new long[] { 128, 256 }, AxisOrder.XY);
-        IBoxShape rect135 = new ShapeFactory().closedBox(new long[] { 128, 128 }, new long[] { 256, 256 },
+        IBoxShape rect0 = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 127, 127 }, AxisOrder.XY);
+        IBoxShape rect45 = new ShapeFactory().closedBox(new long[] { 127, 0 }, new long[] { 255, 127 }, AxisOrder.XY);
+        IBoxShape rect90 = new ShapeFactory().closedBox(new long[] { 0, 127 }, new long[] { 127, 255 }, AxisOrder.XY);
+        IBoxShape rect135 = new ShapeFactory().closedBox(new long[] { 127, 127 }, new long[] { 255, 255 },
                 AxisOrder.XY);
 
         FieldOfView fov = new FieldOfView(rect0, rect45, rect90, rect135);

@@ -34,10 +34,10 @@ public class FourPolarImagingSetupToYamlTest {
 
         imagingSetup.setCameras(Cameras.One);
 
-        IBoxShape rect0 = new ShapeFactory().closedBox(new long[] { 1, 1 }, new long[] { 128, 128 }, AxisOrder.XY);
-        IBoxShape rect45 = new ShapeFactory().closedBox(new long[] { 128, 1 }, new long[] { 256, 128 }, AxisOrder.XY);
-        IBoxShape rect90 = new ShapeFactory().closedBox(new long[] { 1, 128 }, new long[] { 128, 256 }, AxisOrder.XY);
-        IBoxShape rect135 = new ShapeFactory().closedBox(new long[] { 128, 128 }, new long[] { 256, 256 },
+        IBoxShape rect0 = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 127, 127 }, AxisOrder.XY);
+        IBoxShape rect45 = new ShapeFactory().closedBox(new long[] { 127, 0 }, new long[] { 255, 127 }, AxisOrder.XY);
+        IBoxShape rect90 = new ShapeFactory().closedBox(new long[] { 0, 127 }, new long[] { 127, 255 }, AxisOrder.XY);
+        IBoxShape rect135 = new ShapeFactory().closedBox(new long[] { 127, 127 }, new long[] { 255, 255 },
                 AxisOrder.XY);
 
         FieldOfView fov = new FieldOfView(rect0, rect45, rect90, rect135);
