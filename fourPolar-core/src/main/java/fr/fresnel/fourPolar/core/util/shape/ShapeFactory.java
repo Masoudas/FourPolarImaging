@@ -1,14 +1,9 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import net.imglib2.roi.geom.GeomMasks;
-import net.imglib2.roi.geom.real.PointMask;
-import net.imglib2.roi.geom.real.WritableBox;
-import net.imglib2.roi.geom.real.WritablePolygon2D;
 
 public class ShapeFactory {
     /**
@@ -41,20 +36,7 @@ public class ShapeFactory {
             throw new IllegalArgumentException("max should be greater than or equal to min");
         }
 
-        int shapeDim = 0;
-        while (shapeDim < min.length && min[shapeDim] < max[shapeDim]) {
-            shapeDim++;
-        }
-
-        if (shapeDim < 2) {
-            throw new IllegalArgumentException("Dimension of the box has to be at least two.");
-        }
-
-        double[] minCopy = Arrays.stream(min).asDoubleStream().toArray();
-        double[] maxCopy = Arrays.stream(max).asDoubleStream().toArray();
-        WritableBox box = GeomMasks.closedBox(minCopy, maxCopy);
-
-        return new ImgLib2BoxShape(min.length, box, axisOrder, min, max);
+        return ImgLib2BoxShape.create(min, max, axisOrder);
     }
 
     public IPolygon2DShape closedPolygon2D(long[] x, long[] y) {
@@ -65,12 +47,7 @@ public class ShapeFactory {
             throw new IllegalArgumentException("x and y should have the same dimension and greater than three.");
         }
 
-        double[] xPoints = Arrays.stream(x).asDoubleStream().toArray();
-        double[] yPoints = Arrays.stream(y).asDoubleStream().toArray();
-
-        WritablePolygon2D polygon2D = GeomMasks.closedPolygon2D(xPoints, yPoints);
-
-        return new ImgLib2Polygon2DShape(2, polygon2D, AxisOrder.XY, x, y);
+        return ImgLib2Polygon2DShape.create(x, y);
     }
 
     public IPointShape point(long[] point, AxisOrder axisOrder) {
@@ -80,8 +57,7 @@ public class ShapeFactory {
             throw new IllegalArgumentException("Number of axis must correspond to point dimension.");
         }
 
-        PointMask mask = GeomMasks.pointMask(Arrays.stream(point).asDoubleStream().toArray());
-        return new ImgLib2PointShape(1, mask, axisOrder, point);
+        return ImgLib2PointShape.create(point, axisOrder);
     }
 
 }
