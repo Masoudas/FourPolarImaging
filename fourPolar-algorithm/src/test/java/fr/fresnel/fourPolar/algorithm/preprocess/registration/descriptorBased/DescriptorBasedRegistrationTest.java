@@ -68,6 +68,23 @@ public class DescriptorBasedRegistrationTest {
         assertTrue(result.error(RegistrationRule.Pol135_to_Pol0) < 1);
     }
 
+    @Test
+    public void register_NoFPInImages_ReturnsRegistrationUnsuccessful() {
+        DescriptorBasedRegistration registrator = new DescriptorBasedRegistration();
+
+        File pol0 = new File(root, "/NoFPSet/Pol0.tif");
+        File pol45 = new File(root, "/NoFPSet/Pol45.tif");
+        File pol90 = new File(root, "/NoFPSet/Pol90.tif");
+        File pol135 = new File(root, "/NoFPSet/Pol135.tif");
+
+        DummyPolSet polSet = new DummyPolSet(pol0, pol45, pol90, pol135);
+        IChannelRegistrationResult result = registrator.register(polSet);
+
+        assertTrue(!result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0));
+        assertTrue(!result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0));
+        assertTrue(!result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
+    }
+
 }
 
 class DummyPolSet implements IPolarizationImageSet {
