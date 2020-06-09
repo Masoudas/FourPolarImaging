@@ -20,8 +20,8 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
  * each image.
  */
 public class FoVCalculatorTwoCamera implements IFoVCalculator {
-    final private long[] _laxtPixel_pol0_90;
-    final private long[] _lixtPixel_pol45_135;
+    final private long _x_min_two_images;
+    final private long _y_min_two_images;
 
     final private long[] _intersection_pol0_90;
     final private long[] _intersection_pol45_135;
@@ -54,13 +54,13 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
         this._checkIntersectionPointInside(registrationImg_pol0_90, intersection_pol0_90);
         this._checkIntersectionPointInside(registrationImg_pol45_135, intersection_pol45_135);
 
-        this._laxtPixel_pol0_90 = MetadataUtil.getImageLastPixel(registrationImg_pol0_90);
-        this._lixtPixel_pol45_135 = MetadataUtil.getImageLastPixel(registrationImg_pol45_135);
+        this._x_min_two_images = this._getMinimumAlongDim(0, registrationImg_pol0_90, registrationImg_pol45_135);
+        this._y_min_two_images = this._getMinimumAlongDim(1, registrationImg_pol0_90, registrationImg_pol45_135);
 
         this._intersection_pol0_90 = intersection_pol0_90.point();
         this._intersection_pol45_135 = intersection_pol45_135.point();
 
-        this._xlen_PolImg = _calculate_xlen();
+        this._xlen_PolImg = _calculate_xlen(registrationImg_pol0_90, registrationImg_pol45_135);
         this._ylen_PolImg = _calculate_ylen();
 
         this._constellation = constellation;
@@ -80,28 +80,37 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
 
     }
 
+    private long _getMinimumAlongDim(int d, IMetadata registrationImg_pol0_90, IMetadata registrationImg_pol45_135) {
+        assert d >= 0 && d < 2 : "Dimension has to be 0 and 1";
+
+        return Math.min(MetadataUtil.getImageLastPixel(registrationImg_pol0_90)[d],
+                MetadataUtil.getImageLastPixel(registrationImg_pol45_135)[d]);
+    }
+
     /**
-     * x len is maximum length from the intersection of both images.
+     * x len is the minimum of the maximum length from the intersection of both
+     * images (to accommodate for difference in image sizes).
      */
-    private long _calculate_xlen() {
-        long[] _xlen = { _intersection_pol0_90[0], _laxtPixel_pol0_90[0] - _intersection_pol0_90[0],
-                _intersection_pol45_135[0], _lixtPixel_pol45_135[0] - _intersection_pol45_135[0] };
-        return Arrays.stream(_xlen).summaryStatistics().getMax();
+    private long _calculate_xlen(IMetadata registrationImg_pol0_90, IMetadata registrationImg_pol45_135) {
+        long x_pol_0_90 = MetadataUtil.getImageLastPixel(registrationImg_pol0_90)[0];
+        long x_pol_45_135 = MetadataUtil.getImageLastPixel(registrationImg_pol45_135)[0];
+        return Math.min(Math.max(_intersection_pol0_90[0], x_pol_0_90 - _intersection_pol0_90[0]),
+                Math.max(_intersection_pol45_135[0], x_pol_45_135 - _intersection_pol45_135[0]));
     }
 
     /**
      * y max is the minimum of the two images.
      */
     private long _calculate_ylen() {
-        return Math.max(_laxtPixel_pol0_90[1], _lixtPixel_pol45_135[1]);
+        return _y_min_two_images;
     }
 
     @Override
     public IFieldOfView calculate() {
-        IBoxShape pol0 = _defineFoVAsBox(_constellation.pol0(), _laxtPixel_pol0_90[0]);
-        IBoxShape pol45 = _defineFoVAsBox(_constellation.pol45(), _lixtPixel_pol45_135[0]);
-        IBoxShape pol90 = _defineFoVAsBox(_constellation.pol90(), _laxtPixel_pol0_90[0]);
-        IBoxShape pol135 = _defineFoVAsBox(_constellation.pol135(), _lixtPixel_pol45_135[0]);
+        IBoxShape pol0 = _defineFoVAsBox(_constellation.pol0(), _x_min_two_images);
+        IBoxShape pol45 = _defineFoVAsBox(_constellation.pol45(), _x_min_two_images);
+        IBoxShape pol90 = _defineFoVAsBox(_constellation.pol90(), _x_min_two_images);
+        IBoxShape pol135 = _defineFoVAsBox(_constellation.pol135(), _x_min_two_images);
 
         return new FieldOfView(pol0, pol45, pol90, pol135);
     }
