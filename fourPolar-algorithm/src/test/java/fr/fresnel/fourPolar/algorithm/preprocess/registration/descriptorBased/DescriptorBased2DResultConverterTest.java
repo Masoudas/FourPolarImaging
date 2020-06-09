@@ -6,10 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
-import ij.ImagePlus;
-import net.imglib2.img.cell.CellImgFactory;
-import net.imglib2.img.display.imagej.ImageJFunctions;
-import net.imglib2.type.numeric.ARGBType;
 import registration.descriptorBased.result.DescriptorBased2DResult;
 import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
 
@@ -26,11 +22,8 @@ public class DescriptorBased2DResultConverterTest {
         pol90.setFailureDescription(FailureCause.NO_INLIER_AFTER_RANSAC);
         pol90.setIsSuccessful(false);
 
-        long[] resultImageDim = { 2, 2 };
-        ImagePlus img = ImageJFunctions.wrap(new CellImgFactory<ARGBType>(new ARGBType()).create(resultImageDim), "");
         DescriptorBased2DResult pol135 = new DescriptorBased2DResult();
         pol135.setIsSuccessful(true);
-        pol135.setResultingCompositeImage(img);
         pol135.setPercentInliers(0.90);
         pol135.setRegistrationError(0.9);
 
