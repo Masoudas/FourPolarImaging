@@ -12,9 +12,8 @@ public interface IShape {
      */
     public IShapeIterator getIterator();
 
-
     /**
-     * Returns the Axis order associated with the shape. 
+     * Returns the Axis order associated with the shape.
      * 
      */
     public AxisOrder axisOrder();
@@ -30,10 +29,10 @@ public interface IShape {
     /**
      * Apply a 3d rotation with the given rotation order.
      * 
-     * @param angle1 is the rotation over the first axis in radian.
-     * @param angle2 is the rotation over the second axis in radian.
-     * @param angle3 is the rotation over the second axis in radian.
-     * @param rotationOrder  is the desired order of rotation
+     * @param angle1        is the rotation over the first axis in radian.
+     * @param angle2        is the rotation over the second axis in radian.
+     * @param angle3        is the rotation over the second axis in radian.
+     * @param rotationOrder is the desired order of rotation
      */
     public void rotate3D(double angle1, double angle2, double angle3, Rotation3DOrder rotation3dOrder);
 
@@ -68,12 +67,14 @@ public interface IShape {
     public boolean isInside(long[] point);
 
     /**
-     * Ands this shape with the given shape. In case there's no overlap, the
-     * resulting shape has no elements.
+     * Ands this shape with the given shape and returns a new shape. In case there's
+     * no overlap, the resulting shape has no elements. Note that the new shape
+     * instance is not an instance of the old shape. For example, anding two
+     * {@link IBoxShape} does not yield another box shape.
      * 
      * @throws IllegalArgumentException in case the two shapes don't have same
      *                                  number of axis.
      * 
      */
-    public void and(IShape shape);
+    public IShape and(IShape shape);
 }
