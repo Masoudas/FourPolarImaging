@@ -141,16 +141,20 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     private void _drawStick(IOrientationVector orientationVector, long[] stickCenterPosition,
             IPixelRandomAccess<RGB16> stickFigureRA) {
         _transformStick(stickCenterPosition, orientationVector);
-        this._stick.and(this._stickFigureRegion);
-
         Pixel<RGB16> pixelValue = _getStickColor(orientationVector);
 
-        IShapeIterator stickIterator = this._stick.getIterator();
+        IShapeIterator stickIterator = this._getPortionOfStickInsideFigureFrame();
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
             stickFigureRA.setPosition(stickPosition);
             stickFigureRA.setPixel(pixelValue);
         }
+    }
+
+    private IShapeIterator _getPortionOfStickInsideFigureFrame() {
+        IShape portionInsideFrame = this._stick.and(this._stickFigureRegion);
+        IShapeIterator stickIterator = portionInsideFrame.getIterator();
+        return stickIterator;
     }
 
     /**
