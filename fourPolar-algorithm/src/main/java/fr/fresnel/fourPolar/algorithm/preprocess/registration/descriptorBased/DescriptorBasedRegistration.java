@@ -148,8 +148,8 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
         if (result.description() == FailureCause.NO_INLIER_AFTER_RANSAC) {
             updated.numNeighbors(previous_itr.getNumNeighbors() + 1).redundancy(previous_itr.getRedundancy() + 1);
         } else if (result.description() == FailureCause.NOT_ENOUGH_FP) {
-            updated.sigma1(DOG_SIGMA_CHOICES[itr][0]).sigma2(DOG_SIGMA_CHOICES[itr][1])
-                    .detectionThreshold(THRESHOLD_CHOICES[itr]);
+            updated.sigma1(DOG_SIGMA_CHOICES[itr - 1][0]).sigma2(DOG_SIGMA_CHOICES[itr - 1][1])
+                    .detectionThreshold(THRESHOLD_CHOICES[itr - 1]);
         }
 
         return updated;
