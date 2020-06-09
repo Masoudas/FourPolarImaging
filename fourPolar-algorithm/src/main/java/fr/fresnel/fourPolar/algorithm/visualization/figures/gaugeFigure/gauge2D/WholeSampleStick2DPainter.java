@@ -140,10 +140,10 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
      */
     private void _drawStick(IOrientationVector orientationVector, long[] stickCenterPosition,
             IPixelRandomAccess<RGB16> stickFigureRA) {
-        _transformStick(stickCenterPosition, orientationVector);
+
         Pixel<RGB16> pixelValue = _getStickColor(orientationVector);
 
-        IShapeIterator stickIterator = this._getPortionOfStickInsideFigureFrame();
+        IShapeIterator stickIterator = _createStickIteratorForThisDipole(orientationVector, stickCenterPosition);
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
             stickFigureRA.setPosition(stickPosition);
@@ -151,8 +151,15 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         }
     }
 
-    private IShapeIterator _getPortionOfStickInsideFigureFrame() {
-        IShape portionInsideFrame = this._stick.and(this._stickFigureRegion);
+    private IShapeIterator _createStickIteratorForThisDipole(IOrientationVector orientationVector,
+            long[] stickCenterPosition) {
+        IShape transformedStick = _transformStick(stickCenterPosition, orientationVector);
+        IShapeIterator stickIterator = this._getPortionOfStickInsideFigureFrame(transformedStick);
+        return stickIterator;
+    }
+
+    private IShapeIterator _getPortionOfStickInsideFigureFrame(IShape transformedStick) {
+        IShape portionInsideFrame = transformedStick.and(this._stickFigureRegion);
         IShapeIterator stickIterator = portionInsideFrame.getIterator();
         return stickIterator;
     }
@@ -164,10 +171,9 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
      * @param position          is the dipole position
      * @param orientationVector is the orientation vector at the position
      */
-    private void _transformStick(long[] position, IOrientationVector orientationVector) {
-        this._stick.resetToOriginalShape();
-        this._stick.rotate2D(-orientationVector.getAngle(_slopeAngle));
-        this._stick.translate(position.clone());
+    private IShape _transformStick(long[] position, IOrientationVector orientationVector) {
+        IShape transformedStick = this._stick.rotate2D(-orientationVector.getAngle(_slopeAngle));
+        return transformedStick.translate(position.clone());
     }
 
     private IOrientationVector _getOrientationVector(long[] stickCenterPosition) {

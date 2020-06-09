@@ -87,7 +87,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
         int channel = soiImage.channel();
 
         long[] dim = new long[IGaugeFigure.AXIS_ORDER.numAxis];
-        Arrays.setAll(dim, (i)->1);
+        Arrays.setAll(dim, (i) -> 1);
         dim[0] = (long) (stickLength * 1.1);
         dim[1] = dim[0];
 
@@ -160,18 +160,24 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
         final IOrientationVector orientationVector = this._getOrientationOfThePosition(dipolePosition);
         if (_isSoIAboveThreshold(soiThreshold.get()) && _slopeAndColorAngleExist(orientationVector)) {
-            _transformStick(dipolePosition, orientationVector);
-
             // Use the same pixel for every pixel of stick.
             final Pixel<RGB16> pixelColor = this._getStickColor(orientationVector);
             IPixelRandomAccess<RGB16> stickFigureRA = this._dipoleFigure.getImage().getRandomAccess();
 
-            for (IShapeIterator stickIterator = this._stick.getIterator(); stickIterator.hasNext();) {
+            IShapeIterator stickIterator = _createStickIteratorForThisDipole(dipolePosition, orientationVector);
+            for (; stickIterator.hasNext();) {
                 long[] stickPosition = stickIterator.next();
                 stickFigureRA.setPosition(stickPosition);
                 stickFigureRA.setPixel(pixelColor);
             }
         }
+    }
+
+    private IShapeIterator _createStickIteratorForThisDipole(long[] dipolePosition,
+            final IOrientationVector orientationVector) {
+        IShape transformedShape = _transformStick(dipolePosition, orientationVector);
+        IShapeIterator stickIterator = transformedShape.getIterator();
+        return stickIterator;
     }
 
     @Override
@@ -198,10 +204,9 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
                 && !Double.isNaN(orientationVector.getAngle(_colorAngle));
     }
 
-    private void _transformStick(long[] position, IOrientationVector orientationVector) {
-        this._stick.resetToOriginalShape();
-        this._stick.rotate2D(Math.PI / 2 + orientationVector.getAngle(_slopeAngle));
-        this._stick.translate(this._stickTranslation);
+    private IShape _transformStick(long[] position, IOrientationVector orientationVector) {
+        IShape transformedShape = this._stick.rotate2D(Math.PI / 2 + orientationVector.getAngle(_slopeAngle));
+        return transformedShape.translate(this._stickTranslation);
     }
 
     /**
