@@ -17,10 +17,24 @@ class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationRe
     private int _channelNum = 0;
 
     public DescriptorBasedChannelRegistrationResult() {
-        this._isSuccessfulRegistration = new HashMap<>();
+        this._isSuccessfulRegistration = _initializeIsSuccessfulRegistrationToFalse();
         this._affineTransform = new HashMap<>();
         this._error = new HashMap<>();
         this._description = new HashMap<>();
+    }
+
+    /**
+     * All inital results are set to false, so that if the registration algorithm
+     * fails with unknown exception, is successful will be false.
+     * 
+     * @return
+     */
+    private HashMap<RegistrationRule, Boolean> _initializeIsSuccessfulRegistrationToFalse() {
+        HashMap<RegistrationRule, Boolean> isSuccessful = new HashMap<>();
+        for (RegistrationRule rule : RegistrationRule.values()) {
+            isSuccessful.put(rule, false);
+        }
+        return isSuccessful;
     }
 
     public void setAffineTransform(RegistrationRule order, AffineTransform2D affineTransform) {
