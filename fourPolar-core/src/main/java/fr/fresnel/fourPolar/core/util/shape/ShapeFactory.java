@@ -27,6 +27,10 @@ public class ShapeFactory {
             throw new IllegalArgumentException("min and max should have the same dimension");
         }
 
+        if (min.length <= 1) {
+            throw new IllegalArgumentException("Number of dimension has to be at least two.");
+        }
+
         if (axisOrder != AxisOrder.NoOrder && AxisOrder.getNumDefinedAxis(axisOrder) != min.length) {
             throw new IllegalArgumentException("Number of axis must correspond to shape min and max");
         }
