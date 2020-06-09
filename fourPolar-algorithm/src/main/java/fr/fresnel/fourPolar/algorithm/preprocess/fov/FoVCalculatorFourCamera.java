@@ -19,13 +19,17 @@ public class FoVCalculatorFourCamera implements IFoVCalculator {
     private final long _x_len_min;
     private final long _y_len_min;
 
+    /**
+     * Calculate FoV as the minimum size of all four images, using their metadata.
+     * 
+     */
     public FoVCalculatorFourCamera(IMetadata beadImg_pol0, IMetadata beadImg_pol45, IMetadata beadImg_pol90,
             IMetadata beadImg_pol135) {
         // TODO Use Box to indicate region.
-        this._x_len_min = Arrays.stream(new long[] { beadImg_pol0.getDim()[0], beadImg_pol45.getDim()[0],
-                beadImg_pol90.getDim()[0], beadImg_pol135.getDim()[0] }).summaryStatistics().getMin();
-        this._y_len_min = Arrays.stream(new long[] { beadImg_pol0.getDim()[1], beadImg_pol45.getDim()[1],
-                beadImg_pol90.getDim()[1], beadImg_pol135.getDim()[1] }).summaryStatistics().getMin();
+        this._x_len_min = Arrays.stream(new long[] { beadImg_pol0.getDim()[0] - 1, beadImg_pol45.getDim()[0] - 1,
+                beadImg_pol90.getDim()[0] - 1, beadImg_pol135.getDim()[0] - 1 }).summaryStatistics().getMin();
+        this._y_len_min = Arrays.stream(new long[] { beadImg_pol0.getDim()[1] - 1, beadImg_pol45.getDim()[1] - 1,
+                beadImg_pol90.getDim()[1] - 1, beadImg_pol135.getDim()[1] - 1 }).summaryStatistics().getMin();
 
     }
 
@@ -40,7 +44,7 @@ public class FoVCalculatorFourCamera implements IFoVCalculator {
     }
 
     private IBoxShape _defineFoVAsBox() {
-        long[] bottom = { 1, 1 };
+        long[] bottom = { 0, 0 };
         long[] top = { _x_len_min, _y_len_min };
         return new ShapeFactory().closedBox(bottom, top, AxisOrder.XY);
     }

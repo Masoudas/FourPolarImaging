@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.algorithm.preprocess.fov;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.OneCameraPolarizationConstellation;
@@ -12,12 +13,11 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
 /**
  * Calculates the FoV for the one camera case, using the plane dimension of the
- * Captured image together with a {@link IPointShape} which indicates the
- * intersection point of all four polarizations in the image.
+ * Captured image.
  */
 public class FoVCalculatorOneCamera implements IFoVCalculator {
-    final private long _xmax_beadImg;
-    final private long _ymax_beadImg;
+    final private long _xmax_registrationImg;
+    final private long _ymax_registrationImg;
 
     final private long _x_intersection;
     final private long _y_intersection;
@@ -32,39 +32,44 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
     private final OneCameraPolarizationConstellation _constellation;
 
     /**
-     * Calculate FoV using the metadata of the bead image.
+     * Calculate FoV using the metadata of the registration image. FoV is calcualted
+     * with a {@link IPointShape} which indicates the intersection point of all four
+     * polarizations in the image. The maximum length from intersection to each side
+     * of the image is considered as FoV.
      * 
-     * @param beadImg_pol0_45_90_135 is the metadata of the bead image for one
-     *                               camera case.
-     * @param intersectionPoint      is the intersection point of polarizations in
-     *                               the bead image (starting from [1, 1, 1]).
+     * @param registrationImg_pol0_45_90_135 is the metadata of the registration
+     *                                       image for one camera case.
+     * @param intersectionPoint              is the intersection point of
+     *                                       polarizations in the registration image
+     *                                       (starting from [1, 1, 1]).
      * 
      * @throws IllegalArgumentException if the axis order of the @param
      *                                  intersectionPoint is not XY. Also if
-     *                                  intersection point is not in the bead image.
+     *                                  intersection point is not in the
+     *                                  registration image.
      */
-    public FoVCalculatorOneCamera(IMetadata beadImg_pol0_45_90_135, IPointShape intersectionPoint,
+    public FoVCalculatorOneCamera(IMetadata registrationImg_pol0_45_90_135, IPointShape intersectionPoint,
             OneCameraPolarizationConstellation constellation) {
         // TODO Use Box to indicate region.
-        long[] beadImgDim = beadImg_pol0_45_90_135.getDim();
+        long[] registrationImgDim = MetadataUtil.getImageLastPixel(registrationImg_pol0_45_90_135);
         long[] iPoint = intersectionPoint.point();
 
-        if (beadImgDim[0] <= iPoint[0] || beadImgDim[1] <= iPoint[1]) {
+        if (registrationImgDim[0] <= iPoint[0] || registrationImgDim[1] <= iPoint[1]) {
             throw new IllegalArgumentException("Intersection point must be inside the image boundary.");
         }
 
-        if (iPoint[0] <= 0 || iPoint[1] <= 0) {
+        if (iPoint[0] < 0 || iPoint[1] < 0) {
             throw new IllegalArgumentException("Intersection point must be greater than equal zero.");
         }
 
-        _xmax_beadImg = beadImgDim[0];
-        _ymax_beadImg = beadImgDim[1];
+        _xmax_registrationImg = registrationImgDim[0];
+        _ymax_registrationImg = registrationImgDim[1];
 
         _x_intersection = iPoint[0];
         _y_intersection = iPoint[1];
 
-        _xlen_PolImg = Math.min(_x_intersection - 1, _xmax_beadImg - _x_intersection);
-        _ylen_PolImg = Math.min(_y_intersection - 1, _ymax_beadImg - _y_intersection);
+        _xlen_PolImg = Math.max(_x_intersection, _xmax_registrationImg - _x_intersection);
+        _ylen_PolImg = Math.max(_y_intersection, _ymax_registrationImg - _y_intersection);
 
         _constellation = constellation;
     }
@@ -83,17 +88,17 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
         long[] bottom = null;
         long[] top = null;
         if (position == Position.TopLeft) {
-            bottom = new long[] { 1, 1 };
+            bottom = new long[] { 0, 0 };
             top = new long[] { _xlen_PolImg, _ylen_PolImg };
         } else if (position == Position.TopRight) {
-            bottom = new long[] { _xmax_beadImg - _xlen_PolImg + 1, 1 };
-            top = new long[] { _xmax_beadImg, _ylen_PolImg };
+            bottom = new long[] { _xmax_registrationImg - _xlen_PolImg, 0 };
+            top = new long[] { _xmax_registrationImg, _ylen_PolImg };
         } else if (position == Position.BottomLeft) {
-            bottom = new long[] { 1, _ymax_beadImg - _ylen_PolImg + 1 };
-            top = new long[] { _xlen_PolImg, _ymax_beadImg };
+            bottom = new long[] { 0, _ymax_registrationImg - _ylen_PolImg };
+            top = new long[] { _xlen_PolImg, _ymax_registrationImg };
         } else {
-            bottom = new long[] { _xmax_beadImg - _xlen_PolImg + 1, _ymax_beadImg - _ylen_PolImg + 1 };
-            top = new long[] { _xmax_beadImg, _ymax_beadImg };
+            bottom = new long[] { _xmax_registrationImg - _xlen_PolImg, _ymax_registrationImg - _ylen_PolImg };
+            top = new long[] { _xmax_registrationImg, _ymax_registrationImg };
         }
         return new ShapeFactory().closedBox(bottom, top, AxisOrder.XY);
     }

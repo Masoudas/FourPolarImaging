@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.FieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.TwoCameraPolarizationConstellation;
@@ -14,9 +15,9 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
 /**
  * Calculates the FoV for the two camera case, using the plane dimension of the
- * Captured images together with two {@link IPointShape} for each bead image,
- * which indicates the intersection point of the two polarizations in each
- * image.
+ * Captured images together with two {@link IPointShape} for each registration
+ * image, which indicates the intersection point of the two polarizations in
+ * each image.
  */
 public class FoVCalculatorTwoCamera implements IFoVCalculator {
     final private long[] _dim_pol0_90;
@@ -34,15 +35,27 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
 
     final private TwoCameraPolarizationConstellation _constellation;
 
-    public FoVCalculatorTwoCamera(IMetadata beadImg_pol0_90, IPointShape intersection_pol0_90,
-            IMetadata beadImg_pol45_135, IPointShape intersection_pol45_135,
+    /**
+     * Calculate FoV using the metadata of the registration images of each camera.
+     * FoV is calcualted with two {@link IPointShape}, which indicates the
+     * intersection point of two polarizations in each image. The maximum length
+     * from intersection to each side of the image is considered as FoV.
+     * 
+     * @param registrationImg_pol0_90
+     * @param intersection_pol0_90
+     * @param registrationImg_pol45_135
+     * @param intersection_pol45_135
+     * @param constellation
+     */
+    public FoVCalculatorTwoCamera(IMetadata registrationImg_pol0_90, IPointShape intersection_pol0_90,
+            IMetadata registrationImg_pol45_135, IPointShape intersection_pol45_135,
             TwoCameraPolarizationConstellation constellation) {
         // TODO Use Box to indicate region.
-        this._checkIntersectionPointInside(beadImg_pol0_90, intersection_pol0_90);
-        this._checkIntersectionPointInside(beadImg_pol45_135, intersection_pol45_135);
+        this._checkIntersectionPointInside(registrationImg_pol0_90, intersection_pol0_90);
+        this._checkIntersectionPointInside(registrationImg_pol45_135, intersection_pol45_135);
 
-        this._dim_pol0_90 = beadImg_pol0_90.getDim();
-        this._dim_pol45_135 = beadImg_pol45_135.getDim();
+        this._dim_pol0_90 = MetadataUtil.getImageLastPixel(registrationImg_pol0_90);
+        this._dim_pol45_135 = MetadataUtil.getImageLastPixel(registrationImg_pol45_135);
 
         this._intersection_pol0_90 = intersection_pol0_90.point();
         this._intersection_pol45_135 = intersection_pol45_135.point();
@@ -68,19 +81,19 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
     }
 
     /**
-     * x min is minimum length from the intersection of both images.
+     * x len is maximum length from the intersection of both images.
      */
     private long _calculate_xlen() {
-        long[] _xlen = { _intersection_pol0_90[0] - 1, _dim_pol0_90[0] - _intersection_pol0_90[0],
-                _intersection_pol45_135[0] - 1, _dim_pol45_135[0] - _intersection_pol45_135[0] };
-        return Arrays.stream(_xlen).summaryStatistics().getMin();
+        long[] _xlen = { _intersection_pol0_90[0], _dim_pol0_90[0] - _intersection_pol0_90[0],
+                _intersection_pol45_135[0], _dim_pol45_135[0] - _intersection_pol45_135[0] };
+        return Arrays.stream(_xlen).summaryStatistics().getMax();
     }
 
     /**
-     * y min is the minimum of the two images.
+     * y max is the minimum of the two images.
      */
     private long _calculate_ylen() {
-        return Math.min(_dim_pol0_90[1], _dim_pol45_135[1]);
+        return Math.max(_dim_pol0_90[1], _dim_pol45_135[1]);
     }
 
     @Override
@@ -93,16 +106,16 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
         return new FieldOfView(pol0, pol45, pol90, pol135);
     }
 
-    private IBoxShape _defineFoVAsBox(Position position, long _xmax_beadImg) {
+    private IBoxShape _defineFoVAsBox(Position position, long _xmax_registrationImg) {
         long[] bottom = null;
         long[] top = null;
 
         if (position == Position.Left) {
-            bottom = new long[] { 1, 1 };
+            bottom = new long[] { 0, 0 };
             top = new long[] { _xlen_PolImg, _ylen_PolImg };
         } else {
-            bottom = new long[] { _xmax_beadImg - _xlen_PolImg + 1, 1 };
-            top = new long[] { _xmax_beadImg, _ylen_PolImg };
+            bottom = new long[] { _xmax_registrationImg - _xlen_PolImg, 0 };
+            top = new long[] { _xmax_registrationImg, _ylen_PolImg };
 
         }
 
