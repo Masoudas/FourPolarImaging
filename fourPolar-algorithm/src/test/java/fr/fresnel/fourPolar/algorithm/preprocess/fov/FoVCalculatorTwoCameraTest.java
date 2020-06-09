@@ -32,10 +32,9 @@ public class FoVCalculatorTwoCameraTest {
         IFieldOfView fov = new FoVCalculatorTwoCamera(metadata_0_90, intersectionPoint_0_90, metadata_45_135,
                 intersectionPoint_45_135, twoCameraConstellation).calculate();
 
-        long x_len = Arrays
-                .stream(new long[] { intersectionPoint_0_90.point()[0], dim[0] - 1 - intersectionPoint_0_90.point()[0],
-                        intersectionPoint_45_135.point()[0], dim[0] - 1 - intersectionPoint_45_135.point()[0] })
-                .summaryStatistics().getMax();
+        long x_len = Math.min(
+                Math.max(intersectionPoint_0_90.point()[0], dim[0] - 1 - intersectionPoint_0_90.point()[0]),
+                Math.max(intersectionPoint_45_135.point()[0], dim[0] - 1 - intersectionPoint_45_135.point()[0]));
 
         assertArrayEquals(fov.getFoV(Polarization.pol0).min(), new long[] { 0, 0 });
         assertArrayEquals(fov.getFoV(Polarization.pol0).max(), new long[] { x_len, dim[1] - 1 });
@@ -69,10 +68,9 @@ public class FoVCalculatorTwoCameraTest {
         IFieldOfView fov = new FoVCalculatorTwoCamera(metadata_0_90, intersectionPoint_0_90, metadata_45_135,
                 intersectionPoint_45_135, twoCameraConstellation).calculate();
 
-        long x_len = Arrays.stream(
-                new long[] { intersectionPoint_0_90.point()[0], dim[0] - 1 - intersectionPoint_0_90.point()[0],
-                        intersectionPoint_45_135.point()[0], dim[0] - 1 - intersectionPoint_45_135.point()[0] })
-                .summaryStatistics().getMax();
+        long x_len = Math.min(
+                Math.max(intersectionPoint_0_90.point()[0], dim[0] - 1 - intersectionPoint_0_90.point()[0]),
+                Math.max(intersectionPoint_45_135.point()[0], dim[0] - 1 - intersectionPoint_45_135.point()[0]));
 
         assertArrayEquals(fov.getFoV(Polarization.pol90).min(), new long[] { 0, 0 });
         assertArrayEquals(fov.getFoV(Polarization.pol90).max(), new long[] { x_len, dim[1] - 1 });
