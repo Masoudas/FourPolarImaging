@@ -45,7 +45,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
      * We generate a single stick, and then rotate and translate it for different
      * dipoles.
      */
-    final private IShape _stick;
+    final private IShape _baseStick;
 
     /**
      * Create the 3D painter using the builder parameters.
@@ -63,7 +63,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
         this._colormap = builder.getColorMap();
         this._stickLength = builder.getSticklength();
 
-        this._stick = _defineBaseStick(this._stickLength, builder.getStickThickness(),
+        this._baseStick = _defineBaseStick(this._stickLength, builder.getStickThickness(),
                 this._stick3DFigure.getImage().getMetadata().axisOrder());
     }
 
@@ -186,7 +186,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
         long[] stickTranslation = { dipolePosition[0], dipolePosition[1], 0,
                 dipolePosition[z_axis] * this._stickLength + this._stickLength / 2 - 1, dipolePosition[t_axis] };
 
-        IShape transformedShape = this._stick.rotate3D(orientationVector.getAngle(OrientationAngle.eta),
+        IShape transformedShape = this._baseStick.rotate3D(orientationVector.getAngle(OrientationAngle.eta),
                 -Math.PI / 2 + orientationVector.getAngle(OrientationAngle.rho), 0, Rotation3DOrder.XZY);
         return transformedShape.translate(stickTranslation);
     }

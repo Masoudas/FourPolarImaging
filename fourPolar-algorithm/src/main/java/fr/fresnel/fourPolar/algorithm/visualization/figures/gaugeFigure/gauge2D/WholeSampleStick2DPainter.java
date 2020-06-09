@@ -36,7 +36,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
      * We generate a single stick, and then rotate and translate it for different
      * dipoles.
      */
-    final private IShape _stick;
+    final private IShape _baseStick;
 
     private final OrientationAngle _slopeAngle;
     private final OrientationAngle _colorAngle;
@@ -58,7 +58,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         this._colorAngle = getColorAngle(this._stick2DFigure.getGaugeType());
         this._maxColorAngle = OrientationVector.maxAngle(_colorAngle);
 
-        this._stick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness());
+        this._baseStick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness());
 
         this._stickFigureRegion = this._getImageBoundaryAsShape(this._stick2DFigure.getImage().getMetadata().getDim(),
                 this._stick2DFigure.getImage().getMetadata().axisOrder());
@@ -172,7 +172,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
      * @param orientationVector is the orientation vector at the position
      */
     private IShape _transformStick(long[] position, IOrientationVector orientationVector) {
-        IShape transformedStick = this._stick.rotate2D(-orientationVector.getAngle(_slopeAngle));
+        IShape transformedStick = this._baseStick.rotate2D(-orientationVector.getAngle(_slopeAngle));
         return transformedStick.translate(position.clone());
     }
 

@@ -45,7 +45,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
      * We generate a single stick, and then rotate it to represent the unique
      * dipole.
      */
-    final private IShape _stick;
+    final private IShape _baseStick;
 
     private final OrientationAngle _slopeAngle;
     private final OrientationAngle _colorAngle;
@@ -67,7 +67,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
         this._colorAngle = WholeSampleStick2DPainter.getColorAngle(this._dipoleFigure.getGaugeType());
         this._maxColorAngle = OrientationVector.maxAngle(_colorAngle);
 
-        this._stick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness());
+        this._baseStick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness());
 
         this._orientationImageBoundary = this._defineOrientationImageBoundaryAsBoxShape(
                 builder.getOrientationImage().getAngleImage(OrientationAngle.rho).getImage().getMetadata().getDim(),
@@ -205,7 +205,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
     }
 
     private IShape _transformStick(long[] position, IOrientationVector orientationVector) {
-        IShape transformedShape = this._stick.rotate2D(Math.PI / 2 + orientationVector.getAngle(_slopeAngle));
+        IShape transformedShape = this._baseStick.rotate2D(Math.PI / 2 + orientationVector.getAngle(_slopeAngle));
         return transformedShape.translate(this._stickTranslation);
     }
 
