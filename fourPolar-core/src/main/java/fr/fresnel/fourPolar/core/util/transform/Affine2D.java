@@ -23,7 +23,7 @@ public class Affine2D implements AffineTransform {
         }
 
         try {
-            this._matrix.set(matrix);            
+            this._matrix.set(matrix);
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(e);
         }
@@ -36,6 +36,9 @@ public class Affine2D implements AffineTransform {
 
     @Override
     public double get(int row, int column) {
+        if (row >= 2 || column >= 3) {
+            throw new IllegalArgumentException("Element does not exist.");
+        }
         return this._matrix.get(row, column);
     }
 }
