@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
+import mpicbg.models.AffineModel2D;
 import registration.descriptorBased.result.DescriptorBased2DResult;
 import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
 
@@ -25,22 +26,33 @@ public class DescriptorBased2DResultConverterTest {
         DescriptorBased2DResult pol135 = new DescriptorBased2DResult();
         pol135.setIsSuccessful(true);
         pol135.setPercentInliers(0.90);
+        pol135.setAffineTransfrom(new AffineModel2D());
         pol135.setRegistrationError(0.9);
 
-        DescriptorBased2DResultConverter converter = new DescriptorBased2DResultConverter(channel);
-
-        converter.set(RegistrationRule.Pol45_to_Pol0, pol45);
-        converter.set(RegistrationRule.Pol90_to_Pol0, pol90);
-        converter.set(RegistrationRule.Pol135_to_Pol0, pol135);
+        DescriptorBased2DResultConverter converter = new DescriptorBased2DResultConverter(channel)
+                .set(RegistrationRule.Pol45_to_Pol0, pol45).set(RegistrationRule.Pol90_to_Pol0, pol90)
+                .set(RegistrationRule.Pol135_to_Pol0, pol135);
 
         IChannelRegistrationResult result = converter.convert();
 
+        // Pol45
+        assertTrue(result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0) == false);
+        assertTrue(!result.getAffineTransform(RegistrationRule.Pol45_to_Pol0).isPresent());
         assertTrue(result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
                 .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
+        assertTrue(result.error(RegistrationRule.Pol45_to_Pol0) < 0);
+
+        // Pol90
+        assertTrue(result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0) == false);
+        assertTrue(!result.getAffineTransform(RegistrationRule.Pol90_to_Pol0).isPresent());
         assertTrue(result.getFailureDescription(RegistrationRule.Pol90_to_Pol0).get()
                 .equals(DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION));
-        assertTrue(result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
+        assertTrue(result.error(RegistrationRule.Pol90_to_Pol0) < 0);
 
+        // Pol135
+        assertTrue(result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0) == true);
+        assertTrue(result.getAffineTransform(RegistrationRule.Pol135_to_Pol0).isPresent());
+        assertTrue(!result.getFailureDescription(RegistrationRule.Pol135_to_Pol0).isPresent());
         assertTrue(result.error(RegistrationRule.Pol135_to_Pol0) == 0.9);
 
     }
