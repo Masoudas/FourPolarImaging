@@ -81,25 +81,43 @@ public class DescriptorBasedRegistrationTest {
         IChannelRegistrationResult result = registrator.register(polSet);
 
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0));
+        assertTrue(!result.getDescription(RegistrationRule.Pol45_to_Pol0)
+                .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
+
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0));
+        assertTrue(!result.getDescription(RegistrationRule.Pol45_to_Pol0)
+                .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
+
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
+        assertTrue(!result.getDescription(RegistrationRule.Pol45_to_Pol0)
+                .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
+
     }
 
     @Test
-    public void register_NonSymmetricSet_ReturnsRegistrationUnsuccessful() {
+    public void register_Pol0HasNoFPSet_ReturnsRegistrationUnsuccessful() {
         DescriptorBasedRegistration registrator = new DescriptorBasedRegistration();
 
-        File pol0 = new File(root, "/NonSymmetricSet/Pol0.tif");
-        File pol45 = new File(root, "/NonSymmetricSet/Pol45.tif");
-        File pol90 = new File(root, "/NonSymmetricSet/Pol90.tif");
-        File pol135 = new File(root, "/NonSymmetricSet/Pol135.tif");
+        File pol0 = new File(root, "/Pol0HasNoFPSet/Pol0.tif");
+        File pol45 = new File(root, "/Pol0HasNoFPSet/Pol45.tif");
+        File pol90 = new File(root, "/Pol0HasNoFPSet/Pol90.tif");
+        File pol135 = new File(root, "/Pol0HasNoFPSet/Pol135.tif");
 
         DummyPolSet polSet = new DummyPolSet(pol0, pol45, pol90, pol135);
         IChannelRegistrationResult result = registrator.register(polSet);
 
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0));
+        assertTrue(result.getDescription(RegistrationRule.Pol45_to_Pol0)
+                .equals(DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION));
+
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0));
+        assertTrue(result.getDescription(RegistrationRule.Pol90_to_Pol0)
+                .equals(DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION));
+
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
+        assertTrue(result.getDescription(RegistrationRule.Pol135_to_Pol0)
+                .equals(DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION));
+
     }
 
 }
