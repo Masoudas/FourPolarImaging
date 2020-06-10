@@ -8,7 +8,9 @@ import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.ICapturedImageSetS
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageSet;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
+import fr.fresnel.fourPolar.io.exceptions.image.captured.CapturedImageReadFailure;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
+import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.sampleSet.SampleSetPreprocessFailure;
 
 class SampleImageSetPreprocessor implements ISampleImageSetPreprocessor {
     private final int _numChannels;
@@ -30,7 +32,7 @@ class SampleImageSetPreprocessor implements ISampleImageSetPreprocessor {
     }
 
     @Override
-    public void setCapturedImageSet(ICapturedImageFileSet capturedImageFileSet) throws IOException {
+    public void setCapturedImageSet(ICapturedImageFileSet capturedImageFileSet) throws SampleSetPreprocessFailure {
         ICapturedImageSet capturedImageSet = this._readCapturedImageSet(capturedImageFileSet);
 
         // Keep the captured image set in the segmenter, for it to be segmented with
@@ -38,8 +40,13 @@ class SampleImageSetPreprocessor implements ISampleImageSetPreprocessor {
         this._capturedImageSetSegmenter.setCapturedImage(capturedImageSet);
     }
 
-    private ICapturedImageSet _readCapturedImageSet(ICapturedImageFileSet capturedImageFileSet) throws IOException {
-        return this._capturedImageSetReader.read(capturedImageFileSet);
+    private ICapturedImageSet _readCapturedImageSet(ICapturedImageFileSet capturedImageFileSet)
+            throws SampleSetPreprocessFailure {
+        try {
+            return this._capturedImageSetReader.read(capturedImageFileSet);
+        } catch (CapturedImageReadFailure e) {
+            throw new SampleSetPreprocessFailure(e.getMessage());
+        }
     }
 
     @Override
