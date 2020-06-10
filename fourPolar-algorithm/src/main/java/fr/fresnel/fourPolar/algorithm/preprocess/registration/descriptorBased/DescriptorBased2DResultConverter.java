@@ -33,11 +33,12 @@ class DescriptorBased2DResultConverter {
             DescriptorBased2DResult polResult = _results.get(order);
 
             result.setIsSuccessfulRegistration(order, polResult.isSuccessful());
+            result.setAffineTransform(order, this._getAffineTransform(polResult));
+            result.setDescription(order, this._getFailureDescription(polResult));
+
             if (polResult.isSuccessful()) {
                 result.setError(order, polResult.error());
-                result.setAffineTransform(order, this._getAffineTransform(polResult));
             } else {
-                result.setDescription(order, this._getFailureDescription(polResult));
                 result.setError(order, -1);
                 result.setAffineTransform(order, null);
             }
@@ -51,22 +52,29 @@ class DescriptorBased2DResultConverter {
      * affine of the algorithm. Otherwise, return a null, which will later be
      * returned as an empty optional in {@link IChannelRegistrationResult}.
      * 
-     * @param result
-     * @return
      */
     private Affine2D _getAffineTransform(DescriptorBased2DResult result) {
-        Affine2D transform2d = null;
-        if (result.isSuccessful()) {
-            transform2d = new Affine2D();
-            transform2d.set(result.affineTransform());
+        if (!result.isSuccessful()) {
+            return null;
         }
+
+        Affine2D transform2d = null;
+        transform2d = new Affine2D();
+        transform2d.set(result.affineTransform());
         return transform2d;
     }
 
+    /**
+     * If Descriptior based algorithm has been successful, return null, which will
+     * later be returned as an empty optional in {@link IChannelRegistrationResult}.
+     * Otherwise, return the description.
+     */
     private String _getFailureDescription(DescriptorBased2DResult result) {
-        if (result.description() == null) {
+        if (!result.isSuccessful()) {
             return null;
-        } else if (result.description() == FailureCause.NOT_ENOUGH_FP) {
+        }
+
+        if (result.description() == FailureCause.NOT_ENOUGH_FP) {
             return DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION;
         } else if (result.description() == FailureCause.NO_INLIER_AFTER_RANSAC) {
             return DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION;
