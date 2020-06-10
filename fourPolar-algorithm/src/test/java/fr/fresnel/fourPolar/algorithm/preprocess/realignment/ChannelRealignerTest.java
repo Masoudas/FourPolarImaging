@@ -20,10 +20,11 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.util.transform.Affine2D;
+import javassist.tools.reflect.CannotCreateException;
 
 public class ChannelRealignerTest {
     @Test
-    public void realign_Transform2DImage1ToRightAnd1ToBottom_ReturnsCorrectImage() {
+    public void realign_Transform2DImage1ToRightAnd1ToBottom_ReturnsCorrectImage() throws CannotCreateException {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2 }).axisOrder(AxisOrder.XY).build();
 
         Image<UINT16> pol0 = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
