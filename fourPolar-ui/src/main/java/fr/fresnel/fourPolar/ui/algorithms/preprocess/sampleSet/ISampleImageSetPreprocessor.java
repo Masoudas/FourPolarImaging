@@ -5,6 +5,7 @@ import java.io.IOException;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
+import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.sampleSet.SampleSetPreprocessFailure;
 
 /**
  * an interface for processing a set of {@link ICapturedImageFileSet} that are
@@ -33,10 +34,12 @@ public interface ISampleImageSetPreprocessor {
      * 
      * @param capturedImageFileSet
      * 
-     * @throws IOException in case of IO issues while reading this captured image
-     *                     set from the disk.
+     * @throws SampleSetPreprocessFailure in case of the preprocess fails for any
+     *                                    reason (including for example IO issues
+     *                                    while reading this captured image set from
+     *                                    the disk.)
      */
-    public void setCapturedImageSet(ICapturedImageFileSet capturedImageFileSet) throws IOException;
+    public void setCapturedImageSet(ICapturedImageFileSet capturedImageFileSet) throws SampleSetPreprocessFailure;
 
     /**
      * Return the polarization image set for the given channel of the captured image
