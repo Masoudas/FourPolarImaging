@@ -35,9 +35,9 @@ public class DescriptorBased2DResultConverterTest {
 
         IChannelRegistrationResult result = converter.convert();
 
-        assertTrue(result.getDescription(RegistrationRule.Pol45_to_Pol0)
+        assertTrue(result.getFailureDescription(RegistrationRule.Pol45_to_Pol0)
                 .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
-        assertTrue(result.getDescription(RegistrationRule.Pol90_to_Pol0)
+        assertTrue(result.getFailureDescription(RegistrationRule.Pol90_to_Pol0)
                 .equals(DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION));
         assertTrue(result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
 

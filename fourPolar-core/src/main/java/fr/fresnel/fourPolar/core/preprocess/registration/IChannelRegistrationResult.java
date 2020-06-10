@@ -27,13 +27,13 @@ public interface IChannelRegistrationResult {
     public double error(RegistrationRule rule);
 
     /**
-     * Returns a string representation of the result of the algorithm. (Example: For
-     * the bead descriptor based algorithm, it returns the number detected feature
-     * points as a string, or that no feature points were detected).
+     * Returns a string representation of the failure reason of the algorithm.
+     * (Example: For the bead descriptor based algorithm, it says that no feature
+     * points were detected).
      * 
      * @return
      */
-    public String getDescription(RegistrationRule rule);
+    public String getFailureDescription(RegistrationRule rule);
 
     /**
      * The channel number this dark background is associated with.

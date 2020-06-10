@@ -68,7 +68,7 @@ class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationRe
     }
 
     @Override
-    public String getDescription(RegistrationRule order) {
+    public String getFailureDescription(RegistrationRule order) {
         return this._description.get(order);
     }
 
