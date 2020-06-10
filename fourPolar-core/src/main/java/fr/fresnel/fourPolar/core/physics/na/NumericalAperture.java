@@ -34,7 +34,7 @@ public class NumericalAperture implements INumericalAperture {
 
     private void _checkNa(double pol0, double pol45, double pol90, double pol135) throws NumericalApertureOutOfRange{
         if (pol0 <= 0 || pol45 <= 0 || pol90 <= 0 || pol135 <= 0) {
-            throw new NumericalApertureOutOfRange("Negative values are not accepted");
+            throw new NumericalApertureOutOfRange("Numerical aperture should be positive");
         }
     }
 
