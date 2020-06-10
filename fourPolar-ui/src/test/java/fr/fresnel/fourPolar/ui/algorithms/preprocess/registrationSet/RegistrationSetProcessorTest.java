@@ -46,6 +46,8 @@ import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageSetReader;
 import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.RegistrationSetProcessFailure;
 
+// TODO Implement a capturedImageRead interface, and directly return images (without loading).
+// So that testing becomes dependent on images. 
 public class RegistrationSetProcessorTest {
     private static String _root = RegistrationSetProcessor.class.getResource("").getPath();
 

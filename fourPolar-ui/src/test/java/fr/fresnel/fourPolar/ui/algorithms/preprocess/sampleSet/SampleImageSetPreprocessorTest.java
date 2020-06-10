@@ -52,6 +52,8 @@ import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageSetReader;
 import javassist.tools.reflect.CannotCreateException;
 
+// TODO Implement a capturedImageRead interface, and directly return images (without loading).
+// So that testing becomes dependent on images.
 public class SampleImageSetPreprocessorTest {
     /**
      * We expect that no exception. Because realignment and segmentation throw no
@@ -87,7 +89,7 @@ public class SampleImageSetPreprocessorTest {
             processor.getPolarizationImageSet(1);
         });
 
-        _allPolarizationHaveDimension(processor.getPolarizationImageSet(1), new long[]{2,2,1,1,1});
+        _allPolarizationHaveDimension(processor.getPolarizationImageSet(1), new long[] { 2, 2, 1, 1, 1 });
         assertTrue(this._allPixelsOfAllPolarizationsAreEqualToVal(processor.getPolarizationImageSet(1), 0));
     }
 
@@ -128,7 +130,7 @@ public class SampleImageSetPreprocessorTest {
             processor.getPolarizationImageSet(1);
         });
 
-        _allPolarizationHaveDimension(processor.getPolarizationImageSet(1), new long[]{2,2,1,1,1});
+        _allPolarizationHaveDimension(processor.getPolarizationImageSet(1), new long[] { 2, 2, 1, 1, 1 });
         assertTrue(this._allPixelsOfAllPolarizationsAreEqualToVal(processor.getPolarizationImageSet(1), 0));
 
     }
@@ -178,7 +180,7 @@ public class SampleImageSetPreprocessorTest {
             processor.getPolarizationImageSet(1);
         });
 
-        _allPolarizationHaveDimension(processor.getPolarizationImageSet(1), new long[]{3,3,1,1,1});
+        _allPolarizationHaveDimension(processor.getPolarizationImageSet(1), new long[] { 3, 3, 1, 1, 1 });
         assertTrue(this._allPixelsOfAllPolarizationsAreEqualToVal(processor.getPolarizationImageSet(1), 0));
     }
 
