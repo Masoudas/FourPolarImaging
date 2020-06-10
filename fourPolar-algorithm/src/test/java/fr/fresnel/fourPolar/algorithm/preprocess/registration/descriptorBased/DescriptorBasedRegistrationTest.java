@@ -81,15 +81,15 @@ public class DescriptorBasedRegistrationTest {
         IChannelRegistrationResult result = registrator.register(polSet);
 
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0));
-        assertTrue(!result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
+        assertTrue(result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
                 .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
 
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0));
-        assertTrue(!result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
+        assertTrue(result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
                 .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
 
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
-        assertTrue(!result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
+        assertTrue(result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
                 .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
 
     }
@@ -107,15 +107,15 @@ public class DescriptorBasedRegistrationTest {
         IChannelRegistrationResult result = registrator.register(polSet);
 
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0));
-        assertTrue(result.getFailureDescription(RegistrationRule.Pol45_to_Pol0)
+        assertTrue(result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
                 .equals(DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION));
 
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0));
-        assertTrue(result.getFailureDescription(RegistrationRule.Pol90_to_Pol0)
+        assertTrue(result.getFailureDescription(RegistrationRule.Pol90_to_Pol0).get()
                 .equals(DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION));
 
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
-        assertTrue(result.getFailureDescription(RegistrationRule.Pol135_to_Pol0)
+        assertTrue(result.getFailureDescription(RegistrationRule.Pol135_to_Pol0).get()
                 .equals(DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION));
 
     }
@@ -187,7 +187,6 @@ class DummyPol implements IPolarizationImage {
 
     @Override
     public Polarization getPolarization() {
-        // TODO Auto-generated method stub
         return null;
     }
 
