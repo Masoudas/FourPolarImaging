@@ -21,9 +21,9 @@ import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 import fr.fresnel.fourPolar.io.exceptions.image.captured.CapturedImageReadFailure;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
-import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.IOIssueRegistrationSetProcessFailure;
-import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.RegistrationIssueRegistrationSetProcessFailure;
-import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.RegistrationSetProcessFailure;
+import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.IOIssueRegistrationSetProcessFailure;
+import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.RegistrationIssueRegistrationSetProcessFailure;
+import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.RegistrationSetProcessFailure;
 
 class RegistrationSetProcessor implements IRegistrationSetProcessor {
     private final int _numChannels;

@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess;
+package fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet;
 
 /**
  * An exception that is thrown in case of failure while processing the

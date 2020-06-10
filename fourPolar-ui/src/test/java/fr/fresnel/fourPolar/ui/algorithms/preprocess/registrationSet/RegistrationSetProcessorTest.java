@@ -50,7 +50,7 @@ import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseEr
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadataReader;
-import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.RegistrationSetProcessFailure;
+import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.RegistrationSetProcessFailure;
 
 public class RegistrationSetProcessorTest {
     private static String _root = RegistrationSetProcessor.class.getResource("").getPath();

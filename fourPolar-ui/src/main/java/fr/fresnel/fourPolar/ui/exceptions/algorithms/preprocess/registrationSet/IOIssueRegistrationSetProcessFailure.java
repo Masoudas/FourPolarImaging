@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess;
+package fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet;
 

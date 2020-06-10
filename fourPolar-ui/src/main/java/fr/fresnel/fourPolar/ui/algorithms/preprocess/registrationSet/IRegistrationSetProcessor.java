@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet;
 import fr.fresnel.fourPolar.core.preprocess.RegistrationSetProcessResult;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
-import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.RegistrationSetProcessFailure;
+import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.RegistrationSetProcessFailure;
 
 /**
  * An interface for processing the given {@link RegistrationImageSet}, that
