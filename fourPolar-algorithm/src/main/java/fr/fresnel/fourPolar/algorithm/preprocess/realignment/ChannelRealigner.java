@@ -10,6 +10,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.util.transform.Affine2D;
+import javassist.tools.reflect.CannotCreateException;
 import net.imglib2.RealRandomAccessible;
 import net.imglib2.img.Img;
 import net.imglib2.interpolation.randomaccess.NLinearInterpolatorFactory;
@@ -33,9 +34,22 @@ public class ChannelRealigner implements IChannelRealigner {
      * Create an instance for the desired channel, based on its registration result.
      * 
      * @return
+     * @throws CannotCreateException
      */
-    public static IChannelRealigner create(final IChannelRegistrationResult channelRegistrationResult) {
+    public static IChannelRealigner create(final IChannelRegistrationResult channelRegistrationResult)
+            throws CannotCreateException {
+        _areAllRegistrationSuccessful(channelRegistrationResult);
         return new ChannelRealigner(channelRegistrationResult);
+    }
+
+    private static void _areAllRegistrationSuccessful(IChannelRegistrationResult channelRegistrationResult)
+            throws CannotCreateException {
+        for (RegistrationRule rule : RegistrationRule.values()) {
+            if (!channelRegistrationResult.registrationSuccessful(rule)) {
+                throw new CannotCreateException("Can't create realigner because registration has not been successful");
+            }
+        }
+
     }
 
     /**
