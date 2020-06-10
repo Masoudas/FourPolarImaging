@@ -12,8 +12,11 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.RegistrationSetProcessResult;
+import fr.fresnel.fourPolar.core.preprocess.registration.ChannelRegistrationResultUtils;
+import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageSetReader;
+import javassist.tools.reflect.CannotCreateException;
 
 public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocessorBuilder {
     private ICapturedImageSetReader _capturedImageSetReader;
@@ -22,7 +25,7 @@ public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocess
     private final IChannelDarkBackgroundRemover[] _backgroundRemovers;
     private final IChannelRealigner[] _realigners;
 
-    private final int _numChannels;
+    private final IFourPolarImagingSetup _imagingSetup;
 
     /**
      * Initialize the builder, setting all parameters to defaults. This includes
@@ -32,14 +35,27 @@ public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocess
      * @param registrationprocessresult
      */
     public SampleImageSetPreprocessorBuilder(IFourPolarImagingSetup imagingSetup,
-            RegistrationSetProcessResult registrationprocessresult) {
-        this._numChannels = imagingSetup.getNumChannel();
+            RegistrationSetProcessResult registrationProcessResult) {
+        this._checkAllChannelsCanBeRegistered(registrationProcessResult, imagingSetup.getNumChannel());
+        this._imagingSetup = imagingSetup;
 
-        this._segmenter = this._setCapturedImageSetSegmenter(imagingSetup);
-        this._realigners = this._setChannelRealigners(this._numChannels, registrationprocessresult);
-        this._backgroundRemovers = this._setChannelDarkBackgroundRemover(this._numChannels, registrationprocessresult);
+        this._segmenter = this._setCapturedImageSetSegmenter(this._imagingSetup);
+        this._realigners = this._setChannelRealigners(getNumChannels(), registrationProcessResult);
+        this._backgroundRemovers = this._setChannelDarkBackgroundRemover(getNumChannels(), registrationProcessResult);
 
         this._capturedImageSetReader = new TiffCapturedImageSetReader(new ImgLib2ImageFactory());
+
+    }
+
+    private void _checkAllChannelsCanBeRegistered(RegistrationSetProcessResult registrationProcessResult,
+            int numChannels) {
+        for (int channel = 0; channel < numChannels; channel++) {
+            IChannelRegistrationResult channelResult = registrationProcessResult.getRegistrationResult(channel);
+            if (ChannelRegistrationResultUtils.isEveryRegistrationSuccessful(channelResult)) {
+                throw new IllegalArgumentException(
+                        "Can't build a sample set processor when registration for channel " + channel + " has failed.");
+            }
+        }
     }
 
     private ICapturedImageSetSegmenter _setCapturedImageSetSegmenter(IFourPolarImagingSetup imagingSetup) {
@@ -58,12 +74,20 @@ public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocess
 
     /**
      * Set channel realigners
+     * 
+     * @throws CannotCreateException
      */
     private IChannelRealigner[] _setChannelRealigners(int numChannels,
             RegistrationSetProcessResult registrationprocessresult) {
         IChannelRealigner[] realigners = new IChannelRealigner[numChannels];
-        for (int channel = 1; channel <= this._numChannels; channel++) {
-            realigners[channel - 1] = ChannelRealigner.create(registrationprocessresult.getRegistrationResult(channel));
+        for (int channel = 1; channel <= getNumChannels(); channel++) {
+            try {
+                realigners[channel - 1] = ChannelRealigner
+                        .create(registrationprocessresult.getRegistrationResult(channel));
+            } catch (CannotCreateException e) {
+                // This exception is never caught, because we checked in constructor that all
+                // channels are registered.
+            }
         }
 
         return realigners;
@@ -76,7 +100,7 @@ public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocess
             RegistrationSetProcessResult registrationprocessresult) {
         IChannelDarkBackgroundRemover[] channelRemovers = new IChannelDarkBackgroundRemover[numChannels];
 
-        for (int channel = 1; channel <= this._numChannels; channel++) {
+        for (int channel = 1; channel <= getNumChannels(); channel++) {
             channelRemovers[channel - 1] = ChannelDarkBackgroundRemover
                     .create(registrationprocessresult.getDarkBackground(channel));
         }
@@ -90,7 +114,7 @@ public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocess
 
     @Override
     IChannelDarkBackgroundRemover getBackgroundRemovers(int channel) {
-        ChannelUtils.checkChannel(channel, _numChannels);
+        ChannelUtils.checkChannel(channel, getNumChannels());
         return this._backgroundRemovers[channel - 1];
     }
 
@@ -101,12 +125,12 @@ public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocess
 
     @Override
     int getNumChannels() {
-        return this._numChannels;
+        return this._imagingSetup.getNumChannel();
     }
 
     @Override
     IChannelRealigner getRealigners(int channel) {
-        ChannelUtils.checkChannel(channel, _numChannels);
+        ChannelUtils.checkChannel(channel, getNumChannels());
         return this._realigners[channel - 1];
     }
 
