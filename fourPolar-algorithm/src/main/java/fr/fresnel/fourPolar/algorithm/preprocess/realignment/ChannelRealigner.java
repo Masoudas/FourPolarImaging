@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
-import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
+import fr.fresnel.fourPolar.core.util.transform.Affine2D;
 import net.imglib2.Cursor;
 import net.imglib2.RealRandomAccessible;
 import net.imglib2.util.ImgUtil;
@@ -66,7 +66,7 @@ public class ChannelRealigner implements IChannelRealigner {
         this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol135_to_Pol0));
     }
 
-    private void _realignPolarization(final Image<UINT16> image, final AffineTransform2D transform) {
+    private void _realignPolarization(final Image<UINT16> image, final Affine2D transform) {
         Img<UnsignedShortType> imageAsImgLib2 = null;
         try {
             imageAsImgLib2 = ImageToImgLib2Converter.getImg(image, UINT16.zero());
@@ -116,7 +116,7 @@ public class ChannelRealigner implements IChannelRealigner {
      * In order to transform each plane, we need to define an affine transform that
      * has the same length as the image, but only applies to the plane.
      */
-    private AffineGet _expandTransfromToAffineOfImageSize(final IMetadata metadata, final AffineTransform2D transform) {
+    private AffineGet _expandTransfromToAffineOfImageSize(final IMetadata metadata, final Affine2D transform) {
         final int numDimensions = metadata.getDim().length;
 
         final net.imglib2.realtransform.AffineTransform expandedTransform = new net.imglib2.realtransform.AffineTransform(

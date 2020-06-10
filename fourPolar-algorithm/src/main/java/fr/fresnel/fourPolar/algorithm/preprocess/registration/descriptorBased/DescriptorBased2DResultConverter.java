@@ -4,7 +4,7 @@ import java.util.Hashtable;
 
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
-import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
+import fr.fresnel.fourPolar.core.util.transform.Affine2D;
 import registration.descriptorBased.result.DescriptorBased2DResult;
 import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
 
@@ -47,8 +47,8 @@ class DescriptorBased2DResultConverter {
         return result;
     }
 
-    public AffineTransform2D _getAffineTransform(DescriptorBased2DResult result) {
-        AffineTransform2D transform2d = new AffineTransform2D();
+    public Affine2D _getAffineTransform(DescriptorBased2DResult result) {
+        Affine2D transform2d = new Affine2D();
         transform2d.set(result.affineTransform());
         return transform2d;
     }

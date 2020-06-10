@@ -20,7 +20,7 @@ import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
-import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
+import fr.fresnel.fourPolar.core.util.transform.Affine2D;
 
 public class ChannelRealignerTest {
     @Test
@@ -37,7 +37,7 @@ public class ChannelRealignerTest {
         _setPixel(pol90, new long[] { 0, 0 }, 1);
         _setPixel(pol135, new long[] { 0, 0 }, 1);
 
-        AffineTransform2D transform2d = new AffineTransform2D();
+        Affine2D transform2d = new Affine2D();
         transform2d.set(0, 2, 1);
         transform2d.set(1, 2, 1);
 
@@ -71,7 +71,7 @@ public class ChannelRealignerTest {
         _setPixel(pol90, new long[] { 0, 0, 0, 0, 0 }, 1);
         _setPixel(pol135, new long[] { 0, 0, 0, 0, 0 }, 1);
 
-        AffineTransform2D transform2d = new AffineTransform2D();
+        Affine2D transform2d = new Affine2D();
         transform2d.set(0, 2, 1);
         transform2d.set(1, 2, 1);
 
@@ -109,9 +109,9 @@ public class ChannelRealignerTest {
 }
 
 class DummyChannelRegistrationResult implements IChannelRegistrationResult {
-    private AffineTransform2D transform2d;
+    private Affine2D transform2d;
 
-    public DummyChannelRegistrationResult(AffineTransform2D transform2d) {
+    public DummyChannelRegistrationResult(Affine2D transform2d) {
         this.transform2d = transform2d;
     }
 
@@ -121,7 +121,7 @@ class DummyChannelRegistrationResult implements IChannelRegistrationResult {
     }
 
     @Override
-    public AffineTransform2D getAffineTransform(RegistrationRule rule) {
+    public Affine2D getAffineTransform(RegistrationRule rule) {
         return this.transform2d;
     }
 

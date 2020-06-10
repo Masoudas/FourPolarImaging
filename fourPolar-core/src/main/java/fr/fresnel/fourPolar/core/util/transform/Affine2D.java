@@ -1,20 +1,20 @@
 package fr.fresnel.fourPolar.core.util.transform;
 
+import net.imglib2.realtransform.AffineTransform2D;
+
 /**
  * An affine transform over a 2D space. Note that the underlying matrix is 2*3.
  * The original matrix is identity with last column set to zero.
  */
-public class AffineTransform2D implements AffineTransform {
-    private double[][] _matrix;
+public class Affine2D implements AffineTransform {
+    private AffineTransform2D _matrix;
 
-    public AffineTransform2D() {
-        this._matrix = new double[2][3];
-        this._matrix[0][0] = 1;
-        this._matrix[1][1] = 1;
+    public Affine2D() {
+        this._matrix = new AffineTransform2D();
     }
 
     public void set(int row, int column, double value) {
-        this._matrix[row][column] = value;
+        this._matrix.set(row, column, value);
     }
 
     public void set(double[][] matrix) {
@@ -22,7 +22,7 @@ public class AffineTransform2D implements AffineTransform {
             throw new IllegalArgumentException("Matrix is not 2*3");
         }
 
-        this._matrix = matrix;
+        this._matrix.set(matrix);
     }
 
     @Override
@@ -32,6 +32,6 @@ public class AffineTransform2D implements AffineTransform {
 
     @Override
     public double get(int row, int column) {
-        return this._matrix[row][column];
+        return this._matrix.get(row, column);
     }
 }

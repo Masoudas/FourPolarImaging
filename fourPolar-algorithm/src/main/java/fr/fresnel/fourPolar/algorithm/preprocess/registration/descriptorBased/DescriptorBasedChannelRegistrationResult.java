@@ -4,14 +4,14 @@ import java.util.HashMap;
 
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
-import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
+import fr.fresnel.fourPolar.core.util.transform.Affine2D;
 
 class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationResult {
     public final static String _NOT_ENOUGH_FP_DESCRIPTION = "Not enough feature points found.";
     public final static String _NO_TRANSFORMATION_DESCRIPTION = "No transformation found between images.";
 
     private HashMap<RegistrationRule, Boolean> _isSuccessfulRegistration;
-    private HashMap<RegistrationRule, AffineTransform2D> _affineTransform;
+    private HashMap<RegistrationRule, Affine2D> _affineTransform;
     private HashMap<RegistrationRule, String> _description;
     private HashMap<RegistrationRule, Double> _error;
     private int _channelNum = 0;
@@ -37,7 +37,7 @@ class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationRe
         return isSuccessful;
     }
 
-    public void setAffineTransform(RegistrationRule order, AffineTransform2D affineTransform) {
+    public void setAffineTransform(RegistrationRule order, Affine2D affineTransform) {
         this._affineTransform.put(order, affineTransform);
     }
 
@@ -58,7 +58,7 @@ class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationRe
     }
 
     @Override
-    public AffineTransform2D getAffineTransform(RegistrationRule order) {
+    public Affine2D getAffineTransform(RegistrationRule order) {
         return _affineTransform.get(order);
     }
 

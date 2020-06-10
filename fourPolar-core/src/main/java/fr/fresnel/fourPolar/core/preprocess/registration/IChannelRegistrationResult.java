@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.core.preprocess.registration;
 
-import fr.fresnel.fourPolar.core.util.transform.AffineTransform2D;
+import fr.fresnel.fourPolar.core.util.transform.Affine2D;
 
 /**
  * Represents the results of a registration algorithm for a channel.
@@ -17,7 +17,7 @@ public interface IChannelRegistrationResult {
     /**
      * Returns the equivalent affine transform of this registration.
      */
-    public AffineTransform2D getAffineTransform(RegistrationRule rule);
+    public Affine2D getAffineTransform(RegistrationRule rule);
 
     /**
      * The registration error of the algorithm.
