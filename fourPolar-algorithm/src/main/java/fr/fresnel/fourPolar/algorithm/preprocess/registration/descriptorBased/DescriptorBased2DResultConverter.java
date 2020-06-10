@@ -46,9 +46,20 @@ class DescriptorBased2DResultConverter {
         return result;
     }
 
+    /**
+     * If Descriptior based algorithm has been successful, set our matrix to the
+     * affine of the algorithm. Otherwise, return a null, which will later be
+     * returned as an empty optional in {@link IChannelRegistrationResult}.
+     * 
+     * @param result
+     * @return
+     */
     private Affine2D _getAffineTransform(DescriptorBased2DResult result) {
-        Affine2D transform2d = new Affine2D();
-        transform2d.set(result.affineTransform());
+        Affine2D transform2d = null;
+        if (result.isSuccessful()) {
+            transform2d = new Affine2D();
+            transform2d.set(result.affineTransform());
+        }
         return transform2d;
     }
 
