@@ -4,13 +4,13 @@ import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import edu.mines.jtk.mosaic.DRectangle;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.util.DRectangle;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
 /**
- * This class is used as an adaptor of {@link DRectangle} to JSON.
+ * This class is used as an adaptor of {@link IBoxShape} to JSON.
  */
 public class IBoxShape2DJSONAdaptor {
     @JsonProperty("[xTop, yTop]")
