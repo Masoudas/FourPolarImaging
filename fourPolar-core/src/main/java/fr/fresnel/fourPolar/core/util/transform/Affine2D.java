@@ -22,7 +22,11 @@ public class Affine2D implements AffineTransform {
             throw new IllegalArgumentException("Matrix is not 2*3");
         }
 
-        this._matrix.set(matrix);
+        try {
+            this._matrix.set(matrix);            
+        } catch (RuntimeException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     @Override
