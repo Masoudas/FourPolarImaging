@@ -81,15 +81,15 @@ public class DescriptorBasedRegistrationTest {
         IChannelRegistrationResult result = registrator.register(polSet);
 
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0));
-        assertTrue(!result.getFailureDescription(RegistrationRule.Pol45_to_Pol0)
+        assertTrue(!result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
                 .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
 
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0));
-        assertTrue(!result.getFailureDescription(RegistrationRule.Pol45_to_Pol0)
+        assertTrue(!result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
                 .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
 
         assertTrue(!result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
-        assertTrue(!result.getFailureDescription(RegistrationRule.Pol45_to_Pol0)
+        assertTrue(!result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
                 .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
 
     }
