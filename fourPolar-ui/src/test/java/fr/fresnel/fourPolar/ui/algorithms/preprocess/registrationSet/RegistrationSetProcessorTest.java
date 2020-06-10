@@ -1,13 +1,11 @@
 package fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.stream.IntStream;
@@ -32,6 +30,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet.RegistrationImageType;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
@@ -39,56 +38,25 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.OneCameraPolarizationConstellation;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.TwoCameraPolarizationConstellation;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.OneCameraPolarizationConstellation.Position;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
-import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
-import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageSetReader;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadataReader;
 import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.RegistrationSetProcessFailure;
 
 public class RegistrationSetProcessorTest {
     private static String _root = RegistrationSetProcessor.class.getResource("").getPath();
-
-    private IRegistrationSetProcessorBuilder _createDefaultBuilder(IFourPolarImagingSetup imagingSetup) {
-        int numChannels = imagingSetup.getNumChannel();
-
-        RegistrationCapturedImageSetSegmenter segmenter = new RegistrationCapturedImageSetSegmenter(
-                imagingSetup.getFieldOfView(), imagingSetup.getCameras(), numChannels);
-
-        DescriptorBasedRegistration registrator = new DescriptorBasedRegistration();
-        PercentileChannelDarkBackgroundEstimator darkBackgroundEstimator = new PercentileChannelDarkBackgroundEstimator(
-                imagingSetup.getCameras());
-        RegistrationCompositeFigureCreator compositeImageCreator = new RegistrationCompositeFigureCreator(numChannels,
-                Color.Red, Color.Green);
-
-        TiffCapturedImageSetReader registrationImageReader = new TiffCapturedImageSetReader(new ImgLib2ImageFactory());
-
-        return new RSPDummyBuilder(compositeImageCreator, darkBackgroundEstimator, registrationImageReader, registrator,
-                segmenter, numChannels);
-    }
-
-    private IFourPolarImagingSetup createFPSetup(IFieldOfView fov, Cameras cameras, int numChannels) {
-        RSPDummyFPSetup imagingSetup = new RSPDummyFPSetup();
-        imagingSetup.setFieldOfView(fov);
-        for (int channel = 1; channel <= numChannels; channel++) {
-            imagingSetup.setChannel(1, null);
-        }
-        imagingSetup.setCameras(cameras);
-
-        return imagingSetup;
-    }
 
     @Test
     public void process_OneCameraAllZeroImage_ThrowsRegistrationSetProcessFailure()
             throws IOException, MetadataParseError {
         Cameras camera = Cameras.One;
         int[] channel1 = { 1 };
+        IFieldOfView fov = this.createFoVOneCamera(3, 3, 1, 1);
+        IFourPolarImagingSetup imagingSetup = createFPSetup(fov, Cameras.One, 1);
+        IRegistrationSetProcessorBuilder builder = this._createDefaultBuilder(imagingSetup);
 
         File registrationImage = new File(_root, "OneCamera/AllZeroImage.tif");
         ICapturedImageFile[] pol0 = { new RSPDummyCapturedImageFile(channel1, registrationImage) };
@@ -100,18 +68,7 @@ public class RegistrationSetProcessorTest {
                 RegistrationImageType.SAMPLE);
         registrationImageSet.addImageSet(fileSet);
 
-        SCIFIOMetadataReader metadataReader = new SCIFIOMetadataReader();
-        IMetadata regImgMetdata = metadataReader.read(registrationImage);
-        OneCameraPolarizationConstellation constellation = new OneCameraPolarizationConstellation(Position.TopLeft,
-                Position.TopRight, Position.BottomLeft, Position.BottomRight);
-        IPointShape intersection = new ShapeFactory().point(new long[] { 1, 1 }, AxisOrder.XY);
-        FoVCalculatorOneCamera fovCalculator = new FoVCalculatorOneCamera(regImgMetdata, intersection, constellation);
-
-        IFourPolarImagingSetup imagingSetup = createFPSetup(fovCalculator.calculate(), Cameras.One, 1);
-        IRegistrationSetProcessorBuilder builder = this._createDefaultBuilder(imagingSetup);
-
         RegistrationSetProcessor processor = new RegistrationSetProcessor(builder);
-
         assertThrows(RegistrationSetProcessFailure.class, () -> {
             processor.process(registrationImageSet);
         });
@@ -122,6 +79,9 @@ public class RegistrationSetProcessorTest {
             throws IOException, MetadataParseError {
         Cameras camera = Cameras.Two;
         int[] channel1 = { 1 };
+        IFieldOfView fov = this.createFoVTwoCamera(3, 3, 1, 1);
+        IFourPolarImagingSetup imagingSetup = createFPSetup(fov, camera, 1);
+        IRegistrationSetProcessorBuilder builder = this._createDefaultBuilder(imagingSetup);
 
         File registrationImage_pol0_90 = new File(_root, "TwoCamera/AllZeroImages/Pol0_90.tif");
         File registrationImage_pol45_135 = new File(_root, "TwoCamera/AllZeroImages/Pol45_135.tif");
@@ -131,26 +91,11 @@ public class RegistrationSetProcessorTest {
         RSPDummyCapturedImageFileSet fileSet = new RSPDummyCapturedImageFileSet();
         fileSet.setFileSet(Cameras.getLabels(camera)[0], pol0_90);
         fileSet.setFileSet(Cameras.getLabels(camera)[1], pol45_135);
-
         fileSet.setCameras(camera);
 
         RegistrationImageSet registrationImageSet = new RegistrationImageSet(new File(_root),
                 RegistrationImageType.SAMPLE);
         registrationImageSet.addImageSet(fileSet);
-
-        SCIFIOMetadataReader metadataReader = new SCIFIOMetadataReader();
-        IMetadata regImgMetdata_pol0_90 = metadataReader.read(registrationImage_pol0_90);
-        IMetadata regImgMetdata_pol45_135 = metadataReader.read(registrationImage_pol45_135);
-        TwoCameraPolarizationConstellation constellation = new TwoCameraPolarizationConstellation(
-                TwoCameraPolarizationConstellation.Position.Left, TwoCameraPolarizationConstellation.Position.Left,
-                TwoCameraPolarizationConstellation.Position.Right, TwoCameraPolarizationConstellation.Position.Right);
-        IPointShape intersection = new ShapeFactory().point(new long[] { 1, 1 }, AxisOrder.XY);
-
-        FoVCalculatorTwoCamera fovCalculator = new FoVCalculatorTwoCamera(regImgMetdata_pol0_90, intersection,
-                regImgMetdata_pol45_135, intersection, constellation);
-
-        IFourPolarImagingSetup imagingSetup = createFPSetup(fovCalculator.calculate(), camera, 1);
-        IRegistrationSetProcessorBuilder builder = this._createDefaultBuilder(imagingSetup);
 
         RegistrationSetProcessor processor = new RegistrationSetProcessor(builder);
 
@@ -164,6 +109,9 @@ public class RegistrationSetProcessorTest {
             throws IOException, MetadataParseError {
         Cameras camera = Cameras.Four;
         int[] channel1 = { 1 };
+        IFieldOfView fov = this.createFoVFourCamera(3, 3);
+        IFourPolarImagingSetup imagingSetup = createFPSetup(fov, camera, 1);
+        IRegistrationSetProcessorBuilder builder = this._createDefaultBuilder(imagingSetup);
 
         File registrationImage_pol0 = new File(_root, "FourCamera/AllZeroImages/Pol0.tif");
         File registrationImage_pol45 = new File(_root, "FourCamera/AllZeroImages/Pol45.tif");
@@ -186,18 +134,6 @@ public class RegistrationSetProcessorTest {
                 RegistrationImageType.SAMPLE);
         registrationImageSet.addImageSet(fileSet);
 
-        SCIFIOMetadataReader metadataReader = new SCIFIOMetadataReader();
-        IMetadata regImgMetdata_pol0 = metadataReader.read(registrationImage_pol0);
-        IMetadata regImgMetdata_pol45 = metadataReader.read(registrationImage_pol45);
-        IMetadata regImgMetdata_pol90 = metadataReader.read(registrationImage_pol90);
-        IMetadata regImgMetdata_pol135 = metadataReader.read(registrationImage_pol135);
-
-        FoVCalculatorFourCamera fovCalculator = new FoVCalculatorFourCamera(regImgMetdata_pol0, regImgMetdata_pol45,
-                regImgMetdata_pol90, regImgMetdata_pol135);
-
-        IFourPolarImagingSetup imagingSetup = createFPSetup(fovCalculator.calculate(), camera, 1);
-        IRegistrationSetProcessorBuilder builder = this._createDefaultBuilder(imagingSetup);
-
         RegistrationSetProcessor processor = new RegistrationSetProcessor(builder);
 
         assertThrows(RegistrationSetProcessFailure.class, () -> {
@@ -206,62 +142,125 @@ public class RegistrationSetProcessorTest {
     }
 
     // @Test
-    // public void process_TwoCameraProperImageSet_ThrowsRegistrationSetProcessFailure()
-    //         throws IOException, MetadataParseError {
-    //     Cameras camera = Cameras.Two;
-    //     int[] channel1 = { 1 };
+    // public void
+    // process_TwoCameraProperImageSet_ThrowsRegistrationSetProcessFailure()
+    // throws IOException, MetadataParseError {
+    // Cameras camera = Cameras.Two;
+    // int[] channel1 = { 1 };
 
-    //     File registrationImage_pol0_90 = new File(_root, "TwoCamera/ProperImageSet/Pol0_90.tif");
-    //     File registrationImage_pol45_135 = new File(_root, "TwoCamera/ProperImageSet/Pol45_135.tif");
-    //     ICapturedImageFile[] pol0_90 = { new RSPDummyCapturedImageFile(channel1, registrationImage_pol0_90) };
-    //     ICapturedImageFile[] pol45_135 = { new RSPDummyCapturedImageFile(channel1, registrationImage_pol45_135) };
+    // File registrationImage_pol0_90 = new File(_root,
+    // "TwoCamera/ProperImageSet/Pol0_90.tif");
+    // File registrationImage_pol45_135 = new File(_root,
+    // "TwoCamera/ProperImageSet/Pol45_135.tif");
+    // ICapturedImageFile[] pol0_90 = { new RSPDummyCapturedImageFile(channel1,
+    // registrationImage_pol0_90) };
+    // ICapturedImageFile[] pol45_135 = { new RSPDummyCapturedImageFile(channel1,
+    // registrationImage_pol45_135) };
 
-    //     RSPDummyCapturedImageFileSet fileSet = new RSPDummyCapturedImageFileSet();
-    //     fileSet.setFileSet(Cameras.getLabels(camera)[0], pol0_90);
-    //     fileSet.setFileSet(Cameras.getLabels(camera)[1], pol45_135);
+    // RSPDummyCapturedImageFileSet fileSet = new RSPDummyCapturedImageFileSet();
+    // fileSet.setFileSet(Cameras.getLabels(camera)[0], pol0_90);
+    // fileSet.setFileSet(Cameras.getLabels(camera)[1], pol45_135);
 
-    //     fileSet.setCameras(camera);
+    // fileSet.setCameras(camera);
 
-    //     RegistrationImageSet registrationImageSet = new RegistrationImageSet(new File(_root),
-    //             RegistrationImageType.SAMPLE);
-    //     registrationImageSet.addImageSet(fileSet);
+    // RegistrationImageSet registrationImageSet = new RegistrationImageSet(new
+    // File(_root),
+    // RegistrationImageType.SAMPLE);
+    // registrationImageSet.addImageSet(fileSet);
 
-    //     SCIFIOMetadataReader metadataReader = new SCIFIOMetadataReader();
-    //     IMetadata regImgMetdata_pol0_90 = metadataReader.read(registrationImage_pol0_90);
-    //     IMetadata regImgMetdata_pol45_135 = metadataReader.read(registrationImage_pol45_135);
-    //     TwoCameraPolarizationConstellation constellation = new TwoCameraPolarizationConstellation(
-    //             TwoCameraPolarizationConstellation.Position.Left, TwoCameraPolarizationConstellation.Position.Left,
-    //             TwoCameraPolarizationConstellation.Position.Right, TwoCameraPolarizationConstellation.Position.Right);
-    //     IPointShape intersection = new ShapeFactory().point(new long[] { 490, 250 }, AxisOrder.XY);
+    // SCIFIOMetadataReader metadataReader = new SCIFIOMetadataReader();
+    // IMetadata regImgMetdata_pol0_90 =
+    // metadataReader.read(registrationImage_pol0_90);
+    // IMetadata regImgMetdata_pol45_135 =
+    // metadataReader.read(registrationImage_pol45_135);
+    // TwoCameraPolarizationConstellation constellation = new
+    // TwoCameraPolarizationConstellation(
+    // TwoCameraPolarizationConstellation.Position.Left,
+    // TwoCameraPolarizationConstellation.Position.Left,
+    // TwoCameraPolarizationConstellation.Position.Right,
+    // TwoCameraPolarizationConstellation.Position.Right);
+    // IPointShape intersection = new ShapeFactory().point(new long[] { 490, 250 },
+    // AxisOrder.XY);
 
-    //     FoVCalculatorTwoCamera fovCalculator = new FoVCalculatorTwoCamera(regImgMetdata_pol0_90, intersection,
-    //             regImgMetdata_pol45_135, intersection, constellation);
+    // FoVCalculatorTwoCamera fovCalculator = new
+    // FoVCalculatorTwoCamera(regImgMetdata_pol0_90, intersection,
+    // regImgMetdata_pol45_135, intersection, constellation);
 
-    //     IFourPolarImagingSetup imagingSetup = createFPSetup(fovCalculator.calculate(), camera, 1);
-    //     IRegistrationSetProcessorBuilder builder = this._createDefaultBuilder(imagingSetup);
+    // IFourPolarImagingSetup imagingSetup =
+    // createFPSetup(fovCalculator.calculate(), camera, 1);
+    // IRegistrationSetProcessorBuilder builder =
+    // this._createDefaultBuilder(imagingSetup);
 
-    //     RegistrationSetProcessor processor = new RegistrationSetProcessor(builder);
+    // RegistrationSetProcessor processor = new RegistrationSetProcessor(builder);
 
-    //     assertDoesNotThrow(() -> {
-    //         processor.process(registrationImageSet);
-    //     });
+    // assertDoesNotThrow(() -> {
+    // processor.process(registrationImageSet);
+    // });
     // }
 
-}
+    private IFourPolarImagingSetup createFPSetup(IFieldOfView fov, Cameras cameras, int numChannels) {
+        RSPDummyFPSetup imagingSetup = new RSPDummyFPSetup();
+        imagingSetup.setFieldOfView(fov);
+        for (int channel = 1; channel <= numChannels; channel++) {
+            imagingSetup.setChannel(1, null);
+        }
+        imagingSetup.setCameras(cameras);
 
-class RSPDummyFoV implements IFieldOfView {
-    HashMap<Polarization, IBoxShape> map = new HashMap<Polarization, IBoxShape>();
-
-    public RSPDummyFoV(IBoxShape pol0, IBoxShape pol45, IBoxShape pol90, IBoxShape pol135) {
-        map.put(Polarization.pol0, pol0);
-        map.put(Polarization.pol45, pol45);
-        map.put(Polarization.pol90, pol90);
-        map.put(Polarization.pol135, pol135);
+        return imagingSetup;
     }
 
-    @Override
-    public IBoxShape getFoV(Polarization pol) {
-        return map.get(pol);
+    private IRegistrationSetProcessorBuilder _createDefaultBuilder(IFourPolarImagingSetup imagingSetup) {
+        int numChannels = imagingSetup.getNumChannel();
+
+        RegistrationCapturedImageSetSegmenter segmenter = new RegistrationCapturedImageSetSegmenter(
+                imagingSetup.getFieldOfView(), imagingSetup.getCameras(), numChannels);
+
+        DescriptorBasedRegistration registrator = new DescriptorBasedRegistration();
+        PercentileChannelDarkBackgroundEstimator darkBackgroundEstimator = new PercentileChannelDarkBackgroundEstimator(
+                imagingSetup.getCameras());
+        RegistrationCompositeFigureCreator compositeImageCreator = new RegistrationCompositeFigureCreator(numChannels,
+                Color.Red, Color.Green);
+
+        TiffCapturedImageSetReader registrationImageReader = new TiffCapturedImageSetReader(new ImgLib2ImageFactory());
+
+        return new RSPDummyBuilder(compositeImageCreator, darkBackgroundEstimator, registrationImageReader, registrator,
+                segmenter, numChannels);
+    }
+
+    private IFieldOfView createFoVOneCamera(long image_x, long image_y, long x_intersecion, long y_intersection) {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { image_x, image_y }).build();
+
+        return new FoVCalculatorOneCamera(metadata,
+                new ShapeFactory().point(new long[] { x_intersecion, y_intersection }, AxisOrder.XY),
+                new OneCameraPolarizationConstellation(OneCameraPolarizationConstellation.Position.TopLeft,
+                        OneCameraPolarizationConstellation.Position.TopRight,
+                        OneCameraPolarizationConstellation.Position.BottomLeft,
+                        OneCameraPolarizationConstellation.Position.BottomRight)).calculate();
+    }
+
+    /**
+     * Assumes two cameras have image of same size and intersection is at same
+     * point.
+     */
+    private IFieldOfView createFoVTwoCamera(long image_x, long image_y, long x_intersecion, long y_intersection) {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { image_x, image_y }).build();
+
+        return new FoVCalculatorTwoCamera(metadata,
+                new ShapeFactory().point(new long[] { x_intersecion, y_intersection }, AxisOrder.XY), metadata,
+                new ShapeFactory().point(new long[] { x_intersecion, y_intersection }, AxisOrder.XY),
+                new TwoCameraPolarizationConstellation(TwoCameraPolarizationConstellation.Position.Left,
+                        TwoCameraPolarizationConstellation.Position.Left,
+                        TwoCameraPolarizationConstellation.Position.Right,
+                        TwoCameraPolarizationConstellation.Position.Right)).calculate();
+    }
+
+    /**
+     * Assumes four cameras have image of same size.
+     */
+    private IFieldOfView createFoVFourCamera(long image_x, long image_y) {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { image_x, image_y }).build();
+
+        return new FoVCalculatorFourCamera(metadata, metadata, metadata, metadata).calculate();
     }
 
 }
