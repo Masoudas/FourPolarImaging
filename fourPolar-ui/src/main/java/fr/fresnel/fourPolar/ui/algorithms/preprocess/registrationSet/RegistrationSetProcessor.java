@@ -71,8 +71,6 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
 
     private IPolarizationImageSetComposites[] _createCompositeImages(RegistrationImageSet registrationImageSet,
             IPolarizationImageSet[] channelImages, RegistrationSetProcessResult preprocessResult) {
-        this._realignPolarizationImageOfChannels(channelImages, preprocessResult);
-
         IPolarizationImageSetComposites[] composites = new IPolarizationImageSetComposites[this._numChannels];
 
         for (int channel = 1; channel <= this._numChannels; channel++) {
@@ -89,6 +87,11 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
         this._registerChannels(channelImages, preprocessResult);
         this._checkRegistrationIsSuccessful(preprocessResult);
         this._estimateChannelsDarkBackground(channelImages, preprocessResult);
+
+        // Even though realignment is not part of process, we perform it here, so that
+        // images are realigned for possible future uses, like creating composites.
+        this._realignPolarizationImageOfChannels(channelImages, preprocessResult);
+
         return preprocessResult;
     }
 
