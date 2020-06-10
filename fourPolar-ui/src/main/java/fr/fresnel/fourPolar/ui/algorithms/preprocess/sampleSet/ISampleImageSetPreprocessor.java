@@ -48,7 +48,7 @@ public interface ISampleImageSetPreprocessor {
      * Return the polarization image set for the given channel of the captured image
      * set.
      */
-    public IPolarizationImageSet getPolarizationImageSet(int channel);
+    public IPolarizationImageSet getPolarizationImageSet(int channel) throws SampleSetPreprocessFailure;
 
     /**
      * Close all IO resources associated with this processor.
