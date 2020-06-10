@@ -54,7 +54,7 @@ class DescriptorBased2DResultConverter {
 
     private String _getFailureDescription(DescriptorBased2DResult result) {
         if (result.description() == null) {
-            return "";
+            return null;
         } else if (result.description() == FailureCause.NOT_ENOUGH_FP) {
             return DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION;
         } else if (result.description() == FailureCause.NO_INLIER_AFTER_RANSAC) {
@@ -62,7 +62,7 @@ class DescriptorBased2DResultConverter {
         } else if (result.description() == FailureCause.NO_INVERTIBLE_TRANSFORMATION) {
             return DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION;
         } else {
-            return "";
+            return null;
         }
     }
 }

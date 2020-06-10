@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.algorithm.preprocess.registration.descriptorBased;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
@@ -58,8 +59,8 @@ class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationRe
     }
 
     @Override
-    public Affine2D getAffineTransform(RegistrationRule order) {
-        return _affineTransform.get(order);
+    public Optional<Affine2D> getAffineTransform(RegistrationRule order) {
+        return Optional.ofNullable(_affineTransform.get(order));
     }
 
     @Override
@@ -68,8 +69,8 @@ class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationRe
     }
 
     @Override
-    public String getFailureDescription(RegistrationRule order) {
-        return this._description.get(order);
+    public Optional<String> getFailureDescription(RegistrationRule order) {
+        return Optional.ofNullable(this._description.get(order));
     }
 
     @Override
