@@ -50,6 +50,7 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
      */
     public FoVCalculatorOneCamera(IMetadata registrationImg_pol0_45_90_135, IPointShape intersectionPoint,
             OneCameraPolarizationConstellation constellation) {
+        FoVCalculatorUtil.checkIntersectionPointIs2D(intersectionPoint);
         // TODO Use Box to indicate region.
         long[] registrationImgDim = MetadataUtil.getImageLastPixel(registrationImg_pol0_45_90_135);
         long[] iPoint = intersectionPoint.point();
