@@ -24,7 +24,7 @@ public interface IChannelRegistrationResult {
     public Optional<Affine2D> getAffineTransform(RegistrationRule rule);
 
     /**
-     * The registration error of the algorithm. The error would be -1 if
+     * The registration error of the algorithm. The error would be negative if
      * {@link IChannelRegistrationResult#registrationSuccessful} returns false.
      * 
      * @return
