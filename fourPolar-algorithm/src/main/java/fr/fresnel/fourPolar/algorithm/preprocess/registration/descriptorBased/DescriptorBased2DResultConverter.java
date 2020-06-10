@@ -47,18 +47,20 @@ class DescriptorBased2DResultConverter {
         return result;
     }
 
-    public Affine2D _getAffineTransform(DescriptorBased2DResult result) {
+    private Affine2D _getAffineTransform(DescriptorBased2DResult result) {
         Affine2D transform2d = new Affine2D();
         transform2d.set(result.affineTransform());
         return transform2d;
     }
 
-    public String _getDescription(DescriptorBased2DResult result) {
+    private String _getDescription(DescriptorBased2DResult result) {
         if (result.description() == null) {
             return "";
         } else if (result.description() == FailureCause.NOT_ENOUGH_FP) {
             return DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION;
-        } else if ((result.description() == FailureCause.NO_INLIER_AFTER_RANSAC)) {
+        } else if (result.description() == FailureCause.NO_INLIER_AFTER_RANSAC) {
+            return DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION;
+        } else if (result.description() == FailureCause.NO_INVERTIBLE_TRANSFORMATION) {
             return DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION;
         } else {
             return "";

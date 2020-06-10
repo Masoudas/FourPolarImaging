@@ -8,7 +8,7 @@ import fr.fresnel.fourPolar.core.util.transform.Affine2D;
 
 class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationResult {
     public final static String _NOT_ENOUGH_FP_DESCRIPTION = "Not enough feature points found.";
-    public final static String _NO_TRANSFORMATION_DESCRIPTION = "No transformation found between images.";
+    public final static String _NO_TRANSFORMATION_DESCRIPTION = "No (invertible) transformation found between images.";
 
     private HashMap<RegistrationRule, Boolean> _isSuccessfulRegistration;
     private HashMap<RegistrationRule, Affine2D> _affineTransform;
