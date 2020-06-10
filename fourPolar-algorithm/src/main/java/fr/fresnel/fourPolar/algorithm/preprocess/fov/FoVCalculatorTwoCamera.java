@@ -74,7 +74,7 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
             throw new IllegalArgumentException("Intersection point must be inside the image boundary.");
         }
 
-        if (iPoint[0] <= 0 || iPoint[1] <= 0) {
+        if (iPoint[0] < 0 || iPoint[1] < 0) {
             throw new IllegalArgumentException("Intersection point must be greater than equal zero.");
         }
 
