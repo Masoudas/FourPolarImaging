@@ -52,8 +52,13 @@ class DescriptorBased2DResultConverter {
 
     private void _setRegistraionError(DescriptorBasedChannelRegistrationResult ourResult) {
         for (RegistrationRule order : RegistrationRule.values()) {
-            ourResult.setError(order, _results.get(order).error());
+            double error = _getErrorOfAlgorithm(order);
+            ourResult.setError(order, error);
         }
+    }
+
+    private double _getErrorOfAlgorithm(RegistrationRule order) {
+        return _results.get(order).isSuccessful() ? _results.get(order).error() : -1;
     }
 
     /**
