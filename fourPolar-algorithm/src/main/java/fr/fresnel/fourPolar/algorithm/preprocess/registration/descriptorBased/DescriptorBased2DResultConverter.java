@@ -27,24 +27,33 @@ class DescriptorBased2DResultConverter {
     }
 
     public IChannelRegistrationResult convert() {
-        DescriptorBasedChannelRegistrationResult result = new DescriptorBasedChannelRegistrationResult();
-        result.setChannel(this._channelNum);
-        for (RegistrationRule order : RegistrationRule.values()) {
-            DescriptorBased2DResult polResult = _results.get(order);
-
-            result.setIsSuccessfulRegistration(order, polResult.isSuccessful());
-            result.setAffineTransform(order, this._getAffineTransform(polResult));
-            result.setDescription(order, this._getFailureDescription(polResult));
-
-            if (polResult.isSuccessful()) {
-                result.setError(order, polResult.error());
-            } else {
-                result.setError(order, -1);
-                result.setAffineTransform(order, null);
-            }
-        }
+        DescriptorBasedChannelRegistrationResult result = this._createResultForChannel();
+        this._setIsSuccesful(result);
+        this._setRegistraionError(result);
+        this._setAffineTransform(result);
+        this._setFailureDescription(result);
 
         return result;
+
+    }
+
+    private DescriptorBasedChannelRegistrationResult _createResultForChannel() {
+        DescriptorBasedChannelRegistrationResult result = new DescriptorBasedChannelRegistrationResult();
+        result.setChannel(this._channelNum);
+        return result;
+    }
+
+    private void _setIsSuccesful(DescriptorBasedChannelRegistrationResult ourResult) {
+        for (RegistrationRule order : RegistrationRule.values()) {
+            ourResult.setIsSuccessfulRegistration(order, _results.get(order).isSuccessful());
+        }
+
+    }
+
+    private void _setRegistraionError(DescriptorBasedChannelRegistrationResult ourResult) {
+        for (RegistrationRule order : RegistrationRule.values()) {
+            ourResult.setError(order, _results.get(order).error());
+        }
     }
 
     /**
@@ -53,14 +62,20 @@ class DescriptorBased2DResultConverter {
      * returned as an empty optional in {@link IChannelRegistrationResult}.
      * 
      */
-    private Affine2D _getAffineTransform(DescriptorBased2DResult result) {
-        if (!result.isSuccessful()) {
-            return null;
+    private void _setAffineTransform(DescriptorBasedChannelRegistrationResult ourResult) {
+        for (RegistrationRule order : RegistrationRule.values()) {
+            if (_results.get(order).isSuccessful()) {
+                Affine2D transform2d = _convertAlgorithmAffineTransform(_results.get(order));
+                ourResult.setAffineTransform(order, transform2d);
+            }
         }
 
+    }
+
+    private Affine2D _convertAlgorithmAffineTransform(DescriptorBased2DResult algorithmResult) {
         Affine2D transform2d = null;
         transform2d = new Affine2D();
-        transform2d.set(result.affineTransform());
+        transform2d.set(algorithmResult.affineTransform());
         return transform2d;
     }
 
@@ -69,19 +84,31 @@ class DescriptorBased2DResultConverter {
      * later be returned as an empty optional in {@link IChannelRegistrationResult}.
      * Otherwise, return the description.
      */
-    private String _getFailureDescription(DescriptorBased2DResult result) {
-        if (!result.isSuccessful()) {
-            return null;
+    private void _setFailureDescription(DescriptorBasedChannelRegistrationResult ourResult) {
+        for (RegistrationRule order : RegistrationRule.values()) {
+            if (!_results.get(order).isSuccessful()) {
+                String description = this._convertDescription(_results.get(order).description());
+                ourResult.setDescription(order, description);
+            }
         }
+    }
 
-        if (result.description() == FailureCause.NOT_ENOUGH_FP) {
+    /**
+     * Convert from algorithm {@link FailureCause} to our string description.
+     * 
+     * @param failureCause
+     * @return
+     */
+    private String _convertDescription(FailureCause failureCause) {
+        if (failureCause == FailureCause.NOT_ENOUGH_FP) {
             return DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION;
-        } else if (result.description() == FailureCause.NO_INLIER_AFTER_RANSAC) {
+        } else if (failureCause == FailureCause.NO_INLIER_AFTER_RANSAC) {
             return DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION;
-        } else if (result.description() == FailureCause.NO_INVERTIBLE_TRANSFORMATION) {
+        } else if (failureCause == FailureCause.NO_INVERTIBLE_TRANSFORMATION) {
             return DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION;
         } else {
             return null;
         }
+
     }
 }
