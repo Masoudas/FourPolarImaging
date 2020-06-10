@@ -2,7 +2,6 @@ package fr.fresnel.fourPolar.algorithm.preprocess.fov;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;

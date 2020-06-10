@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.algorithm.preprocess.fov;
 
-import java.util.Arrays;
-
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.MetadataUtil;
