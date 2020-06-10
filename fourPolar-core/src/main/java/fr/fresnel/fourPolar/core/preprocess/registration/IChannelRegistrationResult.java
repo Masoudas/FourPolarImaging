@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.core.preprocess.registration;
 
+import java.util.Optional;
+
 import fr.fresnel.fourPolar.core.util.transform.Affine2D;
 
 /**
@@ -15,12 +17,15 @@ public interface IChannelRegistrationResult {
     public boolean registrationSuccessful(RegistrationRule rule);
 
     /**
-     * Returns the equivalent affine transform of this registration.
+     * Returns the equivalent affine transform of this registration. The optional is
+     * empty if {@link IChannelRegistrationResult#registrationSuccessful} returns
+     * false.
      */
-    public Affine2D getAffineTransform(RegistrationRule rule);
+    public Optional<Affine2D> getAffineTransform(RegistrationRule rule);
 
     /**
-     * The registration error of the algorithm.
+     * The registration error of the algorithm. The error would be -1 if
+     * {@link IChannelRegistrationResult#registrationSuccessful} returns false.
      * 
      * @return
      */
@@ -29,11 +34,11 @@ public interface IChannelRegistrationResult {
     /**
      * Returns a string representation of the failure reason of the algorithm.
      * (Example: For the bead descriptor based algorithm, it says that no feature
-     * points were detected).
+     * points were detected). The optional is empty if
+     * {@link IChannelRegistrationResult#registrationSuccessful} returns true.
      * 
-     * @return
      */
-    public String getFailureDescription(RegistrationRule rule);
+    public Optional<String> getFailureDescription(RegistrationRule rule);
 
     /**
      * The channel number this dark background is associated with.
@@ -41,5 +46,4 @@ public interface IChannelRegistrationResult {
      * @return
      */
     public int channel();
-
 }
