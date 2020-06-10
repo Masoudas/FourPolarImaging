@@ -2,6 +2,8 @@ package fr.fresnel.fourPolar.algorithm.preprocess.realignment;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.fourPolar.IIntensityVectorIterator;
@@ -57,7 +59,7 @@ public class ChannelRealignerTest {
     }
 
     @Test
-    public void realign_Transform5D1ToRightAnd1ToBottom_ReturnsCorrectImage() {
+    public void realign_Transform5D1ToRightAnd1ToBottom_ReturnsCorrectImage() throws CannotCreateException {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2, 1, 1, 1 }).axisOrder(AxisOrder.XYCZT)
                 .build();
 
@@ -117,12 +119,12 @@ class DummyChannelRegistrationResult implements IChannelRegistrationResult {
 
     @Override
     public boolean registrationSuccessful(RegistrationRule rule) {
-        return false;
+        return true;
     }
 
     @Override
-    public Affine2D getAffineTransform(RegistrationRule rule) {
-        return this.transform2d;
+    public Optional<Affine2D> getAffineTransform(RegistrationRule rule) {
+        return Optional.of(this.transform2d);
     }
 
     @Override
@@ -131,13 +133,13 @@ class DummyChannelRegistrationResult implements IChannelRegistrationResult {
     }
 
     @Override
-    public String getFailureDescription(RegistrationRule rule) {
+    public Optional<String> getFailureDescription(RegistrationRule rule) {
         return null;
     }
 
     @Override
     public int channel() {
-        return 0;
+        return 1;
     }
 
 }
