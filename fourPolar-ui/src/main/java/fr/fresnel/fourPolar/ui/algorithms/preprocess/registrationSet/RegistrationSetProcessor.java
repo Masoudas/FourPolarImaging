@@ -24,6 +24,7 @@ import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.IOIssueRegistrationSetProcessFailure;
 import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.RegistrationIssueRegistrationSetProcessFailure;
 import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.RegistrationSetProcessFailure;
+import javassist.tools.reflect.CannotCreateException;
 
 class RegistrationSetProcessor implements IRegistrationSetProcessor {
     private final int _numChannels;
@@ -105,7 +106,7 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
     }
 
     /**
-     * Returns polarization image of each channel as an array. 
+     * Returns polarization image of each channel as an array.
      */
     private IPolarizationImageSet[] _segmentRegistrationImageIntoChannels(ICapturedImageSet registrationImageSet) {
         IPolarizationImageSet[] channelImages = new IPolarizationImageSet[this._numChannels];
@@ -170,10 +171,23 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
     private void _realignPolarizationImageOfChannels(IPolarizationImageSet[] channelImages,
             RegistrationSetProcessResult preprocessResult) {
         for (int channel = 1; channel <= this._numChannels; channel++) {
-            IChannelRegistrationResult channelResult = preprocessResult.getRegistrationResult(channel);
-            IChannelRealigner channelRealigner = ChannelRealigner.create(channelResult);
+            IChannelRealigner channelRealigner = _createChannelRealigner(preprocessResult, channel);
             channelRealigner.realign(channelImages[channel - 1]);
         }
+    }
+
+    private IChannelRealigner _createChannelRealigner(RegistrationSetProcessResult preprocessResult, int channel) {
+        IChannelRegistrationResult channelResult = preprocessResult.getRegistrationResult(channel);
+        IChannelRealigner channelRealigner = null;
+        try {
+            channelRealigner = ChannelRealigner.create(channelResult);
+
+        } catch (CannotCreateException e) {
+            // This exception is never caught, because if registration has failed before, we
+            // throw a
+            // RegistrationIssueRegistrationSetProcessFailure.
+        }
+        return channelRealigner;
     }
 
     /**
