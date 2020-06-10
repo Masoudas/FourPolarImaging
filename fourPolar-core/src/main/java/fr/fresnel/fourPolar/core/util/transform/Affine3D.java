@@ -14,7 +14,11 @@ public class Affine3D implements AffineTransform {
     }
 
     public void set(int row, int column, double value) {
-        this._matrix.set(row, column, value);
+        if (row >= 3 || column >= 4) {
+            throw new IllegalArgumentException("Element does not exist.");
+        }
+
+        this._matrix.set(value, row, column);
     }
 
     public void set(double[][] matrix) {
