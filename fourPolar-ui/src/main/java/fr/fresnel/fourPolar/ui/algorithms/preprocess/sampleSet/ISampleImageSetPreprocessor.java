@@ -30,7 +30,10 @@ import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.sampleSet.Sample
  */
 public interface ISampleImageSetPreprocessor {
     /**
-     * Set the captured image to be processed.
+     * Set the captured image to be processed. The captured image set is read from
+     * the disk as soon as it's set by this method, to allow
+     * {@link ISampleImageSetPreprocessor#getPolarizationImageSet(int)} method to
+     * take place instantly.
      * 
      * @param capturedImageFileSet
      * 
