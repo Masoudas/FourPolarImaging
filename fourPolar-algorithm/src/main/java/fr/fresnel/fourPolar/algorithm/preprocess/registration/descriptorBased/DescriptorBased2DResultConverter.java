@@ -33,12 +33,11 @@ class DescriptorBased2DResultConverter {
             DescriptorBased2DResult polResult = _results.get(order);
 
             result.setIsSuccessfulRegistration(order, polResult.isSuccessful());
-            result.setDescription(order, this._getDescription(polResult));
-
             if (polResult.isSuccessful()) {
                 result.setError(order, polResult.error());
                 result.setAffineTransform(order, this._getAffineTransform(polResult));
             } else {
+                result.setDescription(order, this._getFailureDescription(polResult));
                 result.setError(order, -1);
                 result.setAffineTransform(order, null);
             }
@@ -53,7 +52,7 @@ class DescriptorBased2DResultConverter {
         return transform2d;
     }
 
-    private String _getDescription(DescriptorBased2DResult result) {
+    private String _getFailureDescription(DescriptorBased2DResult result) {
         if (result.description() == null) {
             return "";
         } else if (result.description() == FailureCause.NOT_ENOUGH_FP) {
