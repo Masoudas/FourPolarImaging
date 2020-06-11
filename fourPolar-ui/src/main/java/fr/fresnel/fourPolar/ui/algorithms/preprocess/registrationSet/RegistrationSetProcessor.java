@@ -16,6 +16,7 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationI
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.RegistrationSetProcessResult;
 import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackground;
+import fr.fresnel.fourPolar.core.preprocess.registration.ChannelRegistrationResultUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
@@ -143,14 +144,24 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
             throws RegistrationIssueRegistrationSetProcessFailure {
         RegistrationIssueRegistrationSetProcessFailure failure = new RegistrationIssueRegistrationSetProcessFailure();
         for (int channel = 1; channel <= this._numChannels; channel++) {
-            for (RegistrationRule rule : RegistrationRule.values()) {
-                failure.setRuleFailure(rule, channel);
-            }
+            this._assignFailedRulesToException(failure, preprocessResult.getRegistrationResult(channel));
         }
 
         if (failure.hasFailure()) {
             throw failure;
         }
+    }
+
+    private void _assignFailedRulesToException(RegistrationIssueRegistrationSetProcessFailure failure,
+            IChannelRegistrationResult result) {
+        RegistrationRule[] failedRules = this._getChannelFailedRegistrationRules(result);
+        for (RegistrationRule rule : failedRules) {
+            failure.setRuleFailure(rule, result.channel());
+        }
+    }
+
+    private RegistrationRule[] _getChannelFailedRegistrationRules(IChannelRegistrationResult result) {
+        return ChannelRegistrationResultUtils.getFailedRegistrations(result);
     }
 
     /**
