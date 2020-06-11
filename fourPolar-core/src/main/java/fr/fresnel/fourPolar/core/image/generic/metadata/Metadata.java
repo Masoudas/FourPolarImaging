@@ -90,10 +90,9 @@ public class Metadata implements IMetadata {
         this._dim = builder._dim;
         this._bitPerPixel = builder._bitPerPixel;
 
-        int channelAxis = AxisOrder.getChannelAxis(this._axisOrder);
-        if (channelAxis > 0)
+        if (this._axisOrder.c_axis > 0)
         {
-            this._numChannels = (int)this._dim[AxisOrder.getChannelAxis(this._axisOrder)];
+            this._numChannels = (int)this._dim[this._axisOrder.c_axis];
         }
         else{
             this._numChannels = 0;

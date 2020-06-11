@@ -32,13 +32,6 @@ public enum AxisOrder {
         }
     }
 
-    /**
-     * Returns the dimension (from zero) of channel axis (if exists) and -1
-     * otherwise.
-     */
-    public static int getChannelAxis(AxisOrder axisOrder) {
-        return axisOrder.name().indexOf('C');
-    }
 
     /**
      * If z-axis already present, returns the originial order. Else, appends z-axis
@@ -78,7 +71,7 @@ public enum AxisOrder {
             throw new IllegalArgumentException("Can't append channel to NoOrder.");
         }
 
-        if (AxisOrder.getChannelAxis(axisOrder) > 0) {
+        if (axisOrder.c_axis > 0) {
             return axisOrder;
         }
 

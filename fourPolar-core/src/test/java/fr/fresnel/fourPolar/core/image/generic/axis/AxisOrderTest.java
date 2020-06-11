@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 public class AxisOrderTest {
     @Test
     public void channelAxis_ReturnsCorrectChannelAxis() {
-        assertTrue(AxisOrder.getChannelAxis(AxisOrder.XY) == -1 && AxisOrder.NoOrder.z_axis == -1
-                && AxisOrder.getChannelAxis(AxisOrder.XYC) == 2 && AxisOrder.getChannelAxis(AxisOrder.XYTC) == 3
-                && AxisOrder.getChannelAxis(AxisOrder.XYZTC) == 4);
+        assertTrue(AxisOrder.XY.c_axis == -1 && AxisOrder.NoOrder.c_axis == -1
+                && AxisOrder.XYC.c_axis == 2 && AxisOrder.XYTC.c_axis == 3
+                && AxisOrder.XYZTC.c_axis == 4);
 
     }
 
