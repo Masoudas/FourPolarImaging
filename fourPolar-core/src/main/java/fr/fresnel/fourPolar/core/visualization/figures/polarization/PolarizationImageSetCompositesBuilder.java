@@ -7,6 +7,7 @@ import java.util.Objects;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 
@@ -32,6 +33,8 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
     public PolarizationImageSetCompositesBuilder compositeImage(RegistrationRule rule, Image<RGB16> image) {
         Objects.requireNonNull(rule);
         Objects.requireNonNull(image);
+
+        this._checkCompositeImageHaveSameAxisAsPolarizationImage(image);
 
         this._compositeImages.put(rule, image);
 
@@ -69,7 +72,6 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
      */
     public IPolarizationImageSetComposites build() {
         this._checkAllBuildParamsAreGiven();
-        this._checkCompositeImagesAreEqualSize();
 
         PolarizationImageSetComposites composites = new PolarizationImageSetComposites(this);
 
@@ -96,14 +98,9 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
         }
     }
 
-    private void _checkCompositeImagesAreEqualSize() {
-        RegistrationRule ruleToCompare = RegistrationRule.values()[0];
-        long[] dimToCompare = this._compositeImages.get(ruleToCompare).getMetadata().getDim();
-        for (RegistrationRule rule : RegistrationRule.values()) {
-            long[] dimRule = this._compositeImages.get(rule).getMetadata().getDim();
-            if (!Arrays.equals(dimToCompare, dimRule))
-                throw new IllegalArgumentException("Composite images must have equal dimension");
-        }
+    private void _checkCompositeImageHaveSameAxisAsPolarizationImage(Image<RGB16> compositeImage) {
+        if (compositeImage.getMetadata().axisOrder() != IPolarizationImage.AXIS_ORDER)
+            throw new IllegalArgumentException("Composite image must be XYCZT");
 
     }
 
