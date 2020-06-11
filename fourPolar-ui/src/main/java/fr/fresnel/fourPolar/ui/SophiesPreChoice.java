@@ -15,7 +15,7 @@ import bdv.util.BdvOptions;
 import fr.fresnel.fourPolar.algorithm.preprocess.fov.FoVCalculatorOneCamera;
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter.Color;
-import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.RegistrationCompositeFigureCreator;
+import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.PolarizationImageSetCompositesCreator;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSetBuilder;
@@ -229,7 +229,7 @@ public class SophiesPreChoice {
     public static IRegistrationSetProcessor createRegistrationSetProcessor() {
         return new RegistrationSetProcessorBuilder(setup)
                 .registrationCompositeCreator(
-                        new RegistrationCompositeFigureCreator(channels.length, baseImageColor, toRegisterImageColor))
+                        new PolarizationImageSetCompositesCreator(channels.length, baseImageColor, toRegisterImageColor))
                 .build();
     }
 

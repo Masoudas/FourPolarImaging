@@ -26,7 +26,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.polarization.Polarization
  * {@link IPolarizationImageSet} that is not realigned. To avoid any unambiguity
  * that the set should not have been realigned, we demand the realigner.
  */
-public class RegistrationCompositeFigureCreator implements IPolarizationImageSetCompositesCreater {
+public class PolarizationImageSetCompositesCreator implements IPolarizationImageSetCompositesCreater {
     private final Color _baseImageColor;
     private final Color _registeredImageColor;
     private final PolarizationImageSetCompositesBuilder _builder;
@@ -41,7 +41,7 @@ public class RegistrationCompositeFigureCreator implements IPolarizationImageSet
      * @param registeredImageColor is the color to be used for the registered image
      *                             of every rule.
      */
-    public RegistrationCompositeFigureCreator(int numChannels, Color baseImageColor, Color registeredImageColor) {
+    public PolarizationImageSetCompositesCreator(int numChannels, Color baseImageColor, Color registeredImageColor) {
         this._baseImageColor = baseImageColor;
         this._registeredImageColor = registeredImageColor;
         this._builder = new PolarizationImageSetCompositesBuilder(numChannels);

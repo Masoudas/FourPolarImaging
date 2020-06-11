@@ -24,7 +24,7 @@ import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.ICapturedImageSetS
 import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.RegistrationCapturedImageSetSegmenter;
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter.Color;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.IPolarizationImageSetCompositesCreater;
-import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.RegistrationCompositeFigureCreator;
+import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.PolarizationImageSetCompositesCreator;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
@@ -220,7 +220,7 @@ public class RegistrationSetProcessorTest {
         DescriptorBasedRegistration registrator = new DescriptorBasedRegistration();
         PercentileChannelDarkBackgroundEstimator darkBackgroundEstimator = new PercentileChannelDarkBackgroundEstimator(
                 imagingSetup.getCameras());
-        RegistrationCompositeFigureCreator compositeImageCreator = new RegistrationCompositeFigureCreator(numChannels,
+        PolarizationImageSetCompositesCreator compositeImageCreator = new PolarizationImageSetCompositesCreator(numChannels,
                 Color.Red, Color.Green);
 
         TiffCapturedImageSetReader registrationImageReader = new TiffCapturedImageSetReader(new ImgLib2ImageFactory());
