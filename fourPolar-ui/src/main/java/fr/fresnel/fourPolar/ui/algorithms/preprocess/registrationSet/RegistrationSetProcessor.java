@@ -75,7 +75,7 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
         IPolarizationImageSetComposites[] composites = new IPolarizationImageSetComposites[this._numChannels];
 
         for (int channel = 1; channel <= this._numChannels; channel++) {
-            this._compositeImageCreator.create(channelImages[channel - 1]);
+            composites[channel - 1] = this._compositeImageCreator.create(channelImages[channel - 1]);
         }
 
         return composites;
