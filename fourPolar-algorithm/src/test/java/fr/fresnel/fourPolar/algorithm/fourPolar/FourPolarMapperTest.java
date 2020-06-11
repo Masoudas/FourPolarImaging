@@ -1,26 +1,18 @@
 package fr.fresnel.fourPolar.algorithm.fourPolar;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.IteratorMissMatch;
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters.ImpossibleOrientationVector;
-import fr.fresnel.fourPolar.algorithm.fourPolar.converters.IntensityToOrientationConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
-import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
-import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
-import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
-import fr.fresnel.fourPolar.core.physics.propagation.InverseOpticalPropagation;
+import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 public class FourPolarMapperTest {
     /**

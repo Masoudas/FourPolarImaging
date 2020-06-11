@@ -3,7 +3,6 @@ package fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata;
 import java.io.File;
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;

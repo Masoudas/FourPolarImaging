@@ -97,7 +97,6 @@ public class OrientationToIntensityConverter implements IOrientationToIntensityC
                 sinSquaredEta);
 
         // Calculate polarization intensity.
-        IntensityVector intensity = null;
         try {
             double pol0Intensity = this._getPol0Intensity(dipoleSquared_XX, dipoleSquared_YY, dipoleSquared_ZZ,
                     dipoleSquared_XY);

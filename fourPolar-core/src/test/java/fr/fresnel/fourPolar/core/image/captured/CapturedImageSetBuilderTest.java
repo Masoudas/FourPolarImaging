@@ -86,8 +86,6 @@ public class CapturedImageSetBuilderTest {
         builder.setCapturedImage(Cameras.getLabels(camera)[0], pol0_45_90_135[0], pol0_45_90_135_0);
         builder.setCapturedImage(Cameras.getLabels(camera)[0], pol0_45_90_135[1], pol0_45_90_135_1);
 
-        ICapturedImageSet set = builder.build();
-
         // Build second time
         ICapturedImageFile[] pol0_45_90_135_s = {
                 new BuilderDummyCapturedImageFile(channel1, new File(root, "pol0.tiff")),

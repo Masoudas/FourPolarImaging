@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.percentile;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 

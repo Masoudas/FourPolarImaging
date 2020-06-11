@@ -20,7 +20,6 @@ public class ImageToImageJ1ConveterTest {
         ImagePlus imagePlus = ImageToImageJ1Conveter.convertToImgPlus(image, RGB16.zero());
         imagePlus.getProcessor().setPixels(new int[] { 1 });
 
-        RGB16 pixelVal = image.getCursor().next().value();
 
         // TODO how should I write this test?
     }

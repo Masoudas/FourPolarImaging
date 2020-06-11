@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.io.imageSet.acquisition.sample;
 
-import java.io.File;
-
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;

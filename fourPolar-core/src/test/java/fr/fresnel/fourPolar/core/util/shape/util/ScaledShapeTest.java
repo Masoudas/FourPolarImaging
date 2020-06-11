@@ -92,7 +92,7 @@ public class ScaledShapeTest {
         assertThrows(IllegalArgumentException.class, () -> {
             IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 1 }, AxisOrder.XY);
             long[] dim = { 0, 4, 3 };
-            IShapeIterator iterator = new ScaledShape(shape, AxisOrder.XYZ, dim).getIterator();
+            new ScaledShape(shape, AxisOrder.XYZ, dim).getIterator();
         });
     }
 

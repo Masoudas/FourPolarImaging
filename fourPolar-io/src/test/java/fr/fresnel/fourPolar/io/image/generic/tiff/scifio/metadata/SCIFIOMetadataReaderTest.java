@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
