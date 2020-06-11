@@ -23,9 +23,9 @@ public class PolarizationImageSetCompositesBuilderTest {
     @Test
     public void build_SinglePixelCompositeImages_CompositeImageAreOnePixel() {
         int channel = 1;
-        long[] dim = { 1, 1 };
-        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XY).bitPerPixel(PixelTypes.FLOAT_32)
-                .build();
+        long[] dim = { 1, 1, 1, 1, 1 };
+        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT)
+                .bitPerPixel(PixelTypes.FLOAT_32).build();
 
         String setName_alias = "TestSet";
         BuilderDummyCapturedImageFileSet fSet = new BuilderDummyCapturedImageFileSet(setName_alias);
@@ -50,9 +50,9 @@ public class PolarizationImageSetCompositesBuilderTest {
     @Test
     public void build_RepetitiveBuild_CreatesSeparateClasses() {
         int channel = 1;
-        long[] dim = { 1, 1 };
-        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XY).bitPerPixel(PixelTypes.FLOAT_32)
-                .build();
+        long[] dim = { 1, 1, 1, 1, 1 };
+        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT)
+                .bitPerPixel(PixelTypes.FLOAT_32).build();
 
         PolarizationImageSetCompositesBuilder builder = new PolarizationImageSetCompositesBuilder(channel);
 
