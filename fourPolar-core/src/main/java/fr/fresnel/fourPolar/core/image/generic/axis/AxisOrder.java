@@ -1,6 +1,8 @@
 package fr.fresnel.fourPolar.core.image.generic.axis;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 
@@ -14,7 +16,13 @@ public enum AxisOrder {
     XYT(-1, -1, 3, 3), XYTC(3, -1, 2, 4), XYZ(-1, 2, -1, 3), XYZC(3, 2, -1, 4), XYZCT(3, 2, 4, 5), XYZT(-1, 2, 3, 4),
     XYZTC(4, 2, 3, 5), XYTZC(4, 3, 2, 5);
 
-
+    public static AxisOrder fromString(String axisOrder) throws UnsupportedAxisOrder {
+        try {
+            return AxisOrder.valueOf(axisOrder);
+        } catch (IllegalArgumentException e) {
+            throw new UnsupportedAxisOrder();
+        }
+    }
 
     public final int z_axis;
     public final int c_axis;
