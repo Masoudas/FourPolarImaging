@@ -19,7 +19,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  */
 public class OrientationImageFactory {
     /**
-     * Create the orientation image from an {@link IPolarizationImage}.
+     * Create a blank orientation image from an {@link IPolarizationImage}.
      * 
      */
     public static IOrientationImage create(ImageFactory factory, IPolarizationImageSet polarizationImageSet) {
