@@ -33,19 +33,19 @@ public class TiffPolarizationImageFileSet implements IPolarizationImageFileSet {
     }
 
     private File _createPol135File(File parentFolder) {
-        return PolarizationImageFileSetUtils.createPol0File(parentFolder, _EXTENSION);
+        return PolarizationImageFileSetUtils.createPol135File(parentFolder, _EXTENSION);
     }
 
     private File _createPol90File(File parentFolder) {
-        return PolarizationImageFileSetUtils.createPol45File(parentFolder, _EXTENSION);
-    }
-
-    private File _createPol45File(File parentFolder) {
         return PolarizationImageFileSetUtils.createPol90File(parentFolder, _EXTENSION);
     }
 
+    private File _createPol45File(File parentFolder) {
+        return PolarizationImageFileSetUtils.createPol45File(parentFolder, _EXTENSION);
+    }
+
     private File _createPol0File(File parentFolder) {
-        return PolarizationImageFileSetUtils.createPol135File(parentFolder, _EXTENSION);
+        return PolarizationImageFileSetUtils.createPol0File(parentFolder, _EXTENSION);
     }
 
     private void _checkParentFolderExists(File parentFolder) {

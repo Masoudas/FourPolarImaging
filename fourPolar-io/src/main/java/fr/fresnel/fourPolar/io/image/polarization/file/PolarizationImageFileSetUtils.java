@@ -33,7 +33,7 @@ public class PolarizationImageFileSetUtils {
 	 * @return a file instance
 	 */
 	static File createPol0File(File setParentFolder, String extension) {
-		return new File(setParentFolder, "Polarization_0" + extension);
+		return new File(setParentFolder, "Polarization_0." + extension);
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class PolarizationImageFileSetUtils {
 	 * @return a file instance
 	 */
 	static File createPol45File(File setParentFolder, String extension) {
-		return new File(setParentFolder, "Polarization_45" + extension);
+		return new File(setParentFolder, "Polarization_45." + extension);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class PolarizationImageFileSetUtils {
 	 * @return a file instance
 	 */
 	static File createPol90File(File setParentFolder, String extension) {
-		return new File(setParentFolder, "Polarization_90" + extension);
+		return new File(setParentFolder, "Polarization_90." + extension);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class PolarizationImageFileSetUtils {
 	 * @return a file instance
 	 */
 	static File createPol135File(File setParentFolder, String extension) {
-		return new File(setParentFolder, "Polarization_135" + extension);
+		return new File(setParentFolder, "Polarization_135." + extension);
 	}
 
 }
