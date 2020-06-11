@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import fr.fresnel.fourPolar.core.PathFactoryOfProject;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 
-class PolarizationImageFileSetUtils {
+public class PolarizationImageFileSetUtils {
 	public PolarizationImageFileSetUtils() {
 		throw new AssertionError();
 	}
@@ -32,7 +32,7 @@ class PolarizationImageFileSetUtils {
 	 * @param extension       is the desired extension.
 	 * @return a file instance
 	 */
-	public static File createPol0File(File setParentFolder, String extension) {
+	static File createPol0File(File setParentFolder, String extension) {
 		return new File(setParentFolder, "Polarization_0" + extension);
 	}
 
@@ -44,7 +44,7 @@ class PolarizationImageFileSetUtils {
 	 * @param extension       is the desired extension.
 	 * @return a file instance
 	 */
-	public static File createPol45File(File setParentFolder, String extension) {
+	static File createPol45File(File setParentFolder, String extension) {
 		return new File(setParentFolder, "Polarization_45" + extension);
 	}
 
@@ -56,7 +56,7 @@ class PolarizationImageFileSetUtils {
 	 * @param extension       is the desired extension.
 	 * @return a file instance
 	 */
-	public static File createPol90File(File setParentFolder, String extension) {
+	static File createPol90File(File setParentFolder, String extension) {
 		return new File(setParentFolder, "Polarization_90" + extension);
 	}
 
@@ -68,7 +68,7 @@ class PolarizationImageFileSetUtils {
 	 * @param extension       is the desired extension.
 	 * @return a file instance
 	 */
-	public static File createPol135File(File setParentFolder, String extension) {
+	static File createPol135File(File setParentFolder, String extension) {
 		return new File(setParentFolder, "Polarization_135" + extension);
 	}
 
