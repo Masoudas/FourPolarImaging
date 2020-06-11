@@ -7,19 +7,16 @@ import java.util.Iterator;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.PathFactoryOfProject;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 public class PolarizationFileSetTest {
-    int _channel = 1;
     File _root = new File("/root");
-    File _rootPol = PathFactoryOfProject.getFolder_PolarizationImages(_root);
 
     @Test
-    public void getFile_OneCameraCase_CreatesFilesInCorrectPath() {
+    public void getFile_AnAliasSet_CreatesFilesInCorrectPath() {
         int channel = 1;
         String setName_alias = "pol0_45_90_135";
 
