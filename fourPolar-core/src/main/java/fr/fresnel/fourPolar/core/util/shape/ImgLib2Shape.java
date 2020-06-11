@@ -41,7 +41,7 @@ class ImgLib2Shape implements IShape {
      */
     protected ImgLib2Shape(final int shapeDim, RealMaskRealInterval shape, final AxisOrder axisOrder) {
         this._shapeDim = shapeDim;
-        this._pointMask = GeomMasks.pointMask(new double[AxisOrder.getNumDefinedAxis(axisOrder)]);
+        this._pointMask = GeomMasks.pointMask(new double[shapeDim]);
         this._axisOrder = axisOrder;
         this._shape = _copyOriginalShape(shapeDim, shape);
 
@@ -80,7 +80,7 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public boolean isInside(long[] point) {
-        if (point.length != AxisOrder.getNumDefinedAxis(this._axisOrder)) {
+        if (point.length != this._shapeDim) {
             throw new IllegalArgumentException("The given point does not have same number of axis as shape.");
         }
 
@@ -99,7 +99,7 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public IShape rotate3D(double angle1, double angle2, double angle3, Rotation3DOrder rotation3dOrder) {
-        if (this._axisOrder.z_axis < 2) {
+        if (this._axisOrder == AxisOrder.NoOrder || this._axisOrder.z_axis < 0) {
             throw new IllegalArgumentException("Impossible to rotate 3D because no z-axis exists.");
         }
 
@@ -108,17 +108,19 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public IShape translate(long[] translation) {
-        int numAxis = AxisOrder.getNumDefinedAxis(this._axisOrder);
-        if (translation.length != numAxis) {
+        if (translation.length != this._shapeDim) {
             throw new IllegalArgumentException(
                     "Translation must occur over all axis. Consider using zero for undesired axis.");
         }
 
-        return this._transformShape(this._createAffineTranslation(translation, numAxis));
+        return this._transformShape(this._createAffineTranslation(translation, this._shapeDim));
     }
 
     @Override
     public IShape rotate2D(double angle) {
+        if (this._axisOrder == AxisOrder.NoOrder) {
+            throw new IllegalArgumentException("Impossible to rotate, because no axis-order is defined");
+        }
         return _transformShape(this._createAffine2DRotation(angle));
     }
 
@@ -134,7 +136,7 @@ class ImgLib2Shape implements IShape {
         AffineTransform2D affine2D = new AffineTransform2D();
         affine2D.rotate(-angle);
 
-        AffineTransform fTransform = new AffineTransform(AxisOrder.getNumDefinedAxis(this._axisOrder));
+        AffineTransform fTransform = new AffineTransform(this._shapeDim);
         for (int row = 0; row < 2; row++) {
             for (int column = 0; column < 2; column++) {
                 fTransform.set(affine2D.get(row, column), row, column);
@@ -154,7 +156,7 @@ class ImgLib2Shape implements IShape {
         affine3D.rotate(axis[0], -angle1);
 
         int[] rowsToFill = { 0, 1, z_axis }; // Row, columns to be filled in the affine transform.
-        AffineTransform fTransform = new AffineTransform(AxisOrder.getNumDefinedAxis(this._axisOrder));
+        AffineTransform fTransform = new AffineTransform(this._shapeDim);
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
                 fTransform.set(affine3D.get(row, column), rowsToFill[row], rowsToFill[column]);
