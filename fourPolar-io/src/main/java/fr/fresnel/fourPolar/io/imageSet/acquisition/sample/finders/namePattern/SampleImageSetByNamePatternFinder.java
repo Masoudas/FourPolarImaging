@@ -1,13 +1,7 @@
 package fr.fresnel.fourPolar.io.imageSet.acquisition.sample.finders.namePattern;
 
 import java.io.File;
-import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
-
-import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 /**
  * Using this class, we can find the images of the sample set on the given root

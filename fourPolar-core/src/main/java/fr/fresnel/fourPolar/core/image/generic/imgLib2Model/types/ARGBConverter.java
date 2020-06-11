@@ -1,8 +1,7 @@
 package fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types;
 
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import net.imglib2.type.numeric.ARGBType;
 
 /**

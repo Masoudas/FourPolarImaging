@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.core.image.generic;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 
 /**
  * An interface for accessing tiff metadata.

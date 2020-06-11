@@ -62,7 +62,7 @@ public class ImgLib2ImageFactoryTest {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 1, 1, }).axisOrder(AxisOrder.XYCT).build();
 
         assertThrows(IllegalArgumentException.class, () -> {
-            Image<RGB16> image = new ImgLib2ImageFactory().create(metadata, RGB16.zero());
+            new ImgLib2ImageFactory().create(metadata, RGB16.zero());
         });
     }
 
@@ -135,7 +135,7 @@ public class ImgLib2ImageFactoryTest {
         ARGBType type = new ARGBType();
         Img<ARGBType> img = new ArrayImgFactory<ARGBType>(type).create(metadata.getDim());
         assertThrows(IllegalArgumentException.class, () -> {
-            Image<RGB16> image = new ImgLib2ImageFactory().create(img, type, metadata);
+            new ImgLib2ImageFactory().create(img, type, metadata);
         });
 
     }

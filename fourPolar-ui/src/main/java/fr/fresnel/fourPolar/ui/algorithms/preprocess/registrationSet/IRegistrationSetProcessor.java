@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import fr.fresnel.fourPolar.algorithm.preprocess.registration.IChannelRegistrator;
