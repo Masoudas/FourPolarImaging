@@ -15,25 +15,6 @@ public enum AxisOrder {
     XYZTC(4, 2, 3, 5), XYTZC(4, 3, 2, 5);
 
     /**
-     * Returns the number of labeled axis corresponding to the given order.
-     * <p>
-     * WARNING: This method should not be used to check how many dimensions an
-     * entity has, given that it returns -1 for NoOrder. For example for the
-     * {@link Image} interface, we should directly work with the dimension vector of
-     * image.
-     * 
-     * @return -1 if no order is defined, otherwise the number of axis.
-     */
-    public static int getNumDefinedAxis(AxisOrder axisOrder) {
-        if (axisOrder == NoOrder) {
-            return -1;
-        } else {
-            return axisOrder.name().length();
-        }
-    }
-
-
-    /**
      * If z-axis already present, returns the originial order. Else, appends z-axis
      * to first convenient location of the given order. The goal is to increase the
      * number of axis by one.
