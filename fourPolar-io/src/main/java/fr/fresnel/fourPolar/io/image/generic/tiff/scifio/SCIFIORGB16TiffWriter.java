@@ -158,18 +158,19 @@ public class SCIFIORGB16TiffWriter implements ImageWriter<RGB16> {
      * image.
      */
     public IMetadata _createMetadata(IMetadata originalMetadata) {
-        long[] originalDim = originalMetadata.getDim();
-        AxisOrder originalAxisOrder = originalMetadata.axisOrder();
+        // long[] originalDim = originalMetadata.getDim();
+        // AxisOrder originalAxisOrder = originalMetadata.axisOrder();
 
-        AxisOrder axisOrder = AxisOrder.appendChannelToEnd(originalAxisOrder);
-        long[] dim = new long[originalDim.length + 1];
+        // AxisOrder axisOrder = AxisOrder.appendChannelToEnd(originalAxisOrder);
+        // long[] dim = new long[originalDim.length + 1];
 
-        for (int i = 0; i < dim.length - 1; i++) {
-            dim[i] = originalDim[i];
-        }
-        dim[dim.length - 1] = 3;
+        // for (int i = 0; i < dim.length - 1; i++) {
+        //     dim[i] = originalDim[i];
+        // }
+        // dim[dim.length - 1] = 3;
 
-        return new MetadataBuilder(dim).axisOrder(axisOrder).bitPerPixel(PixelTypes.RGB_16).build();
+        // return new MetadataBuilder(dim).axisOrder(axisOrder).bitPerPixel(PixelTypes.RGB_16).build();
+        return null;
     }
 
     private io.scif.formats.TIFFFormat.Metadata _createSCIFIOMetadata() {
