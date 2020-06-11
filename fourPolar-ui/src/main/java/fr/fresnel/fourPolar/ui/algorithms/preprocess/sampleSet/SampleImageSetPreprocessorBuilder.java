@@ -49,9 +49,9 @@ public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocess
 
     private void _checkAllChannelsCanBeRegistered(RegistrationSetProcessResult registrationProcessResult,
             int numChannels) {
-        for (int channel = 0; channel < numChannels; channel++) {
+        for (int channel = 1; channel <= numChannels; channel++) {
             IChannelRegistrationResult channelResult = registrationProcessResult.getRegistrationResult(channel);
-            if (ChannelRegistrationResultUtils.isEveryRegistrationSuccessful(channelResult)) {
+            if (!ChannelRegistrationResultUtils.isEveryRegistrationSuccessful(channelResult)) {
                 throw new IllegalArgumentException(
                         "Can't build a sample set processor when registration for channel " + channel + " has failed.");
             }
