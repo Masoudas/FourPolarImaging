@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.core.image.generic.axis;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
