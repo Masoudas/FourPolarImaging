@@ -69,7 +69,7 @@ public class TiffOrientationImageFileSet implements IOrientationImageFileSet {
 
     private File _getSetParentFolder(File root4PProject, int channel) {
         return Paths.get(PathFactoryOfProject.getFolder_OrientationImages(root4PProject).getAbsolutePath(),
-                "Channel" + channel, this._setName).toFile();
+                "Channel " + channel, this._setName).toFile();
     }
 
     @Override
