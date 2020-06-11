@@ -93,8 +93,8 @@ public class PolarizationImageSetCompositesCreator implements IPolarizationImage
             baseMonochromeView.setPosition(position);
             registeredMonochromeView.setPosition(position);
 
-            RGB16 pixelColor = baseMonochromeView.getPixel().value();
-            pixelColor.add(registeredMonochromeView.getPixel().value());
+            pixel.value().set(baseMonochromeView.getPixel().value());
+            pixel.value().add(registeredMonochromeView.getPixel().value());
 
             compositeCursor.setPixel(pixel);
         }
