@@ -8,9 +8,10 @@ import net.imglib2.roi.geom.real.PointMask;
 
 public class ImgLib2PointShape extends ImgLib2Shape implements IPointShape {
     private final long[] _point;
+
     public static IPointShape create(long[] point, AxisOrder axisOrder) {
         PointMask mask = GeomMasks.pointMask(Arrays.stream(point).asDoubleStream().toArray());
-        return new ImgLib2PointShape(1, mask, axisOrder, point);
+        return new ImgLib2PointShape(point.length, mask, axisOrder, point);
     }
 
     private ImgLib2PointShape(int shapeDim, PointMask shape, AxisOrder axisOrder, long[] point) {
