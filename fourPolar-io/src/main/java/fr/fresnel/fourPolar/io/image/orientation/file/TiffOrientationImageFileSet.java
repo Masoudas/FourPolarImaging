@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.io.image.orientation.file;
 
 import java.io.File;
-import java.nio.file.Paths;
 
 import fr.fresnel.fourPolar.core.PathFactoryOfProject;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
@@ -11,7 +10,8 @@ import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
  * A concrete implementation of the {@link IOrientationImageFileSet}. Note that
  * with this implementation, all images will have a tif extension. The path for
  * angle images is as described in
- * {@link PathFactoryOfProject#getFolder_OrientationImages()} + [Rho, Delta,Eta] + .tif
+ * {@link PathFactoryOfProject#getFolder_OrientationImages()} + [Rho, Delta,Eta]
+ * + .tif
  * 
  */
 public class TiffOrientationImageFileSet implements IOrientationImageFileSet {
@@ -32,44 +32,49 @@ public class TiffOrientationImageFileSet implements IOrientationImageFileSet {
     public TiffOrientationImageFileSet(File root4PProject, ICapturedImageFileSet fileSet, int channel) {
         this._setName = fileSet.getSetName();
 
-        File parentFolder = this._getSetParentFolder(root4PProject, channel);
+        File parentFolder = OrientationImageFileSetUtils.getParentFolder(root4PProject, channel, fileSet);
 
+        _createParentFolder(parentFolder);
+
+        this._rhoImage = _createRhoFile(parentFolder);
+        this._deltaImage = _createDeltaFile(parentFolder);
+        this._etaImage = _createEtaFile(parentFolder);
+        this._channel = channel;
+    }
+
+    private void _createParentFolder(File parentFolder) {
         if (!parentFolder.exists()) {
             parentFolder.mkdirs();
         }
+    }
 
-        this._rhoImage = new File(parentFolder, "Rho" + "." + _extension);
-        this._deltaImage = new File(parentFolder, "Delta" + "." + _extension);
-        this._etaImage = new File(parentFolder, "Eta" + "." + _extension);
-        this._channel = channel;
+    private File _createEtaFile(File parentFolder) {
+        return OrientationImageFileSetUtils.createEtaImageFile(parentFolder, _extension);
+    }
+
+    private File _createDeltaFile(File parentFolder) {
+        return OrientationImageFileSetUtils.createDeltaImageFile(parentFolder, _extension);
+    }
+
+    private File _createRhoFile(File parentFolder) {
+        return OrientationImageFileSetUtils.createRhoImageFile(parentFolder, _extension);
     }
 
     @Override
     public File getFile(OrientationAngle angle) {
-        File imageFile = null;
-
         switch (angle) {
             case rho:
-                imageFile = _rhoImage;
-                break;
+                return _rhoImage;
 
             case delta:
-                imageFile = _deltaImage;
-                break;
+                return _deltaImage;
 
             case eta:
-                imageFile = _etaImage;
-                break;
+                return _etaImage;
 
             default:
-                break;
+                return null;
         }
-        return imageFile;
-    }
-
-    private File _getSetParentFolder(File root4PProject, int channel) {
-        return Paths.get(PathFactoryOfProject.getFolder_OrientationImages(root4PProject).getAbsolutePath(),
-                "Channel " + channel, this._setName).toFile();
     }
 
     @Override
