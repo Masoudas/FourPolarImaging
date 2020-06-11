@@ -114,17 +114,17 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
     }
 
     @Override
-    public IPolarizationImageComposite getCompositeImage(RegistrationRule rule) {
+    IPolarizationImageComposite getCompositeImage(RegistrationRule rule) {
         return new PolarizationImageComposite(rule, this._compositeImages.get(rule));
     }
 
     @Override
-    public int getChannel() {
+    int getChannel() {
         return this._channel;
     }
 
     @Override
-    public ICapturedImageFileSet getFileSet() {
+    ICapturedImageFileSet getFileSet() {
         return this._fileSet;
     }
 }

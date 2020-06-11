@@ -4,9 +4,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 
 abstract class IPolarizationImageSetCompositesBuilder {
-    public abstract IPolarizationImageComposite getCompositeImage(RegistrationRule rule);
-
-    public abstract int getChannel();
-
-    public abstract ICapturedImageFileSet getFileSet();
+   abstract IPolarizationImageComposite getCompositeImage(RegistrationRule rule);
+   abstract int getChannel();
+   abstract ICapturedImageFileSet getFileSet();
 }
