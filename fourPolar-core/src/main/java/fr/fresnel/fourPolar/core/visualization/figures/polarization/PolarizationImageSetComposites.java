@@ -24,7 +24,7 @@ public class PolarizationImageSetComposites implements IPolarizationImageSetComp
             IPolarizationImageSetCompositesBuilder builder) {
         HashMap<RegistrationRule, IPolarizationImageComposite> compositeImages = new HashMap<>();
         for (RegistrationRule rule : RegistrationRule.values()) {
-            this._compositeImages.put(rule, builder.getCompositeImage(rule));
+            compositeImages.put(rule, builder.getCompositeImage(rule));
         }
 
         return compositeImages;
