@@ -35,6 +35,7 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
         Objects.requireNonNull(image);
 
         this._checkCompositeImageHaveSameAxisAsPolarizationImage(image);
+        this._checkCompositeImageHasOneChannel(image);
 
         this._compositeImages.put(rule, image);
 
@@ -101,6 +102,12 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
     private void _checkCompositeImageHaveSameAxisAsPolarizationImage(Image<RGB16> compositeImage) {
         if (compositeImage.getMetadata().axisOrder() != IPolarizationImage.AXIS_ORDER)
             throw new IllegalArgumentException("Composite image must be XYCZT");
+
+    }
+
+    private void _checkCompositeImageHasOneChannel(Image<RGB16> compositeImage) {
+        if (compositeImage.getMetadata().numChannels() != 1)
+            throw new IllegalArgumentException("Composite image must have only one channel.");
 
     }
 
