@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.visualization.figures.polarization;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -68,6 +69,7 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
      */
     public IPolarizationImageSetComposites build() {
         this._checkAllBuildParamsAreGiven();
+        this._checkCompositeImagesAreEqualSize();
 
         PolarizationImageSetComposites composites = new PolarizationImageSetComposites(this);
 
@@ -92,6 +94,17 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
             if (!this._compositeImages.containsKey(rule))
                 throw new IllegalArgumentException("Composite image is not provided for rule " + rule);
         }
+    }
+
+    private void _checkCompositeImagesAreEqualSize() {
+        RegistrationRule ruleToCompare = RegistrationRule.values()[0];
+        long[] dimToCompare = this._compositeImages.get(ruleToCompare).getMetadata().getDim();
+        for (RegistrationRule rule : RegistrationRule.values()) {
+            long[] dimRule = this._compositeImages.get(rule).getMetadata().getDim();
+            if (!Arrays.equals(dimToCompare, dimRule))
+                throw new IllegalArgumentException("Composite images must have equal dimension");
+        }
+
     }
 
     private void _checkChannelIsGiven() {
