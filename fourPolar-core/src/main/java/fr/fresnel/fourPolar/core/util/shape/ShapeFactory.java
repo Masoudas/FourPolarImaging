@@ -31,7 +31,7 @@ public class ShapeFactory {
             throw new IllegalArgumentException("Number of dimension has to be at least two.");
         }
 
-        if (axisOrder != AxisOrder.NoOrder && AxisOrder.getNumDefinedAxis(axisOrder) != min.length) {
+        if (axisOrder != AxisOrder.NoOrder && axisOrder.numAxis != min.length) {
             throw new IllegalArgumentException("Number of axis must correspond to shape min and max");
         }
 
@@ -58,7 +58,7 @@ public class ShapeFactory {
     public IPointShape point(long[] point, AxisOrder axisOrder) {
         Objects.requireNonNull(point, "location cannot be null.");
 
-        if (axisOrder != AxisOrder.NoOrder && AxisOrder.getNumDefinedAxis(axisOrder) != point.length) {
+        if (axisOrder != AxisOrder.NoOrder && axisOrder.numAxis != point.length) {
             throw new IllegalArgumentException("Number of axis must correspond to point dimension.");
         }
 

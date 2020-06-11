@@ -115,7 +115,7 @@ class ImgLib2Image<U extends PixelType, V extends NativeType<V>> implements Imag
 
     private void _isMetadataConsistentWithImage() {
         if (this._metadata.axisOrder() != AxisOrder.NoOrder
-                && AxisOrder.getNumDefinedAxis(this._metadata.axisOrder()) != this._dim.length) {
+                && this._metadata.axisOrder().numAxis != this._dim.length) {
             throw new IllegalArgumentException("Number of axis in metadata AxisOrder should equal image dimension");
         }
 

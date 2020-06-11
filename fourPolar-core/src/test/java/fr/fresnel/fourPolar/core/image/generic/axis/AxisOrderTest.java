@@ -8,26 +8,22 @@ import org.junit.jupiter.api.Test;
 public class AxisOrderTest {
     @Test
     public void channelAxis_ReturnsCorrectChannelAxis() {
-        assertTrue(AxisOrder.XY.c_axis == -1 && AxisOrder.NoOrder.c_axis == -1
-                && AxisOrder.XYC.c_axis == 2 && AxisOrder.XYTC.c_axis == 3
-                && AxisOrder.XYZTC.c_axis == 4);
+        assertTrue(AxisOrder.XY.c_axis == -1 && AxisOrder.NoOrder.c_axis == -1 && AxisOrder.XYC.c_axis == 2
+                && AxisOrder.XYTC.c_axis == 3 && AxisOrder.XYZTC.c_axis == 4);
 
     }
 
     @Test
     public void zAxis_ReturnsCorrectaAxis() {
-        assertTrue(AxisOrder.XY.z_axis == -1 && AxisOrder.NoOrder.z_axis == -1
-                && AxisOrder.XYC.z_axis == -1 && AxisOrder.XYTC.z_axis == -1
-                && AxisOrder.XYZTC.z_axis == 2 && AxisOrder.XYTZC.z_axis == 3);
+        assertTrue(AxisOrder.XY.z_axis == -1 && AxisOrder.NoOrder.z_axis == -1 && AxisOrder.XYC.z_axis == -1
+                && AxisOrder.XYTC.z_axis == -1 && AxisOrder.XYZTC.z_axis == 2 && AxisOrder.XYTZC.z_axis == 3);
 
     }
 
     @Test
     public void getNumDefinedAxis_ReturnsCorrectNumAxis() {
-        assertTrue(AxisOrder.getNumDefinedAxis(AxisOrder.NoOrder) == -1
-                && AxisOrder.getNumDefinedAxis(AxisOrder.XYC) == 3 && AxisOrder.getNumDefinedAxis(AxisOrder.XYTC) == 4
-                && AxisOrder.getNumDefinedAxis(AxisOrder.XYZTC) == 5
-                && AxisOrder.getNumDefinedAxis(AxisOrder.XYTZC) == 5);
+        assertTrue(AxisOrder.NoOrder.numAxis == -1 && AxisOrder.XYC.numAxis == 3 && AxisOrder.XYTC.numAxis == 4
+                && AxisOrder.XYZTC.numAxis == 5 && AxisOrder.XYTZC.numAxis == 5);
 
     }
 

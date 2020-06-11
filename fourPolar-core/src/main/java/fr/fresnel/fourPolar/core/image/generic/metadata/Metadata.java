@@ -46,7 +46,7 @@ public class Metadata implements IMetadata {
         }
 
         public MetadataBuilder axisOrder(AxisOrder axisOrder) {
-            if (axisOrder != AxisOrder.NoOrder && AxisOrder.getNumDefinedAxis(axisOrder) != this._dim.length) {
+            if (axisOrder != AxisOrder.NoOrder && axisOrder.numAxis != this._dim.length) {
                 throw new IllegalArgumentException("Number of axis does not equal image dimension.");
             }
 
@@ -90,11 +90,9 @@ public class Metadata implements IMetadata {
         this._dim = builder._dim;
         this._bitPerPixel = builder._bitPerPixel;
 
-        if (this._axisOrder.c_axis > 0)
-        {
-            this._numChannels = (int)this._dim[this._axisOrder.c_axis];
-        }
-        else{
+        if (this._axisOrder.c_axis > 0) {
+            this._numChannels = (int) this._dim[this._axisOrder.c_axis];
+        } else {
             this._numChannels = 0;
         }
     }

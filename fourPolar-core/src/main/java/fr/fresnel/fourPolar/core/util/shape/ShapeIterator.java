@@ -15,11 +15,11 @@ class ShapeIterator implements IShapeIterator {
     /**
      * Form the iterator, corresponding to space properties and shape.
      * @param iterableRegion is the iterable of ImgLib2.
-     * @param axisOrder is the space axis associated via 
+     * @param shapeDim
      */
-    public ShapeIterator(IterableRegion<BoolType> iterableRegion, AxisOrder axisOrder) {
+    public ShapeIterator(IterableRegion<BoolType> iterableRegion, int shapeDim) {
         this._regionCursor = iterableRegion.cursor();
-        this._position = new long[AxisOrder.getNumDefinedAxis(axisOrder)];
+        this._position = new long[shapeDim];
     }
 
     @Override
