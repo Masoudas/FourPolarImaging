@@ -5,9 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -48,7 +46,7 @@ public class TiffOrientationImageReaderTest {
         // Create an alias for a captured set.
         String setName = "TestCapturedSet";
         int channel = 1;
-        DummyCapturedImageFileSet fileSet = new DummyCapturedImageFileSet(setName);
+        ReaderDummyCapturedImageFileSet fileSet = new ReaderDummyCapturedImageFileSet(setName);
         TiffOrientationImageFileSet fSet = new TiffOrientationImageFileSet(_root, fileSet, channel);
 
         // Create orientation image to be written.
@@ -77,10 +75,10 @@ public class TiffOrientationImageReaderTest {
 
 }
 
-class DummyCapturedImageFileSet implements ICapturedImageFileSet {
+class ReaderDummyCapturedImageFileSet implements ICapturedImageFileSet {
     String setName;
 
-    public DummyCapturedImageFileSet(String setName) {
+    public ReaderDummyCapturedImageFileSet(String setName) {
         this.setName = setName;
     }
 
