@@ -27,23 +27,4 @@ public class AxisOrderTest {
 
     }
 
-    @Test
-    public void append_zAxis_ReturnsAppendedZAxis() {
-        assertTrue(AxisOrder.append_zAxis(AxisOrder.NoOrder) == AxisOrder.NoOrder
-                && AxisOrder.append_zAxis(AxisOrder.XYC) == AxisOrder.XYZC
-                && AxisOrder.append_zAxis(AxisOrder.XYTC) == AxisOrder.XYCZT
-                && AxisOrder.append_zAxis(AxisOrder.XYZTC) == AxisOrder.XYZTC
-                && AxisOrder.append_zAxis(AxisOrder.XYTZC) == AxisOrder.XYTZC);
-
-    }
-
-    @Test
-    public void appendChannelToEnd_ReturnsOrderWithAppendedChannel() {
-        assertThrows(IllegalArgumentException.class, () -> AxisOrder.appendChannelToEnd(AxisOrder.NoOrder));
-
-        assertTrue(AxisOrder.appendChannelToEnd(AxisOrder.XYC) == AxisOrder.XYC
-                && AxisOrder.appendChannelToEnd(AxisOrder.XY) == AxisOrder.XYC
-                && AxisOrder.appendChannelToEnd(AxisOrder.XYT) == AxisOrder.XYTC);
-    }
-
 }
