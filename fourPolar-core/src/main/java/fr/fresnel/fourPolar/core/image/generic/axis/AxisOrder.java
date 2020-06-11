@@ -14,58 +14,7 @@ public enum AxisOrder {
     XYT(-1, -1, 3, 3), XYTC(3, -1, 2, 4), XYZ(-1, 2, -1, 3), XYZC(3, 2, -1, 4), XYZCT(3, 2, 4, 5), XYZT(-1, 2, 3, 4),
     XYZTC(4, 2, 3, 5), XYTZC(4, 3, 2, 5);
 
-    /**
-     * If z-axis already present, returns the originial order. Else, appends z-axis
-     * to first convenient location of the given order. The goal is to increase the
-     * number of axis by one.
-     * 
-     * Any change to the above decision should seriously be entertained (@see
-     * WholeSampleStick3DPainterBuilder).
-     */
-    public static AxisOrder append_zAxis(AxisOrder axisOrder) {
-        if (axisOrder.z_axis > 0) {
-            return axisOrder;
-        }
 
-        if (axisOrder == XY) {
-            return XYZ;
-        } else if (axisOrder == XYT) {
-            return XYZT;
-        } else if (axisOrder == XYC) {
-            return XYZC;
-        } else if (axisOrder == XYTC || axisOrder == XYCT) {
-            return XYCZT;
-        } else {
-            return NoOrder;
-        }
-
-    }
-
-    /**
-     * Throws exception if NoOrder is given. Does nothing if order with existing
-     * channel is given. Appends a channel axis to the end of this axis-order.
-     * 
-     */
-    public static AxisOrder appendChannelToEnd(AxisOrder axisOrder) {
-        Objects.requireNonNull(axisOrder, "axisOrder cannot be null.");
-        if (axisOrder == AxisOrder.NoOrder) {
-            throw new IllegalArgumentException("Can't append channel to NoOrder.");
-        }
-
-        if (axisOrder.c_axis > 0) {
-            return axisOrder;
-        }
-
-        return AxisOrder.valueOf(axisOrder.name() + "C");
-    }
-
-    public static AxisOrder fromString(String axisOrder) throws UnsupportedAxisOrder {
-        try {
-            return AxisOrder.valueOf(axisOrder);
-        } catch (IllegalArgumentException e) {
-            throw new UnsupportedAxisOrder();
-        }
-    }
 
     public final int z_axis;
     public final int c_axis;
