@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 public class AxisOrderTest {
     @Test
     public void channelAxis_ReturnsCorrectChannelAxis() {
-        assertTrue(AxisOrder.getChannelAxis(AxisOrder.XY) == -1 && AxisOrder.getZAxis(AxisOrder.NoOrder) == -1
+        assertTrue(AxisOrder.getChannelAxis(AxisOrder.XY) == -1 && AxisOrder.NoOrder.z_axis == -1
                 && AxisOrder.getChannelAxis(AxisOrder.XYC) == 2 && AxisOrder.getChannelAxis(AxisOrder.XYTC) == 3
                 && AxisOrder.getChannelAxis(AxisOrder.XYZTC) == 4);
 
@@ -16,9 +16,9 @@ public class AxisOrderTest {
 
     @Test
     public void zAxis_ReturnsCorrectaAxis() {
-        assertTrue(AxisOrder.getZAxis(AxisOrder.XY) == -1 && AxisOrder.getZAxis(AxisOrder.NoOrder) == -1
-                && AxisOrder.getZAxis(AxisOrder.XYC) == -1 && AxisOrder.getZAxis(AxisOrder.XYTC) == -1
-                && AxisOrder.getZAxis(AxisOrder.XYZTC) == 2 && AxisOrder.getZAxis(AxisOrder.XYTZC) == 3);
+        assertTrue(AxisOrder.XY.z_axis == -1 && AxisOrder.NoOrder.z_axis == -1
+                && AxisOrder.XYC.z_axis == -1 && AxisOrder.XYTC.z_axis == -1
+                && AxisOrder.XYZTC.z_axis == 2 && AxisOrder.XYTZC.z_axis == 3);
 
     }
 

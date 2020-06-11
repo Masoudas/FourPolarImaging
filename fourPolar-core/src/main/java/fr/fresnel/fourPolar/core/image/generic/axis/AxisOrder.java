@@ -41,20 +41,6 @@ public enum AxisOrder {
     }
 
     /**
-     * Returns the dimension (from zero) of time axis (if exists) and -1 otherwise.
-     */
-    public static int getTimeAxis(AxisOrder axisOrder) {
-        return axisOrder.name().indexOf('T');
-    }
-
-    /**
-     * Returns the dimension (from zero) of z-axis (if exists) and -1 otherwise.
-     */
-    public static int getZAxis(AxisOrder axisOrder) {
-        return axisOrder.name().indexOf('Z');
-    }
-
-    /**
      * If z-axis already present, returns the originial order. Else, appends z-axis
      * to first convenient location of the given order. The goal is to increase the
      * number of axis by one.
@@ -63,7 +49,7 @@ public enum AxisOrder {
      * WholeSampleStick3DPainterBuilder).
      */
     public static AxisOrder append_zAxis(AxisOrder axisOrder) {
-        if (AxisOrder.getZAxis(axisOrder) > 0) {
+        if (axisOrder.z_axis > 0) {
             return axisOrder;
         }
 

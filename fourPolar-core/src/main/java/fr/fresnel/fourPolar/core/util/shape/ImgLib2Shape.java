@@ -99,7 +99,7 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public IShape rotate3D(double angle1, double angle2, double angle3, Rotation3DOrder rotation3dOrder) {
-        if (AxisOrder.getZAxis(this._axisOrder) < 2) {
+        if (this._axisOrder.z_axis < 2) {
             throw new IllegalArgumentException("Impossible to rotate 3D because no z-axis exists.");
         }
 
@@ -145,7 +145,7 @@ class ImgLib2Shape implements IShape {
 
     private AffineGet _createAffine3DMatrix(double angle1, double angle2, double angle3,
             Rotation3DOrder rotation3dOrder) {
-        int z_axis = AxisOrder.getZAxis(this._axisOrder);
+        int z_axis = this._axisOrder.z_axis;
         int[] axis = Rotation3DOrder.getAxisOrder(rotation3dOrder);
 
         AffineTransform3D affine3D = new AffineTransform3D();
