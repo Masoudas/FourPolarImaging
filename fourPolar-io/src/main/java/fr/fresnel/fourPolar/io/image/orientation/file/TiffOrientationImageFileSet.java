@@ -16,7 +16,6 @@ import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
  */
 public class TiffOrientationImageFileSet implements IOrientationImageFileSet {
     private final static String _extension = "tif";
-    private final String _setName;
     private final File _rhoImage;
     private final File _deltaImage;
     private final File _etaImage;
@@ -30,8 +29,6 @@ public class TiffOrientationImageFileSet implements IOrientationImageFileSet {
      * @param fileSet
      */
     public TiffOrientationImageFileSet(File root4PProject, ICapturedImageFileSet fileSet, int channel) {
-        this._setName = fileSet.getSetName();
-
         File parentFolder = OrientationImageFileSetUtils.getParentFolder(root4PProject, channel, fileSet);
 
         _createParentFolder(parentFolder);
