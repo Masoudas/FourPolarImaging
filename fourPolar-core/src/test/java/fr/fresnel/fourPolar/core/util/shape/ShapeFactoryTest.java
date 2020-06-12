@@ -86,9 +86,9 @@ public class ShapeFactoryTest {
         IShape shapeWithin = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
         IShape shapeOutside = new ShapeFactory().closedBox(new long[] { 2, 2 }, new long[] { 4, 4 }, AxisOrder.XY);
 
-        shapeWithin.and(shapeOutside);
+        IShape andedShape = shapeWithin.and(shapeOutside);
 
-        assertTrue(!shapeWithin.getIterator().hasNext());
+        assertTrue(!andedShape.getIterator().hasNext());
 
     }
 
