@@ -8,7 +8,7 @@ import net.imglib2.roi.RealMaskRealInterval;
  * for example.
  */
 public class ImgLib2LogicalShape extends ImgLib2Shape {
-    public static IShape createAndedShape(IShape shape1, IShape shape2) {
+    public static IShape createAndedShape(ImgLib2Shape shape1, ImgLib2Shape shape2) {
         if (shape1.axisOrder() != shape2.axisOrder()) {
             throw new IllegalArgumentException("The two shapes are not defined over the same axis.");
         }
