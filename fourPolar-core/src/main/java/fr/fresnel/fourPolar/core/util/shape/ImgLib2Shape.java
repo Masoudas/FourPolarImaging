@@ -98,7 +98,7 @@ class ImgLib2Shape implements IShape {
     @Override
     public IShape and(IShape shape) {
         if (shape instanceof ImgLib2Shape) {
-            return ImgLib2LogicalShape.createAndedShape(this, shape);
+            return ImgLib2LogicalShape.createAndedShape(this, (ImgLib2Shape)shape);
         } else {
             throw new IllegalArgumentException("Can't And this shape");
         }
