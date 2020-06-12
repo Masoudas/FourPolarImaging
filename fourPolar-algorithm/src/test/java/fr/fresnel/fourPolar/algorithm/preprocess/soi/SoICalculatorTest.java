@@ -83,7 +83,6 @@ class TestPixelCursor implements IPixelCursor<UINT16> {
 
     @Override
     public long[] localize() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -101,7 +100,6 @@ class TestPixelCursor implements IPixelCursor<UINT16> {
 
     @Override
     public long size() {
-        // TODO Auto-generated method stub
         return 0;
     }
     

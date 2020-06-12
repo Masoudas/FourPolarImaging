@@ -15,7 +15,6 @@ public class OpticalPropagationGenerator implements IOpticalPropagationGenerator
     @Override
     public IOpticalPropagation generate(IChannel channel, INumericalAperture na)
             throws CannotComputePropagationFactor, OpticalPropagationNotInvertible {
-        // TODO Auto-generated method stub
         return null;
     }
 

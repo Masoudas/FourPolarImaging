@@ -101,43 +101,36 @@ class DummySet implements ICapturedImageFileSet {
 
     @Override
     public ICapturedImageFile[] getFile(String label) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getSetName() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Cameras getnCameras() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public boolean hasLabel(String label) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean deepEquals(ICapturedImageFileSet fileset) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public Iterator<ICapturedImageFile> getIterator() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public int[] getChannels() {
-        // TODO Auto-generated method stub
         return null;
     }
 

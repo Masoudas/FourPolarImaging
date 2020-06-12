@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.io.image.captured.tiff.checker;
 
-import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;

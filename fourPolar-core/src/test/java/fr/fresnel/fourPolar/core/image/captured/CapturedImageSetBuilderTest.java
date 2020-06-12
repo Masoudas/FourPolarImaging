@@ -233,7 +233,6 @@ class BuilderDummyCapturedImageFileSet implements ICapturedImageFileSet {
 
     @Override
     public int[] getChannels() {
-        // TODO Auto-generated method stub
         return null;
     }
 

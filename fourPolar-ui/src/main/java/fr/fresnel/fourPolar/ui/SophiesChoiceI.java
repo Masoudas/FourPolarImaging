@@ -9,8 +9,6 @@ import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.propagation.OpticalPr
 import fr.fresnel.fourPolar.algorithm.fourPolar.FourPolarMapper;
 import fr.fresnel.fourPolar.algorithm.fourPolar.converters.IntensityToOrientationConverter;
 import fr.fresnel.fourPolar.algorithm.fourPolar.inversePropagation.MatrixBasedInverseOpticalPropagationCalculator;
-import fr.fresnel.fourPolar.algorithm.preprocess.soi.ISoICalculator;
-import fr.fresnel.fourPolar.algorithm.preprocess.soi.SoICalculator;
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;

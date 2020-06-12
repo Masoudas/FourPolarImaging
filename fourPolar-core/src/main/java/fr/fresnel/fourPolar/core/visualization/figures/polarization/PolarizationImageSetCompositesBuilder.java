@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.core.visualization.figures.polarization;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 

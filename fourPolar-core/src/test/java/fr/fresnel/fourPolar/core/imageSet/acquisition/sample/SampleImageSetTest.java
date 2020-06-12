@@ -148,13 +148,11 @@ class DummyCapturedSet implements ICapturedImageFileSet {
 
     @Override
     public Iterator<ICapturedImageFile> getIterator() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public int[] getChannels() {
-        // TODO Auto-generated method stub
         return null;
     }
 

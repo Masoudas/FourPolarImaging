@@ -1,8 +1,5 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
-import java.util.Objects;
-import java.util.stream.IntStream;
-
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 
 public class ShapeFactory {

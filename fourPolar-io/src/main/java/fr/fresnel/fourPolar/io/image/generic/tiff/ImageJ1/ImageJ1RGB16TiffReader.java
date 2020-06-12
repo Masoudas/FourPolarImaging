@@ -60,7 +60,6 @@ public class ImageJ1RGB16TiffReader implements ImageReader<RGB16> {
 
     @Override
     public void close() throws IOException {
-        // TODO Auto-generated method stub
 
     }
 
