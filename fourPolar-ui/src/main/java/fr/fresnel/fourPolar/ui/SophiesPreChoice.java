@@ -77,7 +77,7 @@ public class SophiesPreChoice {
     public static String userName = "Sophie 'The Boss' Brasselet";
 
     // RootFolder
-    public static String rootFolder = "/home/masoud/Documents/SampleImages/A4PolarDataSet";
+    private static String rootFolder = "/home/masoud/Documents/SampleImages/A4PolarDataSet";
 
     // Registration image
     public static String registrationImage = "Sample_OneCamera.tif";
@@ -111,6 +111,9 @@ public class SophiesPreChoice {
     private static Color toRegisterImageColor = Color.Red;
 
     public static void main(String[] args) throws CannotCreateException, IncompatibleCapturedImage, IOException {
+        // -------------------------------------------------------------------
+        // YOU DON'T NEED TO CHANGE ANYTHING FROM HERE ON!
+        // -------------------------------------------------------------------
         beadImageSet = createRegistrationImageSet();
         sampleImageSet = createSampleImageSet();
 
@@ -118,9 +121,6 @@ public class SophiesPreChoice {
 
     }
 
-    // -------------------------------------------------------------------
-    // YOU DON'T NEED TO CHANGE ANYTHING FROM HERE ON!
-    // -------------------------------------------------------------------
     // Imaging setup
     private static IFourPolarImagingSetup setup = initializeImagingSetup();
 
@@ -227,9 +227,8 @@ public class SophiesPreChoice {
     }
 
     public static IRegistrationSetProcessor createRegistrationSetProcessor() {
-        return new RegistrationSetProcessorBuilder(setup)
-                .registrationCompositeCreator(
-                        new PolarizationImageSetCompositesCreator(channels.length, baseImageColor, toRegisterImageColor))
+        return new RegistrationSetProcessorBuilder(setup).registrationCompositeCreator(
+                new PolarizationImageSetCompositesCreator(channels.length, baseImageColor, toRegisterImageColor))
                 .build();
     }
 

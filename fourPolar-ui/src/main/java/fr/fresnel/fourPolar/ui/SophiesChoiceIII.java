@@ -11,9 +11,12 @@ import org.scijava.ui.behaviour.util.Behaviours;
 import bdv.util.Bdv;
 import bdv.util.BdvFunctions;
 import bdv.util.BdvOptions;
-import fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D.SingleDipoleInPlaneStickPainterBuilder;
+import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter;
+import fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D.SingleDipoleStick2DPainterBuilder;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
+import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
@@ -24,104 +27,70 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.image.soi.SoIImage;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.NoReaderFoundForImage;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
+import javassist.tools.reflect.CannotCreateException;
 import net.imglib2.RealPoint;
 
 /**
- * With this choice, Sophie (AKA boss) can draw interactive gauge figures that
+ * Given this choice, Sophie (AKA boss) can draw interactive gauge figures that
  * contain 2D rho stick, 2D delta stick or 2D eta sticks.
  * 
  * To draw the gauge figures, the orientation images should be formed using
  * SophiesChoiceI.
+ *
+ * All other parameters are optional, including stick length, thickness and
+ * color map.
  * 
- * To use this code, the only needed piece of information is the path to images.
- * All other parameters are optional.
+ * Note that the gauge figure is drawing only for the first channel of the first
+ * captured image given in PreChoice. If wish to analyze multiple captured
+ * images or different channels, talk to Masoud.
  */
 
 public class SophiesChoiceIII {
-    public static void main(String[] args) throws IOException {
-        // Define root folder of orientation image. NO BACKSLASHES!
-        String rootFolder = "/home/masoud/Documents/SampleImages/A4PolarDataSet";
+    // By changing this parameter, Delta, Rho or Eta stick can be drawn.
+    static AngleGaugeType angleGaugeType = AngleGaugeType.Rho2D;
 
-        // Define path to orientation images.
-        final File rhoFile = new File(rootFolder, "rho.tif");
-        final File deltaFile = new File(rootFolder, "delta.tif");
-        final File etaFile = new File(rootFolder, "eta.tif");
-        final File soiFile = new File(rootFolder, "soi.tif");
+    // 2D Stick visual params.
+    static int length = 40;
+    static int thickness = 2;
+    static String stickColorMap = ColorMapFactory.IMAGEJ_PHASE;
 
-       
-        // By changing this parameter, Delta, Rho or Eta stick can be drawn.
-        AngleGaugeType angleGaugeType = AngleGaugeType.Rho2D;
-
-        
-
-        // 2D Stick visual params.
-        final int length = 40;
-        final int thickness = 2;
-        final ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
-
-        // Threshold for SoI. Sticks will be drawn above this threshold.
-        final int soiThreshold = 0;
-
+    public static void main(String[] args) throws IOException, CannotCreateException, IncompatibleCapturedImage {
         // -------------------------------------------------------------------
         // YOU DON'T NEED TO TOUCH ANYTHING FROM HERE ON!
         // -------------------------------------------------------------------
-        final IOrientationImage orientationImage = readOrientationImage(rhoFile, deltaFile, etaFile);
+        final ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
+        final SampleImageSet sampleImageSet = SophiesPreChoice.createSampleImageSet();
 
-        final SoIImage soiImage = readSoIImage(soiFile);
+        final ICapturedImageFileSet fileSet = sampleImageSet.getIterator().next();
+        int channel = SophiesPreChoice.channels[0];
 
-        final IAngleGaugePainter gaugePainter = _getGaugePainter(length, thickness, cMap,
-                orientationImage, soiImage, angleGaugeType);
+        final IOrientationImage orientationImage = SophiesChoiceII.readOrientationImage(sampleImageSet.rootFolder(),
+                fileSet, channel);
 
-        _showInteractive(soiImage, gaugePainter, soiThreshold);
+        final ISoIImage soiImage = SophiesChoiceII.readSoIImage(sampleImageSet.rootFolder(), fileSet, channel);
 
-    }
+        final IAngleGaugePainter gaugePainter = _getGaugePainter(length, thickness, cMap, orientationImage, soiImage,
+                angleGaugeType);
 
-    private static SoIImage readSoIImage(final File soiFile) throws IOException {
-        ImageReader<UINT16> reader;
-        SoIImage soiImage = null;
-        try {
-            reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), UINT16.zero());
-            final Image<UINT16> soi = reader.read(soiFile);
-            soiImage = new SoIImage(new CapturedImageFileSet(1, soiFile), soi);
+        _showInteractive(soiImage, gaugePainter, 0);
 
-        } catch (final NoReaderFoundForImage e) {
-        }
-
-        return soiImage;
-    }
-
-    private static IOrientationImage readOrientationImage(final File rhoFile, final File deltaFile, final File etaFile)
-            throws IOException {
-        ImageReader<Float32> reader;
-        IOrientationImage orientationImage = null;
-        try {
-            reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), Float32.zero());
-            final Image<Float32> rhoImage = reader.read(rhoFile);
-            final Image<Float32> deltaImage = reader.read(deltaFile);
-            final Image<Float32> etaImage = reader.read(etaFile);
-            orientationImage = new OrientationImage(null, rhoImage, deltaImage, etaImage);
-
-        } catch (NoReaderFoundForImage | CannotFormOrientationImage e) {
-        }
-
-        return orientationImage;
     }
 
     private static IAngleGaugePainter _getGaugePainter(final int length, final int thickness, final ColorMap cMap,
-            final IOrientationImage orientationImage, final SoIImage soiImage, AngleGaugeType angleGaugeType) {
+            final IOrientationImage orientationImage, final ISoIImage soiImage, AngleGaugeType angleGaugeType) {
         IAngleGaugePainter gaugePainters = null;
 
         try {
-            gaugePainters = new SingleDipoleInPlaneStickPainterBuilder(orientationImage, soiImage, angleGaugeType)
+            gaugePainters = new SingleDipoleStick2DPainterBuilder(orientationImage, soiImage, angleGaugeType)
                     .colorMap(cMap).stickThickness(thickness).stickLen(length).build();
         } catch (ConverterToImgLib2NotFound e) {
 
@@ -132,7 +101,8 @@ public class SophiesChoiceIII {
     private static void _showInteractive(ISoIImage soi, IAngleGaugePainter painter, int soiThreshold) {
         // Viewer to show the soi.
         try {
-            Bdv bdv = BdvFunctions.show(ImageToImgLib2Converter.getImg(soi.getImage(), UINT16.zero()), "SoI",
+            Image<RGB16> colorSoIImage = convertSoIToColorImage(soi);
+            Bdv bdv = BdvFunctions.show(ImageToImgLib2Converter.getImg(colorSoIImage, RGB16.zero()), "SoI",
                     BdvOptions.options().is2D());
 
             Bdv bdv1 = BdvFunctions.show(ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), RGB16.zero()),
@@ -152,6 +122,15 @@ public class SophiesChoiceIII {
         } catch (ConverterToImgLib2NotFound e) {
         }
 
+    }
+
+    private static Image<RGB16> convertSoIToColorImage(ISoIImage soiImage) {
+        try {
+            return GrayScaleToColorConverter.colorUsingMaxEachPlane(soiImage.getImage());
+        } catch (ConverterToImgLib2NotFound e) {
+            // This dumb exception!
+            return null;
+        }
     }
 }
 
@@ -175,7 +154,7 @@ class ShowDipoleUponClick implements ClickBehaviour {
         double[] pos1 = new double[3];
         pos.localize(pos1);
         long[] pos2 = Arrays.stream(pos1).mapToLong((t) -> (long) t).limit(2).toArray();
-        IShape shape = new ShapeFactory().point(pos2, AxisOrder.XY);
+        IShape shape = new ShapeFactory().point(pos2, AxisOrder.XYCZT);
 
         painter.draw(shape, this.soiThreshold);
         bdv.getBdvHandle().getViewerPanel().requestRepaint();

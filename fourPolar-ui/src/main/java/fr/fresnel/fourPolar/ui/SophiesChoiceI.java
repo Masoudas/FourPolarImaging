@@ -9,6 +9,8 @@ import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.propagation.OpticalPr
 import fr.fresnel.fourPolar.algorithm.fourPolar.FourPolarMapper;
 import fr.fresnel.fourPolar.algorithm.fourPolar.converters.IntensityToOrientationConverter;
 import fr.fresnel.fourPolar.algorithm.fourPolar.inversePropagation.MatrixBasedInverseOpticalPropagationCalculator;
+import fr.fresnel.fourPolar.algorithm.preprocess.soi.ISoICalculator;
+import fr.fresnel.fourPolar.algorithm.preprocess.soi.SoICalculator;
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
@@ -35,12 +37,12 @@ import fr.fresnel.fourPolar.ui.algorithms.preprocess.soi.SoIImageCreator;
 import javassist.tools.reflect.CannotCreateException;
 
 /**
- * With this choice, Sophie (AKA Boss) can construct an orientation image
+ * Given this choice, Sophie (AKA Boss) can construct an orientation image
  * together with the SoI image from a polarization image. To employ this choice,
  * Sophie has to run SophiesPreChoice first.
  * 
- * To use this snippet, Sophie just have to set the propagation factors below,
- * and then run the code.
+ * To use this snippet, boss just has to set the propagation factors below, and
+ * then run the code.
  */
 public class SophiesChoiceI {
     /**
@@ -68,6 +70,9 @@ public class SophiesChoiceI {
     private static double _propFactor_xy_135 = -2.9701544558;
 
     public static void main(String[] args) throws IOException, CannotCreateException, IncompatibleCapturedImage {
+        // -------------------------------------------------------------------
+        // YOU DON'T NEED TO TOUCH ANYTHING FROM HERE ON!
+        // -------------------------------------------------------------------
         SampleImageSet sampleImageSet = SophiesPreChoice.createSampleImageSet();
         int[] channels = SophiesPreChoice.channels;
 
@@ -87,15 +92,21 @@ public class SophiesChoiceI {
 
                 IOrientationImage orientationImage = createOrientationImage(polarizationImageSet);
                 mapIntensityToOrientation(polarizationImageSet, orientationImage);
-                saveOrientationImage(orientationImage, sampleImageSet.rootFolder());
+                saveOrientationImageInDegrees(orientationImage, sampleImageSet.rootFolder());
 
-                ISoIImage soiImage = soiImageCreator.create(polarizationImageSet);
-                soiImageWriter.write(sampleImageSet.rootFolder(), soiImage);
+                ISoIImage soiImage = _createSoIImage(soiImageCreator, polarizationImageSet);
+                saveSoIImage(soiImage, sampleImageSet.rootFolder());
             }
         }
 
         closeAllResources(polarizationImageSetReader, orientationImageWriter);
 
+    }
+
+    private static ISoIImage _createSoIImage(ISoIImageCreator soiImageCreator,
+            IPolarizationImageSet polarizationImageSet) {
+        ISoIImage soiImage = soiImageCreator.create(polarizationImageSet);
+        return soiImage;
     }
 
     private static IPolarizationImageSetReader polarizationImageSetReader = null;
@@ -130,7 +141,8 @@ public class SophiesChoiceI {
 
     }
 
-    private static void saveOrientationImage(IOrientationImage orientationImage, File rootFolder) throws IOException {
+    private static void saveOrientationImageInDegrees(IOrientationImage orientationImage, File rootFolder)
+            throws IOException {
         orientationImageWriter.writeInDegrees(rootFolder, orientationImage);
 
     }
