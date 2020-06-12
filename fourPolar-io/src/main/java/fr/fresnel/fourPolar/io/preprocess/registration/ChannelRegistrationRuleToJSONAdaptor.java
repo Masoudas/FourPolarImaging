@@ -17,7 +17,7 @@ class ChannelRegistrationRuleToJSONAdaptor {
     private double _registrationError;
 
 
-    public void toJSON(IChannelRegistrationResult result, RegistrationRule rule) {
+    public ChannelRegistrationRuleToJSONAdaptor(IChannelRegistrationResult result, RegistrationRule rule) {
         this._setRuleDescription(rule.description);
         this._setAffineTransform(result.getAffineTransform(rule).get());
         this._setRegistrationError(result.error(rule));
