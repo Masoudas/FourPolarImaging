@@ -28,12 +28,19 @@ public class TiffGaugeFigureWriter implements IGaugeFigureWriter {
         this._createWriter(gaugeFigure);
 
         File pathToFigure = this._getPathToFigure(root4PProject, visualizationSession, gaugeFigure);
+        this._createParentFolder(pathToFigure);
         
         this._writer.write(pathToFigure, gaugeFigure.getImage());
     }
 
     private File _getPathToFigure(File root4PProject, String visualizationSession, IGaugeFigure gaugeFigure) {
         return TiffGaugeFigureIOUtil.createGaugeFigurePath(root4PProject, visualizationSession, gaugeFigure);
+    }
+
+    private void _createParentFolder(File pathToFigure) {
+        if (pathToFigure.exists()) {
+            pathToFigure.mkdirs();
+        }
     }
 
     @Override
