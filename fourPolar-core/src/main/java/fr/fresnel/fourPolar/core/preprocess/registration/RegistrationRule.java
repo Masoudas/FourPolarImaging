@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
  * and pol135 are all registered to pol0.
  */
 public enum RegistrationRule {
-    Pol45_to_Pol0 {
+    Pol45_to_Pol0("Pol45 to Pol0") {
         public Polarization getBaseImagePolarization() {
             return Polarization.pol0;
         }
@@ -17,7 +17,7 @@ public enum RegistrationRule {
         }
     },
 
-    Pol90_to_Pol0 {
+    Pol90_to_Pol0("Pol90 to Pol0") {
         public Polarization getBaseImagePolarization() {
             return Polarization.pol0;
         }
@@ -27,7 +27,7 @@ public enum RegistrationRule {
         }
     },
 
-    Pol135_to_Pol0 {
+    Pol135_to_Pol0("Pol135 to Pol0") {
         public Polarization getBaseImagePolarization() {
             return Polarization.pol0;
         }
@@ -36,6 +36,12 @@ public enum RegistrationRule {
             return Polarization.pol135;
         }
     };
+
+    public final String description;
+
+    RegistrationRule(String description) {
+        this.description = description;
+    }
 
     /**
      * Returns the polarization that would be the base of registration for this
