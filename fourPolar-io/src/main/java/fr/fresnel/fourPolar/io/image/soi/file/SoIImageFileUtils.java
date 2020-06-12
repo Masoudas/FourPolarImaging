@@ -15,6 +15,6 @@ class SoIImageFileUtils {
     }
 
     public static File createImageFile(File parentFolder, String extension){
-        return new File(parentFolder, "SumOfIntensity" + extension);
+        return new File(parentFolder, "SumOfIntensity." + extension);
     }
 }
