@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.io.image.soi;
 import java.io.File;
 import java.io.IOException;
 
+import fr.fresnel.fourPolar.algorithm.util.image.axis.AxisReassigner;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
@@ -31,15 +32,36 @@ public class TiffSoIImageReader implements ISoIImageReader {
     @Override
     public ISoIImage read(File root4PProject, ICapturedImageFileSet fileSet, int channel) throws IOException {
         ChannelUtils.checkChannel(channel, _numChannels);
-        ISoIImageFile file = new TiffSoIImageFile(root4PProject, fileSet, channel);
+        ISoIImageFile file = _createSoIImageFile(root4PProject, fileSet, channel);
 
-        Image<UINT16> soi = null;
+        Image<UINT16> diskSoI = _readSoI(file);
+        Image<UINT16> soi_xyczt = this._reassignToXYCZT(diskSoI);
+        return SoIImage.create(fileSet, soi_xyczt, channel);
+    }
+
+    private TiffSoIImageFile _createSoIImageFile(File root4PProject, ICapturedImageFileSet fileSet, int channel) {
+        return new TiffSoIImageFile(root4PProject, fileSet, channel);
+    }
+
+    private Image<UINT16> _readSoI(ISoIImageFile file) throws IOException {
+        Image<UINT16> diskSoI = null;
         try {
-            soi = this._reader.read(file.getFile());
+            diskSoI = this._reader.read(file.getFile());
         } catch (MetadataParseError | IOException e) {
             throw new IOException("SoI images doesn't exist or is corrupted");
         }
-        return SoIImage.create(fileSet, soi, channel);
+        return diskSoI;
+    }
+
+    private Image<UINT16> _reassignToXYCZT(Image<UINT16> diskSoI) {
+        // TODO we need to get rid of this method, by making sure that when image is
+        // written, z and t with dimension 1 are properly written to the disk.
+        if (diskSoI.getMetadata().axisOrder() == ISoIImage.AXIS_ORDER) {
+            return diskSoI;
+        } else {
+            return AxisReassigner.reassignToXYCZT(diskSoI, UINT16.zero());
+        }
+
     }
 
     @Override
