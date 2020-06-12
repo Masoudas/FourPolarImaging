@@ -22,7 +22,7 @@ public class SoIImageCreator implements ISoIImageCreator {
     public ISoIImage create(IPolarizationImageSet polarizationImageSet) {
         ISoIImage soiImage = this._createChannelSoIImages(polarizationImageSet);
         this._calculateChannelSoI(polarizationImageSet, soiImage);
-        return null;
+        return soiImage;
     }
 
     /**
