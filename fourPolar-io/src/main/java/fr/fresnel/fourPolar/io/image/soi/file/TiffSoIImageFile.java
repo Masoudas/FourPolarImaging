@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.io.image.polarization.file.TiffPolarizationImageFile
  * {@link TiffPolarizationImageFileSet}.
  */
 public class TiffSoIImageFile implements ISoIImageFile {
-    private final static String _EXTENSION = "SoI.tif";
+    private final static String _EXTENSION = "tif";
 
     private final File _SoIImageFile;
     private final int _channel;
