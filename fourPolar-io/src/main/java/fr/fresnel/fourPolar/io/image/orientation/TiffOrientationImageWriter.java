@@ -37,11 +37,7 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
 
     @Override
     public void write(File root4PProject, IOrientationImage orientationImage) throws IOException {
-        this._createWriter(orientationImage);
-
-        TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(root4PProject,
-                orientationImage.getCapturedSet(), orientationImage.channel());
-
+        IOrientationImageFileSet oSet = _createOrientationImageFileSet(root4PProject, orientationImage);
         _write(orientationImage, oSet);
 
     }
@@ -53,14 +49,14 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
 
     @Override
     public void writeInDegrees(File root4PProject, IOrientationImage orientationImage) throws IOException {
-        TiffOrientationImageInDegreeFileSet oSet = new TiffOrientationImageInDegreeFileSet(root4PProject,
-                orientationImage.getCapturedSet(), orientationImage.channel());
+        IOrientationImageFileSet oSet = _createOrientationImageInDegreeFileSet(root4PProject, orientationImage);
         this._converAnglesToDegrees(orientationImage);
         this._write(orientationImage, oSet);
         this._converAnglesBackToRadian(orientationImage);
     }
 
     private void _write(IOrientationImage orientationImage, IOrientationImageFileSet oSet) throws IOException {
+        this._createWriter(orientationImage);
         _writer.write(oSet.getFile(OrientationAngle.rho),
                 orientationImage.getAngleImage(OrientationAngle.rho).getImage());
         _writer.write(oSet.getFile(OrientationAngle.delta),
@@ -88,6 +84,18 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
             _writer = TiffImageWriterFactory.getWriter(factoryType, Float32.zero());
 
         }
+    }
+
+    private IOrientationImageFileSet _createOrientationImageFileSet(File root4PProject,
+            IOrientationImage orientationImage) {
+        return new TiffOrientationImageFileSet(root4PProject, orientationImage.getCapturedSet(),
+                orientationImage.channel());
+    }
+
+    private IOrientationImageFileSet _createOrientationImageInDegreeFileSet(File root4PProject,
+            IOrientationImage orientationImage) {
+        return new TiffOrientationImageInDegreeFileSet(root4PProject, orientationImage.getCapturedSet(),
+                orientationImage.channel());
     }
 
 }
