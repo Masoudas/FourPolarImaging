@@ -56,12 +56,6 @@ public class ShapeFactory {
     }
 
     public IPointShape point(long[] point, AxisOrder axisOrder) {
-        Objects.requireNonNull(point, "location cannot be null.");
-
-        if (axisOrder != AxisOrder.NoOrder && axisOrder.numAxis != point.length) {
-            throw new IllegalArgumentException("Number of axis must correspond to point dimension.");
-        }
-
         return ImgLib2PointShape.create(point, axisOrder);
     }
 
