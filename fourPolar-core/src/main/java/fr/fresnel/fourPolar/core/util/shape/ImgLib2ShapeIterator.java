@@ -7,7 +7,7 @@ import net.imglib2.type.logic.BoolType;
 /**
  * An iterator to iterator over discrete coordinate points.
  */
-class ShapeIterator implements IShapeIterator {
+class ImgLib2ShapeIterator implements IShapeIterator {
     private final long[] _position;
     private final Cursor<Void> _regionCursor;
 
@@ -16,7 +16,7 @@ class ShapeIterator implements IShapeIterator {
      * @param iterableRegion is the iterable of ImgLib2.
      * @param shapeDim
      */
-    public ShapeIterator(IterableRegion<BoolType> iterableRegion, int shapeDim) {
+    public ImgLib2ShapeIterator(IterableRegion<BoolType> iterableRegion, int shapeDim) {
         this._regionCursor = iterableRegion.cursor();
         this._position = new long[shapeDim];
     }
