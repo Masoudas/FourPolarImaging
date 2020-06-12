@@ -38,7 +38,7 @@ public class TiffGaugeFigureWriter implements IGaugeFigureWriter {
     }
 
     private void _createParentFolder(File pathToFigure) {
-        if (pathToFigure.exists()) {
+        if (!pathToFigure.exists()) {
             pathToFigure.mkdirs();
         }
     }
