@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.ui;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -14,19 +13,15 @@ import bdv.util.BdvOptions;
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D.SingleDipoleStick2DPainterBuilder;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
-import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
-import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
-import fr.fresnel.fourPolar.core.image.soi.SoIImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
@@ -34,8 +29,6 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
-import fr.fresnel.fourPolar.io.image.generic.ImageReader;
-import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
 import javassist.tools.reflect.CannotCreateException;
 import net.imglib2.RealPoint;
 
