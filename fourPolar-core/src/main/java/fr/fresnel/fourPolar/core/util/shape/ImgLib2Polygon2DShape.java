@@ -11,6 +11,17 @@ public class ImgLib2Polygon2DShape extends ImgLib2Shape implements IPolygon2DSha
     private final long[] _x_vertices;
     private final long[] _y_vertices;
 
+    /**
+     * Creates a polygon2D shape, with x and y as coordinates. We expect at least
+     * three points to create a polygon, eventough this object can be tricked to
+     * create 1D shapes (for example, if all three points are the same).
+     * 
+     * @param x is the x coordinate of the vertices.
+     * @param y is the y coordinate of the vertices.
+     * 
+     * @throws IllegalArgument exception if at least three points are not supplied.
+     * @return
+     */
     public static IPolygon2DShape create(long[] x, long[] y) {
         Objects.requireNonNull(x, "x should not be null");
         Objects.requireNonNull(y, "y should not be null");
@@ -36,7 +47,7 @@ public class ImgLib2Polygon2DShape extends ImgLib2Shape implements IPolygon2DSha
     }
 
     private static void _checkAtLeastThreeVerticesExist(long[] x, long[] y) {
-        if (x.length != 3 || y.length != 3) {
+        if (x.length < 3 || y.length < 3) {
             throw new IllegalArgumentException("At least three points should be supplied to create a polygon 2d");
         }
     }

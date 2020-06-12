@@ -23,6 +23,17 @@ public class ShapeFactory {
         return ImgLib2BoxShape.create(min, max, axisOrder);
     }
 
+    /**
+     * Creates a polygon2D shape, with x and y as coordinates. We expect at least
+     * three points to create a polygon, eventough this object can be tricked to
+     * create 1D shapes (for example, if all three points are the same).
+     * 
+     * @param x is the x coordinate of the vertices.
+     * @param y is the y coordinate of the vertices.
+     * 
+     * @throws IllegalArgument exception if at least three points are not supplied.
+     * @return
+     */
     public IPolygon2DShape closedPolygon2D(long[] x, long[] y) {
         return ImgLib2Polygon2DShape.create(x, y);
     }
