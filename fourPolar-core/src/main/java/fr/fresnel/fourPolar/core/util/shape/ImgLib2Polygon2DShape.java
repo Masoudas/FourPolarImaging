@@ -20,7 +20,7 @@ public class ImgLib2Polygon2DShape extends ImgLib2Shape implements IPolygon2DSha
     }
 
     private ImgLib2Polygon2DShape(WritablePolygon2D shape, long[] x_vertices, long[] y_vertices) {
-        super(2, shape, AxisOrder.XY);
+        super(shape, AxisOrder.XY);
         _x_vertices = x_vertices;
         _y_vertices = y_vertices;
     }

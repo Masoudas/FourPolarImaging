@@ -20,11 +20,11 @@ class ImgLib2BoxShape extends ImgLib2Shape implements IBoxShape {
         double[] maxCopy = Arrays.stream(max).asDoubleStream().toArray();
         WritableBox box = GeomMasks.closedBox(minCopy, maxCopy);
 
-        return new ImgLib2BoxShape(min.length, box, axisOrder, min, max);
+        return new ImgLib2BoxShape(box, axisOrder, min, max);
     }
 
-    private ImgLib2BoxShape(final int shapeDim, WritableBox shape, final AxisOrder axisOrder, long[] min, long[] max) {
-        super(shapeDim, shape, axisOrder);
+    private ImgLib2BoxShape(WritableBox shape, final AxisOrder axisOrder, long[] min, long[] max) {
+        super(shape, axisOrder);
         this._min = min;
         this._max = max;
     }

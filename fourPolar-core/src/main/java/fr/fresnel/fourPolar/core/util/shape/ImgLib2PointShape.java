@@ -19,11 +19,11 @@ public class ImgLib2PointShape extends ImgLib2Shape implements IPointShape {
         }
 
         PointMask mask = GeomMasks.pointMask(Arrays.stream(point).asDoubleStream().toArray());
-        return new ImgLib2PointShape(point.length, mask, axisOrder, point);
+        return new ImgLib2PointShape(mask, axisOrder, point);
     }
 
-    private ImgLib2PointShape(int shapeDim, PointMask shape, AxisOrder axisOrder, long[] point) {
-        super(shapeDim, shape, axisOrder);
+    private ImgLib2PointShape(PointMask shape, AxisOrder axisOrder, long[] point) {
+        super(shape, axisOrder);
         this._point = point;
     }
 

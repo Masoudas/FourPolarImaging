@@ -98,7 +98,7 @@ class ImgLib2Shape implements IShape {
     @Override
     public IShape and(IShape shape) {
         if (shape instanceof ImgLib2Shape) {
-            return ImgLib2LogicalShape.create(this, shape);
+            return ImgLib2LogicalShape.createAndedShape(this, shape);
         } else {
             throw new IllegalArgumentException("Can't And this shape");
         }
@@ -136,7 +136,7 @@ class ImgLib2Shape implements IShape {
      */
     protected IShape _transformShape(AffineGet appliedAffineTransform) {
         RealMaskRealInterval transformedShape = this._shape.transform(appliedAffineTransform);
-        return new ImgLib2Shape(this._shapeDim, transformedShape, this._axisOrder);
+        return new ImgLib2Shape(transformedShape, this._axisOrder);
     }
 
     private AffineGet _createAffine2DRotation(double angle) {
