@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
+import java.util.Objects;
+
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import net.imglib2.realtransform.AffineGet;
 import net.imglib2.realtransform.AffineTransform;
@@ -39,20 +41,25 @@ class ImgLib2Shape implements IShape {
      *                  defined.
      * 
      */
-    protected ImgLib2Shape(final int shapeDim, RealMaskRealInterval shape, final AxisOrder axisOrder) {
-        this._shapeDim = shapeDim;
-        this._pointMask = GeomMasks.pointMask(new double[shapeDim]);
-        this._axisOrder = axisOrder;
-        this._shape = _copyOriginalShape(shapeDim, shape);
+    protected ImgLib2Shape(RealMaskRealInterval shape, final AxisOrder axisOrder) {
+        Objects.requireNonNull(shape);
+        Objects.requireNonNull(axisOrder);
 
+        this._checkShapeDimAndNumAxisEqual(shape.numDimensions(), axisOrder);
+        this._checkShapeDimNonzero(shape.numDimensions());
+
+        this._shapeDim = shape.numDimensions();
+        this._pointMask = GeomMasks.pointMask(new double[shape.numDimensions()]);
+        this._axisOrder = axisOrder;
+        this._shape = shape;
     }
 
-    /**
-     * Just a bogus operation to get a new copy of the shape, different from
-     * original shape
-     */
-    private RealMaskRealInterval _copyOriginalShape(int shapeDim, RealMaskRealInterval shape) {
-        return shape;
+    private void _checkShapeDimAndNumAxisEqual(int shapeDim, AxisOrder axisOrder) {
+        ShapeUtils.checkShapeDimAndNumAxisEqual(shapeDim, axisOrder);
+    }
+
+    private void _checkShapeDimNonzero(int shapeDim) {
+        ShapeUtils.checkShapeDimNonzero(shapeDim);
     }
 
     @Override
