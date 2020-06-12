@@ -68,7 +68,7 @@ class ImgLib2Shape implements IShape {
                 .iterable(Views.interval(Views.raster(Masks.toRealRandomAccessible(this._shape)),
                         Intervals.largestContainedInterval(this._shape)));
 
-        return new ShapeIterator(iterableRegion, this._shapeDim);
+        return new ImgLib2ShapeIterator(iterableRegion, this._shapeDim);
     }
 
     @Override
