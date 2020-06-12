@@ -46,4 +46,12 @@ public class Affine2D implements AffineTransform {
         return this._matrix.get(row, column);
     }
 
+    @Override
+    public double[][] get() {
+        double[][] matrix = new double[2][3];
+        this._matrix.toMatrix(matrix);
+
+        return matrix;
+    }
+
 }

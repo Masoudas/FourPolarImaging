@@ -15,4 +15,11 @@ public interface AffineTransform {
      */
     public double get(int row, int column);
 
+    /**
+     * Get a copy of the underlying affine transform matrix
+     * 
+     * @return
+     */
+    public double[][] get();
+
 }
