@@ -24,6 +24,8 @@ public class PercentileChannelDarkBackgroundEstimator implements IChannelDarkBac
      */
     private static int PERCENTILE_THRESHOLD = 10;
 
+    public static String METHOD_DESCRIPTION = PERCENTILE_THRESHOLD + " percentile intensity";
+
     private final IChannelDarkBackgroundEstimator _estimator;
 
     public PercentileChannelDarkBackgroundEstimator(Cameras cameras) {
