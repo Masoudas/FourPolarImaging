@@ -9,7 +9,8 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 /**
  * Using this class, we can estimate the background of one camera using a
  * polarization image set and with the knowledge of polarizations present in
- * that camera.
+ * that camera. The background is estimates using the first plane of the
+ * polarization images.
  */
 class CameraPercentileBackgroundEstimator {
     /**
@@ -18,7 +19,7 @@ class CameraPercentileBackgroundEstimator {
      */
     public static double estimate(IPolarizationImageSet imageSet, Polarization[] polarizations,
             int percentileThreshold) {
-        double[] cameraIntensities = _getCameraFirstImagePlaneAsArray(imageSet, Polarization.values());
+        double[] cameraIntensities = _getCameraFirstImagePlaneAsArray(imageSet, polarizations);
         return PercentileDarkBackgroundUtil.computePercentile(cameraIntensities, percentileThreshold);
     }
 
