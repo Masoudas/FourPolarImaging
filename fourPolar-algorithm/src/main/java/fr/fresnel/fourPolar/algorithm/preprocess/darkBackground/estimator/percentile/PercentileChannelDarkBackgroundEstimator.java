@@ -19,8 +19,7 @@ import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackgroun
  */
 public class PercentileChannelDarkBackgroundEstimator implements IChannelDarkBackgroundEstimator {
     /**
-     * The percentile in the histogram of intensity values that corresponds to
-     * noise.
+     * The percentile of intensity values that corresponds to noise.
      */
     private static int PERCENTILE_THRESHOLD = 10;
 
@@ -34,6 +33,9 @@ public class PercentileChannelDarkBackgroundEstimator implements IChannelDarkBac
         this._estimator = this._chooseSegmenter(cameras);
     }
 
+    /**
+     * Create a proper noise estimator based on the camera constellation.
+     */
     private IChannelDarkBackgroundEstimator _chooseSegmenter(Cameras cameras) {
         switch (cameras) {
             case One:
