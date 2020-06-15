@@ -15,4 +15,9 @@ public interface IChannelDarkBackground {
      * @return
      */
     public int channel();
+
+    /**
+     * @return a string description of the registration method.
+     */
+    public String estimationMethod();
 }
