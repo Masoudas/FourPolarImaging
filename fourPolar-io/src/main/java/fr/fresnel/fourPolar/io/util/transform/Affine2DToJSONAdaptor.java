@@ -8,11 +8,11 @@ import fr.fresnel.fourPolar.core.util.transform.Affine2D;
  * An adaptor of {@link Affine2D} to JSON. Writes the matrix as a string of form
  * [[a00 a01 a02], [a10 a11 a12]] to disk.
  */
-public class Affine2DToJSON {
+public class Affine2DToJSONAdaptor {
     @JsonProperty("Affine 2D")
     private final String _matrixAsString;
 
-    public Affine2DToJSON(Affine2D affine2d) {
+    public Affine2DToJSONAdaptor(Affine2D affine2d) {
         this._matrixAsString = this._convertMatrixToString(affine2d);
     }
 
