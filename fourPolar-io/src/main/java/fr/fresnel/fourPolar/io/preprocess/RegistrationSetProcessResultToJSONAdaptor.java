@@ -1,8 +1,9 @@
 package fr.fresnel.fourPolar.io.preprocess;
 
+import java.util.Iterator;
 import java.util.TreeMap;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
@@ -14,9 +15,9 @@ import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationRes
  * An adaptor that adapts a {@link RegistrationSetProcessResult} to an object
  * ready to be written as JSON.
  */
-public class RegistrationSetProcessResultToJSONAdaptor {
-    @JsonProperty("Channels")
-    private TreeMap<String, ChannelRegistrationSetProcessResultToJSONAdaptor> _channelAdaptors;
+@JsonSerialize(using = RegistrationSetProcessResultJSONSerializer.class)
+class RegistrationSetProcessResultToJSONAdaptor {
+    private final TreeMap<String, ChannelRegistrationSetProcessResultToJSONAdaptor> _channelAdaptors;
 
     public RegistrationSetProcessResultToJSONAdaptor(IFourPolarImagingSetup imagingSetup,
             RegistrationSetProcessResult result) {
@@ -46,5 +47,13 @@ public class RegistrationSetProcessResultToJSONAdaptor {
     private String _channelAsString(int channel) {
         return ChannelUtils.channelAsString(channel);
     };
+
+    public Iterator<String> getChannelLabels() {
+        return this._channelAdaptors.keySet().iterator();
+    }
+
+    public ChannelRegistrationSetProcessResultToJSONAdaptor getChannelResultAdaptor(String channelLabel){
+        return this._channelAdaptors.get(channelLabel);
+    }
 
 }

@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.io.preprocess;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackground;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
@@ -10,11 +10,10 @@ import fr.fresnel.fourPolar.io.preprocess.registration.IChannelRegistrationResul
 /**
  * An adaptor for writing registration results of one channel to disk.
  */
+@JsonSerialize(using = ChannelRegistrationSetProcessResultJSONSerializer.class)
 class ChannelRegistrationSetProcessResultToJSONAdaptor {
-    @JsonProperty("Dark Background")
     private final IChannelDarkBackgroundToJSONAdaptor _darkBackgroundAdaptor;
 
-    @JsonProperty("Registration Result")
     private final IChannelRegistrationResultToJSONAdaptor _registrationResultAdaptor;
 
     public ChannelRegistrationSetProcessResultToJSONAdaptor(IChannelRegistrationResult registrationResult,
@@ -28,20 +27,28 @@ class ChannelRegistrationSetProcessResultToJSONAdaptor {
 
     private void _checkRegistrationAndBackgroundAreFromSameChannel(IChannelRegistrationResult registrationResult,
             IChannelDarkBackground darkBackground) {
-        if (registrationResult.channel() != darkBackground.channel())
-        {
+        if (registrationResult.channel() != darkBackground.channel()) {
             throw new IllegalArgumentException("Dark background and registration result don't belong to same channel.");
         }
 
     }
 
-    private IChannelDarkBackgroundToJSONAdaptor _createDarkBackgroundJSONAdaptor(IChannelDarkBackground darkBackground) {
+    private IChannelDarkBackgroundToJSONAdaptor _createDarkBackgroundJSONAdaptor(
+            IChannelDarkBackground darkBackground) {
         return new IChannelDarkBackgroundToJSONAdaptor(darkBackground);
     }
 
     private IChannelRegistrationResultToJSONAdaptor _createRegistrationResultJSONAdaptor(
             IChannelRegistrationResult registrationResult) {
         return new IChannelRegistrationResultToJSONAdaptor(registrationResult);
+    }
+
+    public IChannelDarkBackgroundToJSONAdaptor getDarkBackgroundJSONAdaptor() {
+        return this._darkBackgroundAdaptor;
+    }
+
+    public IChannelRegistrationResultToJSONAdaptor getRegistrationResultJSONAdaptor() {
+        return this._registrationResultAdaptor;
     }
 
 }
