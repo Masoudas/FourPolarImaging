@@ -28,6 +28,11 @@ import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
  */
 public class DescriptorBasedRegistration implements IChannelRegistrator {
     /**
+     * Registration method.
+     */
+    public static String METHOD_DESCRIPTION = "Descriptor based 2D registration";
+
+    /**
      * Three sets of dog sigma values, starting from rather large (row one) to
      * rather small (row three) bead detection. The larger the detector, the lesser
      * the chances of detecting noise as FP.

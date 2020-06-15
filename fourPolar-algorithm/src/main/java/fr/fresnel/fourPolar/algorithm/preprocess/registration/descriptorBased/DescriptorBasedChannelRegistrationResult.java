@@ -83,4 +83,9 @@ class DescriptorBasedChannelRegistrationResult implements IChannelRegistrationRe
         return this._channelNum;
     }
 
+    @Override
+    public String registrationMethod() {
+        return DescriptorBasedRegistration.METHOD_DESCRIPTION;
+    }
+
 }
