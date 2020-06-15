@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.percentile;
 
-import java.util.HashMap;
-
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
@@ -9,9 +7,6 @@ import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
-import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageUtils;
-import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
  * Utility methods used for estimating dark background.
