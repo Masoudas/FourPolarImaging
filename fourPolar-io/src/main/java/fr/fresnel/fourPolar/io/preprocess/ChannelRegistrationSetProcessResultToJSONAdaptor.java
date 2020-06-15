@@ -26,7 +26,7 @@ class ChannelRegistrationSetProcessResultToJSONAdaptor {
 
     }
 
-    public void _checkRegistrationAndBackgroundAreFromSameChannel(IChannelRegistrationResult registrationResult,
+    private void _checkRegistrationAndBackgroundAreFromSameChannel(IChannelRegistrationResult registrationResult,
             IChannelDarkBackground darkBackground) {
         if (registrationResult.channel() != darkBackground.channel())
         {
@@ -35,11 +35,11 @@ class ChannelRegistrationSetProcessResultToJSONAdaptor {
 
     }
 
-    public IChannelDarkBackgroundToJSONAdaptor _createDarkBackgroundJSONAdaptor(IChannelDarkBackground darkBackground) {
+    private IChannelDarkBackgroundToJSONAdaptor _createDarkBackgroundJSONAdaptor(IChannelDarkBackground darkBackground) {
         return new IChannelDarkBackgroundToJSONAdaptor(darkBackground);
     }
 
-    public IChannelRegistrationResultToJSONAdaptor _createRegistrationResultJSONAdaptor(
+    private IChannelRegistrationResultToJSONAdaptor _createRegistrationResultJSONAdaptor(
             IChannelRegistrationResult registrationResult) {
         return new IChannelRegistrationResultToJSONAdaptor(registrationResult);
     }
