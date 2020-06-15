@@ -1,9 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.percentile;
 
-import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.ChannelDarkBackground;
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChannelDarkBackgroundEstimator;
-import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackground;
@@ -13,7 +10,7 @@ import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackgroun
  * this constellation, the background of each camera is independent from the
  * others.
  */
-public class FourCameraPercentileDarkBackgroundEstimator implements IChannelDarkBackgroundEstimator {
+class FourCameraPercentileDarkBackgroundEstimator implements IChannelDarkBackgroundEstimator {
     private final int _percentileThreshold;
 
     public FourCameraPercentileDarkBackgroundEstimator(int percentileThreshold) {
@@ -22,25 +19,25 @@ public class FourCameraPercentileDarkBackgroundEstimator implements IChannelDark
 
     @Override
     public IChannelDarkBackground estimate(IPolarizationImageSet imageSet) {
-        Image<UINT16> pol0 = imageSet.getPolarizationImage(Polarization.pol0).getImage();
-        double[] pol0AsArray = PercentileDarkBackgroundUtil.getFirstPlaneAsArray(pol0);
+        double pol0Camerabackground = _estimateCameraPolarizationBackgrounds(imageSet,
+                new Polarization[] { Polarization.pol0 });
+        double pol45Camerabackground = _estimateCameraPolarizationBackgrounds(imageSet,
+                new Polarization[] { Polarization.pol45 });
+        double pol90Camerabackground = _estimateCameraPolarizationBackgrounds(imageSet,
+                new Polarization[] { Polarization.pol90 });
+        double pol135Camerabackground = _estimateCameraPolarizationBackgrounds(imageSet,
+                new Polarization[] { Polarization.pol135 });
 
-        Image<UINT16> pol45 = imageSet.getPolarizationImage(Polarization.pol45).getImage();
-        double[] pol45AsArray = PercentileDarkBackgroundUtil.getFirstPlaneAsArray(pol45);
-
-        Image<UINT16> pol90 = imageSet.getPolarizationImage(Polarization.pol90).getImage();
-        double[] pol90AsArray = PercentileDarkBackgroundUtil.getFirstPlaneAsArray(pol90);
-
-        Image<UINT16> pol135 = imageSet.getPolarizationImage(Polarization.pol135).getImage();
-        double[] pol135AsArray = PercentileDarkBackgroundUtil.getFirstPlaneAsArray(pol135);
-
-        double background0 = PercentileDarkBackgroundUtil.computePercentile(pol0AsArray, this._percentileThreshold);
-
-        double background90 = PercentileDarkBackgroundUtil.computePercentile(pol90AsArray, this._percentileThreshold);
-
-        double background45 = PercentileDarkBackgroundUtil.computePercentile(pol45AsArray, this._percentileThreshold);
-
-        double background135 = PercentileDarkBackgroundUtil.computePercentile(pol135AsArray, this._percentileThreshold);
-        return new ChannelDarkBackground(imageSet.channel(), background0, background45, background90, background135);
+        return new ChannelDarkBackground(imageSet.channel(), pol0Camerabackground, pol45Camerabackground,
+                pol90Camerabackground, pol135Camerabackground);
     }
+
+    /**
+     * Estimate the polarization for the given camera (that contains polarizations).
+     */
+    private double _estimateCameraPolarizationBackgrounds(IPolarizationImageSet imageSet,
+            Polarization[] polarizations) {
+        return CameraPercentileBackgroundEstimator.estimate(imageSet, polarizations, this._percentileThreshold);
+    }
+
 }
