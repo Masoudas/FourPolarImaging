@@ -1,9 +1,9 @@
-package fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator;
+package fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.percentile;
 
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackground;
 
-public class ChannelDarkBackground implements IChannelDarkBackground {
+class ChannelDarkBackground implements IChannelDarkBackground {
     private final double _pol0;
     private final double _pol45;
     private final double _pol90;
@@ -70,6 +70,11 @@ public class ChannelDarkBackground implements IChannelDarkBackground {
     @Override
     public int channel() {
         return this._channel;
+    }
+
+    @Override
+    public String estimationMethod() {
+        return null;
     }
 
 }
