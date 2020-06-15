@@ -142,6 +142,11 @@ class DummyChannelRegistrationResult implements IChannelRegistrationResult {
         return 1;
     }
 
+    @Override
+    public String registrationMethod() {
+        return null;
+    }
+
 }
 
 class DummyPolImgSet implements IPolarizationImageSet {
