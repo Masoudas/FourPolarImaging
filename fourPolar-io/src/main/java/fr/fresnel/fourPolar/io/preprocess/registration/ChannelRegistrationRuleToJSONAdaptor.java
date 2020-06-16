@@ -7,10 +7,10 @@ import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.util.transform.Affine2D;
 
 class ChannelRegistrationRuleToJSONAdaptor {
-    @JsonProperty("Rule Affine Transform")
+    @JsonProperty("Affine Transform")
     private String _affineTransformAsString;
 
-    @JsonProperty("Rule Registration Error")
+    @JsonProperty("Registration Error")
     private double _registrationError;
 
     public ChannelRegistrationRuleToJSONAdaptor(IChannelRegistrationResult result, RegistrationRule rule) {
