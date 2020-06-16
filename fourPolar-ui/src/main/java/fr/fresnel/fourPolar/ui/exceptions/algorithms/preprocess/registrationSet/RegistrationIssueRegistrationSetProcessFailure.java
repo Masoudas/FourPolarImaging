@@ -21,11 +21,13 @@ public class RegistrationIssueRegistrationSetProcessFailure extends Registration
     public static class Builder {
         private final Map<Integer, RegistrationRule[]> _failures = new HashMap<>();
 
-        public void setRuleFailure(ChannelRegistrationFailure failureException, int channel) {
+        public Builder setRuleFailure(ChannelRegistrationFailure failureException, int channel) {
             Objects.requireNonNull(failureException, "failureException can't be null");
             ChannelUtils.checkChannelNumberIsNonZero(channel);
 
             this._failures.put(channel, failureException.getFailedRules());
+
+            return this;
         }
 
         public RegistrationIssueRegistrationSetProcessFailure buildException() {
