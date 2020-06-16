@@ -27,11 +27,11 @@ public class RegistrationSetProcessResultToYAMLTest {
 
         DummyFPSetup setup = new DummyFPSetup(2);
 
-        String backgroundEstimMethod = "backgroundEstimMethod";
+        String backgroundEstimMethod = "Dummy Method";
         DummyChannelBackground background_c1 = new DummyChannelBackground(1, 1, 1, 1, 1, backgroundEstimMethod);
         DummyChannelBackground background_c2 = new DummyChannelBackground(2, 1, 1, 1, 1, backgroundEstimMethod);
 
-        String registrationMethod = "registrationMethod";
+        String registrationMethod = "Dummy Method";
         DummyChannelRegistrationResult registrationResult_c1 = new DummyChannelRegistrationResult(1, 1.2,
                 registrationMethod, new Affine2D(), new Affine2D(), new Affine2D());
         DummyChannelRegistrationResult registrationResult_c2 = new DummyChannelRegistrationResult(2, 1.2,
