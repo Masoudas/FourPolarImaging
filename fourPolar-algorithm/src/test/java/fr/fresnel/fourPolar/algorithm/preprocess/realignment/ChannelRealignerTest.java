@@ -2,8 +2,6 @@ package fr.fresnel.fourPolar.algorithm.preprocess.realignment;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.fourPolar.IIntensityVectorIterator;
@@ -118,13 +116,8 @@ class DummyChannelRegistrationResult implements IChannelRegistrationResult {
     }
 
     @Override
-    public boolean registrationSuccessful(RegistrationRule rule) {
-        return true;
-    }
-
-    @Override
-    public Optional<Affine2D> getAffineTransform(RegistrationRule rule) {
-        return Optional.of(this.transform2d);
+    public Affine2D getAffineTransform(RegistrationRule rule) {
+        return this.transform2d;
     }
 
     @Override
@@ -132,10 +125,6 @@ class DummyChannelRegistrationResult implements IChannelRegistrationResult {
         return 0;
     }
 
-    @Override
-    public Optional<String> getFailureDescription(RegistrationRule rule) {
-        return null;
-    }
 
     @Override
     public int channel() {

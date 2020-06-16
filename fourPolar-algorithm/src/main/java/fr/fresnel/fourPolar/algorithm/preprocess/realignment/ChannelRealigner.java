@@ -36,21 +36,10 @@ public class ChannelRealigner implements IChannelRealigner {
      * @return
      * @throws CannotCreateException
      */
-    public static IChannelRealigner create(final IChannelRegistrationResult channelRegistrationResult)
-            throws CannotCreateException {
-        _areAllRegistrationSuccessful(channelRegistrationResult);
+    public static IChannelRealigner create(final IChannelRegistrationResult channelRegistrationResult) {
         return new ChannelRealigner(channelRegistrationResult);
     }
 
-    private static void _areAllRegistrationSuccessful(IChannelRegistrationResult channelRegistrationResult)
-            throws CannotCreateException {
-        for (RegistrationRule rule : RegistrationRule.values()) {
-            if (!channelRegistrationResult.registrationSuccessful(rule)) {
-                throw new CannotCreateException("Can't create realigner because registration has not been successful");
-            }
-        }
-
-    }
 
     /**
      * Realign polarization images using ImgLib2 library.
@@ -63,15 +52,15 @@ public class ChannelRealigner implements IChannelRealigner {
     public void realign(final IPolarizationImageSet imageSet) {
         final Image<UINT16> pol45 = imageSet.getPolarizationImage(Polarization.pol45).getImage();
         this._realignPolarization(pol45,
-                this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol45_to_Pol0).get());
+                this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol45_to_Pol0));
 
         final Image<UINT16> pol90 = imageSet.getPolarizationImage(Polarization.pol90).getImage();
         this._realignPolarization(pol90,
-                this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol90_to_Pol0).get());
+                this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol90_to_Pol0));
 
         final Image<UINT16> pol135 = imageSet.getPolarizationImage(Polarization.pol135).getImage();
         this._realignPolarization(pol135,
-                this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol135_to_Pol0).get());
+                this._channelRegistrationResult.getAffineTransform(RegistrationRule.Pol135_to_Pol0));
     }
 
     private void _realignPolarization(final Image<UINT16> image, final Affine2D transform) {
