@@ -1,6 +1,8 @@
 package fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 
 import fr.fresnel.fourPolar.algorithm.exceptions.preprocess.registration.ChannelRegistrationFailure;
@@ -131,7 +133,7 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
      */
     private void _registerChannels(IPolarizationImageSet[] channelImages, RegistrationSetProcessResult preprocessResult)
             throws RegistrationIssueRegistrationSetProcessFailure {
-        RegistrationIssueRegistrationSetProcessFailure failureException = new RegistrationIssueRegistrationSetProcessFailure();
+        HashMap<Integer, ChannelRegistrationFailure> failuers = new HashMap<>();
         for (int channel = 1; channel <= this._numChannels; channel++) {
             IChannelRegistrationResult registrationResult;
             try {
@@ -139,14 +141,24 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
                 preprocessResult.setRegistrationResult(channel, registrationResult);
 
             } catch (ChannelRegistrationFailure e) {
-                failureException.setRuleFailure(e, channel);
+                failuers.put(channel, e);
             }
         }
 
-        if (failureException.hasFailure()) {
-            throw failureException;
+        if (!failuers.isEmpty()) {
+            throw this._buildRegistrationFailureException(failuers);
         }
 
+    }
+
+    private RegistrationIssueRegistrationSetProcessFailure _buildRegistrationFailureException(
+            HashMap<Integer, ChannelRegistrationFailure> failuers) {
+        RegistrationIssueRegistrationSetProcessFailure.Builder exceptionBuilder = new RegistrationIssueRegistrationSetProcessFailure.Builder();
+
+        for (Integer channel : failuers.keySet()) {
+            exceptionBuilder.setRuleFailure(failuers.get(channel), channel);
+        }
+        return exceptionBuilder.buildException();
     }
 
     /**
