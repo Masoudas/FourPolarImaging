@@ -2,9 +2,11 @@ package fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import fr.fresnel.fourPolar.algorithm.exceptions.preprocess.registration.ChannelRegistrationFailure;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet;
+import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 
 /**
@@ -20,6 +22,9 @@ public class RegistrationIssueRegistrationSetProcessFailure extends Registration
         private final Map<Integer, RegistrationRule[]> _failures = new HashMap<>();
 
         public void setRuleFailure(ChannelRegistrationFailure failureException, int channel) {
+            Objects.requireNonNull(failureException, "failureException can't be null");
+            ChannelUtils.checkChannelNumberIsNonZero(channel);
+
             this._failures.put(channel, failureException.getFailedRules());
         }
 
