@@ -16,16 +16,27 @@ public class RegistrationIssueRegistrationSetProcessFailure extends Registration
     private static final long serialVersionUID = -3746773829399830474L;
     private final Map<Integer, RegistrationRule[]> _failedRegistrations;
 
-    public RegistrationIssueRegistrationSetProcessFailure() {
-        _failedRegistrations = _initializeFailedRegistrationMap();
+    public static class Builder {
+        private final Map<Integer, RegistrationRule[]> _failures = new HashMap<>();
+
+        public void setRuleFailure(ChannelRegistrationFailure failureException, int channel) {
+            this._failures.put(channel, failureException.getFailedRules());
+        }
+
+        public RegistrationIssueRegistrationSetProcessFailure buildException() {
+            _checkAtLeastOneFailureExists();
+            return new RegistrationIssueRegistrationSetProcessFailure(this);
+        }
+
+        private void _checkAtLeastOneFailureExists() {
+            if (this._failures.isEmpty()){
+                throw new IllegalArgumentException("Can't create exception with no failure cases.");
+            }
+        }
     }
 
-    private Map<Integer, RegistrationRule[]> _initializeFailedRegistrationMap() {
-        return new HashMap<>();
-    }
-
-    public void setRuleFailure(ChannelRegistrationFailure failureException, int channel) {
-        this._failedRegistrations.put(channel, failureException.getFailedRules());
+    private RegistrationIssueRegistrationSetProcessFailure(Builder builder) {
+        _failedRegistrations = builder._failures;
     }
 
     @Override
@@ -34,7 +45,7 @@ public class RegistrationIssueRegistrationSetProcessFailure extends Registration
     }
 
     public int[] getFailedChannels() {
-        return this._failedRegistrations.keySet().stream().mapToInt((t)->t).toArray();
+        return this._failedRegistrations.keySet().stream().mapToInt((t) -> t).toArray();
     }
 
     public RegistrationRule[] getChannelFailedRules(int channel) {
