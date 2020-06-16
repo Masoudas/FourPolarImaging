@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -50,7 +49,6 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.util.transform.Affine2D;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageSetReader;
-import javassist.tools.reflect.CannotCreateException;
 
 // TODO Implement a capturedImageRead interface, and directly return images (without loading).
 // So that testing becomes dependent on images.
@@ -130,7 +128,7 @@ public class SampleImageSetPreprocessorTest {
             processor.getPolarizationImageSet(1);
         });
 
-        _allPolarizationHaveDimension(processor.getPolarizationImageSet(1), new long[] { 2, 2, 1, 1, 1 });
+        _allPolarizationHaveDimension(processor.getPolarizationImageSet(1), new long[] { 2, 3, 1, 1, 1 });
         assertTrue(this._allPixelsOfAllPolarizationsAreEqualToVal(processor.getPolarizationImageSet(1), 0));
 
     }
@@ -334,11 +332,7 @@ class SSPDummyBuilder extends ISampleImageSetPreprocessorBuilder {
 
     @Override
     IChannelRealigner getRealigners(int channel) {
-        try {
-            return ChannelRealigner.create(result.getRegistrationResult(channel));
-        } catch (CannotCreateException e) {
-        }
-        return null;
+        return ChannelRealigner.create(result.getRegistrationResult(channel));
     }
 
     @Override
@@ -457,6 +451,11 @@ class SSPDummyDarkBackground implements IChannelDarkBackground {
         return channel;
     }
 
+    @Override
+    public String estimationMethod() {
+        return null;
+    }
+
 }
 
 class SSPDummyChannelRegistrationResult implements IChannelRegistrationResult {
@@ -471,13 +470,8 @@ class SSPDummyChannelRegistrationResult implements IChannelRegistrationResult {
     }
 
     @Override
-    public boolean registrationSuccessful(RegistrationRule rule) {
-        return true;
-    }
-
-    @Override
-    public Optional<Affine2D> getAffineTransform(RegistrationRule rule) {
-        return Optional.of(affines.get(rule));
+    public Affine2D getAffineTransform(RegistrationRule rule) {
+        return affines.get(rule);
     }
 
     @Override
@@ -486,13 +480,13 @@ class SSPDummyChannelRegistrationResult implements IChannelRegistrationResult {
     }
 
     @Override
-    public Optional<String> getFailureDescription(RegistrationRule rule) {
-        return null;
+    public int channel() {
+        return 0;
     }
 
     @Override
-    public int channel() {
-        return 0;
+    public String registrationMethod() {
+        return null;
     }
 
 }
