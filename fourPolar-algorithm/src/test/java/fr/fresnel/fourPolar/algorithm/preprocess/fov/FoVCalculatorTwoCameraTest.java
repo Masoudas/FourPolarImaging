@@ -51,6 +51,37 @@ public class FoVCalculatorTwoCameraTest {
         this.asserFovEqual(fov.getFoV(Polarization.pol0), fov.getFoV(Polarization.pol45));
         this.asserFovEqual(fov.getFoV(Polarization.pol0), fov.getFoV(Polarization.pol90));
         this.asserFovEqual(fov.getFoV(Polarization.pol0), fov.getFoV(Polarization.pol135));
+    }
+
+    @Test
+    public void calculate_ThreeByThreeImage_ReturnsCorrectFoV() {
+        long[] dim = { 3, 3 };
+        IMetadata metadata_0_90 = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XY).build();
+        IMetadata metadata_45_135 = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XY).build();
+
+        IPointShape intersectionPoint_0_90 = new ShapeFactory().point(new long[] { 1, 1 }, AxisOrder.XY);
+        IPointShape intersectionPoint_45_135 = new ShapeFactory().point(new long[] { 1, 1 }, AxisOrder.XY);
+
+        TwoCameraPolarizationConstellation twoCameraConstellation = new TwoCameraPolarizationConstellation(
+                Position.Left, Position.Left, Position.Right, Position.Right);
+        IFieldOfView fov = new FoVCalculatorTwoCamera(metadata_0_90, intersectionPoint_0_90, metadata_45_135,
+                intersectionPoint_45_135, twoCameraConstellation).calculate();
+
+        assertArrayEquals(fov.getFoV(Polarization.pol0).min(), new long[] { 0, 0 });
+        assertArrayEquals(fov.getFoV(Polarization.pol0).max(), new long[] { 1, 2 });
+
+        assertArrayEquals(fov.getFoV(Polarization.pol90).min(), new long[] { 1, 0 });
+        assertArrayEquals(fov.getFoV(Polarization.pol90).max(), new long[] { 2, 2 });
+
+        assertArrayEquals(fov.getFoV(Polarization.pol45).min(), new long[] { 0, 0 });
+        assertArrayEquals(fov.getFoV(Polarization.pol45).max(), new long[] { 1, 2 });
+
+        assertArrayEquals(fov.getFoV(Polarization.pol135).min(), new long[] { 1, 0 });
+        assertArrayEquals(fov.getFoV(Polarization.pol135).max(), new long[] { 2, 2 });
+
+        this.asserFovEqual(fov.getFoV(Polarization.pol0), fov.getFoV(Polarization.pol45));
+        this.asserFovEqual(fov.getFoV(Polarization.pol0), fov.getFoV(Polarization.pol90));
+        this.asserFovEqual(fov.getFoV(Polarization.pol0), fov.getFoV(Polarization.pol135));
 
     }
 
