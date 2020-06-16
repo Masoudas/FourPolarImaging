@@ -1,11 +1,14 @@
 package fr.fresnel.fourPolar.algorithm.preprocess.registration.descriptorBased;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.algorithm.exceptions.preprocess.registration.ChannelRegistrationFailure;
 import fr.fresnel.fourPolar.core.fourPolar.IIntensityVectorIterator;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
@@ -26,7 +29,8 @@ public class DescriptorBasedRegistrationTest {
     private String root = DescriptorBasedRegistrationTest.class.getResource("").getPath();
 
     @Test
-    public void register_beadSet_ResigtrationParamsMatchImageJGUI() {
+    public void register_ASetWithVisibleFPs_ResigtrationParamsMatchImageJGUIResultOfDescriptorBasedAlgorithm()
+            throws ChannelRegistrationFailure {
         DescriptorBasedRegistration registrator = new DescriptorBasedRegistration();
 
         File pol0 = new File(root, "/BeadSet/pol0.tif");
@@ -35,12 +39,12 @@ public class DescriptorBasedRegistrationTest {
         File pol135 = new File(root, "/BeadSet/pol135.tif");
 
         DummyPolSet polSet = new DummyPolSet(pol0, pol45, pol90, pol135);
+
+        assertDoesNotThrow(() -> {
+            registrator.register(polSet);
+        });
+
         IChannelRegistrationResult result = registrator.register(polSet);
-
-        assertTrue(result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0));
-        assertTrue(result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0));
-        assertTrue(result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
-
         assertTrue(result.error(RegistrationRule.Pol45_to_Pol0) < 1);
         assertTrue(result.error(RegistrationRule.Pol90_to_Pol0) < 1);
         assertTrue(result.error(RegistrationRule.Pol135_to_Pol0) < 1);
@@ -48,7 +52,8 @@ public class DescriptorBasedRegistrationTest {
     }
 
     @Test
-    public void register_LowFPSet_ResigtrationParamsMatchImageJGUI() {
+    public void register_LowFPSet_ResigtrationParamsMatchImageJGUIResultOfDescriptorBasedAlgorithm()
+            throws ChannelRegistrationFailure {
         DescriptorBasedRegistration registrator = new DescriptorBasedRegistration();
 
         File pol0 = new File(root, "/LowFPSet/AVG_Pol0.tif");
@@ -59,17 +64,13 @@ public class DescriptorBasedRegistrationTest {
         DummyPolSet polSet = new DummyPolSet(pol0, pol45, pol90, pol135);
         IChannelRegistrationResult result = registrator.register(polSet);
 
-        assertTrue(result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0));
-        assertTrue(result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0));
-        assertTrue(result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
-
         assertTrue(result.error(RegistrationRule.Pol45_to_Pol0) < 1);
         assertTrue(result.error(RegistrationRule.Pol90_to_Pol0) < 1);
         assertTrue(result.error(RegistrationRule.Pol135_to_Pol0) < 1);
     }
 
     @Test
-    public void register_NoFPInImages_ReturnsRegistrationUnsuccessful() {
+    public void register_NoFPInImages_ThrowsChannelRegistrationUnsuccessful() {
         DescriptorBasedRegistration registrator = new DescriptorBasedRegistration();
 
         File pol0 = new File(root, "/NoFPSet/Pol0.tif");
@@ -78,19 +79,21 @@ public class DescriptorBasedRegistrationTest {
         File pol135 = new File(root, "/NoFPSet/Pol135.tif");
 
         DummyPolSet polSet = new DummyPolSet(pol0, pol45, pol90, pol135);
-        IChannelRegistrationResult result = registrator.register(polSet);
 
-        assertTrue(!result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0));
-        assertTrue(result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
-                .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
+        ChannelRegistrationFailure exception = assertThrows(ChannelRegistrationFailure.class, () -> {
+            registrator.register(polSet);
+        });
 
-        assertTrue(!result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0));
-        assertTrue(result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
-                .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
+        assertTrue(exception.getFailedRules().length == 3);
 
-        assertTrue(!result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
-        assertTrue(result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
-                .equals(DescriptorBasedChannelRegistrationResult._NOT_ENOUGH_FP_DESCRIPTION));
+        assertTrue(exception.getFailureReason(RegistrationRule.Pol45_to_Pol0)
+                .equals(DescriptorBased2DResultConverter._NOT_ENOUGH_FP_DESCRIPTION));
+
+        assertTrue(exception.getFailureReason(RegistrationRule.Pol90_to_Pol0)
+                .equals(DescriptorBased2DResultConverter._NOT_ENOUGH_FP_DESCRIPTION));
+
+        assertTrue(exception.getFailureReason(RegistrationRule.Pol135_to_Pol0)
+                .equals(DescriptorBased2DResultConverter._NOT_ENOUGH_FP_DESCRIPTION));
 
     }
 
@@ -104,19 +107,20 @@ public class DescriptorBasedRegistrationTest {
         File pol135 = new File(root, "/Pol0HasNoFPSet/Pol135.tif");
 
         DummyPolSet polSet = new DummyPolSet(pol0, pol45, pol90, pol135);
-        IChannelRegistrationResult result = registrator.register(polSet);
+        ChannelRegistrationFailure exception = assertThrows(ChannelRegistrationFailure.class, () -> {
+            registrator.register(polSet);
+        });
 
-        assertTrue(!result.registrationSuccessful(RegistrationRule.Pol45_to_Pol0));
-        assertTrue(result.getFailureDescription(RegistrationRule.Pol45_to_Pol0).get()
-                .equals(DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION));
+        assertTrue(exception.getFailedRules().length == 3);
 
-        assertTrue(!result.registrationSuccessful(RegistrationRule.Pol90_to_Pol0));
-        assertTrue(result.getFailureDescription(RegistrationRule.Pol90_to_Pol0).get()
-                .equals(DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION));
+        assertTrue(exception.getFailureReason(RegistrationRule.Pol45_to_Pol0)
+                .equals(DescriptorBased2DResultConverter._NO_TRANSFORMATION_DESCRIPTION));
 
-        assertTrue(!result.registrationSuccessful(RegistrationRule.Pol135_to_Pol0));
-        assertTrue(result.getFailureDescription(RegistrationRule.Pol135_to_Pol0).get()
-                .equals(DescriptorBasedChannelRegistrationResult._NO_TRANSFORMATION_DESCRIPTION));
+        assertTrue(exception.getFailureReason(RegistrationRule.Pol90_to_Pol0)
+                .equals(DescriptorBased2DResultConverter._NO_TRANSFORMATION_DESCRIPTION));
+
+        assertTrue(exception.getFailureReason(RegistrationRule.Pol135_to_Pol0)
+                .equals(DescriptorBased2DResultConverter._NO_TRANSFORMATION_DESCRIPTION));
 
     }
 

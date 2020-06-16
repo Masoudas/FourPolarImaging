@@ -8,7 +8,6 @@ import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationRes
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import mpicbg.models.AffineModel2D;
 import registration.descriptorBased.result.DescriptorBased2DResult;
-import registration.descriptorBased.result.DescriptorBased2DResult.FailureCause;
 
 public class DescriptorBased2DResultConverterTest {
     @Test
