@@ -100,7 +100,7 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
 
         for (RegistrationRule rule : RegistrationRule.values()) {
             String failureDescription = DescriptorBased2DResultConverter
-                    ._convertFailureCauseToString(channelResult.get(rule).description());
+                    .convertFailureCauseToString(channelResult.get(rule).description());
             exceptionBuilder.addRuleFailure(rule, failureDescription);
         }
 

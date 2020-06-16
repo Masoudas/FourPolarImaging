@@ -19,7 +19,7 @@ class DescriptorBased2DResultConverter {
     private Hashtable<RegistrationRule, DescriptorBased2DResult> _results;
     private final int _channelNum;
 
-    public static String _convertFailureCauseToString(FailureCause failureCause) {
+    public static String convertFailureCauseToString(FailureCause failureCause) {
         if (failureCause == FailureCause.NOT_ENOUGH_FP) {
             return _NOT_ENOUGH_FP_DESCRIPTION;
         } else if (failureCause == FailureCause.NO_INLIER_AFTER_RANSAC) {
