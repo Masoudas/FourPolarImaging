@@ -36,7 +36,7 @@ public class RegistrationIssueRegistrationSetProcessFailure extends Registration
         }
 
         private void _checkAtLeastOneFailureExists() {
-            if (this._hasFailure()) {
+            if (!this._hasFailure()) {
                 throw new IllegalArgumentException("Can't create exception with no failure cases.");
             }
         }
