@@ -21,9 +21,9 @@ public class PercentileChannelDarkBackgroundEstimator implements IChannelDarkBac
     /**
      * The percentile of intensity values that corresponds to noise.
      */
-    private static int PERCENTILE_THRESHOLD = 10;
+    private static final int PERCENTILE_THRESHOLD = 10;
 
-    public static String METHOD_DESCRIPTION = PERCENTILE_THRESHOLD + " percentile intensity";
+    public static final String METHOD_DESCRIPTION = PERCENTILE_THRESHOLD + " percentile intensity";
 
     private final IChannelDarkBackgroundEstimator _estimator;
 
