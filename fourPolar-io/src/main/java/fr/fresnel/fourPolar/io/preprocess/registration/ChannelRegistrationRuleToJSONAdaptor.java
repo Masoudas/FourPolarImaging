@@ -28,7 +28,7 @@ class ChannelRegistrationRuleToJSONAdaptor {
 
     private String _convertMatrixToString(Affine2D affine2d) {
         return "[[" + affine2d.get(0, 0) + ", " + affine2d.get(0, 1) + ", " + affine2d.get(0, 2) + "], ["
-                + affine2d.get(1, 0) + ", " + affine2d.get(1, 1) + ", " + affine2d.get(1, 2) + "]] ";
+                + affine2d.get(1, 0) + ", " + affine2d.get(1, 1) + ", " + affine2d.get(1, 2) + "]]";
 
     }
 
