@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet;
 import java.io.IOException;
 import java.util.Optional;
 
+import fr.fresnel.fourPolar.algorithm.exceptions.preprocess.registration.ChannelRegistrationFailure;
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.IChannelDarkBackgroundEstimator;
 import fr.fresnel.fourPolar.algorithm.preprocess.realignment.ChannelRealigner;
 import fr.fresnel.fourPolar.algorithm.preprocess.realignment.IChannelRealigner;
@@ -16,16 +17,13 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationI
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.RegistrationSetProcessResult;
 import fr.fresnel.fourPolar.core.preprocess.darkBackground.IChannelDarkBackground;
-import fr.fresnel.fourPolar.core.preprocess.registration.ChannelRegistrationResultUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
-import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 import fr.fresnel.fourPolar.io.exceptions.image.captured.CapturedImageReadFailure;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.IOIssueRegistrationSetProcessFailure;
 import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.RegistrationIssueRegistrationSetProcessFailure;
 import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.RegistrationSetProcessFailure;
-import javassist.tools.reflect.CannotCreateException;
 
 class RegistrationSetProcessor implements IRegistrationSetProcessor {
     private final int _numChannels;
@@ -86,7 +84,6 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
             throws RegistrationIssueRegistrationSetProcessFailure {
         RegistrationSetProcessResult preprocessResult = new RegistrationSetProcessResult(this._numChannels);
         this._registerChannels(channelImages, preprocessResult);
-        this._checkRegistrationIsSuccessful(preprocessResult);
         this._estimateChannelsDarkBackground(channelImages, preprocessResult);
 
         // Even though realignment is not part of process, we perform it here, so that
@@ -124,44 +121,32 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
     }
 
     /**
-     * Register each channel of the registration images.
+     * Register each channel of the registration images. An exception is thrown if
+     * at least one channel fails to register, but it lets all channels to terminate
+     * registration.
+     * 
+     * @throws RegistrationIssueRegistrationSetProcessFailure if at least one
+     *                                                        channel fails to
+     *                                                        register.
      */
-    private void _registerChannels(IPolarizationImageSet[] channelImages,
-            RegistrationSetProcessResult preprocessResult) {
-        for (int channel = 1; channel <= this._numChannels; channel++) {
-            IChannelRegistrationResult registrationResult = this._registrator.register(channelImages[channel - 1]);
-            preprocessResult.setRegistrationResult(channel, registrationResult);
-        }
-
-    }
-
-    /**
-     * Checks whether registration was successful for all {@link RegistrationRule}s
-     * of every channel. The exception thrown contains all registration rules for
-     * which failure has occured.
-     */
-    private void _checkRegistrationIsSuccessful(RegistrationSetProcessResult preprocessResult)
+    private void _registerChannels(IPolarizationImageSet[] channelImages, RegistrationSetProcessResult preprocessResult)
             throws RegistrationIssueRegistrationSetProcessFailure {
-        RegistrationIssueRegistrationSetProcessFailure failure = new RegistrationIssueRegistrationSetProcessFailure();
+        RegistrationIssueRegistrationSetProcessFailure failureException = new RegistrationIssueRegistrationSetProcessFailure();
         for (int channel = 1; channel <= this._numChannels; channel++) {
-            this._assignFailedRulesToException(failure, preprocessResult.getRegistrationResult(channel));
+            IChannelRegistrationResult registrationResult;
+            try {
+                registrationResult = this._registrator.register(channelImages[channel - 1]);
+                preprocessResult.setRegistrationResult(channel, registrationResult);
+
+            } catch (ChannelRegistrationFailure e) {
+                failureException.setRuleFailure(e, channel);
+            }
         }
 
-        if (failure.hasFailure()) {
-            throw failure;
+        if (failureException.hasFailure()) {
+            throw failureException;
         }
-    }
 
-    private void _assignFailedRulesToException(RegistrationIssueRegistrationSetProcessFailure failure,
-            IChannelRegistrationResult result) {
-        RegistrationRule[] failedRules = this._getChannelFailedRegistrationRules(result);
-        for (RegistrationRule rule : failedRules) {
-            failure.setRuleFailure(rule, result.channel());
-        }
-    }
-
-    private RegistrationRule[] _getChannelFailedRegistrationRules(IChannelRegistrationResult result) {
-        return ChannelRegistrationResultUtils.getFailedRegistrations(result);
     }
 
     /**
@@ -191,17 +176,7 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
     }
 
     private IChannelRealigner _createChannelRealigner(RegistrationSetProcessResult preprocessResult, int channel) {
-        IChannelRegistrationResult channelResult = preprocessResult.getRegistrationResult(channel);
-        IChannelRealigner channelRealigner = null;
-        try {
-            channelRealigner = ChannelRealigner.create(channelResult);
-
-        } catch (CannotCreateException e) {
-            // This exception is never caught, because if registration has failed before, we
-            // throw a
-            // RegistrationIssueRegistrationSetProcessFailure.
-        }
-        return channelRealigner;
+        return ChannelRealigner.create(preprocessResult.getRegistrationResult(channel));
     }
 
     /**
