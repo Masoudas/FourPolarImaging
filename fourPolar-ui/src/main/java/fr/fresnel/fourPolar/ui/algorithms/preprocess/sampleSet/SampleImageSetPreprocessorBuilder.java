@@ -12,8 +12,6 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.RegistrationSetProcessResult;
-import fr.fresnel.fourPolar.core.preprocess.registration.ChannelRegistrationResultUtils;
-import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageSetReader;
 import javassist.tools.reflect.CannotCreateException;
@@ -36,7 +34,6 @@ public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocess
      */
     public SampleImageSetPreprocessorBuilder(IFourPolarImagingSetup imagingSetup,
             RegistrationSetProcessResult registrationProcessResult) {
-        this._checkAllChannelsCanBeRegistered(registrationProcessResult, imagingSetup.getNumChannel());
         this._imagingSetup = imagingSetup;
 
         this._segmenter = this._setCapturedImageSetSegmenter(this._imagingSetup);
@@ -45,17 +42,6 @@ public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocess
 
         this._capturedImageSetReader = new TiffCapturedImageSetReader(new ImgLib2ImageFactory());
 
-    }
-
-    private void _checkAllChannelsCanBeRegistered(RegistrationSetProcessResult registrationProcessResult,
-            int numChannels) {
-        for (int channel = 1; channel <= numChannels; channel++) {
-            IChannelRegistrationResult channelResult = registrationProcessResult.getRegistrationResult(channel);
-            if (!ChannelRegistrationResultUtils.isEveryRegistrationSuccessful(channelResult)) {
-                throw new IllegalArgumentException(
-                        "Can't build a sample set processor when registration for channel " + channel + " has failed.");
-            }
-        }
     }
 
     private ICapturedImageSetSegmenter _setCapturedImageSetSegmenter(IFourPolarImagingSetup imagingSetup) {
@@ -81,13 +67,7 @@ public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocess
             RegistrationSetProcessResult registrationprocessresult) {
         IChannelRealigner[] realigners = new IChannelRealigner[numChannels];
         for (int channel = 1; channel <= getNumChannels(); channel++) {
-            try {
-                realigners[channel - 1] = ChannelRealigner
-                        .create(registrationprocessresult.getRegistrationResult(channel));
-            } catch (CannotCreateException e) {
-                // This exception is never caught, because we checked in constructor that all
-                // channels are registered.
-            }
+            realigners[channel - 1] = ChannelRealigner.create(registrationprocessresult.getRegistrationResult(channel));
         }
 
         return realigners;
