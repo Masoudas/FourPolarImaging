@@ -34,10 +34,20 @@ public class RegistrationIssueRegistrationSetProcessFailure extends Registration
         }
 
         private void _checkAtLeastOneFailureExists() {
-            if (this._failures.isEmpty()){
+            if (this._hasFailure()) {
                 throw new IllegalArgumentException("Can't create exception with no failure cases.");
             }
         }
+
+        /**
+         * Returns true if at least one channel has failed.
+         * 
+         * @return
+         */
+        private boolean _hasFailure() {
+            return !this._failures.isEmpty();
+        }
+
     }
 
     private RegistrationIssueRegistrationSetProcessFailure(Builder builder) {
@@ -56,14 +66,4 @@ public class RegistrationIssueRegistrationSetProcessFailure extends Registration
     public RegistrationRule[] getChannelFailedRules(int channel) {
         return this._failedRegistrations.get(channel);
     }
-
-    /**
-     * Returns true if at least one channel has failed.
-     * 
-     * @return
-     */
-    public boolean hasFailure() {
-        return !this._failedRegistrations.isEmpty();
-    }
-
 }
