@@ -2,7 +2,6 @@ package fr.fresnel.fourPolar.io.preprocess.registration;
 
 import java.util.TreeMap;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
