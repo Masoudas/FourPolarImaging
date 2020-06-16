@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.algorithm.exceptions.preprocess.registration;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
@@ -48,11 +49,16 @@ public class ChannelRegistrationFailure extends Exception {
         this._failures = builder._buildFailures;
     }
 
-    public Iterator<RegistrationRule> getFailedRules() {
-        return _failures.keySet().iterator();
+    public RegistrationRule[] getFailedRules() {
+        return _failures.keySet().toArray(new RegistrationRule[0]);
     }
 
     public String getFailureReason(RegistrationRule rule) {
         return _failures.get(rule);
+    }
+
+    @Override
+    public String getMessage() {
+        return "Registration was unsuccessful for the following: " + _failures;
     }
 }
