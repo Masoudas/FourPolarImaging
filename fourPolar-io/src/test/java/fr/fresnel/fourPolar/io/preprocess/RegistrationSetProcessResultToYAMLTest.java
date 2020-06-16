@@ -3,7 +3,6 @@ package fr.fresnel.fourPolar.io.preprocess;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -169,23 +168,13 @@ class DummyChannelRegistrationResult implements IChannelRegistrationResult {
     }
 
     @Override
-    public boolean registrationSuccessful(RegistrationRule rule) {
-        return true;
-    }
-
-    @Override
-    public Optional<Affine2D> getAffineTransform(RegistrationRule rule) {
-        return Optional.of(affines.get(rule));
+    public Affine2D getAffineTransform(RegistrationRule rule) {
+        return affines.get(rule);
     }
 
     @Override
     public double error(RegistrationRule rule) {
         return this.error;
-    }
-
-    @Override
-    public Optional<String> getFailureDescription(RegistrationRule rule) {
-        return null;
     }
 
     @Override

@@ -14,7 +14,7 @@ class ChannelRegistrationRuleToJSONAdaptor {
     private double _registrationError;
 
     public ChannelRegistrationRuleToJSONAdaptor(IChannelRegistrationResult result, RegistrationRule rule) {
-        this._setAffineTransform(result.getAffineTransform(rule).get());
+        this._setAffineTransform(result.getAffineTransform(rule));
         this._setRegistrationError(result.error(rule));
     }
 
