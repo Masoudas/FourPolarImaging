@@ -6,8 +6,13 @@ package fr.fresnel.fourPolar.algorithm.exceptions.preprocess.registration;
 public class RegistrationFailure extends Exception {
     private static final long serialVersionUID = 7499711200932393875L;
 
-    public RegistrationFailure(String message) {
-        super(message);
+    /**
+     * Create an exception, by registration a message indicating the failure reason.
+     * 
+     * @param failureReason is the description of why registration failed.
+     */
+    public RegistrationFailure(String failureReason) {
+        super(failureReason);
     }
 
 }
