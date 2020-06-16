@@ -17,22 +17,34 @@ import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 public class RegistrationIssueRegistrationSetProcessFailure extends RegistrationSetProcessFailure {
     private static final long serialVersionUID = -3746773829399830474L;
     private final Map<Integer, RegistrationRule[]> _failedRegistrations;
+    private final Map<String, String> _reasons;
 
     public static class Builder {
         private final Map<Integer, RegistrationRule[]> _failures = new HashMap<>();
+        private final Map<String, String> _reasons = new HashMap<>();
 
         public Builder setRuleFailure(ChannelRegistrationFailure failureException, int channel) {
             Objects.requireNonNull(failureException, "failureException can't be null");
             ChannelUtils.checkChannelNumberIsNonZero(channel);
 
-            this._failures.put(channel, failureException.getFailedRules());
-
+            this._setChannelFailureRules(failureException, channel);
+            this._setReasons(failureException, channel);
             return this;
+        }
+
+        private void _setChannelFailureRules(ChannelRegistrationFailure failureException, int channel) {
+            this._failures.put(channel, failureException.getFailedRules());
         }
 
         public RegistrationIssueRegistrationSetProcessFailure buildException() {
             _checkAtLeastOneFailureExists();
             return new RegistrationIssueRegistrationSetProcessFailure(this);
+        }
+
+        private void _setReasons(ChannelRegistrationFailure failureException, int channel) {
+            for (RegistrationRule rule : failureException.getFailedRules()) {
+                this._reasons.put(rule.name() + channel, failureException.getFailureReason(rule));
+            }
         }
 
         private void _checkAtLeastOneFailureExists() {
@@ -54,6 +66,7 @@ public class RegistrationIssueRegistrationSetProcessFailure extends Registration
 
     private RegistrationIssueRegistrationSetProcessFailure(Builder builder) {
         _failedRegistrations = builder._failures;
+        _reasons = builder._reasons;
     }
 
     @Override
@@ -67,5 +80,10 @@ public class RegistrationIssueRegistrationSetProcessFailure extends Registration
 
     public RegistrationRule[] getChannelFailedRules(int channel) {
         return this._failedRegistrations.get(channel);
+    }
+
+    public String getFailureReason(int channel, RegistrationRule rule) {
+        return this._reasons.get(rule.name() + channel);
+        
     }
 }
