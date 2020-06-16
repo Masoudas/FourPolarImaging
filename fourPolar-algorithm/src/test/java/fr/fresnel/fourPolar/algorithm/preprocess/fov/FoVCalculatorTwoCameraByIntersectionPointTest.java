@@ -17,7 +17,7 @@ import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
-public class FoVCalculatorTwoCameraTest {
+public class FoVCalculatorTwoCameraByIntersectionPointTest {
     @Test
     public void calculate_0And45LeftConstellation_ReturnsCorrectFoV() {
         long[] dim = { 512, 512, 10 };
@@ -29,7 +29,7 @@ public class FoVCalculatorTwoCameraTest {
 
         TwoCameraPolarizationConstellation twoCameraConstellation = new TwoCameraPolarizationConstellation(
                 Position.Left, Position.Left, Position.Right, Position.Right);
-        IFieldOfView fov = new FoVCalculatorTwoCamera(metadata_0_90, intersectionPoint_0_90, metadata_45_135,
+        IFieldOfView fov = new FoVCalculatorByIntersectionPointTwoCamera(metadata_0_90, intersectionPoint_0_90, metadata_45_135,
                 intersectionPoint_45_135, twoCameraConstellation).calculate();
 
         long x_len = Math.min(
@@ -64,7 +64,7 @@ public class FoVCalculatorTwoCameraTest {
 
         TwoCameraPolarizationConstellation twoCameraConstellation = new TwoCameraPolarizationConstellation(
                 Position.Left, Position.Left, Position.Right, Position.Right);
-        IFieldOfView fov = new FoVCalculatorTwoCamera(metadata_0_90, intersectionPoint_0_90, metadata_45_135,
+        IFieldOfView fov = new FoVCalculatorByIntersectionPointTwoCamera(metadata_0_90, intersectionPoint_0_90, metadata_45_135,
                 intersectionPoint_45_135, twoCameraConstellation).calculate();
 
         assertArrayEquals(fov.getFoV(Polarization.pol0).min(), new long[] { 0, 0 });
@@ -96,7 +96,7 @@ public class FoVCalculatorTwoCameraTest {
 
         TwoCameraPolarizationConstellation twoCameraConstellation = new TwoCameraPolarizationConstellation(
                 Position.Right, Position.Right, Position.Left, Position.Left);
-        IFieldOfView fov = new FoVCalculatorTwoCamera(metadata_0_90, intersectionPoint_0_90, metadata_45_135,
+        IFieldOfView fov = new FoVCalculatorByIntersectionPointTwoCamera(metadata_0_90, intersectionPoint_0_90, metadata_45_135,
                 intersectionPoint_45_135, twoCameraConstellation).calculate();
 
         long x_len = Math.min(

@@ -15,7 +15,7 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
  * images.
  */
 
-public class FoVCalculatorFourCamera implements IFoVCalculator {
+public class FoVCalculatorByIntersectionPointFourCamera implements IFoVCalculatorByIntersectionPoint {
     private final long _x_len_min;
     private final long _y_len_min;
 
@@ -23,7 +23,7 @@ public class FoVCalculatorFourCamera implements IFoVCalculator {
      * Calculate FoV as the minimum size of all four images, using their metadata.
      * 
      */
-    public FoVCalculatorFourCamera(IMetadata beadImg_pol0, IMetadata beadImg_pol45, IMetadata beadImg_pol90,
+    public FoVCalculatorByIntersectionPointFourCamera(IMetadata beadImg_pol0, IMetadata beadImg_pol45, IMetadata beadImg_pol90,
             IMetadata beadImg_pol135) {
         // TODO Use Box to indicate region.
         this._x_len_min = Arrays.stream(new long[] { beadImg_pol0.getDim()[0] - 1, beadImg_pol45.getDim()[0] - 1,

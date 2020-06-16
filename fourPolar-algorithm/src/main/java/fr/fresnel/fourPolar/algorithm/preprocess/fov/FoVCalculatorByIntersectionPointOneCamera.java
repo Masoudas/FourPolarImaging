@@ -15,7 +15,7 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
  * Calculates the FoV for the one camera case, using the plane dimension of the
  * Captured image.
  */
-public class FoVCalculatorOneCamera implements IFoVCalculator {
+public class FoVCalculatorByIntersectionPointOneCamera implements IFoVCalculatorByIntersectionPoint {
     final private long _xmax_registrationImg;
     final private long _ymax_registrationImg;
 
@@ -48,7 +48,7 @@ public class FoVCalculatorOneCamera implements IFoVCalculator {
      *                                  intersection point is not in the
      *                                  registration image.
      */
-    public FoVCalculatorOneCamera(IMetadata registrationImg_pol0_45_90_135, IPointShape intersectionPoint,
+    public FoVCalculatorByIntersectionPointOneCamera(IMetadata registrationImg_pol0_45_90_135, IPointShape intersectionPoint,
             OneCameraPolarizationConstellation constellation) {
         FoVCalculatorUtil.checkIntersectionPointIs2D(intersectionPoint);
         // TODO Use Box to indicate region.

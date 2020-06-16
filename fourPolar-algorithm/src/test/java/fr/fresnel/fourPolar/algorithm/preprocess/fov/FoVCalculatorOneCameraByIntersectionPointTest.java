@@ -16,7 +16,7 @@ import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
-public class FoVCalculatorOneCameraTest {
+public class FoVCalculatorOneCameraByIntersectionPointTest {
     @Test
     public void calculate_BrasseletConstellation_ReturnsCorrectFoV() {
         long[] dim = { 1024, 512, 10 };
@@ -31,7 +31,7 @@ public class FoVCalculatorOneCameraTest {
                 OneCameraPolarizationConstellation.Position.BottomLeft,
                 OneCameraPolarizationConstellation.Position.BottomRight);
 
-        IFieldOfView fov = new FoVCalculatorOneCamera(beadImageMetadata, intersectionPoint, constellation).calculate();
+        IFieldOfView fov = new FoVCalculatorByIntersectionPointOneCamera(beadImageMetadata, intersectionPoint, constellation).calculate();
 
         long x_len = Math.max(dim[0] - 1 - intersectionPoint.point()[0], intersectionPoint.point()[0]);
         long y_len = Math.max(dim[1] - 1 - intersectionPoint.point()[1], intersectionPoint.point()[1]);
@@ -67,7 +67,7 @@ public class FoVCalculatorOneCameraTest {
                 OneCameraPolarizationConstellation.Position.BottomRight,
                 OneCameraPolarizationConstellation.Position.TopRight);
 
-        IFieldOfView fov = new FoVCalculatorOneCamera(beadImageMetadata, intersectionPoint, constellation).calculate();
+        IFieldOfView fov = new FoVCalculatorByIntersectionPointOneCamera(beadImageMetadata, intersectionPoint, constellation).calculate();
 
         long x_len = Math.max(dim[0] - 1 - intersectionPoint.point()[0], intersectionPoint.point()[0]);
         long y_len = Math.max(dim[1] - 1 - intersectionPoint.point()[1], intersectionPoint.point()[1]);
@@ -101,7 +101,7 @@ public class FoVCalculatorOneCameraTest {
                 OneCameraPolarizationConstellation.Position.BottomLeft,
                 OneCameraPolarizationConstellation.Position.BottomRight);
 
-        IFieldOfView fov = new FoVCalculatorOneCamera(beadImageMetadata, intersectionPoint, constellation).calculate();
+        IFieldOfView fov = new FoVCalculatorByIntersectionPointOneCamera(beadImageMetadata, intersectionPoint, constellation).calculate();
 
         long x_len = Math.max(dim[0] - 1 - intersectionPoint.point()[0], intersectionPoint.point()[0]);
         long y_len = Math.max(dim[1] - 1 - intersectionPoint.point()[1], intersectionPoint.point()[1]);

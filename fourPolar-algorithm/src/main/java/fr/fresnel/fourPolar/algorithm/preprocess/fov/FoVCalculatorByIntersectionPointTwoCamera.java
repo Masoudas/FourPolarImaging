@@ -17,7 +17,7 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
  * image, which indicates the intersection point of the two polarizations in
  * each image.
  */
-public class FoVCalculatorTwoCamera implements IFoVCalculator {
+public class FoVCalculatorByIntersectionPointTwoCamera implements IFoVCalculatorByIntersectionPoint {
     final private long _x_min_two_images;
     final private long _y_min_two_images;
 
@@ -45,7 +45,7 @@ public class FoVCalculatorTwoCamera implements IFoVCalculator {
      * @param intersection_pol45_135
      * @param constellation
      */
-    public FoVCalculatorTwoCamera(IMetadata registrationImg_pol0_90, IPointShape intersection_pol0_90,
+    public FoVCalculatorByIntersectionPointTwoCamera(IMetadata registrationImg_pol0_90, IPointShape intersection_pol0_90,
             IMetadata registrationImg_pol45_135, IPointShape intersection_pol45_135,
             TwoCameraPolarizationConstellation constellation) {
         FoVCalculatorUtil.checkIntersectionPointIs2D(intersection_pol0_90);

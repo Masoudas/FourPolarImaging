@@ -17,9 +17,9 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.ChannelDarkBackgroundRemover;
 import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.IChannelDarkBackgroundRemover;
-import fr.fresnel.fourPolar.algorithm.preprocess.fov.FoVCalculatorFourCamera;
-import fr.fresnel.fourPolar.algorithm.preprocess.fov.FoVCalculatorOneCamera;
-import fr.fresnel.fourPolar.algorithm.preprocess.fov.FoVCalculatorTwoCamera;
+import fr.fresnel.fourPolar.algorithm.preprocess.fov.FoVCalculatorByIntersectionPointFourCamera;
+import fr.fresnel.fourPolar.algorithm.preprocess.fov.FoVCalculatorByIntersectionPointOneCamera;
+import fr.fresnel.fourPolar.algorithm.preprocess.fov.FoVCalculatorByIntersectionPointTwoCamera;
 import fr.fresnel.fourPolar.algorithm.preprocess.realignment.ChannelRealigner;
 import fr.fresnel.fourPolar.algorithm.preprocess.realignment.IChannelRealigner;
 import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.ICapturedImageSetSegmenter;
@@ -223,7 +223,7 @@ public class SampleImageSetPreprocessorTest {
     private IFieldOfView createFoVOneCamera(long image_x, long image_y, long x_intersecion, long y_intersection) {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { image_x, image_y }).build();
 
-        return new FoVCalculatorOneCamera(metadata,
+        return new FoVCalculatorByIntersectionPointOneCamera(metadata,
                 new ShapeFactory().point(new long[] { x_intersecion, y_intersection }, AxisOrder.XY),
                 new OneCameraPolarizationConstellation(OneCameraPolarizationConstellation.Position.TopLeft,
                         OneCameraPolarizationConstellation.Position.TopRight,
@@ -238,7 +238,7 @@ public class SampleImageSetPreprocessorTest {
     private IFieldOfView createFoVTwoCamera(long image_x, long image_y, long x_intersecion, long y_intersection) {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { image_x, image_y }).build();
 
-        return new FoVCalculatorTwoCamera(metadata,
+        return new FoVCalculatorByIntersectionPointTwoCamera(metadata,
                 new ShapeFactory().point(new long[] { x_intersecion, y_intersection }, AxisOrder.XY), metadata,
                 new ShapeFactory().point(new long[] { x_intersecion, y_intersection }, AxisOrder.XY),
                 new TwoCameraPolarizationConstellation(TwoCameraPolarizationConstellation.Position.Left,
@@ -253,7 +253,7 @@ public class SampleImageSetPreprocessorTest {
     private IFieldOfView createFoVFourCamera(long image_x, long image_y) {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { image_x, image_y }).build();
 
-        return new FoVCalculatorFourCamera(metadata, metadata, metadata, metadata).calculate();
+        return new FoVCalculatorByIntersectionPointFourCamera(metadata, metadata, metadata, metadata).calculate();
     }
 
 }
