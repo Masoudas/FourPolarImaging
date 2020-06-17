@@ -33,7 +33,8 @@ public class OrientationImageTest {
         Image<Float32> delta = new ImgLib2ImageFactory().create(metadata2, Float32.zero());
 
         assertThrows(CannotFormOrientationImage.class, () -> {
-            new OrientationImage(new DummyPolFileSet(), 1, rho, delta, eta);
+            new OrientationImage(new DummyPolFileSet(), 1, new AngleImage(OrientationAngle.rho, rho),
+                    new AngleImage(OrientationAngle.delta, delta), new AngleImage(OrientationAngle.eta, eta));
         });
     }
 
@@ -44,41 +45,26 @@ public class OrientationImageTest {
 
         Image<Float32> rho = new ImgLib2ImageFactory().create(metadata, Float32.zero());
         Image<Float32> delta = new ImgLib2ImageFactory().create(metadata, Float32.zero());
+        Image<Float32> eta = new ImgLib2ImageFactory().create(metadata, Float32.zero());
 
         assertThrows(CannotFormOrientationImage.class, () -> {
-            new OrientationImage(new DummyPolFileSet(), 1, rho, rho, delta);
+            new OrientationImage(new DummyPolFileSet(), 1, new AngleImage(OrientationAngle.rho, rho),
+                    new AngleImage(OrientationAngle.rho, rho), new AngleImage(OrientationAngle.delta, delta));
         });
+
         assertThrows(CannotFormOrientationImage.class, () -> {
-            new OrientationImage(new DummyPolFileSet(), 1, rho, delta, rho);
+            new OrientationImage(new DummyPolFileSet(), 1, new AngleImage(OrientationAngle.rho, rho),
+                    new AngleImage(OrientationAngle.delta, delta), new AngleImage(OrientationAngle.eta, rho));
         });
+
         assertThrows(CannotFormOrientationImage.class, () -> {
-            new OrientationImage(new DummyPolFileSet(), 1, rho, delta, delta);
+            new OrientationImage(new DummyPolFileSet(), 1, new AngleImage(OrientationAngle.rho, rho),
+                    new AngleImage(OrientationAngle.delta, delta), new AngleImage(OrientationAngle.eta, delta));
         });
-    }
-
-    @Test
-    public void createClass_NotXYCZTImage_ThrowsCannotFormPolarizationImageSet() {
-        long[] dim = { 1, 1, 1, 1, 1 };
-        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYZCT).build();
-
-        Image<Float32> rho = new ImgLib2ImageFactory().create(metadata, Float32.zero());
-        Image<Float32> delta = new ImgLib2ImageFactory().create(metadata, Float32.zero());
 
         assertThrows(CannotFormOrientationImage.class, () -> {
-            new OrientationImage(new DummyPolFileSet(), 1, rho, rho, delta);
-        });
-    }
-
-    @Test
-    public void createClass_NotOneChannelImage_ThrowsCannotFormPolarizationImageSet() {
-        long[] dim = { 1, 1, 2, 1, 1 };
-        IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYZCT).build();
-
-        Image<Float32> rho = new ImgLib2ImageFactory().create(metadata, Float32.zero());
-        Image<Float32> delta = new ImgLib2ImageFactory().create(metadata, Float32.zero());
-
-        assertThrows(CannotFormOrientationImage.class, () -> {
-            new OrientationImage(new DummyPolFileSet(), 1, rho, rho, delta);
+            new OrientationImage(new DummyPolFileSet(), 1, new AngleImage(OrientationAngle.eta, rho),
+                    new AngleImage(OrientationAngle.delta, delta), new AngleImage(OrientationAngle.eta, delta));
         });
     }
 
@@ -91,7 +77,9 @@ public class OrientationImageTest {
         Image<Float32> delta = new ImgLib2ImageFactory().create(metadata, Float32.zero());
         Image<Float32> eta = new ImgLib2ImageFactory().create(metadata, Float32.zero());
 
-        OrientationImage orientationImage = new OrientationImage(new DummyPolFileSet(), 1, rho, delta, eta);
+        OrientationImage orientationImage = new OrientationImage(new DummyPolFileSet(), 1,
+                new AngleImage(OrientationAngle.rho, rho), new AngleImage(OrientationAngle.delta, delta),
+                new AngleImage(OrientationAngle.eta, eta));
 
         assertTrue(orientationImage.getAngleImage(OrientationAngle.rho).getImage() == rho
                 && orientationImage.getAngleImage(OrientationAngle.delta).getImage() == delta
