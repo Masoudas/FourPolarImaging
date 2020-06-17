@@ -1,6 +1,8 @@
 package fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Hashtable;
 
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
@@ -32,10 +34,26 @@ public class FieldOfView implements IFieldOfView {
     /**
      * Check to make sure that pixels are positive.
      */
-    public void _checkPositive(IBoxShape pol) {
+    private void _checkPositive(IBoxShape pol) {
         if (Arrays.stream(pol.min()).summaryStatistics().getMin() < 0) {
             throw new IllegalArgumentException("Pixels must be positive");
         }
 
     }
+
+    @Override
+    public long[] getMaximumSize() {
+        return new long[] { this._calculateMaxFoVOnDim(0), this._calculateMaxFoVOnDim(1) };
+    }
+
+    private long _calculateMaxFoVOnDim(int dim) {
+        ArrayList<Long> lensOnDim = new ArrayList<>();
+        for (Polarization polarization : Polarization.values()) {
+            IBoxShape polFoV = this.getFoV(polarization);
+            lensOnDim.add(IBoxShape.len(polFoV, dim));
+        }
+
+        return Collections.max(lensOnDim);
+    }
+
 }
