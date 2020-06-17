@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.core.image.captured;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
  * An interface for accessing a set of {@link ICapturedImage} that belong
@@ -18,16 +19,16 @@ public interface ICapturedImageSet {
     public ICapturedImage[] getCapturedImage(String label);
 
     /**
-     * Get the captured image that contains this channel. Note that the captured
-     * image may contain other channels.
+     * Get the captured image that contains this channel and polarization. Note that
+     * the captured image may contain other channels, and other polarizations.
      * 
-     * @param label   is the label as defined by {@link Cameras#getLabels(Cameras)}.
-     * @param channel is the desired channel.
+     * @param channel      is the desired channel.
+     * @param Polarization is the desired polarization
      * @throws IllegalArgumentException if channel does not exist.
      * 
      * @return the captured image that contains this channel.
      */
-    public ICapturedImage getChannelCapturedImage(String label, int channel);
+    public ICapturedImage getChannelPolarizationImage(int channel, Polarization polarization);
 
     /**
      * Returns the file set associated with this captured image.
