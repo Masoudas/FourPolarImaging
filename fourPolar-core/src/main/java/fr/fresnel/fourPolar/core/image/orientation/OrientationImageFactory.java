@@ -11,10 +11,10 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
+import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageUtils;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
-import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
  * Factory for creating a plain {@link IOrinetationImage}.
