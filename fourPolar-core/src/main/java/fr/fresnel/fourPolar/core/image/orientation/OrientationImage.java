@@ -6,9 +6,7 @@ import java.util.Objects;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.fourPolar.IOrientationVectorIterator;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
-import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
+import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 
 /**
@@ -33,40 +31,20 @@ class OrientationImage implements IOrientationImage {
      * @throws CannotFormOrientationImage if the images don't have the same
      *                                    dimension, or aren't XYCZT.
      */
-    public OrientationImage(ICapturedImageFileSet fileSet, int channel, Image<Float32> rho, Image<Float32> delta,
-            Image<Float32> eta) throws CannotFormOrientationImage {
+    public OrientationImage(ICapturedImageFileSet fileSet, int channel, AngleImage rho, AngleImage delta,
+            AngleImage eta) throws CannotFormOrientationImage {
         Objects.requireNonNull(fileSet);
         Objects.requireNonNull(rho);
         Objects.requireNonNull(delta);
         Objects.requireNonNull(eta);
 
-        if (this._hasDuplicateImage(rho, delta, eta)) {
-            throw new CannotFormOrientationImage(
-                    "Cannot form the orientation image due to duplicate image for angles.");
-        }
+        ChannelUtils.checkChannelNumberIsNonZero(channel);
+        this._checkHasNoDuplicateImage(rho, delta, eta);
+        this._checkImagesHaveEqualDim(rho, delta, eta);
 
-        if (!this._hasDimensionsEqual(rho, delta, eta)) {
-            throw new CannotFormOrientationImage(
-                    "Cannot form the orientation image because the given images don't have the same dimension.");
-        }
-
-        if (rho.getMetadata().axisOrder() != AxisOrder.XYCZT || delta.getMetadata().axisOrder() != AxisOrder.XYCZT
-                || eta.getMetadata().axisOrder() != AxisOrder.XYCZT) {
-            throw new CannotFormOrientationImage("Angle images are not XYCZT");
-        }
-
-        if (rho.getMetadata().numChannels() != 1 || delta.getMetadata().numChannels() != 1
-                || eta.getMetadata().numChannels() != 1) {
-            throw new CannotFormOrientationImage("Angle images should have only one channel.");
-        }
-
-        if (channel < 1) {
-            throw new CannotFormOrientationImage("Channel number must be positive");
-        }
-
-        _rhoImage = new AngleImage(OrientationAngle.rho, rho);
-        _deltaImage = new AngleImage(OrientationAngle.delta, delta);
-        _etaImage = new AngleImage(OrientationAngle.eta, eta);
+        _rhoImage = rho;
+        _deltaImage = delta;
+        _etaImage = eta;
         _fileSet = fileSet;
         _channel = channel;
     }
@@ -105,15 +83,6 @@ class OrientationImage implements IOrientationImage {
                 _etaImage.getImage().getCursor());
     }
 
-    private boolean _hasDimensionsEqual(Image<Float32> rho, Image<Float32> delta, Image<Float32> eta) {
-        return Arrays.equals(rho.getMetadata().getDim(), delta.getMetadata().getDim())
-                && Arrays.equals(rho.getMetadata().getDim(), eta.getMetadata().getDim());
-    }
-
-    private boolean _hasDuplicateImage(Image<Float32> rho, Image<Float32> delta, Image<Float32> eta) {
-        return rho == delta || rho == eta || delta == eta;
-    }
-
     @Override
     public IOrientationImageRandomAccess getRandomAccess() {
         return new OrientationImageRandomAccess(_rhoImage.getImage().getRandomAccess(),
@@ -125,4 +94,25 @@ class OrientationImage implements IOrientationImage {
         return this._channel;
     }
 
+    private void _checkImagesHaveEqualDim(AngleImage rho, AngleImage delta, AngleImage eta)
+            throws CannotFormOrientationImage {
+        if (!_angleImagesHaveEqualDim(rho, delta, eta)) {
+            throw new CannotFormOrientationImage(
+                    "Cannot form the orientation image because the given images don't have the same dimension.");
+        }
+    }
+
+    private boolean _angleImagesHaveEqualDim(AngleImage rho, AngleImage delta, AngleImage eta) {
+        return Arrays.equals(rho.getImage().getMetadata().getDim(), delta.getImage().getMetadata().getDim())
+                && Arrays.equals(rho.getImage().getMetadata().getDim(), eta.getImage().getMetadata().getDim());
+    }
+
+    private void _checkHasNoDuplicateImage(AngleImage rho, AngleImage delta, AngleImage eta)
+            throws CannotFormOrientationImage {
+        if (rho == delta || rho == eta || delta == eta || rho.getImage() == delta.getImage()
+                || rho.getImage() == eta.getImage() || delta.getImage() == eta.getImage()) {
+            throw new CannotFormOrientationImage(
+                    "Cannot form the orientation image because the given images don't have the same dimension.");
+        }
+    }
 }
