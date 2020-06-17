@@ -4,11 +4,13 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
+import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 class CapturedImageSet implements ICapturedImageSet {
     final private Map<String, ICapturedImage[]> _images;
@@ -62,19 +64,30 @@ class CapturedImageSet implements ICapturedImageSet {
     }
 
     @Override
-    public ICapturedImage getChannelCapturedImage(String label, int channel) {
+    public ICapturedImage getChannelPolarizationImage(int channel, Polarization polarization) {
+        Objects.requireNonNull(polarization, "polarization can't be null");
         ChannelUtils.checkChannel(channel, this._numChannels);
 
-        for (ICapturedImage capturedImage : this._images.get(label)) {
-            if (this._capturedImageHasChannel(capturedImage, channel)){
-                return capturedImage;
+        ICapturedImage[] polImages = _getPolarizationCapturedImages(polarization);
+        
+        ICapturedImage polImage = null;
+        boolean imageFound = false;
+        for ( int index = 0; index < polImages.length && !imageFound; index++ ) {
+            if (this._capturedImageHasChannel(polImages[index], channel)) {
+                polImage = polImages[index] ;
             }
         }
 
-        return null;
+        return polImage;
+    }
+
+    private ICapturedImage[] _getPolarizationCapturedImages(Polarization polarization) {
+        String label = Cameras.getLabelThatContainsPolarization(this._fileSet.getnCameras(), polarization);
+        ICapturedImage[] polImages = this._images.get(label);
+        return polImages;
     }
 
     private boolean _capturedImageHasChannel(ICapturedImage capturedImage, int channel) {
-        return Arrays.stream(capturedImage.channels()).anyMatch((i)->i == channel);
+        return Arrays.stream(capturedImage.channels()).anyMatch((i) -> i == channel);
     }
 }
