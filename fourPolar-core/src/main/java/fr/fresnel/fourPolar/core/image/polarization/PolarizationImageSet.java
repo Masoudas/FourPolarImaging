@@ -6,7 +6,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 /**
- * A concrete implementation of the {@link IPolarizationImageSet}. 
+ * A concrete implementation of the {@link IPolarizationImageSet}.
  */
 class PolarizationImageSet implements IPolarizationImageSet {
     final private IPolarizationImage _pol0;
@@ -25,11 +25,11 @@ class PolarizationImageSet implements IPolarizationImageSet {
      * @param pol135
      * @throws CannotFormPolarizationImageSet
      */
-    public PolarizationImageSet(PolarizationImageSetBuilder builder) throws CannotFormPolarizationImageSet {
-        this._pol0 = new PolarizationImage(Polarization.pol0, builder.getPol0());
-        this._pol45 = new PolarizationImage(Polarization.pol45, builder.getPol45());
-        this._pol90 = new PolarizationImage(Polarization.pol90, builder.getPol90());
-        this._pol135 = new PolarizationImage(Polarization.pol135, builder.getPol135());
+    public PolarizationImageSet(IPolarizationImageSetBuilder builder) throws CannotFormPolarizationImageSet {
+        this._pol0 = builder.getPol0();
+        this._pol45 = builder.getPol45();
+        this._pol90 = builder.getPol90();
+        this._pol135 = builder.getPol135();
         this._fileSet = builder.getFileSet();
         this._channel = builder.getChannel();
     }
