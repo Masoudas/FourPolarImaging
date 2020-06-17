@@ -19,22 +19,22 @@ abstract class IPolarizationImageSetBuilder{
     /**
      * @return the pol0
      */
-    abstract Image<UINT16> getPol0();
+    abstract IPolarizationImage getPol0();
 
     /**
      * @return the pol45
      */
-    abstract Image<UINT16> getPol45();
+    abstract IPolarizationImage getPol45();
 
     /**
      * @return the pol90
      */
-    abstract Image<UINT16> getPol90();
+    abstract IPolarizationImage getPol90();
 
     /**
      * @return the pol135
      */
-    abstract Image<UINT16> getPol135();
+    abstract IPolarizationImage getPol135();
 
     /**
      * @return the numChannels
