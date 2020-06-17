@@ -95,7 +95,7 @@ class ReassingerToXYCZT {
                     "New image dimension for resizing must be greater than equal old dimension.");
         }
 
-        if (IntStream.range(0, oldDim.length).anyMatch((i) -> oldDim[i] < newDim[i])) {
+        if (IntStream.range(0, oldDim.length).anyMatch((i) -> oldDim[i] > newDim[i])) {
             throw new IllegalArgumentException(
                     "New image dimension for resizing must be greater than equal old dimension.");
         }
