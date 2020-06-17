@@ -18,6 +18,18 @@ public interface ICapturedImageSet {
     public ICapturedImage[] getCapturedImage(String label);
 
     /**
+     * Get the captured image that contains this channel. Note that the captured
+     * image may contain other channels.
+     * 
+     * @param channel is the desired channel.
+     * 
+     * @throws IllegalArgumentException if channel does not exist.
+     * 
+     * @return the captured image that contains this channel.
+     */
+    public ICapturedImage getChannelCapturedImage(int channel);
+
+    /**
      * Returns the file set associated with this captured image.
      */
     public ICapturedImageFileSet fileSet();
