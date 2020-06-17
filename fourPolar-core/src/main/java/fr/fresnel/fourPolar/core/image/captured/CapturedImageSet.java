@@ -69,22 +69,24 @@ class CapturedImageSet implements ICapturedImageSet {
         ChannelUtils.checkChannel(channel, this._numChannels);
 
         ICapturedImage[] polImages = _getPolarizationCapturedImages(polarization);
-        
+
         ICapturedImage polImage = null;
         boolean imageFound = false;
-        for ( int index = 0; index < polImages.length && !imageFound; index++ ) {
+        for (int index = 0; index < polImages.length && !imageFound; index++) {
             if (this._capturedImageHasChannel(polImages[index], channel)) {
-                polImage = polImages[index] ;
+                polImage = polImages[index];
             }
         }
 
         return polImage;
     }
 
+    /**
+     * @return the captured images that contain this channel.
+     */
     private ICapturedImage[] _getPolarizationCapturedImages(Polarization polarization) {
         String label = Cameras.getLabelThatContainsPolarization(this._fileSet.getnCameras(), polarization);
-        ICapturedImage[] polImages = this._images.get(label);
-        return polImages;
+        return this._images.get(label);
     }
 
     private boolean _capturedImageHasChannel(ICapturedImage capturedImage, int channel) {
