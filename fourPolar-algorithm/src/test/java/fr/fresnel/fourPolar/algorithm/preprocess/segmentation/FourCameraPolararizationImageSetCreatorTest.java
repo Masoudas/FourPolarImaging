@@ -188,6 +188,11 @@ class FCISDummyCapturedImageSet implements ICapturedImageSet {
         return isMultiChannel;
     }
 
+    @Override
+    public ICapturedImage getChannelPolarizationImage(int channel, Polarization polarization) {
+        return null;
+    }
+
 }
 
 class FCISDummyCapturedImage implements ICapturedImage {

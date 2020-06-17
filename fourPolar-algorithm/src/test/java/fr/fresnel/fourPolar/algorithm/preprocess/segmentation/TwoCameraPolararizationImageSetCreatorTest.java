@@ -267,6 +267,11 @@ class TCISDummyCapturedImageSet implements ICapturedImageSet {
         return isMultiChannel;
     }
 
+    @Override
+    public ICapturedImage getChannelPolarizationImage(int channel, Polarization polarization) {
+        return null;
+    }
+
 }
 
 class TCISDummyCapturedImage implements ICapturedImage {
