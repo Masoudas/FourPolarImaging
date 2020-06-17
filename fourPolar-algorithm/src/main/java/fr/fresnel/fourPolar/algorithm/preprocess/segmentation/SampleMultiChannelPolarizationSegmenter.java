@@ -32,7 +32,7 @@ class SampleMultiChannelPolarizationSegmenter extends ChannelPolarizationSegment
         for (ICapturedImage iCapturedImage : capturedImages) {
             Image<UINT16>[] segmentedPolarizationImages = _createsSegmentedPolarizationImages(iCapturedImage, polFoV);
 
-            for (int image_c = 0; image_c < iCapturedImage.numChannels(); image_c++) {
+            for (int image_c = 0; image_c < iCapturedImage.channels().length; image_c++) {
                 int channel = iCapturedImage.channels()[image_c];
                 channelImages[channel - 1] = segmentedPolarizationImages[image_c];
             }
@@ -51,8 +51,8 @@ class SampleMultiChannelPolarizationSegmenter extends ChannelPolarizationSegment
         Image<UINT16> image = capturedImage.getImage();
         int c_axis = image.getMetadata().axisOrder().c_axis;
 
-        Image<UINT16>[] segmentedPolImageChannels = new Image[capturedImage.numChannels()];
-        for (int channel = 0; channel < capturedImage.numChannels(); channel++) {
+        Image<UINT16>[] segmentedPolImageChannels = new Image[capturedImage.channels().length];
+        for (int channel = 0; channel < capturedImage.channels().length; channel++) {
             long[] bottomCorner = _createBottomCorner(polFoV, image.getMetadata(), channel);
             long[] len = _createLen(polFoV, image.getMetadata(), c_axis);
             segmentedPolImageChannels[channel] = this._createSegmentedImageFromInterval(image, bottomCorner, len);
