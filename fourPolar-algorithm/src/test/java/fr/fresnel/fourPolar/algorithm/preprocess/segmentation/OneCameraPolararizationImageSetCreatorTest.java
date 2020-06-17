@@ -272,11 +272,6 @@ class OCISDummyCapturedImage implements ICapturedImage {
     }
 
     @Override
-    public int numChannels() {
-        return this.channels.length;
-    }
-
-    @Override
     public int[] channels() {
         return this.channels;
     }

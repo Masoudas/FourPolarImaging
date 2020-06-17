@@ -27,15 +27,14 @@ abstract class ChannelPolarizationSegmenter {
         IPixelCursor<UINT16> segmentedImgCursor = image.getCursor(bottomCorner, len);
         IMetadata segmentedImgMetadata = new Metadata.MetadataBuilder(len).axisOrder(image.getMetadata().axisOrder())
                 .bitPerPixel(PixelTypes.UINT_16).build();
-        Image<UINT16> segmentedImage = new SegmentedImage(segmentedImgCursor, image.getFactory(), segmentedImgMetadata);
-        return segmentedImage;
+        return new SegmentedImage(segmentedImgCursor, image.getFactory(), segmentedImgMetadata);
     }
 
     protected int _getTotalNumChannels(ICapturedImage[] capturedImages) {
         int numChannels = 0;
 
         for (ICapturedImage iCapturedImage : capturedImages) {
-            numChannels += iCapturedImage.numChannels();
+            numChannels += iCapturedImage.channels().length;
         }
 
         return numChannels;

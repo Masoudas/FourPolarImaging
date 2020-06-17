@@ -54,11 +54,6 @@ class CapturedImage implements ICapturedImage {
     }
 
     @Override
-    public int numChannels() {
-        return _file.channels().length;
-    }
-
-    @Override
     public int[] channels() {
         return _file.channels();
     }

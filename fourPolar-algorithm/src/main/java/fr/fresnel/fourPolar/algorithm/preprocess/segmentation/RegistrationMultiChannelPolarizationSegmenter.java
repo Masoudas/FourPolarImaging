@@ -33,7 +33,7 @@ class RegistrationMultiChannelPolarizationSegmenter extends ChannelPolarizationS
         for (ICapturedImage iCapturedImage : capturedImages) {
             Image<UINT16>[] segmentedPolarizationImages = _createsChannelPolarizationImages(iCapturedImage, polFoV);
 
-            for (int image_c = 0; image_c < iCapturedImage.numChannels(); image_c++) {
+            for (int image_c = 0; image_c < iCapturedImage.channels().length; image_c++) {
                 int channel = iCapturedImage.channels()[image_c];
                 channelImages[channel - 1] = segmentedPolarizationImages[image_c];
             }
@@ -51,8 +51,8 @@ class RegistrationMultiChannelPolarizationSegmenter extends ChannelPolarizationS
     private Image<UINT16>[] _createsChannelPolarizationImages(ICapturedImage capturedImage, IBoxShape polFoV) {
         Image<UINT16> captImage = capturedImage.getImage();
 
-        Image<UINT16>[] segmentedPolImageChannels = new Image[capturedImage.numChannels()];
-        for (int channel = 0; channel < capturedImage.numChannels(); channel++) {
+        Image<UINT16>[] segmentedPolImageChannels = new Image[capturedImage.channels().length];
+        for (int channel = 0; channel < capturedImage.channels().length; channel++) {
             long[] bottomCorner = _createBottomCorner(polFoV, captImage.getMetadata(), channel);
             long[] len = _createLen(polFoV, captImage.getMetadata());
             segmentedPolImageChannels[channel] = this._createSegmentedImageFromInterval(captImage, bottomCorner, len);

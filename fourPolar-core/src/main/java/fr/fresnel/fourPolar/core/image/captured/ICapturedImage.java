@@ -34,12 +34,6 @@ public interface ICapturedImage {
     public Image<UINT16> getImage();
 
     /**
-     * Returns the number of channels associated with this captured image.
-     * 
-     */
-    public int numChannels();
-
-    /**
      * Returns the channels associatd with this captured image.
      */
     public int[] channels();
