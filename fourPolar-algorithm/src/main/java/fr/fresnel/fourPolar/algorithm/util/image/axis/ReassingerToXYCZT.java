@@ -59,22 +59,10 @@ class ReassingerToXYCZT {
         _checkNewDimIs5D(newImgDim);
         _checkNewDimIsGreaterThanEqualOldDim(image.getMetadata().getDim(), newImgDim);
 
-        Image<T> reassignedImage = _createXYCZTImage(image, t);
+        Image<T> reassignedImage = _createXYCZTImage(image, t, newImgDim);
         _copyImagePixelsToXYCZTImage(image, reassignedImage);
 
         return reassignedImage;
-    }
-
-    private static <T extends PixelType> void _copyImagePixelsToXYCZTImage(Image<T> image, Image<T> reassignedImage) {
-        AxisOrder oldAxisOrder = image.getMetadata().axisOrder();
-        IPixelRandomAccess<T> ra = reassignedImage.getRandomAccess();
-        for (IPixelCursor<T> cursor = image.getCursor(); cursor.hasNext();) {
-            IPixel<T> pixel = cursor.next();
-            long[] position_xyczt = _convertPositionToXYCZT(cursor.localize(), oldAxisOrder);
-
-            ra.setPosition(position_xyczt);
-            ra.setPixel(pixel);
-        }
     }
 
     private static <T extends PixelType> Image<T> _createXYCZTImage(Image<T> image, T t) {
@@ -136,6 +124,18 @@ class ReassingerToXYCZT {
                 .build();
     }
 
+    private static <T extends PixelType> void _copyImagePixelsToXYCZTImage(Image<T> image, Image<T> reassignedImage) {
+        AxisOrder oldAxisOrder = image.getMetadata().axisOrder();
+        IPixelRandomAccess<T> ra = reassignedImage.getRandomAccess();
+        for (IPixelCursor<T> cursor = image.getCursor(); cursor.hasNext();) {
+            IPixel<T> pixel = cursor.next();
+            long[] position_xyczt = _convertPositionToXYCZT(cursor.localize(), oldAxisOrder);
+
+            ra.setPosition(position_xyczt);
+            ra.setPixel(pixel);
+        }
+    }
+    
     private static long[] _convertPositionToXYCZT(long[] position, AxisOrder oldAxisOrder) {
         long[] position_xyczt = { position[0], position[1], 0, 0, 0 };
 
