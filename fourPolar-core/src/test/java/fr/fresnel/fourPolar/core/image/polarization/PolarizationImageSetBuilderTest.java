@@ -3,15 +3,20 @@ package fr.fresnel.fourPolar.core.image.polarization;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Iterator;
+
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 
 public class PolarizationImageSetBuilderTest {
@@ -80,7 +85,8 @@ public class PolarizationImageSetBuilderTest {
     }
 
     @Test
-    public void getPolarizationImage_CreateTwoSets_ReturnsCorrectImages() throws CannotFormPolarizationImageSet {
+    public void getPolarizationImage_CreateTwoSetsWithSameBuilder_BuiltPolImagesAreUnequal()
+            throws CannotFormPolarizationImageSet {
         long[] dim1 = { 1, 1, 1, 1, 1 };
 
         IMetadata metadata1 = new Metadata.MetadataBuilder(dim1).axisOrder(AxisOrder.XYCZT).build();
@@ -95,20 +101,61 @@ public class PolarizationImageSetBuilderTest {
         Image<UINT16> pol90_1 = new ImgLib2ImageFactory().create(metadata1, UINT16.zero());
         Image<UINT16> pol135_1 = new ImgLib2ImageFactory().create(metadata1, UINT16.zero());
 
-        IPolarizationImageSet imageSet = new PolarizationImageSetBuilder(1).channel(1).pol0(pol0).pol45(pol45)
-                .pol90(pol90).pol135(pol135).build();
+        PolarizationImageSetBuilder builder = new PolarizationImageSetBuilder(1);
 
-        IPolarizationImageSet imageSet_1 = new PolarizationImageSetBuilder(1).channel(1).pol0(pol0_1).pol45(pol45_1)
-                .pol90(pol90_1).pol135(pol135_1).build();
+        IPolarizationImageSet imageSet = builder.channel(1).pol0(pol0).pol45(pol45).pol90(pol90).pol135(pol135)
+                .fileSet(new DummyFileSet()).build();
 
-        assertTrue(imageSet.getPolarizationImage(Polarization.pol0).getImage() == pol0
-                && imageSet.getPolarizationImage(Polarization.pol45).getImage() == pol45
-                && imageSet.getPolarizationImage(Polarization.pol90).getImage() == pol90
-                && imageSet.getPolarizationImage(Polarization.pol135).getImage() == pol135
-                && imageSet_1.getPolarizationImage(Polarization.pol0).getImage() == pol0_1
-                && imageSet_1.getPolarizationImage(Polarization.pol45).getImage() == pol45_1
-                && imageSet_1.getPolarizationImage(Polarization.pol90).getImage() == pol90_1
-                && imageSet_1.getPolarizationImage(Polarization.pol135).getImage() == pol135_1);
+        IPolarizationImageSet imageSet_1 = builder.channel(1).pol0(pol0_1).pol45(pol45_1).pol90(pol90_1)
+                .pol135(pol135_1).fileSet(new DummyFileSet()).build();
+
+        assertTrue(imageSet.getPolarizationImage(Polarization.pol0).getImage() != imageSet_1
+                .getPolarizationImage(Polarization.pol0).getImage()
+                && imageSet.getPolarizationImage(Polarization.pol45).getImage() != imageSet_1
+                        .getPolarizationImage(Polarization.pol45).getImage()
+                && imageSet.getPolarizationImage(Polarization.pol90).getImage() != imageSet_1
+                        .getPolarizationImage(Polarization.pol90).getImage()
+                && imageSet.getPolarizationImage(Polarization.pol135).getImage() != imageSet_1
+                        .getPolarizationImage(Polarization.pol135).getImage());
+    }
+
+}
+
+class DummyFileSet implements ICapturedImageFileSet {
+
+    @Override
+    public ICapturedImageFile[] getFile(String label) {
+        return null;
+    }
+
+    @Override
+    public String getSetName() {
+        return null;
+    }
+
+    @Override
+    public Cameras getnCameras() {
+        return null;
+    }
+
+    @Override
+    public boolean hasLabel(String label) {
+        return false;
+    }
+
+    @Override
+    public boolean deepEquals(ICapturedImageFileSet fileset) {
+        return false;
+    }
+
+    @Override
+    public Iterator<ICapturedImageFile> getIterator() {
+        return null;
+    }
+
+    @Override
+    public int[] getChannels() {
+        return null;
     }
 
 }
