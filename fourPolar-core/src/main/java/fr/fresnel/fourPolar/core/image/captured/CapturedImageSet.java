@@ -66,10 +66,15 @@ class CapturedImageSet implements ICapturedImageSet {
         ChannelUtils.checkChannel(channel, this._numChannels);
 
         for (ICapturedImage capturedImage : this._images.get(label)) {
-            
+            if (this._capturedImageHasChannel(capturedImage, channel)){
+                return capturedImage;
+            }
         }
 
         return null;
     }
 
+    private boolean _capturedImageHasChannel(ICapturedImage capturedImage, int channel) {
+        return Arrays.stream(capturedImage.channels()).anyMatch((i)->i == channel);
+    }
 }

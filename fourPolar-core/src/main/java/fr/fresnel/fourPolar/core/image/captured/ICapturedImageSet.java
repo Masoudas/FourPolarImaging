@@ -21,13 +21,13 @@ public interface ICapturedImageSet {
      * Get the captured image that contains this channel. Note that the captured
      * image may contain other channels.
      * 
+     * @param label   is the label as defined by {@link Cameras#getLabels(Cameras)}.
      * @param channel is the desired channel.
-     * 
      * @throws IllegalArgumentException if channel does not exist.
      * 
      * @return the captured image that contains this channel.
      */
-    public ICapturedImage getChannelCapturedImage(int channel);
+    public ICapturedImage getChannelCapturedImage(String label, int channel);
 
     /**
      * Returns the file set associated with this captured image.
