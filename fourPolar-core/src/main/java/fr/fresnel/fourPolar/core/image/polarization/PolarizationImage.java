@@ -18,6 +18,10 @@ class PolarizationImage implements IPolarizationImage {
      * 
      * @param pol   is the polarization of this image.
      * @param image is the image interface of this polarization image.
+     * 
+     * @throws IllegalArgumentException if image does not the same
+     *                                  {@link IPolarizationImage#AXIS_ORDER} or has
+     *                                  more than one channel.
      */
     public PolarizationImage(Polarization pol, Image<UINT16> image) {
         Objects.requireNonNull(pol, "polarization can't be null.");
@@ -25,7 +29,7 @@ class PolarizationImage implements IPolarizationImage {
 
         this._checkAxisOrder(image);
         this._checkImageHasOnlyOneChannel(image);
-        
+
         this._image = image;
         this._pol = pol;
     }
