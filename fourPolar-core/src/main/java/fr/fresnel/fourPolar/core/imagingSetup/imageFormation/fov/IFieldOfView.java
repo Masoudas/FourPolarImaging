@@ -10,9 +10,16 @@ import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
  */
 public interface IFieldOfView {
     /**
-     * Return fov as an {@link IBoxShape}, where fov starts from {@link IBoxShape#min()} to
-     * {@link IBoxShape#max()} inclusive.
+     * Return fov as an {@link IBoxShape}, where fov starts from
+     * {@link IBoxShape#min()} to {@link IBoxShape#max()} inclusive.
      */
     public IBoxShape getFoV(Polarization pol);
+
+    /**
+     * Returns the maximum x and y field of view among all FoVs.
+     * 
+     * @return an array as [maximum_x, maximum_y].
+     */
+    public long[] getMaximumSize();
 
 }
