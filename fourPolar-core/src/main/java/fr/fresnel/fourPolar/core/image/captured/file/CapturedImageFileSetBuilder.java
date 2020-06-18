@@ -48,7 +48,9 @@ public class CapturedImageFileSetBuilder {
 
     /**
      * Add files to the fileSet being built. Returns the current instance to allow
-     * method chaining.
+     * method chaining. Note that the channels must exactly correspond to the
+     * channel axis of the image. Suppose image has two channels, and they
+     * correspond to channel 1 and 2. The channel array then must be [1, 2].
      * <p>
      * Used for the case when only one camera is present.
      * 
@@ -73,7 +75,8 @@ public class CapturedImageFileSetBuilder {
     /**
      * Add files to the fileSet being built. If multiple channels per image, this
      * method should be used one before using the build method. Returns the current
-     * instance to allow method chaining.
+     * instance to allow method chaining. Suppose image has two channels, and they
+     * correspond to channel 1 and 2. The channel array then must be [1, 2].
      * <p>
      * Used for the case when two cameras are present.
      * 
@@ -102,15 +105,20 @@ public class CapturedImageFileSetBuilder {
     /**
      * Add files to the fileSet being built. If multiple channels per image, this
      * method should be used one before using the build method. Returns the current
-     * instance to allow method chaining.
+     * instance to allow method chaining. Suppose image has two channels, and they
+     * correspond to channel 1 and 2. The channel array then must be [1, 2].
      * <p>
      * Used for the case when four cameras are present.
      * 
      * @param channels is the channel(s) this file is associated with.
-     * @param pol0     is the captured image file that has polarization 0.
-     * @param pol45    is the captured image file that has polarization 45.
-     * @param pol90    is the captured image file that has polarization 90.
-     * @param pol135   is the captured image file that has polarization 135.
+     * @param pol0     is the captured image file that corresponds to polarization
+     *                 0.
+     * @param pol45    is the captured image file that corresponds to polarization
+     *                 45.
+     * @param pol90    is the captured image file that corresponds to polarization
+     *                 90.
+     * @param pol135   is the captured image file that corresponds to polarization
+     *                 135.
      */
     public CapturedImageFileSetBuilder add(int[] channels, File pol0, File pol45, File pol90, File pol135) {
         _checkChannel(channels);
@@ -139,8 +147,8 @@ public class CapturedImageFileSetBuilder {
      *
      * @throws CannotCreateException     in case not enough files are given for all
      *                                   channels.
-     * @throws IncompatibleCapturedImage in case the image file does not satisfy the
-     *                                   constraints put forth by
+     * @throws IncompatibleCapturedImage in case a captured image file does not
+     *                                   satisfy the constraints put forth by
      *                                   {@link ICapturedImageChecker}.
      * 
      */
