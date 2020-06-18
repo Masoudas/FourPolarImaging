@@ -16,18 +16,36 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 
 /**
- * Creates polarization view for sample images as described by
- * {@link PolarizationViewCreator}.
+ * Creates polarization view for sample images for the given channel. Note that
+ * by a view we simply a cursor that is wrapped in an image. Hence the process
+ * of creating a view does not add any memory overhead.
+ * <p>
+ * Each polarization view corresponds to the x and y dimension specified using
+ * {@link IFieldOfView}. The z and t axis if exist remain in tact, and of course
+ * the view only contains the demanded channel. Note also that views are created
+ * regardless of whether or not image is single channel or multi-channel.
  */
-class SampleImagePolarizationViewCreator extends PolarizationViewCreator {
+class SampleImagePolarizationViewCreator {
+    private final IFieldOfView _fov;
 
-    @Override
-    public Map<Polarization, Image<UINT16>> create(ICapturedImageSet capturedImageSet, IFieldOfView fov, int channel) {
+    public SampleImagePolarizationViewCreator(IFieldOfView fov) {
+        this._fov = fov;
+    }
+
+    /**
+     * Create the views for the given channel of the captured image.
+     * 
+     * @param capturedImageSet is the captured image set.
+     * @param fov              is the field of view of polarizations.
+     * @param channel          is the desired channel.
+     * @return
+     */
+    public Map<Polarization, Image<UINT16>> create(ICapturedImageSet capturedImageSet, int channel) {
         HashMap<Polarization, Image<UINT16>> channelPolViews = new HashMap<>();
         for (Polarization pol : Polarization.values()) {
             ICapturedImage channelPolImage = capturedImageSet.getChannelPolarizationImage(channel, pol);
 
-            Image<UINT16> channelPolView = this._createPolarizationView(channelPolImage, fov, channel, pol);
+            Image<UINT16> channelPolView = this._createPolarizationView(channelPolImage, channel, pol);
             channelPolViews.put(pol, channelPolView);
         }
 
@@ -38,13 +56,12 @@ class SampleImagePolarizationViewCreator extends PolarizationViewCreator {
      * Create an image interface (more precisely a {@link PolarizationView}) of this
      * polarization and this channel from the captured image that contains it.
      */
-    private PolarizationView _createPolarizationView(ICapturedImage capturedImage, IFieldOfView fov, int channel,
-            Polarization pol) {
+    private PolarizationView _createPolarizationView(ICapturedImage capturedImage, int channel, Polarization pol) {
         Image<UINT16> image = capturedImage.getImage();
 
         int channelAxis = this._convertChannelToAxisNumber(capturedImage, channel);
-        long[] viewBottomCorner = this._createViewBottomCorner(image.getMetadata(), fov.getFoV(pol), channelAxis);
-        long[] viewLength = this._createViewLength(image.getMetadata(), fov.getFoV(pol), channelAxis);
+        long[] viewBottomCorner = this._createViewBottomCorner(image.getMetadata(), _fov.getFoV(pol), channelAxis);
+        long[] viewLength = this._createViewLength(image.getMetadata(), _fov.getFoV(pol), channelAxis);
 
         IPixelCursor<UINT16> channelPolCursor = image.getCursor(viewBottomCorner, viewLength);
         IMetadata viewImageMetadata = this._createChannelPolViewMetadata(image.getMetadata(), viewLength);
@@ -83,17 +100,24 @@ class SampleImagePolarizationViewCreator extends PolarizationViewCreator {
      * @return
      */
     private long[] _createViewBottomCorner(IMetadata capturedImageMetadata, IBoxShape polFoV, int c_axis) {
-        long[] min_fov = polFoV.min();
-
         long[] bottomCorner = new long[capturedImageMetadata.getDim().length];
 
-        // Setting the x and y axis to the point indicated by the fov.
-        bottomCorner[0] = min_fov[0];
-        bottomCorner[1] = min_fov[1];
+        if (capturedImageMetadata.axisOrder().z_axis > 0) {
+            bottomCorner[capturedImageMetadata.axisOrder().z_axis] = 0;
+        }
+
+        if (capturedImageMetadata.axisOrder().t_axis > 0) {
+            bottomCorner[capturedImageMetadata.axisOrder().t_axis] = 0;
+        }
 
         if (c_axis != -1) {
             bottomCorner[capturedImageMetadata.axisOrder().c_axis] = c_axis;
         }
+
+        long[] min_fov = polFoV.min();
+        // Setting the x and y axis to the point indicated by the fov.
+        bottomCorner[0] = min_fov[0];
+        bottomCorner[1] = min_fov[1];
 
         return bottomCorner;
     }
