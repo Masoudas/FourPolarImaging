@@ -69,16 +69,9 @@ class CapturedImageSet implements ICapturedImageSet {
         ChannelUtils.checkChannel(channel, this._numChannels);
 
         ICapturedImage[] polImages = _getPolarizationCapturedImages(polarization);
-
-        ICapturedImage polImage = null;
-        boolean imageFound = false;
-        for (int index = 0; index < polImages.length && !imageFound; index++) {
-            if (this._capturedImageHasChannel(polImages[index], channel)) {
-                polImage = polImages[index];
-            }
-        }
-
-        return polImage;
+        // Note that only one image satisfies the constraints. That's why we use findAny.
+        return Arrays.stream(polImages).filter(
+            (capturedImage) -> this._capturedImageHasChannel(capturedImage, channel)).findAny().get();
     }
 
     /**
