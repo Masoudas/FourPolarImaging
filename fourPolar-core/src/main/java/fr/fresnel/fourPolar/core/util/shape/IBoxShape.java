@@ -18,7 +18,7 @@ public interface IBoxShape extends IShape {
         if (dim < 0 || dim > boxShape.min().length){
             throw new IllegalArgumentException("The given dimension does not exist");
         }
-        return boxShape.max()[dim] - boxShape.min()[dim];
+        return boxShape.max()[dim] - boxShape.min()[dim] + 1;
     }
 
     public long[] min();
