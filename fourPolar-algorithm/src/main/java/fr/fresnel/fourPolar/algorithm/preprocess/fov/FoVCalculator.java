@@ -79,13 +79,13 @@ public class FoVCalculator implements IFoVCalculator {
 
     @Override
     public void setMin(long x, long y, Polarization pol) {
-        FoVCalculatorUtil.checkPointIsInImageBoundary(this._metadatas.get(pol), x, y);
+        _checkPointIsInImageBoundary(this._metadatas.get(pol), x, y);
         _minPoints.put(pol, new long[] { x, y });
     }
 
     @Override
     public void setMax(long x, long y, Polarization pol) {
-        FoVCalculatorUtil.checkPointIsInImageBoundary(this._metadatas.get(pol), x, y);
+        _checkPointIsInImageBoundary(this._metadatas.get(pol), x, y);
         _maxPoints.put(pol, new long[] { x, y });
     }
 
@@ -122,6 +122,21 @@ public class FoVCalculator implements IFoVCalculator {
                     "min and max point of all polarizations have not been provided for FoV calclation.");
         }
 
+    }
+
+    /**
+     * Checks whether this 2D point is inside the image boundary.
+     */
+    private void _checkPointIsInImageBoundary(IMetadata imageMetadata, long x, long y) {
+        long[] imgDim = imageMetadata.getDim();
+
+        if (x < 0 || y < 0) {
+            throw new IllegalArgumentException("Point must be positive.");
+        }
+
+        if (x > imgDim[0] || y > imgDim[1]) {
+            throw new IllegalArgumentException("Point is outside image boundary.");
+        }
     }
 
 }
