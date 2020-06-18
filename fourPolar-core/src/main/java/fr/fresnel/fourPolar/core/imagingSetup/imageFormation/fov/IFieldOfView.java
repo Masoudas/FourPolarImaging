@@ -16,10 +16,10 @@ public interface IFieldOfView {
     public IBoxShape getFoV(Polarization pol);
 
     /**
-     * Returns the maximum x and y field of view among all FoVs.
+     * Returns the maximum length among x and y axis of all field of views.
      * 
      * @return an array as [maximum_x, maximum_y].
      */
-    public long[] getMaximumSize();
+    public long[] getMaximumLength();
 
 }

@@ -42,7 +42,7 @@ public class FieldOfView implements IFieldOfView {
     }
 
     @Override
-    public long[] getMaximumSize() {
+    public long[] getMaximumLength() {
         return new long[] { this._calculateMaxFoVOnDim(0), this._calculateMaxFoVOnDim(1) };
     }
 
