@@ -38,14 +38,14 @@ class SampleImagePolarizationViewCreator {
      * @param capturedImageSet is the captured image set.
      * @param fov              is the field of view of polarizations.
      * @param channel          is the desired channel.
-     * @return
+     * @return a map between a polarization and its {@link PolarizationView}.
      */
-    public Map<Polarization, Image<UINT16>> create(ICapturedImageSet capturedImageSet, int channel) {
-        HashMap<Polarization, Image<UINT16>> channelPolViews = new HashMap<>();
+    public Map<Polarization, PolarizationView> create(ICapturedImageSet capturedImageSet, int channel) {
+        HashMap<Polarization, PolarizationView> channelPolViews = new HashMap<>();
         for (Polarization pol : Polarization.values()) {
             ICapturedImage channelPolImage = capturedImageSet.getChannelPolarizationImage(channel, pol);
 
-            Image<UINT16> channelPolView = this._createPolarizationView(channelPolImage, channel, pol);
+            PolarizationView channelPolView = this._createPolarizationView(channelPolImage, channel, pol);
             channelPolViews.put(pol, channelPolView);
         }
 
