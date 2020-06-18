@@ -144,7 +144,7 @@ class SampleImagePolarizationViewCreator {
         len[1] = IBoxShape.len(polFoV, 1);
 
         if (c_axis != -1) {
-            len[c_axis] = 1;
+            len[capturedImageMetadata.axisOrder().c_axis] = 1;
         }
 
         return len;
