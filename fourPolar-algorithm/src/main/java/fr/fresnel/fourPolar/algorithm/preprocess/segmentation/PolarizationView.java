@@ -8,16 +8,17 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 /**
- * Holds the segmented image as a quasi-image interface. The interval iterator
- * and random access methods of this implementation throw exception. The cursor
- * is a single instance, and copies are not made in each call.
+ * Wraps an interval {@link IPixelCursor<UINT16>} in an image interface to hold
+ * a segmented image as a quasi-image interface. The interval iterator and
+ * random access methods of this implementation throw exception. The cursor is a
+ * single instance, and copies are not made in each call.
  */
-class SegmentedImage implements Image<UINT16> {
+class PolarizationView implements Image<UINT16> {
     private final IPixelCursor<UINT16> _cursor;
     private final ImageFactory _factory;
     private final IMetadata _metadata;
 
-    public SegmentedImage(IPixelCursor<UINT16> cursor, ImageFactory factory, IMetadata metadata) {
+    public PolarizationView(IPixelCursor<UINT16> cursor, ImageFactory factory, IMetadata metadata) {
         cursor.next();
         if (cursor.localize().length != metadata.getDim().length) {
             throw new IllegalArgumentException("cursor and metadata should be of the same dimension.");
