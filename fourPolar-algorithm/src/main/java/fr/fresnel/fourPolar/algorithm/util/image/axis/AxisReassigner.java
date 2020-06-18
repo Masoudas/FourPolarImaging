@@ -38,7 +38,7 @@ public class AxisReassigner {
      *                                  new dim is not greater than equal old
      *                                  dimension.
      */
-    public static <T extends PixelType> Image<T> reassignAndResize(Image<T> image, T t, long[] newImgDim) {
+    public static <T extends PixelType> Image<T> reassignToXYCZTAndResize(Image<T> image, T t, long[] newImgDim) {
         return ReassingerToXYCZT.reassignAndResize(image, t, newImgDim);
     }
 
