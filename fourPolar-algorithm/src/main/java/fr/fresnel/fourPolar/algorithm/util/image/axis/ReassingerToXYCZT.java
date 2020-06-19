@@ -61,7 +61,7 @@ class ReassingerToXYCZT {
         _checkAxisOrderIsDefined(image.getMetadata());
         _checkAxisOrderStartsWithXY(image);
         _checkNewDimIs5D(newImgDim);
-        _checkNewDimIsGreaterThanEqualOldDim(image.getMetadata().getDim(), newImgDim);
+        _checkNewDimIsGreaterThanEqualOldDim(image.getMetadata(), newImgDim);
 
         Image<T> reassignedImage = _createXYCZTImage(image, t, newImgDim);
         _copyImagePixelsToXYCZTImage(image, reassignedImage);
@@ -108,19 +108,18 @@ class ReassingerToXYCZT {
                     "New image dimension for resizing must be greater than equal old dimension.");
         }
 
-        if (_isNewDimGreaterThanEqualOldDim(oldDim, newDim, 0, 0)
-                && _isNewDimGreaterThanEqualOldDim(oldDim, newDim, 1, 1)
-                && _isNewDimGreaterThanEqualOldDim(oldDim, newDim, oldAxisOrder.c_axis, AxisOrder.XYCZT.c_axis)
-                && _isNewDimGreaterThanEqualOldDim(oldDim, newDim, oldAxisOrder.t_axis, AxisOrder.XYCZT.t_axis)
-                && _isNewDimGreaterThanEqualOldDim(oldDim, newDim, oldAxisOrder.z_axis, AxisOrder.XYCZT.z_axis)) {
+        if (_isOldDimGreaterThanNewDim(oldDim, newDim, 0, 0) || _isOldDimGreaterThanNewDim(oldDim, newDim, 1, 1)
+                || _isOldDimGreaterThanNewDim(oldDim, newDim, oldAxisOrder.c_axis, AxisOrder.XYCZT.c_axis)
+                || _isOldDimGreaterThanNewDim(oldDim, newDim, oldAxisOrder.t_axis, AxisOrder.XYCZT.t_axis)
+                || _isOldDimGreaterThanNewDim(oldDim, newDim, oldAxisOrder.z_axis, AxisOrder.XYCZT.z_axis)) {
             throw new IllegalArgumentException(
                     "New image dimension for resizing must be greater than equal old dimension.");
         }
     }
 
     /**
-     * Returns true whether an axis in the old image is greater than equal its
-     * counterpart in the xyczt dimension. If the axis does not exist, returns true.
+     * Returns true id an axis in the old image is greater than its counterpart in
+     * the xyczt dimension. If the axis does not exist, returns false.
      * 
      * @param oldDim    is the old image dimension.
      * @param newDim    is the new image dimension.
@@ -128,11 +127,11 @@ class ReassingerToXYCZT {
      * @param xycztAxis is the counterpart of the axis in xyczt,
      * @return
      */
-    private static boolean _isNewDimGreaterThanEqualOldDim(long[] oldDim, long[] newDim, int oldAxis, int xycztAxis) {
+    private static boolean _isOldDimGreaterThanNewDim(long[] oldDim, long[] newDim, int oldAxis, int xycztAxis) {
         if (oldAxis < 0) {
-            return true;
+            return false;
         } else {
-            return oldDim[oldAxis] <= newDim[xycztAxis];
+            return oldDim[oldAxis] > newDim[xycztAxis];
         }
     }
 
