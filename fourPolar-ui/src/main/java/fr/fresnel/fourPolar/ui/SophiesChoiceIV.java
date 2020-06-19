@@ -31,7 +31,7 @@ import javassist.tools.reflect.CannotCreateException;
  * well as defining stick length, thickness and color map.
  */
 public class SophiesChoiceIV {
-    static String visualizationSessionName = "First Session";
+    static String visualizationSessionName = SophiesChoiceII.visualizationSessionName;
 
     // 2D Stick visual params.
     static int length = 10;
