@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.estimator.percen
 import fr.fresnel.fourPolar.algorithm.preprocess.registration.IChannelRegistrator;
 import fr.fresnel.fourPolar.algorithm.preprocess.registration.descriptorBased.DescriptorBasedRegistration;
 import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.ICapturedImageSetSegmenter;
-import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.RegistrationImageSegmenter;
+import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.SampleImageSegmenter;
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter.Color;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.IPolarizationImageSetCompositesCreater;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.PolarizationImageSetCompositesCreator;
@@ -43,7 +43,7 @@ public class RegistrationSetProcessorBuilder extends IRegistrationSetProcessorBu
 
         this._numChannels = imagingSetup.getNumChannel();
 
-        this._segmenter = new RegistrationImageSegmenter(imagingSetup.getFieldOfView(), this._numChannels);
+        this._segmenter = new SampleImageSegmenter(imagingSetup.getFieldOfView(), this._numChannels);
         this._registrator = new DescriptorBasedRegistration();
         this._darkBackgroundEstimator = new PercentileChannelDarkBackgroundEstimator(imagingSetup.getCameras());
         this._compositeImageCreator = new PolarizationImageSetCompositesCreator(this._numChannels, Color.Red,
