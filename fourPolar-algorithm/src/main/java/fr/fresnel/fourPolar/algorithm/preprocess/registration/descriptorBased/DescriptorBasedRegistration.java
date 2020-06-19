@@ -61,7 +61,7 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
     @Override
     public IChannelRegistrationResult register(IPolarizationImageSet polarizationImageSet)
             throws ChannelRegistrationFailure {
-        this._checkPolarizationImageIsPlanar(polarizationImageSet);
+        this._checkPolarizationImageIsQuasiPlanar(polarizationImageSet);
 
         Hashtable<RegistrationRule, DescriptorBased2DResult> channelResult = this
                 ._registerChannel(polarizationImageSet);
@@ -211,7 +211,7 @@ public class DescriptorBasedRegistration implements IChannelRegistrator {
         return updated;
     }
 
-    private void _checkPolarizationImageIsPlanar(IPolarizationImageSet polarizationImageSet) {
+    private void _checkPolarizationImageIsQuasiPlanar(IPolarizationImageSet polarizationImageSet) {
         IMetadata metadata = polarizationImageSet.getPolarizationImage(Polarization.pol0).getImage().getMetadata();
         if (!MetadataUtil.isImageQuasiPlanar(metadata)) {
             throw new IllegalArgumentException("Polarization (bead) image must be planar to be registered.");
