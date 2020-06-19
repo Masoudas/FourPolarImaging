@@ -15,6 +15,11 @@ import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.sampleSet.Sample
 class SampleImageSetPreprocessor implements ISampleImageSetPreprocessor {
     private final int _numChannels;
 
+    /**
+     * Indicates the sample image supplied to be processed.
+     */
+    private ICapturedImageSet _sampleImage;
+
     private final ICapturedImageSetSegmenter _capturedImageSetSegmenter;
     private final ICapturedImageSetReader _capturedImageSetReader;
 
@@ -33,11 +38,7 @@ class SampleImageSetPreprocessor implements ISampleImageSetPreprocessor {
 
     @Override
     public void setCapturedImageSet(ICapturedImageFileSet capturedImageFileSet) throws SampleSetPreprocessFailure {
-        ICapturedImageSet capturedImageSet = this._readCapturedImageSet(capturedImageFileSet);
-
-        // Keep the captured image set in the segmenter, for it to be segmented with
-        // each call for a channel.
-        this._capturedImageSetSegmenter.setCapturedImage(capturedImageSet);
+        this._sampleImage = this._readCapturedImageSet(capturedImageFileSet);
     }
 
     private ICapturedImageSet _readCapturedImageSet(ICapturedImageFileSet capturedImageFileSet)
@@ -51,9 +52,9 @@ class SampleImageSetPreprocessor implements ISampleImageSetPreprocessor {
 
     @Override
     public IPolarizationImageSet getPolarizationImageSet(int channel) {
-        IPolarizationImageSet polImageSet = this._createChannelPolarizationImages(channel);
+        IPolarizationImageSet polImageSet = this._createPolarizationImageSet(channel);
 
-        this._realignChannelPolarizationImages(polImageSet);
+        this._realignPolarizationImageSet(polImageSet);
         this._removeChannelDarkBackgrounds(polImageSet);
 
         return polImageSet;
@@ -114,12 +115,12 @@ class SampleImageSetPreprocessor implements ISampleImageSetPreprocessor {
         return channelRemovers;
     }
 
-    private IPolarizationImageSet _createChannelPolarizationImages(int channel) {
-        return this._capturedImageSetSegmenter.segment(channel);
+    private IPolarizationImageSet _createPolarizationImageSet(int channel) {
+        return this._capturedImageSetSegmenter.segment(this._sampleImage, channel);
 
     }
 
-    private void _realignChannelPolarizationImages(IPolarizationImageSet polarizationImageSet) {
+    private void _realignPolarizationImageSet(IPolarizationImageSet polarizationImageSet) {
         int channel = polarizationImageSet.channel();
         this._realigners[channel - 1].realign(polarizationImageSet);
     }
