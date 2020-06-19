@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.algorithm.preprocess.darkBackground.IChannelDarkBack
 import fr.fresnel.fourPolar.algorithm.preprocess.realignment.ChannelRealigner;
 import fr.fresnel.fourPolar.algorithm.preprocess.realignment.IChannelRealigner;
 import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.ICapturedImageSetSegmenter;
-import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.SampleCapturedImageSetSegmenter;
+import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.SampleImageSegmenter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
@@ -45,8 +45,7 @@ public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocess
     }
 
     private ICapturedImageSetSegmenter _setCapturedImageSetSegmenter(IFourPolarImagingSetup imagingSetup) {
-        return new SampleCapturedImageSetSegmenter(imagingSetup.getFieldOfView(), imagingSetup.getCameras(),
-                imagingSetup.getNumChannel());
+        return new SampleImageSegmenter(imagingSetup.getFieldOfView(), imagingSetup.getNumChannel());
     }
 
     /**
