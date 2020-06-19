@@ -3,8 +3,6 @@ package fr.fresnel.fourPolar.algorithm.util.image.axis;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
-
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
@@ -156,7 +154,6 @@ public class ReassignerToXYCZTTest {
         assertTrue(_checkPixel(reassignedImg, 0, new long[] { 1, 1, 0, 0, 0 }));
     }
 
-
     @Test
     public void reassignAndResize_XYZImageAddXAndY_ReturnsCorrectXYCZTImage() {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 1 }).axisOrder(AxisOrder.XYZ).build();
@@ -172,6 +169,110 @@ public class ReassignerToXYCZTTest {
         assertTrue(_checkPixel(reassignedImg, 0, new long[] { 1, 0, 0, 0, 0 }));
         assertTrue(_checkPixel(reassignedImg, 0, new long[] { 0, 1, 0, 0, 0 }));
         assertTrue(_checkPixel(reassignedImg, 0, new long[] { 1, 1, 0, 0, 0 }));
+    }
+
+    @Test
+    public void reassignAndResize_TrivialXYImage_ReturnsCorrectXYCZTImage() {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2 }).axisOrder(AxisOrder.XY).build();
+        Image<UINT16> img = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
+
+        long[] newDim = { 3, 3, 2, 1, 1 };
+
+        Image<UINT16> reassignedImg = ReassingerToXYCZT.reassignAndResize(img, UINT16.zero(), newDim);
+        for (IPixelCursor<UINT16> cursor = reassignedImg.getCursor(); cursor.hasNext();) {
+            IPixel<UINT16> pixel = cursor.next();
+            assertTrue(pixel.value().get() == 0);
+        }
+
+        assertArrayEquals(reassignedImg.getMetadata().getDim(), newDim);
+    }
+
+    @Test
+    public void reassignAndResize_XYImage_ReturnsCorrectXYCZTImage() {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2 }).axisOrder(AxisOrder.XY).build();
+        Image<UINT16> img = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
+
+        int val = 0;
+        for (IPixelCursor<UINT16> cursor = img.getCursor(); cursor.hasNext();) {
+            cursor.next();
+            cursor.setPixel(new Pixel<UINT16>(new UINT16(val++)));
+        }
+
+        // Check positions that are one the unresized image have the save value after
+        // resize.
+        long[] newDim = { 3, 3, 2, 1, 1 };
+        Image<UINT16> reassignedImg = ReassingerToXYCZT.reassignAndResize(img, UINT16.zero(), newDim);
+
+        IPixelRandomAccess<UINT16> ra = reassignedImg.getRandomAccess();
+        for (IPixelCursor<UINT16> cursor = img.getCursor(); cursor.hasNext();) {
+            IPixel<UINT16> pixel = cursor.next();
+
+            long[] position = cursor.localize();
+            ra.setPosition(new long[] { position[0], position[1], 0, 0, 0 });
+
+            assertTrue(ra.getPixel().value().get() == pixel.value().get());
+        }
+
+        assertArrayEquals(reassignedImg.getMetadata().getDim(), newDim);
+    }
+
+    @Test
+    public void reassignAndResize_XYZImage_ReturnsCorrectXYCZTImage() {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2, 3 }).axisOrder(AxisOrder.XYZ).build();
+        Image<UINT16> img = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
+
+        int val = 0;
+        for (IPixelCursor<UINT16> cursor = img.getCursor(); cursor.hasNext();) {
+            cursor.next();
+            cursor.setPixel(new Pixel<UINT16>(new UINT16(val++)));
+        }
+
+        // Check positions that are one the unresized image have the save value after
+        // resize.
+        long[] newDim = { 3, 3, 2, 4, 1 };
+        Image<UINT16> reassignedImg = ReassingerToXYCZT.reassignAndResize(img, UINT16.zero(), newDim);
+
+        IPixelRandomAccess<UINT16> ra = reassignedImg.getRandomAccess();
+        for (IPixelCursor<UINT16> cursor = img.getCursor(); cursor.hasNext();) {
+            IPixel<UINT16> pixel = cursor.next();
+
+            long[] position = cursor.localize();
+            ra.setPosition(new long[] { position[0], position[1], 0, position[2], 0 });
+
+            assertTrue(ra.getPixel().value().get() == pixel.value().get());
+        }
+
+        assertArrayEquals(reassignedImg.getMetadata().getDim(), newDim);
+    }
+
+    @Test
+    public void reassignAndResize_XYCZTImage_ReturnsCorrectXYCZTImage() {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2, 2, 1, 2 }).axisOrder(AxisOrder.XYCZT)
+                .build();
+        Image<UINT16> img = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
+
+        int val = 0;
+        for (IPixelCursor<UINT16> cursor = img.getCursor(); cursor.hasNext();) {
+            cursor.next();
+            cursor.setPixel(new Pixel<UINT16>(new UINT16(val++)));
+        }
+
+        // Check positions that are one the unresized image have the save value after
+        // resize.
+        long[] newDim = { 3, 3, 2, 1, 2 };
+        Image<UINT16> reassignedImg = ReassingerToXYCZT.reassignAndResize(img, UINT16.zero(), newDim);
+
+        IPixelRandomAccess<UINT16> ra = reassignedImg.getRandomAccess();
+        for (IPixelCursor<UINT16> cursor = img.getCursor(); cursor.hasNext();) {
+            IPixel<UINT16> pixel = cursor.next();
+
+            long[] position = cursor.localize();
+            ra.setPosition(position);
+
+            assertTrue(ra.getPixel().value().get() == pixel.value().get());
+        }
+
+        assertArrayEquals(reassignedImg.getMetadata().getDim(), newDim);
     }
 
     private void _setPixel(Image<UINT16> pol, int value) {
