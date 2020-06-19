@@ -58,9 +58,9 @@ public class SampleImageSegmenter implements ICapturedImageSetSegmenter {
         this._polSetBuilder.channel(channel);
         this._polSetBuilder.fileSet(capturedImageSet.fileSet());
         this._polSetBuilder.pol0(polImages.get(Polarization.pol0));
-        this._polSetBuilder.pol0(polImages.get(Polarization.pol45));
-        this._polSetBuilder.pol0(polImages.get(Polarization.pol90));
-        this._polSetBuilder.pol0(polImages.get(Polarization.pol135));
+        this._polSetBuilder.pol45(polImages.get(Polarization.pol45));
+        this._polSetBuilder.pol90(polImages.get(Polarization.pol90));
+        this._polSetBuilder.pol135(polImages.get(Polarization.pol135));
 
         IPolarizationImageSet polImageSet = null;
         try {
