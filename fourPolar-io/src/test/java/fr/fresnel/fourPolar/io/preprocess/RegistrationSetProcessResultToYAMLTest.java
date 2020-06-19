@@ -31,9 +31,9 @@ public class RegistrationSetProcessResultToYAMLTest {
         DummyChannelBackground background_c2 = new DummyChannelBackground(2, 1, 1, 1, 1, backgroundEstimMethod);
 
         String registrationMethod = "Dummy Method";
-        DummyChannelRegistrationResult registrationResult_c1 = new DummyChannelRegistrationResult(1, 1.2,
+        DummyChannelRegistrationResult registrationResult_c1 = new DummyChannelRegistrationResult(1, 1.23213,
                 registrationMethod, new Affine2D(), new Affine2D(), new Affine2D());
-        DummyChannelRegistrationResult registrationResult_c2 = new DummyChannelRegistrationResult(2, 1.2,
+        DummyChannelRegistrationResult registrationResult_c2 = new DummyChannelRegistrationResult(2, 1.21321,
                 registrationMethod, new Affine2D(), new Affine2D(), new Affine2D());
 
         RegistrationSetProcessResult setResult = new RegistrationSetProcessResult(2);
