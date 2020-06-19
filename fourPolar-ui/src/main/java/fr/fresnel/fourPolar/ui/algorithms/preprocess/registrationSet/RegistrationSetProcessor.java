@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
