@@ -11,6 +11,7 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 class ReassingerToXYCZT {
     private ReassingerToXYCZT() {
@@ -30,7 +31,9 @@ class ReassingerToXYCZT {
         Objects.requireNonNull(image, "image can't be null");
         Objects.requireNonNull(t, "t can't be null");
 
+        _checkAxisOrderIsDefined(image.getMetadata());
         _checkAxisOrderStartsWithXY(image);
+
         Image<T> reassignedImage = _createXYCZTImage(image, t);
         _copyImagePixelsToXYCZTImage(image, reassignedImage);
 
@@ -55,6 +58,7 @@ class ReassingerToXYCZT {
     public static <T extends PixelType> Image<T> reassignAndResize(Image<T> image, T t, long[] newImgDim) {
         Objects.requireNonNull(image, "image can't be null");
         Objects.requireNonNull(t, "t can't be null");
+        _checkAxisOrderIsDefined(image.getMetadata());
         _checkAxisOrderStartsWithXY(image);
         _checkNewDimIs5D(newImgDim);
         _checkNewDimIsGreaterThanEqualOldDim(image.getMetadata().getDim(), newImgDim);
@@ -83,21 +87,52 @@ class ReassingerToXYCZT {
         }
     }
 
+    private static void _checkAxisOrderIsDefined(IMetadata metadata) {
+        if (metadata.axisOrder() == AxisOrder.NoOrder) {
+            throw new IllegalArgumentException("Axis order for resizing can't be undefined.");
+        }
+    }
+
     private static void _checkNewDimIs5D(long[] newDim) {
         if (newDim.length != 5) {
             throw new IllegalArgumentException("New image dimension for resizing must 5 dimensional.");
         }
     }
 
-    private static void _checkNewDimIsGreaterThanEqualOldDim(long[] oldDim, long[] newDim) {
+    private static void _checkNewDimIsGreaterThanEqualOldDim(IMetadata oldImageMetadata, long[] newDim) {
+        long[] oldDim = oldImageMetadata.getDim();
+        AxisOrder oldAxisOrder = oldImageMetadata.axisOrder();
+
         if (oldDim.length > newDim.length) {
             throw new IllegalArgumentException(
                     "New image dimension for resizing must be greater than equal old dimension.");
         }
 
-        if (IntStream.range(0, oldDim.length).anyMatch((i) -> oldDim[i] > newDim[i])) {
+        if (_isNewDimGreaterThanEqualOldDim(oldDim, newDim, 0, 0)
+                && _isNewDimGreaterThanEqualOldDim(oldDim, newDim, 1, 1)
+                && _isNewDimGreaterThanEqualOldDim(oldDim, newDim, oldAxisOrder.c_axis, AxisOrder.XYCZT.c_axis)
+                && _isNewDimGreaterThanEqualOldDim(oldDim, newDim, oldAxisOrder.t_axis, AxisOrder.XYCZT.t_axis)
+                && _isNewDimGreaterThanEqualOldDim(oldDim, newDim, oldAxisOrder.z_axis, AxisOrder.XYCZT.z_axis)) {
             throw new IllegalArgumentException(
                     "New image dimension for resizing must be greater than equal old dimension.");
+        }
+    }
+
+    /**
+     * Returns true whether an axis in the old image is greater than equal its
+     * counterpart in the xyczt dimension. If the axis does not exist, returns true.
+     * 
+     * @param oldDim    is the old image dimension.
+     * @param newDim    is the new image dimension.
+     * @param oldAxis   is the old axis to check.
+     * @param xycztAxis is the counterpart of the axis in xyczt,
+     * @return
+     */
+    private static boolean _isNewDimGreaterThanEqualOldDim(long[] oldDim, long[] newDim, int oldAxis, int xycztAxis) {
+        if (oldAxis < 0) {
+            return true;
+        } else {
+            return oldDim[oldAxis] <= newDim[xycztAxis];
         }
     }
 
@@ -135,7 +170,7 @@ class ReassingerToXYCZT {
             ra.setPixel(pixel);
         }
     }
-    
+
     private static long[] _convertPositionToXYCZT(long[] position, AxisOrder oldAxisOrder) {
         long[] position_xyczt = { position[0], position[1], 0, 0, 0 };
 
