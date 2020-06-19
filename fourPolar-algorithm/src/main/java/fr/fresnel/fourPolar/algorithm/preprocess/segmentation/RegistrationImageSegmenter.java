@@ -58,15 +58,16 @@ public class RegistrationImageSegmenter implements ICapturedImageSetSegmenter {
         this._polSetBuilder.channel(channel);
         this._polSetBuilder.fileSet(capturedImageSet.fileSet());
         this._polSetBuilder.pol0(polImages.get(Polarization.pol0));
-        this._polSetBuilder.pol0(polImages.get(Polarization.pol45));
-        this._polSetBuilder.pol0(polImages.get(Polarization.pol90));
-        this._polSetBuilder.pol0(polImages.get(Polarization.pol135));
+        this._polSetBuilder.pol45(polImages.get(Polarization.pol45));
+        this._polSetBuilder.pol90(polImages.get(Polarization.pol90));
+        this._polSetBuilder.pol135(polImages.get(Polarization.pol135));
 
         IPolarizationImageSet polImageSet = null;
         try {
             polImageSet = this._polSetBuilder.build();
         } catch (CannotFormPolarizationImageSet e) {
             // This exception is not caught, because images have same size.
+            e.printStackTrace();
         }
 
         return polImageSet;
