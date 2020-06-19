@@ -120,11 +120,15 @@ public class SampleImageSegmenter implements ICapturedImageSetSegmenter {
         if (polViewMetadata.axisOrder().z_axis > 0) {
             resizeDimension[IPolarizationImage.AXIS_ORDER.z_axis] = polViewMetadata
                     .getDim()[polViewMetadata.axisOrder().z_axis];
+        } else {
+            resizeDimension[IPolarizationImage.AXIS_ORDER.z_axis] = 1;
         }
 
         if (polViewMetadata.axisOrder().t_axis > 0) {
             resizeDimension[IPolarizationImage.AXIS_ORDER.t_axis] = polViewMetadata
                     .getDim()[polViewMetadata.axisOrder().t_axis];
+        } else {
+            resizeDimension[IPolarizationImage.AXIS_ORDER.t_axis] = 1;
         }
 
         return resizeDimension;
