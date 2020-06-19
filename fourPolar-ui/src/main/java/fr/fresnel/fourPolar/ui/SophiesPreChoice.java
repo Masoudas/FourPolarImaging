@@ -12,7 +12,8 @@ import org.scijava.ui.behaviour.util.Behaviours;
 import bdv.util.Bdv;
 import bdv.util.BdvFunctions;
 import bdv.util.BdvOptions;
-import fr.fresnel.fourPolar.algorithm.preprocess.fov.FoVCalculatorOneCamera;
+import fr.fresnel.fourPolar.algorithm.preprocess.fov.FoVCalculator;
+import fr.fresnel.fourPolar.algorithm.preprocess.fov.IFoVCalculator;
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter.Color;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.PolarizationImageSetCompositesCreator;
@@ -22,7 +23,6 @@ import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSetBuilder
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
@@ -34,15 +34,12 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.OneCameraPolarizationConstellation;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.OneCameraPolarizationConstellation.Position;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
+import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.RegistrationSetProcessResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
-import fr.fresnel.fourPolar.core.util.shape.IPointShape;
-import fr.fresnel.fourPolar.core.util.shape.IShape;
-import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.captured.tiff.checker.TiffCapturedImageChecker;
@@ -51,6 +48,7 @@ import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOUINT16TiffReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadataReader;
 import fr.fresnel.fourPolar.io.image.polarization.TiffPolarizationImageSetWriter;
 import fr.fresnel.fourPolar.io.imagingSetup.FourPolarImagingSetupToYaml;
+import fr.fresnel.fourPolar.io.preprocess.RegistrationSetProcessResultToYAML;
 import fr.fresnel.fourPolar.io.visualization.figures.polarization.tiff.TiffPolarizationImageSetCompositesWriter;
 import fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet.IRegistrationSetProcessor;
 import fr.fresnel.fourPolar.ui.algorithms.preprocess.registrationSet.RegistrationSetProcessorBuilder;
@@ -63,10 +61,11 @@ import net.imglib2.RealPoint;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 
 /**
- * With this pre-choic, Sophie (AKA boss) can preprocess a sample image. For
+ * With this pre-choice, Sophie (AKA boss) can preprocess a sample image. For
  * this end, she has to provide a bead image (which can also be the same sample
  * image as well).
  * 
+ * Use control + space to see the list of possibilities for a variable.
  * 
  * To use this code, Sophie only needs to fill the static parameters in
  * SophiesPreChoice up to the point where she sees the message that says don't
@@ -77,7 +76,7 @@ public class SophiesPreChoice {
     public static String userName = "Sophie 'The Boss' Brasselet";
 
     // RootFolder
-    private static String rootFolder = "/home/masoud/Documents/SampleImages/A4PolarDataSet";
+    public static String rootFolder = "/home/masoud/Documents/SampleImages/A4PolarDataSet";
 
     // Registration image
     public static String registrationImage = "Sample_OneCamera.tif";
@@ -94,21 +93,14 @@ public class SophiesPreChoice {
     // Wavelength (in meter)
     public static double[] wavelengths = { 1e-9 };
 
-    // Axis order of the image.
-    public static AxisOrder sampleImageAxisOrder = AxisOrder.XY;
-
     // Number of cameras
     public static Cameras camera = Cameras.One;
-
-    // Position of each polarization inside the image.
-    private static Position positionPol0 = Position.TopLeft;
-    private static Position positionPol45 = Position.TopRight;
-    private static Position positionPol90 = Position.BottomLeft;
-    private static Position positionPol135 = Position.BottomRight;
 
     // Registration result composite image colors.
     private static Color baseImageColor = Color.Green;
     private static Color toRegisterImageColor = Color.Red;
+
+    private static Bdv registrationImageViewer;
 
     public static void main(String[] args) throws CannotCreateException, IncompatibleCapturedImage, IOException {
         // -------------------------------------------------------------------
@@ -117,21 +109,18 @@ public class SophiesPreChoice {
         beadImageSet = createRegistrationImageSet();
         sampleImageSet = createSampleImageSet();
 
-        _showSampleImageSetForFoVCalculation();
+        _showRegistrationImageSetForFoVCalculation();
 
     }
 
     // Imaging setup
-    private static IFourPolarImagingSetup setup = initializeImagingSetup();
+    public static IFourPolarImagingSetup setup = initializeImagingSetup();
 
     // Bead image set
     private static RegistrationImageSet beadImageSet = null;
 
     // Sample image set.
     private static SampleImageSet sampleImageSet = null;
-
-    // Polarization constellation for one camera case
-    private static OneCameraPolarizationConstellation polConstellation = createPolarizationConstellation();
 
     private static IFourPolarImagingSetup initializeImagingSetup() {
         IFourPolarImagingSetup setup = FourPolarImagingSetup.instance();
@@ -185,30 +174,27 @@ public class SophiesPreChoice {
         return builder.build();
     }
 
-    private static OneCameraPolarizationConstellation createPolarizationConstellation() {
-        return new OneCameraPolarizationConstellation(positionPol0, positionPol45, positionPol90, positionPol135);
-    }
-
-    private static void _showSampleImageSetForFoVCalculation() {
+    private static void _showRegistrationImageSetForFoVCalculation() {
         File beadImagePath = beadImageSet.getIterator().next().getFile(Cameras.getLabels(camera)[0])[0].file();
 
         try {
             Image<UINT16> beadImageGray = new SCIFIOUINT16TiffReader(new ImgLib2ImageFactory()).read(beadImagePath);
             Image<RGB16> beadImageColor = GrayScaleToColorConverter.colorUsingMaxEachPlane(beadImageGray);
-            Bdv bdv = BdvFunctions.show(ImageToImgLib2Converter.getImg(beadImageColor, RGB16.zero()), "SoI",
-                    BdvOptions.options().is2D());
+            registrationImageViewer = BdvFunctions.show(ImageToImgLib2Converter.getImg(beadImageColor, RGB16.zero()),
+                    "SoI", BdvOptions.options().is2D());
 
             Behaviours behaviours = new Behaviours(new InputTriggerConfig());
-            behaviours.install(bdv.getBdvHandle().getTriggerbindings(), "my-new-behaviours");
+            behaviours.install(registrationImageViewer.getBdvHandle().getTriggerbindings(), "my-new-behaviours");
 
-            CalculateFoVAndContinue doubleClick = new CalculateFoVAndContinue(bdv);
+            CalculateFoVAndContinue doubleClick = new CalculateFoVAndContinue(registrationImageViewer);
             behaviours.behaviour(doubleClick, "print global pos", "button1");
+
         } catch (IOException | MetadataParseError | ConverterToImgLib2NotFound e) {
             e.printStackTrace();
         }
     }
 
-    public static void createFieldOfView(IPointShape intersectionPoint) {
+    public static IFoVCalculator createFieldOfViewCalculator() {
         File beadImage = beadImageSet.getIterator().next().getFile(Cameras.getLabels(camera)[0])[0].file();
 
         IMetadataReader metadataReader = new SCIFIOMetadataReader();
@@ -219,11 +205,7 @@ public class SophiesPreChoice {
             // Caught before.
         }
 
-        FoVCalculatorOneCamera fovCalculator = new FoVCalculatorOneCamera(metadata, intersectionPoint,
-                polConstellation);
-
-        setup.setFieldOfView(fovCalculator.calculate());
-
+        return FoVCalculator.oneCamera(metadata);
     }
 
     public static IRegistrationSetProcessor createRegistrationSetProcessor() {
@@ -241,29 +223,56 @@ public class SophiesPreChoice {
 
 class CalculateFoVAndContinue implements ClickBehaviour {
     Bdv bdv;
+    IFoVCalculator foVCalculator;
+
+    int numClicksToDetectFoVs = 8;
+    int clickCounter = 0;
 
     public CalculateFoVAndContinue(Bdv bdv) {
         this.bdv = bdv;
+        foVCalculator = SophiesPreChoice.createFieldOfViewCalculator();
     }
 
     @Override
     public void click(int x, int y) {
-        createFoV(x, y);
+        if (clickCounter % 2 == 0) {
+            this._setFoVMinimum(clickCounter, x, y);
 
-        RegistrationImageSet registrationImageSet = this.createRegImageSet();
+        } else {
+            this._setFoVMaximum(clickCounter, x, y);
+        }
+        clickCounter++;
 
-        // Call preprocessor here
-        IRegistrationSetProcessor preprocessor = SophiesPreChoice.createRegistrationSetProcessor();
-        RegistrationSetProcessResult result = this.preprocessRegistrationSet(registrationImageSet, preprocessor);
+        if (clickCounter >= numClicksToDetectFoVs) {
+            bdv.close();
+            IFieldOfView fov = createFoV();
 
-        TiffPolarizationImageSetCompositesWriter compositesWriter = new TiffPolarizationImageSetCompositesWriter();
-        for (int channel = 1; channel <= SophiesPreChoice.channels.length; channel++) {
-            IPolarizationImageSetComposites composites = preprocessor.getRegistrationComposite(channel).get();
-            this.showRegistrationCompositeImage(composites);
-            this.writeComposite(compositesWriter, composites, registrationImageSet.rootFolder());
+            SophiesPreChoice.setup.setFieldOfView(fov);
+
+            RegistrationImageSet registrationImageSet = this.createRegImageSet();
+
+            // Call preprocessor here
+            IRegistrationSetProcessor preprocessor = SophiesPreChoice.createRegistrationSetProcessor();
+            RegistrationSetProcessResult result = this.preprocessRegistrationSet(registrationImageSet, preprocessor);
+
+            _serializeRegistrationSetProcess(result, new File(SophiesPreChoice.rootFolder));
+
+            _writeRegistrationComposites(registrationImageSet, preprocessor);
+
+            // Call processor here.
+            _processAndWriteSampleImages(result);
+
+            try {
+                SophiesPreChoice.writeSetupToDisk();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
-        // Call processor here.
+    }
+
+    private void _processAndWriteSampleImages(RegistrationSetProcessResult result) {
         SampleImageSet sampleImageSet = this.createSampleSet();
         TiffPolarizationImageSetWriter writer = new TiffPolarizationImageSetWriter();
         ISampleImageSetPreprocessor processor = SophiesPreChoice.createSampleImageSetPreprocessor(result);
@@ -284,16 +293,16 @@ class CalculateFoVAndContinue implements ClickBehaviour {
                 writeSamplePolarizationImage(writer, sampleImageSet, polSet);
             }
         }
+    }
 
-        // Call display here.
-        bdv.close();
-
-        try {
-            SophiesPreChoice.writeSetupToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void _writeRegistrationComposites(RegistrationImageSet registrationImageSet,
+            IRegistrationSetProcessor preprocessor) {
+        TiffPolarizationImageSetCompositesWriter compositesWriter = new TiffPolarizationImageSetCompositesWriter();
+        for (int channel = 1; channel <= SophiesPreChoice.channels.length; channel++) {
+            IPolarizationImageSetComposites composites = preprocessor.getRegistrationComposite(channel).get();
+            this.showRegistrationCompositeImage(composites);
+            this.writeComposite(compositesWriter, composites, registrationImageSet.rootFolder());
         }
-
     }
 
     private void writeSamplePolarizationImage(TiffPolarizationImageSetWriter writer, SampleImageSet sampleImageSet,
@@ -343,24 +352,9 @@ class CalculateFoVAndContinue implements ClickBehaviour {
         }
     }
 
-    private void createFoV(int x, int y) {
-        long[] pos2 = getIntersectionPoint(x, y);
-
-        IShape shape = new ShapeFactory().point(pos2, SophiesPreChoice.sampleImageAxisOrder);
-
+    private IFieldOfView createFoV() {
         // Create FoV here
-        SophiesPreChoice.createFieldOfView((IPointShape) shape);
-    }
-
-    private long[] getIntersectionPoint(int x, int y) {
-        final RealPoint pos = new RealPoint(5);
-        bdv.getBdvHandle().getViewerPanel().displayToGlobalCoordinates(x, y, pos);
-        bdv.close();
-
-        double[] pos1 = new double[5];
-        pos.localize(pos1);
-        long[] pos2 = Arrays.stream(pos1).mapToLong((t) -> (long) t).limit(2).toArray();
-        return pos2;
+        return foVCalculator.calculate();
     }
 
     private void showRegistrationCompositeImage(IPolarizationImageSetComposites composites) {
@@ -375,6 +369,59 @@ class CalculateFoVAndContinue implements ClickBehaviour {
         } catch (ConverterToImgLib2NotFound e) {
 
         }
+    }
+
+    private void _serializeRegistrationSetProcess(RegistrationSetProcessResult result, File root4PProject) {
+        // Preprocess result serializer
+        RegistrationSetProcessResultToYAML processResultToYAML = new RegistrationSetProcessResultToYAML(
+                SophiesPreChoice.setup, result);
+
+        try {
+            processResultToYAML.write(root4PProject);
+        } catch (IOException e) {
+            System.out.println("Unable to write registration result to disk.");
+            e.printStackTrace();
+        }
+    }
+
+    private void _setFoVMinimum(int numClicks, int x, int y) {
+        long[] coordinate = _convertClickPointToPixelCoordinate(x, y);
+
+        if (numClicks / 2 == 0) {
+            foVCalculator.setMin(coordinate[0], coordinate[1], Polarization.pol0);
+        } else if (numClicks / 2 == 1) {
+            foVCalculator.setMin(coordinate[0], coordinate[1], Polarization.pol45);
+        } else if (numClicks / 2 == 2) {
+            foVCalculator.setMin(coordinate[0], coordinate[1], Polarization.pol90);
+        } else {
+            foVCalculator.setMin(coordinate[0], coordinate[1], Polarization.pol135);
+        }
+
+    }
+
+    private void _setFoVMaximum(int numClicks, int x, int y) {
+        long[] coordinate = _convertClickPointToPixelCoordinate(x, y);
+
+        if (numClicks / 2 == 0) {
+            foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol0);
+        } else if (numClicks / 2 == 1) {
+            foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol45);
+        } else if (numClicks / 2 == 2) {
+            foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol90);
+        } else {
+            foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol135);
+        }
+
+    }
+
+    private long[] _convertClickPointToPixelCoordinate(int x, int y) {
+        final RealPoint pos = new RealPoint(5);
+        bdv.getBdvHandle().getViewerPanel().displayToGlobalCoordinates(x, y, pos);
+
+        double[] pos1 = new double[5];
+        pos.localize(pos1);
+        long[] pos2 = Arrays.stream(pos1).mapToLong((t) -> (long) t).limit(2).toArray();
+        return pos2;
     }
 
 }
