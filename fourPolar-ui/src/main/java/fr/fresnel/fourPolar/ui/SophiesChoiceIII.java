@@ -108,10 +108,6 @@ public class SophiesChoiceIII {
             ShowDipoleUponClick doubleClick = new ShowDipoleUponClick(bdv1, painter, soiThreshold);
             behaviours.behaviour(doubleClick, "print global pos", "button1");
 
-            while (bdv.getBdvHandle().getViewerPanel().isShowing()) {
-
-            }
-
         } catch (ConverterToImgLib2NotFound e) {
         }
 
@@ -144,9 +140,9 @@ class ShowDipoleUponClick implements ClickBehaviour {
         final RealPoint pos = new RealPoint(3);
         bdv.getBdvHandle().getViewerPanel().displayToGlobalCoordinates(x, y, pos);
 
-        double[] pos1 = new double[3];
+        double[] pos1 = new double[5];
         pos.localize(pos1);
-        long[] pos2 = Arrays.stream(pos1).mapToLong((t) -> (long) t).limit(2).toArray();
+        long[] pos2 = Arrays.stream(pos1).mapToLong((t) -> (long) t).toArray();
         IShape shape = new ShapeFactory().point(pos2, AxisOrder.XYCZT);
 
         painter.draw(shape, this.soiThreshold);
