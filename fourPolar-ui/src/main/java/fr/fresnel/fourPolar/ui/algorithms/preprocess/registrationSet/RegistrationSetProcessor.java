@@ -58,7 +58,6 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
     @Override
     public RegistrationSetProcessResult process(RegistrationImageSet registrationImageSet)
             throws RegistrationSetProcessFailure {
-        // TODO use multi-threading here.
         ICapturedImageSet registrationImage = this._readRegistrationImage(registrationImageSet.getIterator().next());
 
         IPolarizationImageSet[] channelImages = this._segmentRegistrationImageIntoChannels(registrationImage);
@@ -114,9 +113,8 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
     private IPolarizationImageSet[] _segmentRegistrationImageIntoChannels(ICapturedImageSet registrationImageSet) {
         IPolarizationImageSet[] channelImages = new IPolarizationImageSet[this._numChannels];
 
-        this._segmenter.setCapturedImage(registrationImageSet);
         for (int channel = 1; channel <= this._numChannels; channel++) {
-            channelImages[channel - 1] = this._segmenter.segment(channel);
+            channelImages[channel - 1] = this._segmenter.segment(registrationImageSet, channel);
         }
 
         return channelImages;
