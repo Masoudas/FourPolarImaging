@@ -48,11 +48,11 @@ public class RegistrationImagePolarizationViewCreatorTest {
 
         FieldOfView fov = _createFoV(intersectionPoint, capImage_dimension);
 
-        ICapturedImage capturedImage = new SIPDummyCapturedImage(capImage_axisOrder, capImage_dimension,
+        ICapturedImage capturedImage = new SIPVCDummyCapturedImage(capImage_axisOrder, capImage_dimension,
                 capImage_channels);
-        SIPImageChecker._setImage(capturedImage.getImage(), capImage_channels, intersectionPoint);
+        RIPVCImageChecker._setImage(capturedImage.getImage(), capImage_channels, intersectionPoint);
 
-        SIPDummyCapturedImageSet capturedImageSet = new SIPDummyCapturedImageSet(false);
+        SIPVCDummyCapturedImageSet capturedImageSet = new SIPVCDummyCapturedImageSet(false);
         capturedImageSet.setFileSet(capturedImage);
 
         RegistrationImagePolarizationViewCreator creator = new RegistrationImagePolarizationViewCreator(fov);
@@ -73,11 +73,11 @@ public class RegistrationImagePolarizationViewCreatorTest {
 
         FieldOfView fov = _createFoV(intersectionPoint, capImage_dimension);
 
-        ICapturedImage capturedImage = new SIPDummyCapturedImage(capImage_axisOrder, capImage_dimension,
+        ICapturedImage capturedImage = new SIPVCDummyCapturedImage(capImage_axisOrder, capImage_dimension,
                 capImage_channels);
-        SIPImageChecker._setImage(capturedImage.getImage(), capImage_channels, intersectionPoint);
+        RIPVCImageChecker._setImage(capturedImage.getImage(), capImage_channels, intersectionPoint);
 
-        SIPDummyCapturedImageSet capturedImageSet = new SIPDummyCapturedImageSet(false);
+        SIPVCDummyCapturedImageSet capturedImageSet = new SIPVCDummyCapturedImageSet(false);
         capturedImageSet.setFileSet(capturedImage);
 
         RegistrationImagePolarizationViewCreator creator = new RegistrationImagePolarizationViewCreator(fov);
@@ -98,11 +98,11 @@ public class RegistrationImagePolarizationViewCreatorTest {
 
         FieldOfView fov = _createFoV(intersectionPoint, capImage_dimension);
 
-        ICapturedImage capturedImage = new SIPDummyCapturedImage(capImage_axisOrder, capImage_dimension,
+        ICapturedImage capturedImage = new SIPVCDummyCapturedImage(capImage_axisOrder, capImage_dimension,
                 capImage_channels);
-        SIPImageChecker._setImage(capturedImage.getImage(), capImage_channels, intersectionPoint);
+        RIPVCImageChecker._setImage(capturedImage.getImage(), capImage_channels, intersectionPoint);
 
-        SIPDummyCapturedImageSet capturedImageSet = new SIPDummyCapturedImageSet(false);
+        SIPVCDummyCapturedImageSet capturedImageSet = new SIPVCDummyCapturedImageSet(false);
         capturedImageSet.setFileSet(capturedImage);
 
         RegistrationImagePolarizationViewCreator creator = new RegistrationImagePolarizationViewCreator(fov);
@@ -123,11 +123,11 @@ public class RegistrationImagePolarizationViewCreatorTest {
 
         FieldOfView fov = _createFoV(intersectionPoint, capImage_dimension);
 
-        ICapturedImage capturedImage = new SIPDummyCapturedImage(capImage_axisOrder, capImage_dimension,
+        ICapturedImage capturedImage = new SIPVCDummyCapturedImage(capImage_axisOrder, capImage_dimension,
                 capImage_channels);
-        SIPImageChecker._setImage(capturedImage.getImage(), capImage_channels, intersectionPoint);
+        RIPVCImageChecker._setImage(capturedImage.getImage(), capImage_channels, intersectionPoint);
 
-        SIPDummyCapturedImageSet capturedImageSet = new SIPDummyCapturedImageSet(true);
+        SIPVCDummyCapturedImageSet capturedImageSet = new SIPVCDummyCapturedImageSet(true);
         capturedImageSet.setFileSet(capturedImage);
 
         RegistrationImagePolarizationViewCreator creator = new RegistrationImagePolarizationViewCreator(fov);
@@ -147,14 +147,13 @@ public class RegistrationImagePolarizationViewCreatorTest {
         AxisOrder capImage_axisOrder = AxisOrder.XYCZT;
         int[] capImage_channels = new int[] { 1, 2 };
 
-
         FieldOfView fov = _createFoV(intersectionPoint, capImage_dimension);
 
-        ICapturedImage capturedImage = new SIPDummyCapturedImage(capImage_axisOrder, capImage_dimension,
+        ICapturedImage capturedImage = new SIPVCDummyCapturedImage(capImage_axisOrder, capImage_dimension,
                 capImage_channels);
-        SIPImageChecker._setImage(capturedImage.getImage(), capImage_channels, intersectionPoint);
+        RIPVCImageChecker._setImage(capturedImage.getImage(), capImage_channels, intersectionPoint);
 
-        SIPDummyCapturedImageSet capturedImageSet = new SIPDummyCapturedImageSet(true);
+        SIPVCDummyCapturedImageSet capturedImageSet = new SIPVCDummyCapturedImageSet(true);
         capturedImageSet.setFileSet(capturedImage);
 
         RegistrationImagePolarizationViewCreator creator = new RegistrationImagePolarizationViewCreator(fov);
@@ -171,10 +170,10 @@ public class RegistrationImagePolarizationViewCreatorTest {
         assertArrayEquals(views.get(Polarization.pol90).getMetadata().getDim(), viewDimAfterSegment);
         assertArrayEquals(views.get(Polarization.pol135).getMetadata().getDim(), viewDimAfterSegment);
 
-        assertTrue(SIPImageChecker._checkImage(views.get(Polarization.pol0), 0, channel));
-        assertTrue(SIPImageChecker._checkImage(views.get(Polarization.pol45), 1, channel));
-        assertTrue(SIPImageChecker._checkImage(views.get(Polarization.pol90), 2, channel));
-        assertTrue(SIPImageChecker._checkImage(views.get(Polarization.pol135), 3, channel));
+        assertTrue(RIPVCImageChecker._checkImage(views.get(Polarization.pol0), 0, channel));
+        assertTrue(RIPVCImageChecker._checkImage(views.get(Polarization.pol45), 1, channel));
+        assertTrue(RIPVCImageChecker._checkImage(views.get(Polarization.pol90), 2, channel));
+        assertTrue(RIPVCImageChecker._checkImage(views.get(Polarization.pol135), 3, channel));
     }
 
     private FieldOfView _createFoV(long[] intersectionPoint, long[] capImage_dimension) {
@@ -193,25 +192,30 @@ public class RegistrationImagePolarizationViewCreatorTest {
 
 }
 
-class RIPImageChecker {
+class RIPVCImageChecker {
     /**
      * For each plane, sets (0,0)-> 0 + channelNo, (1,0)-> 1 + channelNo, (0,1)-> 2
      * + channelNo, (1,1)-> 3 + channelNo. If no channel, add zero.
      */
     public static void _setImage(Image<UINT16> image, int[] channels, long[] intersectionPoint) {
         int c_axis = image.getMetadata().axisOrder().c_axis;
+        int t_axis = image.getMetadata().axisOrder().t_axis;
+        int z_axis = image.getMetadata().axisOrder().z_axis;
         for (IPixelCursor<UINT16> cursor = image.getCursor(); cursor.hasNext();) {
             cursor.next();
             long[] position = cursor.localize();
-            int offset = c_axis > 0 ? channels[(int) position[c_axis]] : channels[0];
+            int offset_c = c_axis > 0 ? channels[(int) position[c_axis]] : channels[0];
+            int offset_z = z_axis > 0 ? (int) position[z_axis] : 0;
+            int offset_t = t_axis > 0 ? (int) position[t_axis] : 0;
+
             if (position[0] < intersectionPoint[0] + 1 && position[1] < intersectionPoint[1] + 1) {
-                cursor.setPixel(new Pixel<UINT16>(new UINT16(0 + offset)));
+                cursor.setPixel(new Pixel<UINT16>(new UINT16(0 + offset_c + offset_z + offset_t)));
             } else if (position[0] >= intersectionPoint[0] + 1 && position[1] < intersectionPoint[1] + 1) {
-                cursor.setPixel(new Pixel<UINT16>(new UINT16(1 + offset)));
+                cursor.setPixel(new Pixel<UINT16>(new UINT16(1 + offset_c + offset_z + offset_t)));
             } else if (position[0] < intersectionPoint[0] + 1 && position[1] >= intersectionPoint[1] + 1) {
-                cursor.setPixel(new Pixel<UINT16>(new UINT16(2 + offset)));
+                cursor.setPixel(new Pixel<UINT16>(new UINT16(2 + offset_c + offset_z + offset_t)));
             } else if (position[0] >= intersectionPoint[0] + 1 && position[1] >= intersectionPoint[1] + 1) {
-                cursor.setPixel(new Pixel<UINT16>(new UINT16(3 + offset)));
+                cursor.setPixel(new Pixel<UINT16>(new UINT16(3 + offset_c + offset_z + offset_t)));
             }
         }
     }
@@ -224,10 +228,19 @@ class RIPImageChecker {
             return false;
         }
 
+        int t_axis = image.getMetadata().axisOrder().t_axis;
+        int z_axis = image.getMetadata().axisOrder().z_axis;
+
         boolean equals = true;
         for (IPixelCursor<UINT16> cursor = image.getCursor(); cursor.hasNext() && equals;) {
             IPixel<UINT16> pixel = cursor.next();
-            equals &= pixel.value().get() == value + channel;
+
+            long[] position = cursor.localize();
+
+            int offset_z = z_axis > 0 ? (int) position[z_axis] : 0;
+            int offset_t = t_axis > 0 ? (int) position[t_axis] : 0;
+
+            equals &= pixel.value().get() == value + channel + offset_z + offset_t;
         }
         return equals;
     }
@@ -237,11 +250,11 @@ class RIPImageChecker {
  * Can hold only one captured image at a time (could be single channel or
  * multichannel)
  */
-class RIPDummyCapturedImageSet implements ICapturedImageSet {
+class RIPVCDummyCapturedImageSet implements ICapturedImageSet {
     ICapturedImage capturedImages;
     boolean isMultiChannel;
 
-    public RIPDummyCapturedImageSet(boolean isMultiChannel) {
+    public RIPVCDummyCapturedImageSet(boolean isMultiChannel) {
         this.isMultiChannel = isMultiChannel;
 
     }
@@ -257,7 +270,7 @@ class RIPDummyCapturedImageSet implements ICapturedImageSet {
 
     @Override
     public ICapturedImageFileSet fileSet() {
-        return new SIPDummyFileSet();
+        return new SIPVCDummyFileSet();
     }
 
     @Override
@@ -272,12 +285,12 @@ class RIPDummyCapturedImageSet implements ICapturedImageSet {
 
 }
 
-class RIPDummyCapturedImage implements ICapturedImage {
+class RIPVCDummyCapturedImage implements ICapturedImage {
     Image<UINT16> image;
     IMetadata metadata;
     int[] channels;
 
-    public RIPDummyCapturedImage(AxisOrder axisOrder, long[] dim, int[] channels) {
+    public RIPVCDummyCapturedImage(AxisOrder axisOrder, long[] dim, int[] channels) {
         metadata = new Metadata.MetadataBuilder(dim).axisOrder(axisOrder).build();
         image = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
         this.channels = channels;
@@ -305,7 +318,7 @@ class RIPDummyCapturedImage implements ICapturedImage {
 
 }
 
-class RIPDummyFileSet implements ICapturedImageFileSet {
+class RIPVCDummyFileSet implements ICapturedImageFileSet {
 
     @Override
     public ICapturedImageFile[] getFile(String label) {
