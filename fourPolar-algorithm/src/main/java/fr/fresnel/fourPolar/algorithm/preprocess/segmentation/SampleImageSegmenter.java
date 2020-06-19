@@ -45,6 +45,7 @@ public class SampleImageSegmenter implements ICapturedImageSetSegmenter {
 
     @Override
     public IPolarizationImageSet segment(ICapturedImageSet capturedImageSet, int channel) {
+        ChannelUtils.checkChannel(channel, _numChannels);
         HashMap<Polarization, Image<UINT16>> polImages = _createPolarizationImages(capturedImageSet, channel);
         return _createPolarizationImageSet(capturedImageSet, channel, polImages);
     }
