@@ -46,7 +46,6 @@ public class ChannelRealignerTest {
         DummyPolImgSet polSet = new DummyPolImgSet(pol0, pol45, pol90, pol135);
         realigner.realign(polSet);
 
-        // Doesn't make a difference which image we get here, all are the same.
         assertTrue(
                 _getPixel(polSet.getPolarizationImage(Polarization.pol45).getImage(), new long[] { 1, 1 }).get() == 1);
         assertTrue(
@@ -80,7 +79,6 @@ public class ChannelRealignerTest {
         DummyPolImgSet polSet = new DummyPolImgSet(pol0, pol45, pol90, pol135);
         realigner.realign(polSet);
 
-        // Doesn't make a difference which image we get here, all are the same.
         assertTrue(_getPixel(polSet.getPolarizationImage(Polarization.pol45).getImage(), new long[] { 1, 1, 0, 0, 0 })
                 .get() == 1);
         assertTrue(_getPixel(polSet.getPolarizationImage(Polarization.pol90).getImage(), new long[] { 1, 1, 0, 0, 0 })
