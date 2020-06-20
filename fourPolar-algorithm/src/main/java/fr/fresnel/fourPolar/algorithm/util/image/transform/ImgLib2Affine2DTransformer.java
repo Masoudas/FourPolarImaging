@@ -35,7 +35,7 @@ class ImgLib2Affine2DTransformer {
      * @throws IllegalArgumentException if the given affine transform is not
      *                                  invertible.
      */
-    public static <T extends NumericType<T>> void applyfromWithNearestNeighbor(Img<T> image, Affine2D affine2D) {
+    public static <T extends NumericType<T>> void applyWithNearestNeighbor(Img<T> image, Affine2D affine2D) {
         Objects.requireNonNull(image, "image can't be null");
         Objects.requireNonNull(affine2D, "affine2D can't be null");
         _checkAffineTransformIsInvertible(affine2D);
