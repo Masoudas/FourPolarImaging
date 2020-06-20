@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.algorithm.util.image.transform;
 
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.util.transform.Affine2D;
@@ -29,12 +30,12 @@ class ImgLib2Affine2DTransformer {
 
     /**
      * Apply affine transform to Imglib2 type using nearest neighbor method for
-     * interpolation.
+     * interpolation. The transformation is applied to every plane of the image.
      * 
      * @throws IllegalArgumentException if the given affine transform is not
      *                                  invertible.
      */
-    public static <T extends NumericType<T>> void apply2DTransfromWithNearestNeighbor(Img<T> image, Affine2D affine2D) {
+    public static <T extends NumericType<T>> void applyfromWithNearestNeighbor(Img<T> image, Affine2D affine2D) {
         Objects.requireNonNull(image, "image can't be null");
         Objects.requireNonNull(affine2D, "affine2D can't be null");
         _checkAffineTransformIsInvertible(affine2D);
@@ -51,7 +52,7 @@ class ImgLib2Affine2DTransformer {
     }
 
     private static void _checkAffineTransformIsInvertible(AffineTransform affineTransform) {
-        if (affineTransform.isInvertible()) {
+        if (!affineTransform.isInvertible()) {
             throw new IllegalArgumentException("The given affine transform is not invvertible");
         }
     }
@@ -107,18 +108,32 @@ class ImgLib2Affine2DTransformer {
     /**
      * In order to transform each plane, we need to define an affine transform that
      * has the same length as the image, but only applies to the plane.
+     * 
+     * The reason we create an equivalent matrix and put it inside is that the set
+     * method checks for invertibility of affine at every set!!!
      */
     private static AffineGet _expandTransfromToAffineOfImageSize(final int imgDim, final Affine2D transform) {
         final net.imglib2.realtransform.AffineTransform expandedTransform = new net.imglib2.realtransform.AffineTransform(
                 imgDim);
-        expandedTransform.set(transform.get(0, 0), 0, 0);
-        expandedTransform.set(transform.get(0, 1), 0, 1);
-        expandedTransform.set(transform.get(0, 2), 0, imgDim);
+        double[][] matrix = _createNDimTransform(imgDim, transform);
 
-        expandedTransform.set(transform.get(1, 0), 1, 0);
-        expandedTransform.set(transform.get(1, 1), 1, 1);
-        expandedTransform.set(transform.get(1, 2), 1, imgDim);
-
+        expandedTransform.set(matrix);
         return expandedTransform;
+    }
+
+    private static double[][] _createNDimTransform(final int imgDim, final Affine2D transform) {
+        double[][] matrix = new double[imgDim][imgDim + 1];
+
+        matrix[0][0] = transform.get(0, 0);
+        matrix[0][1] = transform.get(0, 1);
+        matrix[0][imgDim] = transform.get(0, 2);
+
+        matrix[1][0] = transform.get(1, 0);
+        matrix[1][1] = transform.get(1, 1);
+        matrix[1][imgDim] = transform.get(1, 2);
+
+        // Set all remaining diagonal elements to 1.
+        IntStream.range(2, imgDim).forEach((index) -> matrix[index][index] = 1);
+        return matrix;
     }
 }
