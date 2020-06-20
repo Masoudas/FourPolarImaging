@@ -54,4 +54,16 @@ public class Affine2D implements AffineTransform {
         return matrix;
     }
 
+    @Override
+    public boolean isInvertible() {
+        try{
+            this._matrix.inverse();
+        } catch (RuntimeException e){
+            return false;
+        }
+
+        return true;
+
+    }
+
 }

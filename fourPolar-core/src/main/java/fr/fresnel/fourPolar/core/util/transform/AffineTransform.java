@@ -22,4 +22,9 @@ public interface AffineTransform {
      */
     public double[][] get();
 
+    /**
+     * Returns true if the matrix is invertible.
+     */
+    public boolean isInvertible();
+
 }
