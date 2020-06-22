@@ -9,9 +9,11 @@ import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.propagation.OpticalPr
 import fr.fresnel.fourPolar.algorithm.fourPolar.FourPolarMapper;
 import fr.fresnel.fourPolar.algorithm.fourPolar.converters.IntensityToOrientationConverter;
 import fr.fresnel.fourPolar.algorithm.fourPolar.inversePropagation.MatrixBasedInverseOpticalPropagationCalculator;
+import fr.fresnel.fourPolar.core.exceptions.fourPolar.propagationdb.PropagationChannelNotInDatabase;
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.exceptions.physics.propagation.PropagationFactorNotFound;
+import fr.fresnel.fourPolar.core.fourPolar.propagationdb.IOpticalPropagationDB;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
@@ -24,12 +26,14 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.physics.propagation.IInverseOpticalPropagation;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
 import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
+import fr.fresnel.fourPolar.io.fourPolar.propagationdb.XMLOpticalPropagationDBIO;
 import fr.fresnel.fourPolar.io.image.orientation.IOrientationImageWriter;
 import fr.fresnel.fourPolar.io.image.orientation.TiffOrientationImageWriter;
 import fr.fresnel.fourPolar.io.image.polarization.IPolarizationImageSetReader;
 import fr.fresnel.fourPolar.io.image.polarization.TiffPolarizationImageSetReader;
 import fr.fresnel.fourPolar.io.image.soi.ISoIImageWriter;
 import fr.fresnel.fourPolar.io.image.soi.TiffSoIImageWriter;
+import fr.fresnel.fourPolar.io.physics.propagation.OpticalPropagationToYaml;
 import fr.fresnel.fourPolar.ui.algorithms.preprocess.soi.ISoIImageCreator;
 import fr.fresnel.fourPolar.ui.algorithms.preprocess.soi.SoIImageCreator;
 import javassist.tools.reflect.CannotCreateException;
@@ -69,7 +73,7 @@ public class SophiesChoiceI {
     private static double _propFactor_zz_135 = 2.263;
     private static double _propFactor_xy_135 = -3.80;
 
-    public static void main(String[] args) throws IOException, CannotCreateException, IncompatibleCapturedImage {
+    public static void main(String[] args) throws IOException, CannotCreateException, IncompatibleCapturedImage, PropagationChannelNotInDatabase {
         // -------------------------------------------------------------------
         // YOU DON'T NEED TO TOUCH ANYTHING FROM HERE ON!
         // -------------------------------------------------------------------
@@ -100,6 +104,8 @@ public class SophiesChoiceI {
         }
 
         closeAllResources(polarizationImageSetReader, orientationImageWriter);
+
+        _serializePropagationMatrix(new File(SophiesPreChoice.rootFolder));
 
     }
 
@@ -159,7 +165,21 @@ public class SophiesChoiceI {
     }
 
     private static IInverseOpticalPropagation _getInverseOpticalPropagation() {
-        IOpticalPropagation opticalPropagation = new OpticalPropagation(null, null);
+        IOpticalPropagation opticalPropagation = _createOpticalPropagation();
+
+        MatrixBasedInverseOpticalPropagationCalculator inverseCalculator = new MatrixBasedInverseOpticalPropagationCalculator();
+
+        try {
+            return inverseCalculator.getInverse(opticalPropagation);
+        } catch (PropagationFactorNotFound | OpticalPropagationNotInvertible e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    private static IOpticalPropagation _createOpticalPropagation() {
+        IOpticalPropagation opticalPropagation = new OpticalPropagation(SophiesPreChoice.setup.getChannel(1),
+                SophiesPreChoice.setup.getNumericalAperture());
 
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0, _propFactor_xx_0);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol0, _propFactor_yy_0);
@@ -180,15 +200,16 @@ public class SophiesChoiceI {
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135, _propFactor_yy_135);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135, _propFactor_zz_135);
         opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135, _propFactor_xy_135);
+        return opticalPropagation;
+    }
 
-        MatrixBasedInverseOpticalPropagationCalculator inverseCalculator = new MatrixBasedInverseOpticalPropagationCalculator();
-
-        try {
-            return inverseCalculator.getInverse(opticalPropagation);
-        } catch (PropagationFactorNotFound | OpticalPropagationNotInvertible e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
+    public static void _serializePropagationMatrix(File root4PProject)
+            throws PropagationChannelNotInDatabase, IOException {
+        XMLOpticalPropagationDBIO dbIO = new XMLOpticalPropagationDBIO();
+        IOpticalPropagationDB db = dbIO.read();
+        db.add(_createOpticalPropagation());
+        new OpticalPropagationToYaml().write(root4PProject, SophiesPreChoice.setup, db);
+        
     }
 
 }
