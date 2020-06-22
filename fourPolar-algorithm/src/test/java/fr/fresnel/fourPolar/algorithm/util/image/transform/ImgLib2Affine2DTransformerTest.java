@@ -23,7 +23,7 @@ public class ImgLib2Affine2DTransformerTest {
         transform2d.set(0, 2, 1);
         transform2d.set(1, 2, 1);
 
-        ImgLib2Affine2DTransformer.applyfromWithNearestNeighbor(img, transform2d);
+        ImgLib2Affine2DTransformer.applyWithNearestNeighbor(img, transform2d);
 
         assertTrue(_getPixel(img, new long[] { 0, 0 }) == 0);
         assertTrue(_getPixel(img, new long[] { 0, 1 }) == 0);
@@ -43,7 +43,7 @@ public class ImgLib2Affine2DTransformerTest {
         transform2d.set(0, 2, 1);
         transform2d.set(1, 2, 1);
 
-        ImgLib2Affine2DTransformer.applyfromWithNearestNeighbor(img, transform2d);
+        ImgLib2Affine2DTransformer.applyWithNearestNeighbor(img, transform2d);
 
         assertTrue(_getPixel(img, new long[] { 0, 0, 0 }) == 0);
         assertTrue(_getPixel(img, new long[] { 0, 1, 0 }) == 0);
@@ -69,7 +69,7 @@ public class ImgLib2Affine2DTransformerTest {
         transform2d.set(1, 1, 0);
         transform2d.set(0, 0, 0);
 
-        ImgLib2Affine2DTransformer.applyfromWithNearestNeighbor(img, transform2d);
+        ImgLib2Affine2DTransformer.applyWithNearestNeighbor(img, transform2d);
 
         assertTrue(_getPixel(img, new long[] { 0, 0, 0 }) == 0);
         assertTrue(_getPixel(img, new long[] { 0, 1, 0 }) == 1);
