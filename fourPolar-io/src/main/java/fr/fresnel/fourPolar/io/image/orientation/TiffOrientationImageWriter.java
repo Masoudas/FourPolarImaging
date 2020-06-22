@@ -7,6 +7,7 @@ import fr.fresnel.fourPolar.algorithm.postprocess.orientation.OrientationAngleCo
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
+import fr.fresnel.fourPolar.core.image.orientation.IAngleImage;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
@@ -39,8 +40,11 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
     @Override
     public void write(File root4PProject, IOrientationImage orientationImage) throws IOException {
         IOrientationImageFileSet oSet = _createOrientationImageFileSet(root4PProject, orientationImage);
-        _write(orientationImage, oSet);
+        this._createWriter(orientationImage);
 
+        for (OrientationAngle angle : OrientationAngle.values()) {
+            this._writeAngleImage(orientationImage.getAngleImage(angle).getImage(), oSet.getFile(angle));
+        }
     }
 
     @Override
@@ -51,19 +55,16 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
     @Override
     public void writeInDegrees(File root4PProject, IOrientationImage orientationImage) throws IOException {
         IOrientationImageFileSet oSet = _createOrientationImageInDegreeFileSet(root4PProject, orientationImage);
+        this._createWriter(orientationImage);
 
         for (OrientationAngle angle : OrientationAngle.values()) {
             Image<Float32> angleImage = this._converAngleImageToDegree(orientationImage, angle);
-            _writer.write(oSet.getFile(OrientationAngle.rho), angleImage);
+            this._writeAngleImage(angleImage, oSet.getFile(angle));
         }
-        
     }
 
-    private void _write(IOrientationImage orientationImage, IOrientationImageFileSet oSet) throws IOException {
-        this._createWriter(orientationImage);
-        for (OrientationAngle angle : OrientationAngle.values()) {
-            _writer.write(oSet.getFile(angle), orientationImage.getAngleImage(angle).getImage());
-        }
+    private void _writeAngleImage(Image<Float32> angleImage, File path) throws IOException {
+        _writer.write(path, angleImage);
     }
 
     private Image<Float32> _converAngleImageToDegree(IOrientationImage orientationImage, OrientationAngle angle) {
