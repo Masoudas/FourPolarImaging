@@ -58,8 +58,10 @@ public class FourPolarMapper {
     }
 
     /**
-     * Iterates over the given set of intensities and if sum of intensity is greater than
-     * the threshold, puts the calculated orientation vector into the orientation set via its iterator.
+     * Iterates over the given set of intensities and if sum of intensity is greater
+     * than the threshold, puts the calculated orientation vector into the
+     * orientation set via its iterator. Puts NaN for all orientation angles if the
+     * position does not exceed threshold.
      * 
      * @param intensityIterator   is the intensity set iterator.
      * @param orientationIterator is the orientation vector set iterator.
@@ -83,10 +85,13 @@ public class FourPolarMapper {
                     orientationVector.setAngles(Double.NaN, Double.NaN, Double.NaN);
                 }
 
-                orientationIterator.next();
-                orientationIterator.set(orientationVector);
-
+            } else {
+                orientationVector.setAngles(Double.NaN, Double.NaN, Double.NaN);
             }
+
+            orientationIterator.next();
+            orientationIterator.set(orientationVector);
+
         }
     }
 
