@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.algorithm.postprocess.orientation.OrientationAngleConverter;
+import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
@@ -50,27 +51,23 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
     @Override
     public void writeInDegrees(File root4PProject, IOrientationImage orientationImage) throws IOException {
         IOrientationImageFileSet oSet = _createOrientationImageInDegreeFileSet(root4PProject, orientationImage);
-        this._converAnglesToDegrees(orientationImage);
-        this._write(orientationImage, oSet);
-        this._converAnglesBackToRadian(orientationImage);
+
+        for (OrientationAngle angle : OrientationAngle.values()) {
+            Image<Float32> angleImage = this._converAngleImageToDegree(orientationImage, angle);
+            _writer.write(oSet.getFile(OrientationAngle.rho), angleImage);
+        }
+        
     }
 
     private void _write(IOrientationImage orientationImage, IOrientationImageFileSet oSet) throws IOException {
         this._createWriter(orientationImage);
-        _writer.write(oSet.getFile(OrientationAngle.rho),
-                orientationImage.getAngleImage(OrientationAngle.rho).getImage());
-        _writer.write(oSet.getFile(OrientationAngle.delta),
-                orientationImage.getAngleImage(OrientationAngle.delta).getImage());
-        _writer.write(oSet.getFile(OrientationAngle.eta),
-                orientationImage.getAngleImage(OrientationAngle.eta).getImage());
+        for (OrientationAngle angle : OrientationAngle.values()) {
+            _writer.write(oSet.getFile(angle), orientationImage.getAngleImage(angle).getImage());
+        }
     }
 
-    private void _converAnglesBackToRadian(IOrientationImage orientationImage) {
-        OrientationAngleConverter.convertToRadian(orientationImage);
-    }
-
-    private void _converAnglesToDegrees(IOrientationImage orientationImage) {
-        OrientationAngleConverter.convertToDegree(orientationImage);
+    private Image<Float32> _converAngleImageToDegree(IOrientationImage orientationImage, OrientationAngle angle) {
+        return OrientationAngleConverter.convertToDegree(orientationImage, angle);
     }
 
     /**

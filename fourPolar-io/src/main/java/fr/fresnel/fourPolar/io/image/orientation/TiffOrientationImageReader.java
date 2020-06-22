@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.io.image.orientation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import fr.fresnel.fourPolar.algorithm.postprocess.orientation.OrientationAngleConverter;
 import fr.fresnel.fourPolar.algorithm.util.image.axis.AxisReassigner;
@@ -48,7 +49,9 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
         ChannelUtils.checkChannel(channel, this._numChannels);
         TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(root4PProject, fileSet, channel);
 
-        return this._read(oSet, fileSet);
+        HashMap<OrientationAngle, Image<Float32>> angleImages = this._read(oSet, fileSet);
+        return _createOrientationImage(angleImages.get(OrientationAngle.rho), angleImages.get(OrientationAngle.delta), angleImages.get(OrientationAngle.eta), 
+        fileSet, channel);
     }
 
     @Override
@@ -58,9 +61,13 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
         TiffOrientationImageInDegreeFileSet oSet = new TiffOrientationImageInDegreeFileSet(root4PProject, fileSet,
                 channel);
 
-        IOrientationImage orientationImage = this._read(oSet, fileSet);
-        converAnglesToRadian(orientationImage);
-        return orientationImage;
+        HashMap<OrientationAngle, Image<Float32>> angleImages = this._read(oSet, fileSet);
+        for (OrientationAngle angle : OrientationAngle.values()) {
+            _convertDegreeImageToRadian(angleImages.get(angle));
+        }
+
+        return _createOrientationImage(angleImages.get(OrientationAngle.rho), angleImages.get(OrientationAngle.delta), angleImages.get(OrientationAngle.eta), 
+            fileSet, channel);
     }
 
     @Override
@@ -68,21 +75,34 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
         _reader.close();
     }
 
-    private IOrientationImage _read(IOrientationImageFileSet orientationImageFileSet, ICapturedImageFileSet capturedSet)
-            throws CannotFormOrientationImage, IOException {
+
+    private HashMap<OrientationAngle, Image<Float32>> _read(IOrientationImageFileSet orientationImageFileSet, ICapturedImageFileSet capturedSet)
+            throws IOException {
+        HashMap<OrientationAngle, Image<Float32>> angleImages = new HashMap<>();
+        for (OrientationAngle angle : OrientationAngle.values()) {
+            try {
+
+                angleImages.put(angle, this._readAngleImage(OrientationAngle.rho, orientationImageFileSet));
+            } catch (MetadataParseError | IOException e) {
+                throw new IOException("orientation image doesn't exist or is corrupted");
+            }
+        }
+
+        return angleImages;
+    }
+
+    private IOrientationImage _createOrientationImage(Image<Float32> rhoImage, Image<Float32> deltaImage, Image<Float32> etaImage, 
+        ICapturedImageFileSet fileSet, int channel) throws IOException {
         IOrientationImage orientationImage = null;
         try {
-            Image<Float32> rho = this._readAngleImage(OrientationAngle.rho, orientationImageFileSet);
-            Image<Float32> delta = this._readAngleImage(OrientationAngle.delta, orientationImageFileSet);
-            Image<Float32> eta = this._readAngleImage(OrientationAngle.eta, orientationImageFileSet);
-
-            orientationImage = OrientationImageFactory.create(capturedSet, orientationImageFileSet.getChannel(), rho,
-                    delta, eta);
-        } catch (MetadataParseError | IOException e) {
+            orientationImage = OrientationImageFactory.create(fileSet, channel, rhoImage, deltaImage, etaImage);
+        } catch (CannotFormOrientationImage e){
+            // Because if orientation images don't have the same size, the files are not coherent.
             throw new IOException("orientation image doesn't exist or is corrupted");
         }
 
         return orientationImage;
+
     }
 
     private Image<Float32> _readAngleImage(OrientationAngle angle, IOrientationImageFileSet orientationImageFileSet)
@@ -107,8 +127,8 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
 
     }
 
-    private void converAnglesToRadian(IOrientationImage orientationImage) {
-        OrientationAngleConverter.convertToRadian(orientationImage);
+    private void _convertDegreeImageToRadian(Image<Float32> angleImageInDegree) {
+        OrientationAngleConverter.convertToRadian(angleImageInDegree);
     }
 
 }
