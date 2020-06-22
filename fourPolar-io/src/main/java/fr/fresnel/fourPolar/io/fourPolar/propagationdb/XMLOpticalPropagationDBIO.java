@@ -105,7 +105,7 @@ public class XMLOpticalPropagationDBIO {
             throw new IOException("Original db was not found");
         }
 
-        Path originalDB = Paths.get(resourcePath.getPath());
+        Path originalDB = Paths.get(new File(resourcePath.getFile()).getPath());
 
         Path copyDB = Paths.get(this._getDataBasePath().getAbsolutePath());
         try {
