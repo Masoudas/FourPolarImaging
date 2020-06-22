@@ -49,4 +49,11 @@ public class IntensityVector {
 
         return intensity;
     }
+
+    /**
+     * @return the sum of intensity.
+     */
+    public double getSumOfIntensity() {
+        return _pol0 + _pol45 + _pol90 + _pol135;
+    }
 }
