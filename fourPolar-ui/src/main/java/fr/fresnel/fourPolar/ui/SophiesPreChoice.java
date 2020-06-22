@@ -76,16 +76,16 @@ public class SophiesPreChoice {
     public static String userName = "Sophie 'The Boss' Brasselet";
 
     // RootFolder
-    public static String rootFolder = "/home/masoud/Documents/SampleImages/A4PolarDataSet";
+    public static String rootFolder = "D:\\4PolarBackendTest\\Masoud";
 
     // Registration image
-    public static String registrationImage = "Sample_OneCamera.tif";
+    public static String registrationImage = "AVG_rotor_60.tif";
 
     // Registration image type
     public static RegistrationImageType registrationImageType = RegistrationImageType.SAMPLE;
 
     // Sample image
-    public static String sampleImage = "Sample_OneCamera.tif";
+    public static String sampleImage = "AVG_rotor_60.tif";
 
     // Number of channels
     public static int[] channels = { 1 };
@@ -225,7 +225,7 @@ class CalculateFoVAndContinue implements ClickBehaviour {
     Bdv bdv;
     IFoVCalculator foVCalculator;
 
-    int numClicksToDetectFoVs = 8;
+    int numClicksToDetectFoVs = 5;
     int clickCounter = 0;
 
     public CalculateFoVAndContinue(Bdv bdv) {
@@ -235,15 +235,15 @@ class CalculateFoVAndContinue implements ClickBehaviour {
 
     @Override
     public void click(int x, int y) {
-        if (clickCounter % 2 == 0) {
+        if (clickCounter == 1) {
+            this._setFoVPol0Max(x, y);                     
+        }else {
             this._setFoVMinimum(clickCounter, x, y);
-
-        } else if (clickCounter / 2 == 0) {
-            this._setFoVMaximum(clickCounter, x, y);
         }
         clickCounter++;
 
         if (clickCounter >= numClicksToDetectFoVs) {
+            this._setFoVPol45_90_135Max();
             bdv.close();
             IFieldOfView fov = createFoV();
 
@@ -387,25 +387,41 @@ class CalculateFoVAndContinue implements ClickBehaviour {
     private void _setFoVMinimum(int numClicks, int x, int y) {
         long[] coordinate = _convertClickPointToPixelCoordinate(x, y);
 
-        if (numClicks / 2 == 0) {
+        if (numClicks == 0) {
             foVCalculator.setMin(coordinate[0], coordinate[1], Polarization.pol0);
-        } else if (numClicks / 2 == 1) {
+        } else if (numClicks == 2) {
             foVCalculator.setMin(coordinate[0], coordinate[1], Polarization.pol45);
-        } else if (numClicks / 2 == 2) {
+        } else if (numClicks == 3) {
             foVCalculator.setMin(coordinate[0], coordinate[1], Polarization.pol90);
-        } else {
+        } else if (numClicks == 4) {
             foVCalculator.setMin(coordinate[0], coordinate[1], Polarization.pol135);
         }
 
     }
 
-    private void _setFoVMaximum(int numClicks, int x, int y) {
+    private void _setFoVPol0Max(int x, int y) {
         long[] coordinate = _convertClickPointToPixelCoordinate(x, y);
         foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol0);
-        foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol45);
-        foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol90);
-        foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol135);
+    }
 
+    private void _setFoVPol45_90_135Max() {
+        long[] len = _getPol0FovLen();
+
+        long[] pol45_min = foVCalculator.getMinPoint(Polarization.pol45);
+        long[] pol90_min = foVCalculator.getMinPoint(Polarization.pol90);
+        long[] pol135_min = foVCalculator.getMinPoint(Polarization.pol135);
+
+        foVCalculator.setMax(pol45_min[0] + len[0], pol45_min[1] + len[1], Polarization.pol45);
+        foVCalculator.setMax(pol90_min[0] + len[0], pol90_min[1] + len[1], Polarization.pol90);
+        foVCalculator.setMax(pol135_min[0] + len[0], pol135_min[1] + len[1], Polarization.pol135);
+
+    }
+
+    private long[] _getPol0FovLen() {
+        long[] pol0Min = foVCalculator.getMinPoint(Polarization.pol0);
+        long[] pol0Max = foVCalculator.getMaxPoint(Polarization.pol0);
+
+        return new long[]{pol0Max[0] - pol0Min[0] + 1, pol0Max[1] - pol0Min[1] + 1};
     }
 
     private long[] _convertClickPointToPixelCoordinate(int x, int y) {
