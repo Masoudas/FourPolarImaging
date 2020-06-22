@@ -49,11 +49,44 @@ public class FourPolarMapper {
             try {
                 _converter.convert(intensity, orientationVector);
             } catch (ImpossibleOrientationVector e) {
-                orientationVector = new OrientationVector(Double.NaN, Double.NaN, Double.NaN);
+                orientationVector.setAngles(Double.NaN, Double.NaN, Double.NaN);
             }
 
             orientationIterator.next();
             orientationIterator.set(orientationVector);
+        }
+    }
+
+    /**
+     * Iterates over the given set of intensities and if sum of intensity is greater than
+     * the threshold, puts the calculated orientation vector into the orientation set via its iterator.
+     * 
+     * @param intensityIterator   is the intensity set iterator.
+     * @param orientationIterator is the orientation vector set iterator.
+     * @throws ImpossibleOrientationVector
+     */
+    public void map(IIntensityVectorIterator intensityIterator, IOrientationVectorIterator orientationIterator,
+            double soiThreshold) throws IteratorMissMatch {
+        if (orientationIterator.size() != intensityIterator.size()) {
+            throw new IteratorMissMatch("Orientation and intensity iterators don't have same size. Hence,"
+                    + " orientation image does not correspond to polarization image.");
+        }
+
+        IOrientationVector orientationVector = new OrientationVector(0, 0, 0);
+        while (intensityIterator.hasNext()) {
+            IntensityVector intensity = intensityIterator.next();
+
+            if (intensity.getSumOfIntensity() >= soiThreshold) {
+                try {
+                    _converter.convert(intensity, orientationVector);
+                } catch (ImpossibleOrientationVector e) {
+                    orientationVector.setAngles(Double.NaN, Double.NaN, Double.NaN);
+                }
+
+                orientationIterator.next();
+                orientationIterator.set(orientationVector);
+
+            }
         }
     }
 
