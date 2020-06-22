@@ -101,7 +101,7 @@ public class WholeSampleStick2DPainterBuilderTest {
     }
 
     /**
-     * In the orientation image, each row has same eta, but different rho.
+     * In stick figure, each row has same delta, but different rho.
      */
     @Test
     public void delta2DStick_RhoAndDeltaChangeFrom0to180_GeneratesProperImage()
@@ -133,7 +133,7 @@ public class WholeSampleStick2DPainterBuilderTest {
         for (int j = 0; j < 5; j++) {
             for (int i = 0; i < 5; i++) {
                 long[] pose = new long[] { 50 + i * 50, 50 + j * 50, 0, 0, 0 };
-                setPixel(rhoRA, pose, new Float32((float) Math.toRadians(i * 45)));
+                setPixel(rhoRA, pose, new Float32((float)Math.toRadians(j * 45)));
                 setPixel(deltaRA, pose, new Float32((float) Math.toRadians(j * 45)));
             }
         }
@@ -147,7 +147,7 @@ public class WholeSampleStick2DPainterBuilderTest {
         int thickness = 2;
 
         IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D, cMap, thickness, length);
+                AngleGaugeType.Delta2D, cMap, thickness, length);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
