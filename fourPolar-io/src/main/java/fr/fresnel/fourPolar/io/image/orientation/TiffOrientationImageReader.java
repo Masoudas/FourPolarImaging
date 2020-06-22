@@ -82,7 +82,7 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
         for (OrientationAngle angle : OrientationAngle.values()) {
             try {
 
-                angleImages.put(angle, this._readAngleImage(OrientationAngle.rho, orientationImageFileSet));
+                angleImages.put(angle, this._readAngleImage(angle, orientationImageFileSet));
             } catch (MetadataParseError | IOException e) {
                 throw new IOException("orientation image doesn't exist or is corrupted");
             }
@@ -107,7 +107,7 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
 
     private Image<Float32> _readAngleImage(OrientationAngle angle, IOrientationImageFileSet orientationImageFileSet)
             throws IOException, MetadataParseError {
-        Image<Float32> diskAngleImage = _reader.read(orientationImageFileSet.getFile(OrientationAngle.rho));
+        Image<Float32> diskAngleImage = _reader.read(orientationImageFileSet.getFile(angle));
         return this._reassignAngleImageToXYCZT(diskAngleImage);
     }
 
