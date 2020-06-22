@@ -43,29 +43,31 @@ import javassist.tools.reflect.CannotCreateException;
  * then run the code.
  */
 public class SophiesChoiceI {
+    private static double soiThreshold = 10;
+
     /**
      * ATTENTION: These are PROPAGATION factors, and NOT inverse propagation
      * factors.
      */
     private static double _propFactor_xx_0 = 1.72622242;
-    private static double _propFactor_yy_0 = 0.012080463;
+    private static double _propFactor_yy_0 = -0.4;
     private static double _propFactor_zz_0 = 0.348276444;
-    private static double _propFactor_xy_0 = 0.0;
+    private static double _propFactor_xy_0 = 1.250261605602023;
 
-    private static double _propFactor_xx_90 = 0.012080463;
-    private static double _propFactor_yy_90 = 1.726222425;
-    private static double _propFactor_zz_90 = 0.348276444;
-    private static double _propFactor_xy_90 = 0.0;
+    private static double _propFactor_xx_90 = 1.697;
+    private static double _propFactor_yy_90 = 1.26;
+    private static double _propFactor_zz_90 = 1.2502;
+    private static double _propFactor_xy_90 = 1.250;
 
-    private static double _propFactor_xx_45 = 1.6369744726;
-    private static double _propFactor_yy_45 = 1.6369744726;
-    private static double _propFactor_zz_45 = 1.55973262275;
-    private static double _propFactor_xy_45 = 2.97015445583;
+    private static double _propFactor_xx_45 = 0.326;
+    private static double _propFactor_yy_45 = -0.08;
+    private static double _propFactor_zz_45 = 1.18;
+    private static double _propFactor_xy_45 = 1.18;
 
-    private static double _propFactor_xx_135 = 1.63697447260;
-    private static double _propFactor_yy_135 = 1.63697447260;
-    private static double _propFactor_zz_135 = 1.55973262275;
-    private static double _propFactor_xy_135 = -2.9701544558;
+    private static double _propFactor_xx_135 = -0.005;
+    private static double _propFactor_yy_135 = -0.78;
+    private static double _propFactor_zz_135 = 2.263;
+    private static double _propFactor_xy_135 = -3.80;
 
     public static void main(String[] args) throws IOException, CannotCreateException, IncompatibleCapturedImage {
         // -------------------------------------------------------------------
