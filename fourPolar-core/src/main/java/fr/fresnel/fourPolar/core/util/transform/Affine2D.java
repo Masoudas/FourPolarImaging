@@ -9,8 +9,20 @@ import net.imglib2.realtransform.AffineTransform2D;
 public class Affine2D implements AffineTransform {
     private AffineTransform2D _matrix;
 
+    /**
+     * The threshold that determines whether a matrix is invertible or not (if
+     * determinant is closer to this than zero, we declare matrix as
+     * non-invertible.)
+     */
+    private final double _detThreshold;
+
     public Affine2D() {
         this._matrix = new AffineTransform2D();
+        this._detThreshold = 1e-5;
+    }
+
+    public Affine2D(double detThreshold) {
+        this._detThreshold = detThreshold;
     }
 
     public void set(int row, int column, double value) {
@@ -18,7 +30,14 @@ public class Affine2D implements AffineTransform {
             throw new IllegalArgumentException("Element does not exist.");
         }
 
-        this._matrix.set(value, row, column);
+        try {
+            this._matrix.set(value, row, column);
+        } catch (RuntimeException e) {
+            // Unfortunately, everytime the matrix is updated, if it's not invertible, we
+            // throw
+            // this exception. We need to catch it to allow elemnt-wise setting of
+            // parameters.
+        }
     }
 
     public void set(double[][] matrix) {
@@ -56,14 +75,17 @@ public class Affine2D implements AffineTransform {
 
     @Override
     public boolean isInvertible() {
-        try{
-            this._matrix.inverse();
-        } catch (RuntimeException e){
+        double det = this._calculateDeterminant();
+        if (Math.abs(det) < _detThreshold) {
             return false;
+        } else {
+            return true;
         }
 
-        return true;
+    }
 
+    private double _calculateDeterminant() {
+        return _matrix.get(0, 0) * _matrix.get(1, 1) - _matrix.get(1, 0) * _matrix.get(0, 1);
     }
 
 }
