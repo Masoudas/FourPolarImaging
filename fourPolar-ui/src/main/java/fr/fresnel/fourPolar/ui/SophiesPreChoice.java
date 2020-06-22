@@ -238,7 +238,7 @@ class CalculateFoVAndContinue implements ClickBehaviour {
         if (clickCounter % 2 == 0) {
             this._setFoVMinimum(clickCounter, x, y);
 
-        } else {
+        } else if (clickCounter / 2 == 0) {
             this._setFoVMaximum(clickCounter, x, y);
         }
         clickCounter++;
@@ -401,16 +401,10 @@ class CalculateFoVAndContinue implements ClickBehaviour {
 
     private void _setFoVMaximum(int numClicks, int x, int y) {
         long[] coordinate = _convertClickPointToPixelCoordinate(x, y);
-
-        if (numClicks / 2 == 0) {
-            foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol0);
-        } else if (numClicks / 2 == 1) {
-            foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol45);
-        } else if (numClicks / 2 == 2) {
-            foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol90);
-        } else {
-            foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol135);
-        }
+        foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol0);
+        foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol45);
+        foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol90);
+        foVCalculator.setMax(coordinate[0], coordinate[1], Polarization.pol135);
 
     }
 
