@@ -17,8 +17,8 @@ class ImgLib2BoxShape extends ImgLib2Shape implements IBoxShape {
         Objects.requireNonNull(max, "max should not be null");
 
         _checkMinAndMaxHaveEqualDimension(min, max);
-        _checkBoxIsAtLeastTwoDimensional(min);
-        _checkMaxIsGreaterThanMin(min, max);
+        _checkBoxIsAtLeastTwoDimensional(min, max);
+        _checkMaxIsGreaterThanEqualMin(min, max);
         _checkMinDimensionEqualsNumAxis(min, axisOrder);
 
         double[] minCopy = Arrays.stream(min).asDoubleStream().toArray();
@@ -34,7 +34,7 @@ class ImgLib2BoxShape extends ImgLib2Shape implements IBoxShape {
         }
     }
 
-    private static void _checkMaxIsGreaterThanMin(long[] min, long[] max) {
+    private static void _checkMaxIsGreaterThanEqualMin(long[] min, long[] max) {
         if (IntStream.range(0, max.length).anyMatch((i) -> {
             return min[i] > max[i];
         })) {
@@ -42,9 +42,15 @@ class ImgLib2BoxShape extends ImgLib2Shape implements IBoxShape {
         }
     }
 
-    private static void _checkBoxIsAtLeastTwoDimensional(long[] min) {
+    private static void _checkBoxIsAtLeastTwoDimensional(long[] min, long[] max) {
         if (min.length <= 1) {
-            throw new IllegalArgumentException("Number of dimension has to be at least two.");
+            throw new IllegalArgumentException("Box dimension must be at least two");
+        }
+
+        long dim = IntStream.range(0, min.length).filter((i)->(min[i] < max[i])).count();
+        
+        if (dim < 2 ){
+            throw new IllegalArgumentException("Box dimension must be at least two");
         }
     }
 
@@ -69,6 +75,5 @@ class ImgLib2BoxShape extends ImgLib2Shape implements IBoxShape {
     public long[] max() {
         return this._max;
     }
-
 
 }

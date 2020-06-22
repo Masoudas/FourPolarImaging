@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -19,6 +21,23 @@ import net.imglib2.util.Intervals;
 import net.imglib2.view.Views;
 
 public class ImgLib2BoxShapeTest {
+    @Test
+    public void init_DimensionTest_CantCreateOneDimensionalBoxes() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            ImgLib2BoxShape.create(new long[] { 0 }, new long[] { 1 }, AxisOrder.NoOrder);
+        });
+        assertThrows(IllegalArgumentException.class, () -> {
+            ImgLib2BoxShape.create(new long[] { 0, 0 }, new long[] { 0, 0 }, AxisOrder.NoOrder);
+        });
+        assertDoesNotThrow(() -> {
+            ImgLib2BoxShape.create(new long[] { 0, 0 }, new long[] { 1, 1 }, AxisOrder.NoOrder);
+        });
+        assertDoesNotThrow(() -> {
+            ImgLib2BoxShape.create(new long[] { 0, 0, 0 }, new long[] { 1, 0, 1 }, AxisOrder.NoOrder);
+        });
+
+    }
+
     @Test
     public void rotate2D_closed2DBox_ReturnsCorrectCoordinates() {
         IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
