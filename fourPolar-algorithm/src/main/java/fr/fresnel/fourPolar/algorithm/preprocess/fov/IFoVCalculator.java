@@ -45,4 +45,15 @@ public interface IFoVCalculator {
      */
     public IFieldOfView calculate();
 
+    /**
+     * Return a copy of polarization fov max point.
+     */
+    public long[] getMaxPoint(Polarization polarization);
+
+    /**
+     * Return a copy of polarization fov min point.
+     */
+    public long[] getMinPoint(Polarization polarization);
+
+
 }
