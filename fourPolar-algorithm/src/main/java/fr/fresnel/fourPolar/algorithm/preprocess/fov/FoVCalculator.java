@@ -139,4 +139,18 @@ public class FoVCalculator implements IFoVCalculator {
         }
     }
 
+    /**
+     * Return a copy of polarization fov max point.
+     */
+    public long[] getMaxPoint(Polarization polarization) {
+        return _maxPoints.get(polarization).clone();
+    }
+
+    /**
+     * Return a copy of polarization fov min point.
+     */
+    public long[] getMinPoint(Polarization polarization) {
+        return _minPoints.get(polarization).clone();
+    }
+
 }
