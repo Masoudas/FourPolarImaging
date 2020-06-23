@@ -33,4 +33,37 @@
     <ZZ_135-factor>0.304</ZZ_135-factor>
     <XY_135-factor>-1.617</XY_135-factor>
   </OpticalPropagation>
+
+  <OpticalPropagation>
+    <Channel>
+      <Wavelength-nanometer>561</Wavelength-nanometer>
+      <CalibFactor-Pol0>1.0</CalibFactor-Pol0>
+      <CalibFactor-Pol45>1.0</CalibFactor-Pol45>
+      <CalibFactor-Pol90>1.0</CalibFactor-Pol90>
+      <CalibFactor-Pol135>1.0</CalibFactor-Pol135>
+    </Channel>
+    <NumericalAperutre>
+      <pol0>1.45</pol0>
+      <pol45>1.0</pol45>
+      <pol90>1.45</pol90>
+      <pol135>1.0</pol135>
+    </NumericalAperutre>
+    <XX_0-factor>0.380</XX_0-factor>
+    <YY_0-factor>0.014</YY_0-factor>
+    <ZZ_0-factor>0.102</ZZ_0-factor>
+    <XY_0-factor>0.061</XY_0-factor>
+    <XX_90-factor>0.007</XX_90-factor>
+    <YY_90-factor>0.342</YY_90-factor>
+    <ZZ_90-factor>0.102</ZZ_90-factor>
+    <XY_90-factor>-0.068</XY_90-factor>
+    <XX_45-factor>0.250</XX_45-factor>
+    <YY_45-factor>0.384</YY_45-factor>
+    <ZZ_45-factor>0.398</ZZ_45-factor>
+    <XY_45-factor>0.607</XY_45-factor>
+    <XX_135-factor>0.362</XX_135-factor>
+    <YY_135-factor>0.274</YY_135-factor>
+    <ZZ_135-factor>0.398</ZZ_135-factor>
+    <XY_135-factor>-0.601</XY_135-factor>
+  </OpticalPropagation>
+
 </XMLOpticalPropagationDB>
