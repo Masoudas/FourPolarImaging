@@ -21,11 +21,8 @@ import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
-import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
-import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.physics.propagation.IInverseOpticalPropagation;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
-import fr.fresnel.fourPolar.core.physics.propagation.OpticalPropagation;
 import fr.fresnel.fourPolar.io.fourPolar.propagationdb.XMLOpticalPropagationDBIO;
 import fr.fresnel.fourPolar.io.image.orientation.IOrientationImageWriter;
 import fr.fresnel.fourPolar.io.image.orientation.TiffOrientationImageWriter;
@@ -33,7 +30,6 @@ import fr.fresnel.fourPolar.io.image.polarization.IPolarizationImageSetReader;
 import fr.fresnel.fourPolar.io.image.polarization.TiffPolarizationImageSetReader;
 import fr.fresnel.fourPolar.io.image.soi.ISoIImageWriter;
 import fr.fresnel.fourPolar.io.image.soi.TiffSoIImageWriter;
-import fr.fresnel.fourPolar.io.physics.propagation.OpticalPropagationToYaml;
 import fr.fresnel.fourPolar.ui.algorithms.preprocess.soi.ISoIImageCreator;
 import fr.fresnel.fourPolar.ui.algorithms.preprocess.soi.SoIImageCreator;
 import javassist.tools.reflect.CannotCreateException;
@@ -47,31 +43,7 @@ import javassist.tools.reflect.CannotCreateException;
  * then run the code.
  */
 public class SophiesChoiceI {
-    private static double soiThreshold = 0;
-
-    /**
-     * ATTENTION: These are PROPAGATION factors, and NOT inverse propagation
-     * factors.
-     */
-    private static double _propFactor_xx_0 = 1.72622242;
-    private static double _propFactor_yy_0 = -0.4;
-    private static double _propFactor_zz_0 = 0.348276444;
-    private static double _propFactor_xy_0 = 1.250261605602023;
-
-    private static double _propFactor_xx_90 = 1.697;
-    private static double _propFactor_yy_90 = 1.26;
-    private static double _propFactor_zz_90 = 1.2502;
-    private static double _propFactor_xy_90 = 1.250;
-
-    private static double _propFactor_xx_45 = 0.326;
-    private static double _propFactor_yy_45 = -0.08;
-    private static double _propFactor_zz_45 = 1.18;
-    private static double _propFactor_xy_45 = 1.18;
-
-    private static double _propFactor_xx_135 = -0.005;
-    private static double _propFactor_yy_135 = -0.78;
-    private static double _propFactor_zz_135 = 2.263;
-    private static double _propFactor_xy_135 = -3.80;
+    private static double soiThreshold = 1000;
 
     public static void main(String[] args)
             throws IOException, CannotCreateException, IncompatibleCapturedImage, PropagationChannelNotInDatabase {
@@ -106,7 +78,7 @@ public class SophiesChoiceI {
 
         closeAllResources(polarizationImageSetReader, orientationImageWriter);
 
-        _serializePropagationMatrix(new File(SophiesPreChoice.rootFolder));
+        _readPropagationMatrixFromDatabase();
 
     }
 
@@ -135,7 +107,7 @@ public class SophiesChoiceI {
     }
 
     private static void mapIntensityToOrientation(IPolarizationImageSet polarizationImageSet,
-            IOrientationImage orientationImage) {
+            IOrientationImage orientationImage) throws PropagationChannelNotInDatabase, IOException {
         IInverseOpticalPropagation inverseOpticalProp = _getInverseOpticalPropagation();
 
         IntensityToOrientationConverter converter = new IntensityToOrientationConverter(inverseOpticalProp);
@@ -166,7 +138,8 @@ public class SophiesChoiceI {
 
     }
 
-    private static IInverseOpticalPropagation _getInverseOpticalPropagation() {
+    private static IInverseOpticalPropagation _getInverseOpticalPropagation()
+            throws PropagationChannelNotInDatabase, IOException {
         IOpticalPropagation opticalPropagation = _createOpticalPropagation();
 
         MatrixBasedInverseOpticalPropagationCalculator inverseCalculator = new MatrixBasedInverseOpticalPropagationCalculator();
@@ -179,38 +152,17 @@ public class SophiesChoiceI {
         return null;
     }
 
-    private static IOpticalPropagation _createOpticalPropagation() {
-        IOpticalPropagation opticalPropagation = new OpticalPropagation(SophiesPreChoice.setup.getChannel(1),
-                SophiesPreChoice.setup.getNumericalAperture());
-
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol0, _propFactor_xx_0);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol0, _propFactor_yy_0);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol0, _propFactor_zz_0);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol0, _propFactor_xy_0);
-
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol90, _propFactor_xx_90);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol90, _propFactor_yy_90);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol90, _propFactor_zz_90);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol90, _propFactor_xy_90);
-
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol45, _propFactor_xx_45);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol45, _propFactor_yy_45);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol45, _propFactor_zz_45);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol45, _propFactor_xy_45);
-
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XX, Polarization.pol135, _propFactor_xx_135);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.YY, Polarization.pol135, _propFactor_yy_135);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.ZZ, Polarization.pol135, _propFactor_zz_135);
-        opticalPropagation.setPropagationFactor(DipoleSquaredComponent.XY, Polarization.pol135, _propFactor_xy_135);
-        return opticalPropagation;
+    private static IOpticalPropagation _createOpticalPropagation()
+            throws PropagationChannelNotInDatabase, IOException {
+        return _readPropagationMatrixFromDatabase();
     }
 
-    public static void _serializePropagationMatrix(File root4PProject)
+    public static IOpticalPropagation _readPropagationMatrixFromDatabase()
             throws PropagationChannelNotInDatabase, IOException {
         XMLOpticalPropagationDBIO dbIO = new XMLOpticalPropagationDBIO();
         IOpticalPropagationDB db = dbIO.read();
-        db.add(_createOpticalPropagation());
-        new OpticalPropagationToYaml().write(root4PProject, SophiesPreChoice.setup, db);
+        
+        return db.search(SophiesPreChoice.createChannel(), SophiesPreChoice.createNumericalAperture());
 
     }
 
