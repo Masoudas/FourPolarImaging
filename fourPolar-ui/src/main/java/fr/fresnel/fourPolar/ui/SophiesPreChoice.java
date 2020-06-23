@@ -76,16 +76,16 @@ public class SophiesPreChoice {
     public static String userName = "Sophie 'The Boss' Brasselet";
 
     // RootFolder
-    public static String rootFolder = "D:\\4PolarBackendTest\\Masoud";
+    public static String rootFolder = "/home/masoud/Documents/SampleImages/A4PolarDataSet";
 
     // Registration image
-    public static String registrationImage = "AVG_rotor_60.tif";
+    public static String registrationImage = "BeadImage.tif";
 
     // Registration image type
-    public static RegistrationImageType registrationImageType = RegistrationImageType.SAMPLE;
+    public static RegistrationImageType registrationImageType = RegistrationImageType.BEAD;
 
     // Sample image
-    public static String sampleImage = "AVG_rotor_60.tif";
+    public static String sampleImage = "BeadImage.tif";
 
     // Number of channels
     public static int[] channels = { 1 };
