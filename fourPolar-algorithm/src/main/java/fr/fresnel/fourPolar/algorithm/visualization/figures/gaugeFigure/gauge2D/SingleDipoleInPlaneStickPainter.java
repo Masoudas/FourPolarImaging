@@ -159,7 +159,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
         this._paintStickFigureBlack();
 
         final IOrientationVector orientationVector = this._getOrientationOfThePosition(dipolePosition);
-        if (_isSoIAboveThreshold(soiThreshold.get()) && _slopeAndColorAngleExist(orientationVector)) {
+        if (_slopeAndColorAngleExist(orientationVector)) {
             // Use the same pixel for every pixel of stick.
             final Pixel<RGB16> pixelColor = this._getStickColor(orientationVector);
             IPixelRandomAccess<RGB16> stickFigureRA = this._dipoleFigure.getImage().getRandomAccess();
@@ -193,10 +193,6 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
     private IOrientationVector _getOrientationVector(long[] stickCenterPosition) {
         this._orientationRA.setPosition(stickCenterPosition);
         return this._orientationRA.getOrientation();
-    }
-
-    private boolean _isSoIAboveThreshold(int threshold) {
-        return this._soiRA.getPixel().value().get() >= threshold;
     }
 
     private boolean _slopeAndColorAngleExist(final IOrientationVector orientationVector) {
