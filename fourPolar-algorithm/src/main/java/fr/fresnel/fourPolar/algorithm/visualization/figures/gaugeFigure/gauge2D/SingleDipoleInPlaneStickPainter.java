@@ -190,11 +190,6 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
         return new Pixel<RGB16>(pixelColor);
     }
 
-    private IOrientationVector _getOrientationVector(long[] stickCenterPosition) {
-        this._orientationRA.setPosition(stickCenterPosition);
-        return this._orientationRA.getOrientation();
-    }
-
     private boolean _slopeAndColorAngleExist(final IOrientationVector orientationVector) {
         return !Double.isNaN(orientationVector.getAngle(_slopeAngle))
                 && !Double.isNaN(orientationVector.getAngle(_colorAngle));
@@ -220,8 +215,8 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
     }
 
     private IOrientationVector _getOrientationOfThePosition(long[] dipolePosition) {
-        this._soiRA.setPosition(dipolePosition);
-        return this._getOrientationVector(dipolePosition);
+        this._orientationRA.setPosition(dipolePosition);
+        return this._orientationRA.getOrientation();
     }
 
 }
