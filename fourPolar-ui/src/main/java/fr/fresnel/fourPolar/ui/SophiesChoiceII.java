@@ -44,13 +44,13 @@ public class SophiesChoiceII {
     static String visualizationSessionName = "First Session";
 
     // 2D Stick visual params.
-    static int length = 40;
+    static int length = 20;
     static int thickness = 2;
     static String rho2DStickColorMap = ColorMapFactory.IMAGEJ_PHASE;
     static String etaAndDelta2DStickColorMap = ColorMapFactory.IMAGEJ_PHASE;
 
     // Threshold for SoI. Sticks will be drawn above this threshold.
-    static int soiThreshold = 0;
+    static int soiThreshold = 50000;
 
     /**
      * A box RoI from min to max coordinates. The box can be 2d (in which case it
@@ -174,7 +174,7 @@ public class SophiesChoiceII {
                 ImageJFunctions.show(
                         ImageToImgLib2Converter.getImg(iAngleGaugePainter.getFigure().getImage(), RGB16.zero()),
                         iAngleGaugePainter.getFigure().getGaugeType().name() + " of " + fileSet.getSetName()
-                                + " Channel " + "");
+                                + " Channel " + channel);
             } catch (ConverterToImgLib2NotFound e) {
             }
 
