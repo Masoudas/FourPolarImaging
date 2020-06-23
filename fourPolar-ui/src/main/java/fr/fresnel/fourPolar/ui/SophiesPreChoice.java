@@ -36,6 +36,8 @@ import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.physics.channel.Channel;
+import fr.fresnel.fourPolar.core.physics.channel.IChannel;
+import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.physics.na.NumericalAperture;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.RegistrationSetProcessResult;
@@ -79,19 +81,31 @@ public class SophiesPreChoice {
     public static String rootFolder = "/home/masoud/Documents/SampleImages/A4PolarDataSet";
 
     // Registration image
-    public static String registrationImage = "BeadImage.tif";
+    public static String registrationImage = "MAX_rotor_10.tif";
 
     // Registration image type
     public static RegistrationImageType registrationImageType = RegistrationImageType.BEAD;
 
     // Sample image
-    public static String sampleImage = "BeadImage.tif";
+    public static String sampleImage = "MAX_rotor_10.tif";
 
     // Number of channels
     public static int[] channels = { 1 };
 
     // Wavelength (in meter)
-    public static double[] wavelengths = { 1e-9 };
+    private static double[] wavelengths = { 561e-9 };
+
+    // Numerical aperture
+    private static double na_0 = 1.45;
+    private static double na_45 = 1;
+    private static double na_90 = 1.45;
+    private static double na_135 = 1;
+
+    // Calibration factors
+    private static double calibFactPol0 = 1;
+    private static double calibFactPol45 = 1;
+    private static double calibFactPol90 = 1;
+    private static double calibFactPol135 = 1;
 
     // Number of cameras
     public static Cameras camera = Cameras.One;
@@ -127,11 +141,10 @@ public class SophiesPreChoice {
         setup.setCameras(camera);
 
         for (int i = 0; i < channels.length; i++) {
-            setup.setChannel(channels[i], new Channel(wavelengths[i], 0, 0, 0, 0));
+            setup.setChannel(channels[i], createChannel());
         }
 
-        setup.setNumericalAperture(new NumericalAperture(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY,
-                Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
+        setup.setNumericalAperture(createNumericalAperture());
         return setup;
     }
 
@@ -219,6 +232,14 @@ public class SophiesPreChoice {
         return processorBuilder.build();
     }
 
+    public static INumericalAperture createNumericalAperture() {
+        return new NumericalAperture(na_0, na_45, na_90, na_135);
+    }
+
+    public static IChannel createChannel() {
+        return new Channel(wavelengths[0], calibFactPol0, calibFactPol45, calibFactPol90, calibFactPol135);
+    }
+
 }
 
 class CalculateFoVAndContinue implements ClickBehaviour {
@@ -236,8 +257,8 @@ class CalculateFoVAndContinue implements ClickBehaviour {
     @Override
     public void click(int x, int y) {
         if (clickCounter == 1) {
-            this._setFoVPol0Max(x, y);                     
-        }else {
+            this._setFoVPol0Max(x, y);
+        } else {
             this._setFoVMinimum(clickCounter, x, y);
         }
         clickCounter++;
@@ -421,7 +442,7 @@ class CalculateFoVAndContinue implements ClickBehaviour {
         long[] pol0Min = foVCalculator.getMinPoint(Polarization.pol0);
         long[] pol0Max = foVCalculator.getMaxPoint(Polarization.pol0);
 
-        return new long[]{pol0Max[0] - pol0Min[0] + 1, pol0Max[1] - pol0Min[1] + 1};
+        return new long[] { pol0Max[0] - pol0Min[0] + 1, pol0Max[1] - pol0Min[1] + 1 };
     }
 
     private long[] _convertClickPointToPixelCoordinate(int x, int y) {
