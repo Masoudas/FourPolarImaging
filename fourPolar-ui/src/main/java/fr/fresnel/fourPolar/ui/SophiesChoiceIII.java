@@ -95,17 +95,17 @@ public class SophiesChoiceIII {
         // Viewer to show the soi.
         try {
             Image<RGB16> colorSoIImage = convertSoIToColorImage(soi);
-            Bdv bdv = BdvFunctions.show(ImageToImgLib2Converter.getImg(colorSoIImage, RGB16.zero()), "SoI",
+            Bdv bdv_soi = BdvFunctions.show(ImageToImgLib2Converter.getImg(colorSoIImage, RGB16.zero()), "SoI",
                     BdvOptions.options().is2D());
 
-            Bdv bdv1 = BdvFunctions.show(ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), RGB16.zero()),
+            Bdv bdv_dipole = BdvFunctions.show(ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), RGB16.zero()),
                     "Dipole", BdvOptions.options().is2D());
             // Viewer to show the stick.
 
             Behaviours behaviours = new Behaviours(new InputTriggerConfig());
-            behaviours.install(bdv.getBdvHandle().getTriggerbindings(), "my-new-behaviours");
+            behaviours.install(bdv_soi.getBdvHandle().getTriggerbindings(), "my-new-behaviours");
 
-            ShowDipoleUponClick doubleClick = new ShowDipoleUponClick(bdv1, painter, soiThreshold);
+            ShowDipoleUponClick doubleClick = new ShowDipoleUponClick(bdv_soi, bdv_dipole, painter, soiThreshold);
             behaviours.behaviour(doubleClick, "print global pos", "button1");
 
         } catch (ConverterToImgLib2NotFound e) {
@@ -124,13 +124,15 @@ public class SophiesChoiceIII {
 }
 
 class ShowDipoleUponClick implements ClickBehaviour {
-    Bdv bdv;
+    Bdv bdv_soi;
+    Bdv bdv_dipole;
     IAngleGaugePainter painter;
     int place = 10;
     UINT16 soiThreshold;
 
-    public ShowDipoleUponClick(Bdv bdv, IAngleGaugePainter painter, int soiThreshold) {
-        this.bdv = bdv;
+    public ShowDipoleUponClick(Bdv bdv_soi, Bdv bdv_dipole, IAngleGaugePainter painter, int soiThreshold) {
+        this.bdv_soi = bdv_soi;
+        this.bdv_dipole = bdv_dipole;
         this.painter = painter;
         this.soiThreshold = new UINT16(soiThreshold);
     }
@@ -138,15 +140,15 @@ class ShowDipoleUponClick implements ClickBehaviour {
     @Override
     public void click(int x, int y) {
         final RealPoint pos = new RealPoint(3);
-        bdv.getBdvHandle().getViewerPanel().displayToGlobalCoordinates(x, y, pos);
+        bdv_soi.getBdvHandle().getViewerPanel().displayToGlobalCoordinates(x, y, pos);
 
         double[] pos1 = new double[5];
         pos.localize(pos1);
         long[] pos2 = Arrays.stream(pos1).mapToLong((t) -> (long) t).toArray();
         IShape shape = new ShapeFactory().point(pos2, AxisOrder.XYCZT);
 
-        painter.draw(shape, this.soiThreshold);
-        bdv.getBdvHandle().getViewerPanel().requestRepaint();
+        painter.draw(shape, this.soiThreshold);        
+        bdv_dipole.getBdvHandle().getViewerPanel().requestRepaint();
 
     }
 
