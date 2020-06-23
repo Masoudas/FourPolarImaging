@@ -47,7 +47,7 @@ import javassist.tools.reflect.CannotCreateException;
  * then run the code.
  */
 public class SophiesChoiceI {
-    private static double soiThreshold = 10;
+    private static double soiThreshold = 0;
 
     /**
      * ATTENTION: These are PROPAGATION factors, and NOT inverse propagation
@@ -73,7 +73,8 @@ public class SophiesChoiceI {
     private static double _propFactor_zz_135 = 2.263;
     private static double _propFactor_xy_135 = -3.80;
 
-    public static void main(String[] args) throws IOException, CannotCreateException, IncompatibleCapturedImage, PropagationChannelNotInDatabase {
+    public static void main(String[] args)
+            throws IOException, CannotCreateException, IncompatibleCapturedImage, PropagationChannelNotInDatabase {
         // -------------------------------------------------------------------
         // YOU DON'T NEED TO TOUCH ANYTHING FROM HERE ON!
         // -------------------------------------------------------------------
@@ -141,7 +142,8 @@ public class SophiesChoiceI {
 
         FourPolarMapper mapper = new FourPolarMapper(converter);
         try {
-            mapper.map(polarizationImageSet.getIterator(), orientationImage.getOrientationVectorIterator());
+            mapper.map(polarizationImageSet.getIterator(), orientationImage.getOrientationVectorIterator(),
+                    soiThreshold);
         } catch (IteratorMissMatch e) {
         }
 
@@ -209,7 +211,7 @@ public class SophiesChoiceI {
         IOpticalPropagationDB db = dbIO.read();
         db.add(_createOpticalPropagation());
         new OpticalPropagationToYaml().write(root4PProject, SophiesPreChoice.setup, db);
-        
+
     }
 
 }
