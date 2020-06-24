@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.io.image.captured.file;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Stream;
