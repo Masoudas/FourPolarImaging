@@ -4,6 +4,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 
 /**
  * An interface that models the SoI (Sum of Intensity) images. This image is
@@ -14,7 +15,7 @@ public interface ISoIImage {
     /**
      * Axis order of the image.
      */
-    public static final AxisOrder AXIS_ORDER = AxisOrder.XYCZT;
+    public static final AxisOrder AXIS_ORDER = IPolarizationImage.AXIS_ORDER;
 
     /**
      * Returns the image interface corresponding to this SoI Image.
