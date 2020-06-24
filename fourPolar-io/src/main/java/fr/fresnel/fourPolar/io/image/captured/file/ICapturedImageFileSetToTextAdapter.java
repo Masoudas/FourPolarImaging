@@ -53,10 +53,10 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
  * {@link Cameras#Two}, pol0 is equal to pol90 and pol45 is equal to pol135.
  */
 public class ICapturedImageFileSetToTextAdapter {
-    private final ICapturedImageFileSet _capturedSet;
+    private final Cameras _camera;
 
-    public ICapturedImageFileSetToTextAdapter(ICapturedImageFileSet capturedImageFileSet) {
-        _capturedSet = capturedImageFileSet;
+    public ICapturedImageFileSetToTextAdapter(Cameras camera) {
+        _camera = camera;
     }
 
     /**
@@ -64,10 +64,10 @@ public class ICapturedImageFileSetToTextAdapter {
      *         correspond to the four polarizations. Each iteration returns one
      *         group of such files.
      */
-    public Iterator<String[]> getStringRepresentation() {
+    public Iterator<String[]> getStringRepresentation(ICapturedImageFileSet capturedImageFileSet) {
         ArrayList<String[]> groupRepresenters = new ArrayList<>();
 
-        Map<int[], Map<String, File>> capturedImageGroups = _groupCapturedImageGroups();
+        Map<int[], Map<String, File>> capturedImageGroups = _groupCapturedImageGroups(capturedImageFileSet);
         for (Map.Entry<int[], Map<String, File>> capturedGroup : capturedImageGroups.entrySet()) {
             String[] groupAsString = _getStringRepresentationOfCapturedImageGroup(capturedGroup.getValue(),
                     capturedGroup.getKey());
@@ -78,11 +78,11 @@ public class ICapturedImageFileSetToTextAdapter {
         return groupRepresenters.iterator();
     }
 
-    private Map<int[], Map<String, File>> _groupCapturedImageGroups() {
+    private Map<int[], Map<String, File>> _groupCapturedImageGroups(ICapturedImageFileSet capturedSet) {
         Map<int[], Map<String, File>> capturedImageGroups = new HashMap<>();
-        for (int groupNo = 0; groupNo < this._nFileGroups(); groupNo++) {
-            Map<String, File> groupFiles = _getGroupFiles(groupNo);
-            int[] channels = _getGroupChannels(groupNo);
+        for (int groupNo = 0; groupNo < this._nFileGroups(capturedSet); groupNo++) {
+            Map<String, File> groupFiles = _getGroupFiles(capturedSet, groupNo);
+            int[] channels = _getGroupChannels(capturedSet, groupNo);
 
             capturedImageGroups.put(channels, groupFiles);
         }
@@ -90,17 +90,17 @@ public class ICapturedImageFileSetToTextAdapter {
         return capturedImageGroups;
     }
 
-    private Map<String, File> _getGroupFiles(int groupNo) {
+    private Map<String, File> _getGroupFiles(ICapturedImageFileSet capturedSet, int groupNo) {
         HashMap<String, File> groupFiles = new HashMap<>();
-        for (String label : Cameras.getLabels(_capturedSet.getnCameras())) {
-            groupFiles.put(label, _capturedSet.getFile(label)[groupNo].file());
+        for (String label : Cameras.getLabels(capturedSet.getnCameras())) {
+            groupFiles.put(label, capturedSet.getFile(label)[groupNo].file());
         }
         return groupFiles;
     }
 
-    private int[] _getGroupChannels(int groupNo) {
-        String label0 = Cameras.getLabels(_capturedSet.getnCameras())[0];
-        return _capturedSet.getFile(label0)[groupNo].channels();
+    private int[] _getGroupChannels(ICapturedImageFileSet capturedSet, int groupNo) {
+        String label0 = Cameras.getLabels(capturedSet.getnCameras())[0];
+        return capturedSet.getFile(label0)[groupNo].channels();
     }
 
     private String[] _getStringRepresentationOfCapturedImageGroup(Map<String, File> capturedImageGroup, int[] channel) {
@@ -110,7 +110,7 @@ public class ICapturedImageFileSetToTextAdapter {
         representer[repLineCtr++] = "Channels : " + Arrays.toString(channel);
 
         for (String label : capturedImageGroup.keySet()) {
-            representer[repLineCtr++] = label + ": " + capturedImageGroup.get(label);
+            representer[repLineCtr++] = label + ": " + capturedImageGroup.get(label).getAbsolutePath();
         }
 
         return representer;
@@ -128,13 +128,13 @@ public class ICapturedImageFileSetToTextAdapter {
      * polarization are present in this set. This would correspond to the length of
      * {@link ICapturedImage} for this label.
      */
-    private int _nFileGroups() {
-        return _capturedSet.getFile(Cameras.getLabels(_capturedSet.getnCameras())[0]).length;
+    private int _nFileGroups(ICapturedImageFileSet capturedSet) {
+        return capturedSet.getFile(Cameras.getLabels(_camera)[0]).length;
 
     }
 
     private int _nCameraLabels() {
-        return Cameras.getLabels(_capturedSet.getnCameras()).length;
+        return Cameras.getLabels(_camera).length;
     }
 
 }
