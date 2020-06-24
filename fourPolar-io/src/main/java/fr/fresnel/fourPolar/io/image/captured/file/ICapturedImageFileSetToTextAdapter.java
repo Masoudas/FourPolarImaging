@@ -92,14 +92,14 @@ public class ICapturedImageFileSetToTextAdapter {
 
     private Map<String, File> _getGroupFiles(ICapturedImageFileSet capturedSet, int groupNo) {
         HashMap<String, File> groupFiles = new HashMap<>();
-        for (String label : Cameras.getLabels(capturedSet.getnCameras())) {
+        for (String label : Cameras.getLabels(_camera)) {
             groupFiles.put(label, capturedSet.getFile(label)[groupNo].file());
         }
         return groupFiles;
     }
 
     private int[] _getGroupChannels(ICapturedImageFileSet capturedSet, int groupNo) {
-        String label0 = Cameras.getLabels(capturedSet.getnCameras())[0];
+        String label0 = Cameras.getLabels(_camera)[0];
         return capturedSet.getFile(label0)[groupNo].channels();
     }
 
@@ -109,7 +109,7 @@ public class ICapturedImageFileSetToTextAdapter {
         int repLineCtr = 0;
         representer[repLineCtr++] = "Channels : " + Arrays.toString(channel);
 
-        for (String label : capturedImageGroup.keySet()) {
+        for (String label : Cameras.getLabels(_camera)) {
             representer[repLineCtr++] = label + ": " + capturedImageGroup.get(label).getAbsolutePath();
         }
 
