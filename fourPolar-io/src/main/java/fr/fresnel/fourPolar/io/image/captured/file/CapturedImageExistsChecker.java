@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.imageSet.acquisition.sample;
+package fr.fresnel.fourPolar.io.image.captured.file;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
