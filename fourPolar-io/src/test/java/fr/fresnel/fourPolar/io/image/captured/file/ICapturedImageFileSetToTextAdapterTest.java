@@ -28,14 +28,14 @@ public class ICapturedImageFileSetToTextAdapterTest {
         int[] multiChannel = { 2, 3 };
         File multiChannelFile = new File("/", "multiChannel.tif");
 
-        ICapturedImageFile[] pol0_45_90_135 = { new DummyCapturedImageFile(singleChannel, singleChannelFile),
-                new DummyCapturedImageFile(multiChannel, multiChannelFile) };
+        ICapturedImageFile[] pol0_45_90_135 = { new ToDummyCapturedImageFile(singleChannel, singleChannelFile),
+                new ToDummyCapturedImageFile(multiChannel, multiChannelFile) };
 
-        DummyCapturedImageFileSet fileSet = new DummyCapturedImageFileSet();
+        ToDummyCapturedImageFileSet fileSet = new ToDummyCapturedImageFileSet();
         fileSet.setFileSet(Cameras.getLabels(camera)[0], pol0_45_90_135);
 
         ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(camera);
-        Iterator<String[]> representors = adapter.getStringRepresentation(fileSet);
+        Iterator<String[]> representors = adapter.toString(fileSet);
 
         assertTrue(_isStringRepresentationCorrect(representors.next(), camera, pol0_45_90_135));
         assertTrue(_isStringRepresentationCorrect(representors.next(), camera, pol0_45_90_135));
@@ -57,17 +57,17 @@ public class ICapturedImageFileSetToTextAdapterTest {
         File multiChannelFile_pol0_90 = new File("/", "multiChannel_pol0_90.tif");
         File multiChannelFile_pol45_135 = new File("/", "multiChannel_pol45_135.tif");
 
-        ICapturedImageFile[] pol0_90 = { new DummyCapturedImageFile(singleChannel, singleChannelFile_pol0_90),
-                new DummyCapturedImageFile(multiChannel, multiChannelFile_pol0_90) };
-        ICapturedImageFile[] pol45_135 = { new DummyCapturedImageFile(singleChannel, singleChannelFile_pol45_135),
-                new DummyCapturedImageFile(multiChannel, multiChannelFile_pol45_135) };
+        ICapturedImageFile[] pol0_90 = { new ToDummyCapturedImageFile(singleChannel, singleChannelFile_pol0_90),
+                new ToDummyCapturedImageFile(multiChannel, multiChannelFile_pol0_90) };
+        ICapturedImageFile[] pol45_135 = { new ToDummyCapturedImageFile(singleChannel, singleChannelFile_pol45_135),
+                new ToDummyCapturedImageFile(multiChannel, multiChannelFile_pol45_135) };
 
-        DummyCapturedImageFileSet fileSet = new DummyCapturedImageFileSet();
+        ToDummyCapturedImageFileSet fileSet = new ToDummyCapturedImageFileSet();
         fileSet.setFileSet(Cameras.getLabels(camera)[0], pol0_90);
         fileSet.setFileSet(Cameras.getLabels(camera)[1], pol45_135);
 
         ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(camera);
-        Iterator<String[]> representors = adapter.getStringRepresentation(fileSet);
+        Iterator<String[]> representors = adapter.toString(fileSet);
 
         assertTrue(_isStringRepresentationCorrect(representors.next(), camera, pol0_90, pol45_135));
         assertTrue(_isStringRepresentationCorrect(representors.next(), camera, pol0_90, pol45_135));
@@ -93,23 +93,23 @@ public class ICapturedImageFileSetToTextAdapterTest {
         File multiChannelFile_pol90 = new File("/", "multiChannel_pol90.tif");
         File multiChannelFile_pol135 = new File("/", "multiChannel_pol135.tif");
 
-        ICapturedImageFile[] pol0 = { new DummyCapturedImageFile(singleChannel, singleChannelFile_pol0),
-                new DummyCapturedImageFile(multiChannel, multiChannelFile_pol0), };
-        ICapturedImageFile[] pol45 = { new DummyCapturedImageFile(singleChannel, singleChannelFile_pol45),
-                new DummyCapturedImageFile(multiChannel, multiChannelFile_pol45) };
-        ICapturedImageFile[] pol90 = { new DummyCapturedImageFile(singleChannel, singleChannelFile_pol90),
-                new DummyCapturedImageFile(multiChannel, multiChannelFile_pol90), };
-        ICapturedImageFile[] pol135 = { new DummyCapturedImageFile(singleChannel, singleChannelFile_pol135),
-                new DummyCapturedImageFile(multiChannel, multiChannelFile_pol135) };
+        ICapturedImageFile[] pol0 = { new ToDummyCapturedImageFile(singleChannel, singleChannelFile_pol0),
+                new ToDummyCapturedImageFile(multiChannel, multiChannelFile_pol0), };
+        ICapturedImageFile[] pol45 = { new ToDummyCapturedImageFile(singleChannel, singleChannelFile_pol45),
+                new ToDummyCapturedImageFile(multiChannel, multiChannelFile_pol45) };
+        ICapturedImageFile[] pol90 = { new ToDummyCapturedImageFile(singleChannel, singleChannelFile_pol90),
+                new ToDummyCapturedImageFile(multiChannel, multiChannelFile_pol90), };
+        ICapturedImageFile[] pol135 = { new ToDummyCapturedImageFile(singleChannel, singleChannelFile_pol135),
+                new ToDummyCapturedImageFile(multiChannel, multiChannelFile_pol135) };
 
-        DummyCapturedImageFileSet fileSet = new DummyCapturedImageFileSet();
+        ToDummyCapturedImageFileSet fileSet = new ToDummyCapturedImageFileSet();
         fileSet.setFileSet(Cameras.getLabels(camera)[0], pol0);
         fileSet.setFileSet(Cameras.getLabels(camera)[1], pol45);
         fileSet.setFileSet(Cameras.getLabels(camera)[2], pol90);
         fileSet.setFileSet(Cameras.getLabels(camera)[3], pol135);
 
         ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(camera);
-        Iterator<String[]> representors = adapter.getStringRepresentation(fileSet);
+        Iterator<String[]> representors = adapter.toString(fileSet);
 
         assertTrue(_isStringRepresentationCorrect(representors.next(), camera, pol0, pol45, pol90, pol135));
         assertTrue(_isStringRepresentationCorrect(representors.next(), camera, pol0, pol45, pol90, pol135));
@@ -133,7 +133,7 @@ public class ICapturedImageFileSetToTextAdapterTest {
 
 }
 
-class DummyCapturedImageFileSet implements ICapturedImageFileSet {
+class ToDummyCapturedImageFileSet implements ICapturedImageFileSet {
     private Hashtable<String, ICapturedImageFile[]> files = new Hashtable<>();
     private Cameras _cameras;
 
@@ -187,11 +187,11 @@ class DummyCapturedImageFileSet implements ICapturedImageFileSet {
 
 }
 
-class DummyCapturedImageFile implements ICapturedImageFile {
+class ToDummyCapturedImageFile implements ICapturedImageFile {
     private int[] _channels;
     private File _file;
 
-    public DummyCapturedImageFile(int[] channels, File file) {
+    public ToDummyCapturedImageFile(int[] channels, File file) {
         _channels = channels;
         _file = file;
     }
