@@ -6,15 +6,57 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 class ICapturedImageFileSetToTextAdapter {
+    /**
+     * The index where first channel number resides.
+     */
+    public static final int _CHANNEL_NO_START = 12;
+
+    /**
+     * The index where pol0_45_90_135 resides.
+     */
+    public static final int _POL0_45_90_135_START = 12;
+
+    /**
+     * The index where pol0_90 resides.
+     */
+    public static final int _POL0_90_START = 9;
+
+    /**
+     * The index where pol45_135 resides.
+     */
+    public static final int _POL45_135_START = 11;
+
+    /**
+     * The index where pol0 resides.
+     */
+    public static final int _POL0_START = 6;
+
+    /**
+     * The index where pol45 resides.
+     */
+    public static final int _POL45_START = 6;
+
+    /**
+     * The index where pol90 resides.
+     */
+    public static final int _POL90_START = 6;
+
+    /**
+     * The index where pol135 resides.
+     */
+    public static final int _POL135_START = 7;
+
     private final Cameras _camera;
 
     public ICapturedImageFileSetToTextAdapter(Cameras camera) {
+        Objects.requireNonNull(camera, "camera can't be null");
         _camera = camera;
     }
 
@@ -24,6 +66,8 @@ class ICapturedImageFileSetToTextAdapter {
      *         group of such files.
      */
     public Iterator<String[]> toString(ICapturedImageFileSet capturedImageFileSet) {
+        Objects.requireNonNull(capturedImageFileSet, "capturedImageFileSet can't be null");
+
         ArrayList<String[]> groupRepresenters = new ArrayList<>();
 
         Map<int[], Map<String, File>> capturedImageGroups = _groupCapturedImageGroups(capturedImageFileSet);
