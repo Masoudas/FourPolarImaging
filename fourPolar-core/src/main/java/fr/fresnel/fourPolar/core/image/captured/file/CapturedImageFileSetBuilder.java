@@ -57,6 +57,9 @@ public class CapturedImageFileSetBuilder {
      * @param channels       is the channel(s) this file is associated with.
      * @param pol0_45_90_135 is the captured image file that corresponds to all four
      *                       polarizations.
+     * 
+     * @throws IllegalArgumentException if method is used for incorrect
+     *                                  {@link Cameras}
      */
     public CapturedImageFileSetBuilder add(int[] channels, File pol0_45_90_135) {
         _checkChannel(channels);
@@ -85,6 +88,9 @@ public class CapturedImageFileSetBuilder {
      *                  0 and 90.
      * @param pol45_135 is the captured image file that corresponds to polarizations
      *                  45 and 135.
+     * 
+     * @throws IllegalArgumentException if method is used for incorrect
+     *                                  {@link Cameras}
      */
     public CapturedImageFileSetBuilder add(int[] channels, File pol0_90, File pol45_135) {
         _checkChannel(channels);
@@ -119,6 +125,9 @@ public class CapturedImageFileSetBuilder {
      *                 90.
      * @param pol135   is the captured image file that corresponds to polarization
      *                 135.
+     * 
+     * @throws IllegalArgumentException if method is used for incorrect
+     *                                  {@link Cameras}.
      */
     public CapturedImageFileSetBuilder add(int[] channels, File pol0, File pol45, File pol90, File pol135) {
         _checkChannel(channels);
