@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.imageSet.acquisition.sample;
+package fr.fresnel.fourPolar.io.imageSet.acquisition;
 
 import java.io.BufferedWriter;
 import java.io.File;
