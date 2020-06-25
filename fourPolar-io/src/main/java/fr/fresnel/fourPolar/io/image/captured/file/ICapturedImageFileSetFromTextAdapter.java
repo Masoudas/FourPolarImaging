@@ -41,7 +41,7 @@ abstract class ICapturedImageFileSetFromTextAdapter {
             String[] capturedImageGroup = iterator.next();
             _checkGroupStringsLength(capturedImageGroup, setName);
 
-            _addFilesToBuilder(capturedImageGroup);
+            _addFilesToBuilder(capturedImageGroup, setName);
         }
 
         try {
@@ -51,7 +51,8 @@ abstract class ICapturedImageFileSetFromTextAdapter {
         }
     }
 
-    abstract protected void _addFilesToBuilder(String[] capturedImageGroup);
+    abstract protected void _addFilesToBuilder(String[] capturedImageGroupm, String setName)
+            throws CorruptCapturedImageSet;
 
     protected int[] _channelsFromString(String channelLine) {
         String channelNoPortion = channelLine.substring(_CHANNEL_NO_START, channelLine.length() - 1);
