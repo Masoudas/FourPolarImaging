@@ -23,27 +23,32 @@ class ICapturedImageFileSetFourCameraFromTextAdapter extends ICapturedImageFileS
         return super.fromString(iterator, setName);
     }
 
-    private File _pol0FromFileString(String pol0Line) {
+    private File _pol0FromFileString(String pol0Line) throws IndexOutOfBoundsException {
         return new File(pol0Line.substring(_POL0_START));
     }
 
-    private File _pol45FromFileString(String pol45Line) {
+    private File _pol45FromFileString(String pol45Line) throws IndexOutOfBoundsException {
         return new File(pol45Line.substring(_POL45_START));
     }
 
-    private File _pol90FromFileString(String pol90Line) {
+    private File _pol90FromFileString(String pol90Line) throws IndexOutOfBoundsException {
         return new File(pol90Line.substring(_POL90_START));
     }
 
-    private File _pol135FromFileString(String pol135Line) {
+    private File _pol135FromFileString(String pol135Line) throws IndexOutOfBoundsException {
         return new File(pol135Line.substring(_POL135_START));
     }
 
     @Override
-    protected void _addFilesToBuilder(String[] capturedImageGroup) {
-        _builder.add(_channelsFromString(capturedImageGroup[0]), _pol0FromFileString(capturedImageGroup[1]),
-                _pol45FromFileString(capturedImageGroup[1]), _pol90FromFileString(capturedImageGroup[2]),
-                _pol135FromFileString(capturedImageGroup[3]));
+    protected void _addFilesToBuilder(String[] capturedImageGroup, String setName) throws CorruptCapturedImageSet {
+        try {
+            _builder.add(_channelsFromString(capturedImageGroup[0]), _pol0FromFileString(capturedImageGroup[1]),
+                    _pol45FromFileString(capturedImageGroup[1]), _pol90FromFileString(capturedImageGroup[2]),
+                    _pol135FromFileString(capturedImageGroup[3]));
+
+        } catch (IndexOutOfBoundsException e) {
+            throw new CorruptCapturedImageSet(setName);
+        }
 
     }
 
