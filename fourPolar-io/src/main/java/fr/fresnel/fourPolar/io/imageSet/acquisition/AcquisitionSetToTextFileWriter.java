@@ -12,7 +12,7 @@ import fr.fresnel.fourPolar.core.PathFactoryOfProject;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
-import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetWriteError;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetIOIssue;
 import fr.fresnel.fourPolar.io.image.captured.file.ICapturedImageFileSetTextAdapter;
 
 /**
@@ -31,10 +31,22 @@ public class AcquisitionSetToTextFileWriter {
     public static final int SPACE_BEFORE_FILE_LINE = 10;
 
     /**
-     * Determines how many lines we leave empty after having written a group of
-     * files in the captured set.
+     * Number of lines in a set file that correspond to a captured image group. One
+     * File Path + One Channels.
      */
-    public static final int NLINESPACE_AFTER_GROUP = 1;
+    public static final int ONE_CAM_LINES_PER_GROUP = 1 + 1;
+
+    /**
+     * Number of lines in a set file that correspond to a captured image group. Two
+     * File Path + One Channels.
+     */
+    public static final int TWO_CAM_LINES_PER_GROUP = 2 + 1;
+
+    /**
+     * Number of lines in a set file that correspond to a captured image group. Two
+     * File Path + One Channels.
+     */
+    public static final int FOUR_CAM_LINES_PER_GROUP = 4 + 1;
 
     private final ICapturedImageFileSetTextAdapter _textAdapter;
     private final String _spaceBeforeFile;
@@ -57,23 +69,23 @@ public class AcquisitionSetToTextFileWriter {
      * 
      * @param root4PProject is the location of the 4Polar folder of the project
      *                      {@see PathFactoryOfProject}.
-     * @throws AcquisitionSetWriteError is thrown if at least one captured image set
-     *                                  can't be written to disk.
+     * @throws AcquisitionSetIOIssue is thrown if at least one captured image set
+     *                               can't be written to disk.
      */
-    public void write() throws AcquisitionSetWriteError {
-        File textFilesRoot = this._getTextFilesRootFolder();
-        AcquisitionSetWriteError exception = new AcquisitionSetWriteError();
+    public void write() throws AcquisitionSetIOIssue {
+        File textFilesRoot = this._getAcquisitionSetRootFolder();
+        AcquisitionSetIOIssue exceptionIOIssue = new AcquisitionSetIOIssue(_getAcquisitionSetExceptionMessage());
 
         for (Iterator<ICapturedImageFileSet> fileSetsItr = _acquisitionSet.getIterator(); fileSetsItr.hasNext();) {
             ICapturedImageFileSet fileSet = fileSetsItr.next();
             try {
                 _writeCapturedImageSet(fileSet, textFilesRoot);
             } catch (IOException e) {
-                exception.setFailedSets(fileSet.getSetName());
+                exceptionIOIssue.addFailedSet(fileSet.getSetName());
             }
         }
 
-        _throwExceptionIfFailureOccured(exception);
+        _throwExceptionIfFailureOccured(exceptionIOIssue);
     }
 
     private void _writeCapturedImageSet(ICapturedImageFileSet set, File textFilesRoot) throws IOException {
@@ -84,10 +96,6 @@ public class AcquisitionSetToTextFileWriter {
                 writer.write(groupAsText[0] + "\n"); // Write channel line;
                 for (int fileInfo = 1; fileInfo < groupAsText.length; fileInfo++) {
                     writer.write(_spaceBeforeFile + groupAsText[fileInfo] + "\n");
-                }
-
-                for (int linesAfterGroup = 0; linesAfterGroup < NLINESPACE_AFTER_GROUP; linesAfterGroup++) {
-                    writer.write("\n");
                 }
             }
         }
@@ -102,7 +110,7 @@ public class AcquisitionSetToTextFileWriter {
         return _textAdapter.toString(set);
     }
 
-    private File _getTextFilesRootFolder() {
+    private File _getAcquisitionSetRootFolder() {
         File rootFolder = AcquisitionSetToTextFileIOUtil._getTextFilesRootFolder(_acquisitionSet.rootFolder(),
                 _acquisitionSet.setType());
 
@@ -128,12 +136,16 @@ public class AcquisitionSetToTextFileWriter {
     /**
      * Simply activates this exception if at least one failure has occured.
      * 
-     * @throws AcquisitionSetWriteError
+     * @throws AcquisitionSetIOIssue
      */
-    private void _throwExceptionIfFailureOccured(AcquisitionSetWriteError exception) throws AcquisitionSetWriteError {
-        if (exception.hasFaileSets()) {
+    private void _throwExceptionIfFailureOccured(AcquisitionSetIOIssue exception) throws AcquisitionSetIOIssue {
+        if (exception.hasFailedSets()) {
             throw exception;
         }
+    }
+
+    private String _getAcquisitionSetExceptionMessage() {
+        return "At least one captured image set file can't be written to disk due to IO issues.";
     }
 
 }
