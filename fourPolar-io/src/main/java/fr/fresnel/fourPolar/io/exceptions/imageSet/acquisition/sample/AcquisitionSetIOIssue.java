@@ -6,33 +6,38 @@ import java.util.Iterator;
 
 /**
  * Exception thrown when at least one {@link ICapturedImageFileSet} of an
- * {@link AcquisitionSet} can't be written to disk.
+ * {@link AcquisitionSet} can't be written to /read from the disk.
  */
-public class AcquisitionSetWriteError extends IOException {
+public class AcquisitionSetIOIssue extends IOException {
     private static final long serialVersionUID = 432029075341114324L;
 
-    ArrayList<String> _failedSets = new ArrayList<>();
+    private final ArrayList<String> _failedSets = new ArrayList<>();
+    private final String _message;
+
+    public AcquisitionSetIOIssue(String message) {
+        _message = message;
+    }
 
     @Override
     public String getMessage() {
-        return "At least one captured image set file can't be written to disk due to IO issues.";
+        return _message;
     }
 
     /**
-     * Set the failed sets that could not be written
+     * Add failed set to the exception.
      */
-    public void setFailedSets(String setName) {
+    public void addFailedSet(String setName) {
         _failedSets.add(setName);
     }
 
     /**
-     * @return an iterator over set names that could not be written to disk.
+     * @return an iterator over set names with IO issues.
      */
     public Iterator<String> getFailedSets() {
         return null;
     }
 
-    public boolean hasFaileSets() {
+    public boolean hasFailedSets() {
         return !_failedSets.isEmpty();
     }
 }
