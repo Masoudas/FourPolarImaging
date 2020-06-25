@@ -50,7 +50,7 @@ public class ICapturedImageFileSetFromTextAdapterTest {
         ICapturedImageFileSetToTextAdapter toAdapter = new ICapturedImageFileSetToTextAdapter(camera);
         Iterator<String[]> representors = toAdapter.toString(fileSet);
 
-        ICapturedImageFileSetTwoCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetTwoCameraFromTextAdapter(
+        ICapturedImageFileSetOneCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetOneCameraFromTextAdapter(
                 setup, new DummyChecker());
 
         ICapturedImageFileSet set = fromAdaptor.fromString(representors, setName);
@@ -68,7 +68,7 @@ public class ICapturedImageFileSetFromTextAdapterTest {
     @Test
     public void getStringRepresentation_TwoCameraCase_ReturnsCorrectString() throws CorruptCapturedImageSet {
         Cameras camera = Cameras.Two;
-        String setName = "OneCamera";
+        String setName = "TwoCamera";
 
         int[] singleChannel = { 1 };
         File singleChannelFile_pol0_90 = new File("/", "singleChannel_pol0_90.tif");
@@ -92,7 +92,7 @@ public class ICapturedImageFileSetFromTextAdapterTest {
         ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(camera);
         Iterator<String[]> representors = adapter.toString(fileSet);
 
-        ICapturedImageFileSetFourCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetFourCameraFromTextAdapter(
+        ICapturedImageFileSetTwoCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetTwoCameraFromTextAdapter(
                 setup, new DummyChecker());
 
         ICapturedImageFileSet set = fromAdaptor.fromString(representors, setName);
@@ -110,7 +110,7 @@ public class ICapturedImageFileSetFromTextAdapterTest {
     @Test
     public void getStringRepresentation_FourCameraCase_ReturnsCorrectString() throws CorruptCapturedImageSet {
         Cameras camera = Cameras.Four;
-        String setName = "OneCamera";
+        String setName = "FourCamera";
 
         int[] singleChannel = { 1 };
         File singleChannelFile_pol0 = new File("/", "singleChannel_pol0.tif");
@@ -144,7 +144,7 @@ public class ICapturedImageFileSetFromTextAdapterTest {
         ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(camera);
         Iterator<String[]> representors = adapter.toString(fileSet);
 
-        ICapturedImageFileSetOneCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetOneCameraFromTextAdapter(
+        ICapturedImageFileSetFourCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetFourCameraFromTextAdapter(
                 setup, new DummyChecker());
 
         ICapturedImageFileSet set = fromAdaptor.fromString(representors, setName);
@@ -163,8 +163,8 @@ public class ICapturedImageFileSetFromTextAdapterTest {
 
         for (int i = 0; i < Cameras.getNImages(camera) && equals; i++) {
             String label = Cameras.getLabels(camera)[i];
-            ICapturedImageFile labelOriginalFile = files[i];
-            equals &= Arrays.stream(set.getFile(label)).anyMatch(w -> w.file().equals(labelOriginalFile.file()));
+            ICapturedImageFile originalFileOfLabel = files[i];
+            equals &= Arrays.stream(set.getFile(label)).anyMatch(w -> w.file().equals(originalFileOfLabel.file()));
         }
 
         return equals;
