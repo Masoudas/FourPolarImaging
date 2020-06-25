@@ -43,8 +43,8 @@ class ICapturedImageFileSetFourCameraFromTextAdapter extends ICapturedImageFileS
     protected void _addFilesToBuilder(String[] capturedImageGroup, String setName) throws CorruptCapturedImageSet {
         try {
             _builder.add(_channelsFromString(capturedImageGroup[0]), _pol0FromFileString(capturedImageGroup[1]),
-                    _pol45FromFileString(capturedImageGroup[1]), _pol90FromFileString(capturedImageGroup[2]),
-                    _pol135FromFileString(capturedImageGroup[3]));
+                    _pol45FromFileString(capturedImageGroup[2]), _pol90FromFileString(capturedImageGroup[3]),
+                    _pol135FromFileString(capturedImageGroup[4]));
 
         } catch (IndexOutOfBoundsException e) {
             throw new CorruptCapturedImageSet(setName);

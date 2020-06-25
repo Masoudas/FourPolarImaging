@@ -21,7 +21,7 @@ class ICapturedImageFileSetToTextAdapter {
     /**
      * The index where pol0_45_90_135 resides.
      */
-    public static final int _POL0_45_90_135_START = 12;
+    public static final int _POL0_45_90_135_START = 16;
 
     /**
      * The index where pol0_90 resides.
@@ -41,17 +41,17 @@ class ICapturedImageFileSetToTextAdapter {
     /**
      * The index where pol45 resides.
      */
-    public static final int _POL45_START = 6;
+    public static final int _POL45_START = 7;
 
     /**
      * The index where pol90 resides.
      */
-    public static final int _POL90_START = 6;
+    public static final int _POL90_START = 7;
 
     /**
      * The index where pol135 resides.
      */
-    public static final int _POL135_START = 7;
+    public static final int _POL135_START = 8;
 
     private final Cameras _camera;
 
