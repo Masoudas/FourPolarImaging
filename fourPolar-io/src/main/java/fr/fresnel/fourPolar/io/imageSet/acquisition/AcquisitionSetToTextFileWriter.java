@@ -103,9 +103,8 @@ public class AcquisitionSetToTextFileWriter {
     }
 
     private File _getTextFilesRootFolder() {
-        File root4PProject = _acquisitionSet.rootFolder();
-        File rootFolder = new File(PathFactoryOfProject.getFolder_Params(root4PProject),
-                _acquisitionSet.setType().description);
+        File rootFolder = AcquisitionSetToTextFileIOUtil._getTextFilesRootFolder(_acquisitionSet.rootFolder(),
+                _acquisitionSet.setType());
 
         if (!rootFolder.exists()) {
             rootFolder.mkdirs();
@@ -115,7 +114,7 @@ public class AcquisitionSetToTextFileWriter {
     }
 
     private File _createCapturedSetTextFile(File textFilesRoot, String setName) throws IOException {
-        File setTextFile = new File(textFilesRoot, setName + ".txt");
+        File setTextFile = AcquisitionSetToTextFileIOUtil._getCapturedSetTextFile(textFilesRoot, setName);
 
         if (setTextFile.exists()) {
             setTextFile.delete();
