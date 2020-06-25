@@ -9,6 +9,7 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSetType;
 
 /**
  * Encapsulates the sample image set files as provided by the user.
@@ -19,6 +20,7 @@ public class SampleImageSet implements AcquisitionSet {
 
     /**
      * Create set for the given project. See {@link PathFactoryOfProject}.
+     * 
      * @param rootFolder is the root folder of where all the images are located.
      */
     public SampleImageSet(File rootFolder) {
@@ -66,5 +68,10 @@ public class SampleImageSet implements AcquisitionSet {
     @Override
     public File rootFolder() {
         return this._rootFolder;
+    }
+
+    @Override
+    public AcquisitionSetType setType() {
+        return AcquisitionSetType.Sample;
     }
 }

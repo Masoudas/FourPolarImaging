@@ -10,9 +10,11 @@ import javax.management.openmbean.KeyAlreadyExistsException;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSetType;
 
 /**
- * Defines the registration image set (bead or otherwise), that accompanies the sample image set.
+ * Defines the registration image set (bead or otherwise), that accompanies the
+ * sample image set.
  */
 public class RegistrationImageSet implements AcquisitionSet {
     /**
@@ -101,5 +103,10 @@ public class RegistrationImageSet implements AcquisitionSet {
      */
     public RegistrationImageType getType() {
         return this._imageType;
+    }
+
+    @Override
+    public AcquisitionSetType setType() {
+        return AcquisitionSetType.Registration;
     }
 }

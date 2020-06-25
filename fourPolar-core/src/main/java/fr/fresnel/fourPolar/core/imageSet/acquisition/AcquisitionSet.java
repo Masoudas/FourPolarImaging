@@ -57,9 +57,14 @@ public interface AcquisitionSet {
     public void removeCapturedImageSet(String setName) throws KeyException;
 
     /**
-     * Returns the number of {@link ICapturedImageFileSet} in this set.
+     * @return the number of {@link ICapturedImageFileSet} in this set.
      */
     public int setSize();
+
+    /**
+     * @return the type of this acquisition set.
+     */
+    public AcquisitionSetType setType();
 
     /**
      * Get the root folder of where all the images are located.
