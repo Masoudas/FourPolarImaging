@@ -115,7 +115,7 @@ public class AcquisitionSetToTextFileWriter {
     }
 
     private File _createCapturedSetTextFile(File textFilesRoot, String setName) throws IOException {
-        File setTextFile = new File(textFilesRoot, setName);
+        File setTextFile = new File(textFilesRoot, setName + ".txt");
 
         if (setTextFile.exists()) {
             setTextFile.delete();
