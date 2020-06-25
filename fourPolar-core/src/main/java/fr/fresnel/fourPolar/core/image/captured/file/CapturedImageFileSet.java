@@ -137,7 +137,7 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
 
     @Override
     public ICapturedImageFile[] getFile(String label) {
-        return fileSet.get(label);
+        return fileSet.get(label).clone();
     }
 
     @Override
@@ -208,7 +208,7 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
 
     @Override
     public int[] getChannels() {
-        return this.channels;
+        return this.channels.clone();
     }
 
     /**
