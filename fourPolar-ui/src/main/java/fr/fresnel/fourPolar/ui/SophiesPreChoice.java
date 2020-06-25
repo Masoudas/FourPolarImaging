@@ -160,7 +160,7 @@ public class SophiesPreChoice {
         File beadImagePath = new File(rootFolder, registrationImage);
         ICapturedImageFileSet beadCapturedImageFileSet = createFileSet(beadImagePath);
 
-        beadImageSet.addImageSet(beadCapturedImageFileSet);
+        beadImageSet.addCapturedImageSet(beadCapturedImageFileSet);
 
         return beadImageSet;
     }
@@ -171,7 +171,7 @@ public class SophiesPreChoice {
         File sampleImagePath = new File(rootFolder, sampleImage);
         ICapturedImageFileSet sampleCapturedImageFileSet = createFileSet(sampleImagePath);
 
-        sampleImageSet.addImageSet(sampleCapturedImageFileSet);
+        sampleImageSet.addCapturedImageSet(sampleCapturedImageFileSet);
 
         return sampleImageSet;
     }

@@ -31,7 +31,7 @@ public interface AcquisitionSet {
      * @throws KeyAlreadyExistsException in case the file set has already been
      *                                   added.
      */
-    public void addImageSet(ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException;
+    public void addCapturedImageSet(ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException;
 
     /**
      * Returns a particular image set file using its set name.
@@ -40,7 +40,7 @@ public interface AcquisitionSet {
      * 
      * @throws KeyAlreadyExistsException in case the set name does not exist.
      */
-    public ICapturedImageFileSet getImageSet(String setName) throws KeyException;
+    public ICapturedImageFileSet getCapturedImageSet(String setName) throws KeyException;
 
     /**
      * Return an iterator that over all file sets inside this set.
@@ -54,7 +54,7 @@ public interface AcquisitionSet {
      * @param channel
      * @param setName
      */
-    public void removeImageSet(String setName) throws KeyException;
+    public void removeCapturedImageSet(String setName) throws KeyException;
 
     /**
      * Returns the number of {@link ICapturedImageFileSet} in this set.

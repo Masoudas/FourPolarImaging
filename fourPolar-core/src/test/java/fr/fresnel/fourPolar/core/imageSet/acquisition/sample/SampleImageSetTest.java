@@ -29,29 +29,29 @@ public class SampleImageSetTest {
     public void addImage_DuplicateImage_ShouldThrowException()
             throws IllegalArgumentException, IncompatibleCapturedImage, KeyException {
         SampleImageSet sampleSet = new SampleImageSet(new File("/"));
-        sampleSet.addImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }));
+        sampleSet.addCapturedImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }));
 
         assertThrows(KeyAlreadyExistsException.class, () -> {
-            sampleSet.addImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }));
+            sampleSet.addCapturedImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }));
         });
     }
 
     @Test
     public void removeImage_fileSet_ReturnsZeroLengthForChannelOne() throws IllegalArgumentException, KeyException {
         SampleImageSet sampleSet = new SampleImageSet(new File("/"));
-        sampleSet.addImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }));
+        sampleSet.addCapturedImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }));
 
-        sampleSet.removeImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }).getSetName());
+        sampleSet.removeCapturedImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }).getSetName());
         assertTrue(sampleSet.setSize() == 0);
     }
 
     @Test
     public void removeImage_nonExistentfileSet_ShouldThrowException() throws KeyException {
         SampleImageSet sampleSet = new SampleImageSet(new File("/"));
-        sampleSet.addImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }));
+        sampleSet.addCapturedImageSet(new DummyCapturedSet(pol0, new int[] { 1, 2 }));
 
         assertThrows(KeyException.class, () -> {
-            sampleSet.removeImageSet("wrongSetName");
+            sampleSet.removeCapturedImageSet("wrongSetName");
         });
     }
 
@@ -62,8 +62,8 @@ public class SampleImageSetTest {
         ICapturedImageFileSet set1 = new DummyCapturedSet(pol0, new int[] { 1, 2 });
         ICapturedImageFileSet set2 = new DummyCapturedSet(pol45, new int[] { 1, 2 });
 
-        sampleSet.addImageSet(set1);
-        sampleSet.addImageSet(set2);
+        sampleSet.addCapturedImageSet(set1);
+        sampleSet.addCapturedImageSet(set2);
 
         Iterator<ICapturedImageFileSet> itr = sampleSet.getIterator();
 

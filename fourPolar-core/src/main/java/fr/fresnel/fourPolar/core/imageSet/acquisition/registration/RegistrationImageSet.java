@@ -47,7 +47,7 @@ public class RegistrationImageSet implements AcquisitionSet {
     }
 
     @Override
-    public void addImageSet(ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
+    public void addCapturedImageSet(ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
         if (imageFileSet != null) {
             throw new KeyAlreadyExistsException("Bead image set has already been defined.");
         }
@@ -56,7 +56,7 @@ public class RegistrationImageSet implements AcquisitionSet {
     }
 
     @Override
-    public ICapturedImageFileSet getImageSet(String setName) throws KeyException {
+    public ICapturedImageFileSet getCapturedImageSet(String setName) throws KeyException {
         if (imageFileSet.getSetName().equals(setName)) {
             return imageFileSet;
         } else {
@@ -68,7 +68,7 @@ public class RegistrationImageSet implements AcquisitionSet {
      * This method only requires the channel number to function.
      */
     @Override
-    public void removeImageSet(String setName) throws KeyException {
+    public void removeCapturedImageSet(String setName) throws KeyException {
         if (imageFileSet.getSetName().equals(setName)) {
             imageFileSet = null;
         } else {

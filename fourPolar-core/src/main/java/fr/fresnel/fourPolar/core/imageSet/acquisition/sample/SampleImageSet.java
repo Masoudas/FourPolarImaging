@@ -27,7 +27,7 @@ public class SampleImageSet implements AcquisitionSet {
     }
 
     @Override
-    public void removeImageSet(String setName) throws KeyException {
+    public void removeCapturedImageSet(String setName) throws KeyException {
         if (!_fileSuperSet.containsKey(setName)) {
             throw new KeyException("The given set name does not exist.");
         } else {
@@ -37,7 +37,7 @@ public class SampleImageSet implements AcquisitionSet {
     }
 
     @Override
-    public void addImageSet(ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
+    public void addCapturedImageSet(ICapturedImageFileSet fileSet) throws KeyAlreadyExistsException {
         if (_fileSuperSet.values().stream().anyMatch(t -> t.deepEquals(fileSet))) {
             throw new KeyAlreadyExistsException("The given file set already exists for this channel");
         }
@@ -46,7 +46,7 @@ public class SampleImageSet implements AcquisitionSet {
     }
 
     @Override
-    public ICapturedImageFileSet getImageSet(String setName) throws KeyException {
+    public ICapturedImageFileSet getCapturedImageSet(String setName) throws KeyException {
         if (!_fileSuperSet.containsKey(setName))
             throw new KeyAlreadyExistsException("The given file set does not exist.");
 

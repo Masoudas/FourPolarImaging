@@ -68,7 +68,7 @@ public class RegistrationSetProcessorTest {
 
         RegistrationImageSet registrationImageSet = new RegistrationImageSet(new File(_root),
                 RegistrationImageType.SAMPLE);
-        registrationImageSet.addImageSet(fileSet);
+        registrationImageSet.addCapturedImageSet(fileSet);
 
         RegistrationSetProcessor processor = new RegistrationSetProcessor(builder);
         assertThrows(RegistrationSetProcessFailure.class, () -> {
@@ -97,7 +97,7 @@ public class RegistrationSetProcessorTest {
 
         RegistrationImageSet registrationImageSet = new RegistrationImageSet(new File(_root),
                 RegistrationImageType.SAMPLE);
-        registrationImageSet.addImageSet(fileSet);
+        registrationImageSet.addCapturedImageSet(fileSet);
 
         RegistrationSetProcessor processor = new RegistrationSetProcessor(builder);
 
@@ -134,7 +134,7 @@ public class RegistrationSetProcessorTest {
 
         RegistrationImageSet registrationImageSet = new RegistrationImageSet(new File(_root),
                 RegistrationImageType.SAMPLE);
-        registrationImageSet.addImageSet(fileSet);
+        registrationImageSet.addCapturedImageSet(fileSet);
 
         RegistrationSetProcessor processor = new RegistrationSetProcessor(builder);
 
