@@ -1,8 +1,10 @@
 package fr.fresnel.fourPolar.io.image.captured.file;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -150,6 +152,30 @@ public class ICapturedImageFileSetFromTextAdapterTest {
         ICapturedImageFileSet set = fromAdaptor.fromString(representors, setName);
         assertTrue(_isFromStringRepresentationCorrect(set, camera, pol0[0], pol45[0], pol90[0], pol135[0]));
         assertTrue(_isFromStringRepresentationCorrect(set, camera, pol0[1], pol45[1], pol90[1], pol135[1]));
+    }
+
+    @Test
+    public void getStringRepresentation_EmptyFileStrings_ThrowsCorruptCapturedImageSet()
+            throws CorruptCapturedImageSet {
+        Cameras camera = Cameras.Four;
+        IFourPolarImagingSetup setup = new DummyFPSetup(1, camera);
+
+        String setName = "FourCamera";
+
+        String[] setAsString = new String[5];
+        setAsString[0] = "Channels: [1]";
+        setAsString[1] = " ";
+        setAsString[2] = " ";
+        setAsString[3] = " ";
+        setAsString[4] = " ";
+
+        ArrayList<String[]> representorList = new ArrayList<>();
+        representorList.add(setAsString);
+
+        ICapturedImageFileSetFourCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetFourCameraFromTextAdapter(
+                setup, new DummyChecker());
+
+        assertThrows(CorruptCapturedImageSet.class, () -> fromAdaptor.fromString(representorList.iterator(), setName));
     }
 
     private boolean _isFromStringRepresentationCorrect(ICapturedImageFileSet set, Cameras camera,

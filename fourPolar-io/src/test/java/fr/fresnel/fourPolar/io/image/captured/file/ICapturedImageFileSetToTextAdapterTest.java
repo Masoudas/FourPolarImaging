@@ -118,7 +118,7 @@ public class ICapturedImageFileSetToTextAdapterTest {
 
     private boolean _isStringRepresentationCorrect(String[] strings, Cameras camera, ICapturedImageFile[]... files) {
         boolean equals = Arrays.stream(files[0])
-                .anyMatch(p -> strings[0].equals("Channels : " + Arrays.toString(p.channels())));
+                .anyMatch(p -> strings[0].equals("Channels: " + Arrays.toString(p.channels())));
 
         for (int i = 1; i < strings.length && equals; i++) {
             String label = Cameras.getLabels(camera)[i - 1];
