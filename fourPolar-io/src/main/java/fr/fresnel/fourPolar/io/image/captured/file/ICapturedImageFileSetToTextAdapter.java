@@ -16,7 +16,7 @@ class ICapturedImageFileSetToTextAdapter {
     /**
      * The index where first channel number resides.
      */
-    public static final int _CHANNEL_NO_START = 12;
+    public static final int _CHANNEL_NO_START = 11;
 
     /**
      * The index where pol0_45_90_135 resides.
@@ -110,7 +110,7 @@ class ICapturedImageFileSetToTextAdapter {
         String[] representer = new String[_nStringPerGroup()];
 
         int repLineCtr = 0;
-        representer[repLineCtr++] = "Channels : " + Arrays.toString(channel);
+        representer[repLineCtr++] = "Channels: " + Arrays.toString(channel);
 
         for (String label : Cameras.getLabels(_camera)) {
             representer[repLineCtr++] = label + ": " + capturedImageGroup.get(label).getAbsolutePath();
