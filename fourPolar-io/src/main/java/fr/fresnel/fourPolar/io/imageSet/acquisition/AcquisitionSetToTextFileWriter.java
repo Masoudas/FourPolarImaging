@@ -60,8 +60,8 @@ public class AcquisitionSetToTextFileWriter {
      * @throws AcquisitionSetWriteError is thrown if at least one captured image set
      *                                  can't be written to disk.
      */
-    public void write(File root4PProject) throws AcquisitionSetWriteError {
-        File textFilesRoot = this._getTextFilesRootFolder(root4PProject);
+    public void write() throws AcquisitionSetWriteError {
+        File textFilesRoot = this._getTextFilesRootFolder();
         AcquisitionSetWriteError exception = new AcquisitionSetWriteError();
 
         for (Iterator<ICapturedImageFileSet> fileSetsItr = _acquisitionSet.getIterator(); fileSetsItr.hasNext();) {
@@ -102,7 +102,8 @@ public class AcquisitionSetToTextFileWriter {
         return _textAdapter.toString(set);
     }
 
-    private File _getTextFilesRootFolder(File root4PProject) {
+    private File _getTextFilesRootFolder() {
+        File root4PProject = _acquisitionSet.rootFolder();
         File rootFolder = new File(PathFactoryOfProject.getFolder_Params(root4PProject),
                 _acquisitionSet.setType().description);
 
