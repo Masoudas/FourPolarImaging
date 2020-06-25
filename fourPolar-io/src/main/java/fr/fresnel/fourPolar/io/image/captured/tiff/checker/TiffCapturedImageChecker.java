@@ -6,8 +6,8 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOr
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
+import fr.fresnel.fourPolar.core.image.captured.file.RejectedCapturedImage;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
 

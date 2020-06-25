@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition;
 
-import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
+import fr.fresnel.fourPolar.core.image.captured.file.RejectedCapturedImage;
 
 /**
  * Exception thrown when the content of the given captured image is corrupt

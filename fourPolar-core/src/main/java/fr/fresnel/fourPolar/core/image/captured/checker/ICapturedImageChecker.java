@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.core.image.captured.checker;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
-import fr.fresnel.fourPolar.core.imageSet.acquisition.RejectedCapturedImage;
+import fr.fresnel.fourPolar.core.image.captured.file.RejectedCapturedImage;
 
 /**
  * Used for checking that a captured image file has the desired format,
