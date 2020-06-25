@@ -82,7 +82,7 @@ public class AcquisitionSetToTextFileWriter {
                 String[] groupAsText = setAsStringItr.next();
 
                 writer.write(groupAsText[0] + "\n"); // Write channel line;
-                for (int fileInfo = 1; fileInfo <= groupAsText.length; fileInfo++) {
+                for (int fileInfo = 1; fileInfo < groupAsText.length; fileInfo++) {
                     writer.write(_spaceBeforeFile + groupAsText[fileInfo] + "\n");
                 }
 
