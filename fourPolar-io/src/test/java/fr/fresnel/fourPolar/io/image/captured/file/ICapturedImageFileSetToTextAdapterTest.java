@@ -12,7 +12,11 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
+import fr.fresnel.fourPolar.core.physics.channel.IChannel;
+import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 
 public class ICapturedImageFileSetToTextAdapterTest {
     /**
@@ -34,7 +38,8 @@ public class ICapturedImageFileSetToTextAdapterTest {
         ToDummyCapturedImageFileSet fileSet = new ToDummyCapturedImageFileSet();
         fileSet.setFileSet(Cameras.getLabels(camera)[0], pol0_45_90_135);
 
-        ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(camera);
+        IFourPolarImagingSetup setup = new ToTextDummyFPSetup(singleChannel.length + multiChannel.length, camera);
+        ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(setup);
         Iterator<String[]> representors = adapter.toString(fileSet);
 
         assertTrue(_isStringRepresentationCorrect(representors.next(), camera, pol0_45_90_135));
@@ -66,7 +71,8 @@ public class ICapturedImageFileSetToTextAdapterTest {
         fileSet.setFileSet(Cameras.getLabels(camera)[0], pol0_90);
         fileSet.setFileSet(Cameras.getLabels(camera)[1], pol45_135);
 
-        ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(camera);
+        IFourPolarImagingSetup setup = new ToTextDummyFPSetup(singleChannel.length + multiChannel.length, camera);
+        ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(setup);
         Iterator<String[]> representors = adapter.toString(fileSet);
 
         assertTrue(_isStringRepresentationCorrect(representors.next(), camera, pol0_90, pol45_135));
@@ -108,7 +114,8 @@ public class ICapturedImageFileSetToTextAdapterTest {
         fileSet.setFileSet(Cameras.getLabels(camera)[2], pol90);
         fileSet.setFileSet(Cameras.getLabels(camera)[3], pol135);
 
-        ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(camera);
+        IFourPolarImagingSetup setup = new ToTextDummyFPSetup(singleChannel.length + multiChannel.length, camera);
+        ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(setup);
         Iterator<String[]> representors = adapter.toString(fileSet);
 
         assertTrue(_isStringRepresentationCorrect(representors.next(), camera, pol0, pol45, pol90, pol135));
@@ -132,6 +139,62 @@ public class ICapturedImageFileSetToTextAdapterTest {
     }
 
 }
+
+class ToTextDummyFPSetup implements IFourPolarImagingSetup {
+    private Cameras cameras;
+    private int numChannels;
+
+    public ToTextDummyFPSetup(int numChannels, Cameras camera) {
+        this.numChannels = numChannels;
+        this.cameras = camera;
+    }
+
+    @Override
+    public Cameras getCameras() {
+        return cameras;
+    }
+
+    @Override
+    public void setCameras(Cameras cameras) throws IllegalArgumentException {
+        this.cameras = cameras;
+    }
+
+    @Override
+    public IChannel getChannel(int channel) throws IllegalArgumentException {
+        return null;
+    }
+
+    @Override
+    public void setChannel(int channel, IChannel propagationChannel) throws IllegalArgumentException {
+    }
+
+    @Override
+    public int getNumChannel() {
+        return this.numChannels;
+    }
+
+    @Override
+    public INumericalAperture getNumericalAperture() {
+        return null;
+    }
+
+    @Override
+    public void setNumericalAperture(INumericalAperture na) {
+
+    }
+
+    @Override
+    public IFieldOfView getFieldOfView() {
+        return null;
+    }
+
+    @Override
+    public void setFieldOfView(IFieldOfView fov) throws IllegalArgumentException {
+
+    }
+
+}
+
 
 class ToDummyCapturedImageFileSet implements ICapturedImageFileSet {
     private Hashtable<String, ICapturedImageFile[]> files = new Hashtable<>();

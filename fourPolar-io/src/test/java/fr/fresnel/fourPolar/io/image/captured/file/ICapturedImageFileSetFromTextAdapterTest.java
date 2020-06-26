@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +16,7 @@ import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCap
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSetBuilder;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
@@ -24,6 +25,8 @@ import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.io.exceptions.image.captured.file.CorruptCapturedImageSet;
 
 public class ICapturedImageFileSetFromTextAdapterTest {
+    final static String[] setNames = { "Set1", "Set2" };
+
     /**
      * Create an artificial case of both single channel and multi-channel captured
      * files
@@ -33,31 +36,30 @@ public class ICapturedImageFileSetFromTextAdapterTest {
     @Test
     public void getStringRepresentation_OneCameraCase_ReturnsCorrectString() throws CorruptCapturedImageSet {
         Cameras camera = Cameras.One;
-        String setName = "OneCamera";
+        String setName = setNames[0];
 
         int[] singleChannel = { 1 };
-        File singleChannelFile = new File("/", "singleChannel.tif");
+        File singleChannelFile = new File("singleChannel.tif");
 
         int[] multiChannel = { 2, 3 };
-        File multiChannelFile = new File("/", "multiChannel.tif");
+        File multiChannelFile = new File("multiChannel.tif");
 
-        ICapturedImageFile[] pol0_45_90_135 = { new FromDummyCapturedImageFile(singleChannel, singleChannelFile),
-                new FromDummyCapturedImageFile(multiChannel, multiChannelFile) };
+        FromDummyCapturedSetBuilder builder = new FromDummyCapturedSetBuilder(
+                singleChannel.length + multiChannel.length);
+        builder.add(singleChannel, singleChannelFile);
+        builder.add(multiChannel, multiChannelFile);
+        ICapturedImageFileSet fileSet = builder.build();
 
-        IFourPolarImagingSetup setup = new DummyFPSetup(singleChannel.length + multiChannel.length, camera);
+        IFourPolarImagingSetup setup = new FromTextDummyFPSetup(singleChannel.length + multiChannel.length, camera);
 
-        FromDummyCapturedImageFileSet fileSet = new FromDummyCapturedImageFileSet();
-        fileSet.setFileSet(Cameras.getLabels(camera)[0], pol0_45_90_135);
-
-        ICapturedImageFileSetToTextAdapter toAdapter = new ICapturedImageFileSetToTextAdapter(camera);
+        ICapturedImageFileSetToTextAdapter toAdapter = new ICapturedImageFileSetToTextAdapter(setup);
         Iterator<String[]> representors = toAdapter.toString(fileSet);
 
         ICapturedImageFileSetOneCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetOneCameraFromTextAdapter(
-                setup, new DummyChecker());
+                setup, new DummyChecker(), new FromDummyCapturedSetBuilder(singleChannel.length + multiChannel.length));
 
         ICapturedImageFileSet set = fromAdaptor.fromString(representors, setName);
-        assertTrue(_isFromStringRepresentationCorrect(set, camera, pol0_45_90_135[0]));
-        assertTrue(_isFromStringRepresentationCorrect(set, camera, pol0_45_90_135[1]));
+        assertTrue(_isFromStringRepresentationCorrect(set, camera, fileSet));
 
     }
 
@@ -70,36 +72,33 @@ public class ICapturedImageFileSetFromTextAdapterTest {
     @Test
     public void getStringRepresentation_TwoCameraCase_ReturnsCorrectString() throws CorruptCapturedImageSet {
         Cameras camera = Cameras.Two;
-        String setName = "TwoCamera";
+        String setName = setNames[0];
 
         int[] singleChannel = { 1 };
-        File singleChannelFile_pol0_90 = new File("/", "singleChannel_pol0_90.tif");
-        File singleChannelFile_pol45_135 = new File("/", "singleChannel_pol45_135.tif");
+        File singleChannelFile_pol0_90 = new File("singleChannel_pol0_90.tif");
+        File singleChannelFile_pol45_135 = new File("singleChannel_pol45_135.tif");
 
         int[] multiChannel = { 2, 3 };
-        File multiChannelFile_pol0_90 = new File("/", "multiChannel_pol0_90.tif");
-        File multiChannelFile_pol45_135 = new File("/", "multiChannel_pol45_135.tif");
+        File multiChannelFile_pol0_90 = new File("multiChannel_pol0_90.tif");
+        File multiChannelFile_pol45_135 = new File("multiChannel_pol45_135.tif");
 
-        ICapturedImageFile[] pol0_90 = { new FromDummyCapturedImageFile(singleChannel, singleChannelFile_pol0_90),
-                new FromDummyCapturedImageFile(multiChannel, multiChannelFile_pol0_90) };
-        ICapturedImageFile[] pol45_135 = { new FromDummyCapturedImageFile(singleChannel, singleChannelFile_pol45_135),
-                new FromDummyCapturedImageFile(multiChannel, multiChannelFile_pol45_135) };
+        FromDummyCapturedSetBuilder builder = new FromDummyCapturedSetBuilder(
+                singleChannel.length + multiChannel.length);
+        builder.add(singleChannel, singleChannelFile_pol0_90, singleChannelFile_pol45_135);
+        builder.add(multiChannel, multiChannelFile_pol0_90, multiChannelFile_pol45_135);
 
-        IFourPolarImagingSetup setup = new DummyFPSetup(singleChannel.length + multiChannel.length, camera);
+        ICapturedImageFileSet fileSet = builder.build();
 
-        FromDummyCapturedImageFileSet fileSet = new FromDummyCapturedImageFileSet();
-        fileSet.setFileSet(Cameras.getLabels(camera)[0], pol0_90);
-        fileSet.setFileSet(Cameras.getLabels(camera)[1], pol45_135);
+        IFourPolarImagingSetup setup = new FromTextDummyFPSetup(singleChannel.length + multiChannel.length, camera);
 
-        ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(camera);
+        ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(setup);
         Iterator<String[]> representors = adapter.toString(fileSet);
 
         ICapturedImageFileSetTwoCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetTwoCameraFromTextAdapter(
-                setup, new DummyChecker());
+                setup, new DummyChecker(), new FromDummyCapturedSetBuilder(singleChannel.length + multiChannel.length));
 
         ICapturedImageFileSet set = fromAdaptor.fromString(representors, setName);
-        assertTrue(_isFromStringRepresentationCorrect(set, camera, pol0_90[0], pol45_135[0]));
-        assertTrue(_isFromStringRepresentationCorrect(set, camera, pol0_90[1], pol45_135[1]));
+        assertTrue(_isFromStringRepresentationCorrect(set, camera, fileSet));
 
     }
 
@@ -112,53 +111,45 @@ public class ICapturedImageFileSetFromTextAdapterTest {
     @Test
     public void getStringRepresentation_FourCameraCase_ReturnsCorrectString() throws CorruptCapturedImageSet {
         Cameras camera = Cameras.Four;
-        String setName = "FourCamera";
+        String setName = setNames[0];
 
         int[] singleChannel = { 1 };
-        File singleChannelFile_pol0 = new File("/", "singleChannel_pol0.tif");
-        File singleChannelFile_pol45 = new File("/", "singleChannel_pol45.tif");
-        File singleChannelFile_pol90 = new File("/", "singleChannel_pol90.tif");
-        File singleChannelFile_pol135 = new File("/", "singleChannel_pol135.tif");
+        File singleChannelFile_pol0 = new File("singleChannel_pol0.tif");
+        File singleChannelFile_pol45 = new File("singleChannel_pol45.tif");
+        File singleChannelFile_pol90 = new File("singleChannel_pol90.tif");
+        File singleChannelFile_pol135 = new File("singleChannel_pol135.tif");
 
         int[] multiChannel = { 2, 3 };
-        File multiChannelFile_pol0 = new File("/", "multiChannel_pol0.tif");
-        File multiChannelFile_pol45 = new File("/", "multiChannel_pol45.tif");
-        File multiChannelFile_pol90 = new File("/", "multiChannel_pol90.tif");
-        File multiChannelFile_pol135 = new File("/", "multiChannel_pol135.tif");
+        File multiChannelFile_pol0 = new File("multiChannel_pol0.tif");
+        File multiChannelFile_pol45 = new File("multiChannel_pol45.tif");
+        File multiChannelFile_pol90 = new File("multiChannel_pol90.tif");
+        File multiChannelFile_pol135 = new File("multiChannel_pol135.tif");
 
-        IFourPolarImagingSetup setup = new DummyFPSetup(singleChannel.length + multiChannel.length, camera);
+        IFourPolarImagingSetup setup = new FromTextDummyFPSetup(singleChannel.length + multiChannel.length, camera);
 
-        ICapturedImageFile[] pol0 = { new FromDummyCapturedImageFile(singleChannel, singleChannelFile_pol0),
-                new FromDummyCapturedImageFile(multiChannel, multiChannelFile_pol0), };
-        ICapturedImageFile[] pol45 = { new FromDummyCapturedImageFile(singleChannel, singleChannelFile_pol45),
-                new FromDummyCapturedImageFile(multiChannel, multiChannelFile_pol45) };
-        ICapturedImageFile[] pol90 = { new FromDummyCapturedImageFile(singleChannel, singleChannelFile_pol90),
-                new FromDummyCapturedImageFile(multiChannel, multiChannelFile_pol90), };
-        ICapturedImageFile[] pol135 = { new FromDummyCapturedImageFile(singleChannel, singleChannelFile_pol135),
-                new FromDummyCapturedImageFile(multiChannel, multiChannelFile_pol135) };
+        FromDummyCapturedSetBuilder builder = new FromDummyCapturedSetBuilder(
+                singleChannel.length + multiChannel.length);
+        builder.add(singleChannel, singleChannelFile_pol0, singleChannelFile_pol45, singleChannelFile_pol90,
+                singleChannelFile_pol135);
+        builder.add(multiChannel, multiChannelFile_pol0, multiChannelFile_pol45, multiChannelFile_pol90,
+                multiChannelFile_pol135);
+        ICapturedImageFileSet fileSet = builder.build();
 
-        FromDummyCapturedImageFileSet fileSet = new FromDummyCapturedImageFileSet();
-        fileSet.setFileSet(Cameras.getLabels(camera)[0], pol0);
-        fileSet.setFileSet(Cameras.getLabels(camera)[1], pol45);
-        fileSet.setFileSet(Cameras.getLabels(camera)[2], pol90);
-        fileSet.setFileSet(Cameras.getLabels(camera)[3], pol135);
-
-        ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(camera);
+        ICapturedImageFileSetToTextAdapter adapter = new ICapturedImageFileSetToTextAdapter(setup);
         Iterator<String[]> representors = adapter.toString(fileSet);
 
         ICapturedImageFileSetFourCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetFourCameraFromTextAdapter(
-                setup, new DummyChecker());
+                setup, new DummyChecker(), new FromDummyCapturedSetBuilder(singleChannel.length + multiChannel.length));
 
         ICapturedImageFileSet set = fromAdaptor.fromString(representors, setName);
-        assertTrue(_isFromStringRepresentationCorrect(set, camera, pol0[0], pol45[0], pol90[0], pol135[0]));
-        assertTrue(_isFromStringRepresentationCorrect(set, camera, pol0[1], pol45[1], pol90[1], pol135[1]));
+        assertTrue(_isFromStringRepresentationCorrect(set, camera, fileSet));
     }
 
     @Test
     public void getStringRepresentation_EmptyFileStrings_ThrowsCorruptCapturedImageSet()
             throws CorruptCapturedImageSet {
         Cameras camera = Cameras.Four;
-        IFourPolarImagingSetup setup = new DummyFPSetup(1, camera);
+        IFourPolarImagingSetup setup = new FromTextDummyFPSetup(1, camera);
 
         String setName = "FourCamera";
 
@@ -173,24 +164,20 @@ public class ICapturedImageFileSetFromTextAdapterTest {
         representorList.add(setAsString);
 
         ICapturedImageFileSetFourCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetFourCameraFromTextAdapter(
-                setup, new DummyChecker());
+                setup, new DummyChecker(), new FromDummyCapturedSetBuilder(1));
 
         assertThrows(CorruptCapturedImageSet.class, () -> fromAdaptor.fromString(representorList.iterator(), setName));
     }
 
     private boolean _isFromStringRepresentationCorrect(ICapturedImageFileSet set, Cameras camera,
-            ICapturedImageFile... files) {
+            ICapturedImageFileSet files) {
         boolean equals = true;
-        ICapturedImageFile[] label0Files = set.getFile(Cameras.getLabels(camera)[0]);
-
-        for (int i = 0; i < label0Files.length && equals; i++) {
-            equals &= Arrays.stream(label0Files).anyMatch(p -> Arrays.equals(files[0].channels(), p.channels()));
-        }
 
         for (int i = 0; i < Cameras.getNImages(camera) && equals; i++) {
             String label = Cameras.getLabels(camera)[i];
-            ICapturedImageFile originalFileOfLabel = files[i];
-            equals &= Arrays.stream(set.getFile(label)).anyMatch(w -> w.file().equals(originalFileOfLabel.file()));
+            ICapturedImageFile[] originalFileOfLabel = files.getFile(label);
+            equals &= Arrays.stream(set.getFile(label))
+                    .allMatch(w -> Arrays.stream(originalFileOfLabel).anyMatch(p -> w.file().equals(p.file())));
         }
 
         return equals;
@@ -200,11 +187,27 @@ public class ICapturedImageFileSetFromTextAdapterTest {
 }
 
 class FromDummyCapturedImageFileSet implements ICapturedImageFileSet {
-    private Hashtable<String, ICapturedImageFile[]> files = new Hashtable<>();
+    private Hashtable<String, ArrayList<ICapturedImageFile>> files = new Hashtable<>();
     private Cameras _cameras;
+    private String setName;
+    private int numChannels;
 
-    public void setFileSet(String label, ICapturedImageFile[] file) {
-        this.files.put(label, file);
+    FromDummyCapturedImageFileSet(int numChannels) {
+
+        this.numChannels = numChannels;
+    }
+
+    public void setSetName(String setName) {
+        this.setName = setName;
+    }
+
+    public void setFileSet(String label, ICapturedImageFile file) {
+        if (this.files.get(label) == null) {
+            ArrayList<ICapturedImageFile> cFiles = new ArrayList<>();
+            files.put(label, cFiles);
+        }
+
+        this.files.get(label).add(file);
     }
 
     public void setCameras(Cameras cameras) {
@@ -213,12 +216,12 @@ class FromDummyCapturedImageFileSet implements ICapturedImageFileSet {
 
     @Override
     public ICapturedImageFile[] getFile(String label) {
-        return this.files.get(label);
+        return this.files.get(label).toArray(new ICapturedImageFile[0]);
     }
 
     @Override
     public String getSetName() {
-        return null;
+        return setName;
     }
 
     @Override
@@ -238,17 +241,20 @@ class FromDummyCapturedImageFileSet implements ICapturedImageFileSet {
 
     @Override
     public Iterator<ICapturedImageFile> getIterator() {
-        Stream<ICapturedImageFile> concatStream = Stream.empty();
-        for (Iterator<ICapturedImageFile[]> iterator = this.files.values().iterator(); iterator.hasNext();) {
-            concatStream = Stream.concat(concatStream, Arrays.stream(iterator.next()));
+        ArrayList<ICapturedImageFile> all = new ArrayList<>();
+        for (String label : Cameras.getLabels(this._cameras)) {
+            for (Iterator<ICapturedImageFile> iterator = this.files.get(label).iterator(); iterator.hasNext();) {
+                all.add(iterator.next());
+            }
+
         }
 
-        return concatStream.iterator();
+        return all.iterator();
     }
 
     @Override
     public int[] getChannels() {
-        return null;
+        return IntStream.range(1, numChannels + 1).toArray();
     }
 
 }
@@ -274,11 +280,11 @@ class FromDummyCapturedImageFile implements ICapturedImageFile {
 
 }
 
-class DummyFPSetup implements IFourPolarImagingSetup {
+class FromTextDummyFPSetup implements IFourPolarImagingSetup {
     private Cameras cameras;
     private int numChannels;
 
-    public DummyFPSetup(int numChannels, Cameras camera) {
+    public FromTextDummyFPSetup(int numChannels, Cameras camera) {
         this.numChannels = numChannels;
         this.cameras = camera;
     }
@@ -333,6 +339,54 @@ class DummyChecker implements ICapturedImageChecker {
 
     @Override
     public void check(ICapturedImageFile capturedImageFile) throws IncompatibleCapturedImage {
+
+    }
+
+}
+
+class FromDummyCapturedSetBuilder implements ICapturedImageFileSetBuilder {
+    int numChannels;
+    int counter = 0;
+    FromDummyCapturedImageFileSet fileSet;
+
+    FromDummyCapturedSetBuilder(int numChannels) {
+        this.numChannels = numChannels;
+        fileSet = new FromDummyCapturedImageFileSet(numChannels);
+    }
+
+    @Override
+    public ICapturedImageFileSetBuilder add(int[] channels, File pol0_45_90_135) {
+        fileSet.setCameras(Cameras.One);
+        fileSet.setFileSet(Cameras.getLabels(Cameras.One)[0], new FromDummyCapturedImageFile(channels, pol0_45_90_135));
+        return this;
+    }
+
+    @Override
+    public ICapturedImageFileSetBuilder add(int[] channels, File pol0_90, File pol45_135) {
+        fileSet.setCameras(Cameras.Two);
+        fileSet.setFileSet(Cameras.getLabels(Cameras.Two)[0], new FromDummyCapturedImageFile(channels, pol0_90));
+        fileSet.setFileSet(Cameras.getLabels(Cameras.Two)[1], new FromDummyCapturedImageFile(channels, pol45_135));
+        return null;
+    }
+
+    @Override
+    public ICapturedImageFileSetBuilder add(int[] channels, File pol0, File pol45, File pol90, File pol135) {
+        fileSet.setCameras(Cameras.Four);
+        fileSet.setFileSet(Cameras.getLabels(Cameras.Four)[0], new FromDummyCapturedImageFile(channels, pol0));
+        fileSet.setFileSet(Cameras.getLabels(Cameras.Four)[1], new FromDummyCapturedImageFile(channels, pol45));
+        fileSet.setFileSet(Cameras.getLabels(Cameras.Four)[2], new FromDummyCapturedImageFile(channels, pol90));
+        fileSet.setFileSet(Cameras.getLabels(Cameras.Four)[3], new FromDummyCapturedImageFile(channels, pol135));
+
+        return this;
+    }
+
+    @Override
+    public ICapturedImageFileSet build() {
+        fileSet.setSetName(ICapturedImageFileSetFromTextAdapterTest.setNames[counter++]);
+        FromDummyCapturedImageFileSet fileSetTemp = fileSet;
+        fileSet = new FromDummyCapturedImageFileSet(numChannels);
+
+        return fileSetTemp;
 
     }
 
