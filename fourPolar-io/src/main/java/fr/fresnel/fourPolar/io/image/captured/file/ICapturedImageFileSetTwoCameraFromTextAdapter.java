@@ -21,11 +21,11 @@ class ICapturedImageFileSetTwoCameraFromTextAdapter extends ICapturedImageFileSe
         return super.fromString(iterator, setName);
     }
 
-    private File _pol0_90FromFileString(String pol0_90Line, String setName) throws IndexOutOfBoundsException {
+    private File _pol0_90FromFileString(String pol0_90Line) throws IndexOutOfBoundsException {
         return new File(pol0_90Line.substring(_POL0_90_START));
     }
 
-    private File _pol45_135FromFileString(String pol45_135Line, String setName) throws IndexOutOfBoundsException {
+    private File _pol45_135FromFileString(String pol45_135Line) throws IndexOutOfBoundsException {
         return new File(pol45_135Line.substring(_POL45_135_START));
     }
 
@@ -33,8 +33,8 @@ class ICapturedImageFileSetTwoCameraFromTextAdapter extends ICapturedImageFileSe
     protected void _addFilesToBuilder(String[] capturedImageGroup, String setName) throws CorruptCapturedImageSet {
         try {
             _builder.add(_channelsFromString(capturedImageGroup[0]),
-                    _pol0_90FromFileString(capturedImageGroup[1], setName),
-                    _pol45_135FromFileString(capturedImageGroup[2], setName));
+                    _pol0_90FromFileString(capturedImageGroup[1]),
+                    _pol45_135FromFileString(capturedImageGroup[2]));
 
         } catch (IndexOutOfBoundsException e) {
             throw new CorruptCapturedImageSet(setName);
