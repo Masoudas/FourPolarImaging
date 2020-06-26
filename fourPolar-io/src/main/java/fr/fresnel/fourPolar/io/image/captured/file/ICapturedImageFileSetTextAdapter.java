@@ -53,12 +53,34 @@ public class ICapturedImageFileSetTextAdapter {
     /**
      * The checker used when recreating the file set from strings.
      */
-    private static final ICapturedImageChecker _CHECKER = new CapturedImageExistsChecker();
+    private final ICapturedImageChecker _checker;
 
     private final ICapturedImageFileSetToTextAdapter _toTextAdapter;
     private final ICapturedImageFileSetFromTextAdapter _fromTextAdapter;
 
+    /**
+     * With this constructor, the captured image checker is set to
+     * {@link CapturedImageExistsChecker}. This would only check for existence of
+     * images
+     * 
+     * @param setup is the four polar imaging setup.
+     */
     public ICapturedImageFileSetTextAdapter(IFourPolarImagingSetup setup) {
+        _checker = new CapturedImageExistsChecker();
+        _toTextAdapter = new ICapturedImageFileSetToTextAdapter(setup.getCameras());
+        _fromTextAdapter = _chooseFromTextAdapter(setup);
+    }
+
+    /**
+     * With this constructor, we can supply a {@link CapturedImageExistsChecker},
+     * that is used for checking the captured image when forming a
+     * {@link ICapturedImageSet}.
+     * 
+     * 
+     * @param setup is the four polar imaging setup.
+     */
+    public ICapturedImageFileSetTextAdapter(IFourPolarImagingSetup setup, ICapturedImageChecker checker) {
+        _checker = checker;
         _toTextAdapter = new ICapturedImageFileSetToTextAdapter(setup.getCameras());
         _fromTextAdapter = _chooseFromTextAdapter(setup);
     }
@@ -66,13 +88,13 @@ public class ICapturedImageFileSetTextAdapter {
     private ICapturedImageFileSetFromTextAdapter _chooseFromTextAdapter(IFourPolarImagingSetup setup) {
         switch (setup.getCameras()) {
             case One:
-                return new ICapturedImageFileSetOneCameraFromTextAdapter(setup, _CHECKER);
+                return new ICapturedImageFileSetOneCameraFromTextAdapter(setup, _checker);
 
             case Two:
-                return new ICapturedImageFileSetTwoCameraFromTextAdapter(setup, _CHECKER);
+                return new ICapturedImageFileSetTwoCameraFromTextAdapter(setup, _checker);
 
             default:
-                return new ICapturedImageFileSetFourCameraFromTextAdapter(setup, _CHECKER);
+                return new ICapturedImageFileSetFourCameraFromTextAdapter(setup, _checker);
         }
     }
 
