@@ -45,9 +45,30 @@ abstract class ICapturedImageFileSetFromTextAdapter {
         }
 
         try {
-            return _builder.build();
+            return _buildCapturedImageSet(setName);
         } catch (CannotCreateException | IncompatibleCapturedImage e) {
             throw new CorruptCapturedImageSet(setName);
+        }
+    }
+
+    private ICapturedImageFileSet _buildCapturedImageSet(String setName)
+            throws CannotCreateException, IncompatibleCapturedImage, CorruptCapturedImageSet {
+        ICapturedImageFileSet fileSet = _builder.build();
+        _checkSetNameAfterBuild(setName, fileSet);
+        return fileSet;
+    }
+
+    /**
+     * Check the set name that is created by the builder correspond to the provided
+     * set name and throw an exception otherwise.
+     * 
+     * @param setName is the supposed set name of this set.
+     * @param fileSet is the file set built by the builder.
+     * @throws CorruptCapturedImageSet
+     */
+    private void _checkSetNameAfterBuild(String setName, ICapturedImageFileSet fileSet) throws CorruptCapturedImageSet {
+        if (setName.equals(fileSet.getSetName())) {
+            throw new CorruptCapturedImageSet("The set name does not correspond to the provided name.");
         }
     }
 
