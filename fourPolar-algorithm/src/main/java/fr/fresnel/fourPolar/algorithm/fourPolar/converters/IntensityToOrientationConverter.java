@@ -153,6 +153,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
     @Override
     public void convert(IntensityVector intensityVector, IOrientationVector orientationVector)
             throws ImpossibleOrientationVector {
+        // TODO : get rid of the exception and just return Nan for impossible situations
         // Getting intensities.
         double pol0Intensity = intensityVector.getIntensity(Polarization.pol0);
         double pol45Intensity = intensityVector.getIntensity(Polarization.pol45);

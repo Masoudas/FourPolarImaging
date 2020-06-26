@@ -141,7 +141,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
         final RGB16 color = _getStickColor(orientationVector);
         Pixel<RGB16> stickPixel = new Pixel<>(RGB16.zero()); // Create one pixel instance, to avoid creating many
                                                              // objects.
-
+        // TODO sum to the previous value rather than fully override, so that we can see the effect of all pixels.
         IShapeIterator stickIterator = _createStickIteratorForThisDipole(orientationVector, dipolePosition);
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();

@@ -143,6 +143,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
 
         Pixel<RGB16> pixelValue = _getStickColor(orientationVector);
 
+        // TODO sum to the previous value rather than fully override, so that we can see the effect of all pixels.
         IShapeIterator stickIterator = _createStickIteratorForThisDipole(orientationVector, stickCenterPosition);
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();

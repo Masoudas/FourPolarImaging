@@ -164,6 +164,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
             final Pixel<RGB16> pixelColor = this._getStickColor(orientationVector);
             IPixelRandomAccess<RGB16> stickFigureRA = this._dipoleFigure.getImage().getRandomAccess();
 
+            // TODO sum to the previous value rather than fully override, so that we can see the effect of all pixels.
             IShapeIterator stickIterator = _createStickIteratorForThisDipole(dipolePosition, orientationVector);
             for (; stickIterator.hasNext();) {
                 long[] stickPosition = stickIterator.next();
