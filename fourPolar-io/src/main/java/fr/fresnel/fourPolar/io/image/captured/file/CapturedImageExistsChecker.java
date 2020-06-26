@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
  * This checker ensures that a given captured image exists when using the image
  * for future applications.
  */
-class CapturedImageExistsChecker implements ICapturedImageChecker {
+public class CapturedImageExistsChecker implements ICapturedImageChecker {
     private static String notExists = "The captured image has been removed.";
 
     @Override
