@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
 /**
@@ -95,9 +96,9 @@ public class ICapturedImageFileSetToTextAdapter {
 
     private final Cameras _camera;
 
-    public ICapturedImageFileSetToTextAdapter(Cameras camera) {
-        Objects.requireNonNull(camera, "camera can't be null");
-        _camera = camera;
+    public ICapturedImageFileSetToTextAdapter(IFourPolarImagingSetup setup) {
+        Objects.requireNonNull(setup, "setup can't be null");
+        _camera = setup.getCameras();
     }
 
     /**
