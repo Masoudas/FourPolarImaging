@@ -14,11 +14,18 @@ class CapturedImageExistsChecker implements ICapturedImageChecker {
 
     @Override
     public void check(ICapturedImageFile capturedImageFile) throws IncompatibleCapturedImage {
+        // TODO: maybe we should check here that orientation and polarization and soi
+        // image exist too.
+        _checkCapturedImageFileIsOnDisk(capturedImageFile);
+
+    }
+
+    private void _checkCapturedImageFileIsOnDisk(ICapturedImageFile capturedImageFile)
+            throws IncompatibleCapturedImage {
         if (!capturedImageFile.file().exists()) {
             throw new IncompatibleCapturedImage(new fr.fresnel.fourPolar.core.image.captured.file.RejectedCapturedImage(
                     capturedImageFile.file(), notExists));
         }
-
     }
 
 }
