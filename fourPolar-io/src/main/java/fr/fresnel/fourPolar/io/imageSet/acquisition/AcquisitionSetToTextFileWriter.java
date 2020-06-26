@@ -13,7 +13,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetIOIssue;
-import fr.fresnel.fourPolar.io.image.captured.file.ICapturedImageFileSetTextAdapter;
+import fr.fresnel.fourPolar.io.image.captured.file.ICapturedImageFileSetToTextAdapter;
 
 /**
  * Using this class, we can write an {@link AcquisitionSet} to text as a set of
@@ -29,6 +29,12 @@ public class AcquisitionSetToTextFileWriter {
      * name in the captured set.
      */
     public static final int SPACE_BEFORE_FILE_LINE = 10;
+
+    /**
+     * Denotes the number of information lines (like associated channels of the
+     * group) before the file paths for a captured image group.
+     */
+    public static final int LINES_BEFORE_CAPTURED_IMAGE_GROUP = 1;
 
     /**
      * Number of lines in a set file that correspond to a captured image group. One
@@ -48,14 +54,14 @@ public class AcquisitionSetToTextFileWriter {
      */
     public static final int FOUR_CAM_LINES_PER_GROUP = 4 + 1;
 
-    private final ICapturedImageFileSetTextAdapter _textAdapter;
+    private final ICapturedImageFileSetToTextAdapter _textAdapter;
     private final String _spaceBeforeFile;
     private final AcquisitionSet _acquisitionSet;
 
     public AcquisitionSetToTextFileWriter(AcquisitionSet acquisitionSet, IFourPolarImagingSetup setup) {
         _acquisitionSet = acquisitionSet;
 
-        _textAdapter = new ICapturedImageFileSetTextAdapter(setup);
+        _textAdapter = new ICapturedImageFileSetToTextAdapter(setup);
         _spaceBeforeFile = _createSpaceString();
 
     }
