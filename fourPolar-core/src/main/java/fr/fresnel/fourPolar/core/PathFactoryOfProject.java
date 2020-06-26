@@ -54,6 +54,7 @@ public class PathFactoryOfProject {
      * @return
      */
     public static File getFolder_4Polar(File root4PProject) {
+        // TODO Check all absolute paths in the project!
         Path path = Paths.get(root4PProject.getAbsolutePath(), _projectRoot);
         File _projectRootPath = path.toFile();
 
