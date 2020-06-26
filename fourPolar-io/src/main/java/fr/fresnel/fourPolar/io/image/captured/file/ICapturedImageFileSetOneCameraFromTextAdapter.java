@@ -5,14 +5,16 @@ import java.util.Iterator;
 
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSetBuilder;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.io.exceptions.image.captured.file.CorruptCapturedImageSet;
 
 class ICapturedImageFileSetOneCameraFromTextAdapter extends ICapturedImageFileSetFromTextAdapter {
     private static final int _POL0_45_90_135_START = ICapturedImageFileSetToTextAdapter._POL0_45_90_135_START;
 
-    public ICapturedImageFileSetOneCameraFromTextAdapter(IFourPolarImagingSetup setup, ICapturedImageChecker checker) {
-        super(setup, checker);
+    public ICapturedImageFileSetOneCameraFromTextAdapter(IFourPolarImagingSetup setup, ICapturedImageChecker checker,
+            ICapturedImageFileSetBuilder builder) {
+        super(setup, checker, builder);
     }
 
     public ICapturedImageFileSet fromString(Iterator<String[]> iterator, String setName)
@@ -20,8 +22,7 @@ class ICapturedImageFileSetOneCameraFromTextAdapter extends ICapturedImageFileSe
         return super.fromString(iterator, setName);
     }
 
-    private File _pol0_45_90_135FromFileString(String pol0_45_90_135Line)
-            throws IndexOutOfBoundsException {
+    private File _pol0_45_90_135FromFileString(String pol0_45_90_135Line) throws IndexOutOfBoundsException {
         return new File(pol0_45_90_135Line.substring(_POL0_45_90_135_START));
     }
 

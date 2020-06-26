@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSetBuilder;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.io.exceptions.image.captured.file.CorruptCapturedImageSet;
 
@@ -12,8 +13,9 @@ class ICapturedImageFileSetTwoCameraFromTextAdapter extends ICapturedImageFileSe
     private static final int _POL0_90_START = ICapturedImageFileSetToTextAdapter._POL0_90_START;
     private static final int _POL45_135_START = ICapturedImageFileSetToTextAdapter._POL45_135_START;
 
-    public ICapturedImageFileSetTwoCameraFromTextAdapter(IFourPolarImagingSetup setup, ICapturedImageChecker checker) {
-        super(setup, checker);
+    public ICapturedImageFileSetTwoCameraFromTextAdapter(IFourPolarImagingSetup setup, ICapturedImageChecker checker,
+            ICapturedImageFileSetBuilder builder) {
+        super(setup, checker, builder);
     }
 
     public ICapturedImageFileSet fromString(Iterator<String[]> iterator, String setName)
@@ -32,8 +34,7 @@ class ICapturedImageFileSetTwoCameraFromTextAdapter extends ICapturedImageFileSe
     @Override
     protected void _addFilesToBuilder(String[] capturedImageGroup, String setName) throws CorruptCapturedImageSet {
         try {
-            _builder.add(_channelsFromString(capturedImageGroup[0]),
-                    _pol0_90FromFileString(capturedImageGroup[1]),
+            _builder.add(_channelsFromString(capturedImageGroup[0]), _pol0_90FromFileString(capturedImageGroup[1]),
                     _pol45_135FromFileString(capturedImageGroup[2]));
 
         } catch (IndexOutOfBoundsException e) {

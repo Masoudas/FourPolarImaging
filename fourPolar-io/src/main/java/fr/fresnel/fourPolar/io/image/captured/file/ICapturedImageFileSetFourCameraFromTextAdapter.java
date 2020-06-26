@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSetBuilder;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.io.exceptions.image.captured.file.CorruptCapturedImageSet;
 
@@ -14,8 +15,9 @@ class ICapturedImageFileSetFourCameraFromTextAdapter extends ICapturedImageFileS
     private static final int _POL90_START = ICapturedImageFileSetToTextAdapter._POL90_START;
     private static final int _POL135_START = ICapturedImageFileSetToTextAdapter._POL135_START;
 
-    public ICapturedImageFileSetFourCameraFromTextAdapter(IFourPolarImagingSetup setup, ICapturedImageChecker checker) {
-        super(setup, checker);
+    public ICapturedImageFileSetFourCameraFromTextAdapter(IFourPolarImagingSetup setup, ICapturedImageChecker checker,
+            ICapturedImageFileSetBuilder builder) {
+        super(setup, checker, builder);
     }
 
     public ICapturedImageFileSet fromString(Iterator<String[]> iterator, String setName)
