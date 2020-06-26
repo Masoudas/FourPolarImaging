@@ -50,7 +50,7 @@ public class SophiesChoiceII {
     static String etaAndDelta2DStickColorMap = ColorMapFactory.IMAGEJ_PHASE;
 
     // Threshold for SoI. Sticks will be drawn above this threshold.
-    static int soiThreshold = 50000;
+    static int soiThreshold = 500;
 
     /**
      * A box RoI from min to max coordinates. The box can be 2d (in which case it

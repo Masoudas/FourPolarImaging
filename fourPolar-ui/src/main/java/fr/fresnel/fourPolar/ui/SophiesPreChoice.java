@@ -78,22 +78,22 @@ public class SophiesPreChoice {
     public static String userName = "Sophie 'The Boss' Brasselet";
 
     // RootFolder
-    public static String rootFolder = "/home/masoud/Documents/SampleImages/A4PolarDataSet";
+    public static String rootFolder = "D:/4PolarBackendTest/Masoud";
 
     // Registration image
-    public static String registrationImage = "MAX_rotor_10.tif";
+    public static String registrationImage = "AF488_3D_noSAF_2-wf.tif";
 
     // Registration image type
     public static RegistrationImageType registrationImageType = RegistrationImageType.BEAD;
 
     // Sample image
-    public static String sampleImage = "MAX_rotor_10.tif";
+    public static String sampleImage = "AF488_3D_noSAF_2-wf.tif";
 
     // Number of channels
     public static int[] channels = { 1 };
 
     // Wavelength (in meter)
-    private static double[] wavelengths = { 561e-9 };
+    private static double[] wavelengths = { 488e-9 };
 
     // Numerical aperture
     private static double na_0 = 1.45;

@@ -43,7 +43,7 @@ import javassist.tools.reflect.CannotCreateException;
  * then run the code.
  */
 public class SophiesChoiceI {
-    private static double soiThreshold = 1000;
+    private static double soiThreshold = 200;
 
     public static void main(String[] args)
             throws IOException, CannotCreateException, IncompatibleCapturedImage, PropagationChannelNotInDatabase {
