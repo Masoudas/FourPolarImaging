@@ -219,11 +219,13 @@ class CapturedImageFileSet implements ICapturedImageFileSet {
      * @return
      */
     private int[] _setChannels(ICapturedImageFile[] cameraFiles) {
-        IntStream channels = IntStream.empty();
+        IntStream channelsAsStream = IntStream.empty();
         for (ICapturedImageFile capturedImageFile : cameraFiles) {
-            channels = IntStream.concat(channels, Arrays.stream(capturedImageFile.channels()));
+            channelsAsStream = IntStream.concat(channelsAsStream, Arrays.stream(capturedImageFile.channels()));
         }
 
-        return channels.toArray();
+        int[] channels = channelsAsStream.toArray();
+        Arrays.sort(channels);
+        return channels; 
     }
 }
