@@ -19,6 +19,11 @@ import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.Acquisitio
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetNotFound;
 import fr.fresnel.fourPolar.io.image.captured.file.ICapturedImageFileSetTextAdapter;
 
+/**
+ * 
+ * Reads an acquisition set that is written to the disk using
+ * {@link AcquisitionSetToTextFileWriter}
+ */
 public class AcquisitionSetFromTextFileReader {
     private final int _nLinesForEachCapturedImageGroup;
 
@@ -46,11 +51,20 @@ public class AcquisitionSetFromTextFileReader {
     }
 
     /**
+     * Populate an acquisition with the text files that are on the disk. The type of
+     * acquisition set determines which folder should be searched.
+     * 
      * @param setType        is an empty set to be populated by this reader.
      * @param acquisitionSet is the acquisition set to be populated. The type of the
      *                       set is used for reading the corresponding set from the
      *                       disk.
-     * @throws AcquisitionSetIOIssue
+     * 
+     * @throws AcquisitionSetNotFound   if the requested acquisition set does not
+     *                                  exist on the disk.
+     * @throws AcquisitionSetIOIssue    for any IO issues that may occur while
+     *                                  reading the acquisition set (like issues
+     *                                  with the text files, or that the captured
+     *                                  images have been deleted. )
      * 
      * @throws IOException              if the requested acquisition set does not
      *                                  exist or is empy.
