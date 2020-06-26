@@ -8,6 +8,7 @@ import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCap
 import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.file.CapturedImageFileSetBuilder;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSetBuilder;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.image.captured.file.CorruptCapturedImageSet;
@@ -19,16 +20,60 @@ abstract class ICapturedImageFileSetFromTextAdapter {
      */
     private static final int _CHANNEL_NO_START = ICapturedImageFileSetToTextAdapter._CHANNEL_NO_START;
 
-    protected final CapturedImageFileSetBuilder _builder;
+    protected final ICapturedImageFileSetBuilder _builder;
 
     private final int _nImages;
 
-    protected ICapturedImageFileSetFromTextAdapter(IFourPolarImagingSetup setup, ICapturedImageChecker checker) {
+    /**
+     * With this constructor, the captured image checker is set to
+     * {@link CapturedImageExistsChecker} and default
+     * {@link CapturedImageSetBuilder}. This would only check for existence of
+     * images.
+     * 
+     * @param setup is the four polar imaging setup.
+     */
+    public static ICapturedImageFileSetFromTextAdapter create(IFourPolarImagingSetup setup) {
+        ICapturedImageChecker defaultChecker = new CapturedImageExistsChecker();
+        ICapturedImageFileSetBuilder defaultBuilder = new CapturedImageFileSetBuilder(setup, defaultChecker);
+
+        return _chooseFromTextAdapter(setup, defaultChecker, defaultBuilder);
+    }
+
+    /**
+     * With this constructor, we can supply a {@link CapturedImageExistsChecker},
+     * that is used for checking the captured image when forming a
+     * {@link ICapturedImageSet}.
+     * 
+     * 
+     * @param setup   is the four polar imaging setup.
+     * @param checker is the checker to be used for checking captured images.
+     * @param builder is the builder used to create captured image set.
+     */
+    public static ICapturedImageFileSetFromTextAdapter create(IFourPolarImagingSetup setup, ICapturedImageChecker checker,
+            ICapturedImageFileSetBuilder builder) {
+        return _chooseFromTextAdapter(setup, checker, builder);
+    }
+
+    private static ICapturedImageFileSetFromTextAdapter _chooseFromTextAdapter(IFourPolarImagingSetup setup,
+            ICapturedImageChecker checker, ICapturedImageFileSetBuilder builder) {
+        switch (setup.getCameras()) {
+            case One:
+                return new ICapturedImageFileSetOneCameraFromTextAdapter(setup, checker, builder);
+
+            case Two:
+                return new ICapturedImageFileSetTwoCameraFromTextAdapter(setup, checker, builder);
+
+            default:
+                return new ICapturedImageFileSetFourCameraFromTextAdapter(setup, checker, builder);
+        }
+    }
+
+    protected ICapturedImageFileSetFromTextAdapter(IFourPolarImagingSetup setup, ICapturedImageChecker checker,
+            ICapturedImageFileSetBuilder builder) {
         Objects.requireNonNull(setup, "setup can't be null");
         Objects.requireNonNull(checker, "checker can't be null");
 
-        _builder = new CapturedImageFileSetBuilder(setup, checker);
-
+        _builder = builder;
         _nImages = Cameras.getNImages(setup.getCameras());
     }
 
