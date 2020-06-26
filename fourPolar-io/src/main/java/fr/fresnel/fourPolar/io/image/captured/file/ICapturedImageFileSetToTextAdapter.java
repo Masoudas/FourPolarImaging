@@ -154,7 +154,7 @@ public class ICapturedImageFileSetToTextAdapter {
         representer[repLineCtr++] = "Channels: " + Arrays.toString(channel);
 
         for (String label : Cameras.getLabels(_camera)) {
-            representer[repLineCtr++] = label + ": " + capturedImageGroup.get(label).getAbsolutePath();
+            representer[repLineCtr++] = label + ": " + capturedImageGroup.get(label).getPath();
         }
 
         return representer;
