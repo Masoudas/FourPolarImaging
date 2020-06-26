@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import fr.fresnel.fourPolar.core.image.captured.checker.ICapturedImageChecker;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSetBuilder;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSetType;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
@@ -17,7 +19,7 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.image.captured.file.CorruptCapturedImageSet;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetIOIssue;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetNotFound;
-import fr.fresnel.fourPolar.io.image.captured.file.ICapturedImageFileSetTextAdapter;
+import fr.fresnel.fourPolar.io.image.captured.file.ICapturedImageFileSetFromTextAdapter;
 
 /**
  * 
@@ -27,14 +29,38 @@ import fr.fresnel.fourPolar.io.image.captured.file.ICapturedImageFileSetTextAdap
 public class AcquisitionSetFromTextFileReader {
     private final int _nLinesForEachCapturedImageGroup;
 
-    private final int _nSpaces_Before_Path_Line;
+    private final int _nSpaces_Before_Path_Line = AcquisitionSetToTextFileWriter.SPACE_BEFORE_FILE_LINE;
 
-    private final ICapturedImageFileSetTextAdapter _adaptorToCapturedSet;
+    private final ICapturedImageFileSetFromTextAdapter _adaptorToCapturedSet;
 
+    private final int _nLinesBeforeCapturedImageGroup = AcquisitionSetToTextFileWriter.LINES_BEFORE_CAPTURED_IMAGE_GROUP;
+
+    /**
+     * Construct reader for the given four polar setup, with the image checker that
+     * is used in {@link ICapturedImageFileSetTextAdapter} is
+     * {@link CapturedImageExistsChecker} and {@link CapturedImageFileSetBuilder}.
+     * This implies that when forming the acqusition set, we only check for the
+     * existence of the images.
+     * 
+     * @param setup is the four polar imaging setup.
+     */
     public AcquisitionSetFromTextFileReader(IFourPolarImagingSetup setup) {
-        this._nSpaces_Before_Path_Line = AcquisitionSetToTextFileWriter.SPACE_BEFORE_FILE_LINE;
         this._nLinesForEachCapturedImageGroup = _numLinesForEachCapturdImageGroup(setup.getCameras());
-        this._adaptorToCapturedSet = new ICapturedImageFileSetTextAdapter(setup);
+        this._adaptorToCapturedSet = ICapturedImageFileSetFromTextAdapter.create(setup);
+    }
+
+    /**
+     * Construct reader for the given four polar setup, with the provided checker
+     * and file set builder.
+     * 
+     * @param setup   is the four polar imaging setup.
+     * @param checker is the captured image checker.
+     * @param builder is the captured image set builder.
+     */
+    public AcquisitionSetFromTextFileReader(IFourPolarImagingSetup setup, ICapturedImageChecker checker,
+            ICapturedImageFileSetBuilder builder) {
+        this._nLinesForEachCapturedImageGroup = _numLinesForEachCapturdImageGroup(setup.getCameras());
+        this._adaptorToCapturedSet = ICapturedImageFileSetFromTextAdapter.create(setup, checker, builder);
     }
 
     private int _numLinesForEachCapturdImageGroup(Cameras camera) {
@@ -54,7 +80,6 @@ public class AcquisitionSetFromTextFileReader {
      * Populate an acquisition with the text files that are on the disk. The type of
      * acquisition set determines which folder should be searched.
      * 
-     * @param setType        is an empty set to be populated by this reader.
      * @param acquisitionSet is the acquisition set to be populated. The type of the
      *                       set is used for reading the corresponding set from the
      *                       disk.
@@ -71,12 +96,11 @@ public class AcquisitionSetFromTextFileReader {
      * @throws IllegalArgumentException if the given acquisition set is not empty.
      * 
      */
-    public void read(File root4PProject, AcquisitionSet acquisitionSet)
-            throws AcquisitionSetNotFound, AcquisitionSetIOIssue {
+    public void read(AcquisitionSet acquisitionSet) throws AcquisitionSetNotFound, AcquisitionSetIOIssue {
         _checkAcquisitionSetIsEmpty(acquisitionSet);
 
         AcquisitionSetIOIssue exceptionIOIssue = new AcquisitionSetIOIssue(_getAcquisitionSetExceptionMessage());
-        File[] capturedImageSets = _getCapturedImageSetsAsTextFilesOnRoot(root4PProject, acquisitionSet.setType());
+        File[] capturedImageSets = _getCapturedImageSetsAsTextFilesOnRoot(acquisitionSet);
         for (File capturedImageSet : capturedImageSets) {
             String setName = _getCapturedSetNameFromFileName(capturedImageSet);
             try {
@@ -108,21 +132,33 @@ public class AcquisitionSetFromTextFileReader {
      */
     private Iterator<String[]> _groupCapturedImagesFromTextFileContent(File setFile) throws IOException {
         List<String> setFileContent = _readCapturedImageSet(setFile);
-        ArrayList<String[]> capturedSetAsString = new ArrayList<>();
+        ArrayList<String[]> capturedSetAsStringGroups = _convertFileLinesIntoGroupsOfCapturedImages(setFileContent);
+        _removeSpacesFromFilePathLines(capturedSetAsStringGroups);
+        return capturedSetAsStringGroups.iterator();
 
-        String[] capturedImageGroup = new String[_nLinesForEachCapturedImageGroup];
-        for (int index = 0; index < setFileContent.size(); index++) {
-            if (index % _nLinesForEachCapturedImageGroup == 0) {
-                capturedImageGroup = new String[_nLinesForEachCapturedImageGroup];
-                capturedImageGroup[index] = setFileContent.get(index);
-            } else if (index % _nLinesForEachCapturedImageGroup < _nLinesForEachCapturedImageGroup) {
-                capturedImageGroup[index] = _removeSpacesFromFilePathLines(setFileContent.get(index));
-            }
-        }
-
-        return capturedSetAsString.iterator();
     }
 
+    /**
+     * Return an iterator over the captured image groups, each group being returned
+     * over one iteration.
+     */
+    private ArrayList<String[]> _convertFileLinesIntoGroupsOfCapturedImages(List<String> setFileContent) {
+        ArrayList<String[]> capturedSetAsStringGroups = new ArrayList<>();
+        String[] capturedImageGroup = new String[_nLinesForEachCapturedImageGroup];
+        for (int index = 0; index < setFileContent.size(); index++) {
+            int groupIndex = index % _nLinesForEachCapturedImageGroup;
+            if (groupIndex == 0) {
+                capturedImageGroup = new String[_nLinesForEachCapturedImageGroup];
+                capturedSetAsStringGroups.add(capturedImageGroup);
+            }
+            capturedImageGroup[groupIndex] = setFileContent.get(index);
+        }
+        return capturedSetAsStringGroups;
+    }
+
+    /**
+     * Read the content of the captured image set and return each line.
+     */
     private ArrayList<String> _readCapturedImageSet(File setFile) throws IOException {
         ArrayList<String> fileContent = new ArrayList<>();
 
@@ -136,8 +172,17 @@ public class AcquisitionSetFromTextFileReader {
         return fileContent;
     }
 
-    private String _removeSpacesFromFilePathLines(String lineContainingFilePath) {
-        return lineContainingFilePath.substring(_nSpaces_Before_Path_Line + 1);
+    /**
+     * Iterate over each group, go over the lines that contain the paths, and remove
+     * the space before them.
+     */
+    private void _removeSpacesFromFilePathLines(ArrayList<String[]> capturedSetAsStringGroups) {
+        for (Iterator<String[]> groupItr = capturedSetAsStringGroups.iterator(); groupItr.hasNext();) {
+            String[] capturedImageGroup = groupItr.next();
+            for (int groupIndex = _nLinesBeforeCapturedImageGroup; groupIndex < capturedImageGroup.length; groupIndex++) {
+                capturedImageGroup[groupIndex] = capturedImageGroup[groupIndex].substring(_nSpaces_Before_Path_Line);
+            }
+        }
     }
 
     private BufferedReader _getCapturedFileSetReader(File setFile) {
@@ -155,9 +200,8 @@ public class AcquisitionSetFromTextFileReader {
      * returns them (without file extension), which are equivalent to captured image
      * set names.
      */
-    private File[] _getCapturedImageSetsAsTextFilesOnRoot(File root4PProject, AcquisitionSetType setType)
-            throws AcquisitionSetNotFound {
-        File root = this._getAcquisitionSetRootFolder(root4PProject, setType);
+    private File[] _getCapturedImageSetsAsTextFilesOnRoot(AcquisitionSet acquisitionSet) throws AcquisitionSetNotFound {
+        File root = this._getAcquisitionSetRootFolder(acquisitionSet.rootFolder(), acquisitionSet.setType());
 
         return root.listFiles(new TextFileFilter());
     }
