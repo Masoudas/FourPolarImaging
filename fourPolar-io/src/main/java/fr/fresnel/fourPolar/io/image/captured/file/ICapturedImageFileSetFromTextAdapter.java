@@ -123,7 +123,7 @@ abstract public class ICapturedImageFileSetFromTextAdapter {
      * @throws CorruptCapturedImageSet
      */
     private void _checkSetNameAfterBuild(String setName, ICapturedImageFileSet fileSet) throws CorruptCapturedImageSet {
-        if (setName.equals(fileSet.getSetName())) {
+        if (!setName.equals(fileSet.getSetName())) {
             throw new CorruptCapturedImageSet("The set name does not correspond to the provided name.");
         }
     }
