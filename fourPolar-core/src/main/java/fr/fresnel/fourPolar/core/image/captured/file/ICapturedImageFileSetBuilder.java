@@ -25,7 +25,7 @@ public interface ICapturedImageFileSetBuilder {
      * @throws IllegalArgumentException if method is used for incorrect
      *                                  {@link Cameras}
      */
-    public CapturedImageFileSetBuilder add(int[] channels, File pol0_45_90_135);
+    public ICapturedImageFileSetBuilder add(int[] channels, File pol0_45_90_135);
 
     /**
      * Add files to the fileSet being built. If multiple channels per image, this
@@ -44,7 +44,7 @@ public interface ICapturedImageFileSetBuilder {
      * @throws IllegalArgumentException if method is used for incorrect
      *                                  {@link Cameras}
      */
-    public CapturedImageFileSetBuilder add(int[] channels, File pol0_90, File pol45_135);
+    public ICapturedImageFileSetBuilder add(int[] channels, File pol0_90, File pol45_135);
 
     /**
      * Add files to the fileSet being built. If multiple channels per image, this
@@ -67,7 +67,7 @@ public interface ICapturedImageFileSetBuilder {
      * @throws IllegalArgumentException if method is used for incorrect
      *                                  {@link Cameras}.
      */
-    public CapturedImageFileSetBuilder add(int[] channels, File pol0, File pol45, File pol90, File pol135);
+    public ICapturedImageFileSetBuilder add(int[] channels, File pol0, File pol45, File pol90, File pol135);
 
     /**
      * Returns the {@link ICapturedImageFileSet} that is created based on the added
