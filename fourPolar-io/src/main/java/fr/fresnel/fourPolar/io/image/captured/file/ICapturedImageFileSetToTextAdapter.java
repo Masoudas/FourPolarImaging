@@ -12,7 +12,47 @@ import fr.fresnel.fourPolar.core.image.captured.ICapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 
-class ICapturedImageFileSetToTextAdapter {
+/**
+ * Provides an string representation of an {@link ICapturedImageFileSet} that
+ * can be used to write this set to disk.
+ * 
+ * The convention used is that each group of {@link ICapturedImageFile} that
+ * correspond to the four polarizations are converted into the following
+ * strings:
+ * <ul>
+ * <ul>
+ * {@link Cameras#One} case:
+ * <li>String 0 : "Channels : [c1, c2, ...]", that indicates the channels the
+ * files correspond to.</li>
+ * <li>String 1 : "Pol0_45_90_135 : file.xxx", the file that corresponds to
+ * pol0, 45, 90 and 135.</li>
+ * </ul>
+ * 
+ * <ul>
+ * {@link Cameras#Two} case:
+ * <li>String 0 : "Channels : [c1, c2, ...]", that indicates the channels the
+ * files correspond to.</li>
+ * <li>String 1 : "Pol0_90 : file.xxx", the file that corresponds to pol0 and
+ * 90.</li>
+ * <li>String 2 : "Pol45_135 : file.xxx", the file that corresponds to pol45 and
+ * 135.</li>
+ * </ul>
+ * 
+ * <ul>
+ * {@link Cameras#Four} case:
+ * <li>String 0 : "Channels : [c1, c2, ...]", that indicates the channels the
+ * files correspond to.</li>
+ * <li>String 1 : "Pol0 : file.xxx", the file that corresponds to pol0.</li>
+ * <li>String 2 : "Pol45 : file.xxx", the file that corresponds to pol45.</li>
+ * <li>String 3 : "Pol90 : file.xxx", the file that corresponds to pol90.</li>
+ * <li>String 4 : "Pol135 : file.xxx", the file that corresponds to pol135.</li>
+ * </ul>
+ * </ul>
+ * 
+ * Note that for {@link Cameras#One}, all pol filess would be equal, and for
+ * {@link Cameras#Two}, pol0 is equal to pol90 and pol45 is equal to pol135.
+ */
+public class ICapturedImageFileSetToTextAdapter {
     /**
      * The index where first channel number resides.
      */
