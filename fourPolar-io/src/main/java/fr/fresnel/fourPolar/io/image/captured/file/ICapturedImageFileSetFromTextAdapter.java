@@ -131,11 +131,15 @@ abstract public class ICapturedImageFileSetFromTextAdapter {
     abstract protected void _addFilesToBuilder(String[] capturedImageGroupm, String setName)
             throws CorruptCapturedImageSet;
 
-    protected int[] _channelsFromString(String channelLine) {
+    protected int[] _channelsFromString(String channelLine, String setName) throws CorruptCapturedImageSet{
         String channelNoPortion = channelLine.substring(_CHANNEL_NO_START, channelLine.length() - 1);
         String[] channels = channelNoPortion.split(", ");
 
-        return Stream.of(channels).mapToInt(Integer::parseInt).toArray();
+        try {
+            return Stream.of(channels).mapToInt(Integer::parseInt).toArray();            
+        } catch (NumberFormatException e) {
+            throw new CorruptCapturedImageSet(setName);
+        }
     }
 
     private void _checkGroupStringsLength(String[] capturedImageGroup, String setName) throws CorruptCapturedImageSet {

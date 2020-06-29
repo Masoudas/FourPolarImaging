@@ -29,7 +29,7 @@ class ICapturedImageFileSetOneCameraFromTextAdapter extends ICapturedImageFileSe
     @Override
     protected void _addFilesToBuilder(String[] capturedImageGroup, String setName) throws CorruptCapturedImageSet {
         try {
-            _builder.add(_channelsFromString(capturedImageGroup[0]),
+            _builder.add(_channelsFromString(capturedImageGroup[0], setName),
                     _pol0_45_90_135FromFileString(capturedImageGroup[1]));
         } catch (IndexOutOfBoundsException e) {
             throw new CorruptCapturedImageSet(setName);

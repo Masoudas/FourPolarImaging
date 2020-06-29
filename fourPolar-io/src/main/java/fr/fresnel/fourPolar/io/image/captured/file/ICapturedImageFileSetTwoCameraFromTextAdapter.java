@@ -34,8 +34,8 @@ class ICapturedImageFileSetTwoCameraFromTextAdapter extends ICapturedImageFileSe
     @Override
     protected void _addFilesToBuilder(String[] capturedImageGroup, String setName) throws CorruptCapturedImageSet {
         try {
-            _builder.add(_channelsFromString(capturedImageGroup[0]), _pol0_90FromFileString(capturedImageGroup[1]),
-                    _pol45_135FromFileString(capturedImageGroup[2]));
+            _builder.add(_channelsFromString(capturedImageGroup[0], setName),
+                    _pol0_90FromFileString(capturedImageGroup[1]), _pol45_135FromFileString(capturedImageGroup[2]));
 
         } catch (IndexOutOfBoundsException e) {
             throw new CorruptCapturedImageSet(setName);
