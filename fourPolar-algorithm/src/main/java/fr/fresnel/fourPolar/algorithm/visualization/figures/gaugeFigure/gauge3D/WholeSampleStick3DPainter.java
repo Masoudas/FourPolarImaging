@@ -7,6 +7,7 @@ import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
+import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
@@ -139,16 +140,17 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
 
     private void _drawStick(IOrientationVector orientationVector, long[] dipolePosition) {
         final RGB16 color = _getStickColor(orientationVector);
-        Pixel<RGB16> stickPixel = new Pixel<>(RGB16.zero()); // Create one pixel instance, to avoid creating many
-                                                             // objects.
-        // TODO sum to the previous value rather than fully override, so that we can see the effect of all pixels.
+
         IShapeIterator stickIterator = _createStickIteratorForThisDipole(orientationVector, dipolePosition);
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
             if (this._stick3DFigureBoundary.isInside(stickPosition)) {
                 this._stick3DFigureRA.setPosition(stickPosition);
-                stickPixel.value().set(color.getR(), color.getG(), color.getB());
-                this._stick3DFigureRA.setPixel(stickPixel);
+                
+                IPixel<RGB16> stickPositionPixel = this._stick3DFigureRA.getPixel();
+                stickPositionPixel.value().add(color);
+                
+                this._stick3DFigureRA.setPixel(stickPositionPixel);
             }
         }
     }

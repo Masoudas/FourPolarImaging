@@ -7,6 +7,7 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.Converter
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
@@ -140,15 +141,17 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
      */
     private void _drawStick(IOrientationVector orientationVector, long[] stickCenterPosition,
             IPixelRandomAccess<RGB16> stickFigureRA) {
+        RGB16 stickColor = _getStickColor(orientationVector);
 
-        Pixel<RGB16> pixelValue = _getStickColor(orientationVector);
-
-        // TODO sum to the previous value rather than fully override, so that we can see the effect of all pixels.
         IShapeIterator stickIterator = _createStickIteratorForThisDipole(orientationVector, stickCenterPosition);
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
             stickFigureRA.setPosition(stickPosition);
-            stickFigureRA.setPixel(pixelValue);
+            
+            IPixel<RGB16> stickPositionPixel = stickFigureRA.getPixel();
+            stickPositionPixel.value().add(stickColor);
+            
+            stickFigureRA.setPixel(stickPositionPixel);
         }
     }
 
@@ -191,9 +194,8 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
                 && !Double.isNaN(orientationVector.getAngle(_colorAngle));
     }
 
-    private Pixel<RGB16> _getStickColor(IOrientationVector orientationVector) {
-        RGB16 pixelColor = this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
-        return new Pixel<RGB16>(pixelColor);
+    private RGB16 _getStickColor(IOrientationVector orientationVector) {
+        return this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
     }
 
     @Override
