@@ -71,6 +71,10 @@ public class ARGB8 implements PixelType {
         this._a = this._limitAlphaRange(rgb16._a);
     }
 
+    public void setAlpha(int alpha) {
+        this._a = this._limitAlphaRange(alpha);
+    }
+
     /**
      * Add to the current pixel, and set the transparency to that of the new pixel.
      * 
