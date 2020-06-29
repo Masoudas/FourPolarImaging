@@ -24,8 +24,84 @@ import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.io.exceptions.image.captured.file.CorruptCapturedImageSet;
 
+/**
+ * The dummy captured image file set builder we used here creates the sets with the
+ * names define by {@link #setNames}.
+ */
 public class ICapturedImageFileSetFromTextAdapterTest {
     final static String[] setNames = { "Set1", "Set2" };
+
+    @Test
+    public void getStringRepresentation_ChannelStringHasAdditionalSpace_ThrowsCorruptCapturedImageSet()
+            throws CorruptCapturedImageSet {
+        Cameras camera = Cameras.One;
+        IFourPolarImagingSetup setup = new FromTextDummyFPSetup(1, camera);
+
+        String setName = setNames[0];
+
+        String[] setAsString = new String[2];
+        setAsString[0] = "Channels:  [1]";
+        setAsString[1] = " ";
+        
+
+        ArrayList<String[]> representorList = new ArrayList<>();
+        representorList.add(setAsString);
+
+        ICapturedImageFileSetFourCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetFourCameraFromTextAdapter(
+                setup, new DummyChecker(), new FromDummyCapturedSetBuilder(1));
+
+        assertThrows(CorruptCapturedImageSet.class, () -> fromAdaptor.fromString(
+            representorList.iterator(), setName));
+    }
+
+
+    @Test
+    public void getStringRepresentation_EmptyFileStrings_ThrowsCorruptCapturedImageSet()
+            throws CorruptCapturedImageSet {
+        Cameras camera = Cameras.Four;
+        IFourPolarImagingSetup setup = new FromTextDummyFPSetup(1, camera);
+
+        String setName = setNames[0];
+
+        String[] setAsString = new String[5];
+        setAsString[0] = "Channels: [1]";
+        setAsString[1] = " ";
+        setAsString[2] = " ";
+        setAsString[3] = " ";
+        setAsString[4] = " ";
+
+        ArrayList<String[]> representorList = new ArrayList<>();
+        representorList.add(setAsString);
+
+        ICapturedImageFileSetFourCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetFourCameraFromTextAdapter(
+                setup, new DummyChecker(), new FromDummyCapturedSetBuilder(1));
+
+        assertThrows(CorruptCapturedImageSet.class, () -> fromAdaptor.fromString(
+            representorList.iterator(), setName));
+    }
+
+    @Test
+    public void getStringRepresentation_FilesDontCreateSetName_ThrowsCorruptCapturedImageSet()
+            throws CorruptCapturedImageSet {
+        Cameras camera = Cameras.One;
+        IFourPolarImagingSetup setup = new FromTextDummyFPSetup(1, camera);
+
+        String setName = setNames[0];
+
+        String[] setAsString = new String[2];
+        setAsString[0] = "Channels: [1]";
+        setAsString[1] = Cameras.getLabels(camera)[0] + ": NotSet1.tif";
+
+        ArrayList<String[]> representorList = new ArrayList<>();
+        representorList.add(setAsString);
+
+        ICapturedImageFileSetFourCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetFourCameraFromTextAdapter(
+                setup, new DummyChecker(), new FromDummyCapturedSetBuilder(1));
+
+        assertThrows(CorruptCapturedImageSet.class, () -> fromAdaptor.fromString(
+            representorList.iterator(), setName));
+    }
+
 
     /**
      * Create an artificial case of both single channel and multi-channel captured
@@ -143,30 +219,6 @@ public class ICapturedImageFileSetFromTextAdapterTest {
 
         ICapturedImageFileSet set = fromAdaptor.fromString(representors, setName);
         assertTrue(_isFromStringRepresentationCorrect(set, camera, fileSet));
-    }
-
-    @Test
-    public void getStringRepresentation_EmptyFileStrings_ThrowsCorruptCapturedImageSet()
-            throws CorruptCapturedImageSet {
-        Cameras camera = Cameras.Four;
-        IFourPolarImagingSetup setup = new FromTextDummyFPSetup(1, camera);
-
-        String setName = "FourCamera";
-
-        String[] setAsString = new String[5];
-        setAsString[0] = "Channels: [1]";
-        setAsString[1] = " ";
-        setAsString[2] = " ";
-        setAsString[3] = " ";
-        setAsString[4] = " ";
-
-        ArrayList<String[]> representorList = new ArrayList<>();
-        representorList.add(setAsString);
-
-        ICapturedImageFileSetFourCameraFromTextAdapter fromAdaptor = new ICapturedImageFileSetFourCameraFromTextAdapter(
-                setup, new DummyChecker(), new FromDummyCapturedSetBuilder(1));
-
-        assertThrows(CorruptCapturedImageSet.class, () -> fromAdaptor.fromString(representorList.iterator(), setName));
     }
 
     private boolean _isFromStringRepresentationCorrect(ICapturedImageFileSet set, Cameras camera,
