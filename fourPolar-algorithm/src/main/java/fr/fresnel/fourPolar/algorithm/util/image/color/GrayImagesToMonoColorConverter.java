@@ -10,7 +10,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2RandomAccessConverter;
 import fr.fresnel.fourPolar.core.image.generic.metadata.MetadataUtil;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
@@ -34,7 +34,7 @@ class GrayImagesToMonoColorConverter {
         new AssertionError();
     }
 
-    public static IPixelRandomAccess<RGB16> convert(Image<UINT16> image, Color color) {
+    public static IPixelRandomAccess<ARGB8> convert(Image<UINT16> image, Color color) {
         Objects.requireNonNull(image);
         Objects.requireNonNull(color);
 

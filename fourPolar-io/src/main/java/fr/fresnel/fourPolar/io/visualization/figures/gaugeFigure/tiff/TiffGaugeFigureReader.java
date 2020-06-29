@@ -6,7 +6,7 @@ import java.io.IOException;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
@@ -24,7 +24,7 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
     private final AngleGaugeType _angleGaugeType;
     private final GaugeFigureType _gaugeFigureType;
 
-    private ImageReader<RGB16> _reader;
+    private ImageReader<ARGB8> _reader;
 
     /**
      * Initializes the reader to read a particular form of gauge figure.
@@ -36,7 +36,7 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
      */
     public TiffGaugeFigureReader(ImageFactory imageFactory, GaugeFigureType gaugeFigureType,
             AngleGaugeType angleGaugeType) {
-        this._reader = TiffImageReaderFactory.getReader(imageFactory, RGB16.zero());
+        this._reader = TiffImageReaderFactory.getReader(imageFactory, ARGB8.zero());
         this._gaugeFigureType = gaugeFigureType;
         this._angleGaugeType = angleGaugeType;
     }
@@ -46,7 +46,7 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
             ICapturedImageFileSet capturedImageFileSet) throws IOException {
         File pathToFigure = this._getPathToFigure(root4PProject, visualizationSession, channel, capturedImageFileSet);
 
-        Image<RGB16> gaugeFigure = this._readGaugeFigure(pathToFigure);
+        Image<ARGB8> gaugeFigure = this._readGaugeFigure(pathToFigure);
 
         return GaugeFigureFactory.create(this._gaugeFigureType, this._angleGaugeType, gaugeFigure, capturedImageFileSet,
                 channel);
@@ -64,8 +64,8 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
                 capturedImageFileSet, this._gaugeFigureType, this._angleGaugeType);
     }
 
-    private Image<RGB16> _readGaugeFigure(File pathToFigure) throws IOException {
-        Image<RGB16> diskImage = null;
+    private Image<ARGB8> _readGaugeFigure(File pathToFigure) throws IOException {
+        Image<ARGB8> diskImage = null;
         try {
             this._reader.read(pathToFigure);
         } catch (IOException | MetadataParseError e) {

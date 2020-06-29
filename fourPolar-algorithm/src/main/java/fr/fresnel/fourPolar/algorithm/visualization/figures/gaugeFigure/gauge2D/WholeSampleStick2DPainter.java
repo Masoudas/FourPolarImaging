@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImageRandomAccess;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
@@ -73,7 +73,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
      */
     private IGaugeFigure _createGaugeFigure(ISoIImage soiImage, AngleGaugeType gaugeType) {
         int channel = soiImage.channel();
-        Image<RGB16> gaugeImage = null;
+        Image<ARGB8> gaugeImage = null;
         try {
             gaugeImage = GrayScaleToColorConverter.colorUsingMaxEachPlane(soiImage.getImage());
         } catch (ConverterToImgLib2NotFound e) {
@@ -117,7 +117,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         }
 
         int threshold = soiThreshold.get();
-        IPixelRandomAccess<RGB16> stickFigureRA = _stick2DFigure.getImage().getRandomAccess();
+        IPixelRandomAccess<ARGB8> stickFigureRA = _stick2DFigure.getImage().getRandomAccess();
 
         IShapeIterator iterator = region.getIterator();
         while (iterator.hasNext()) {
@@ -140,15 +140,15 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
      * position.
      */
     private void _drawStick(IOrientationVector orientationVector, long[] stickCenterPosition,
-            IPixelRandomAccess<RGB16> stickFigureRA) {
-        RGB16 stickColor = _getStickColor(orientationVector);
+            IPixelRandomAccess<ARGB8> stickFigureRA) {
+        ARGB8 stickColor = _getStickColor(orientationVector);
 
         IShapeIterator stickIterator = _createStickIteratorForThisDipole(orientationVector, stickCenterPosition);
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
             stickFigureRA.setPosition(stickPosition);
             
-            IPixel<RGB16> stickPositionPixel = stickFigureRA.getPixel();
+            IPixel<ARGB8> stickPositionPixel = stickFigureRA.getPixel();
             stickPositionPixel.value().add(stickColor);
             
             stickFigureRA.setPixel(stickPositionPixel);
@@ -194,7 +194,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
                 && !Double.isNaN(orientationVector.getAngle(_colorAngle));
     }
 
-    private RGB16 _getStickColor(IOrientationVector orientationVector) {
+    private ARGB8 _getStickColor(IOrientationVector orientationVector) {
         return this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
     }
 

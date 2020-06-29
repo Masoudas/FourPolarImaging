@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RealType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import net.imglib2.converter.Converter;
@@ -21,7 +21,7 @@ import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 /**
- * Convertes the given channel of {@link UINT16} image to an {@link RGB16}
+ * Convertes the given channel of {@link UINT16} image to an {@link ARGB8}
  * image. Note that an 8 bit lookup table is used for the conversion, hence
  * there are only 256 white pixels. Note that each image plane is scaled with
  * respect to it's minimum and maximum (not the maximum of the entire image.).
@@ -38,19 +38,19 @@ class MaxPlaneGrayScaleToColorConverter {
      *                                    ImgLib2 model.
      * 
      */
-    public static <T extends RealType> Image<RGB16> convert(final Image<T> grayImage)
+    public static <T extends RealType> Image<ARGB8> convert(final Image<T> grayImage)
             throws ConverterToImgLib2NotFound {
         Objects.requireNonNull(grayImage, "grayImage cannot be null");
         Objects.requireNonNull(grayImage, "colorImage cannot be null");
 
         IMetadata colorMetadata = _copyGaryMetadataForColorImage(grayImage.getMetadata());
-        Image<RGB16> colorImage = grayImage.getFactory().create(colorMetadata, RGB16.zero());
+        Image<ARGB8> colorImage = grayImage.getFactory().create(colorMetadata, ARGB8.zero());
 
         // We use ImgLib2 classes, i.e, we convert to Img. Then we convert the Image.
         // Finaly, we create a new Image instance and fill it, and return it.
         final ColorTable8 cTable8 = new ColorTable8();
         final IPixelCursor<T> grayCursor = grayImage.getCursor();
-        final IPixelCursor<RGB16> colorCursor = colorImage.getCursor();
+        final IPixelCursor<ARGB8> colorCursor = colorImage.getCursor();
 
         final DoubleType doubleType = new DoubleType();
         final ARGBType argbType = new ARGBType();
@@ -70,7 +70,7 @@ class MaxPlaneGrayScaleToColorConverter {
                 converter = new RealLUTConverter<DoubleType>(minMax[0][planeNo - 1], minMax[1][planeNo - 1], cTable8);
             }
 
-            final IPixel<RGB16> pixel = colorCursor.next();
+            final IPixel<ARGB8> pixel = colorCursor.next();
 
             doubleType.set(grayCursor.next().value().getRealValue());
             converter.convert(doubleType, argbType);

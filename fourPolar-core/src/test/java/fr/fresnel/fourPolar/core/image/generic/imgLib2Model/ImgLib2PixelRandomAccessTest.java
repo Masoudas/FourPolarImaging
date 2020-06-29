@@ -12,7 +12,7 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 public class ImgLib2PixelRandomAccessTest {
@@ -91,22 +91,22 @@ public class ImgLib2PixelRandomAccessTest {
     @Test
     public void setPixel_RGB16Image_SetsPixelsToDefinedValues() {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2 }).axisOrder(AxisOrder.XY).build();
-        Image<RGB16> image = new ImgLib2ImageFactory().create(metadata, RGB16.zero());
+        Image<ARGB8> image = new ImgLib2ImageFactory().create(metadata, ARGB8.zero());
 
-        IPixelRandomAccess<RGB16> rAccess = image.getRandomAccess();
+        IPixelRandomAccess<ARGB8> rAccess = image.getRandomAccess();
 
         int pixelValue = 0;
         rAccess.setPosition(new long[] { 0, 0 });
-        rAccess.setPixel(new Pixel<RGB16>(new RGB16(++pixelValue, 0, 0)));
+        rAccess.setPixel(new Pixel<ARGB8>(new ARGB8(++pixelValue, 0, 0)));
 
         rAccess.setPosition(new long[] { 1, 0 });
-        rAccess.setPixel(new Pixel<RGB16>(new RGB16(++pixelValue, 0, 0)));
+        rAccess.setPixel(new Pixel<ARGB8>(new ARGB8(++pixelValue, 0, 0)));
 
         rAccess.setPosition(new long[] { 0, 1 });
-        rAccess.setPixel(new Pixel<RGB16>(new RGB16(++pixelValue, 0, 0)));
+        rAccess.setPixel(new Pixel<ARGB8>(new ARGB8(++pixelValue, 0, 0)));
 
         rAccess.setPosition(new long[] { 1, 1 });
-        rAccess.setPixel(new Pixel<RGB16>(new RGB16(++pixelValue, 0, 0)));
+        rAccess.setPixel(new Pixel<ARGB8>(new ARGB8(++pixelValue, 0, 0)));
 
         boolean equals = true;
         rAccess.setPosition(new long[] { 0, 0 });

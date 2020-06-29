@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IAngleImage;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImageRandomAccess;
@@ -34,7 +34,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  */
 class WholeSampleStick3DPainter implements IAngleGaugePainter {
     final private IGaugeFigure _stick3DFigure;
-    final private IPixelRandomAccess<RGB16> _stick3DFigureRA;
+    final private IPixelRandomAccess<ARGB8> _stick3DFigureRA;
     final private IOrientationImageRandomAccess _orientationRA;
     final private IPixelRandomAccess<UINT16> _soiRA;
     final private ColorMap _colormap;
@@ -80,7 +80,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
         long[] dimGaugeIm = { soiImgDim[0], soiImgDim[1], 1, soiImgDim[3] * stickLength, soiImgDim[4] };
         IMetadata gaugeMetadata = new Metadata.MetadataBuilder(dimGaugeIm).axisOrder(IGaugeFigure.AXIS_ORDER).build();
 
-        Image<RGB16> gaugeImage = soiImage.getImage().getFactory().create(gaugeMetadata, RGB16.zero());
+        Image<ARGB8> gaugeImage = soiImage.getImage().getFactory().create(gaugeMetadata, ARGB8.zero());
         return GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D, gaugeImage,
                 soiImage.getFileSet(), channel);
     }
@@ -139,7 +139,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     }
 
     private void _drawStick(IOrientationVector orientationVector, long[] dipolePosition) {
-        final RGB16 color = _getStickColor(orientationVector);
+        final ARGB8 color = _getStickColor(orientationVector);
 
         IShapeIterator stickIterator = _createStickIteratorForThisDipole(orientationVector, dipolePosition);
         while (stickIterator.hasNext()) {
@@ -147,7 +147,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
             if (this._stick3DFigureBoundary.isInside(stickPosition)) {
                 this._stick3DFigureRA.setPosition(stickPosition);
                 
-                IPixel<RGB16> stickPositionPixel = this._stick3DFigureRA.getPixel();
+                IPixel<ARGB8> stickPositionPixel = this._stick3DFigureRA.getPixel();
                 stickPositionPixel.value().add(color);
                 
                 this._stick3DFigureRA.setPixel(stickPositionPixel);
@@ -162,7 +162,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
         return stickIterator;
     }
 
-    private RGB16 _getStickColor(IOrientationVector orientationVector) {
+    private ARGB8 _getStickColor(IOrientationVector orientationVector) {
         return this._colormap.getColor(0, OrientationVector.maxAngle(OrientationAngle.delta),
                 orientationVector.getAngle(OrientationAngle.delta));
     }

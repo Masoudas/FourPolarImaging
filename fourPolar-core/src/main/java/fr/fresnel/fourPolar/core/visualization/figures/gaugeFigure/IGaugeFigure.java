@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 
 /**
@@ -31,7 +31,7 @@ public interface IGaugeFigure {
      * 
      * @return
      */
-    public Image<RGB16> getImage();
+    public Image<ARGB8> getImage();
 
     /**
      * Returns the {@link ICapturedImageFileSet} this figure corresponds to.

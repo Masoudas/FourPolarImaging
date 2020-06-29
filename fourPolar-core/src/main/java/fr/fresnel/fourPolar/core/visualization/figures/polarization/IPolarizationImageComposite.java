@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.visualization.figures.polarization;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 
 /**
@@ -19,5 +19,5 @@ public interface IPolarizationImageComposite {
     /**
      * Get the image.
      */
-    public Image<RGB16> getImage();
+    public Image<ARGB8> getImage();
 }

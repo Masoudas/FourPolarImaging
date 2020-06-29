@@ -20,7 +20,7 @@ public enum PixelTypes {
                 break;
 
             case RGB_16:
-                pixelType = new RGB16(0, 0, 0);
+                pixelType = new ARGB8(0, 0, 0);
                 break;
 
             default:

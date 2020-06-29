@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverterF
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import net.imglib2.FinalDimensions;
 import net.imglib2.img.Img;
@@ -67,9 +67,9 @@ public class ImgLib2ImageFactory implements ImageFactory {
      * @param imgLib2Type is an instance of ARGBType
      * @param IMetadata   is the metadata associated with this image.
      */
-    public Image<RGB16> create(Img<ARGBType> img, ARGBType imgLib2Type, IMetadata metadata) {
+    public Image<ARGB8> create(Img<ARGBType> img, ARGBType imgLib2Type, IMetadata metadata) {
         try {
-            return new ImgLib2Image<RGB16, ARGBType>(img, TypeConverterFactory.getConverter(RGB16.zero(), imgLib2Type),
+            return new ImgLib2Image<ARGB8, ARGBType>(img, TypeConverterFactory.getConverter(ARGB8.zero(), imgLib2Type),
                     this, metadata);
         } catch (ConverterNotFound e) {
             // Exception never caught due to proper type handling
@@ -126,7 +126,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
                 try {
                     ARGBType type = new ARGBType();
                     Img<ARGBType> img = _chooseImgFactory(metadataCP.getDim(), type);
-                    TypeConverter<RGB16, ARGBType> converter = TypeConverterFactory.getConverter(RGB16.zero(), type);
+                    TypeConverter<ARGB8, ARGBType> converter = TypeConverterFactory.getConverter(ARGB8.zero(), type);
 
                     _image = new ImgLib2Image<T, ARGBType>(img, (TypeConverter<T, ARGBType>) converter, this,
                             metadataCP);

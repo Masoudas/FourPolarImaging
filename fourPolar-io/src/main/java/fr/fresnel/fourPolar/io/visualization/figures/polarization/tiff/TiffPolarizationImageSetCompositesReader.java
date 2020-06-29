@@ -8,7 +8,7 @@ import java.util.Objects;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
@@ -23,7 +23,7 @@ import fr.fresnel.fourPolar.io.visualization.figures.polarization.IPolarizationI
  * read tiff composite images.
  */
 public class TiffPolarizationImageSetCompositesReader implements IPolarizationImageSetCompositesReader {
-    final private ImageReader<RGB16> _reader;
+    final private ImageReader<ARGB8> _reader;
     final private int _numChannels;
     final private PolarizationImageSetCompositesBuilder _compositeSetBuilder;
 
@@ -38,7 +38,7 @@ public class TiffPolarizationImageSetCompositesReader implements IPolarizationIm
         Objects.requireNonNull(factory);
         ChannelUtils.checkNumChannelsNonZero(numChannels);
 
-        _reader = TiffImageReaderFactory.getReader(factory, RGB16.zero());
+        _reader = TiffImageReaderFactory.getReader(factory, ARGB8.zero());
         _numChannels = numChannels;
         _compositeSetBuilder = new PolarizationImageSetCompositesBuilder(this._numChannels);
     }
@@ -49,14 +49,14 @@ public class TiffPolarizationImageSetCompositesReader implements IPolarizationIm
      */
     private IPolarizationImageSetComposites _read(File rootCompositeImages, ICapturedImageFileSet fileSet, int channel)
             throws IOException {
-        HashMap<RegistrationRule, Image<RGB16>> compositeFigures = _readRules(rootCompositeImages);
+        HashMap<RegistrationRule, Image<ARGB8>> compositeFigures = _readRules(rootCompositeImages);
         _buildCompositionSet(fileSet, channel, compositeFigures);
 
         return this._compositeSetBuilder.build();
     }
 
-    private HashMap<RegistrationRule, Image<RGB16>> _readRules(File rootCompositeImages) throws IOException {
-        HashMap<RegistrationRule, Image<RGB16>> compositeFigures = new HashMap<>();
+    private HashMap<RegistrationRule, Image<ARGB8>> _readRules(File rootCompositeImages) throws IOException {
+        HashMap<RegistrationRule, Image<ARGB8>> compositeFigures = new HashMap<>();
 
         for (RegistrationRule rule : RegistrationRule.values()) {
             compositeFigures.put(rule, this._readRule(rootCompositeImages, rule));
@@ -64,10 +64,10 @@ public class TiffPolarizationImageSetCompositesReader implements IPolarizationIm
         return compositeFigures;
     }
 
-    private Image<RGB16> _readRule(File rootCompositeImages, RegistrationRule rule) throws IOException {
+    private Image<ARGB8> _readRule(File rootCompositeImages, RegistrationRule rule) throws IOException {
         File ruleFile = TiffPolarizationImageSetCompositesUtil.getRuleFile(rootCompositeImages, rule);
 
-        Image<RGB16> ruleImage = null;
+        Image<ARGB8> ruleImage = null;
         try {
             ruleImage = this._reader.read(ruleFile);
         } catch (MetadataParseError | IOException e) {
@@ -79,7 +79,7 @@ public class TiffPolarizationImageSetCompositesReader implements IPolarizationIm
 
 
     private void _buildCompositionSet(ICapturedImageFileSet fileSet, int channel,
-            HashMap<RegistrationRule, Image<RGB16>> compositeFigures) {
+            HashMap<RegistrationRule, Image<ARGB8>> compositeFigures) {
         this._compositeSetBuilder.channel(channel).fileSet(fileSet);
 
         for (RegistrationRule rule : RegistrationRule.values()) {

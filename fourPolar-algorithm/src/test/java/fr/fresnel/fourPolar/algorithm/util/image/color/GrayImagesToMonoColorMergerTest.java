@@ -12,7 +12,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 public class GrayImagesToMonoColorMergerTest {
@@ -24,8 +24,8 @@ public class GrayImagesToMonoColorMergerTest {
 
         _setPixel(image1, new long[] { 0, 0 }, UINT16.MAX_VAL);
 
-        IPixelRandomAccess<RGB16> monochromeImage = GrayImagesToMonoColorConverter.convert(image1, Color.Green);
-        RGB16 color = _getPixel(monochromeImage, new long[] { 0, 0 });
+        IPixelRandomAccess<ARGB8> monochromeImage = GrayImagesToMonoColorConverter.convert(image1, Color.Green);
+        ARGB8 color = _getPixel(monochromeImage, new long[] { 0, 0 });
 
         assertTrue(color.getB() == 0 && color.getG() == 255 && color.getR() == 0);
     }
@@ -46,14 +46,14 @@ public class GrayImagesToMonoColorMergerTest {
         long[] position2 = { 0, 0, 1 };
         _setPixel(image1, position2, UINT16.MAX_VAL);
 
-        IPixelRandomAccess<RGB16> monochromeImage = GrayImagesToMonoColorConverter.convert(image1, Color.Red);
-        RGB16 color0 = _getPixel(monochromeImage, position0);
+        IPixelRandomAccess<ARGB8> monochromeImage = GrayImagesToMonoColorConverter.convert(image1, Color.Red);
+        ARGB8 color0 = _getPixel(monochromeImage, position0);
         assertTrue(color0.getB() == 0 && color0.getG() == 0 && color0.getR() == 0);
 
-        RGB16 color1 = _getPixel(monochromeImage, position1);
+        ARGB8 color1 = _getPixel(monochromeImage, position1);
         assertTrue(color1.getB() == 0 && color1.getG() == 0 && color1.getR() == 255);
 
-        RGB16 color2 = _getPixel(monochromeImage, position2);
+        ARGB8 color2 = _getPixel(monochromeImage, position2);
         assertTrue(color2.getB() == 0 && color2.getG() == 0 && color2.getR() == 255);
     }
 
@@ -66,7 +66,7 @@ public class GrayImagesToMonoColorMergerTest {
         ra.setPixel(pixel);
     }
 
-    private RGB16 _getPixel(IPixelRandomAccess<RGB16> ra, long[] position) {
+    private ARGB8 _getPixel(IPixelRandomAccess<ARGB8> ra, long[] position) {
         ra.setPosition(position);
 
         return ra.getPixel().value();

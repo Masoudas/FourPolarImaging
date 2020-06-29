@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Conver
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import io.scif.config.SCIFIOConfig;
 import io.scif.img.ImgOpener;
@@ -38,9 +38,9 @@ public class MaxPlaneGrayScaleToColorConverterTest {
             cursor.setPixel(pixel);
         }
 
-        Image<RGB16> colorImage = GrayScaleToColorConverter.colorUsingMaxEachPlane(grayImage);
+        Image<ARGB8> colorImage = GrayScaleToColorConverter.colorUsingMaxEachPlane(grayImage);
 
-        ImageJFunctions.show(ImageToImgLib2Converter.getImg(colorImage, RGB16.zero()));
+        ImageJFunctions.show(ImageToImgLib2Converter.getImg(colorImage, ARGB8.zero()));
 
         TimeUnit.SECONDS.sleep(20);
 
@@ -72,9 +72,9 @@ public class MaxPlaneGrayScaleToColorConverterTest {
 
         }
 
-        Image<RGB16> colorImage = GrayScaleToColorConverter.colorUsingMaxEachPlane(grayImage);
+        Image<ARGB8> colorImage = GrayScaleToColorConverter.colorUsingMaxEachPlane(grayImage);
 
-        ImageJFunctions.show(ImageToImgLib2Converter.getImg(colorImage, RGB16.zero()));
+        ImageJFunctions.show(ImageToImgLib2Converter.getImg(colorImage, ARGB8.zero()));
 
         TimeUnit.SECONDS.sleep(20);
     }

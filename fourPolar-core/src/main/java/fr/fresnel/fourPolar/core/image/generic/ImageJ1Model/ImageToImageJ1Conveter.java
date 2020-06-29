@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import ij.ImagePlus;
 import net.imglib2.img.Img;
@@ -28,7 +28,7 @@ public class ImageToImageJ1Conveter {
         throw new AssertionError();
     }
 
-    public static ImagePlus convertToImgPlus(Image<RGB16> image, RGB16 pixelType) {
+    public static ImagePlus convertToImgPlus(Image<ARGB8> image, ARGB8 pixelType) {
         if (image.getFactory() instanceof ImgLib2ImageFactory) {
             Img<ARGBType> imgLib2Image = null;
             try {

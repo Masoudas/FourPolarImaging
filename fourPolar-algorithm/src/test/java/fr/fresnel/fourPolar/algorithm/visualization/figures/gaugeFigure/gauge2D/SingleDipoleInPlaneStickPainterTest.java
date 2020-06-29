@@ -28,7 +28,7 @@ import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
@@ -138,7 +138,7 @@ public class SingleDipoleInPlaneStickPainterTest {
                 BdvOptions.options().is2D());
 
         // Viewer to show the stick.
-        Bdv bdv1 = BdvFunctions.show(ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), RGB16.zero()),
+        Bdv bdv1 = BdvFunctions.show(ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), ARGB8.zero()),
                 "Dipole", BdvOptions.options().is2D());
 
         Behaviours behaviours = new Behaviours(new InputTriggerConfig());
@@ -164,7 +164,7 @@ public class SingleDipoleInPlaneStickPainterTest {
 
         File path = new File(root, stickImageName);
 
-        ImagePlus imp = ImageJFunctions.wrapRGB(ImageToImgLib2Converter.getImg(stickFigure.getImage(), RGB16.zero()),
+        ImagePlus imp = ImageJFunctions.wrapRGB(ImageToImgLib2Converter.getImg(stickFigure.getImage(), ARGB8.zero()),
                 "RGB");
         FileSaver impSaver = new FileSaver(imp);
         impSaver.saveAsTiff(path.getAbsolutePath());

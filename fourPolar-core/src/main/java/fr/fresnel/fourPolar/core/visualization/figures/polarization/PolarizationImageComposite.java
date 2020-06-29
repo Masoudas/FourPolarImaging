@@ -1,14 +1,14 @@
 package fr.fresnel.fourPolar.core.visualization.figures.polarization;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 
 class PolarizationImageComposite implements IPolarizationImageComposite {
     private final RegistrationRule _rule;
-    private final Image<RGB16> _image;
+    private final Image<ARGB8> _image;
 
-    public PolarizationImageComposite(RegistrationRule rule, Image<RGB16> image) {
+    public PolarizationImageComposite(RegistrationRule rule, Image<ARGB8> image) {
         this._rule = rule;
         this._image = image;
     }
@@ -19,7 +19,7 @@ class PolarizationImageComposite implements IPolarizationImageComposite {
     }
 
     @Override
-    public Image<RGB16> getImage() {
+    public Image<ARGB8> getImage() {
         return this._image;
     }
 }

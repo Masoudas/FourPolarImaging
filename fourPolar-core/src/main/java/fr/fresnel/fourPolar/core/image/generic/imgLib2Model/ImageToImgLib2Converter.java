@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.core.image.generic.imgLib2Model;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
@@ -77,11 +77,11 @@ public class ImageToImgLib2Converter {
      *         ImgLib2.
      */
     @SuppressWarnings("unchecked")
-    public static Img<ARGBType> getImg(Image<RGB16> image, RGB16 pixelType) throws ConverterToImgLib2NotFound {
+    public static Img<ARGBType> getImg(Image<ARGB8> image, ARGB8 pixelType) throws ConverterToImgLib2NotFound {
         Img<ARGBType> img = null;
 
         if (image instanceof ImgLib2Image) {
-            ImgLib2Image<RGB16, ARGBType> implementation = (ImgLib2Image<RGB16, ARGBType>) image;
+            ImgLib2Image<ARGB8, ARGBType> implementation = (ImgLib2Image<ARGB8, ARGBType>) image;
             img = implementation.getImg();
         } else {
             throw new ConverterToImgLib2NotFound();

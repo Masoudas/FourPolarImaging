@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 
 public class ImageJColorMapTest {
     @Test
@@ -13,7 +13,7 @@ public class ImageJColorMapTest {
 
         double max = 1;
 
-        RGB16 red = cMap.getColor(0, 1, max);
+        ARGB8 red = cMap.getColor(0, 1, max);
 
         assertTrue(
             red.getR() == 255 && red.getG() == 0 && red.getB() == 0);

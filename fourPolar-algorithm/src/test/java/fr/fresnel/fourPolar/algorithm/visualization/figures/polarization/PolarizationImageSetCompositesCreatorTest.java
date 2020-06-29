@@ -17,7 +17,7 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
@@ -53,13 +53,13 @@ public class PolarizationImageSetCompositesCreatorTest {
                 Color.Green);
         IPolarizationImageSetComposites composites = creator.create(polImageSet);
 
-        Image<RGB16> pol45_to_0 = composites.getCompositeImage(RegistrationRule.Pol45_to_Pol0).getImage();
-        Image<RGB16> pol90_to_0 = composites.getCompositeImage(RegistrationRule.Pol90_to_Pol0).getImage();
-        Image<RGB16> pol135_to_0 = composites.getCompositeImage(RegistrationRule.Pol135_to_Pol0).getImage();
+        Image<ARGB8> pol45_to_0 = composites.getCompositeImage(RegistrationRule.Pol45_to_Pol0).getImage();
+        Image<ARGB8> pol90_to_0 = composites.getCompositeImage(RegistrationRule.Pol90_to_Pol0).getImage();
+        Image<ARGB8> pol135_to_0 = composites.getCompositeImage(RegistrationRule.Pol135_to_Pol0).getImage();
 
-        RGB16 pol45_to_0_pixel = this._getPixel(pol45_to_0.getRandomAccess(), position0);
-        RGB16 pol90_to_0_pixel = this._getPixel(pol90_to_0.getRandomAccess(), position0);
-        RGB16 pol135_to_0_pixel = this._getPixel(pol135_to_0.getRandomAccess(), position0);
+        ARGB8 pol45_to_0_pixel = this._getPixel(pol45_to_0.getRandomAccess(), position0);
+        ARGB8 pol90_to_0_pixel = this._getPixel(pol90_to_0.getRandomAccess(), position0);
+        ARGB8 pol135_to_0_pixel = this._getPixel(pol135_to_0.getRandomAccess(), position0);
 
         assertTrue(pol45_to_0_pixel.getR() == 255 && pol45_to_0_pixel.getG() == 0 && pol45_to_0_pixel.getB() == 0);
         assertTrue(pol90_to_0_pixel.getR() == 255 && pol90_to_0_pixel.getG() == 255 && pol90_to_0_pixel.getB() == 0);
@@ -89,13 +89,13 @@ public class PolarizationImageSetCompositesCreatorTest {
                 Color.Blue);
         IPolarizationImageSetComposites composites = creator.create(polImageSet);
 
-        Image<RGB16> pol45_to_0 = composites.getCompositeImage(RegistrationRule.Pol45_to_Pol0).getImage();
-        Image<RGB16> pol90_to_0 = composites.getCompositeImage(RegistrationRule.Pol90_to_Pol0).getImage();
-        Image<RGB16> pol135_to_0 = composites.getCompositeImage(RegistrationRule.Pol135_to_Pol0).getImage();
+        Image<ARGB8> pol45_to_0 = composites.getCompositeImage(RegistrationRule.Pol45_to_Pol0).getImage();
+        Image<ARGB8> pol90_to_0 = composites.getCompositeImage(RegistrationRule.Pol90_to_Pol0).getImage();
+        Image<ARGB8> pol135_to_0 = composites.getCompositeImage(RegistrationRule.Pol135_to_Pol0).getImage();
 
-        RGB16 pol45_to_0_pixel = this._getPixel(pol45_to_0.getRandomAccess(), position0);
-        RGB16 pol90_to_0_pixel = this._getPixel(pol90_to_0.getRandomAccess(), position0);
-        RGB16 pol135_to_0_pixel = this._getPixel(pol135_to_0.getRandomAccess(), position0);
+        ARGB8 pol45_to_0_pixel = this._getPixel(pol45_to_0.getRandomAccess(), position0);
+        ARGB8 pol90_to_0_pixel = this._getPixel(pol90_to_0.getRandomAccess(), position0);
+        ARGB8 pol135_to_0_pixel = this._getPixel(pol135_to_0.getRandomAccess(), position0);
 
         assertTrue(pol45_to_0_pixel.getR() == 255 && pol45_to_0_pixel.getG() == 0 && pol45_to_0_pixel.getB() == 0);
         assertTrue(pol90_to_0_pixel.getR() == 255 && pol90_to_0_pixel.getG() == 0 && pol90_to_0_pixel.getB() == 255);
@@ -112,7 +112,7 @@ public class PolarizationImageSetCompositesCreatorTest {
         ra.setPixel(pixel);
     }
 
-    private RGB16 _getPixel(IPixelRandomAccess<RGB16> ra, long[] position) {
+    private ARGB8 _getPixel(IPixelRandomAccess<ARGB8> ra, long[] position) {
         ra.setPosition(position);
 
         return ra.getPixel().value();

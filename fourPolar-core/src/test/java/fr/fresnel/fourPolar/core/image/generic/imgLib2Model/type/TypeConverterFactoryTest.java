@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.types.Con
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverterFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.NativeTypeFactory;
@@ -92,11 +92,11 @@ public class TypeConverterFactoryTest {
         ARGBType val2 = new ARGBType(ARGBType.rgba(0, 1, 0, 0));
         ARGBType val3 = new ARGBType(ARGBType.rgba(0, 0, 1, 0));
 
-        TypeConverter<RGB16, ARGBType> converter = TypeConverterFactory.getConverter(RGB16.zero(), new ARGBType());
+        TypeConverter<ARGB8, ARGBType> converter = TypeConverterFactory.getConverter(ARGB8.zero(), new ARGBType());
 
-        RGB16 val1RGB16 = new RGB16(0, 0, 0);
-        RGB16 val2RGB16 = new RGB16(0, 0, 0);
-        RGB16 val3RGB16 = new RGB16(0, 0, 0);
+        ARGB8 val1RGB16 = new ARGB8(0, 0, 0);
+        ARGB8 val2RGB16 = new ARGB8(0, 0, 0);
+        ARGB8 val3RGB16 = new ARGB8(0, 0, 0);
         
         converter.setPixelType(val1, val1RGB16);
         converter.setPixelType(val2, val2RGB16);
@@ -111,11 +111,11 @@ public class TypeConverterFactoryTest {
 
     @Test
     public void setNativeType_RGB16_SetsARGBTypeToSameValue() throws ConverterNotFound {
-        RGB16 val1RGB16 = new RGB16(1, 0, 0);
-        RGB16 val2RGB16 = new RGB16(0, 1, 0);
-        RGB16 val3RGB16 = new RGB16(0, 0, 1);
+        ARGB8 val1RGB16 = new ARGB8(1, 0, 0);
+        ARGB8 val2RGB16 = new ARGB8(0, 1, 0);
+        ARGB8 val3RGB16 = new ARGB8(0, 0, 1);
 
-        TypeConverter<RGB16, ARGBType> converter = TypeConverterFactory.getConverter(RGB16.zero(), new ARGBType());
+        TypeConverter<ARGB8, ARGBType> converter = TypeConverterFactory.getConverter(ARGB8.zero(), new ARGBType());
 
         ARGBType val1 = new ARGBType();
         ARGBType val2 = new ARGBType();

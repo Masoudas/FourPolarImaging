@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.Converter
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOTiffMetadataConverter;
 import io.scif.FormatException;
@@ -25,7 +25,7 @@ import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.util.Util;
 
-public class SCIFIORGB16TiffWriter implements ImageWriter<RGB16> {
+public class SCIFIORGB16TiffWriter implements ImageWriter<ARGB8> {
     final private ImgSaver _saver;
     final private SCIFIOConfig _config;
     final private Writer<Metadata> _writer;
@@ -42,7 +42,7 @@ public class SCIFIORGB16TiffWriter implements ImageWriter<RGB16> {
     }
 
     @Override
-    public void write(File path, Image<RGB16> image) throws IOException {
+    public void write(File path, Image<ARGB8> image) throws IOException {
         throw new AssertionError("This writer has not been refactored to consider ARGB images with channel.");
 
         // Objects.requireNonNull(path, "path cannot be null");
@@ -105,7 +105,7 @@ public class SCIFIORGB16TiffWriter implements ImageWriter<RGB16> {
         this._writer.setDest(path.getAbsolutePath(), this._config);
     }
 
-    private io.scif.formats.TIFFFormat.Metadata _createMultiChannelSCIFIOMetadata(Image<RGB16> image) {
+    private io.scif.formats.TIFFFormat.Metadata _createMultiChannelSCIFIOMetadata(Image<ARGB8> image) {
         IMetadata diskMetadata = this._createMetadata(image.getMetadata());
         io.scif.formats.TIFFFormat.Metadata scifioMetadata = this._createSCIFIOMetadata();
 
@@ -113,8 +113,8 @@ public class SCIFIORGB16TiffWriter implements ImageWriter<RGB16> {
         return scifioMetadata;
     }
 
-    private Img<UnsignedByteType> _convertToMultiChannelImage(Image<RGB16> image) throws ConverterToImgLib2NotFound {
-        Img<ARGBType> imgLib2Image = ImageToImgLib2Converter.getImg(image, RGB16.zero());
+    private Img<UnsignedByteType> _convertToMultiChannelImage(Image<ARGB8> image) throws ConverterToImgLib2NotFound {
+        Img<ARGBType> imgLib2Image = ImageToImgLib2Converter.getImg(image, ARGB8.zero());
 
         Img<UnsignedByteType> convertedImg = _convertRGBToChannelImage(imgLib2Image);
         return convertedImg;

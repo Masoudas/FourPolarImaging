@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.core.util.image.colorMap;
 import java.io.IOException;
 import java.net.URL;
 
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import net.imagej.lut.DefaultLUTService;
 import net.imagej.lut.LUTService;
 import net.imglib2.display.ColorTable;
@@ -18,7 +18,7 @@ class ImageJColorMap implements ColorMap {
     private ColorTable _cTable;
     private final String _colorMap;
 
-    private final RGB16 _color;
+    private final ARGB8 _color;
 
     public static ImageJColorMap getDefaultColorMaps(String colorMap) {
         ImageJColorMap jColorMap = null;
@@ -49,12 +49,12 @@ class ImageJColorMap implements ColorMap {
     private ImageJColorMap(String colorMap, ColorTable colorTable) {
         this._colorMap = colorMap;
         this._cTable = colorTable;
-        this._color = new RGB16(0, 0, 0);
+        this._color = new ARGB8(0, 0, 0);
 
     }
 
     @Override
-    public RGB16 getColor(double min, double max, double val) {
+    public ARGB8 getColor(double min, double max, double val) {
         int index = this._cTable.lookupARGB(min, max, val);
         this._color.set(ARGBType.red(index), ARGBType.green(index), ARGBType.blue(index));
         return _color;

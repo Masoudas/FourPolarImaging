@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
@@ -49,15 +49,15 @@ public class PolarizationImageSetCompositesCreator implements IPolarizationImage
 
     @Override
     public IPolarizationImageSetComposites create(IPolarizationImageSet polImageSet) {
-        HashMap<RegistrationRule, Image<RGB16>> compositeImages = this._createCompositesOfRules(polImageSet);
+        HashMap<RegistrationRule, Image<ARGB8>> compositeImages = this._createCompositesOfRules(polImageSet);
         return this._buildPolarizationImageSetComposites(compositeImages, polImageSet);
     }
 
-    private HashMap<RegistrationRule, Image<RGB16>> _createCompositesOfRules(IPolarizationImageSet polImageSet) {
-        HashMap<RegistrationRule, Image<RGB16>> compositeImages = new HashMap<>();
+    private HashMap<RegistrationRule, Image<ARGB8>> _createCompositesOfRules(IPolarizationImageSet polImageSet) {
+        HashMap<RegistrationRule, Image<ARGB8>> compositeImages = new HashMap<>();
 
         for (RegistrationRule rule : RegistrationRule.values()) {
-            Image<RGB16> compositeImage = this.createRuleCompositeImage(rule, polImageSet);
+            Image<ARGB8> compositeImage = this.createRuleCompositeImage(rule, polImageSet);
             compositeImages.put(rule, compositeImage);
         }
         return compositeImages;
@@ -67,27 +67,27 @@ public class PolarizationImageSetCompositesCreator implements IPolarizationImage
         return polImageSet.getPolarizationImage(polarization).getImage();
     }
 
-    private Image<RGB16> createRuleCompositeImage(RegistrationRule rule, IPolarizationImageSet polImageSet) {
-        IPixelRandomAccess<RGB16> baseImageMonochromeView = this._getMonochromeViewOfPolarizationImage(polImageSet,
+    private Image<ARGB8> createRuleCompositeImage(RegistrationRule rule, IPolarizationImageSet polImageSet) {
+        IPixelRandomAccess<ARGB8> baseImageMonochromeView = this._getMonochromeViewOfPolarizationImage(polImageSet,
                 rule.getBaseImagePolarization(), this._baseImageColor);
-        IPixelRandomAccess<RGB16> toRegisterImageMonochromeView = this._getMonochromeViewOfPolarizationImage(
+        IPixelRandomAccess<ARGB8> toRegisterImageMonochromeView = this._getMonochromeViewOfPolarizationImage(
                 polImageSet, rule.getToRegisterImagePolarization(), this._registeredImageColor);
         return this._mergeMonochromeViews(baseImageMonochromeView, toRegisterImageMonochromeView,
                 polImageSet.getPolarizationImage(rule.getBaseImagePolarization()));
     }
 
-    private IPixelRandomAccess<RGB16> _getMonochromeViewOfPolarizationImage(IPolarizationImageSet polImageSet,
+    private IPixelRandomAccess<ARGB8> _getMonochromeViewOfPolarizationImage(IPolarizationImageSet polImageSet,
             Polarization pol, Color color) {
         Image<UINT16> baseImage = this._getPolarizationImage(polImageSet, pol);
         return GrayScaleToColorConverter.createMonochromeView(baseImage, color);
     }
 
-    private Image<RGB16> _mergeMonochromeViews(IPixelRandomAccess<RGB16> baseMonochromeView,
-            IPixelRandomAccess<RGB16> registeredMonochromeView, IPolarizationImage imageBase) {
-        Image<RGB16> compositeImage = this._createImageForRuleCompositeFromBasePolarizationImage(imageBase);
+    private Image<ARGB8> _mergeMonochromeViews(IPixelRandomAccess<ARGB8> baseMonochromeView,
+            IPixelRandomAccess<ARGB8> registeredMonochromeView, IPolarizationImage imageBase) {
+        Image<ARGB8> compositeImage = this._createImageForRuleCompositeFromBasePolarizationImage(imageBase);
 
-        for (IPixelCursor<RGB16> compositeCursor = compositeImage.getCursor(); compositeCursor.hasNext();) {
-            IPixel<RGB16> pixel = compositeCursor.next();
+        for (IPixelCursor<ARGB8> compositeCursor = compositeImage.getCursor(); compositeCursor.hasNext();) {
+            IPixel<ARGB8> pixel = compositeCursor.next();
             final long[] position = compositeCursor.localize();
 
             baseMonochromeView.setPosition(position);
@@ -102,14 +102,14 @@ public class PolarizationImageSetCompositesCreator implements IPolarizationImage
         return compositeImage;
     }
 
-    private Image<RGB16> _createImageForRuleCompositeFromBasePolarizationImage(IPolarizationImage imageBase) {
+    private Image<ARGB8> _createImageForRuleCompositeFromBasePolarizationImage(IPolarizationImage imageBase) {
         IMetadata metadata = new Metadata.MetadataBuilder(imageBase.getImage().getMetadata())
                 .bitPerPixel(PixelTypes.RGB_16).build();
-        return imageBase.getImage().getFactory().create(metadata, RGB16.zero());
+        return imageBase.getImage().getFactory().create(metadata, ARGB8.zero());
     }
 
     private IPolarizationImageSetComposites _buildPolarizationImageSetComposites(
-            HashMap<RegistrationRule, Image<RGB16>> compositeImages, IPolarizationImageSet polImageSet) {
+            HashMap<RegistrationRule, Image<ARGB8>> compositeImages, IPolarizationImageSet polImageSet) {
         this._builder.fileSet(polImageSet.getFileSet()).channel(polImageSet.channel());
 
         for (RegistrationRule rule : RegistrationRule.values()) {

@@ -19,7 +19,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
@@ -120,12 +120,12 @@ public class SophiesChoiceIII {
     private static void _showInteractive(ISoIImage soi, IAngleGaugePainter painter, int soiThreshold) {
         // Viewer to show the soi.
         try {
-            Image<RGB16> colorSoIImage = convertSoIToColorImage(soi);
-            Bdv bdv_soi = BdvFunctions.show(ImageToImgLib2Converter.getImg(colorSoIImage, RGB16.zero()), "SoI",
+            Image<ARGB8> colorSoIImage = convertSoIToColorImage(soi);
+            Bdv bdv_soi = BdvFunctions.show(ImageToImgLib2Converter.getImg(colorSoIImage, ARGB8.zero()), "SoI",
                     BdvOptions.options().is2D());
 
             Bdv bdv_dipole = BdvFunctions.show(
-                    ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), RGB16.zero()), "Dipole",
+                    ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), ARGB8.zero()), "Dipole",
                     BdvOptions.options().is2D());
             // Viewer to show the stick.
 
@@ -140,7 +140,7 @@ public class SophiesChoiceIII {
 
     }
 
-    private static Image<RGB16> convertSoIToColorImage(ISoIImage soiImage) {
+    private static Image<ARGB8> convertSoIToColorImage(ISoIImage soiImage) {
         try {
             return GrayScaleToColorConverter.colorUsingMaxEachPlane(soiImage.getImage());
         } catch (ConverterToImgLib2NotFound e) {

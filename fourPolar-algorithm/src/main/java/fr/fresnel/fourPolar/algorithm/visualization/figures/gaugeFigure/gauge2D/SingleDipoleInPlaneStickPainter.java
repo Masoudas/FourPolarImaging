@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImageRandomAccess;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
@@ -92,7 +92,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
         dim[1] = dim[0];
 
         IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
-        Image<RGB16> gaugeImage = soiImage.getImage().getFactory().create(gaugeFigMetadata, RGB16.zero());
+        Image<ARGB8> gaugeImage = soiImage.getImage().getFactory().create(gaugeFigMetadata, ARGB8.zero());
         return GaugeFigureFactory.create(GaugeFigureType.SingleDipole, angleGaugeType, gaugeImage,
                 soiImage.getFileSet(), channel);
     }
@@ -161,8 +161,8 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
         final IOrientationVector orientationVector = this._getOrientationOfThePosition(dipolePosition);
         if (_slopeAndColorAngleExist(orientationVector)) {
             // Use the same pixel for every pixel of stick.
-            final Pixel<RGB16> pixelColor = this._getStickColor(orientationVector);
-            IPixelRandomAccess<RGB16> stickFigureRA = this._dipoleFigure.getImage().getRandomAccess();
+            final Pixel<ARGB8> pixelColor = this._getStickColor(orientationVector);
+            IPixelRandomAccess<ARGB8> stickFigureRA = this._dipoleFigure.getImage().getRandomAccess();
 
             // TODO sum to the previous value rather than fully override, so that we can see the effect of all pixels.
             IShapeIterator stickIterator = _createStickIteratorForThisDipole(dipolePosition, orientationVector);
@@ -186,9 +186,9 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
         return this._dipoleFigure;
     }
 
-    private Pixel<RGB16> _getStickColor(IOrientationVector orientationVector) {
-        RGB16 pixelColor = this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
-        return new Pixel<RGB16>(pixelColor);
+    private Pixel<ARGB8> _getStickColor(IOrientationVector orientationVector) {
+        ARGB8 pixelColor = this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
+        return new Pixel<ARGB8>(pixelColor);
     }
 
     private boolean _slopeAndColorAngleExist(final IOrientationVector orientationVector) {
@@ -206,9 +206,9 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
      * the painter, the background remains
      */
     private void _paintStickFigureBlack() {
-        IPixelCursor<RGB16> cursor = this._dipoleFigure.getImage().getCursor();
+        IPixelCursor<ARGB8> cursor = this._dipoleFigure.getImage().getCursor();
 
-        Pixel<RGB16> pixel = new Pixel<RGB16>(new RGB16(0, 0, 0));
+        Pixel<ARGB8> pixel = new Pixel<ARGB8>(new ARGB8(0, 0, 0));
         while (cursor.hasNext()) {
             cursor.next();
             cursor.setPixel(pixel);

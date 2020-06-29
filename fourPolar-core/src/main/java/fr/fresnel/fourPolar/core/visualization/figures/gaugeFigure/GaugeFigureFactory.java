@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 
@@ -27,7 +27,7 @@ public class GaugeFigureFactory {
      *                                  given image is not the same as that of
      *                                  {@link ISoIImage.AXIS_ORDER}.
      */
-    public static IGaugeFigure create(GaugeFigureType figureType, AngleGaugeType angleGaugeType, Image<RGB16> image,
+    public static IGaugeFigure create(GaugeFigureType figureType, AngleGaugeType angleGaugeType, Image<ARGB8> image,
             ICapturedImageFileSet fileSet, int channel) {
         Objects.requireNonNull(angleGaugeType, "angleGaugeType cannot be null.");
         Objects.requireNonNull(image, "image cannot be null");

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOFloat32TiffReader;
@@ -31,7 +31,7 @@ public class TiffImageReaderFactoryTest {
 
     @Test
     public void getReader_RGB16ImgLib2Implementation_ReturnsCorrectWriter() {
-        ImageReader<RGB16> reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), RGB16.zero());
+        ImageReader<ARGB8> reader = TiffImageReaderFactory.getReader(new ImgLib2ImageFactory(), ARGB8.zero());
 
         assertTrue(reader instanceof SCIFIORGB16TiffReader);
     }

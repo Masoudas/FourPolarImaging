@@ -15,7 +15,7 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 
@@ -34,7 +34,7 @@ public class PolarizationImageSetCompositesBuilderTest {
         builder.fileSet(fSet);
 
         for (RegistrationRule rule : RegistrationRule.values()) {
-            Image<RGB16> ruleImage = new ImgLib2ImageFactory().create(metadata, RGB16.zero());
+            Image<ARGB8> ruleImage = new ImgLib2ImageFactory().create(metadata, ARGB8.zero());
             builder.channel(1).compositeImage(rule, ruleImage);
 
         }
@@ -65,7 +65,7 @@ public class PolarizationImageSetCompositesBuilderTest {
             builder.fileSet(fSet);
 
             for (RegistrationRule rule : RegistrationRule.values()) {
-                Image<RGB16> ruleImage = new ImgLib2ImageFactory().create(metadata, RGB16.zero());
+                Image<ARGB8> ruleImage = new ImgLib2ImageFactory().create(metadata, ARGB8.zero());
                 builder.channel(1).compositeImage(rule, ruleImage);
 
             }

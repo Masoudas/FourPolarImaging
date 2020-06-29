@@ -8,7 +8,7 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOTiffMetadataConverter;
@@ -26,7 +26,7 @@ import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import net.imglib2.util.Util;
 
-public class SCIFIORGB16TiffReader implements ImageReader<RGB16> {
+public class SCIFIORGB16TiffReader implements ImageReader<ARGB8> {
     final private SCIFIOConfig _config;
     private Reader _reader;
     final private ImgOpener _imgOpener;
@@ -54,7 +54,7 @@ public class SCIFIORGB16TiffReader implements ImageReader<RGB16> {
     }
 
     @Override
-    public Image<RGB16> read(File path) throws IOException, MetadataParseError {
+    public Image<ARGB8> read(File path) throws IOException, MetadataParseError {
         throw new AssertionError("This reader has not been refactored to consider ARGB images with channel.");
         // Objects.requireNonNull(path, "path should not be null");
         // SCIFIOUtils.checkExtension(path.getName());

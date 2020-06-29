@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageComposite;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
@@ -19,7 +19,7 @@ import fr.fresnel.fourPolar.io.visualization.figures.polarization.IPolarizationI
  * write the tiff composite images.
  */
 public class TiffPolarizationImageSetCompositesWriter implements IPolarizationImageSetCompositesWriter {
-    private ImageWriter<RGB16> _writer;
+    private ImageWriter<ARGB8> _writer;
 
     /**
      * Caches the image type supplied the last time. This would allow us to create
@@ -96,7 +96,7 @@ public class TiffPolarizationImageSetCompositesWriter implements IPolarizationIm
                 .getFactory();
 
         if (factoryType != this._cachedImageType) {
-            _writer = TiffImageWriterFactory.getWriter(factoryType, RGB16.zero());
+            _writer = TiffImageWriterFactory.getWriter(factoryType, ARGB8.zero());
 
         }
     }

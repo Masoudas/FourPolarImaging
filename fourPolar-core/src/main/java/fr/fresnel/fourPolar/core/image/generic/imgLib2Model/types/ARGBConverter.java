@@ -1,16 +1,16 @@
 package fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import net.imglib2.type.numeric.ARGBType;
 
 /**
  * Creates a suitable pixel type (of ours) based on the passed data type of
  * Imglib2.
  */
-class ARGBConverter implements TypeConverter<RGB16, ARGBType> {
+class ARGBConverter implements TypeConverter<ARGB8, ARGBType> {
     @Override
-    public void setPixelType(ARGBType type, RGB16 pixel) {
+    public void setPixelType(ARGBType type, ARGB8 pixel) {
         ARGBType value = (ARGBType)type;
         
         int index = value.get();
@@ -18,13 +18,13 @@ class ARGBConverter implements TypeConverter<RGB16, ARGBType> {
         int blue = ARGBType.blue(index);
         int green = ARGBType.green(index);
 
-        RGB16 rgb16 = (RGB16)pixel;
+        ARGB8 rgb16 = (ARGB8)pixel;
         rgb16.set(red, green, blue);
     }
 
     @Override
-    public void setNativeType(RGB16 pixel, ARGBType type) {
-        RGB16 value = (RGB16)pixel;                
+    public void setNativeType(ARGB8 pixel, ARGBType type) {
+        ARGB8 value = (ARGB8)pixel;                
         type.set(ARGBType.rgba(value.getR(), value.getG(), value.getB(), 0));
     }
 

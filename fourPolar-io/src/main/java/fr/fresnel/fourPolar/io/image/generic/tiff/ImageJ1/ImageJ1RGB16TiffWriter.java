@@ -5,19 +5,19 @@ import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageJ1Model.ImageToImageJ1Conveter;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import ij.ImagePlus;
 import ij.io.FileSaver;
 
-public class ImageJ1RGB16TiffWriter implements ImageWriter<RGB16> {
+public class ImageJ1RGB16TiffWriter implements ImageWriter<ARGB8> {
 
     @Override
-    public void write(File path, Image<RGB16> image) throws IOException {
+    public void write(File path, Image<ARGB8> image) throws IOException {
         Utils.checkExtension(path.getAbsolutePath());
         Utils.deleteFileIfExists(path);
 
-        ImagePlus imagePlus = ImageToImageJ1Conveter.convertToImgPlus(image, RGB16.zero());
+        ImagePlus imagePlus = ImageToImageJ1Conveter.convertToImgPlus(image, ARGB8.zero());
         FileSaver writer = new FileSaver(imagePlus);
 
         writer.saveAsTiff(path.getAbsolutePath());

@@ -12,7 +12,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
@@ -48,10 +48,10 @@ public class ImgLib2ImageFactoryTest {
     @Test
     public void createByDimension_RGBImage_CreatesImageOfSameDimension() throws ConverterToImgLib2NotFound {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 1, 1, }).axisOrder(AxisOrder.XYZT).build();
-        Image<RGB16> image = new ImgLib2ImageFactory().create(metadata, RGB16.zero());
+        Image<ARGB8> image = new ImgLib2ImageFactory().create(metadata, ARGB8.zero());
 
         long[] dimensions = metadata.getDim().clone();
-        ImageToImgLib2Converter.getImg(image, RGB16.zero()).dimensions(dimensions);
+        ImageToImgLib2Converter.getImg(image, ARGB8.zero()).dimensions(dimensions);
 
         assertArrayEquals(image.getMetadata().getDim(), dimensions);
     }
@@ -62,7 +62,7 @@ public class ImgLib2ImageFactoryTest {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 1, 1, }).axisOrder(AxisOrder.XYCT).build();
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new ImgLib2ImageFactory().create(metadata, RGB16.zero());
+            new ImgLib2ImageFactory().create(metadata, ARGB8.zero());
         });
     }
 
@@ -119,10 +119,10 @@ public class ImgLib2ImageFactoryTest {
 
         ARGBType type = new ARGBType();
         Img<ARGBType> img = new ArrayImgFactory<ARGBType>(type).create(metadata.getDim());
-        Image<RGB16> image = new ImgLib2ImageFactory().create(img, type, metadata);
+        Image<ARGB8> image = new ImgLib2ImageFactory().create(img, type, metadata);
 
         long[] dimensions = metadata.getDim().clone();
-        ImageToImgLib2Converter.getImg(image, RGB16.zero()).dimensions(dimensions);
+        ImageToImgLib2Converter.getImg(image, ARGB8.zero()).dimensions(dimensions);
 
         assertArrayEquals(image.getMetadata().getDim(), dimensions);
     }

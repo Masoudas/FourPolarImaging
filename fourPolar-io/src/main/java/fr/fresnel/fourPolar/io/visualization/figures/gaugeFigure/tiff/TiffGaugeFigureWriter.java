@@ -4,14 +4,14 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
 import fr.fresnel.fourPolar.io.visualization.figures.gaugeFigure.IGaugeFigureWriter;
 
 public class TiffGaugeFigureWriter implements IGaugeFigureWriter {
-    private ImageWriter<RGB16> _writer;
+    private ImageWriter<ARGB8> _writer;
 
     /**
      * Caches the image type supplied the last time. This would allow us to create
@@ -56,7 +56,7 @@ public class TiffGaugeFigureWriter implements IGaugeFigureWriter {
         ImageFactory factoryType = gaugeFigure.getImage().getFactory();
 
         if (factoryType != this._cachedImageType) {
-            _writer = TiffImageWriterFactory.getWriter(factoryType, RGB16.zero());
+            _writer = TiffImageWriterFactory.getWriter(factoryType, ARGB8.zero());
 
         }
     }

@@ -5,7 +5,7 @@ import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverterFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import net.imglib2.RandomAccess;
 import net.imglib2.type.numeric.ARGBType;
@@ -20,10 +20,10 @@ public class ImgLib2RandomAccessConverter {
         throw new AssertionError();
     }
 
-    public static IPixelRandomAccess<RGB16> convertARGBType(RandomAccess<ARGBType> ra) {
-        TypeConverter<RGB16, ARGBType> typeConverter = null;
+    public static IPixelRandomAccess<ARGB8> convertARGBType(RandomAccess<ARGBType> ra) {
+        TypeConverter<ARGB8, ARGBType> typeConverter = null;
         try {
-            typeConverter = TypeConverterFactory.getConverter(RGB16.zero(), new ARGBType());
+            typeConverter = TypeConverterFactory.getConverter(ARGB8.zero(), new ARGBType());
         } catch (ConverterNotFound e) {
             // Never caught, converter is already implemented.
         }

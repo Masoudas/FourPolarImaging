@@ -2,14 +2,14 @@ package fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 
 /**
  * A concrete implementation of the {@link IGaugeFigure}.
  */
 class GaugeFigure implements IGaugeFigure {
-    private final Image<RGB16> _image;
+    private final Image<ARGB8> _image;
     private final AngleGaugeType _type;
     private final ICapturedImageFileSet _fileSet;
     private final GaugeFigureType _figureType;
@@ -22,7 +22,7 @@ class GaugeFigure implements IGaugeFigure {
      * @param image   is the colored SoI image.
      * @param fileSet is the captured file set this stick image corresponds to.
      */
-    public GaugeFigure(GaugeFigureType figureType, AngleGaugeType type, Image<RGB16> image,
+    public GaugeFigure(GaugeFigureType figureType, AngleGaugeType type, Image<ARGB8> image,
             ICapturedImageFileSet fileSet, int channel) {
         this._image = image;
         this._type = type;
@@ -37,7 +37,7 @@ class GaugeFigure implements IGaugeFigure {
     }
 
     @Override
-    public Image<RGB16> getImage() {
+    public Image<ARGB8> getImage() {
         return _image;
     }
 

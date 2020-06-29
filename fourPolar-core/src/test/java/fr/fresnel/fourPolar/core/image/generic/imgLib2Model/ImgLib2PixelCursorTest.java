@@ -19,7 +19,7 @@ import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import net.imglib2.img.Img;
 import net.imglib2.img.array.ArrayImgFactory;
@@ -97,13 +97,13 @@ public class ImgLib2PixelCursorTest {
     @Test
     public void setPixel_RGB16Image_SetsPixelsToDefinedValues() {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2 }).axisOrder(AxisOrder.XY).build();
-        Image<RGB16> image = new ImgLib2ImageFactory().create(metadata, RGB16.zero());
-        IPixelCursor<RGB16> cursor = image.getCursor();
+        Image<ARGB8> image = new ImgLib2ImageFactory().create(metadata, ARGB8.zero());
+        IPixelCursor<ARGB8> cursor = image.getCursor();
 
         int value = 0;
         while (cursor.hasNext()) {
             cursor.next();
-            cursor.setPixel(new Pixel<RGB16>(new RGB16(++value, 0, 0)));
+            cursor.setPixel(new Pixel<ARGB8>(new ARGB8(++value, 0, 0)));
         }
 
         boolean equals = true;

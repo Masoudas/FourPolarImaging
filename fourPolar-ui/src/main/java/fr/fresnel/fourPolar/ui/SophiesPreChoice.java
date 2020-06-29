@@ -26,7 +26,7 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
@@ -210,8 +210,8 @@ public class SophiesPreChoice {
 
         try {
             Image<UINT16> beadImageGray = new SCIFIOUINT16TiffReader(new ImgLib2ImageFactory()).read(beadImagePath);
-            Image<RGB16> beadImageColor = GrayScaleToColorConverter.colorUsingMaxEachPlane(beadImageGray);
-            registrationImageViewer = BdvFunctions.show(ImageToImgLib2Converter.getImg(beadImageColor, RGB16.zero()),
+            Image<ARGB8> beadImageColor = GrayScaleToColorConverter.colorUsingMaxEachPlane(beadImageGray);
+            registrationImageViewer = BdvFunctions.show(ImageToImgLib2Converter.getImg(beadImageColor, ARGB8.zero()),
                     "SoI", BdvOptions.options().is2D());
 
             // Calculate 60 percentile, and normalize brightness with respect to this value.
@@ -406,7 +406,7 @@ class CalculateFoVAndContinue implements ClickBehaviour {
         try {
             for (RegistrationRule rule : RegistrationRule.values()) {
                 ImageJFunctions.show(
-                        ImageToImgLib2Converter.getImg(composites.getCompositeImage(rule).getImage(), RGB16.zero()),
+                        ImageToImgLib2Converter.getImg(composites.getCompositeImage(rule).getImage(), ARGB8.zero()),
                         rule.name() + " of channel " + composites.channel());
 
             }

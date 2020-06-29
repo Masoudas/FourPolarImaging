@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
  * Builds an instance of {@link IPolarizationImageSetComposites}.
  */
 public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSetCompositesBuilder {
-    private final HashMap<RegistrationRule, Image<RGB16>> _compositeImages;
+    private final HashMap<RegistrationRule, Image<ARGB8>> _compositeImages;
     private final int _numChannels;
 
     private int _channel;
@@ -29,7 +29,7 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
     /**
      * Set the composite image of the given registration rule.
      */
-    public PolarizationImageSetCompositesBuilder compositeImage(RegistrationRule rule, Image<RGB16> image) {
+    public PolarizationImageSetCompositesBuilder compositeImage(RegistrationRule rule, Image<ARGB8> image) {
         Objects.requireNonNull(rule);
         Objects.requireNonNull(image);
 
@@ -98,13 +98,13 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
         }
     }
 
-    private void _checkCompositeImageHaveSameAxisAsPolarizationImage(Image<RGB16> compositeImage) {
+    private void _checkCompositeImageHaveSameAxisAsPolarizationImage(Image<ARGB8> compositeImage) {
         if (compositeImage.getMetadata().axisOrder() != IPolarizationImage.AXIS_ORDER)
             throw new IllegalArgumentException("Composite image must be XYCZT");
 
     }
 
-    private void _checkCompositeImageHasOneChannel(Image<RGB16> compositeImage) {
+    private void _checkCompositeImageHasOneChannel(Image<ARGB8> compositeImage) {
         if (compositeImage.getMetadata().numChannels() != 1)
             throw new IllegalArgumentException("Composite image must have only one channel.");
 
