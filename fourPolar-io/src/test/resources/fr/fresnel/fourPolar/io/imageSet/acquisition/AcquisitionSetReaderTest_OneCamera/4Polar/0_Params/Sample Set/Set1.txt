@@ -1,4 +1,0 @@
-Channels: [1]
-          Pol0_45_90_135: /singleChannel.tif
-Channels: [2, 3]
-          Pol0_45_90_135: /multiChannel.tif

@@ -1,0 +1,10 @@
+Channels: [1]
+          Pol0: singleChannel_pol0.tif
+          Pol45: singleChannel_pol45.tif
+          Pol90: singleChannel_pol90.tif
+          Pol135: singleChannel_pol135.tif
+Channels: [2, 3]
+          Pol0: multiChannel_pol0.tif
+          Pol45: multiChannel_pol45.tif
+          Pol90: multiChannel_pol90.tif
+          Pol135: multiChannel_pol135.tif

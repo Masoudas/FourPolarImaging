@@ -29,9 +29,12 @@ import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetIOIssue;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetNotFound;
 
+/**
+ * The set Name of every resource set is equal to the path of the first file.
+ */
 public class AcquisitionSetFromTextFileReaderTest {
-    private String _resourceRoot = AcquisitionSetFromTextFileReaderTest.class.getResource("").getPath();
-    final static String[] setNames = { "Set1", "Set2" };
+    private String _resourceRoot = AcquisitionSetFromTextFileReaderTest.class.getResource("AcquisitionSetReaderTest")
+            .getPath();
 
     @Test
     public void read_OneCameraSampleSetWithTwoCapturedImageSets_CreatesProperAcquisitionSet()
@@ -43,12 +46,12 @@ public class AcquisitionSetFromTextFileReaderTest {
         int numChannels = 3;
         IFourPolarImagingSetup setup = new DummyFPSetup(numChannels, Cameras.One);
         AcquisitionSetFromTextFileReader reader = new AcquisitionSetFromTextFileReader(setup, new DummyChecker(),
-                new ReaderDummyCapturedSetBuilder(numChannels));
+                new ReaderDummyCapturedSetBuilder(numChannels, Cameras.One));
         reader.read(acquisitionSet);
 
         // This are the sets that are in the file.
-        ICapturedImageFileSet set1 = _defineOneCameraFileSet(setNames[0]);
-        ICapturedImageFileSet set2 = _defineOneCameraFileSet(setNames[1]);
+        ICapturedImageFileSet set1 = _defineOneCameraFileSet();
+        ICapturedImageFileSet set2 = _defineOneCameraFileSet();
 
         assertTrue(_isAcquisitionSetCorrectSize(acquisitionSet, 2));
         assertTrue(_doesCapturedImageSetExist(acquisitionSet, set1));
@@ -66,12 +69,12 @@ public class AcquisitionSetFromTextFileReaderTest {
         int numChannels = 3;
         IFourPolarImagingSetup setup = new DummyFPSetup(numChannels, Cameras.Two);
         AcquisitionSetFromTextFileReader reader = new AcquisitionSetFromTextFileReader(setup, new DummyChecker(),
-                new ReaderDummyCapturedSetBuilder(numChannels));
+                new ReaderDummyCapturedSetBuilder(numChannels, Cameras.Two));
         reader.read(acquisitionSet);
 
         // This are the sets that are in the file.
-        ICapturedImageFileSet set1 = _defineTwoCameraFileSet(setNames[0]);
-        ICapturedImageFileSet set2 = _defineTwoCameraFileSet(setNames[1]);
+        ICapturedImageFileSet set1 = _defineTwoCameraFileSet();
+        ICapturedImageFileSet set2 = _defineTwoCameraFileSet();
 
         assertTrue(_isAcquisitionSetCorrectSize(acquisitionSet, 2));
         assertTrue(_doesCapturedImageSetExist(acquisitionSet, set1));
@@ -89,12 +92,12 @@ public class AcquisitionSetFromTextFileReaderTest {
         int numChannels = 3;
         IFourPolarImagingSetup setup = new DummyFPSetup(numChannels, Cameras.Four);
         AcquisitionSetFromTextFileReader reader = new AcquisitionSetFromTextFileReader(setup, new DummyChecker(),
-                new ReaderDummyCapturedSetBuilder(numChannels));
+                new ReaderDummyCapturedSetBuilder(numChannels, Cameras.Four));
         reader.read(acquisitionSet);
 
         // This are the sets that are in the file.
-        ICapturedImageFileSet set1 = _defineFourCameraFileSet(setNames[0]);
-        ICapturedImageFileSet set2 = _defineFourCameraFileSet(setNames[1]);
+        ICapturedImageFileSet set1 = _defineFourCameraFileSet();
+        ICapturedImageFileSet set2 = _defineFourCameraFileSet();
 
         assertTrue(_isAcquisitionSetCorrectSize(acquisitionSet, 2));
         assertTrue(_doesCapturedImageSetExist(acquisitionSet, set1));
@@ -102,52 +105,52 @@ public class AcquisitionSetFromTextFileReaderTest {
 
     }
 
-    private ICapturedImageFileSet _defineOneCameraFileSet(String setName) {
+    private ICapturedImageFileSet _defineOneCameraFileSet() {
         int[] singleChannel = { 1 };
-        File singleChannelFile = new File("/", "singleChannel.tif");
+        File singleChannelFile = new File("singleChannel.tif");
 
         int[] multiChannel = { 2, 3 };
-        File multiChannelFile = new File("/", "multiChannel.tif");
+        File multiChannelFile = new File("multiChannel.tif");
 
         ReaderDummyCapturedSetBuilder builder = new ReaderDummyCapturedSetBuilder(
-                singleChannel.length + multiChannel.length);
+                singleChannel.length + multiChannel.length, Cameras.One);
         builder.add(singleChannel, singleChannelFile);
         builder.add(multiChannel, multiChannelFile);
         return builder.build();
     }
 
-    private ICapturedImageFileSet _defineTwoCameraFileSet(String setName) {
+    private ICapturedImageFileSet _defineTwoCameraFileSet() {
         int[] singleChannel = { 1 };
-        File singleChannelFile_pol0_90 = new File("/", "singleChannel_pol0_90.tif");
-        File singleChannelFile_pol45_135 = new File("/", "singleChannel_pol45_135.tif");
+        File singleChannelFile_pol0_90 = new File("singleChannel_pol0_90.tif");
+        File singleChannelFile_pol45_135 = new File("singleChannel_pol45_135.tif");
 
         int[] multiChannel = { 2, 3 };
-        File multiChannelFile_pol0_90 = new File("/", "multiChannel_pol0_90.tif");
-        File multiChannelFile_pol45_135 = new File("/", "multiChannel_pol45_135.tif");
+        File multiChannelFile_pol0_90 = new File("multiChannel_pol0_90.tif");
+        File multiChannelFile_pol45_135 = new File("multiChannel_pol45_135.tif");
 
         ReaderDummyCapturedSetBuilder builder = new ReaderDummyCapturedSetBuilder(
-                singleChannel.length + multiChannel.length);
+                singleChannel.length + multiChannel.length, Cameras.Two);
         builder.add(singleChannel, singleChannelFile_pol0_90, singleChannelFile_pol45_135);
         builder.add(multiChannel, multiChannelFile_pol0_90, multiChannelFile_pol45_135);
 
         return builder.build();
     }
 
-    private ICapturedImageFileSet _defineFourCameraFileSet(String setName) {
+    private ICapturedImageFileSet _defineFourCameraFileSet() {
         int[] singleChannel = { 1 };
-        File singleChannelFile_pol0 = new File("/", "singleChannel_pol0.tif");
-        File singleChannelFile_pol45 = new File("/", "singleChannel_pol45.tif");
-        File singleChannelFile_pol90 = new File("/", "singleChannel_pol90.tif");
-        File singleChannelFile_pol135 = new File("/", "singleChannel_pol135.tif");
+        File singleChannelFile_pol0 = new File("singleChannel_pol0.tif");
+        File singleChannelFile_pol45 = new File("singleChannel_pol45.tif");
+        File singleChannelFile_pol90 = new File("singleChannel_pol90.tif");
+        File singleChannelFile_pol135 = new File("singleChannel_pol135.tif");
 
         int[] multiChannel = { 2, 3 };
-        File multiChannelFile_pol0 = new File("/", "multiChannel_pol0.tif");
-        File multiChannelFile_pol45 = new File("/", "multiChannel_pol45.tif");
-        File multiChannelFile_pol90 = new File("/", "multiChannel_pol90.tif");
-        File multiChannelFile_pol135 = new File("/", "multiChannel_pol135.tif");
+        File multiChannelFile_pol0 = new File("multiChannel_pol0.tif");
+        File multiChannelFile_pol45 = new File("multiChannel_pol45.tif");
+        File multiChannelFile_pol90 = new File("multiChannel_pol90.tif");
+        File multiChannelFile_pol135 = new File("multiChannel_pol135.tif");
 
         ReaderDummyCapturedSetBuilder builder = new ReaderDummyCapturedSetBuilder(
-                singleChannel.length + multiChannel.length);
+                singleChannel.length + multiChannel.length, Cameras.Four);
         builder.add(singleChannel, singleChannelFile_pol0, singleChannelFile_pol45, singleChannelFile_pol90,
                 singleChannelFile_pol135);
         builder.add(multiChannel, multiChannelFile_pol0, multiChannelFile_pol45, multiChannelFile_pol90,
@@ -171,8 +174,7 @@ public class AcquisitionSetFromTextFileReaderTest {
             String[] labels = Cameras.getLabels(capturedSetInAcquisitionSet.getnCameras());
             for (String label : labels) {
                 isFilesEqual &= Arrays.stream(capturedSetInAcquisitionSet.getFile(label)).allMatch(t -> {
-                    return Arrays.stream(fileSet.getFile(label))
-                            .anyMatch(p -> t.file().equals(p.file()));
+                    return Arrays.stream(fileSet.getFile(label)).anyMatch(p -> t.file().equals(p.file()));
                 });
 
             }
@@ -236,10 +238,12 @@ class ReaderDummyCapturedSetBuilder implements ICapturedImageFileSetBuilder {
     int numChannels;
     int counter = 0;
     ReaderDummyCapturedImageFileSet fileSet;
+    Cameras camera;
 
-    ReaderDummyCapturedSetBuilder(int numChannels) {
+    ReaderDummyCapturedSetBuilder(int numChannels, Cameras camera) {
         this.numChannels = numChannels;
         fileSet = new ReaderDummyCapturedImageFileSet(numChannels);
+        this.camera = camera;
     }
 
     @Override
@@ -271,12 +275,17 @@ class ReaderDummyCapturedSetBuilder implements ICapturedImageFileSetBuilder {
 
     @Override
     public ICapturedImageFileSet build() {
-        fileSet.setSetName(AcquisitionSetFromTextFileReaderTest.setNames[counter++]);
+        setSetName();
         ReaderDummyCapturedImageFileSet fileSetTemp = fileSet;
         fileSet = new ReaderDummyCapturedImageFileSet(numChannels);
 
         return fileSetTemp;
 
+    }
+
+    private void setSetName() {
+        String fileName = fileSet.getFile(Cameras.getLabels(camera)[0])[0].file().getName();
+        fileSet.setSetName(fileName.substring(0, fileName.indexOf('.')));
     }
 
 }
