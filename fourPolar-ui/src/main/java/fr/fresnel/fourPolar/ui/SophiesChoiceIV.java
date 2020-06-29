@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.ui;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -12,11 +13,17 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
+import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetIOIssue;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetNotFound;
+import fr.fresnel.fourPolar.io.imageSet.acquisition.AcquisitionSetFromTextFileReader;
+import fr.fresnel.fourPolar.io.imagingSetup.FourPolarImagingSetupFromYaml;
 import javassist.tools.reflect.CannotCreateException;
 
 /**
@@ -68,7 +75,8 @@ public class SophiesChoiceIV {
         // -------------------------------------------------------------------
         // YOU DON'T NEED TO TOUCH ANYTHING FROM HERE ON!
         // -------------------------------------------------------------------
-        SampleImageSet sampleImageSet = SophiesPreChoice.createSampleImageSet();
+        _readImagingSetup();
+        SampleImageSet sampleImageSet = _readSampleImageSet();
 
         for (Iterator<ICapturedImageFileSet> fileSetItr = sampleImageSet.getIterator(); fileSetItr.hasNext();) {
             ICapturedImageFileSet fileSet = fileSetItr.next();
@@ -87,6 +95,26 @@ public class SophiesChoiceIV {
         }
 
         SophiesChoiceII.closeAllResources();
+    }
+
+    private static File rootFolder = new File(SophiesPreChoice.rootFolder);
+    private static IFourPolarImagingSetup setup;
+
+    private static IFourPolarImagingSetup _readImagingSetup() throws IOException {
+        setup = FourPolarImagingSetup.instance();
+        FourPolarImagingSetupFromYaml reader = new FourPolarImagingSetupFromYaml(rootFolder);
+        reader.read(setup);
+
+        return setup;
+    }
+
+    private static SampleImageSet _readSampleImageSet() throws AcquisitionSetNotFound, AcquisitionSetIOIssue {
+        SampleImageSet sampleImageSet = new SampleImageSet(rootFolder);
+
+        AcquisitionSetFromTextFileReader reader = new AcquisitionSetFromTextFileReader(setup);
+        reader.read(sampleImageSet);
+
+        return sampleImageSet;
     }
 
     private static IAngleGaugePainter _getGaugePainter(final IOrientationImage orientationImage,

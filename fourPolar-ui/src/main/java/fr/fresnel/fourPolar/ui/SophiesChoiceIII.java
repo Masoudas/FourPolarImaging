@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.ui;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -23,12 +24,18 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
+import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetIOIssue;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetNotFound;
+import fr.fresnel.fourPolar.io.imageSet.acquisition.AcquisitionSetFromTextFileReader;
+import fr.fresnel.fourPolar.io.imagingSetup.FourPolarImagingSetupFromYaml;
 import javassist.tools.reflect.CannotCreateException;
 import net.imglib2.RealPoint;
 
@@ -60,22 +67,41 @@ public class SophiesChoiceIII {
         // -------------------------------------------------------------------
         // YOU DON'T NEED TO TOUCH ANYTHING FROM HERE ON!
         // -------------------------------------------------------------------
+        _readImagingSetup();
+        SampleImageSet sampleImageSet = _readSampleImageSet();
+
         final ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
-        final SampleImageSet sampleImageSet = SophiesPreChoice.createSampleImageSet();
-
         final ICapturedImageFileSet fileSet = sampleImageSet.getIterator().next();
-        int channel = SophiesPreChoice.channels[0];
-
         final IOrientationImage orientationImage = SophiesChoiceII.readOrientationImage(sampleImageSet.rootFolder(),
-                fileSet, channel);
+                fileSet, 1);
 
-        final ISoIImage soiImage = SophiesChoiceII.readSoIImage(sampleImageSet.rootFolder(), fileSet, channel);
+        final ISoIImage soiImage = SophiesChoiceII.readSoIImage(sampleImageSet.rootFolder(), fileSet, 1);
 
         final IAngleGaugePainter gaugePainter = _getGaugePainter(length, thickness, cMap, orientationImage, soiImage,
                 angleGaugeType);
 
         _showInteractive(soiImage, gaugePainter, 0);
 
+    }
+
+    private static File rootFolder = new File(SophiesPreChoice.rootFolder);
+    private static IFourPolarImagingSetup setup;
+
+    private static IFourPolarImagingSetup _readImagingSetup() throws IOException {
+        setup = FourPolarImagingSetup.instance();
+        FourPolarImagingSetupFromYaml reader = new FourPolarImagingSetupFromYaml(rootFolder);
+        reader.read(setup);
+
+        return setup;
+    }
+
+    private static SampleImageSet _readSampleImageSet() throws AcquisitionSetNotFound, AcquisitionSetIOIssue {
+        SampleImageSet sampleImageSet = new SampleImageSet(rootFolder);
+
+        AcquisitionSetFromTextFileReader reader = new AcquisitionSetFromTextFileReader(setup);
+        reader.read(sampleImageSet);
+
+        return sampleImageSet;
     }
 
     private static IAngleGaugePainter _getGaugePainter(final int length, final int thickness, final ColorMap cMap,
@@ -98,8 +124,9 @@ public class SophiesChoiceIII {
             Bdv bdv_soi = BdvFunctions.show(ImageToImgLib2Converter.getImg(colorSoIImage, RGB16.zero()), "SoI",
                     BdvOptions.options().is2D());
 
-            Bdv bdv_dipole = BdvFunctions.show(ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), RGB16.zero()),
-                    "Dipole", BdvOptions.options().is2D());
+            Bdv bdv_dipole = BdvFunctions.show(
+                    ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), RGB16.zero()), "Dipole",
+                    BdvOptions.options().is2D());
             // Viewer to show the stick.
 
             Behaviours behaviours = new Behaviours(new InputTriggerConfig());
@@ -147,7 +174,7 @@ class ShowDipoleUponClick implements ClickBehaviour {
         long[] pos2 = Arrays.stream(pos1).mapToLong((t) -> (long) t).toArray();
         IShape shape = new ShapeFactory().point(pos2, AxisOrder.XYCZT);
 
-        painter.draw(shape, this.soiThreshold);        
+        painter.draw(shape, this.soiThreshold);
         bdv_dipole.getBdvHandle().getViewerPanel().requestRepaint();
 
     }

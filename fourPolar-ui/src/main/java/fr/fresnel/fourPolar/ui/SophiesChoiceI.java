@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.ui;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.IteratorMissMatch;
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.propagation.OpticalPropagationNotInvertible;
@@ -21,8 +22,12 @@ import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
+import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
+import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.physics.propagation.IInverseOpticalPropagation;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetIOIssue;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetNotFound;
 import fr.fresnel.fourPolar.io.fourPolar.propagationdb.XMLOpticalPropagationDBIO;
 import fr.fresnel.fourPolar.io.image.orientation.IOrientationImageWriter;
 import fr.fresnel.fourPolar.io.image.orientation.TiffOrientationImageWriter;
@@ -30,6 +35,8 @@ import fr.fresnel.fourPolar.io.image.polarization.IPolarizationImageSetReader;
 import fr.fresnel.fourPolar.io.image.polarization.TiffPolarizationImageSetReader;
 import fr.fresnel.fourPolar.io.image.soi.ISoIImageWriter;
 import fr.fresnel.fourPolar.io.image.soi.TiffSoIImageWriter;
+import fr.fresnel.fourPolar.io.imageSet.acquisition.AcquisitionSetFromTextFileReader;
+import fr.fresnel.fourPolar.io.imagingSetup.FourPolarImagingSetupFromYaml;
 import fr.fresnel.fourPolar.ui.algorithms.preprocess.soi.ISoIImageCreator;
 import fr.fresnel.fourPolar.ui.algorithms.preprocess.soi.SoIImageCreator;
 import javassist.tools.reflect.CannotCreateException;
@@ -43,27 +50,28 @@ import javassist.tools.reflect.CannotCreateException;
  * then run the code.
  */
 public class SophiesChoiceI {
-    private static double soiThreshold = 200;
+    private static double soiThreshold = 1000;
 
     public static void main(String[] args)
             throws IOException, CannotCreateException, IncompatibleCapturedImage, PropagationChannelNotInDatabase {
         // -------------------------------------------------------------------
         // YOU DON'T NEED TO TOUCH ANYTHING FROM HERE ON!
         // -------------------------------------------------------------------
-        SampleImageSet sampleImageSet = SophiesPreChoice.createSampleImageSet();
-        int[] channels = SophiesPreChoice.channels;
+        _readImagingSetup();
 
-        ISoIImageCreator soiImageCreator = SoIImageCreator.create(channels.length);
+        SampleImageSet sampleImageSet = _readSampleImageSet();
+
+        ISoIImageCreator soiImageCreator = SoIImageCreator.create(setup.getNumChannel());
 
         polarizationImageSetReader = new TiffPolarizationImageSetReader(new ImgLib2ImageFactory(),
-                SophiesPreChoice.channels.length);
+                setup.getNumChannel());
 
         orientationImageWriter = new TiffOrientationImageWriter();
         soiImageWriter = new TiffSoIImageWriter();
 
         for (Iterator<ICapturedImageFileSet> capFilesItr = sampleImageSet.getIterator(); capFilesItr.hasNext();) {
             ICapturedImageFileSet fileSet = capFilesItr.next();
-            for (int channel : channels) {
+            for (int channel : IntStream.rangeClosed(1, setup.getNumChannel()).toArray()) {
                 IPolarizationImageSet polarizationImageSet = readPolarizationImages(sampleImageSet.rootFolder(),
                         fileSet, channel);
 
@@ -77,9 +85,21 @@ public class SophiesChoiceI {
         }
 
         closeAllResources(polarizationImageSetReader, orientationImageWriter);
+    }
 
-        _readPropagationMatrixFromDatabase();
+    private static void _readImagingSetup() throws IOException {
+        setup = FourPolarImagingSetup.instance();
+        FourPolarImagingSetupFromYaml reader = new FourPolarImagingSetupFromYaml(rootFolder);
+        reader.read(setup);
+    }
 
+    private static SampleImageSet _readSampleImageSet() throws AcquisitionSetNotFound, AcquisitionSetIOIssue {
+        SampleImageSet sampleImageSet = new SampleImageSet(rootFolder);
+
+        AcquisitionSetFromTextFileReader reader = new AcquisitionSetFromTextFileReader(setup);
+        reader.read(sampleImageSet);
+
+        return sampleImageSet;
     }
 
     private static ISoIImage _createSoIImage(ISoIImageCreator soiImageCreator,
@@ -88,9 +108,11 @@ public class SophiesChoiceI {
         return soiImage;
     }
 
+    private static IFourPolarImagingSetup setup = null;
     private static IPolarizationImageSetReader polarizationImageSetReader = null;
     private static IOrientationImageWriter orientationImageWriter = null;
     private static ISoIImageWriter soiImageWriter = null;
+    private static File rootFolder = new File(SophiesPreChoice.rootFolder);
 
     private static IPolarizationImageSet readPolarizationImages(File rootFolder, ICapturedImageFileSet fileSet,
             int channel) throws IOException {
@@ -108,7 +130,8 @@ public class SophiesChoiceI {
 
     private static void mapIntensityToOrientation(IPolarizationImageSet polarizationImageSet,
             IOrientationImage orientationImage) throws PropagationChannelNotInDatabase, IOException {
-        IInverseOpticalPropagation inverseOpticalProp = _getInverseOpticalPropagation();
+        IInverseOpticalPropagation inverseOpticalProp = _getInverseOpticalPropagation(
+            polarizationImageSet.channel());
 
         IntensityToOrientationConverter converter = new IntensityToOrientationConverter(inverseOpticalProp);
 
@@ -138,9 +161,9 @@ public class SophiesChoiceI {
 
     }
 
-    private static IInverseOpticalPropagation _getInverseOpticalPropagation()
+    private static IInverseOpticalPropagation _getInverseOpticalPropagation(int channel)
             throws PropagationChannelNotInDatabase, IOException {
-        IOpticalPropagation opticalPropagation = _createOpticalPropagation();
+        IOpticalPropagation opticalPropagation = _createOpticalPropagation(channel);
 
         MatrixBasedInverseOpticalPropagationCalculator inverseCalculator = new MatrixBasedInverseOpticalPropagationCalculator();
 
@@ -152,17 +175,17 @@ public class SophiesChoiceI {
         return null;
     }
 
-    private static IOpticalPropagation _createOpticalPropagation()
+    private static IOpticalPropagation _createOpticalPropagation(int channel)
             throws PropagationChannelNotInDatabase, IOException {
-        return _readPropagationMatrixFromDatabase();
+        return _readPropagationMatrixFromDatabase(channel);
     }
 
-    public static IOpticalPropagation _readPropagationMatrixFromDatabase()
+    public static IOpticalPropagation _readPropagationMatrixFromDatabase(int channel)
             throws PropagationChannelNotInDatabase, IOException {
         XMLOpticalPropagationDBIO dbIO = new XMLOpticalPropagationDBIO();
         IOpticalPropagationDB db = dbIO.read();
-        
-        return db.search(SophiesPreChoice.createChannel(), SophiesPreChoice.createNumericalAperture());
+
+        return db.search(setup.getChannel(channel), setup.getNumericalAperture());
 
     }
 

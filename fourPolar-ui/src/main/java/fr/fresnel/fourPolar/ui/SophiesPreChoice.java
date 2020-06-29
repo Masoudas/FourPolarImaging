@@ -16,6 +16,7 @@ import fr.fresnel.fourPolar.algorithm.preprocess.fov.FoVCalculator;
 import fr.fresnel.fourPolar.algorithm.preprocess.fov.IFoVCalculator;
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter.Color;
+import fr.fresnel.fourPolar.algorithm.util.image.stats.ImageStatistics;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.PolarizationImageSetCompositesCreator;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
@@ -28,6 +29,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RGB16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
+import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationImageSet.RegistrationImageType;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
@@ -44,11 +46,13 @@ import fr.fresnel.fourPolar.core.preprocess.RegistrationSetProcessResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetIOIssue;
 import fr.fresnel.fourPolar.io.image.captured.tiff.checker.TiffCapturedImageChecker;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOUINT16TiffReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadataReader;
 import fr.fresnel.fourPolar.io.image.polarization.TiffPolarizationImageSetWriter;
+import fr.fresnel.fourPolar.io.imageSet.acquisition.AcquisitionSetToTextFileWriter;
 import fr.fresnel.fourPolar.io.imagingSetup.FourPolarImagingSetupToYaml;
 import fr.fresnel.fourPolar.io.preprocess.RegistrationSetProcessResultToYAML;
 import fr.fresnel.fourPolar.io.visualization.figures.polarization.tiff.TiffPolarizationImageSetCompositesWriter;
@@ -78,16 +82,16 @@ public class SophiesPreChoice {
     public static String userName = "Sophie 'The Boss' Brasselet";
 
     // RootFolder
-    public static String rootFolder = "D:/4PolarBackendTest/Masoud";
+    public static String rootFolder = "/home/masoud/Documents/SampleImages/A4PolarDataSet";
 
     // Registration image
-    public static String registrationImage = "AF488_3D_noSAF_2-wf.tif";
+    public static String registrationImage = "AVG_rotor_120.tif";
 
     // Registration image type
     public static RegistrationImageType registrationImageType = RegistrationImageType.BEAD;
 
     // Sample image
-    public static String sampleImage = "AF488_3D_noSAF_2-wf.tif";
+    public static String sampleImage = "AVG_rotor_120.tif";
 
     // Number of channels
     public static int[] channels = { 1 };
@@ -120,15 +124,20 @@ public class SophiesPreChoice {
         // -------------------------------------------------------------------
         // YOU DON'T NEED TO CHANGE ANYTHING FROM HERE ON!
         // -------------------------------------------------------------------
+        setup = initializeImagingSetup();
+
         beadImageSet = createRegistrationImageSet();
         sampleImageSet = createSampleImageSet();
+
+        writeAcquisitionSetToDisk(beadImageSet);
+        writeAcquisitionSetToDisk(sampleImageSet);
 
         _showRegistrationImageSetForFoVCalculation();
 
     }
 
     // Imaging setup
-    public static IFourPolarImagingSetup setup = initializeImagingSetup();
+    public static IFourPolarImagingSetup setup;
 
     // Bead image set
     private static RegistrationImageSet beadImageSet = null;
@@ -151,6 +160,15 @@ public class SophiesPreChoice {
     public static void writeSetupToDisk() throws IOException {
         FourPolarImagingSetupToYaml writer = new FourPolarImagingSetupToYaml(setup, sampleImageSet.rootFolder());
         writer.write();
+    }
+
+    private static void writeAcquisitionSetToDisk(AcquisitionSet set) {
+        AcquisitionSetToTextFileWriter writer = new AcquisitionSetToTextFileWriter(set, setup);
+        try {
+            writer.write();
+        } catch (AcquisitionSetIOIssue e) {
+            e.printStackTrace();
+        }
     }
 
     public static RegistrationImageSet createRegistrationImageSet()
@@ -176,7 +194,7 @@ public class SophiesPreChoice {
         return sampleImageSet;
     }
 
-    public static ICapturedImageFileSet createFileSet(File pol0_45_90_135)
+    private static ICapturedImageFileSet createFileSet(File pol0_45_90_135)
             throws CannotCreateException, IncompatibleCapturedImage {
         IMetadataReader metadataReader = new SCIFIOMetadataReader();
         TiffCapturedImageChecker checker = new TiffCapturedImageChecker(metadataReader);
@@ -195,6 +213,12 @@ public class SophiesPreChoice {
             Image<RGB16> beadImageColor = GrayScaleToColorConverter.colorUsingMaxEachPlane(beadImageGray);
             registrationImageViewer = BdvFunctions.show(ImageToImgLib2Converter.getImg(beadImageColor, RGB16.zero()),
                     "SoI", BdvOptions.options().is2D());
+
+            // Calculate 60 percentile, and normalize brightness with respect to this value.
+            double percetile60 = ImageStatistics.computePercentileFirstPlane(beadImageGray, 80);
+            double maxPlane = ImageStatistics.getPlaneMinMax(beadImageGray)[1][0];
+            registrationImageViewer.getBdvHandle().getSetupAssignments().getConverterSetups().get(0).setDisplayRange(
+                0, 255 * percetile60 / maxPlane);
 
             Behaviours behaviours = new Behaviours(new InputTriggerConfig());
             behaviours.install(registrationImageViewer.getBdvHandle().getTriggerbindings(), "my-new-behaviours");
@@ -232,11 +256,11 @@ public class SophiesPreChoice {
         return processorBuilder.build();
     }
 
-    public static INumericalAperture createNumericalAperture() {
+    private static INumericalAperture createNumericalAperture() {
         return new NumericalAperture(na_0, na_45, na_90, na_135);
     }
 
-    public static IChannel createChannel() {
+    private static IChannel createChannel() {
         return new Channel(wavelengths[0], calibFactPol0, calibFactPol45, calibFactPol90, calibFactPol135);
     }
 
