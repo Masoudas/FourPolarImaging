@@ -118,10 +118,10 @@ public class AcquisitionSetToTextFileWriterTest {
 
     private ICapturedImageFileSet _defineOneCameraFileSet(String setName) {
         int[] singleChannel = { 1 };
-        File singleChannelFile = new File("/", "singleChannel.tif");
+        File singleChannelFile = new File("singleChannel.tif");
 
         int[] multiChannel = { 2, 3 };
-        File multiChannelFile = new File("/", "multiChannel.tif");
+        File multiChannelFile = new File("multiChannel.tif");
 
         ICapturedImageFile[] pol0_45_90_135 = { new WriterDummyCapturedImageFile(singleChannel, singleChannelFile),
                 new WriterDummyCapturedImageFile(multiChannel, multiChannelFile) };
@@ -134,12 +134,12 @@ public class AcquisitionSetToTextFileWriterTest {
 
     private ICapturedImageFileSet _defineTwoCameraFileSet(String setName) {
         int[] singleChannel = { 1 };
-        File singleChannelFile_pol0_90 = new File("/", "singleChannel_pol0_90.tif");
-        File singleChannelFile_pol45_135 = new File("/", "singleChannel_pol45_135.tif");
+        File singleChannelFile_pol0_90 = new File("singleChannel_pol0_90.tif");
+        File singleChannelFile_pol45_135 = new File("singleChannel_pol45_135.tif");
 
         int[] multiChannel = { 2, 3 };
-        File multiChannelFile_pol0_90 = new File("/", "multiChannel_pol0_90.tif");
-        File multiChannelFile_pol45_135 = new File("/", "multiChannel_pol45_135.tif");
+        File multiChannelFile_pol0_90 = new File("multiChannel_pol0_90.tif");
+        File multiChannelFile_pol45_135 = new File("multiChannel_pol45_135.tif");
 
         ICapturedImageFile[] pol0_90 = { new WriterDummyCapturedImageFile(singleChannel, singleChannelFile_pol0_90),
                 new WriterDummyCapturedImageFile(multiChannel, multiChannelFile_pol0_90) };
@@ -155,16 +155,16 @@ public class AcquisitionSetToTextFileWriterTest {
 
     private ICapturedImageFileSet _defineFourCameraFileSet(String setName) {
         int[] singleChannel = { 1 };
-        File singleChannelFile_pol0 = new File("/", "singleChannel_pol0.tif");
-        File singleChannelFile_pol45 = new File("/", "singleChannel_pol45.tif");
-        File singleChannelFile_pol90 = new File("/", "singleChannel_pol90.tif");
-        File singleChannelFile_pol135 = new File("/", "singleChannel_pol135.tif");
+        File singleChannelFile_pol0 = new File("singleChannel_pol0.tif");
+        File singleChannelFile_pol45 = new File("singleChannel_pol45.tif");
+        File singleChannelFile_pol90 = new File("singleChannel_pol90.tif");
+        File singleChannelFile_pol135 = new File("singleChannel_pol135.tif");
 
         int[] multiChannel = { 2, 3 };
-        File multiChannelFile_pol0 = new File("/", "multiChannel_pol0.tif");
-        File multiChannelFile_pol45 = new File("/", "multiChannel_pol45.tif");
-        File multiChannelFile_pol90 = new File("/", "multiChannel_pol90.tif");
-        File multiChannelFile_pol135 = new File("/", "multiChannel_pol135.tif");
+        File multiChannelFile_pol0 = new File("multiChannel_pol0.tif");
+        File multiChannelFile_pol45 = new File("multiChannel_pol45.tif");
+        File multiChannelFile_pol90 = new File("multiChannel_pol90.tif");
+        File multiChannelFile_pol135 = new File("multiChannel_pol135.tif");
 
         ICapturedImageFile[] pol0 = { new WriterDummyCapturedImageFile(singleChannel, singleChannelFile_pol0),
                 new WriterDummyCapturedImageFile(multiChannel, multiChannelFile_pol0), };
