@@ -27,10 +27,10 @@ public class ICapturedImageFileSetToTextAdapterTest {
     public void getStringRepresentation_OneCameraCase_ReturnsCorrectString() {
         Cameras camera = Cameras.One;
         int[] singleChannel = { 1 };
-        File singleChannelFile = new File("/", "singleChannel.tif");
+        File singleChannelFile = new File("singleChannel.tif");
 
         int[] multiChannel = { 2, 3 };
-        File multiChannelFile = new File("/", "multiChannel.tif");
+        File multiChannelFile = new File("multiChannel.tif");
 
         ICapturedImageFile[] pol0_45_90_135 = { new ToDummyCapturedImageFile(singleChannel, singleChannelFile),
                 new ToDummyCapturedImageFile(multiChannel, multiChannelFile) };
@@ -55,12 +55,12 @@ public class ICapturedImageFileSetToTextAdapterTest {
     public void getStringRepresentation_TwoCameraCase_ReturnsCorrectString() {
         Cameras camera = Cameras.Two;
         int[] singleChannel = { 1 };
-        File singleChannelFile_pol0_90 = new File("/", "singleChannel_pol0_90.tif");
-        File singleChannelFile_pol45_135 = new File("/", "singleChannel_pol45_135.tif");
+        File singleChannelFile_pol0_90 = new File("singleChannel_pol0_90.tif");
+        File singleChannelFile_pol45_135 = new File("singleChannel_pol45_135.tif");
 
         int[] multiChannel = { 2, 3 };
-        File multiChannelFile_pol0_90 = new File("/", "multiChannel_pol0_90.tif");
-        File multiChannelFile_pol45_135 = new File("/", "multiChannel_pol45_135.tif");
+        File multiChannelFile_pol0_90 = new File("multiChannel_pol0_90.tif");
+        File multiChannelFile_pol45_135 = new File("multiChannel_pol45_135.tif");
 
         ICapturedImageFile[] pol0_90 = { new ToDummyCapturedImageFile(singleChannel, singleChannelFile_pol0_90),
                 new ToDummyCapturedImageFile(multiChannel, multiChannelFile_pol0_90) };
@@ -88,16 +88,16 @@ public class ICapturedImageFileSetToTextAdapterTest {
     public void getStringRepresentation_FourCameraCase_ReturnsCorrectString() {
         Cameras camera = Cameras.Four;
         int[] singleChannel = { 1 };
-        File singleChannelFile_pol0 = new File("/", "singleChannel_pol0.tif");
-        File singleChannelFile_pol45 = new File("/", "singleChannel_pol45.tif");
-        File singleChannelFile_pol90 = new File("/", "singleChannel_pol90.tif");
-        File singleChannelFile_pol135 = new File("/", "singleChannel_pol135.tif");
+        File singleChannelFile_pol0 = new File("singleChannel_pol0.tif");
+        File singleChannelFile_pol45 = new File("singleChannel_pol45.tif");
+        File singleChannelFile_pol90 = new File("singleChannel_pol90.tif");
+        File singleChannelFile_pol135 = new File("singleChannel_pol135.tif");
 
         int[] multiChannel = { 2, 3 };
-        File multiChannelFile_pol0 = new File("/", "multiChannel_pol0.tif");
-        File multiChannelFile_pol45 = new File("/", "multiChannel_pol45.tif");
-        File multiChannelFile_pol90 = new File("/", "multiChannel_pol90.tif");
-        File multiChannelFile_pol135 = new File("/", "multiChannel_pol135.tif");
+        File multiChannelFile_pol0 = new File("multiChannel_pol0.tif");
+        File multiChannelFile_pol45 = new File("multiChannel_pol45.tif");
+        File multiChannelFile_pol90 = new File("multiChannel_pol90.tif");
+        File multiChannelFile_pol135 = new File("multiChannel_pol135.tif");
 
         ICapturedImageFile[] pol0 = { new ToDummyCapturedImageFile(singleChannel, singleChannelFile_pol0),
                 new ToDummyCapturedImageFile(multiChannel, multiChannelFile_pol0), };
@@ -131,7 +131,7 @@ public class ICapturedImageFileSetToTextAdapterTest {
             String label = Cameras.getLabels(camera)[i - 1];
             String str = strings[i];
 
-            equals &= Arrays.stream(files[i - 1]).anyMatch(p -> str.equals(label + ": " + p.file().getAbsolutePath()));
+            equals &= Arrays.stream(files[i - 1]).anyMatch(p -> str.equals(label + ": " + p.file().getPath()));
         }
 
         return equals;
