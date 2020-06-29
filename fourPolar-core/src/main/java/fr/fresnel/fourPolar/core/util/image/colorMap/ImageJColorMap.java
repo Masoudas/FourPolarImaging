@@ -56,7 +56,7 @@ class ImageJColorMap implements ColorMap {
     @Override
     public ARGB8 getColor(double min, double max, double val) {
         int index = this._cTable.lookupARGB(min, max, val);
-        this._color.set(ARGBType.red(index), ARGBType.green(index), ARGBType.blue(index));
+        this._color.set(ARGBType.red(index), ARGBType.green(index), ARGBType.blue(index), ARGBType.alpha(index));
         return _color;
     }
 

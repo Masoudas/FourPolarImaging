@@ -17,9 +17,10 @@ class ARGBConverter implements TypeConverter<ARGB8, ARGBType> {
         int red = ARGBType.red(index);
         int blue = ARGBType.blue(index);
         int green = ARGBType.green(index);
+        int alpha = ARGBType.alpha(index);
 
         ARGB8 rgb16 = (ARGB8)pixel;
-        rgb16.set(red, green, blue);
+        rgb16.set(red, green, blue, alpha);
     }
 
     @Override

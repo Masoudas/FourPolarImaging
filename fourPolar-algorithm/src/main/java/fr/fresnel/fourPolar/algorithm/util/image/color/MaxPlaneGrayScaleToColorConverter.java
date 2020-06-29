@@ -76,7 +76,7 @@ class MaxPlaneGrayScaleToColorConverter {
             converter.convert(doubleType, argbType);
 
             final int color = argbType.get();
-            pixel.value().set(ARGBType.red(color), ARGBType.green(color), ARGBType.blue(color));
+            pixel.value().set(ARGBType.red(color), ARGBType.green(color), ARGBType.blue(color), ARGBType.alpha(color));
             colorCursor.setPixel(pixel);
         }
 
