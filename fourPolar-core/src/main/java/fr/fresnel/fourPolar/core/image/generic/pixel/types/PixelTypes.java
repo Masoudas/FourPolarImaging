@@ -9,23 +9,18 @@ public enum PixelTypes {
      * @return
      */
     public static PixelType create(PixelTypes type) {
-        PixelType pixelType = null;
         switch (type) {
             case FLOAT_32:
-                pixelType = new Float32(0);
-                break;
+                return new Float32(Float32.MIN_VAL);
 
             case UINT_16:
-                pixelType = new UINT16(0);
-                break;
+                return new UINT16(UINT16.MIN_VAL);
 
             case RGB_16:
-                pixelType = new ARGB8(0, 0, 0);
-                break;
+                return new ARGB8(ARGB8.MIN_COLOR, ARGB8.MIN_COLOR, ARGB8.MIN_COLOR, ARGB8.MIN_ALPHA);
 
             default:
-                break;
+                return null;
         }
-        return pixelType;
     }
 }
