@@ -8,59 +8,100 @@ public class ARGB8 implements PixelType {
     /**
      * Maximum value allowed for each color.
      */
-    public static int MAX_VAL = 255;
-    public static int MIN_VAL = 0;
+    public static int MAX_COLOR = 255;
+
+    /**
+     * Minimum value allowed for each color.
+     */
+    public static int MIN_COLOR = 0;
+
+    /**
+     * Maximum value allowed for alpha;
+     */
+    public static int MAX_ALPHA = 255;
+
+    /**
+     * Minimum value allowed for each color.
+     */
+    public static int MIN_ALPHA = 0;
 
     private int _r;
     private int _g;
     private int _b;
+    private int _a;
 
     private final static ARGB8 _zero = new ARGB8(0, 0, 0);
 
     /**
-     * Constructs the type with specified values.
+     * Return a shared zero instance. Used for initializing types.
      * 
-     * @param r
-     * @param g
-     * @param b
+     * @return a shared instance with value zero.
      */
-    public ARGB8(int r, int g, int b) {
-        this.set(r, g, b);
+    public static ARGB8 zero() {
+        return _zero;
     }
 
-    public void set(int r, int g, int b) {
+    /**
+     * Constructs the type with specified values, setting alpha to {@link MIN_ALPHA}
+     * (minimum transparency).
+     * 
+     * @param r is red.
+     * @param g is green. 
+     * @param b is blue.
+     */
+    public ARGB8(int r, int g, int b) {
+        this.set(r, g, b, MIN_ALPHA);
+    }
+
+    public ARGB8(int r, int g, int b, int a){
+        this.set(r, g, b, a);
+    }
+
+    public void set(int r, int g, int b, int a) {
         this._r = this._limitColorRange(r);
         this._g = this._limitColorRange(g);
         this._b = this._limitColorRange(b);
+        this._a = this._limitAlphaRange(a);
     }
 
     public void set(ARGB8 rgb16) {
         this._r = this._limitColorRange(rgb16._r);
         this._g = this._limitColorRange(rgb16._g);
         this._b = this._limitColorRange(rgb16._b);
+        this._a = this._limitAlphaRange(rgb16._a);
     }
 
+    /**
+     * Add to the current pixel, and set the transparency to that of the new pixel.
+     * 
+     */
     public void add(ARGB8 rgb16) {
-        this.set(rgb16._r + this._r, rgb16._g + this._g, rgb16._b + this._b);
+        this.set(rgb16._r + this._r, rgb16._g + this._g, rgb16._b + this._b, rgb16._a);
     }
 
     /**
      * Limits the range of color to the range specified by {@code UINT16}
      * 
      * @param color
-     * @return
      */
     private int _limitColorRange(int color) {
-        int compressedColor = 0;
-        if (color < ARGB8.MIN_VAL) {
-            compressedColor = 0;
-        } else if (color > ARGB8.MAX_VAL) {
-            compressedColor = ARGB8.MAX_VAL;
+        if (color < ARGB8.MIN_COLOR) {
+            return MIN_COLOR;
+        } else if (color > ARGB8.MAX_COLOR) {
+            return ARGB8.MAX_COLOR;
         } else {
-            compressedColor = color;
+            return color;
         }
+    }
 
-        return compressedColor;
+    private int _limitAlphaRange(int alpha) {
+        if (alpha < MIN_ALPHA) {
+            return MIN_ALPHA;
+        } else if (alpha > MAX_ALPHA) {
+            return MAX_ALPHA;
+        } else {
+            return alpha;
+        }
 
     }
 
@@ -91,23 +132,18 @@ public class ARGB8 implements PixelType {
         return _b;
     }
 
+    public int getAlpha() {
+        return _a;
+    }
+
     @Override
     public PixelTypes getType() {
         return PixelTypes.RGB_16;
     }
 
-    /**
-     * Return a shared zero instance. Used for initializing types.
-     * 
-     * @return a shared instance with value zero.
-     */
-    public static ARGB8 zero() {
-        return _zero;
-    }
-
     @Override
     public PixelType copy() {
-        return new ARGB8(getR(), getG(), getB());
+        return new ARGB8(getR(), getG(), getB(), getAlpha());
     }
 
 }
