@@ -43,4 +43,15 @@ public class ImageStatistics {
 
     }
 
+        /**
+     * Calculates the demanded percentile of the first plane of the image.
+     * 
+     * @param image    is the image instance.
+     * @param quantile is the desired percentile.
+     * @return the percentile as documented in {@link Percentile}.
+     */
+    public static <T extends RealType> double computePercentileFirstPlane(Image<T> image, int quantile) {
+        return ImagePercentileCalculator.computePercentileFirstPlane(image, quantile);
+    }
+
 }
