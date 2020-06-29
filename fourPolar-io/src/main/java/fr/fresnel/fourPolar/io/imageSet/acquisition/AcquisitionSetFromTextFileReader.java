@@ -99,7 +99,7 @@ public class AcquisitionSetFromTextFileReader {
     public void read(AcquisitionSet acquisitionSet) throws AcquisitionSetNotFound, AcquisitionSetIOIssue {
         _checkAcquisitionSetIsEmpty(acquisitionSet);
 
-        AcquisitionSetIOIssue exceptionIOIssue = new AcquisitionSetIOIssue(_getAcquisitionSetExceptionMessage());
+        AcquisitionSetIOIssue exceptionIOIssue = new AcquisitionSetIOIssue(_getSetFileNotParsableMessage());
         File[] capturedImageSets = _getCapturedImageSetsAsTextFilesOnRoot(acquisitionSet);
         for (File capturedImageSet : capturedImageSets) {
             String setName = _getCapturedSetNameFromFileName(capturedImageSet);
@@ -232,7 +232,7 @@ public class AcquisitionSetFromTextFileReader {
         }
     }
 
-    private String _getAcquisitionSetExceptionMessage() {
-        return "At least one captured image set file can't be read from disk due to IO issues.";
+    private String _getSetFileNotParsableMessage() {
+        return "At least one captured image set file can't be parsed from the text file.";
     }
 }
