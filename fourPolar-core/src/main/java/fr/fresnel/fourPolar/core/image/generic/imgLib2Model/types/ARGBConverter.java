@@ -26,7 +26,7 @@ class ARGBConverter implements TypeConverter<ARGB8, ARGBType> {
     @Override
     public void setNativeType(ARGB8 pixel, ARGBType type) {
         ARGB8 value = (ARGB8)pixel;                
-        type.set(ARGBType.rgba(value.getR(), value.getG(), value.getB(), 0));
+        type.set(ARGBType.rgba(value.getR(), value.getG(), value.getB(), pixel.getAlpha()));
     }
 
     @Override
