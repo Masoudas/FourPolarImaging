@@ -61,7 +61,7 @@ public interface IFourPolarImagingSetup {
     public void setNumericalAperture(INumericalAperture na);
 
     /**
-     * Return the field of view for each polarization.
+     * Return the field of view.
      */
     public IFieldOfView getFieldOfView();
 
