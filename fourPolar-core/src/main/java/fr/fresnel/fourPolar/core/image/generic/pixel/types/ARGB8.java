@@ -76,8 +76,8 @@ public class ARGB8 implements PixelType {
     }
 
     /**
-     * Add to the current pixel, and set the transparency to that of the new pixel.
-     * 
+     * Simply Add to the current pixel, and set the transparency to that of the new pixel.
+     * @see {@link ColorBlender}. 
      */
     public void add(ARGB8 rgb16) {
         this.set(rgb16._r + this._r, rgb16._g + this._g, rgb16._b + this._b, rgb16._a);
