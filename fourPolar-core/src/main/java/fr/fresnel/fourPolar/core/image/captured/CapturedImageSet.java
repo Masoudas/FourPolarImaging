@@ -66,7 +66,7 @@ class CapturedImageSet implements ICapturedImageSet {
     @Override
     public ICapturedImage getChannelPolarizationImage(int channel, Polarization polarization) {
         Objects.requireNonNull(polarization, "polarization can't be null");
-        ChannelUtils.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannelExists(channel, this._numChannels);
 
         ICapturedImage[] polImages = _getPolarizationCapturedImages(polarization);
         // Note that only one image satisfies the constraints. That's why we use findAny.

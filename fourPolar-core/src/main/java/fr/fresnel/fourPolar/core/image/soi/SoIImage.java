@@ -75,7 +75,7 @@ public class SoIImage implements ISoIImage {
     private SoIImage(ICapturedImageFileSet fileSet, Image<UINT16> image, int channel) {
         _checkAxisOrder(image);
         _checkImageIsSingleChannel(image);
-        ChannelUtils.checkChannel(channel, fileSet.getChannels().length);
+        ChannelUtils.checkChannelExists(channel, fileSet.getChannels().length);
 
         this._fileSet = fileSet;
         this._image = image;

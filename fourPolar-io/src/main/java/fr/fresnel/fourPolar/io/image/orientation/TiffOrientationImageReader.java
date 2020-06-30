@@ -46,7 +46,7 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
     @Override
     public IOrientationImage read(File root4PProject, ICapturedImageFileSet fileSet, int channel)
             throws IOException, CannotFormOrientationImage {
-        ChannelUtils.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannelExists(channel, this._numChannels);
         TiffOrientationImageFileSet oSet = new TiffOrientationImageFileSet(root4PProject, fileSet, channel);
 
         HashMap<OrientationAngle, Image<Float32>> angleImages = this._read(oSet, fileSet);
@@ -57,7 +57,7 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
     @Override
     public IOrientationImage readFromDegrees(File root4PProject, ICapturedImageFileSet fileSet, int channel)
             throws IOException, CannotFormOrientationImage {
-        ChannelUtils.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannelExists(channel, this._numChannels);
         TiffOrientationImageInDegreeFileSet oSet = new TiffOrientationImageInDegreeFileSet(root4PProject, fileSet,
                 channel);
 

@@ -97,7 +97,7 @@ public class TiffPolarizationImageSetCompositesReader implements IPolarizationIm
     public IPolarizationImageSetComposites readRegistrationComposite(File root4PProject, int channel)
             throws IOException {
         Objects.requireNonNull(root4PProject);
-        ChannelUtils.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannelExists(channel, this._numChannels);
         File rootCompositeImages = TiffPolarizationImageSetCompositesUtil
                 .getRootFolderRegistrationComposites(root4PProject, channel);
         return this._read(rootCompositeImages, null, channel);
@@ -108,7 +108,7 @@ public class TiffPolarizationImageSetCompositesReader implements IPolarizationIm
             ICapturedImageFileSet fileSet) throws IOException {
         Objects.requireNonNull(fileSet);
         Objects.requireNonNull(root4PProject);
-        ChannelUtils.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannelExists(channel, this._numChannels);
         
         File rootCompositeImages = TiffPolarizationImageSetCompositesUtil.getRootFolder(root4PProject,
                 visualizationSession, channel, fileSet);

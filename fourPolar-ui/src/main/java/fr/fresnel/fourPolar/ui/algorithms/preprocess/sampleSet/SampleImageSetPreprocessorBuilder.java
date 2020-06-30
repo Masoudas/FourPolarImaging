@@ -93,7 +93,7 @@ public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocess
 
     @Override
     IChannelDarkBackgroundRemover getBackgroundRemovers(int channel) {
-        ChannelUtils.checkChannel(channel, getNumChannels());
+        ChannelUtils.checkChannelExists(channel, getNumChannels());
         return this._backgroundRemovers[channel - 1];
     }
 
@@ -109,7 +109,7 @@ public class SampleImageSetPreprocessorBuilder extends ISampleImageSetPreprocess
 
     @Override
     IChannelRealigner getRealigners(int channel) {
-        ChannelUtils.checkChannel(channel, getNumChannels());
+        ChannelUtils.checkChannelExists(channel, getNumChannels());
         return this._realigners[channel - 1];
     }
 

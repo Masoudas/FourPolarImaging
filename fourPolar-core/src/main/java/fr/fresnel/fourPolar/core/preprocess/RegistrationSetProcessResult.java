@@ -31,13 +31,13 @@ public class RegistrationSetProcessResult {
      */
     public void setRegistrationResult(int channel, IChannelRegistrationResult registrationResult) {
         Objects.requireNonNull(registrationResult, "Registration result can't be null for channel + " + channel);
-        ChannelUtils.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannelExists(channel, this._numChannels);
         this._channelRegistrationResults[channel - 1] = registrationResult;
     }
 
     public void setDarkBackground(int channel, IChannelDarkBackground darkBackground) {
         Objects.requireNonNull(darkBackground, "Channel dark background can't be null for channel + " + channel);
-        ChannelUtils.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannelExists(channel, this._numChannels);
         this._channelDarkBackground[channel - 1] = darkBackground;
     }
 
@@ -45,12 +45,12 @@ public class RegistrationSetProcessResult {
      * Return the result of registration for the given channel.
      */
     public IChannelRegistrationResult getRegistrationResult(int channel) {
-        ChannelUtils.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannelExists(channel, this._numChannels);
         return this._channelRegistrationResults[channel - 1];
     }
 
     public IChannelDarkBackground getDarkBackground(int channel) {
-        ChannelUtils.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannelExists(channel, this._numChannels);
         return this._channelDarkBackground[channel - 1];
     }
 

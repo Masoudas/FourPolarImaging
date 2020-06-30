@@ -63,7 +63,7 @@ public class PolarizationImageSetBuilder extends IPolarizationImageSetBuilder {
     }
 
     public PolarizationImageSetBuilder channel(int channel) {
-        ChannelUtils.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannelExists(channel, this._numChannels);
         this._channel = channel;
         
         return this;
@@ -130,7 +130,7 @@ public class PolarizationImageSetBuilder extends IPolarizationImageSetBuilder {
         Objects.requireNonNull(this._pol90, "pol135 image is not set.");
         Objects.requireNonNull(this._fileSet, "fileSet is not set.");
 
-        ChannelUtils.checkChannel(this._channel, this._numChannels);
+        ChannelUtils.checkChannelExists(this._channel, this._numChannels);
     }
 
     private void _resetBuilder() {

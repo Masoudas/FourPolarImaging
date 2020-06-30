@@ -29,7 +29,7 @@ public class ChannelUtils {
 	 * 
 	 * @throws IllegalArgumentException in case channel is not positive or greater than numChannels.
 	 */
-	public static void checkChannel(int channel, int numChannels) {
+	public static void checkChannelExists(int channel, int numChannels) {
 	    if (channel <= 0 || channel > numChannels){
 	        throw new IllegalArgumentException("Channel does not exist.");
 	    }

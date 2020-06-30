@@ -203,7 +203,7 @@ class RegistrationSetProcessor implements IRegistrationSetProcessor {
 
     @Override
     public Optional<IPolarizationImageSetComposites> getRegistrationComposite(int channel) {
-        ChannelUtils.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannelExists(channel, this._numChannels);
         return Optional.ofNullable(this._channelComposites[channel - 1]);
     }
 

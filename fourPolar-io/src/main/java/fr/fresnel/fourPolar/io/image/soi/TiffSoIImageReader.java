@@ -31,7 +31,7 @@ public class TiffSoIImageReader implements ISoIImageReader {
 
     @Override
     public ISoIImage read(File root4PProject, ICapturedImageFileSet fileSet, int channel) throws IOException {
-        ChannelUtils.checkChannel(channel, _numChannels);
+        ChannelUtils.checkChannelExists(channel, _numChannels);
         ISoIImageFile file = _createSoIImageFile(root4PProject, fileSet, channel);
 
         Image<UINT16> diskSoI = _readSoI(file);

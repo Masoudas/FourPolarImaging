@@ -46,7 +46,7 @@ public class PolarizationImageSetCompositesBuilder extends IPolarizationImageSet
      * if the channel is not set.
      */
     public PolarizationImageSetCompositesBuilder channel(int channel) {
-        ChannelUtils.checkChannel(channel, this._numChannels);
+        ChannelUtils.checkChannelExists(channel, this._numChannels);
 
         this._channel = channel;
         return this;
