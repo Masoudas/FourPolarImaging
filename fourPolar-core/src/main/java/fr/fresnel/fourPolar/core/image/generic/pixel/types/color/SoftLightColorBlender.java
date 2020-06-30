@@ -22,8 +22,14 @@ public class SoftLightColorBlender implements ColorBlender {
         double baseAsDouble = ((double) baseColor) / 255d;
         double blendAsDouble = ((double) blendColor) / 255d;
 
-        double screenBlendFactor = (1 - 2 * blendAsDouble) * Math.pow(baseAsDouble, 2)
-                + 2 * baseAsDouble * blendAsDouble;
-        return (int) (screenBlendFactor * 255);
+        double softBlendFactor;
+        if (blendAsDouble < 0.5) {
+            softBlendFactor = 2 * baseAsDouble * blendAsDouble + baseAsDouble * baseAsDouble * (1 - 2 * blendAsDouble);
+        } else {
+            softBlendFactor = 2 * baseAsDouble * (1 - blendAsDouble)
+                    + Math.sqrt(baseAsDouble) * (2 * blendAsDouble - 1);
+        }
+
+        return (int) (softBlendFactor * 255);
     }
 }
