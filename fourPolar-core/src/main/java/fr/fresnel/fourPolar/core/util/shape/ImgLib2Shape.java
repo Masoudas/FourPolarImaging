@@ -88,7 +88,7 @@ class ImgLib2Shape implements IShape {
     @Override
     public boolean isInside(long[] point) {
         if (point.length != this._shapeDim) {
-            throw new IllegalArgumentException("The given point does not have same number of axis as shape.");
+            return false;
         }
 
         this._pointMask.setPosition(point);
@@ -98,7 +98,7 @@ class ImgLib2Shape implements IShape {
     @Override
     public IShape and(IShape shape) {
         if (shape instanceof ImgLib2Shape) {
-            return ImgLib2LogicalShape.createAndedShape(this, (ImgLib2Shape)shape);
+            return ImgLib2LogicalShape.createAndedShape(this, (ImgLib2Shape) shape);
         } else {
             throw new IllegalArgumentException("Can't And this shape");
         }
