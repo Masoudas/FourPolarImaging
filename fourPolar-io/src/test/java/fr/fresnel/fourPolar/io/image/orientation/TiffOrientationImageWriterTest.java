@@ -26,7 +26,6 @@ import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
-import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
 import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageFileSet;
 import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageInDegreeFileSet;
 import io.scif.img.ImgOpener;
@@ -60,13 +59,13 @@ public class TiffOrientationImageWriterTest {
         long[] pos1 = new long[] { 1, 0, 0, 0, 0 };
 
         _setPixel(rho, pos0, 0);
-        _setPixel(rho, pos1, (float) OrientationVector.MAX_Rho);
+        _setPixel(rho, pos1, (float) IOrientationVector.MAX_Rho);
 
         _setPixel(delta, pos0, (float) Math.PI / 4);
         _setPixel(delta, pos1, (float) (3 * Math.PI / 4));
 
         _setPixel(eta, pos0, 0);
-        _setPixel(eta, pos1, (float) OrientationVector.MAX_Eta);
+        _setPixel(eta, pos1, (float) IOrientationVector.MAX_Eta);
 
         IOrientationImage imageSet = OrientationImageFactory.create(fileSet, channel, rho, delta, eta);
 
@@ -86,8 +85,8 @@ public class TiffOrientationImageWriterTest {
                 new ArrayImgFactory<FloatType>(new FloatType())).get(0);
 
         assertTrue(_isOrientationVectorEqualTo(diskRho, diskDelta, diskEta, pos0, 0, (float) Math.PI / 4, 0));
-        assertTrue(_isOrientationVectorEqualTo(diskRho, diskDelta, diskEta, pos1, (float) OrientationVector.MAX_Rho,
-                (float) (3 * Math.PI / 4), (float) OrientationVector.MAX_Eta));
+        assertTrue(_isOrientationVectorEqualTo(diskRho, diskDelta, diskEta, pos1, (float) IOrientationVector.MAX_Rho,
+                (float) (3 * Math.PI / 4), (float) IOrientationVector.MAX_Eta));
     }
 
     @Test
@@ -111,13 +110,13 @@ public class TiffOrientationImageWriterTest {
         long[] pos1 = new long[] { 1, 0, 0, 0, 0 };
 
         _setPixel(rho, pos0, 0);
-        _setPixel(rho, pos1, (float) OrientationVector.MAX_Rho);
+        _setPixel(rho, pos1, (float) IOrientationVector.MAX_Rho);
 
         _setPixel(delta, pos0, (float) Math.PI / 4);
         _setPixel(delta, pos1, (float) (3 * Math.PI / 4));
 
         _setPixel(eta, pos0, 0);
-        _setPixel(eta, pos1, (float) OrientationVector.MAX_Eta);
+        _setPixel(eta, pos1, (float) IOrientationVector.MAX_Eta);
 
         IOrientationImage imageSet = OrientationImageFactory.create(fileSet, channel, rho, delta, eta);
 

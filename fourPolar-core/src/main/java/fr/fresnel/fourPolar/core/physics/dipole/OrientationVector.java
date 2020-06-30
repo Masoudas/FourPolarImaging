@@ -11,42 +11,20 @@ public class OrientationVector implements IOrientationVector {
     private double _eta;
     private boolean _isWellDefind = false;
 
-    /**
-     * Maximum possible value for the rho
-     */
-    public final static double MAX_Rho = Math.PI;
-
-    /**
-     * Maximum possible value for the delta
-     */
-    public final static double MAX_Delta = Math.PI;
-
-    /**
-     * Maximum possible value for the delta
-     */
-    public final static double MAX_Eta = Math.PI / 2;
-
-    /**
-     * The maximum allowed devation from the given angle ranges. Hence: rho in [0 -
-     * ERR_Angle, MAX_Rho + ERR_Angle] delta in [0 - ERR_Angle, MAX_delta +
-     * ERR_Angle] eta in [0 - ERR_Angle, MAX_eta + ERR_Angle]
-     */
-    final private static double ERR_Angle = Math.PI / 180 * 0.0001;
-
     public static double maxAngle(OrientationAngle angle) {
         double max = 0;
         switch (angle) {
             case rho:
-                max = MAX_Rho;
+                max = IOrientationVector.MAX_Rho;
                 break;
 
             case delta:
-                max = MAX_Delta;
+                max = IOrientationVector.MAX_Delta;
                 break;
 
 
             case eta:
-                max = MAX_Eta;
+                max = IOrientationVector.MAX_Eta;
                 break;
 
             default:
@@ -111,19 +89,19 @@ public class OrientationVector implements IOrientationVector {
     }
 
     private void _checkRho(double value) throws OrientationAngleOutOfRange {
-        if (value < -ERR_Angle || value - MAX_Rho > ERR_Angle) {
+        if (value < -IOrientationVector.ERR_Angle || value - IOrientationVector.MAX_Rho > IOrientationVector.ERR_Angle) {
             throw new OrientationAngleOutOfRange("Rho is out of [0, pi] range");
         }
     }
 
     private void _checkDelta(double value) throws OrientationAngleOutOfRange {
-        if (value < -ERR_Angle || value - MAX_Delta > ERR_Angle) {
+        if (value < -IOrientationVector.ERR_Angle || value - IOrientationVector.MAX_Delta > IOrientationVector.ERR_Angle) {
             throw new OrientationAngleOutOfRange("Delta is out of [0, pi] range");
         }
     }
 
     private void _checkEta(double value) throws OrientationAngleOutOfRange {
-        if (value < -ERR_Angle || value - MAX_Eta > ERR_Angle) {
+        if (value < -IOrientationVector.ERR_Angle || value - IOrientationVector.MAX_Eta > IOrientationVector.ERR_Angle) {
             throw new OrientationAngleOutOfRange("Eta is out of [0, pi/2) range");
         }
     }

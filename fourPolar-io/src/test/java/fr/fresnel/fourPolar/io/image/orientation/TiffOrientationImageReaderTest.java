@@ -77,13 +77,13 @@ public class TiffOrientationImageReaderTest {
         long[] pos1 = new long[] { 1, 0, 0, 0, 0 };
 
         _setPixel(rho, pos0, 0);
-        _setPixel(rho, pos1, (float) OrientationVector.MAX_Rho);
+        _setPixel(rho, pos1, (float) IOrientationVector.MAX_Rho);
 
         _setPixel(delta, pos0, (float) Math.PI / 4);
         _setPixel(delta, pos1, (float) (3 * Math.PI / 4));
 
         _setPixel(eta, pos0, 0);
-        _setPixel(eta, pos1, (float) OrientationVector.MAX_Eta);
+        _setPixel(eta, pos1, (float) IOrientationVector.MAX_Eta);
 
         // Write the orientation images manually.
         ImgSaver saver = new ImgSaver();
@@ -104,7 +104,7 @@ public class TiffOrientationImageReaderTest {
 
         assertTrue(_isOrientationVectorEqualTo(imageSet, pos0, new OrientationVector(0, Math.PI / 4, 0)));
         assertTrue(_isOrientationVectorEqualTo(imageSet, pos1,
-                new OrientationVector(OrientationVector.MAX_Rho, 3 * Math.PI / 4, OrientationVector.MAX_Eta)));
+                new OrientationVector(IOrientationVector.MAX_Rho, 3 * Math.PI / 4, IOrientationVector.MAX_Eta)));
 
     }
 
@@ -152,7 +152,7 @@ public class TiffOrientationImageReaderTest {
 
         assertTrue(_isOrientationVectorEqualTo(orientationImage, pos0, new OrientationVector(0, Math.PI / 4, 0)));
         assertTrue(_isOrientationVectorEqualTo(orientationImage, pos1,
-                new OrientationVector(OrientationVector.MAX_Rho, 3 * Math.PI / 4, OrientationVector.MAX_Eta)));
+                new OrientationVector(IOrientationVector.MAX_Rho, 3 * Math.PI / 4, IOrientationVector.MAX_Eta)));
 
     }
 

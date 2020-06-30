@@ -3,7 +3,6 @@ package fr.fresnel.fourPolar.algorithm.fourPolar.converters;
 import fr.fresnel.fourPolar.algorithm.exceptions.fourPolar.converters.ImpossibleOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.DipoleSquaredComponent;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
-import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
 import fr.fresnel.fourPolar.core.physics.polarization.IntensityVector;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.physics.propagation.IInverseOpticalPropagation;
@@ -116,7 +115,7 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
      */
     private double _getRho(double normalizedDipoleSquared_XY, double normalizedDipoleSquared_XYdiff) {
         double raw_Rho = 0.5 * Math.atan2(normalizedDipoleSquared_XY, normalizedDipoleSquared_XYdiff);
-        return ((raw_Rho + OrientationVector.MAX_Rho) % OrientationVector.MAX_Rho);
+        return ((raw_Rho + IOrientationVector.MAX_Rho) % IOrientationVector.MAX_Rho);
     }
 
     /**
@@ -139,12 +138,12 @@ public class IntensityToOrientationConverter implements IIntensityToOrientationC
                 2 * (sumNormalizedDipoleSquared - normalizedDipoleSquared_Z) / (3 * sumNormalizedDipoleSquared - 1)));
 
         double eta = 0;
-        if (raw_eta < OrientationVector.MAX_Eta - ERR_ModEta_90) {
+        if (raw_eta < IOrientationVector.MAX_Eta - ERR_ModEta_90) {
             eta = raw_eta;
-        } else if (raw_eta > OrientationVector.MAX_Eta + ERR_ModEta_90) {
-            eta = raw_eta - OrientationVector.MAX_Eta;
+        } else if (raw_eta > IOrientationVector.MAX_Eta + ERR_ModEta_90) {
+            eta = raw_eta - IOrientationVector.MAX_Eta;
         } else {
-            eta = OrientationVector.MAX_Eta;
+            eta = IOrientationVector.MAX_Eta;
         }
 
         return eta;

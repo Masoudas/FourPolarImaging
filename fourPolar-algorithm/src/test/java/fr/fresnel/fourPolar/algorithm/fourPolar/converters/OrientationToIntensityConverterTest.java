@@ -75,7 +75,7 @@ public class OrientationToIntensityConverterTest {
 
     @Test
     public void convert_Delta180_ReturnsSameIntensityForAllRhoAndEta() {
-        double delta = OrientationVector.MAX_Delta;
+        double delta = IOrientationVector.MAX_Delta;
         double angleStep = Math.PI / 180;
 
         IOrientationVector baseVector = new OrientationVector(0f, delta, 0f);
@@ -87,8 +87,8 @@ public class OrientationToIntensityConverterTest {
         _converter.convert(baseVector, baseIntensity);
 
         boolean equals = true;
-        for (double rho = 0; rho < OrientationVector.MAX_Rho; rho += angleStep) {
-            for (double eta = 0; eta < OrientationVector.MAX_Eta && equals; eta += angleStep) {
+        for (double rho = 0; rho < IOrientationVector.MAX_Rho; rho += angleStep) {
+            for (double eta = 0; eta < IOrientationVector.MAX_Eta && equals; eta += angleStep) {
                 vector.setAngles(rho, delta, eta);
                 _converter.convert(vector, intensity);
                 equals &= _checkRatioPrecision(intensity, baseIntensity, 1e-4);
@@ -111,11 +111,11 @@ public class OrientationToIntensityConverterTest {
         
         
         boolean equals = true;
-        for (double delta = 0; delta < OrientationVector.MAX_Delta; delta += angleStep) {
+        for (double delta = 0; delta < IOrientationVector.MAX_Delta; delta += angleStep) {
             baseVector.setAngles(0f, delta, eta);
             _converter.convert(baseVector, baseIntensity);
 
-            for (double rho = 0; rho < OrientationVector.MAX_Rho && equals; rho += angleStep) {
+            for (double rho = 0; rho < IOrientationVector.MAX_Rho && equals; rho += angleStep) {
                 vector.setAngles(rho, delta, eta);
                 _converter.convert(vector, intensity);
                 equals &= _checkRatioPrecision(intensity, baseIntensity, 1e-4);
@@ -162,8 +162,8 @@ public class OrientationToIntensityConverterTest {
             double rho = Double.parseDouble(values[4]) % Math.PI;
             double eta = Double.parseDouble(values[5]) % Math.PI;
             double delta = Double.parseDouble(values[6]);
-            if (eta > OrientationVector.MAX_Eta) {
-                eta = eta - OrientationVector.MAX_Eta;
+            if (eta > IOrientationVector.MAX_Eta) {
+                eta = eta - IOrientationVector.MAX_Eta;
             }
 
             if (isGreaterThan(eta, etaGreaterThan) && isGreaterThan(rho, rhoGreaterThan)

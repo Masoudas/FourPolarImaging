@@ -21,8 +21,8 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
-import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
 
 public class OrientationAngleConverterTest {
     @Test
@@ -38,27 +38,27 @@ public class OrientationAngleConverterTest {
         long[] pos0 = new long[]{0,0,0,0,0};
         long[] pos1 = new long[]{1,0,0,0,0};
         _setPixel(rho, pos0, 0);
-        _setPixel(rho, pos1, (float)OrientationVector.MAX_Rho);
+        _setPixel(rho, pos1, (float)IOrientationVector.MAX_Rho);
 
         _setPixel(delta, pos0, 0);
-        _setPixel(delta, pos1, (float)OrientationVector.MAX_Delta);
+        _setPixel(delta, pos1, (float)IOrientationVector.MAX_Delta);
         
         _setPixel(eta, pos0, 0);
-        _setPixel(eta, pos1, (float)OrientationVector.MAX_Eta);
+        _setPixel(eta, pos1, (float)IOrientationVector.MAX_Eta);
 
         IOrientationImage orientationImage = OrientationImageFactory.create(new DummySet(), 1, rho, delta, eta);
 
         Image<Float32> degreeImage_rho = OrientationAngleConverter.convertToDegree(orientationImage, OrientationAngle.rho);
         assertTrue(_isPixelEqualToValue(degreeImage_rho, pos0, (float)0));
-        assertTrue(_isPixelEqualToValue(degreeImage_rho, pos1, (float)Math.toDegrees(OrientationVector.MAX_Rho)));
+        assertTrue(_isPixelEqualToValue(degreeImage_rho, pos1, (float)Math.toDegrees(IOrientationVector.MAX_Rho)));
 
         Image<Float32> degreeImage_delta = OrientationAngleConverter.convertToDegree(orientationImage, OrientationAngle.delta);
         assertTrue(_isPixelEqualToValue(degreeImage_delta, pos0, (float)0));
-        assertTrue(_isPixelEqualToValue(degreeImage_delta, pos1, (float)Math.toDegrees(OrientationVector.MAX_Delta)));
+        assertTrue(_isPixelEqualToValue(degreeImage_delta, pos1, (float)Math.toDegrees(IOrientationVector.MAX_Delta)));
 
         Image<Float32> degreeImage_eta = OrientationAngleConverter.convertToDegree(orientationImage, OrientationAngle.eta);
         assertTrue(_isPixelEqualToValue(degreeImage_eta, pos0, (float)0));
-        assertTrue(_isPixelEqualToValue(degreeImage_eta, pos1, (float)Math.toDegrees(OrientationVector.MAX_Eta)));
+        assertTrue(_isPixelEqualToValue(degreeImage_eta, pos1, (float)Math.toDegrees(IOrientationVector.MAX_Eta)));
         
     }
 
@@ -77,7 +77,7 @@ public class OrientationAngleConverterTest {
         OrientationAngleConverter.convertToRadian(rho);
 
         assertTrue(_isPixelEqualToValue(rho, pos0, (float)0));
-        assertTrue(_isPixelEqualToValue(rho, pos1, (float)OrientationVector.MAX_Rho));
+        assertTrue(_isPixelEqualToValue(rho, pos1, (float)IOrientationVector.MAX_Rho));
 
     }
 
@@ -96,7 +96,7 @@ public class OrientationAngleConverterTest {
         OrientationAngleConverter.convertToRadian(rho);
 
         assertTrue(_isPixelEqualToValue(rho, pos0, (float)0));
-        assertTrue(_isPixelEqualToValue(rho, pos1, (float)OrientationVector.MAX_Delta));
+        assertTrue(_isPixelEqualToValue(rho, pos1, (float)IOrientationVector.MAX_Delta));
 
     }
 
@@ -115,7 +115,7 @@ public class OrientationAngleConverterTest {
         OrientationAngleConverter.convertToRadian(rho);
 
         assertTrue(_isPixelEqualToValue(rho, pos0, (float)0));
-        assertTrue(_isPixelEqualToValue(rho, pos1, (float)OrientationVector.MAX_Eta));
+        assertTrue(_isPixelEqualToValue(rho, pos1, (float)IOrientationVector.MAX_Eta));
 
     }
 

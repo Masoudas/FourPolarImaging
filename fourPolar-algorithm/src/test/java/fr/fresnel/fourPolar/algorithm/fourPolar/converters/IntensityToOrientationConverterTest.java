@@ -112,8 +112,8 @@ public class IntensityToOrientationConverterTest {
             double rho = Double.parseDouble(values[4]) % Math.PI;
             double eta = Double.parseDouble(values[5]) % Math.PI;
             double delta = Double.parseDouble(values[6]);
-            if (eta > OrientationVector.MAX_Eta) {
-                eta = eta - OrientationVector.MAX_Eta;
+            if (eta > IOrientationVector.MAX_Eta) {
+                eta = eta - IOrientationVector.MAX_Eta;
             }
 
             if (isGreaterThan(eta, etaGreaterThan) && isGreaterThan(rho, rhoGreaterThan)
