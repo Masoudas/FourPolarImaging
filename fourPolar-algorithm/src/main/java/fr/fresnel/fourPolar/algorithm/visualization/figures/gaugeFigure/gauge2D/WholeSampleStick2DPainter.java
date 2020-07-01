@@ -8,9 +8,12 @@ import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
-import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.ColorBlender;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.MultiplyColorBlender;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.ScreenColorBlender;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.SoftLightColorBlender;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImageRandomAccess;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
@@ -46,6 +49,8 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     private final IShape _stickFigureRegion;
     private final IShape _soiImageRegion;
 
+    private final ColorBlender _colorBlender;
+
     public WholeSampleStick2DPainter(IWholeSampleStick2DPainterBuilder builder) throws ConverterToImgLib2NotFound {
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
 
@@ -54,6 +59,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
 
         this._colormap = builder.getColorMap();
+        this._colorBlender = builder.getColorBlender();
 
         this._slopeAngle = getSlopeAngle(this._stick2DFigure.getGaugeType());
         this._colorAngle = getColorAngle(this._stick2DFigure.getGaugeType());
@@ -147,12 +153,21 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
             stickFigureRA.setPosition(stickPosition);
-            
+
             IPixel<ARGB8> stickPositionPixel = stickFigureRA.getPixel();
-            stickPositionPixel.value().add(stickColor);
-            
+            _blendCurrentPixelWithStickColor(stickPositionPixel.value(), stickColor);
+
             stickFigureRA.setPixel(stickPositionPixel);
         }
+    }
+
+    /**
+     * As opposed to simply replacing or adding the stick color to the current
+     * position, we blend it using a {@link ColorBlender} interface.
+     */
+    private void _blendCurrentPixelWithStickColor(ARGB8 stickPositionPixel, ARGB8 stickColor) {
+        stickPositionPixel.add(stickColor);
+        this._colorBlender.blend(stickPositionPixel, stickColor);
     }
 
     private IShapeIterator _createStickIteratorForThisDipole(IOrientationVector orientationVector,
@@ -195,7 +210,9 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     }
 
     private ARGB8 _getStickColor(IOrientationVector orientationVector) {
-        return this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
+        ARGB8 stickColor = this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
+        stickColor.setAlpha(255);
+        return stickColor;
     }
 
     @Override
