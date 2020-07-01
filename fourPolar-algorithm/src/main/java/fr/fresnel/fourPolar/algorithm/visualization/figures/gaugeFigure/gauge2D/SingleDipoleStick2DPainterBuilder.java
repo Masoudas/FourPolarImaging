@@ -34,6 +34,12 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
     private int _length = 50;
+    
+    /**
+     * This ratio determines the size of the underlying figure with respect to 
+     * stick length. Default value is 8. Hence figure dimension is (8 * _length) * (8 * _length) 
+     */
+    private int _figSizeToStickLenRatio = 8;
 
     /**
      * Initialize the painter with the given orientation and soi image, for the
@@ -106,6 +112,15 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
         return this;
     }
 
+    public SingleDipoleStick2DPainterBuilder figSizeToStickLenRatio(int ratio) {
+        if (ratio < 1){
+            throw new IllegalArgumentException("Ratio has to be greater than one");
+        }
+        
+        this._figSizeToStickLenRatio = ratio;
+        return this;
+    }
+
     /**
      * Build the Painter from the provided constraints.
      * 
@@ -146,6 +161,11 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
     @Override
     AngleGaugeType getAngleGaugeType() {
         return this._angleGaugeType;
+    }
+
+    @Override
+    int figSizeToStickLenRatio() {
+        return this._figSizeToStickLenRatio;
     }
 
 }
