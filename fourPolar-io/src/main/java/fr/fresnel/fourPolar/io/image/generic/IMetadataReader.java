@@ -15,7 +15,12 @@ public interface IMetadataReader {
      * Read metadata of the image file.
      * 
      * @param imageFile
-     * @return
+     * 
+     * @throws MetadataParseError in case the metadata of the image can't be parsed.
+     *                            Note that undefined axis does not raise this
+     *                            exception.
+     * @throws IOException        in case of low level IO issues.
+     * @return the metadata of the image.
      */
     public IMetadata read(File imageFile) throws IOException, MetadataParseError;
 
