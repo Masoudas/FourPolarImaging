@@ -34,10 +34,11 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
     private int _length = 50;
-    
+
     /**
-     * This ratio determines the size of the underlying figure with respect to 
-     * stick length. Default value is 8. Hence figure dimension is (8 * _length) * (8 * _length) 
+     * This ratio determines the size of the underlying figure with respect to stick
+     * length. Default value is 8. Hence figure dimension is (8 * _length) * (8 *
+     * _length)
      */
     private int _figSizeToStickLenRatio = 8;
 
@@ -112,11 +113,15 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
         return this;
     }
 
+    /**
+     * Set the ratio of the underlying figure with respect to stick length. Default
+     * value is 8. Hence figure dimension is 8 times stick length in each dimension.
+     */
     public SingleDipoleStick2DPainterBuilder figSizeToStickLenRatio(int ratio) {
-        if (ratio < 1){
+        if (ratio < 1) {
             throw new IllegalArgumentException("Ratio has to be greater than one");
         }
-        
+
         this._figSizeToStickLenRatio = ratio;
         return this;
     }
