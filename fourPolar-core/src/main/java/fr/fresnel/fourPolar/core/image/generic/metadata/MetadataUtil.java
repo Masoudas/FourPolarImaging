@@ -91,4 +91,12 @@ public class MetadataUtil {
 		return Arrays.stream(metadata.getDim()).map((t) -> t - 1).toArray();
 	}
 
+	/**
+	 * @return true if number of axis in the given {@link AxisOrder} equals the given dimension 
+	 * vector, otherwise return false.
+	 */
+	public static boolean isNumAxisEqualDimension(AxisOrder axisOrder, long[] dimension){
+		return axisOrder.numAxis == dimension.length;
+	}
+
 }
