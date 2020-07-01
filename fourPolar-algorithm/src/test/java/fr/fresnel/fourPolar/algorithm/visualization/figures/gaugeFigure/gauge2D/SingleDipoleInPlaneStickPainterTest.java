@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 
+
 import org.junit.jupiter.api.Test;
 import org.scijava.ui.behaviour.ClickBehaviour;
 import org.scijava.ui.behaviour.io.InputTriggerConfig;
@@ -85,7 +86,7 @@ public class SingleDipoleInPlaneStickPainterTest {
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
         ISingleDipoleStick2DPainterBuilder builder = new DummySingleDipoleBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D, cMap, 8, 100);
+                AngleGaugeType.Rho2D, cMap, 8, 100, 10);
 
         SingleDipoleInPlaneStickPainter painter = new SingleDipoleInPlaneStickPainter(builder);
 
@@ -129,7 +130,7 @@ public class SingleDipoleInPlaneStickPainterTest {
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
         ISingleDipoleStick2DPainterBuilder builder = new DummySingleDipoleBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D, cMap, 8, 50);
+                AngleGaugeType.Rho2D, cMap, 8, 50, 10);
         SingleDipoleInPlaneStickPainter painter = new SingleDipoleInPlaneStickPainter(builder);
 
         // Viewer to show the soi.
@@ -237,7 +238,7 @@ class DummyFileSet implements ICapturedImageFileSet {
 
     @Override
     public int[] getChannels() {
-        return null;
+        return new int[]{1};
     }
 
 }
@@ -250,6 +251,7 @@ class DummySingleDipoleBuilder extends ISingleDipoleStick2DPainterBuilder {
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
     private int _length = 50;
+    private int _ratio = 8;
 
     @Override
     ColorMap getColorMap() {
@@ -277,18 +279,24 @@ class DummySingleDipoleBuilder extends ISingleDipoleStick2DPainterBuilder {
     }
 
     public DummySingleDipoleBuilder(IOrientationImage _orientationImage, ISoIImage _soiImage, AngleGaugeType _gaugeType,
-            ColorMap _colorMap, int _thickness, int _length) {
+            ColorMap _colorMap, int _thickness, int _length, int ratio) {
         this._orientationImage = _orientationImage;
         this._soiImage = _soiImage;
         this._gaugeType = _gaugeType;
         this._colorMap = _colorMap;
         this._thickness = _thickness;
         this._length = _length;
+        this._ratio = ratio;
     }
 
     @Override
     AngleGaugeType getAngleGaugeType() {
         return this._gaugeType;
+    }
+
+    @Override
+    int figSizeToStickLenRatio() {
+        return this._ratio;
     }
 
 }

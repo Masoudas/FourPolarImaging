@@ -24,6 +24,8 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.ColorBlender;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.SoftLightColorBlender;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
@@ -111,7 +113,7 @@ public class WholeSampleStick3DPainterTest {
                 new long[] { 1024, 512, 0, 0, 0 }, axisOrder);
 
         IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
-                thickness, length);
+                thickness, length, new SoftLightColorBlender());
 
         IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
         painter.draw(entireImageRegion, new UINT16(0));
@@ -187,7 +189,7 @@ public class WholeSampleStick3DPainterTest {
                 new long[] { 1021, 511, 0, 0, 2 }, axisOrder);
 
         IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
-                thickness, length);
+                thickness, length, new SoftLightColorBlender());
 
         IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
         painter.draw(entireImageRegion, new UINT16(0));
@@ -267,7 +269,7 @@ public class WholeSampleStick3DPainterTest {
         int thickness = 4;
 
         IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
-                thickness, length);
+                thickness, length, new SoftLightColorBlender());
         IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
@@ -339,7 +341,7 @@ public class WholeSampleStick3DPainterTest {
         int thickness = 4;
 
         IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
-                thickness, length);
+                thickness, length, new SoftLightColorBlender());
         IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
@@ -410,7 +412,7 @@ public class WholeSampleStick3DPainterTest {
         int thickness = 4;
 
         IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
-                thickness, length);
+                thickness, length, new SoftLightColorBlender());
         IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
 
         // Notice the region is out of image dimensions.
@@ -482,7 +484,7 @@ public class WholeSampleStick3DPainterTest {
         int thickness = 4;
 
         IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
-                thickness, length);
+                thickness, length, new SoftLightColorBlender());
         IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
@@ -546,7 +548,7 @@ class DummyWholeSample3DFileSet implements ICapturedImageFileSet {
 
     @Override
     public int[] getChannels() {
-        return null;
+        return new int[]{1};
     }
 
 }
@@ -558,6 +560,7 @@ class DummyWholeSampleStick3DBuilder extends IWholeSampleStick3DPainterBuilder {
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
     private int _length = 50;
+    private ColorBlender _blender;
 
     @Override
     ColorMap getColorMap() {
@@ -585,12 +588,18 @@ class DummyWholeSampleStick3DBuilder extends IWholeSampleStick3DPainterBuilder {
     }
 
     public DummyWholeSampleStick3DBuilder(IOrientationImage _orientationImage, ISoIImage _soiImage, ColorMap _colorMap,
-            int _thickness, int _length) {
+            int _thickness, int _length, ColorBlender blender) {
         this._orientationImage = _orientationImage;
         this._soiImage = _soiImage;
         this._colorMap = _colorMap;
         this._thickness = _thickness;
         this._length = _length;
+        this._blender = blender;
+    }
+
+    @Override
+    ColorBlender getColorBlender() {
+        return this._blender;
     }
 
 }
