@@ -37,7 +37,6 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
     final private IGaugeFigure _dipoleFigure;
     final private IOrientationImageRandomAccess _orientationRA;
-    final private IPixelRandomAccess<UINT16> _soiRA;
 
     final private ColorMap _colormap;
 
@@ -45,7 +44,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
      * We generate a single stick, and then rotate it to represent the unique
      * dipole.
      */
-    final private IShape _baseStick;
+    private final IShape _baseStick;
 
     private final OrientationAngle _slopeAngle;
     private final OrientationAngle _colorAngle;
@@ -54,12 +53,12 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
     private final IShape _orientationImageBoundary;
 
     private final long[] _stickTranslation;
+    private final int _figSizeToStickLenRatio;
 
     public SingleDipoleInPlaneStickPainter(ISingleDipoleStick2DPainterBuilder builder) {
         this._dipoleFigure = this._createDipoleFigure(builder.getSticklength(), builder.getSoIImage(),
                 builder.getAngleGaugeType());
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
-        this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
 
         this._colormap = builder.getColorMap();
 
@@ -74,6 +73,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
                 builder.getOrientationImage().getAngleImage(OrientationAngle.rho).getImage().getMetadata().axisOrder());
 
         this._stickTranslation = this._setStickTranslationToDipoleCenterPosition();
+        this._figSizeToStickLenRatio = builder.figSizeToStickLenRatio();
     }
 
     /**
@@ -88,7 +88,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
         long[] dim = new long[IGaugeFigure.AXIS_ORDER.numAxis];
         Arrays.setAll(dim, (i) -> 1);
-        dim[0] = (long) (stickLength * 1.1);
+        dim[0] = (long) (stickLength * this._figSizeToStickLenRatio);
         dim[1] = dim[0];
 
         IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
@@ -101,16 +101,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
      * Base stick complies with the {@link FIGURE_DIM}
      */
     private IShape _defineBaseStick(int len, int thickness) {
-        long[] stickMin = new long[FIGURE_DIM];
-        long[] stickMax = new long[FIGURE_DIM];
-
-        // Base stick is at the origin of the xy plane.
-        stickMin[0] = -thickness / 2 + 1;
-        stickMin[1] = -len / 2 + 1;
-        stickMax[0] = thickness / 2;
-        stickMax[1] = len / 2;
-
-        return new ShapeFactory().closedBox(stickMin, stickMax, AxisOrder.XYCZT);
+        return new ShapeFactory().line2DShape(new long[FIGURE_DIM], 0, len, thickness, AxisOrder.XYCZT);
     }
 
     /**
@@ -164,7 +155,6 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
             final Pixel<ARGB8> pixelColor = this._getStickColor(orientationVector);
             IPixelRandomAccess<ARGB8> stickFigureRA = this._dipoleFigure.getImage().getRandomAccess();
 
-            // TODO sum to the previous value rather than fully override, so that we can see the effect of all pixels.
             IShapeIterator stickIterator = _createStickIteratorForThisDipole(dipolePosition, orientationVector);
             for (; stickIterator.hasNext();) {
                 long[] stickPosition = stickIterator.next();
@@ -188,6 +178,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
     private Pixel<ARGB8> _getStickColor(IOrientationVector orientationVector) {
         ARGB8 pixelColor = this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
+        pixelColor.setAlpha(255);
         return new Pixel<ARGB8>(pixelColor);
     }
 
