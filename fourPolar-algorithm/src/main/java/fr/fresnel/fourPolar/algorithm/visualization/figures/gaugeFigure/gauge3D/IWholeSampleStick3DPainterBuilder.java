@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge3D;
 
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.ColorBlender;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
@@ -17,4 +18,6 @@ abstract public class IWholeSampleStick3DPainterBuilder {
     abstract ISoIImage getSoIImage();
 
     abstract int getStickThickness();
+
+    abstract ColorBlender getColorBlender();
 }

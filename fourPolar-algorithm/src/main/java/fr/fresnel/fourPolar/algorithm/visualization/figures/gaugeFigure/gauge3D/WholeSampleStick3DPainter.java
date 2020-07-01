@@ -8,9 +8,9 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
-import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.ColorBlender;
 import fr.fresnel.fourPolar.core.image.orientation.IAngleImage;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImageRandomAccess;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
@@ -41,6 +41,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     final private IShape _soiImageBoundary;
     final private IShape _stick3DFigureBoundary;
     final private int _stickLength;
+    final private ColorBlender _colorBlender;
 
     /**
      * We generate a single stick, and then rotate and translate it for different
@@ -62,6 +63,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
 
         this._colormap = builder.getColorMap();
+        this._colorBlender = builder.getColorBlender();
         this._stickLength = builder.getSticklength();
 
         this._baseStick = _defineBaseStick(this._stickLength, builder.getStickThickness(),
@@ -139,17 +141,17 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     }
 
     private void _drawStick(IOrientationVector orientationVector, long[] dipolePosition) {
-        final ARGB8 color = _getStickColor(orientationVector);
+        final ARGB8 stickColor = _getStickColor(orientationVector);
 
         IShapeIterator stickIterator = _createStickIteratorForThisDipole(orientationVector, dipolePosition);
         while (stickIterator.hasNext()) {
             long[] stickPosition = stickIterator.next();
             if (this._stick3DFigureBoundary.isInside(stickPosition)) {
                 this._stick3DFigureRA.setPosition(stickPosition);
-                
+
                 IPixel<ARGB8> stickPositionPixel = this._stick3DFigureRA.getPixel();
-                stickPositionPixel.value().add(color);
-                
+                this._blendCurrentPixelWithStickColor(stickPositionPixel.value(), stickColor);
+
                 this._stick3DFigureRA.setPixel(stickPositionPixel);
             }
         }
@@ -205,6 +207,15 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
     @Override
     public IGaugeFigure getFigure() {
         return _stick3DFigure;
+    }
+
+    /**
+     * As opposed to simply replacing or adding the stick color to the current
+     * position, we blend it using a {@link ColorBlender} interface.
+     */
+    private void _blendCurrentPixelWithStickColor(ARGB8 stickPositionPixel, ARGB8 stickColor) {
+        stickPositionPixel.add(stickColor);
+        this._colorBlender.blend(stickPositionPixel, stickColor);
     }
 
 }
