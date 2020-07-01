@@ -56,8 +56,10 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
     private final int _figSizeToStickLenRatio;
 
     public SingleDipoleInPlaneStickPainter(ISingleDipoleStick2DPainterBuilder builder) {
+        this._figSizeToStickLenRatio = builder.figSizeToStickLenRatio();
         this._dipoleFigure = this._createDipoleFigure(builder.getSticklength(), builder.getSoIImage(),
                 builder.getAngleGaugeType());
+        
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
 
         this._colormap = builder.getColorMap();
@@ -73,7 +75,6 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
                 builder.getOrientationImage().getAngleImage(OrientationAngle.rho).getImage().getMetadata().axisOrder());
 
         this._stickTranslation = this._setStickTranslationToDipoleCenterPosition();
-        this._figSizeToStickLenRatio = builder.figSizeToStickLenRatio();
     }
 
     /**
