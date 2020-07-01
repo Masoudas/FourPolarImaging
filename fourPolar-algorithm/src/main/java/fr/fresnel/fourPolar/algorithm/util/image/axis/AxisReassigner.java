@@ -42,4 +42,22 @@ public class AxisReassigner {
         return ReassingerToXYCZT.reassignAndResize(image, t, newImgDim);
     }
 
+    /**
+     * Defines an axis order for the given image. Note that the new image refers to
+     * the same underlying image, i.e, even though {@link IMetadata} changes, the
+     * underlying image pixels are not.
+     * 
+     * @param <T>          is the pixel type of the image.
+     * @param image        is the image.
+     * @param newAxisOrder is the axis order to be assigned to the image.
+     * 
+     * @throws IllegalArgumentException if the given image already has an axis
+     *                                  order, or the new axis order has unequal
+     *                                  dimension to the image.
+     * @return an image instance with axis order that contains the reference to the
+     *         image with no axis order.
+     */
+    public static <T extends PixelType> Image<T> defineAxis(Image<T> image, AxisOrder newAxisOrder) {
+        return AxisDefiner.defineAxis(image, newAxisOrder);
+    }
 }
