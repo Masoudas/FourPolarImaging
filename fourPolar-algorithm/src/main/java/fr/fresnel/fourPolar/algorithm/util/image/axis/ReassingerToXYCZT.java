@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.util.image.axis;
 
 import java.util.Objects;
-import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
@@ -11,7 +10,6 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 class ReassingerToXYCZT {
     private ReassingerToXYCZT() {
