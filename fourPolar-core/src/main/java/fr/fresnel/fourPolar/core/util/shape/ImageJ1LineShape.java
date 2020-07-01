@@ -17,8 +17,7 @@ public class ImageJ1LineShape implements ILineShape {
     private final long _length;
     private final int _thickness;
     private final double[] _position;
-    private final Line _negativeLine;
-    private final Line _positiveLine;
+    private final Line _line;
 
     /**
      * Create a line with the given slope, length, thickness from the position. Note
@@ -30,6 +29,7 @@ public class ImageJ1LineShape implements ILineShape {
      * @param position   is the pixel position of the dipole, as [x, y, z, ...]
      * @param length     is the desired length of the line.
      * @param thickness  is the desired thickness of the line.
+     * @param axisOrder  is the axis order associated with position.
      * 
      */
     public static ILineShape create(double[] position, double slopeAngle, long length, int thickness,
@@ -41,7 +41,6 @@ public class ImageJ1LineShape implements ILineShape {
         this._checkPositionAtLeast2D(position);
         this._checkLengthIsPositive(length);
         this._checkThicknessIsPositive(thickness);
-
         this._checkNumAxisEqualsPositionDim(position.length, axisOrder);
 
         this._axisOrder = axisOrder;
@@ -51,11 +50,9 @@ public class ImageJ1LineShape implements ILineShape {
         this._length = length;
 
         double[] lineStartPoint = _calculateStartPoint(position, slopeAngle, length);
-        _negativeLine = _createLine(lineStartPoint, position, thickness);
-
         double[] lineEndPoint = _calculateEndPoint(position, slopeAngle, length);
-        _positiveLine = _createLine(position, lineEndPoint, thickness);
 
+        _line = _createLine(lineStartPoint, lineEndPoint, thickness);
     }
 
     private void _checkThicknessIsPositive(int thickness) {
@@ -114,8 +111,8 @@ public class ImageJ1LineShape implements ILineShape {
 
     @Override
     public IShapeIterator getIterator() {
-
-        return null;
+        long[] positionAsLong = Arrays.stream(_position).mapToLong(t -> (long) t).toArray();
+        return new ImageJ1LineShapeIterator(_line.iterator(), positionAsLong);
     }
 
     @Override
@@ -154,25 +151,25 @@ public class ImageJ1LineShape implements ILineShape {
             return false;
         }
 
-        boolean containsXyPoint = _positiveLine.containsPoint(point[0], point[1])
-                || _negativeLine.containsPoint(point[0], point[0]);
+        boolean containsXyPoint = _line.containsPoint(point[0], point[0]);
         boolean higherDimensionsEqual = IntStream.range(2, point.length).allMatch(dim -> point[dim] == _position[dim]);
         return containsXyPoint && higherDimensionsEqual;
     }
 
     @Override
     public IShape and(IShape shape) {
-        
-        return null;
+        // ShapeRoi shapeRoi = new ShapeRoi(new Line(0, 0, 0, 0)); Use this if you
+        // needed this operation!
+        throw new UnsupportedOperationException("This operation is not supported for this shape");
     }
 
     @Override
     public long[] lineStart() {
-        return new long[] { _negativeLine.x1, _negativeLine.y1 };
+        return new long[] { _line.x1, _line.y1 };
     }
 
     @Override
     public long[] lineEnd() {
-        return new long[] { _negativeLine.x2, _negativeLine.y2 };
+        return new long[] { _line.x2, _line.y2 };
     }
 }
