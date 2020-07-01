@@ -3,6 +3,8 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.ColorBlender;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.SoftLightColorBlender;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
@@ -37,6 +39,11 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
     private int _length = 50;
+
+    /**
+     * Color blender that is used for mixing overlapping pixel colors.
+     */
+    private ColorBlender _colorBlender = new SoftLightColorBlender();
 
     /**
      * Initialize the painter with the given orientation and soi image, for the
@@ -107,6 +114,16 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
     }
 
     /**
+     * Color blender that is used for mixing overlapping pixel colors.
+     */
+    public WholeSampleStick2DPainterBuilder colorBlender(ColorBlender blender) {
+        Objects.requireNonNull(blender, "blender can't be null.");
+
+        this._colorBlender = blender;
+        return this;
+    }
+
+    /**
      * Build the Painter from the provided constraints.
      * 
      * @return the interface for the painter of sticks.
@@ -145,6 +162,11 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
     @Override
     AngleGaugeType getAngleGaugeType() {
         return this._gaugeType;
+    }
+
+    @Override
+    ColorBlender getColorBlender() {
+        return _colorBlender;
     }
 
 }
