@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.io.image.polarization;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import fr.fresnel.fourPolar.algorithm.util.image.axis.AxisReassigner;
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
@@ -12,11 +13,11 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSetBuilder;
-import fr.fresnel.fourPolar.io.image.polarization.file.IPolarizationImageFileSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
+import fr.fresnel.fourPolar.io.image.orientation.IOrientationImageReader;
+import fr.fresnel.fourPolar.io.image.polarization.file.IPolarizationImageFileSet;
 import fr.fresnel.fourPolar.io.image.polarization.file.TiffPolarizationImageFileSet;
 
 /**
@@ -42,27 +43,33 @@ public class TiffPolarizationImageSetReader implements IPolarizationImageSetRead
     @Override
     public IPolarizationImageSet read(File root4PProject, ICapturedImageFileSet fileSet, int channel)
             throws IOException, CannotFormPolarizationImageSet {
-        IPolarizationImageFileSet polFileSet = new TiffPolarizationImageFileSet(root4PProject, fileSet, channel);
+        IPolarizationImageFileSet polFileSet = _createPolarizationImageFileSet(root4PProject, fileSet, channel);
+        HashMap<Polarization, Image<UINT16>> polImages = _readPolarizationImageSet(polFileSet);
 
-        IPolarizationImageSet imageSet = null;
+        return new PolarizationImageSetBuilder(this._numChannels).channel(1).fileSet(fileSet)
+                .pol0(polImages.get(Polarization.pol0)).pol45(polImages.get(Polarization.pol45))
+                .pol90(polImages.get(Polarization.pol90)).pol135(polImages.get(Polarization.pol135)).build();
+    }
+
+    private TiffPolarizationImageFileSet _createPolarizationImageFileSet(File root4PProject, ICapturedImageFileSet fileSet, int channel) {
+        return new TiffPolarizationImageFileSet(root4PProject, fileSet, channel);
+    }
+
+    private HashMap<Polarization, Image<UINT16>> _readPolarizationImageSet(IPolarizationImageFileSet polFileSet)
+            throws IOException {
+        HashMap<Polarization, Image<UINT16>> polImages = new HashMap<>();
         try {
-            Image<UINT16> pol0 = _readPolarizationImage(Polarization.pol0, polFileSet);
-            Image<UINT16> pol45 = _readPolarizationImage(Polarization.pol45, polFileSet);
-            Image<UINT16> pol90 = _readPolarizationImage(Polarization.pol90, polFileSet);
-            Image<UINT16> pol135 = _readPolarizationImage(Polarization.pol90, polFileSet);
-
-            imageSet = new PolarizationImageSetBuilder(this._numChannels).channel(1).fileSet(fileSet).pol0(pol0)
-                    .pol45(pol45).pol90(pol90).pol135(pol135).build();
-
-        } catch (IOException | MetadataParseError e) {
+            for (Polarization polarization : Polarization.values()) {
+                polImages.put(polarization, _readPolarizationImage(polarization, polFileSet));
+            }
+        } catch (IOException e) {
             throw new IOException("Polarization images don't exist or are corrupted");
         }
-
-        return imageSet;
+        return polImages;
     }
 
     private Image<UINT16> _readPolarizationImage(Polarization pol, IPolarizationImageFileSet fileSet)
-            throws IOException, MetadataParseError {
+            throws IOException {
         File imageFile = fileSet.getFile(pol);
         Image<UINT16> diskImageFile = this._reader.read(imageFile);
         return this._reassignPolarizationImageToXYCZT(diskImageFile);
