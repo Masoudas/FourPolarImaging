@@ -68,7 +68,7 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
         Image<ARGB8> diskImage = null;
         try {
             this._reader.read(pathToFigure);
-        } catch (IOException | MetadataParseError e) {
+        } catch (IOException e) {
             throw new IOException("Polarization images don't exist or are corrupted");
         }
         return diskImage;

@@ -55,7 +55,7 @@ public class TiffCapturedImageSetReader implements ICapturedImageSetReader {
         Image<UINT16> img = null;
         try {
             img = _reader.read(capturedImageFile.file());
-        } catch (IOException | MetadataParseError e) {
+        } catch (IOException e) {
             throw new CapturedImageReadFailure(capturedImageFile.channels());
         }
 

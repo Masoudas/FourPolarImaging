@@ -47,7 +47,7 @@ public class TiffSoIImageReader implements ISoIImageReader {
         Image<UINT16> diskSoI = null;
         try {
             diskSoI = this._reader.read(file.getFile());
-        } catch (MetadataParseError | IOException e) {
+        } catch (IOException e) {
             throw new IOException("SoI images doesn't exist or is corrupted");
         }
         return diskSoI;

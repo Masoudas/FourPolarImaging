@@ -70,7 +70,7 @@ public class TiffPolarizationImageSetCompositesReader implements IPolarizationIm
         Image<ARGB8> ruleImage = null;
         try {
             ruleImage = this._reader.read(ruleFile);
-        } catch (MetadataParseError | IOException e) {
+        } catch (IOException e) {
             throw new IOException("composite images does not exist or is corrupted");
         }
 
