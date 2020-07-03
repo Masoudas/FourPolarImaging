@@ -34,11 +34,14 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
      */
     private final long[] _nPlanesPerDim;
 
+    private final long _totalNumPlanes;
+
     protected AWTBufferedImage(IMetadata metadata, BufferedImageTypes imageType, ImageFactory factory) {
         _images = _createBuffreredImageArray(metadata, imageType);
         _metadata = metadata;
         _nPlanesPerDim = _nPlanesPerDim();
         _factory = factory;
+        _totalNumPlanes = MetadataUtil.getNPlanes(metadata);
 
     }
 
@@ -63,24 +66,15 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
     }
 
     /**
-     * Returns the plane that is associated with this plane dimension. Example:
-     * Suppose image is XYCZT and [2, 2, 1, 3, 2] and we write [0, 2, 1]. Then the
-     * plane that is returned is the plane number 1 * 2 * 1.
+     * Returns the buffered image of the demanded plane. Calculate plane number
+     * using {@link #getPlaneNumber()}.
      */
-    public BufferedImage _getImagePlane(long... planeDim) {
-        if (planeDim.length != _images.length) {
-            throw new IllegalArgumentException("planeDim length should be equal to image dimension - 2");
+    public BufferedImage getImagePlane(int planeNumber) {
+        if (planeNumber < 0 || planeNumber > _totalNumPlanes) {
+            throw new IllegalArgumentException(
+                    "plane number should be greater than zero and less than total number of planes.");
         }
-
-        long[] dim = _metadata.getDim();
-        if (IntStream.range(0, planeDim.length).anyMatch(i -> planeDim[i] > dim[i + 2])) {
-            throw new IllegalArgumentException("plane does not exist.");
-        }
-
-        int offSet = (int) planeDim[0];
-        int planeIndex = offSet + (int) IntStream.range(0, planeDim.length)
-                .mapToLong(i -> (planeDim[i] + 1) * _nPlanesPerDim[i - 1]).sum();
-        return _images[planeIndex];
+        return _images[planeNumber];
 
     }
 
@@ -98,6 +92,20 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
         }
 
         return nPlanesPerDim;
+    }
+
+    /**
+     * Returns the plane number this position belongs to starting from 0.
+     */
+    public int getPlaneNumber(long[] position) {
+        if (this._totalNumPlanes == 1){
+            return 0;
+        }
+
+        int offSet = (int) position[0];
+        return offSet + (int) IntStream.range(2, position.length)
+                .mapToLong(i -> (position[i] + 1) * _nPlanesPerDim[i - 1]).sum();
+
     }
 
     @Override
