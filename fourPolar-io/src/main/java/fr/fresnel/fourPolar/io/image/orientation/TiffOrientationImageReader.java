@@ -16,7 +16,6 @@ import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
 import fr.fresnel.fourPolar.io.image.orientation.file.IOrientationImageFileSet;
@@ -83,7 +82,7 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
             try {
 
                 angleImages.put(angle, this._readAngleImage(angle, orientationImageFileSet));
-            } catch (MetadataParseError | IOException e) {
+            } catch (IOException e) {
                 throw new IOException("orientation image doesn't exist or is corrupted");
             }
         }
@@ -106,7 +105,7 @@ public class TiffOrientationImageReader implements IOrientationImageReader {
     }
 
     private Image<Float32> _readAngleImage(OrientationAngle angle, IOrientationImageFileSet orientationImageFileSet)
-            throws IOException, MetadataParseError {
+            throws IOException {
         Image<Float32> diskAngleImage = _reader.read(orientationImageFileSet.getFile(angle));
         return this._reassignAngleImageToXYCZT(diskAngleImage);
     }

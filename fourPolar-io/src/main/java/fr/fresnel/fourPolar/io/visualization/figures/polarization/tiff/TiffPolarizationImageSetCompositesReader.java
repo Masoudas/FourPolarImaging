@@ -13,7 +13,6 @@ import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.PolarizationImageSetCompositesBuilder;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
 import fr.fresnel.fourPolar.io.visualization.figures.polarization.IPolarizationImageSetCompositesReader;
@@ -32,7 +31,6 @@ public class TiffPolarizationImageSetCompositesReader implements IPolarizationIm
      * class can read several orientation images from the disk.
      * 
      * @param factory
-     * @throws NoReaderFoundForImage
      */
     public TiffPolarizationImageSetCompositesReader(ImageFactory factory, int numChannels) {
         Objects.requireNonNull(factory);
