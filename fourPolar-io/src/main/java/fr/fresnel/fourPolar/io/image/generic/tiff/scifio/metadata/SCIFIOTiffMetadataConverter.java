@@ -7,7 +7,6 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOr
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import io.scif.ImageMetadata;
 import net.imagej.axis.Axes;
 import net.imagej.axis.AxisType;

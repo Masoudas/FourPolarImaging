@@ -57,8 +57,6 @@ public class SCIFIOFloat32TiffReader implements ImageReader<Float32> {
 
     /**
      * Read metadata independently of the underlying image.
-     * 
-     * @throws MetadataParseError if there are problems parsing the metadata.
      */
     private IMetadata _readMetadata() throws IOException {
         return SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));

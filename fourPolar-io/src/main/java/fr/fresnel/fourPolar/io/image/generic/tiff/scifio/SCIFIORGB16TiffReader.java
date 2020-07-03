@@ -2,7 +2,6 @@ package fr.fresnel.fourPolar.io.image.generic.tiff.scifio;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
