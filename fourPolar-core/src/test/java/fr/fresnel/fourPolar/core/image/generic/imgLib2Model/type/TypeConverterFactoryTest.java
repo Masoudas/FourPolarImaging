@@ -25,8 +25,7 @@ public class TypeConverterFactoryTest {
         UnsignedShortType val1 = new UnsignedShortType(0);
         UnsignedShortType val2 = new UnsignedShortType(0xffff);
 
-        TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory.getConverter(UINT16.zero(),
-                new UnsignedShortType());
+        TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory.getConverter(new UnsignedShortType());
 
         UINT16 val1Uint16 = new UINT16(0);
         UINT16 val2Uint16 = new UINT16(0);
@@ -42,8 +41,7 @@ public class TypeConverterFactoryTest {
         UINT16 val1Uint16 = new UINT16(1);
         UINT16 val2Uint16 = new UINT16(0xffff);
 
-        TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory.getConverter(val1Uint16,
-                new UnsignedShortType());
+        TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory.getConverter(new UnsignedShortType());
 
         UnsignedShortType val1 = new UnsignedShortType();
         UnsignedShortType val2 = new UnsignedShortType();
@@ -59,8 +57,7 @@ public class TypeConverterFactoryTest {
         FloatType val1 = new FloatType(-1e-4f);
         FloatType val2 = new FloatType(1e-4f);
 
-        TypeConverter<Float32, FloatType> converter = TypeConverterFactory.getConverter(Float32.zero(),
-                new FloatType());
+        TypeConverter<Float32, FloatType> converter = TypeConverterFactory.getConverter(new FloatType());
 
         Float32 val1Float32 = new Float32(0);
         Float32 val2Float32 = new Float32(0);
@@ -75,7 +72,7 @@ public class TypeConverterFactoryTest {
         Float32 val1Float32 = new Float32(-1e-4f);
         Float32 val2Float32 = new Float32(1e-4f);
 
-        TypeConverter<Float32, FloatType> converter = TypeConverterFactory.getConverter(val1Float32, new FloatType());
+        TypeConverter<Float32, FloatType> converter = TypeConverterFactory.getConverter(new FloatType());
 
         FloatType val1 = new FloatType();
         FloatType val2 = new FloatType();
@@ -92,12 +89,12 @@ public class TypeConverterFactoryTest {
         ARGBType val2 = new ARGBType(ARGBType.rgba(0, 1, 0, 0));
         ARGBType val3 = new ARGBType(ARGBType.rgba(0, 0, 1, 0));
 
-        TypeConverter<ARGB8, ARGBType> converter = TypeConverterFactory.getConverter(ARGB8.zero(), new ARGBType());
+        TypeConverter<ARGB8, ARGBType> converter = TypeConverterFactory.getConverter(new ARGBType());
 
         ARGB8 val1RGB16 = new ARGB8(0, 0, 0);
         ARGB8 val2RGB16 = new ARGB8(0, 0, 0);
         ARGB8 val3RGB16 = new ARGB8(0, 0, 0);
-        
+
         converter.setPixelType(val1, val1RGB16);
         converter.setPixelType(val2, val2RGB16);
         converter.setPixelType(val3, val3RGB16);
@@ -115,7 +112,7 @@ public class TypeConverterFactoryTest {
         ARGB8 val2RGB16 = new ARGB8(0, 1, 0);
         ARGB8 val3RGB16 = new ARGB8(0, 0, 1);
 
-        TypeConverter<ARGB8, ARGBType> converter = TypeConverterFactory.getConverter(ARGB8.zero(), new ARGBType());
+        TypeConverter<ARGB8, ARGBType> converter = TypeConverterFactory.getConverter(new ARGBType());
 
         ARGBType val1 = new ARGBType();
         ARGBType val2 = new ARGBType();
@@ -134,14 +131,14 @@ public class TypeConverterFactoryTest {
     }
 
     public void getType_ThreePixelTypes_ReturnsProperPixelType() {
-        
+
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Test
     public void getConverter_BogusNativeType_ThrowsConverterNotFound() {
         assertThrows(ConverterNotFound.class, () -> {
-            TypeConverterFactory.getConverter(UINT16.zero(), new BogusType());
+            TypeConverterFactory.getConverter(new BogusType());
         });
 
     }

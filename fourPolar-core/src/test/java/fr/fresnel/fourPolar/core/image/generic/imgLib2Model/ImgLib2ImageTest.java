@@ -24,7 +24,7 @@ public class ImgLib2ImageTest {
         long[] dimensions = new long[] { 1, 1, 1, 1 };
         UnsignedShortType type = new UnsignedShortType();
         Img<UnsignedShortType> img = new ArrayImgFactory<UnsignedShortType>(type).create(dimensions);
-        TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory.getConverter(UINT16.zero(), type);
+        TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory.getConverter(type);
         IMetadata metadata = new Metadata.MetadataBuilder(dimensions).bitPerPixel(PixelTypes.UINT_16)
                 .axisOrder(AxisOrder.XYCT).build();
         ImgLib2Image<UINT16, UnsignedShortType> image = new ImgLib2Image<UINT16, UnsignedShortType>(img, converter,
@@ -38,7 +38,7 @@ public class ImgLib2ImageTest {
         long[] dimensions = new long[] { 1, 1, 1, 1 };
         UnsignedShortType type = new UnsignedShortType();
         Img<UnsignedShortType> img = new ArrayImgFactory<UnsignedShortType>(type).create(dimensions);
-        TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory.getConverter(UINT16.zero(), type);
+        TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory.getConverter(type);
         IMetadata metadata = new Metadata.MetadataBuilder(dimensions).bitPerPixel(PixelTypes.UINT_16)
                 .axisOrder(AxisOrder.XYCT).build();
         ImgLib2Image<UINT16, UnsignedShortType> image = new ImgLib2Image<UINT16, UnsignedShortType>(img, converter,

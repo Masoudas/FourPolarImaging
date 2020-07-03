@@ -23,7 +23,7 @@ public class ImgLib2RandomAccessConverter {
     public static IPixelRandomAccess<ARGB8> convertARGBType(RandomAccess<ARGBType> ra) {
         TypeConverter<ARGB8, ARGBType> typeConverter = null;
         try {
-            typeConverter = TypeConverterFactory.getConverter(ARGB8.zero(), new ARGBType());
+            typeConverter = TypeConverterFactory.getConverter(new ARGBType());
         } catch (ConverterNotFound e) {
             // Never caught, converter is already implemented.
         }
@@ -33,7 +33,7 @@ public class ImgLib2RandomAccessConverter {
     public static IPixelRandomAccess<UINT16> convertUnsignedShortType(RandomAccess<UnsignedShortType> ra) {
         TypeConverter<UINT16, UnsignedShortType> typeConverter = null;
         try {
-            typeConverter = TypeConverterFactory.getConverter(UINT16.zero(), new UnsignedShortType());
+            typeConverter = TypeConverterFactory.getConverter(new UnsignedShortType());
         } catch (ConverterNotFound e) {
             // Never caught, converter is already implemented.
         }
@@ -44,7 +44,7 @@ public class ImgLib2RandomAccessConverter {
     public static IPixelRandomAccess<Float32> convertFloat32Type(RandomAccess<FloatType> ra) {
         TypeConverter<Float32, FloatType> typeConverter = null;
         try {
-            typeConverter = TypeConverterFactory.getConverter(Float32.zero(), new FloatType());
+            typeConverter = TypeConverterFactory.getConverter(new FloatType());
         } catch (ConverterNotFound e) {
             // Never caught, converter is already implemented.
         }

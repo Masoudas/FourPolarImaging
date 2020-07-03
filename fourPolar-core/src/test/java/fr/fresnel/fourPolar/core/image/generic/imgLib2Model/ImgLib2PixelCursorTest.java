@@ -121,7 +121,7 @@ public class ImgLib2PixelCursorTest {
         long[] dimensions = new long[] { 5, 1 };
         UnsignedShortType type = new UnsignedShortType();
         Img<UnsignedShortType> img = new ArrayImgFactory<UnsignedShortType>(type).create(dimensions);
-        TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory.getConverter(UINT16.zero(), type);
+        TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory.getConverter(type);
 
         IMetadata metadata = new Metadata.MetadataBuilder(dimensions).bitPerPixel(PixelTypes.UINT_16)
                 .axisOrder(AxisOrder.XY).build();

@@ -21,7 +21,7 @@ public class TypeConverterFactory {
      * @throws ConverterNotFound
      */
     @SuppressWarnings("unchecked")
-    public static <U extends PixelType, T extends NativeType<T>> TypeConverter<U, T> getConverter(U pixel, T type) throws ConverterNotFound {
+    public static <U extends PixelType, T extends NativeType<T>> TypeConverter<U, T> getConverter(T type) throws ConverterNotFound {
         TypeConverter<U, T> converter = null;
 
         if (type instanceof FloatType) {

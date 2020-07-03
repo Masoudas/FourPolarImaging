@@ -36,7 +36,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
     public Image<UINT16> create(Img<UnsignedShortType> img, UnsignedShortType imgLib2Type, IMetadata metadata) {
         try {
             return new ImgLib2Image<UINT16, UnsignedShortType>(img,
-                    TypeConverterFactory.getConverter(UINT16.zero(), imgLib2Type), this, metadata);
+                    TypeConverterFactory.getConverter(imgLib2Type), this, metadata);
         } catch (ConverterNotFound e) {
             // Exception never caught due to proper type handling
         }
@@ -53,7 +53,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
     public Image<Float32> create(Img<FloatType> img, FloatType imgLib2Type, IMetadata metadata) {
         try {
             return new ImgLib2Image<Float32, FloatType>(img,
-                    TypeConverterFactory.getConverter(Float32.zero(), imgLib2Type), this, metadata);
+                    TypeConverterFactory.getConverter(imgLib2Type), this, metadata);
         } catch (ConverterNotFound e) {
             // Exception never caught due to proper type handling
         }
@@ -69,7 +69,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
      */
     public Image<ARGB8> create(Img<ARGBType> img, ARGBType imgLib2Type, IMetadata metadata) {
         try {
-            return new ImgLib2Image<ARGB8, ARGBType>(img, TypeConverterFactory.getConverter(ARGB8.zero(), imgLib2Type),
+            return new ImgLib2Image<ARGB8, ARGBType>(img, TypeConverterFactory.getConverter(imgLib2Type),
                     this, metadata);
         } catch (ConverterNotFound e) {
             // Exception never caught due to proper type handling
@@ -99,7 +99,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
                     UnsignedShortType type = new UnsignedShortType();
                     Img<UnsignedShortType> img = _chooseImgFactory(metadataCP.getDim(), type);
                     TypeConverter<UINT16, UnsignedShortType> converter = TypeConverterFactory
-                            .getConverter(UINT16.zero(), type);
+                            .getConverter(type);
 
                     _image = new ImgLib2Image<T, UnsignedShortType>(img,
                             (TypeConverter<T, UnsignedShortType>) converter, this, metadataCP);
@@ -112,7 +112,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
                 try {
                     FloatType type = new FloatType();
                     Img<FloatType> img = _chooseImgFactory(metadataCP.getDim(), type);
-                    TypeConverter<Float32, FloatType> converter = TypeConverterFactory.getConverter(Float32.zero(),
+                    TypeConverter<Float32, FloatType> converter = TypeConverterFactory.getConverter(
                             type);
 
                     _image = new ImgLib2Image<T, FloatType>(img, (TypeConverter<T, FloatType>) converter, this,
@@ -126,7 +126,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
                 try {
                     ARGBType type = new ARGBType();
                     Img<ARGBType> img = _chooseImgFactory(metadataCP.getDim(), type);
-                    TypeConverter<ARGB8, ARGBType> converter = TypeConverterFactory.getConverter(ARGB8.zero(), type);
+                    TypeConverter<ARGB8, ARGBType> converter = TypeConverterFactory.getConverter(type);
 
                     _image = new ImgLib2Image<T, ARGBType>(img, (TypeConverter<T, ARGBType>) converter, this,
                             metadataCP);
