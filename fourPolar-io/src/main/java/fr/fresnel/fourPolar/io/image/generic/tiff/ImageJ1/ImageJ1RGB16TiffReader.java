@@ -8,7 +8,6 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import ij.ImagePlus;
 import ij.io.FileInfo;
@@ -20,7 +19,7 @@ import net.imglib2.type.numeric.ARGBType;
 public class ImageJ1RGB16TiffReader implements ImageReader<ARGB8> {
 
     @Override
-    public Image<ARGB8> read(File path) throws IOException, MetadataParseError {
+    public Image<ARGB8> read(File path) throws IOException {
         Utils.checkExtension(path.getAbsolutePath());
         Utils.checkFileExists(path);
 

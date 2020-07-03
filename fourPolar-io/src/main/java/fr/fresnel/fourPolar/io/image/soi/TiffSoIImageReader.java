@@ -11,7 +11,6 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.image.soi.SoIImage;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
 import fr.fresnel.fourPolar.io.image.soi.file.ISoIImageFile;

@@ -11,7 +11,6 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.io.exceptions.image.captured.CapturedImageReadFailure;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
