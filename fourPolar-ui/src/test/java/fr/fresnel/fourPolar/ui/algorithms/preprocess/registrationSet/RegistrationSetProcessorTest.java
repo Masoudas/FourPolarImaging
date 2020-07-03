@@ -36,8 +36,6 @@ import fr.fresnel.fourPolar.core.imageSet.acquisition.registration.RegistrationI
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.OneCameraPolarizationConstellation;
-import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.TwoCameraPolarizationConstellation;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
@@ -53,7 +51,7 @@ public class RegistrationSetProcessorTest {
 
     @Test
     public void process_OneCameraAllZeroImage_ThrowsRegistrationSetProcessFailure()
-            throws IOException, MetadataParseError {
+            throws IOException {
         Cameras camera = Cameras.One;
         int[] channel1 = { 1 };
         IFieldOfView fov = this.createFoVOneCamera(3, 3, 1, 1);
@@ -78,7 +76,7 @@ public class RegistrationSetProcessorTest {
 
     @Test
     public void process_TwoCameraAllZeroImage_ThrowsRegistrationSetProcessFailure()
-            throws IOException, MetadataParseError {
+            throws IOException {
         Cameras camera = Cameras.Two;
         int[] channel1 = { 1 };
         IFieldOfView fov = this.createFoVTwoCamera(3, 3, 1, 1);
@@ -108,7 +106,7 @@ public class RegistrationSetProcessorTest {
 
     @Test
     public void process_FourCameraAllZeroImage_ThrowsRegistrationSetProcessFailure()
-            throws IOException, MetadataParseError {
+            throws IOException {
         Cameras camera = Cameras.Four;
         int[] channel1 = { 1 };
         IFieldOfView fov = this.createFoVFourCamera(3, 3);
