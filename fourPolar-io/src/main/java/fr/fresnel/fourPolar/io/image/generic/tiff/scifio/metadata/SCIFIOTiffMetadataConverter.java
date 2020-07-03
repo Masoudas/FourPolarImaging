@@ -20,12 +20,10 @@ import net.imagej.axis.DefaultAxisType;
  */
 public class SCIFIOTiffMetadataConverter {
     /**
-     * Convert from SCIFIO metadata
-     * 
-     * @throws UnsupportedAxisOrder in case the underlying image has an undefined
-     *                              axis order.
+     * Convert from SCIFIO metadata. Note that {@link IMetadata#axisOrder()} returns
+     * {@link AxisOrder#NoOrder} is the image has an undefined axis.
      */
-    public static IMetadata convertFrom(ImageMetadata SCIFIOMetadata) throws MetadataParseError {
+    public static IMetadata convertFrom(ImageMetadata SCIFIOMetadata) {
         long[] dim = SCIFIOMetadata.getAxesLengths();
         int bitDepth = SCIFIOMetadata.getBitsPerPixel();
         AxisOrder axisOrder = _getAxisOrder(SCIFIOMetadata.getAxes());
@@ -50,10 +48,11 @@ public class SCIFIOTiffMetadataConverter {
     /**
      * Returns {@link AxisOrder} from the given axisList.
      */
-    private static AxisOrder _getAxisOrder(List<CalibratedAxis> axisList) throws MetadataParseError {
+    private static AxisOrder _getAxisOrder(List<CalibratedAxis> axisList) {
         String axisOrderAsString = "";
 
-        for (Iterator<CalibratedAxis> itr = axisList.iterator(); itr.hasNext();) {
+        boolean axisIsUndefined = false;
+        for (Iterator<CalibratedAxis> itr = axisList.iterator(); itr.hasNext() && !axisIsUndefined;) {
             String axisName = itr.next().type().getLabel();
             if (axisName.equals(Axes.CHANNEL.getLabel())) {
                 axisOrderAsString += "C";
@@ -63,14 +62,15 @@ public class SCIFIOTiffMetadataConverter {
                     || axisName.equals(Axes.Y.getLabel())) {
                 axisOrderAsString += axisName;
             } else {
-                throw new MetadataParseError(MetadataParseError.UNDEFINED_AXIS);
+                axisIsUndefined = true;
+                axisOrderAsString = AxisOrder.NoOrder.toString();
             }
         }
 
         try {
             return AxisOrder.fromString(axisOrderAsString);
         } catch (UnsupportedAxisOrder e) {
-            throw new MetadataParseError(MetadataParseError.UNDEFINED_AXIS_ORDER);
+            return AxisOrder.NoOrder;
         }
 
     }
