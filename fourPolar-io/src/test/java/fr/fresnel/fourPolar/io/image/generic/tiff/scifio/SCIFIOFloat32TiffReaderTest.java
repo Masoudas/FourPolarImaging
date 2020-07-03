@@ -16,7 +16,6 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 
 public class SCIFIOFloat32TiffReaderTest {
     private static File _testResource;
@@ -28,7 +27,7 @@ public class SCIFIOFloat32TiffReaderTest {
 
     @Test
     public void read_Float32XYImage_ShouldShowImage()
-            throws IOException, InterruptedException, ConverterToImgLib2NotFound, MetadataParseError {
+            throws IOException, InterruptedException, ConverterToImgLib2NotFound {
         File path = new File(_testResource, "Float32XYImage.tif");
         SCIFIOFloat32TiffReader reader = new SCIFIOFloat32TiffReader(new ImgLib2ImageFactory());
         Image<Float32> img = reader.read(path);
@@ -39,7 +38,7 @@ public class SCIFIOFloat32TiffReaderTest {
 
     @Test
     public void read_Float32XYCZTImage_ShouldShowImage()
-            throws IOException, InterruptedException, ConverterToImgLib2NotFound, MetadataParseError {
+            throws IOException, InterruptedException, ConverterToImgLib2NotFound {
         File path = new File(_testResource, "Float32XYCZTImage.tif");
         SCIFIOFloat32TiffReader reader = new SCIFIOFloat32TiffReader(new ImgLib2ImageFactory());
         Image<Float32> img = reader.read(path);
@@ -50,7 +49,7 @@ public class SCIFIOFloat32TiffReaderTest {
 
     @Test
     public void read_SameImageTenThousandTimes_ShouldNotRunOutOfResource() throws IllegalArgumentException, IOException,
-            InterruptedException, KeyException, IncompatibleCapturedImage, MetadataParseError {
+            InterruptedException, KeyException, IncompatibleCapturedImage {
         File path = new File(_testResource, "Float32XYImage.tif");
         SCIFIOFloat32TiffReader reader = new SCIFIOFloat32TiffReader(new ImgLib2ImageFactory());
 

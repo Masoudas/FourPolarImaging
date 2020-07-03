@@ -226,7 +226,7 @@ public class SophiesPreChoice {
             CalculateFoVAndContinue doubleClick = new CalculateFoVAndContinue(registrationImageViewer);
             behaviours.behaviour(doubleClick, "print global pos", "button1");
 
-        } catch (IOException | MetadataParseError | ConverterToImgLib2NotFound e) {
+        } catch (IOException | ConverterToImgLib2NotFound e) {
             e.printStackTrace();
         }
     }
@@ -238,7 +238,7 @@ public class SophiesPreChoice {
         IMetadata metadata = null;
         try {
             metadata = metadataReader.read(beadImage);
-        } catch (IOException | MetadataParseError e) {
+        } catch (MetadataParseError e) {
             // Caught before.
         }
 
