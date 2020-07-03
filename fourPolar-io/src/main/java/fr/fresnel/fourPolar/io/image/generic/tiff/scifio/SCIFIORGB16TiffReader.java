@@ -54,7 +54,7 @@ public class SCIFIORGB16TiffReader implements ImageReader<ARGB8> {
     }
 
     @Override
-    public Image<ARGB8> read(File path) throws IOException, MetadataParseError {
+    public Image<ARGB8> read(File path) throws IOException {
         throw new AssertionError("This reader has not been refactored to consider ARGB images with channel.");
         // Objects.requireNonNull(path, "path should not be null");
         // SCIFIOUtils.checkExtension(path.getName());

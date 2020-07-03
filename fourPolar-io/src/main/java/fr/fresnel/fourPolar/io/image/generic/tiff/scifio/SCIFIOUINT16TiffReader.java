@@ -8,7 +8,6 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOTiffMetadataConverter;
 import io.scif.config.SCIFIOConfig;
@@ -37,7 +36,7 @@ public class SCIFIOUINT16TiffReader implements ImageReader<UINT16> {
     }
 
     @Override
-    public Image<UINT16> read(File path) throws IOException, MetadataParseError {
+    public Image<UINT16> read(File path) throws IOException {
         Objects.requireNonNull(path, "path should not be null");
         SCIFIOUtils.checkExtension(path.getName());
         SCIFIOUtils.checkFileExists(path);
@@ -57,10 +56,8 @@ public class SCIFIOUINT16TiffReader implements ImageReader<UINT16> {
 
     /**
      * Read metadata independently of the underlying image.
-     * 
-     * @throws MetadataParseError if there are problems parsing the metadata.
      */
-    private IMetadata _readMetadata() throws IOException, MetadataParseError {
+    private IMetadata _readMetadata() throws IOException {
         return SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
     }
 

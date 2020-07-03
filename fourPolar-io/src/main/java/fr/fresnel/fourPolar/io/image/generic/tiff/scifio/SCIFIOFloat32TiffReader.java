@@ -37,7 +37,7 @@ public class SCIFIOFloat32TiffReader implements ImageReader<Float32> {
     }
 
     @Override
-    public Image<Float32> read(File path) throws IOException, MetadataParseError {
+    public Image<Float32> read(File path) throws IOException {
         Objects.requireNonNull(path, "path should not be null");
         SCIFIOUtils.checkExtension(path.getName());
         SCIFIOUtils.checkFileExists(path);
@@ -60,7 +60,7 @@ public class SCIFIOFloat32TiffReader implements ImageReader<Float32> {
      * 
      * @throws MetadataParseError if there are problems parsing the metadata.
      */
-    private IMetadata _readMetadata() throws IOException, MetadataParseError {
+    private IMetadata _readMetadata() throws IOException {
         return SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
     }
 
