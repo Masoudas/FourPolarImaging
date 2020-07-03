@@ -31,7 +31,6 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOFloat32TiffWriter;
 import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageFileSet;
 import fr.fresnel.fourPolar.io.image.orientation.file.TiffOrientationImageInDegreeFileSet;
 import io.scif.img.ImgIOException;
