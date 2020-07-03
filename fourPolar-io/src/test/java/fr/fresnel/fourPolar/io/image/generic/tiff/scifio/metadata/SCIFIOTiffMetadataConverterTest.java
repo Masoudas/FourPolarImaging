@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -38,7 +37,7 @@ public class SCIFIOTiffMetadataConverterTest {
     }
 
     @Test
-    public void convertImageMetadata_UnSupportedAxisOrder_ThrowsUnsupportedAxisOrder() {
+    public void convertImageMetadata_UnSupportedAxisOrder_MetadataAxisOrderIsNoOrder() {
         io.scif.formats.TIFFFormat.Metadata tiffMetadata = new io.scif.formats.TIFFFormat.Metadata();
         tiffMetadata.createImageMetadata(1);
         ImageMetadata imageMetadata = tiffMetadata.get(0);
@@ -47,16 +46,14 @@ public class SCIFIOTiffMetadataConverterTest {
         imageMetadata.addAxis(Axes.Z, dim[0]);
         imageMetadata.addAxis(Axes.Z, dim[1]);
         imageMetadata.addAxis(Axes.Z, dim[2]);
-
-        MetadataParseError exception = assertThrows(MetadataParseError.class, () -> {
-            SCIFIOTiffMetadataConverter.convertFrom(imageMetadata);
-        });
-
-        assertTrue(exception.getMessage().equals(MetadataParseError.UNDEFINED_AXIS_ORDER));
+        
+        IMetadata metadata = SCIFIOTiffMetadataConverter.convertFrom(imageMetadata);
+        
+        assertTrue(metadata.axisOrder() == AxisOrder.NoOrder);
     }
 
     @Test
-    public void convertImageMetadata_UndefinedAxis_ThrowsUnsupportedAxisOrder() {
+    public void convertImageMetadata_UndefinedAxis_MetadataAxisOrderIsNoOrder() {
         io.scif.formats.TIFFFormat.Metadata tiffMetadata = new io.scif.formats.TIFFFormat.Metadata();
         tiffMetadata.createImageMetadata(1);
         ImageMetadata imageMetadata = tiffMetadata.get(0);
@@ -66,12 +63,9 @@ public class SCIFIOTiffMetadataConverterTest {
         imageMetadata.addAxis(new DefaultAxisType(Axes.UNKNOWN_LABEL), dim[1]);
         imageMetadata.addAxis(Axes.Z, dim[2]);
 
-        MetadataParseError exception = assertThrows(MetadataParseError.class, () -> {
-            SCIFIOTiffMetadataConverter.convertFrom(imageMetadata);
-        });
-
-        assertTrue(exception.getMessage().equals(MetadataParseError.UNDEFINED_AXIS));
-    }
+        IMetadata metadata = SCIFIOTiffMetadataConverter.convertFrom(imageMetadata);
+        
+        assertTrue(metadata.axisOrder() == AxisOrder.NoOrder);    }
 
     @Test
     public void convertMetadata_FiveAxisMetadata_ReturnsCorrectImageMetadata() {
