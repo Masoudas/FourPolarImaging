@@ -25,13 +25,14 @@ public class SCIFIOMetadataReader implements IMetadataReader {
     }
 
     @Override
-    public IMetadata read(File imageFile) throws IOException, MetadataParseError {
-        this._reader.setSource(imageFile.getAbsolutePath(), this._config);
+    public IMetadata read(File imageFile) throws MetadataParseError {
+        try {
+            this._reader.setSource(imageFile.getAbsolutePath(), this._config);
+        } catch (IOException e) {
+            throw new MetadataParseError(MetadataParseError.IO_ISSUES);
+        }
 
-        IMetadata metadata = null;
-        metadata = SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
-
-        return metadata;
+        return SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
     }
 
     @Override
