@@ -9,10 +9,6 @@ import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationRes
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.util.transform.Affine2D;
 import javassist.tools.reflect.CannotCreateException;
-import net.imglib2.RandomAccessible;
-import net.imglib2.interpolation.InterpolatorFactory;
-import net.imglib2.interpolation.randomaccess.FloorInterpolatorFactory;
-import net.imglib2.type.numeric.integer.UnsignedShortType;
 
 /**
  * A concrete implementation of {@link IChannelRealigner.}
