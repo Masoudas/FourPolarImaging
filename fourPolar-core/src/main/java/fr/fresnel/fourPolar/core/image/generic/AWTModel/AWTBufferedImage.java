@@ -23,7 +23,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
  * 
  * @param <T> is the pixel type.
  */
-abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
+public abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
     protected final AWTBufferedImagePlane[] _images;
     protected final IMetadata _metadata;
     private final ImageFactory _factory;
