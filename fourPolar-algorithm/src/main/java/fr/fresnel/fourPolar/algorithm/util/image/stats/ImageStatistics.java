@@ -2,8 +2,8 @@ package fr.fresnel.fourPolar.algorithm.util.image.stats;
 
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RealType;
+import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 
 public class ImageStatistics {

@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.image.generic.metadata;
+package fr.fresnel.fourPolar.core.util.image.metadata;
 
 import java.util.Arrays;
 import java.util.Objects;
