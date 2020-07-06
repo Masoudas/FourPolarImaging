@@ -6,7 +6,11 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
-public class BufferedImageFactory implements ImageFactory {
+/**
+ * Creates an image interface implemented using the {@link BufferedImage} of AWT
+ * as backend.
+ */
+public class AWTBufferedImageFactory implements ImageFactory {
 
     @SuppressWarnings("unchecked")
     @Override
