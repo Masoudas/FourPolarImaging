@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.core.image.generic.AWTModel;
 
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
@@ -8,7 +9,6 @@ import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.AWTModel.type.BufferedImageTypes;
 import fr.fresnel.fourPolar.core.image.generic.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 
@@ -39,12 +39,15 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
 
     private final long _totalNumPlanes;
 
-    protected AWTBufferedImage(IMetadata metadata, BufferedImageTypes imageType, ImageFactory factory) {
+    protected AWTBufferedImage(IMetadata metadata, ImageFactory factory, T pixelType) {
+        Objects.requireNonNull(metadata, "Metadata can't be null");
+        Objects.requireNonNull(factory, "factory can't be null");
+
         _metadata = metadata;
         _factory = factory;
 
         _nPlanesPerDim = _nPlanesPerDim();
-        _images = _createBuffreredImageArray(metadata, imageType);
+        _images = _createBuffreredImageArray(metadata, pixelType);
         _totalNumPlanes = MetadataUtil.getNPlanes(metadata);
 
     }
@@ -57,7 +60,7 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
      * @param dim is the dimension of the image.
      * @return an array of buffered image plane that belong to each plane.
      */
-    private AWTBufferedImagePlane[] _createBuffreredImageArray(IMetadata metadata, BufferedImageTypes imageType) {
+    private AWTBufferedImagePlane[] _createBuffreredImageArray(IMetadata metadata, PixelType pixelType) {
         int numPlanes = MetadataUtil.getNPlanes(metadata);
         int xdim = (int) metadata.getDim()[0];
         int ydim = (int) metadata.getDim()[0];
@@ -65,7 +68,7 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
         AWTBufferedImagePlane[] _images = new AWTBufferedImagePlane[numPlanes];
 
         IntStream.range(0, _images.length).forEach(
-                planeIndex -> _images[planeIndex] = new AWTBufferedImagePlane(planeIndex, xdim, ydim, imageType));
+                planeIndex -> _images[planeIndex] = new AWTBufferedImagePlane(planeIndex, xdim, ydim, pixelType));
         return _images;
     }
 

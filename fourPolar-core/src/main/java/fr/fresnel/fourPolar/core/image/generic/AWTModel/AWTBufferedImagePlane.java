@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.core.image.generic.AWTModel;
 import java.awt.image.BufferedImage;
 
 import fr.fresnel.fourPolar.core.image.generic.AWTModel.type.BufferedImageTypes;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 
 /**
  * Models a plane of the {@link AWTBufferedImage}. The plane index starts from
@@ -12,17 +13,18 @@ class AWTBufferedImagePlane {
     final private int _planeIndex;
     final private BufferedImage _imagePlane;
 
-    public AWTBufferedImagePlane(int planeIndex, int xdim, int ydim, BufferedImageTypes imageType) {
+    public AWTBufferedImagePlane(int planeIndex, int xdim, int ydim, PixelType pixelType) {
         assert planeIndex > 0 : "planeIndex should be greater than zero";
         assert xdim > 0 && ydim > 0 : "image dimension should be greater than zero";
-        assert imageType != null : "imageType should not be null";
+        assert pixelType != null : "imageType should not be null";
 
         _planeIndex = planeIndex;
-        _imagePlane = _createBufferedImage(xdim, ydim, imageType);
+        _imagePlane = _createBufferedImage(xdim, ydim, pixelType);
     }
 
-    public BufferedImage _createBufferedImage(int xdim, int ydim, BufferedImageTypes imageType) {
-        return new BufferedImage(xdim, ydim, imageType.getBufferedType());
+    public BufferedImage _createBufferedImage(int xdim, int ydim, PixelType pixelType) {
+        BufferedImageTypes bufferedImageType = BufferedImageTypes.convertPixelTypes(pixelType.getType());
+        return new BufferedImage(xdim, ydim, bufferedImageType.getBufferedType());
     }
 
     /**
