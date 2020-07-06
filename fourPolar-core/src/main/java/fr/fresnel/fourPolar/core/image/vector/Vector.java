@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
 /**
  * An interface that defines a vector as is conventional of vector images.
  */
-public interface IVector {
+public interface Vector {
     /**
      * @return the shape of this vector.
      */
