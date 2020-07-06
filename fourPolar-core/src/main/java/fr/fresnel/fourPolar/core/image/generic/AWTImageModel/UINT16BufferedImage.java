@@ -25,7 +25,7 @@ public class UINT16BufferedImage extends AWTBufferedImage<UINT16> {
 
     @Override
     public IPixelRandomAccess<UINT16> getRandomAccess() {
-        return null;
+        return new UINT16PixelRandomAccess(this);
     }
 
 }
