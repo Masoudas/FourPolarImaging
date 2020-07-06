@@ -2,7 +2,7 @@ package fr.fresnel.fourPolar.io.preprocess;
 
 import java.io.File;
 
-import fr.fresnel.fourPolar.core.PathFactoryOfProject;
+import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 
 class RegistrationSetProcessResultToYAMLFile {
     private static String _FILE_NAME = "Registration_Image_Set_Process_Results.yaml";

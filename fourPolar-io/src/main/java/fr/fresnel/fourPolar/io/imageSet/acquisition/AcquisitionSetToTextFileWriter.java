@@ -8,10 +8,10 @@ import java.util.Iterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import fr.fresnel.fourPolar.core.PathFactoryOfProject;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSet;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
+import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetIOIssue;
 import fr.fresnel.fourPolar.io.image.captured.file.ICapturedImageFileSetToTextAdapter;
 

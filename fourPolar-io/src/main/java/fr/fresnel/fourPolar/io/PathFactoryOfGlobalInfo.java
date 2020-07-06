@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core;
+package fr.fresnel.fourPolar.io;
 
 import java.io.File;
 import java.io.IOException;

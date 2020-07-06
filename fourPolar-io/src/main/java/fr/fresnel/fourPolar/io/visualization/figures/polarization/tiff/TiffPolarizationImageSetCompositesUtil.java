@@ -3,10 +3,10 @@ package fr.fresnel.fourPolar.io.visualization.figures.polarization.tiff;
 import java.io.File;
 import java.nio.file.Paths;
 
-import fr.fresnel.fourPolar.core.PathFactoryOfProject;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
+import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 
 /**
  * Utility methods.

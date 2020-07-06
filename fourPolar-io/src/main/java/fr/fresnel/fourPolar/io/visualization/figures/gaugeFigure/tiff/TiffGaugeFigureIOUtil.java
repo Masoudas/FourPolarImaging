@@ -3,12 +3,12 @@ package fr.fresnel.fourPolar.io.visualization.figures.gaugeFigure.tiff;
 import java.io.File;
 import java.nio.file.Paths;
 
-import fr.fresnel.fourPolar.core.PathFactoryOfProject;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
+import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 
 /**
  * A set of utility methods.

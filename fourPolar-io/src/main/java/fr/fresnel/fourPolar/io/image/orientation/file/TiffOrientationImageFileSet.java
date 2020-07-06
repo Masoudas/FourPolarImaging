@@ -2,9 +2,9 @@ package fr.fresnel.fourPolar.io.image.orientation.file;
 
 import java.io.File;
 
-import fr.fresnel.fourPolar.core.PathFactoryOfProject;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
+import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 
 /**
  * A concrete implementation of the {@link IOrientationImageFileSet}. Note that

@@ -3,8 +3,8 @@ package fr.fresnel.fourPolar.io.imageSet.acquisition;
 import java.io.File;
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.core.PathFactoryOfProject;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSetType;
+import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 
 /**
  * A set of utility method for text file IO.

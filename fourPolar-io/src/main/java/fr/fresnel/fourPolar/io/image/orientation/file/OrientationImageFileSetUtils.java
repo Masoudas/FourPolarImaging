@@ -3,8 +3,8 @@ package fr.fresnel.fourPolar.io.image.orientation.file;
 import java.io.File;
 import java.nio.file.Paths;
 
-import fr.fresnel.fourPolar.core.PathFactoryOfProject;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
+import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 
 /**
  * A set of static helper methods.

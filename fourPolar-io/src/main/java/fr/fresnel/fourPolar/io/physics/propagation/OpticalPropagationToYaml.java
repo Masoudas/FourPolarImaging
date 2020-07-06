@@ -12,7 +12,7 @@ import fr.fresnel.fourPolar.core.exceptions.fourPolar.propagationdb.PropagationC
 import fr.fresnel.fourPolar.core.fourPolar.propagationdb.IOpticalPropagationDB;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.physics.propagation.IOpticalPropagation;
-import fr.fresnel.fourPolar.core.PathFactoryOfProject;
+import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 
 /**
  * Using this class, we write the {@link IOpticalPropagation} of each channel to
