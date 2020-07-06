@@ -39,12 +39,15 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
 
     private final long _totalNumPlanes;
 
+    private final long[] _imageDim;
+
     protected AWTBufferedImage(IMetadata metadata, ImageFactory factory, T pixelType) {
         Objects.requireNonNull(metadata, "Metadata can't be null");
         Objects.requireNonNull(factory, "factory can't be null");
 
         _metadata = metadata;
         _factory = factory;
+        _imageDim = metadata.getDim();
 
         _nPlanesPerDim = _nPlanesPerDim();
         _images = _createBuffreredImageArray(metadata, pixelType);
@@ -68,7 +71,7 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
         AWTBufferedImagePlane[] _images = new AWTBufferedImagePlane[numPlanes];
 
         IntStream.range(0, _images.length).forEach(
-                planeIndex -> _images[planeIndex] = new AWTBufferedImagePlane(planeIndex, xdim, ydim, pixelType));
+                planeIndex -> _images[planeIndex] = new AWTBufferedImagePlane(planeIndex + 1, xdim, ydim, pixelType));
         return _images;
     }
 
@@ -86,27 +89,29 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
     }
 
     private long[] _nPlanesPerDim() {
-        if (_metadata.getDim().length <= 2) {
+        if (_imageDim.length <= 2) {
             return new long[] { 1 };
         }
 
-        long[] imgDim = getMetadata().getDim();
 
         // Create the same vector size. Note that by default, the first two dims
         // have zero planes.
-        long[] nPlanesPerDim = new long[imgDim.length];
-        nPlanesPerDim[2] = imgDim[2];
+        long[] nPlanesPerDim = new long[_imageDim.length];
+        nPlanesPerDim[2] = _imageDim[2];
         for (int dim = 3; dim < nPlanesPerDim.length; dim++) {
-            nPlanesPerDim[dim] = nPlanesPerDim[dim - 1] * imgDim[dim];
+            nPlanesPerDim[dim] = nPlanesPerDim[dim - 1] * _imageDim[dim];
         }
 
         return nPlanesPerDim;
     }
 
     /**
-     * @return the plane number this position belongs to starting from 1.
+     * @return the plane number this position belongs to starting from 1. It's the
+     *         responsibility of the caller to make sure that the position is in the
+     *         image boundary.
      */
     public int getPlaneNumber(long[] position) {
+        if (position.length != _imageDim.length)
         if (this._totalNumPlanes == 1) {
             return 1;
         }
@@ -114,7 +119,7 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
         // One is added, because image planes start from one.
         int offSet = (int) position[2];
         return offSet + (int) IntStream.range(2, position.length)
-                .mapToLong(i -> (position[i] + 1) * _nPlanesPerDim[i - 1]).sum() + 1;
+                .mapToLong(i -> position[i] * _nPlanesPerDim[i - 1]).sum() + 1;
 
     }
 
