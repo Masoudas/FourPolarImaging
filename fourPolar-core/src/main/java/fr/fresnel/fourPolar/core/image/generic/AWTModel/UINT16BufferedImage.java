@@ -6,7 +6,7 @@ import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
-public class UINT16BufferedImage extends AWTBufferedImage<UINT16> {
+class UINT16BufferedImage extends AWTBufferedImage<UINT16> {
 
     protected UINT16BufferedImage(IMetadata metadata, ImageFactory factory, UINT16 pixelType) {
         super(metadata, factory, pixelType);
