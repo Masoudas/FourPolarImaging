@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.core.image.generic.AWTModel;
 
+import java.util.Objects;
+
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
@@ -25,6 +27,9 @@ public class ImageToAWTBufferedImageConverter {
      * @return a buffered image type.
      */
     public static AWTBufferedImage<UINT16> convert(Image<UINT16> image, UINT16 pixelType) {
+        Objects.requireNonNull(image, "image can't be null.");
+        Objects.requireNonNull(pixelType, "pixelType can't be null.");
+
         if (image instanceof AWTBufferedImage) {
             return (AWTBufferedImage<UINT16>) image;
         } else {
