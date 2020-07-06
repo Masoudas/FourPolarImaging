@@ -1,8 +1,7 @@
 package fr.fresnel.fourPolar.core.image.generic.AWTImageModel;
 
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
@@ -16,21 +15,25 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 /**
  * An abstract class for implementing the image interface using
  * {@link BufferedImage}. This class shall be extended for each
- * {@link PixelType}. Note that buffered images are implemented as an array,
+ * {@link PixelType}.
+ * <p>
+ * Note that the system for accessing the buffered images is through a 1D array,
  * where each element of the array corresponds to one plane, as discussed
  * further in {@link #_createBuffreredImageArray()}.
  * 
  * @param <T> is the pixel type.
  */
 abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
-    protected final BufferedImage[] _images;
+    protected final AWTBufferedImagePlane[] _images;
     protected final IMetadata _metadata;
     private final ImageFactory _factory;
 
     /**
      * A helper vector indicating how many planes are present per dimension. For
-     * example, if dim = [2, 2, 3, 4], 3 planes are present for the 3rd dim and 12
-     * for the fourth.
+     * example, if dim = [2, 2, 3, 4], and given the first two axis indicate the the
+     * xy plane, we conclude that 3 planes are present for the 3rd dim and 12 for
+     * the fourth. Note that the first two elements are always set to zero for
+     * convenience.
      */
     private final long[] _nPlanesPerDim;
 
@@ -51,17 +54,17 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
      * buffered image would be 2 * 2 in size.
      * 
      * @param dim is the dimension of the image.
-     * @return an array of buffered image belonging to each plane.
+     * @return an array of buffered image plane that belong to each plane.
      */
-    private BufferedImage[] _createBuffreredImageArray(IMetadata metadata, BufferedImageTypes imageType) {
+    private AWTBufferedImagePlane[] _createBuffreredImageArray(IMetadata metadata, BufferedImageTypes imageType) {
         int numPlanes = MetadataUtil.getNPlanes(metadata);
         int xdim = (int) metadata.getDim()[0];
         int ydim = (int) metadata.getDim()[0];
 
-        BufferedImage[] _images = new BufferedImage[numPlanes];
+        AWTBufferedImagePlane[] _images = new AWTBufferedImagePlane[numPlanes];
 
-        IntStream.range(0, _images.length)
-                .forEach(i -> _images[i] = new BufferedImage(xdim, ydim, imageType.getBufferedType()));
+        IntStream.range(0, _images.length).forEach(
+                planeIndex -> _images[planeIndex] = new AWTBufferedImagePlane(planeIndex, xdim, ydim, imageType));
         return _images;
     }
 
@@ -69,12 +72,12 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
      * Returns the buffered image of the demanded plane. Calculate plane number
      * using {@link #getPlaneNumber()}.
      */
-    public BufferedImage getImagePlane(int planeNumber) {
-        if (planeNumber < 0 || planeNumber > _totalNumPlanes) {
+    public AWTBufferedImagePlane getImagePlane(int planeNumber) {
+        if (planeNumber < 1 || planeNumber > _totalNumPlanes) {
             throw new IllegalArgumentException(
                     "plane number should be greater than zero and less than total number of planes.");
         }
-        return _images[planeNumber];
+        return _images[planeNumber - 1];
 
     }
 
@@ -83,28 +86,31 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
             return new long[] { 1 };
         }
 
-        long[] dim = _metadata.getDim();
-        long[] nPlanesPerDim = new long[dim.length - 2];
+        long[] imgDim = getMetadata().getDim();
 
-        nPlanesPerDim[0] = dim[2];
-        for (int i = 1; i < nPlanesPerDim.length; i++) {
-            nPlanesPerDim[i] = nPlanesPerDim[i - 1] * dim[i];
+        // Create the same vector size. Note that by default, the first two dims
+        // have zero planes.
+        long[] nPlanesPerDim = new long[imgDim.length];
+        nPlanesPerDim[2] = imgDim[2];
+        for (int dim = 3; dim < nPlanesPerDim.length; dim++) {
+            nPlanesPerDim[dim] = nPlanesPerDim[dim - 1] * imgDim[dim];
         }
 
         return nPlanesPerDim;
     }
 
     /**
-     * Returns the plane number this position belongs to starting from 0.
+     * @return the plane number this position belongs to starting from 1.
      */
     public int getPlaneNumber(long[] position) {
-        if (this._totalNumPlanes == 1){
-            return 0;
+        if (this._totalNumPlanes == 1) {
+            return 1;
         }
 
-        int offSet = (int) position[0];
+        // One is added, because image planes start from one.
+        int offSet = (int) position[2];
         return offSet + (int) IntStream.range(2, position.length)
-                .mapToLong(i -> (position[i] + 1) * _nPlanesPerDim[i - 1]).sum();
+                .mapToLong(i -> (position[i] + 1) * _nPlanesPerDim[i - 1]).sum() + 1;
 
     }
 
