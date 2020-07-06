@@ -93,7 +93,6 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
             return new long[] { 1 };
         }
 
-
         // Create the same vector size. Note that by default, the first two dims
         // have zero planes.
         long[] nPlanesPerDim = new long[_imageDim.length];
@@ -111,15 +110,19 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
      *         image boundary.
      */
     public int getPlaneNumber(long[] position) {
-        if (position.length != _imageDim.length)
+        if (position.length != _imageDim.length) {
+            throw new IllegalArgumentException("position does not have same dimension as image.");
+        }
+        
         if (this._totalNumPlanes == 1) {
             return 1;
         }
 
         // One is added, because image planes start from one.
         int offSet = (int) position[2];
-        return offSet + (int) IntStream.range(2, position.length)
-                .mapToLong(i -> position[i] * _nPlanesPerDim[i - 1]).sum() + 1;
+        return offSet
+                + (int) IntStream.range(2, position.length).mapToLong(i -> position[i] * _nPlanesPerDim[i - 1]).sum()
+                + 1;
 
     }
 
