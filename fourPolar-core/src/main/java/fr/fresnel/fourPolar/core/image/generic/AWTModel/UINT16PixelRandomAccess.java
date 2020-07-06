@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.image.generic.AWTImageModel;
+package fr.fresnel.fourPolar.core.image.generic.AWTModel;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;

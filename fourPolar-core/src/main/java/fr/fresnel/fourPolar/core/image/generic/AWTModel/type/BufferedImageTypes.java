@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.image.generic.AWTImageModel.type;
+package fr.fresnel.fourPolar.core.image.generic.AWTModel.type;
 
 import java.awt.image.BufferedImage;
 

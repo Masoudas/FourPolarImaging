@@ -1,8 +1,8 @@
-package fr.fresnel.fourPolar.core.image.generic.AWTImageModel;
+package fr.fresnel.fourPolar.core.image.generic.AWTModel;
 
 import java.awt.image.BufferedImage;
 
-import fr.fresnel.fourPolar.core.image.generic.AWTImageModel.type.BufferedImageTypes;
+import fr.fresnel.fourPolar.core.image.generic.AWTModel.type.BufferedImageTypes;
 
 /**
  * Models a plane of the {@link AWTBufferedImage}. The plane index starts from

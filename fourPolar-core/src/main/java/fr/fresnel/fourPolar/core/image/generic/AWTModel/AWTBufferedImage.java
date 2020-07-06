@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.image.generic.AWTImageModel;
+package fr.fresnel.fourPolar.core.image.generic.AWTModel;
 
 import java.awt.image.BufferedImage;
 import java.util.stream.IntStream;
@@ -8,7 +8,7 @@ import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.AWTImageModel.type.BufferedImageTypes;
+import fr.fresnel.fourPolar.core.image.generic.AWTModel.type.BufferedImageTypes;
 import fr.fresnel.fourPolar.core.image.generic.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 
@@ -40,10 +40,11 @@ abstract class AWTBufferedImage<T extends PixelType> implements Image<T> {
     private final long _totalNumPlanes;
 
     protected AWTBufferedImage(IMetadata metadata, BufferedImageTypes imageType, ImageFactory factory) {
-        _images = _createBuffreredImageArray(metadata, imageType);
         _metadata = metadata;
-        _nPlanesPerDim = _nPlanesPerDim();
         _factory = factory;
+
+        _nPlanesPerDim = _nPlanesPerDim();
+        _images = _createBuffreredImageArray(metadata, imageType);
         _totalNumPlanes = MetadataUtil.getNPlanes(metadata);
 
     }
