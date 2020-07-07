@@ -11,10 +11,36 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
  */
 public interface IVector {
     /**
+     * Creates a concrete vector that has a point shape, with the same fill and
+     * boundary color, and stroke width equal to one.
+     * 
+     * @param pointShape is the point shape.
      * @return a concrete vector.
      */
-    public static IVector createPointVector() {
+    public static IVector createPointVector(IPointShape pointShape, ARGB8 color) {
+        return new Vector(pointShape, color);
+    }
 
+    /**
+     * Creates a concrete vector that has a line shape, with the same fill and
+     * boundary color, and stroke width equal to one.
+     * 
+     * @param lineShape is the line shape.
+     * @return a concrete vector.
+     */
+    public static IVector createLineVector(ILineShape lineShape, ARGB8 color) {
+        return new Vector(lineShape, color);
+    }
+
+    /**
+     * Creates a concrete vector that has a box shape, with the same fill and
+     * boundary color, and stroke width equal to one.
+     * 
+     * @param boxShape is the line shape.
+     * @return a concrete vector.
+     */
+    public static IVector createBoxVector(IBoxShape boxShape, ARGB8 color) {
+        return new Vector(boxShape, color);
     }
 
     /**
