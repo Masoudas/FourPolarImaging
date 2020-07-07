@@ -11,6 +11,13 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
  */
 public interface IVector {
     /**
+     * @return a concrete vector.
+     */
+    public static IVector createPointVector() {
+
+    }
+
+    /**
      * @return the shape associated with this vector.
      */
     public IShape shape();
@@ -32,9 +39,6 @@ public interface IVector {
 
     /**
      * Sets the shape of this vector as a point shape.
-     * 
-     * @throws IllegalArgumentException if the {@link AxisOrder} of the point is not
-     *                                  the same as the underlying image.
      */
     public void setShape(IPointShape shape);
 
@@ -44,10 +48,6 @@ public interface IVector {
      * order has to be equal to the underlying image. Hence for example a cube
      * cannot be drawn, however a the 2D rectangle [0,0,1]->[1,1,1] can.
      * 
-     * @throws IllegalArgumentException if the {@link AxisOrder} of the box is not
-     *                                  the same as the underlying image. Or in case
-     *                                  the dimension of the image is not equal to
-     *                                  two in the xy plane.
      */
     public void setShape(IBoxShape shape);
 
@@ -57,10 +57,6 @@ public interface IVector {
      * to be equal to the underlying image. Hence for example the line from [0,0,1]
      * to [1,1,1] can be drawn, however the line from [1,0,0] to [1,1,1] cannot.
      * 
-     * @throws IllegalArgumentException if the {@link AxisOrder} of the point is not
-     *                                  the same as the underlying image. Or in case
-     *                                  the dimension of the image is not equal to
-     *                                  two.
      */
     public void setShape(ILineShape shape);
 
@@ -70,9 +66,9 @@ public interface IVector {
     public void setColor(ARGB8 color);
 
     /**
-     * Set the fill color for this shape.
+     * Sets the fill color for this shape.
      */
-    public void setFill();
+    public void setFill(ARGB8 color);
 
     /**
      * Sets the stroke width of the vector.
