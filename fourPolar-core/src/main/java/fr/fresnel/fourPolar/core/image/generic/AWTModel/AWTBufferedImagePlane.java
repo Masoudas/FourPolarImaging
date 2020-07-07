@@ -22,7 +22,7 @@ class AWTBufferedImagePlane {
         _imagePlane = _createBufferedImage(xdim, ydim, pixelType);
     }
 
-    public BufferedImage _createBufferedImage(int xdim, int ydim, PixelType pixelType) {
+    private BufferedImage _createBufferedImage(int xdim, int ydim, PixelType pixelType) {
         BufferedImageTypes bufferedImageType = BufferedImageTypes.convertPixelTypes(pixelType.getType());
         return new BufferedImage(xdim, ydim, bufferedImageType.getBufferedType());
     }
