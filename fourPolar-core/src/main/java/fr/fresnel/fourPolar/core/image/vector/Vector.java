@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
  */
 public interface Vector {
     /**
-     * @return the shape of this vector.
+     * @return the shape associated with this vector.
      */
     public IShape shape();
 
