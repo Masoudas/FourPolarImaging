@@ -1,163 +1,172 @@
 package fr.fresnel.fourPolar.core.image.vector.filter;
 
+import java.util.Objects;
+import java.util.Optional;
+
 /**
  * Defines a blender filter that can be used for blending colors.
  */
 public class Blender implements Filter {
     /**
-     * Indicates the element that should be used as the source of blending
-     * operation.
-     */
-    public enum IN {
-        SOURCE_GRAPHIC {
-            public String value() {
-                return "SourceGraphic";
-            }
-        },
-        BACKGROUND_IMAGE {
-            public String value() {
-                return "BackgroundImage";
-            }
-        },
-        NO_SOURCE {
-            public String value() {
-                return null;
-            }
-        };
-
-        abstract public String value();
-    }
-
-    /**
      * Indicates possible blending modes.
      */
     public enum Mode {
         MULTIPLY {
-            public String value() {
+            public String modeAsString() {
                 return "multiply";
             }
         },
         Darken {
-            public String value() {
+            public String modeAsString() {
                 return "darken";
             }
         },
         Lighten {
-            public String value() {
+            public String modeAsString() {
                 return "lighten";
             }
         },
         COLOR_DODGE {
-            public String value() {
+            public String modeAsString() {
                 return "color-dodge";
             }
         },
         SCREEN {
-            public String value() {
+            public String modeAsString() {
                 return "screean";
             }
         },
         OVERLAY {
-            public String value() {
+            public String modeAsString() {
                 return "overlay";
             }
         },
         COLOR_BURN {
-            public String value() {
+            public String modeAsString() {
                 return "color-burn";
             }
 
         },
         HARD_LIGHT {
-            public String value() {
+            public String modeAsString() {
                 return "hard-light";
             }
         },
         SOFT_LIGHT {
-            public String value() {
+            public String modeAsString() {
                 return "soft-light";
             }
         },
         DIFFERENCE {
             @Override
-            public String value() {
+            public String modeAsString() {
                 return "difference";
             }
 
         },
         EXCLUSION {
-            public String value() {
+            public String modeAsString() {
                 return "exclusion";
             }
         },
         HUE {
             @Override
-            public String value() {
+            public String modeAsString() {
                 return "hue";
             }
 
         },
         SATURATION {
             @Override
-            public String value() {
+            public String modeAsString() {
                 return "saturation";
             }
         },
         COLOR {
             @Override
-            public String value() {
+            public String modeAsString() {
                 return "color";
             }
 
         },
         LUMINOSITY {
             @Override
-            public String value() {
+            public String modeAsString() {
                 return "luminosity";
             }
         };
 
-        abstract public String value();
+        abstract public String modeAsString();
     }
 
-    private final IN _in;
-    private final IN _in2;
-    private final Mode _mode;
+    private final String _in;
+    private final String _in2;
+    private final String _mode;
+    private final String _result;
 
     /**
-     * Define a blender filter by defining two sources and a mode. First source
-     * can't be {@link IN#NO_SOURCE}. If second source is {@link IN#NO_SOURCE}, it
-     * would imply that no source is added.
+     * Define a blender filter by defining two sources and a mode. Non of the
+     * aforementioned parameters can be null. The resultName however can be set to
+     * null.
      * 
-     * @param in is blender in parameter.
-     * @param in2 is blender in2 parameter.
-     * @param mode is the blending mode.
+     * @param in         is feblender in parameter.
+     * @param mode       is feblender blending mode.
+     * @param resultName is the result name tag of the feblender. It must be set to
+     *                   null if no output tag is desired (and not empty string).
      */
-    public Blender(IN in, IN in2, Mode mode) {
-        _checkInIsNotNoSource(in);
+    public Blender(IN in, Mode mode, String resultName) {
+        Objects.requireNonNull(in, "in can't be null.");
+        Objects.requireNonNull(mode, "mode can't be null.");
 
-        _in = in;
-        _in2 = in2;
-        _mode = mode;
+        _in = in.asString();
+        _in2 = null;
+        _mode = mode.modeAsString();
+        _result = resultName;
 
     }
 
-    public void _checkInIsNotNoSource(IN in) {
-        if (in == IN.NO_SOURCE){
-            throw new IllegalArgumentException("in can't be no source.");
-        }
-        
+    /**
+     * Define a blender filter by defining two sources and a mode. Non of the
+     * aforementioned parameters can be null. The resultName however can be set to
+     * null.
+     * 
+     * @param in         is feblender in parameter.
+     * @param in2        is feblender in2 parameter.
+     * @param mode       is feblender blending mode.
+     * @param resultName is the result name tag of the feblender. It must be set to
+     *                   null if no output tag is desired (and not empty string).
+     */
+    public Blender(IN in, IN in2, Mode mode, String resultName) {
+        Objects.requireNonNull(in, "in can't be null.");
+        Objects.requireNonNull(in2, "in2 can't be null.");
+        Objects.requireNonNull(mode, "mode can't be null.");
+
+        _in = in.asString();
+        _in2 = in2.asString();
+        _mode = mode.modeAsString();
+        _result = resultName;
+
     }
 
-    public IN in() {
+    /**
+     * @return the blending mode as string.
+     */
+    public String mode() {
+        return _mode;
+    }
+
+    @Override
+    public String in() {
         return _in;
     }
 
-    public IN in2() {
-        return _in2;
+    @Override
+    public Optional<String> in2() {
+        return Optional.ofNullable(_in2);
     }
 
-    public Mode mode() {
-        return _mode;
+    @Override
+    public Optional<String> resultName() {
+        return Optional.ofNullable(_result);
     }
 }
