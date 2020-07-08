@@ -12,8 +12,8 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
 /**
  * A set of static methods for converting an {@link IShape} to java AWT shapes.
  */
-class ShapeConverter {
-    private ShapeConverter() {
+class ShapeToAWTShapeConverter {
+    private ShapeToAWTShapeConverter() {
         throw new AssertionError();
     }
 
