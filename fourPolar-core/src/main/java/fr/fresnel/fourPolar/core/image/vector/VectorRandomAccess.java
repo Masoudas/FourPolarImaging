@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.core.image.vector;
 import java.util.RandomAccess;
 
 /**
- * An interface for randomly accessing the underlying {@link IVector} of the
+ * An interface for randomly accessing the underlying {@link Vector} of the
  * {@link VectorImage}.
  */
 public interface VectorRandomAccess extends RandomAccess {
@@ -16,6 +16,6 @@ public interface VectorRandomAccess extends RandomAccess {
     /**
      * Sets the vector of the given position.
      */
-    public void setVector(IVector vector);
+    public void setVector(Vector vector);
 
 }
