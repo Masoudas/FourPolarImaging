@@ -3,7 +3,6 @@ package fr.fresnel.fourPolar.core.image.vector;
 import java.util.Optional;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
-import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ILineShape;
 import fr.fresnel.fourPolar.core.util.shape.IPointShape;
@@ -111,7 +110,9 @@ public interface IVector {
 
     /**
      * Sets the filter composite that should be applied to this element. If the
-     * filter is not set, the optional in {@link #getFilter()} would be empty.
+     * filter is not set, the optional in {@link #getFilter()} would be empty. It's
+     * the responsibility of the caller to ensure that the filter is defined in the
+     * SVG document, otherwise adding the filter has no effect on the element.
      */
     public void setFilter(FilterComposite composite);
 }
