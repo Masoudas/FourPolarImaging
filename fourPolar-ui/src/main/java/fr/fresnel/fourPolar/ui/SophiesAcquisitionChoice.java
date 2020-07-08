@@ -28,7 +28,7 @@ import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadata
  * dimension as image.
  * 
  */
-public class SohpiesAcquisitionChoice {
+public class SophiesAcquisitionChoice {
     static String rootFolder = "/home/masoud";
     static String fileName = "UnknownAxis.tif";
 
