@@ -35,20 +35,6 @@ class DefaultVector implements Vector {
     }
 
     /**
-     * Constructs the vector with a point shape, setting its color equal to fill
-     * color, and stroke width equal to 1.
-     * 
-     * @param pointShape is the point shape of the vector.
-     * @param color      is the color of the vector
-     */
-    DefaultVector(IPointShape pointShape, ARGB8 color) {
-        this(color);
-
-        Objects.requireNonNull(pointShape, "pointShape can't be null");
-        _shape = pointShape;
-    }
-
-    /**
      * Constructs the vector with a line shape, setting its color equal to fill
      * color, and stroke width equal to 1.
      * 
@@ -92,13 +78,6 @@ class DefaultVector implements Vector {
     @Override
     public int strokeWidth() {
         return this._strokeWidth;
-    }
-
-    @Override
-    public void setShape(IPointShape point) {
-        Objects.requireNonNull(point, "point shape can't be null");
-
-        this._shape = point;
     }
 
     @Override

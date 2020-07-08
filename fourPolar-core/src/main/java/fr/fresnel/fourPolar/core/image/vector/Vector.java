@@ -13,17 +13,6 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
  */
 public interface Vector {
     /**
-     * Creates a concrete vector that has a point shape, with the same fill and
-     * boundary color, and stroke width equal to one.
-     * 
-     * @param pointShape is the point shape.
-     * @return a concrete vector.
-     */
-    public static Vector createPointVector(IPointShape pointShape, ARGB8 color) {
-        return new DefaultVector(pointShape, color);
-    }
-
-    /**
      * Creates a concrete vector that has a line shape, with the same fill and
      * boundary color, and stroke width equal to one.
      * 
@@ -69,11 +58,6 @@ public interface Vector {
      * @return the stroke width of this vector.
      */
     public int strokeWidth();
-
-    /**
-     * Sets the shape of this vector as a point shape.
-     */
-    public void setShape(IPointShape shape);
 
     /**
      * Sets the shape of this vector as a box shape. To draw a box shape, the
