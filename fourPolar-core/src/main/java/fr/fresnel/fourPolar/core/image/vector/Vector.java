@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.core.image.vector;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
@@ -14,6 +15,8 @@ class Vector implements IVector {
     private ARGB8 _fillColor;
     private int _strokeWidth;
 
+    private FilterComposite _filterComposite;
+
     /**
      * Private constructor for setting colors and stroke width. Sets fill color
      * equal to color, and stroke with to 1.
@@ -24,6 +27,8 @@ class Vector implements IVector {
         _color = color;
         _fillColor = color;
         _strokeWidth = 1;
+
+        _filterComposite = null;
     }
 
     /**
@@ -35,7 +40,7 @@ class Vector implements IVector {
      */
     Vector(IPointShape pointShape, ARGB8 color) {
         this(color);
-        
+
         Objects.requireNonNull(pointShape, "pointShape can't be null");
         _shape = pointShape;
     }
@@ -121,8 +126,17 @@ class Vector implements IVector {
 
     @Override
     public void setStrokeWidth(int width) {
-        // TODO Auto-generated method stub
+        this._strokeWidth = width;
+    }
 
+    @Override
+    public Optional<FilterComposite> filter() {
+        return Optional.ofNullable(_filterComposite);
+    }
+
+    @Override
+    public void setFilter(FilterComposite composite) {
+        _filterComposite = composite;
     }
 
 }
