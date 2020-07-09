@@ -16,7 +16,7 @@ public enum AnimationEvents {
     };
 
     /**
-     * @return event as an string that can be written in svg document.
+     * @return event as an string that can be used as an svg attribute.
      */
     public abstract String eventAsString();
 }
