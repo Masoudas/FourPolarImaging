@@ -1,9 +1,7 @@
-package fr.fresnel.fourPolar.core.image.vector;
+package fr.fresnel.fourPolar.core.image.vector.filter;
 
 import java.util.Iterator;
 import java.util.Optional;
-
-import fr.fresnel.fourPolar.core.image.vector.filter.Filter;
 
 /**
  * As we know, each filter element in SVG consists of at least one sub-filter

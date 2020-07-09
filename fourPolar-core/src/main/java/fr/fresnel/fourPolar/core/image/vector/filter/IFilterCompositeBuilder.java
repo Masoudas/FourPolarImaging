@@ -1,8 +1,6 @@
-package fr.fresnel.fourPolar.core.image.vector;
+package fr.fresnel.fourPolar.core.image.vector.filter;
 
 import java.util.List;
-
-import fr.fresnel.fourPolar.core.image.vector.filter.Filter;
 
 /**
  * A private interface for accessing the parameters of the

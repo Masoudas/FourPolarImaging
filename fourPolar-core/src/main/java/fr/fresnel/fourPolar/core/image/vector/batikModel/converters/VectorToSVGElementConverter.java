@@ -4,8 +4,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.svg.SVGDocument;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
-import fr.fresnel.fourPolar.core.image.vector.FilterComposite;
 import fr.fresnel.fourPolar.core.image.vector.Vector;
+import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ILineShape;
 import fr.fresnel.fourPolar.core.util.shape.IShape;

@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
+import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ILineShape;
 import fr.fresnel.fourPolar.core.util.shape.IPointShape;

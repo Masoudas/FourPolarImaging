@@ -1,10 +1,8 @@
-package fr.fresnel.fourPolar.core.image.vector;
+package fr.fresnel.fourPolar.core.image.vector.filter;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-
-import fr.fresnel.fourPolar.core.image.vector.filter.Filter;
 
 /**
  * A concrete implementation of {@link CompositeFilter}.
