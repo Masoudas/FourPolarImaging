@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.image.vector.batikModel.converters;
+package fr.fresnel.fourPolar.core.image.vector.batikModel.converters.filter;
 
 import org.w3c.dom.svg.SVGDocument;
 
