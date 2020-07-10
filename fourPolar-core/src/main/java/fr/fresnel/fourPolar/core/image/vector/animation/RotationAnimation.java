@@ -97,9 +97,12 @@ public class RotationAnimation implements Animation {
         return _beginEvent.eventAsString();
     }
 
+    /**
+     * The s is added to indicate seconds.
+     */
     @Override
     public String dur() {
-        return String.valueOf(_duration);
+        return String.valueOf(_duration) + "s";
     }
 
     @Override
