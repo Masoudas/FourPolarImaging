@@ -3,10 +3,10 @@ package fr.fresnel.fourPolar.core.image.vector;
 import java.util.Optional;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
+import fr.fresnel.fourPolar.core.image.vector.animation.Animation;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ILineShape;
-import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 
 /**
@@ -61,6 +61,11 @@ public interface Vector {
     public int strokeWidth();
 
     /**
+     * @return the animation associated with this vector.
+     */
+    public Optional<Animation> animation();
+
+    /**
      * Sets the shape of this vector as a box shape. To draw a box shape, the
      * dimension of the box has to be two and in the xy-plane. Note however the axis
      * order has to be equal to the underlying image. Hence for example a cube
@@ -95,9 +100,16 @@ public interface Vector {
 
     /**
      * Sets the filter composite that should be applied to this element. If the
-     * filter is not set, the optional in {@link #getFilter()} would be empty. It's
-     * the responsibility of the caller to ensure that the filter is defined in the
-     * SVG document, otherwise adding the filter has no effect on the element.
+     * filter is not set, the optional in {@link #filter()} would be empty. It's the
+     * responsibility of the caller to ensure that the filter is defined in the SVG
+     * document, otherwise adding the filter has no effect on the element.
      */
     public void setFilter(FilterComposite composite);
+
+    /**
+     * Sets an animation for this vector. The animation would solely be applied to
+     * this vector. If animation is not set, the {@link #animation()} optional would
+     * be empty.
+     */
+    public void setAnimation(Animation animation);
 }
