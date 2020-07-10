@@ -6,7 +6,7 @@ import java.util.Optional;
 /**
  * Defines a blender filter that can be used for blending colors.
  */
-public class Blender implements Filter {
+public class BlenderFilter implements Filter {
     /**
      * Indicates possible blending modes.
      */
@@ -114,7 +114,7 @@ public class Blender implements Filter {
      * @param resultName is the result name tag of the feblender. It must be set to
      *                   null if no output tag is desired (and not empty string).
      */
-    public Blender(IN in, Mode mode, String resultName) {
+    public BlenderFilter(IN in, Mode mode, String resultName) {
         Objects.requireNonNull(in, "in can't be null.");
         Objects.requireNonNull(mode, "mode can't be null.");
 
@@ -136,7 +136,7 @@ public class Blender implements Filter {
      * @param resultName is the result name tag of the feblender. It must be set to
      *                   null if no output tag is desired (and not empty string).
      */
-    public Blender(IN in, IN in2, Mode mode, String resultName) {
+    public BlenderFilter(IN in, IN in2, Mode mode, String resultName) {
         Objects.requireNonNull(in, "in can't be null.");
         Objects.requireNonNull(in2, "in2 can't be null.");
         Objects.requireNonNull(mode, "mode can't be null.");
