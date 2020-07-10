@@ -85,7 +85,7 @@ public class ImageJ1LineShape implements ILineShape {
         double cosSlopeAngle = Math.cos(slopeAngle);
 
         double[] xyStart = new double[2];
-        xyStart[0] = position[0] - cosSlopeAngle * ((length - 1) / 2);
+        xyStart[0] = position[0] - cosSlopeAngle * (length / 2d);
         xyStart[1] = position[1] + (xyStart[0] - position[0]) * slope;
 
         return xyStart;
@@ -96,7 +96,7 @@ public class ImageJ1LineShape implements ILineShape {
         double cosSlopeAngle = Math.cos(slopeAngle);
 
         double[] xyEnd = new double[2];
-        xyEnd[0] = position[0] + cosSlopeAngle * (length / 2);
+        xyEnd[0] = position[0] + cosSlopeAngle * (length / 2d);
         xyEnd[1] = position[1] + (xyEnd[0] - position[0]) * slope;
 
         return xyEnd;
@@ -165,11 +165,17 @@ public class ImageJ1LineShape implements ILineShape {
 
     @Override
     public long[] lineStart() {
-        return new long[] { _line.x1, _line.y1 };
+        long[] start = Arrays.stream(_position).mapToLong(t->(long)t).toArray();
+        start[0] = _line.x1;
+        start[1] = _line.y1;
+        return start;
     }
 
     @Override
     public long[] lineEnd() {
-        return new long[] { _line.x2, _line.y2 };
+        long[] end = Arrays.stream(_position).mapToLong(t->(long)t).toArray();
+        end[0] = _line.x2;
+        end[1] = _line.y2;
+        return end;
     }
 }
