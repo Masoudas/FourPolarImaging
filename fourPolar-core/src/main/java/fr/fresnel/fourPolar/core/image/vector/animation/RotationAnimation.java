@@ -98,7 +98,7 @@ public class RotationAnimation implements Animation {
     }
 
     @Override
-    public String duration() {
+    public String dur() {
         return String.valueOf(_duration);
     }
 
@@ -126,4 +126,16 @@ public class RotationAnimation implements Animation {
         return _TYPE;
     }
 
+    /**
+     * @return the "values" attribute of animation.
+     */
+    public String values() {
+        StringBuilder builder = new StringBuilder();
+        for (int degree : _rotationInDegree) {
+            builder.append(String.valueOf(degree) + " " + String.valueOf(_x_rotationCenter) + " "
+                    + String.valueOf(_y_rotationCenter) + ";");
+        }
+
+        return builder.toString();
+    }
 }
