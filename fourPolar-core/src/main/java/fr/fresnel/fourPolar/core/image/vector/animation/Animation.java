@@ -14,11 +14,11 @@ public interface Animation {
     public void setBegin(AnimationEvents event);
 
     /**
-     * Sets the beginning of animation as an animation event.
+     * Sets the duration of animation in seconds.
      * 
-     * @param event is the event that fires the animation.
+     * @param duration is the animation duration in seconds.
      */
-    public void setDuration(AnimationEvents event);
+    public void setDuration(double duration);
 
     /**
      * Sets the number of times the animation should be repeated.
@@ -35,22 +35,22 @@ public interface Animation {
     public void setEnd(AnimationEvents event);
 
     /**
-     * @return the beginning of animation attribute as an string.
+     * @return the "begin" attribute of animation as an string.
      */
     public String begin();
 
     /**
-     * @return the duration of animation attribute as an string.
+     * @return the "dur" attribure of animation element.
      */
-    public String duration();
+    public String dur();
 
     /**
-     * @return the end of animation attribute as an string or empty otherwise.
+     * @return the "end" attribute of animation as an string or empty otherwise.
      */
     public Optional<String> end();
 
     /**
-     * @return the repetition counr of animation attribute as an string or empty
+     * @return the "repeatCount" attribute of animation as an string or empty
      *         otherwise.
      */
     public Optional<String> repeatCount();
