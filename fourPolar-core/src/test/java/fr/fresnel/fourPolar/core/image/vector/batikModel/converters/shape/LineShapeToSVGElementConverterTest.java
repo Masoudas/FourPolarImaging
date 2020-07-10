@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.batik.anim.dom.SVGDOMImplementation;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.svg.SVGDocument;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
