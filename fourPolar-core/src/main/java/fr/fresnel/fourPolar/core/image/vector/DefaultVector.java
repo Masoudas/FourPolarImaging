@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
+import fr.fresnel.fourPolar.core.image.vector.animation.Animation;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.shape.ILineShape;
@@ -18,6 +19,7 @@ class DefaultVector implements Vector {
     private ARGB8 _color;
     private ARGB8 _fillColor;
     private int _strokeWidth;
+    private Animation _animation;
 
     private FilterComposite _filterComposite;
 
@@ -33,6 +35,7 @@ class DefaultVector implements Vector {
         _strokeWidth = 1;
 
         _filterComposite = null;
+        _animation = null;
     }
 
     /**
@@ -82,6 +85,11 @@ class DefaultVector implements Vector {
     }
 
     @Override
+    public Optional<Animation> animation() {
+        return Optional.ofNullable(_animation);
+    }
+
+    @Override
     public void setShape(IBoxShape box) {
         Objects.requireNonNull(box, "box shape can't be null");
 
@@ -120,6 +128,11 @@ class DefaultVector implements Vector {
     @Override
     public void setFilter(FilterComposite composite) {
         _filterComposite = composite;
+    }
+
+    @Override
+    public void setAnimation(Animation animation) {
+        this._animation = animation;
     }
 
 }
