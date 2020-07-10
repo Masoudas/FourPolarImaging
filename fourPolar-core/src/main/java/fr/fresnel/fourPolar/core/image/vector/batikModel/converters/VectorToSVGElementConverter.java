@@ -5,9 +5,9 @@ import org.w3c.dom.svg.SVGDocument;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.vector.Vector;
+import fr.fresnel.fourPolar.core.image.vector.batikModel.converters.animation.AnimationToSVGElementConverter;
+import fr.fresnel.fourPolar.core.image.vector.batikModel.converters.shape.ShapeToSVGElementConverter;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
-import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
-import fr.fresnel.fourPolar.core.util.shape.ILineShape;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 
 /**
@@ -20,132 +20,87 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
 class VectorToSVGElementConverter {
 
     public void convert(SVGDocument svgDocument, String namespaceURI, Vector vector) {
-        Element vectorElement = _createElementBasedOnVectorShape(svgDocument, namespaceURI, vector);
+        Element vectorElement = _createElementBasedOnVectorShape(svgDocument, namespaceURI, vector.shape());
 
-        _setElementFillColor(vectorElement, namespaceURI, vector);
-        _setElementOpacity(vectorElement, namespaceURI, vector);
-        _setElementStrokeColor(vectorElement, namespaceURI, vector);
+        _setVectorAttributes(vectorElement, vector);
+        _setVectorAnimation(svgDocument, vectorElement, vector);
+        _appendVectorElementToDocumentElement(svgDocument, vectorElement);
+    }
 
-        vector.filter().ifPresent((filter) -> _setElementFilter(vectorElement, namespaceURI, filter));
-
+    private void _appendVectorElementToDocumentElement(SVGDocument svgDocument, Element vectorElement) {
         svgDocument.getDocumentElement().appendChild(vectorElement);
     }
 
     /**
+     * Adds all the attributes related to the vector element, such as fill, stroke
+     * width and so forth.
+     */
+    private void _setVectorAttributes(Element vectorElement, Vector vector) {
+        _setElementFillColor(vectorElement, vector);
+        _setElementOpacity(vectorElement, vector);
+        _setElementStrokeColor(vectorElement, vector);
+
+        vector.filter().ifPresent((filter) -> _setElementFilter(vectorElement, filter));
+    }
+
+    /**
+     * Set the vector animation, if such an animation exists.
+     */
+    private void _setVectorAnimation(SVGDocument svgDocument, Element vectorElement, Vector vector) {
+        vector.animation().ifPresent(anim -> AnimationToSVGElementConverter.convert(svgDocument, vectorElement, anim));
+    }
+
+    /**
      * Create the element based on the shape interface that is at the backend of
-     * this vector
-     * 
-     * @param svgDocument  is the source svg document
-     * @param namespaceURI is the name space of the document
-     * @param vectorShape  is the backend shape of this vector
-     * @return an SVG element corresponding to this shape.
+     * this vector using the shape converter.
      */
     private Element _createElementBasedOnVectorShape(SVGDocument svgDocument, String namespaceURI, IShape vectorShape) {
-        if (vectorShape instanceof ILineShape) {
-            return _createLineGraphicElement(svgDocument, namespaceURI, (ILineShape) vectorShape);
-        } else if (vectorShape instanceof IBoxShape) {
-            return _createRectangleGraphicElement(svgDocument, namespaceURI, (IBoxShape) vectorShape);
-        } else {
-            throw new IllegalArgumentException(
-                    "Can't convert the given shape because no suitable svg element is found.");
-        }
-
-    }
-
-    /**
-     * Converts a box shape to a {@link Rectangle}. Only the first two coordinates
-     * are used to create the rectangle element.
-     * 
-     * @param svgDocument  is the source svg document
-     * @param namespaceURI is the name space of the document
-     * @param boxShape     is the box shape.
-     * 
-     * @return an svg element that is a rectangle.
-     */
-    private Element _createRectangleGraphicElement(SVGDocument svgDocument, String namespaceURI, IBoxShape boxShape) {
-        Element rectangleElement = svgDocument.createElementNS(namespaceURI, "rect");
-
-        long[] rectangleMin = boxShape.min();
-        long[] rectangleMax = boxShape.max();
-
-        rectangleElement.setAttributeNS(namespaceURI, "x", String.valueOf(rectangleMin[0]));
-        rectangleElement.setAttributeNS(namespaceURI, "y", String.valueOf(rectangleMin[1]));
-        rectangleElement.setAttributeNS(namespaceURI, "width", String.valueOf(rectangleMax[0] - rectangleMin[0]));
-        rectangleElement.setAttributeNS(namespaceURI, "height", String.valueOf(rectangleMax[1] - rectangleMin[1]));
-
-        return rectangleElement;
-    }
-
-    /**
-     * Converts a line shape to a {@link Line2D}. Only the first two coordinates *
-     * are used to create the rectangle element.
-     * 
-     * @param svgDocument  is the source svg document.
-     * @param namespaceURI is the name space of the document.
-     * @param lineShape    is the line shape.
-     * @return an svg element that is a line.
-     */
-    private Element _createLineGraphicElement(SVGDocument svgDocument, String namespaceURI, ILineShape lineShape) {
-        Element lineElement = svgDocument.createElementNS(namespaceURI, "line");
-
-        long[] start = lineShape.lineStart();
-        long[] end = lineShape.lineEnd();
-
-        lineElement.setAttributeNS(namespaceURI, "x1", String.valueOf(start[0]));
-        lineElement.setAttributeNS(namespaceURI, "y1", String.valueOf(start[1]));
-        lineElement.setAttributeNS(namespaceURI, "x2", String.valueOf(end[0]));
-        lineElement.setAttributeNS(namespaceURI, "y2", String.valueOf(end[1]));
-
-        return lineElement;
+        return ShapeToSVGElementConverter.convert(svgDocument, namespaceURI, vectorShape);
     }
 
     /**
      * Sets the fill color, from the {@link Vector#fillColor()} of vector.
      * 
-     * @param element      is the SVG document element.
-     * @param namespaceURI is the document name space.
-     * @param vector       is the vector to be converted.
+     * @param vectorElement is the SVG document element.
+     * @param namespaceURI  is the document name space.
+     * @param vector        is the vector to be converted.
      */
-    private void _setElementFillColor(Element element, String namespaceURI, Vector vector) {
+    private void _setElementFillColor(Element vectorElement, Vector vector) {
         String fillColorAsString = _getRGBColorAsString(vector.fill());
-        element.setAttributeNS(namespaceURI, "fill", fillColorAsString);
+        vectorElement.setAttributeNS(vectorElement.getNamespaceURI(), "fill", fillColorAsString);
     }
 
     /**
      * Sets the stroke color, from the {@link Vector#color()} of vector.
      * 
-     * @param element      is the SVG document element.
-     * @param namespaceURI is the document name space.
-     * @param vector       is the vector to be converted.
+     * @param vectorElement is the SVG document element.
+     * @param vector        is the vector to be converted.
      */
-    private void _setElementStrokeColor(Element element, String namespaceURI, Vector vector) {
+    private void _setElementStrokeColor(Element vectorElement, Vector vector) {
         String colorAsString = _getRGBColorAsString(vector.color());
-        element.setAttributeNS(namespaceURI, "stroke", colorAsString);
+        vectorElement.setAttributeNS(vectorElement.getNamespaceURI(), "stroke", colorAsString);
     }
 
     /**
      * Sets the element opacity, using the {@link Vector#color()} alpha value.
      * 
-     * @param element      is the SVG document element.
-     * @param namespaceURI is the document name space.
-     * @param vector       is the vector to be converted.
+     * @param vectorElement is the SVG document element.
+     * @param vector        is the vector to be converted.
      */
-    private void _setElementOpacity(Element element, String namespaceURI, Vector vector) {
+    private void _setElementOpacity(Element vectorElement, Vector vector) {
         String opacityAsString = _getOpacityAsString(vector.color());
-        element.setAttributeNS(namespaceURI, "opacity", opacityAsString);
+        vectorElement.setAttributeNS(vectorElement.getNamespaceURI(), "opacity", opacityAsString);
     }
 
     /**
      * Sets the element filter.
      * 
-     * @param element      is the SVG document element.
-     * @param namespaceURI is the document name space.
-     * @param vector       is the vector to be converted.
+     * @param vectorElement is the SVG document element.
+     * @param vector        is the vector to be converted.
      */
-    private void _setElementFilter(Element element, String namespaceURI, FilterComposite filterComposite) {
+    private void _setElementFilter(Element vectorElement, FilterComposite filterComposite) {
         String filterId = filterComposite.id();
-        element.setAttributeNS(namespaceURI, "filter", "url(#" + filterId + ")");
-
+        vectorElement.setAttributeNS(vectorElement.getNamespaceURI(), "filter", "url(#" + filterId + ")");
     }
 
     /**
