@@ -30,7 +30,7 @@ class BoxShapeToSVGElementConverter {
      * 
      * @return an svg element that is a rectangle.
      */
-    public static Element convert(SVGDocument svgDocument, String namespaceURI, IBoxShape boxShape) {
+    public static Element convert(IBoxShape boxShape, SVGDocument svgDocument, String namespaceURI) {
         Element rectangleElement = svgDocument.createElementNS(namespaceURI, _ELEMENT_TAG);
 
         long[] rectangleMin = boxShape.min();

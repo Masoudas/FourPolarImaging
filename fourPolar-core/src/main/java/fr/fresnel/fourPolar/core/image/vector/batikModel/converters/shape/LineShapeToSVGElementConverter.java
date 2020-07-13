@@ -22,7 +22,7 @@ public class LineShapeToSVGElementConverter {
      * @param lineShape    is the line shape.
      * @return an svg element that is a line.
      */
-    public static Element convert(SVGDocument svgDocument, String namespaceURI, ILineShape lineShape) {
+    public static Element convert(ILineShape lineShape, SVGDocument svgDocument, String namespaceURI) {
         Element lineElement = svgDocument.createElementNS(namespaceURI, _ELEMENT_TAG);
 
         long[] start = lineShape.lineStart();

@@ -30,11 +30,11 @@ public class ShapeToSVGElementConverter {
      * @throws IllegalArgumentException in case no converter is found for the shape
      *                                  of the vector.
      */
-    public static Element convert(SVGDocument svgDocument, String namespaceURI, IShape shape) {
+    public static Element convert(IShape shape, SVGDocument svgDocument, String namespaceURI) {
         if (shape instanceof ILineShape) {
-            return LineShapeToSVGElementConverter.convert(svgDocument, namespaceURI, (ILineShape) shape);
+            return LineShapeToSVGElementConverter.convert((ILineShape) shape, svgDocument, namespaceURI);
         } else if (shape instanceof IBoxShape) {
-            return BoxShapeToSVGElementConverter.convert(svgDocument, namespaceURI, (IBoxShape) shape);
+            return BoxShapeToSVGElementConverter.convert((IBoxShape) shape, svgDocument, namespaceURI);
         } else {
             throw new IllegalArgumentException(
                     "Can't convert the given shape because no suitable shape converter is found.");
