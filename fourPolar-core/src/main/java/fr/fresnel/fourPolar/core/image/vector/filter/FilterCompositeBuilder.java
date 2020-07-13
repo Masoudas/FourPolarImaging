@@ -35,32 +35,40 @@ public class FilterCompositeBuilder extends IFilterCompositeBuilder {
      * @param x is the x start position of the filter. If negative, it will be set
      *          to empty.
      */
-    public void xStart(int x) {
+    public FilterCompositeBuilder xStart(int x) {
         _xStart = x;
+
+        return this;
     }
 
     /**
      * @param y is the y start position of the filter. If negative, it will be set
      *          to empty.
      */
-    public void yStart(int y) {
+    public FilterCompositeBuilder yStart(int y) {
         _yStart = y;
+
+        return this;
     }
 
     /**
      * @param percent is the width percentage of where the filter is applied. If
      *                negative, it will be set to empty.
      */
-    public void widthPercent(int percent) {
+    public FilterCompositeBuilder widthPercent(int percent) {
         _widthPercent = percent;
+
+        return this;
     }
 
     /**
      * @param percent is the height percentage of where the filter is applied. If
      *                negative, it will be set to empty.
      */
-    public void heightPercent(int percent) {
+    public FilterCompositeBuilder heightPercent(int percent) {
         _heightPercent = percent;
+
+        return this;
     }
 
     /**
@@ -69,10 +77,12 @@ public class FilterCompositeBuilder extends IFilterCompositeBuilder {
      * 
      * @param filter is the new filter.
      */
-    public void addFilter(Filter filter) {
+    public FilterCompositeBuilder addFilter(Filter filter) {
         Objects.requireNonNull(filter);
 
         _filters.add(filter);
+
+        return this;
     }
 
     public FilterComposite build() {
