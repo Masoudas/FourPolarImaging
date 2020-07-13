@@ -17,7 +17,7 @@ class RotationAnimationToSVGElementConverter {
     private static final String _ATTRIBUTE_NAME_ATTR = "attributeName";
     private static final String _TYPE_ATTR = "type";
     private static final String _VALUES_ATTR = "values";
-    private static final String _BEGIN_ATTR = "mouseover";
+    private static final String _BEGIN_ATTR = "begin";
     private static final String _DUR_ATTR = "dur";
     private static final String _REPEAT_COUNT_ATTR = "repeatCount";
     private static final String _END_ATTR = "end";
