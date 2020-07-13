@@ -43,7 +43,7 @@ class FilterCompositeToSVGElementConverter {
 
         Element filterCompositeElement = _createFilterElementAsDocumentElementChild(svgDocument, namespaceURI);
         _addFilterAttributes(composite, filterCompositeElement, namespaceURI);
-        _addFilterAttributes(composite, filterCompositeElement, namespaceURI);
+        _addFiltersOfComposite(composite, filterCompositeElement, svgDocument);
     }
 
     private static Element _createFilterElementAsDocumentElementChild(SVGDocument svgDocument, String namespaceURI) {
@@ -75,7 +75,7 @@ class FilterCompositeToSVGElementConverter {
     /**
      * Add filters of this composite to the filter element.
      */
-    private void _addFiltersOfComposite(FilterComposite composite, Element filterCompositeElement,
+    private static void _addFiltersOfComposite(FilterComposite composite, Element filterCompositeElement,
             SVGDocument document) {
         for (Iterator<Filter> filterItr = composite.filters(); filterItr.hasNext();) {
             _addFilterAsFilterElementChild(filterItr.next(), filterCompositeElement, document);
@@ -85,7 +85,7 @@ class FilterCompositeToSVGElementConverter {
     private static void _addFilterAsFilterElementChild(Filter filter, Element filterCompositeElement,
             SVGDocument document) {
         if (filter instanceof BlenderFilter) {
-            BlenderFilterToSVGElementConverter.convert(filter, filterCompositeElement, document);
+            BlenderFilterToSVGElementConverter.convert((BlenderFilter)filter, filterCompositeElement, document);
         } else {
             throw new IllegalArgumentException("No converter to svg element was found for the given filter");
         }
