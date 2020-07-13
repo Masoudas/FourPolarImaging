@@ -23,7 +23,7 @@ class VectorToSVGElementConverter {
         Element vectorElement = _createElementBasedOnVectorShape(svgDocument, namespaceURI, vector.shape());
 
         _setVectorAttributes(vectorElement, vector);
-        _setVectorAnimation(svgDocument, vectorElement, vector);
+        _setVectorAnimation(vector, vectorElement, svgDocument);
         _appendVectorElementToDocumentElement(svgDocument, vectorElement);
     }
 
@@ -46,8 +46,9 @@ class VectorToSVGElementConverter {
     /**
      * Set the vector animation, if such an animation exists.
      */
-    private void _setVectorAnimation(SVGDocument svgDocument, Element vectorElement, Vector vector) {
-        vector.animation().ifPresent(anim -> AnimationToSVGElementConverter.convert(svgDocument, vectorElement, anim));
+    private void _setVectorAnimation(Vector vector, Element vectorElement, SVGDocument svgDocument) {
+        vector.animation()
+                .ifPresent(anim -> AnimationToSVGElementConverter.addToVectorElement(anim, vectorElement, svgDocument));
     }
 
     /**
