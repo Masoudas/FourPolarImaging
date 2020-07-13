@@ -67,7 +67,7 @@ class FilterCompositeToSVGElementConverter {
                 .ifPresent(yStart -> filterCompositeElement.setAttributeNS(namespaceURI, _Y_START_ATTR, yStart));
         composite.widthPercent()
                 .ifPresent(width -> filterCompositeElement.setAttributeNS(namespaceURI, _WIDTH_ATTR, width));
-        composite.widthPercent()
+        composite.heightPercent()
                 .ifPresent(height -> filterCompositeElement.setAttributeNS(namespaceURI, _HEIGHT_ATTR, height));
 
     }
