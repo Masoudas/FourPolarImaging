@@ -26,6 +26,9 @@ public class ShapeToSVGElementConverter {
      * @param namespaceURI is the name space of the document
      * @param vectorShape  is the backend shape of this vector
      * @return an SVG element corresponding to this shape.
+     * 
+     * @throws IllegalArgumentException in case no converter is found for the shape
+     *                                  of the vector.
      */
     public static Element convert(SVGDocument svgDocument, String namespaceURI, IShape shape) {
         if (shape instanceof ILineShape) {
