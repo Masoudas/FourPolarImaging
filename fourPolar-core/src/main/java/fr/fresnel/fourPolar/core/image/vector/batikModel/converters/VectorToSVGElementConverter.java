@@ -141,7 +141,7 @@ class VectorToSVGElementConverter {
      * @param vector        is the vector to be converted.
      */
     private static void _setElementFilter(Element vectorElement, Vector vector) {
-        if (vector.fill().isPresent()) {
+        if (vector.filter().isPresent()) {
             String filterId = vector.filter().get().id();
             vectorElement.setAttributeNS(vectorElement.getNamespaceURI(), _FILTER_ATTR, "url(#" + filterId + ")");
         }
