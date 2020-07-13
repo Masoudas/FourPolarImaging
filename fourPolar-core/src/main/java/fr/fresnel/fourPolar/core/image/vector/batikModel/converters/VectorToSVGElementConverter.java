@@ -18,9 +18,25 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
  * method directly asks for the svg document.
  */
 class VectorToSVGElementConverter {
+    private VectorToSVGElementConverter() {
+        throw new AssertionError();
+    }
 
-    public void convert(SVGDocument svgDocument, String namespaceURI, Vector vector) {
-        Element vectorElement = _createElementBasedOnVectorShape(svgDocument, namespaceURI, vector.shape());
+    /**
+     * Convert the given vector to an svg element (including all its properties),
+     * and set it as a child of document element.
+     * 
+     * @param vector       is the vector to be converted.
+     * @param svgDocument  is the instance of the document to which this document
+     *                     should be added.
+     * @param namespaceURI is the name space inside the document to which the
+     *                     element equivalent of vector must be added.
+     * 
+     * @throws IllegalArgumentException if no converter is for an element of this
+     *                                  vector.
+     */
+    public void convert(Vector vector, SVGDocument svgDocument, String namespaceURI) {
+        Element vectorElement = _createElementBasedOnVectorShape(vector.shape(), svgDocument, namespaceURI);
 
         _setVectorAttributes(vectorElement, vector);
         _setVectorAnimation(vector, vectorElement, svgDocument);
@@ -55,8 +71,8 @@ class VectorToSVGElementConverter {
      * Create the element based on the shape interface that is at the backend of
      * this vector using the shape converter.
      */
-    private Element _createElementBasedOnVectorShape(SVGDocument svgDocument, String namespaceURI, IShape vectorShape) {
-        return ShapeToSVGElementConverter.convert(svgDocument, namespaceURI, vectorShape);
+    private Element _createElementBasedOnVectorShape(IShape vectorShape, SVGDocument svgDocument, String namespaceURI) {
+        return ShapeToSVGElementConverter.convert(vectorShape, svgDocument, namespaceURI);
     }
 
     /**
