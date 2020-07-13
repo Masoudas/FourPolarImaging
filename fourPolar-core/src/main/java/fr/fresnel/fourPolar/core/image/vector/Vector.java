@@ -14,25 +14,25 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
  */
 public interface Vector {
     /**
-     * Creates a concrete vector that has a line shape, with the same fill and
-     * boundary color, and stroke width equal to one.
+     * Creates a concrete vector that has a line shape, with all other properties
+     * set to null.
      * 
      * @param lineShape is the line shape.
      * @return a concrete vector.
      */
-    public static Vector createLineVector(ILineShape lineShape, ARGB8 color) {
-        return new DefaultVector(lineShape, color);
+    public static Vector createLineVector(ILineShape lineShape) {
+        return new DefaultVector(lineShape);
     }
 
     /**
-     * Creates a concrete vector that has a box shape, with the same fill and
-     * boundary color, and stroke width equal to one.
+     * Creates a concrete vector that has a box shape, with all other properties
+     * set to null.
      * 
      * @param boxShape is the line shape.
      * @return a concrete vector.
      */
-    public static Vector createBoxVector(IBoxShape boxShape, ARGB8 color) {
-        return new DefaultVector(boxShape, color);
+    public static Vector createBoxVector(IBoxShape boxShape) {
+        return new DefaultVector(boxShape);
     }
 
     /**
@@ -48,17 +48,17 @@ public interface Vector {
     /**
      * @return the color associated with (the boundary of) this shape.
      */
-    public ARGB8 color();
+    public Optional<ARGB8> color();
 
     /**
      * @return the fill color for this shape.
      */
-    public ARGB8 fill();
+    public Optional<ARGB8> fill();
 
     /**
      * @return the stroke width of this vector.
      */
-    public int strokeWidth();
+    public Optional<Integer> strokeWidth();
 
     /**
      * @return the animation associated with this vector.
