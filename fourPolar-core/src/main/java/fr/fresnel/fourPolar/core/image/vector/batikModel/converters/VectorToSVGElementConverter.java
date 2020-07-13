@@ -19,6 +19,7 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
 class VectorToSVGElementConverter {
     private static final String _FILL_ATTR = "fill";
     private static final String _STROKE_ATTR = "stroke";
+    private static final String _STROKE_WIDTH_ATTR = "stroke-width";
     private static final String _OPACITY_ATTR = "opacity";
     private static final String _FILTER_ATTR = "filter";
 
@@ -59,6 +60,7 @@ class VectorToSVGElementConverter {
         _setElementFillColor(vectorElement, vector);
         _setElementOpacity(vectorElement, vector);
         _setElementStrokeColor(vectorElement, vector);
+        _setElementStrokeWidth(vectorElement, vector);
         _setElementFilter(vectorElement, vector);
     }
 
@@ -74,7 +76,8 @@ class VectorToSVGElementConverter {
      * Create the element based on the shape interface that is at the backend of
      * this vector using the shape converter.
      */
-    private static Element _createElementBasedOnVectorShape(IShape vectorShape, SVGDocument svgDocument, String namespaceURI) {
+    private static Element _createElementBasedOnVectorShape(IShape vectorShape, SVGDocument svgDocument,
+            String namespaceURI) {
         return ShapeToSVGElementConverter.convert(vectorShape, svgDocument, namespaceURI);
     }
 
@@ -102,6 +105,19 @@ class VectorToSVGElementConverter {
         if (vector.color().isPresent()) {
             String colorAsString = _getRGBColorAsString(vector.color().get());
             vectorElement.setAttributeNS(vectorElement.getNamespaceURI(), _STROKE_ATTR, colorAsString);
+        }
+    }
+
+    /**
+     * Sets the stroke width, from the {@link Vector#strokeWidth()} of vector.
+     * 
+     * @param vectorElement is the SVG document element.
+     * @param vector        is the vector to be converted.
+     */
+    private static void _setElementStrokeWidth(Element vectorElement, Vector vector) {
+        if (vector.strokeWidth().isPresent()) {
+            String strokeWidthAsString = String.valueOf(vector.strokeWidth().get());
+            vectorElement.setAttributeNS(vectorElement.getNamespaceURI(), _STROKE_WIDTH_ATTR, strokeWidthAsString);
         }
     }
 
