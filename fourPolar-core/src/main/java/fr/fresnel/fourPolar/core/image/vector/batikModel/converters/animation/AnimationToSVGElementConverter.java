@@ -20,17 +20,20 @@ public class AnimationToSVGElementConverter {
 
     /**
      * Converts the given animation to a proper svg element using the document, and
-     * writes it as a child element of the given element.
+     * writes it as a child element of the given vector element.
      * 
-     * @param svgDocument   is the document.
+     * @param animation     is the animation to be added.
      * @param vectorElement is the vector element to which we want to add this
      *                      animation.
-     * @param animation     is the animation to be added.
+     * @param svgDocument   is the document.
+     * 
+     * @throws IllegalArgumentException if no converter is found for the given
+     *                                  animation
      */
-    public static void convert(SVGDocument svgDocument, Element vectorElement, Animation animation) {
-        
-        if (animation instanceof RotationAnimation) {
+    public static void addToVectorElement(Animation animation, Element vectorElement, SVGDocument svgDocument) {
 
+        if (animation instanceof RotationAnimation) {
+            RotationAnimationToSVGElementConverter.convert((RotationAnimation) animation, vectorElement, svgDocument);
         } else {
             throw new IllegalArgumentException(
                     "Can't convert the given animation type because no converters are found");

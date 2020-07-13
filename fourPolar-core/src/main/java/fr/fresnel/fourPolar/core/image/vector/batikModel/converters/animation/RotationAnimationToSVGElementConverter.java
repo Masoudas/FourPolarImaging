@@ -26,12 +26,12 @@ class RotationAnimationToSVGElementConverter {
      * Converts the given rotation animation to a proper svg element, and writes it
      * as a child element of the given element.
      * 
-     * @param svgDocument       is the document.
+     * @param rotationAnimation is rotation animation.
      * @param vectorElement     is the vector element to which we want to add this
      *                          animation.
-     * @param rotationAnimation is rotation animation.
+     * @param svgDocument       is the document.
      */
-    public static void convert(SVGDocument svgDocument, Element vectorElement, RotationAnimation rotationAnimation) {
+    public static void convert(RotationAnimation rotationAnimation, Element vectorElement, SVGDocument svgDocument) {
         String nameSpaceURI = vectorElement.getNamespaceURI();
 
         Element animationElement = _createChildAnimationElement(svgDocument, vectorElement.getNamespaceURI());
