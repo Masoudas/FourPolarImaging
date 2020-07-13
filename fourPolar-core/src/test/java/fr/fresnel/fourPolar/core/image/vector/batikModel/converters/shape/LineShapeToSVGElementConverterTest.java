@@ -19,7 +19,7 @@ public class LineShapeToSVGElementConverterTest {
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
 
-        Element line = LineShapeToSVGElementConverter.convert(svgDocument, SVGDOMImplementation.SVG_NAMESPACE_URI, lineShape);
+        Element line = LineShapeToSVGElementConverter.convert(lineShape, svgDocument, SVGDOMImplementation.SVG_NAMESPACE_URI);
 
         assertTrue(line.getTagName().equals("line"));
         assertTrue(line.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "x1").equals(String.valueOf(0)));
@@ -35,7 +35,7 @@ public class LineShapeToSVGElementConverterTest {
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
 
-        Element line = LineShapeToSVGElementConverter.convert(svgDocument, SVGDOMImplementation.SVG_NAMESPACE_URI, lineShape);
+        Element line = LineShapeToSVGElementConverter.convert(lineShape, svgDocument, SVGDOMImplementation.SVG_NAMESPACE_URI);
 
         assertTrue(line.getTagName().equals("line"));
         assertTrue(line.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "x1").equals(String.valueOf(0)));

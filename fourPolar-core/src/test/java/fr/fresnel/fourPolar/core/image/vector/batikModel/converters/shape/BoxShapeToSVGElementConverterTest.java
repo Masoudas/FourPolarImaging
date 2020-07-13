@@ -19,7 +19,7 @@ public class BoxShapeToSVGElementConverterTest {
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
 
-        Element box = BoxShapeToSVGElementConverter.convert(svgDocument, SVGDOMImplementation.SVG_NAMESPACE_URI, shape);
+        Element box = BoxShapeToSVGElementConverter.convert(shape, svgDocument, SVGDOMImplementation.SVG_NAMESPACE_URI);
 
         assertTrue(box.getTagName().equals("rect"));
         assertTrue(box.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "x").equals(String.valueOf(0)));
@@ -37,7 +37,7 @@ public class BoxShapeToSVGElementConverterTest {
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
 
-        Element box = BoxShapeToSVGElementConverter.convert(svgDocument, SVGDOMImplementation.SVG_NAMESPACE_URI, shape);
+        Element box = BoxShapeToSVGElementConverter.convert(shape, svgDocument, SVGDOMImplementation.SVG_NAMESPACE_URI);
 
         assertTrue(box.getTagName().equals("rect"));
         assertTrue(box.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "x").equals(String.valueOf(0)));
