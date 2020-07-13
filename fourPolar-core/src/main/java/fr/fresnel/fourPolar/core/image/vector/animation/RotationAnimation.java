@@ -107,11 +107,17 @@ public class RotationAnimation implements Animation {
 
     @Override
     public Optional<String> end() {
+        if (_endEvent == null) {
+            return Optional.ofNullable(null);
+        }
         return Optional.ofNullable(_endEvent.eventAsString());
     }
 
     @Override
     public Optional<String> repeatCount() {
+        if (_repeatCount == null) {
+            return Optional.ofNullable(null);
+        }
         return Optional.ofNullable(_repeatCount.countAsString());
     }
 
