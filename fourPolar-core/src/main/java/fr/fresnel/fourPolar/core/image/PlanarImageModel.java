@@ -116,4 +116,11 @@ public abstract class PlanarImageModel<T> implements ImagePlaneAccesser<T> {
                 + _FIRST_PLANE_INDEX;
 
     }
+
+    /**
+     * Returns the total number of planes.
+     */
+    public int numPlanes() {
+        return _totalNumPlanes;
+    }
 }
