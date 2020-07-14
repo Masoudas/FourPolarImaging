@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
  * be used through reference calls inside the document (like filters, shapes,
  * etc).
  */
-public class ToSVGDefintionElementConverter {
+public class ToSVGDefsElementConverter {
     private static final String _DEFS_TAG = "defs";
 
     private FilterComposite[] _filterComposite = new FilterComposite[0];
@@ -39,7 +39,7 @@ public class ToSVGDefintionElementConverter {
      * 
      * @param composites is the filter composites.
      */
-    public ToSVGDefintionElementConverter setFilterComposite(FilterComposite[] composites) {
+    public ToSVGDefsElementConverter setFilterComposite(FilterComposite[] composites) {
         _filterComposite = composites;
         return this;
     }

@@ -16,7 +16,7 @@ import fr.fresnel.fourPolar.core.image.vector.filter.BlenderFilter;
 import fr.fresnel.fourPolar.core.image.vector.filter.Filter;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 
-public class ToSVGDefintionElementConverterTest {
+public class ToSVGDefsElementConverterTest {
     private static final String _NAME_SPACE = SVGDOMImplementation.SVG_NAMESPACE_URI;
 
     @Test
@@ -25,8 +25,8 @@ public class ToSVGDefintionElementConverterTest {
 
         SVGDocument svgDocument = _createDocument();
 
-        new ToSVGDefintionElementConverter().setFilterComposite(new FilterComposite[] { composite })
-                .convert(svgDocument, ToSVGDefintionElementConverter.createDefsElement(svgDocument, _NAME_SPACE));
+        new ToSVGDefsElementConverter().setFilterComposite(new FilterComposite[] { composite })
+                .convert(svgDocument, ToSVGDefsElementConverter.createDefsElement(svgDocument, _NAME_SPACE));
 
         Element documentElement = svgDocument.getDocumentElement();
 
