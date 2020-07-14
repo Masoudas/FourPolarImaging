@@ -14,6 +14,7 @@ import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
  */
 public abstract class PlanarImageModel<T> implements ImagePlaneAccesser<T> {
     private static final int _FIRST_PLANE_INDEX = 1;
+   
     private final long[] _nPlanesPerDim;
     private final int _totalNumPlanes;
     private final long[] _imageDim;
