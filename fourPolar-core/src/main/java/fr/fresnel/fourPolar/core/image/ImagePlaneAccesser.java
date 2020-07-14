@@ -23,5 +23,5 @@ public interface ImagePlaneAccesser<T> {
      * @throws IndexOutOfBoundsException if the plane index is less than zero or does
      *                                  not exist.
      */
-    public T getImagePlane(int planeIndex);
+    public ImagePlane<T> getImagePlane(int planeIndex);
 }
