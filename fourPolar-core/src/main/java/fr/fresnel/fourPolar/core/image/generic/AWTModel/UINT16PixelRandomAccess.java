@@ -28,13 +28,13 @@ class UINT16PixelRandomAccess extends AWTBufferedImagePixelRandomAccess<UINT16> 
 
     @Override
     public void setPixel(IPixel<UINT16> pixel) throws ArrayIndexOutOfBoundsException {
-        _cachedPlane.getImage().getRaster().setPixel((int) _position[0], (int) _position[1],
+        _cachedPlane.getPlane().getRaster().setPixel((int) _position[0], (int) _position[1],
                 new int[] { pixel.value().get() });
     }
 
     @Override
     public IPixel<UINT16> getPixel() throws ArrayIndexOutOfBoundsException {
-        _cachedPlane.getImage().getRaster().getPixel((int) _position[0], (int) _position[1], _bufferedImagePixelVal);
+        _cachedPlane.getPlane().getRaster().getPixel((int) _position[0], (int) _position[1], _bufferedImagePixelVal);
         _cachedPixel.value().set(_bufferedImagePixelVal[0]);
         return _cachedPixel;
     }

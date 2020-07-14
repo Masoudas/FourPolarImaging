@@ -1,5 +1,8 @@
 package fr.fresnel.fourPolar.core.image.generic.AWTModel;
 
+import java.awt.image.BufferedImage;
+
+import fr.fresnel.fourPolar.core.image.ImagePlane;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
@@ -21,19 +24,19 @@ abstract class AWTBufferedImagePixelRandomAccess<T extends PixelType> implements
      * We cache the current plane requested by the user to avoid calling the same
      * plane several times.
      */
-    protected AWTBufferedImagePlane _cachedPlane;
+    protected ImagePlane<BufferedImage> _cachedPlane;
 
     protected long[] _position;
 
     public AWTBufferedImagePixelRandomAccess(AWTBufferedImage<T> bufferedImage) {
         assert bufferedImage != null : "BufferedImage can't be null";
 
-        _bufferedImage = bufferedImage;        
+        _bufferedImage = bufferedImage;
         _cachedPlane = _setFirstPlaneAsCachedPlane();
 
     }
 
-    private AWTBufferedImagePlane _setFirstPlaneAsCachedPlane() {
+    private ImagePlane<BufferedImage> _setFirstPlaneAsCachedPlane() {
         return _bufferedImage.getImagePlane(1);
     }
 
@@ -41,7 +44,7 @@ abstract class AWTBufferedImagePixelRandomAccess<T extends PixelType> implements
     public void setPosition(long[] position) {
         _position = position;
 
-        int newPlaneIndex = _bufferedImage.getPlaneNumber(position);
+        int newPlaneIndex = _bufferedImage.getPlaneIndex(position);
         if (newPlaneIndex == _cachedPlane.planeIndex()) {
             return;
         }

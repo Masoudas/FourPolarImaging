@@ -22,7 +22,7 @@ public class UINT16BufferedImageTest {
                 .bitPerPixel(PixelTypes.UINT_16).build();
 
         UINT16BufferedImage image = new UINT16BufferedImage(metadata, new U16BIDummyImageFactory(), UINT16.zero());
-        assertTrue(image.getImagePlane(1).getImage().getType() == BufferedImage.TYPE_USHORT_GRAY);
+        assertTrue(image.getImagePlane(1).getPlane().getType() == BufferedImage.TYPE_USHORT_GRAY);
     }
 
 }
