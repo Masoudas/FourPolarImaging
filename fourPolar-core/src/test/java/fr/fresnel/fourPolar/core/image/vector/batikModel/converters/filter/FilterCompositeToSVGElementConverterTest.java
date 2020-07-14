@@ -123,6 +123,45 @@ public class FilterCompositeToSVGElementConverterTest {
         assertTrue(filterElement.getTagName().equals("feBlend"));
     }
 
+    @Test
+    public void convertUsingDefsElement_CompositeWithIDAndOneBlenderFilter_CreatesFilterCompositeWithOneChildFilter() {
+        DummyBlenderFilter filter = new DummyBlenderFilter();
+        String filterID = "testFilter";
+        FilterComposite composite = new FilterCompositeBuilder(filterID, filter).build();
+
+        SVGDocument document = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
+                .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
+        Element defsElement = document.createElementNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "defs");
+
+        FilterCompositeToSVGElementConverter.convert(composite, document, defsElement);
+
+        NodeList nodes = defsElement.getChildNodes();
+
+        assertTrue(nodes.getLength() == 1);
+        Element filterCompositeElement = (Element) nodes.item(0);
+
+        assertTrue(filterCompositeElement.getTagName().equals("filter"));
+        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _ID_ATTR)
+                .equals(filterID));
+
+        // The following attributes don't exist
+        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _X_START_ATTR)
+                .equals(""));
+        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _Y_START_ATTR)
+                .equals(""));
+        assertTrue(
+                filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _WIDTH_ATTR).equals(""));
+        assertTrue(
+                filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _HEIGHT_ATTR).equals(""));
+
+        // Check that the child dummy blend filter has been added as well.
+        NodeList compositeChildNodes = filterCompositeElement.getChildNodes();
+        assertTrue(compositeChildNodes.getLength() == 1); // Only one child filter is added.
+
+        Element filterElement = (Element) compositeChildNodes.item(0);
+        assertTrue(filterElement.getTagName().equals("feBlend"));
+    }
+
 }
 
 class DummyBlenderFilter extends BlenderFilter {
