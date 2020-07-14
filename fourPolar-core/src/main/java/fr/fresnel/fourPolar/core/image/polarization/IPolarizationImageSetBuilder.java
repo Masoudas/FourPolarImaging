@@ -1,8 +1,6 @@
 package fr.fresnel.fourPolar.core.image.polarization;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
-import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 /**
  * Builds an {@link IPolarizationImageSet} for the given channel of sample.
