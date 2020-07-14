@@ -15,7 +15,24 @@ import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
  * etc).
  */
 public class ToSVGDefintionElementConverter {
+    private static final String _DEFS_TAG = "defs";
+
     private FilterComposite[] _filterComposite = new FilterComposite[0];
+
+    /**
+     * Creates the defs element (an element with tag defs) as the child of document
+     * element.
+     * 
+     * @param svgDocument  is the svg document instance.
+     * @param namespaceURI is the name space in which the defs will be defined.
+     * @return the defs element.
+     */
+    public static Element createDefsElement(SVGDocument svgDocument, String namespaceURI) {
+        Element defsElement = svgDocument.createElementNS(namespaceURI, _DEFS_TAG);
+        svgDocument.getDocumentElement().appendChild(defsElement);
+
+        return defsElement;
+    }
 
     /**
      * Set the filter composite definitions.
@@ -32,7 +49,8 @@ public class ToSVGDefintionElementConverter {
      * svg document.
      * 
      * @param svgDocument is the svg document.
-     * @param defsElement is the defs element of this document.
+     * @param defsElement is the defs element of this document. @see
+     *                    {@link #createDefsElement()};
      * 
      */
     public void convert(SVGDocument svgDocument, Element defsElement) {
