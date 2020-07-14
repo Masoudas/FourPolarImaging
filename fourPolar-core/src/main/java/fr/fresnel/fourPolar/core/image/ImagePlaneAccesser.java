@@ -13,6 +13,8 @@ public interface ImagePlaneAccesser<T> {
      * 
      * @param position is the position.
      * @return the index of the plane this position belongs to.
+     * @throws IllegalArgumentException if position does not have same number of
+     *                                  dimension as image.
      */
     public int getPlaneIndex(long[] position);
 
@@ -20,8 +22,8 @@ public interface ImagePlaneAccesser<T> {
      * Returns the plane corresponding to the given index.
      * 
      * @param planeIndex is the index of the plane, which is greater than zero.
-     * @throws IndexOutOfBoundsException if the plane index is less than zero or does
-     *                                  not exist.
+     * @throws IndexOutOfBoundsException if the plane index is less than zero or
+     *                                   does not exist.
      */
     public ImagePlane<T> getImagePlane(int planeIndex);
 }
