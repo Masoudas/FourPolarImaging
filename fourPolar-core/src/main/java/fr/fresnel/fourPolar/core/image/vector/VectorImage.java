@@ -4,6 +4,7 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
+import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 
 /**
  * An interface for defining a vector image, that can be stored as an SVG image.
@@ -29,6 +30,13 @@ public interface VectorImage {
      * color.
      */
     public void setBackground(ARGB8 color);
+
+    /**
+     * Adds the given composite filter as a child of svg defs element.
+     * 
+     * @param composite is the composite filter.
+     */
+    public void addFilterComposite(FilterComposite composite);
 
     /**
      * Puts the given image inside the given vector image. Note that with this
