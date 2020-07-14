@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
  * Using this class, we can convert a {@link FilterComposite} to an SVG element
  * that would be written in the root node of the SVG.
  */
-class FilterCompositeToSVGElementConverter {
+public class FilterCompositeToSVGElementConverter {
     private final static String _ID_ATTR = "id";
     private final static String _WIDTH_ATTR = "width";
     private final static String _HEIGHT_ATTR = "height";
@@ -42,7 +42,27 @@ class FilterCompositeToSVGElementConverter {
         Objects.requireNonNull(namespaceURI, "namespaceURI can't be null");
 
         Element filterCompositeElement = _createFilterElementAsDocumentElementChild(svgDocument, namespaceURI);
-        _addFilterAttributes(composite, filterCompositeElement, namespaceURI);
+        _addFilterAttributes(composite, filterCompositeElement);
+        _addFiltersOfComposite(composite, filterCompositeElement, svgDocument);
+    }
+
+    /**
+     * Converts the given filter composite to an svg document element, and write it
+     * as a child of the documnt defs element (i.e, on top of the document, for all
+     * other elements to use.)
+     * 
+     * @param composite   is the filter composite.
+     * @param svgDocument is the svg document instance.
+     * @param defsElement is the defs element of the svg document.
+     * @throws IllegalArgumentException if no converter is found for the filter.
+     */
+    public static void convert(FilterComposite composite, SVGDocument svgDocument, Element defsElement) {
+        Objects.requireNonNull(composite, "composite can't be null");
+        Objects.requireNonNull(svgDocument, "svgDocument can't be null");
+        Objects.requireNonNull(defsElement, "defsElement can't be null");
+
+        Element filterCompositeElement = _createFilterElementAsDefsElementChild(svgDocument, defsElement);
+        _addFilterAttributes(composite, filterCompositeElement);
         _addFiltersOfComposite(composite, filterCompositeElement, svgDocument);
     }
 
@@ -55,11 +75,18 @@ class FilterCompositeToSVGElementConverter {
         return filterCompositeElement;
     }
 
+    private static Element _createFilterElementAsDefsElementChild(SVGDocument svgDocument, Element defsElement) {
+        Element filterCompositeElement = svgDocument.createElementNS(defsElement.getNamespaceURI(), "filter");
+        defsElement.appendChild(filterCompositeElement);
+
+        return filterCompositeElement;
+    }
+
     /**
      * Adds the general attributes of the filter composite to the filter element.
      */
-    private static void _addFilterAttributes(FilterComposite composite, Element filterCompositeElement,
-            String namespaceURI) {
+    private static void _addFilterAttributes(FilterComposite composite, Element filterCompositeElement) {
+        String namespaceURI = filterCompositeElement.getNamespaceURI();
         filterCompositeElement.setAttributeNS(namespaceURI, _ID_ATTR, composite.id());
         composite.xStart()
                 .ifPresent(xStart -> filterCompositeElement.setAttributeNS(namespaceURI, _X_START_ATTR, xStart));
@@ -85,7 +112,7 @@ class FilterCompositeToSVGElementConverter {
     private static void _addFilterAsFilterElementChild(Filter filter, Element filterCompositeElement,
             SVGDocument document) {
         if (filter instanceof BlenderFilter) {
-            BlenderFilterToSVGElementConverter.convert((BlenderFilter)filter, filterCompositeElement, document);
+            BlenderFilterToSVGElementConverter.convert((BlenderFilter) filter, filterCompositeElement, document);
         } else {
             throw new IllegalArgumentException("No converter to svg element was found for the given filter");
         }
