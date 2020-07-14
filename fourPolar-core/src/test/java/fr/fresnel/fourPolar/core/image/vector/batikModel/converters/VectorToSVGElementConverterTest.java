@@ -2,7 +2,6 @@ package fr.fresnel.fourPolar.core.image.vector.batikModel.converters;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -15,7 +14,6 @@ import org.w3c.dom.svg.SVGDocument;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.vector.Vector;
-import fr.fresnel.fourPolar.core.image.vector.filter.BlenderFilter;
 import fr.fresnel.fourPolar.core.image.vector.filter.Filter;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 import fr.fresnel.fourPolar.core.util.shape.ILineShape;
