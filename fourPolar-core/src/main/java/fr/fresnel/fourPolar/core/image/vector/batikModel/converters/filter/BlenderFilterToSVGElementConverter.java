@@ -28,24 +28,22 @@ class BlenderFilterToSVGElementConverter {
         Objects.requireNonNull(blenderFilter, "blenderFilter can't be null");
         Objects.requireNonNull(filterCompositeElement, "filterCompositeElement can't be null");
         Objects.requireNonNull(document, "document can't be null");
-
-        String namespaceURI = filterCompositeElement.getNamespaceURI();
         
-        Element filterElement = _createChildBlenderFilterElement(document, namespaceURI);
-        _setFilterElementAttrs(blenderFilter, filterElement, namespaceURI);
+        Element filterElement = _createChildBlenderFilterElement(document);
+        _setFilterElementAttrs(blenderFilter, filterElement);
         _appendAnimationElementToFilterCompositeElement(filterCompositeElement, filterElement);
     }
 
-    private static Element _createChildBlenderFilterElement(SVGDocument document, String namespaceURI) {
-        return document.createElementNS(namespaceURI, _FILTER_TAG);
+    private static Element _createChildBlenderFilterElement(SVGDocument document) {
+        return document.createElementNS(document.getNamespaceURI(), _FILTER_TAG);
     }
 
-    private static void _setFilterElementAttrs(BlenderFilter filter, Element filterElement, String namespaceURI) {
-        filterElement.setAttributeNS(namespaceURI, _IN_ATTR, filter.in());
-        filterElement.setAttributeNS(namespaceURI, _MODE_ATTR, filter.mode());
-        filter.in2().ifPresent(in2 -> filterElement.setAttributeNS(namespaceURI, _IN2_ATTR, in2));
+    private static void _setFilterElementAttrs(BlenderFilter filter, Element filterElement) {
+        filterElement.setAttributeNS(null, _IN_ATTR, filter.in());
+        filterElement.setAttributeNS(null, _MODE_ATTR, filter.mode());
+        filter.in2().ifPresent(in2 -> filterElement.setAttributeNS(null, _IN2_ATTR, in2));
         filter.resultName()
-                .ifPresent(resultName -> filterElement.setAttributeNS(namespaceURI, _RESULT_ATTR, resultName));
+                .ifPresent(resultName -> filterElement.setAttributeNS(null, _RESULT_ATTR, resultName));
     }
 
     private static void _appendAnimationElementToFilterCompositeElement(Element filterCompositeElement,

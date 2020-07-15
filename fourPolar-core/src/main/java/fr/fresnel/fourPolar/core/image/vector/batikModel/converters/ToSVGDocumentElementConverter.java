@@ -38,18 +38,16 @@ public class ToSVGDocumentElementConverter {
      * element.
      * 
      * @param svgDocument  is the svg document instance.
-     * @param namespaceURI is the name space to which the properties should be
-     *                     written.
      */
-    public void convert(SVGDocument svgDocument, String namespaceURI) {
-        _setSVGDocumentSize(svgDocument, namespaceURI);
+    public void convert(SVGDocument svgDocument) {
+        _setSVGDocumentSize(svgDocument);
     }
 
-    private void _setSVGDocumentSize(SVGDocument svgDocument, String namespaceURI) {
+    private void _setSVGDocumentSize(SVGDocument svgDocument) {
         Element documentElement = svgDocument.getDocumentElement();
 
-        documentElement.setAttributeNS(namespaceURI, _WIDTH_ATTR, String.valueOf(_xdim));
-        documentElement.setAttributeNS(namespaceURI, _HEIGHT_ATTR, String.valueOf(_ydim));
+        documentElement.setAttributeNS(null, _WIDTH_ATTR, String.valueOf(_xdim));
+        documentElement.setAttributeNS(null, _HEIGHT_ATTR, String.valueOf(_ydim));
     }
 
 }

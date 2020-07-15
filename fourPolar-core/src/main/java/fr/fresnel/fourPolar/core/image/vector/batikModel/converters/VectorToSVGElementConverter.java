@@ -41,7 +41,7 @@ class VectorToSVGElementConverter {
      *                                  can't be converted to an svg element.
      */
     public static void convert(Vector vector, SVGDocument svgDocument, String namespaceURI) {
-        Element vectorElement = _createElementBasedOnVectorShape(vector.shape(), svgDocument, namespaceURI);
+        Element vectorElement = _createElementBasedOnVectorShape(vector.shape(), svgDocument);
 
         _setVectorAttributes(vectorElement, vector);
         _setVectorAnimation(vector, vectorElement, svgDocument);
@@ -76,9 +76,8 @@ class VectorToSVGElementConverter {
      * Create the element based on the shape interface that is at the backend of
      * this vector using the shape converter.
      */
-    private static Element _createElementBasedOnVectorShape(IShape vectorShape, SVGDocument svgDocument,
-            String namespaceURI) {
-        return ShapeToSVGElementConverter.convert(vectorShape, svgDocument, namespaceURI);
+    private static Element _createElementBasedOnVectorShape(IShape vectorShape, SVGDocument svgDocument) {
+        return ShapeToSVGElementConverter.convert(vectorShape, svgDocument);
     }
 
     /**
@@ -91,7 +90,7 @@ class VectorToSVGElementConverter {
     private static void _setElementFillColor(Element vectorElement, Vector vector) {
         if (vector.fill().isPresent()) {
             String fillColorAsString = _getRGBColorAsString(vector.fill().get());
-            vectorElement.setAttributeNS(vectorElement.getNamespaceURI(), _FILL_ATTR, fillColorAsString);
+            vectorElement.setAttributeNS(null, _FILL_ATTR, fillColorAsString);
         }
     }
 
@@ -104,7 +103,7 @@ class VectorToSVGElementConverter {
     private static void _setElementStrokeColor(Element vectorElement, Vector vector) {
         if (vector.color().isPresent()) {
             String colorAsString = _getRGBColorAsString(vector.color().get());
-            vectorElement.setAttributeNS(vectorElement.getNamespaceURI(), _STROKE_ATTR, colorAsString);
+            vectorElement.setAttributeNS(null, _STROKE_ATTR, colorAsString);
         }
     }
 
@@ -117,7 +116,7 @@ class VectorToSVGElementConverter {
     private static void _setElementStrokeWidth(Element vectorElement, Vector vector) {
         if (vector.strokeWidth().isPresent()) {
             String strokeWidthAsString = String.valueOf(vector.strokeWidth().get());
-            vectorElement.setAttributeNS(vectorElement.getNamespaceURI(), _STROKE_WIDTH_ATTR, strokeWidthAsString);
+            vectorElement.setAttributeNS(null, _STROKE_WIDTH_ATTR, strokeWidthAsString);
         }
     }
 
@@ -130,7 +129,7 @@ class VectorToSVGElementConverter {
     private static void _setElementOpacity(Element vectorElement, Vector vector) {
         if (vector.color().isPresent()) {
             String opacityAsString = _getOpacityAsString(vector.color().get());
-            vectorElement.setAttributeNS(vectorElement.getNamespaceURI(), _OPACITY_ATTR, opacityAsString);
+            vectorElement.setAttributeNS(null, _OPACITY_ATTR, opacityAsString);
         }
     }
 
@@ -143,7 +142,7 @@ class VectorToSVGElementConverter {
     private static void _setElementFilter(Element vectorElement, Vector vector) {
         if (vector.filter().isPresent()) {
             String filterId = vector.filter().get().id();
-            vectorElement.setAttributeNS(vectorElement.getNamespaceURI(), _FILTER_ATTR, "url(#" + filterId + ")");
+            vectorElement.setAttributeNS(null, _FILTER_ATTR, "url(#" + filterId + ")");
         }
     }
 

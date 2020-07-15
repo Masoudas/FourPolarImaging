@@ -15,6 +15,8 @@ import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
  * that would be written in the root node of the SVG.
  */
 public class FilterCompositeToSVGElementConverter {
+    private final static String _FILTER_TAG = "filter";
+
     private final static String _ID_ATTR = "id";
     private final static String _WIDTH_ATTR = "width";
     private final static String _HEIGHT_ATTR = "height";
@@ -32,16 +34,13 @@ public class FilterCompositeToSVGElementConverter {
      * 
      * @param composite    is the filter composite.
      * @param svgDocument  is the svg document instance.
-     * @param namespaceURI is the name space of where this filter should be added in
-     *                     the document.
      * @throws IllegalArgumentException if no converter is found for the filter.
      */
-    public static void convert(FilterComposite composite, SVGDocument svgDocument, String namespaceURI) {
+    public static void convert(FilterComposite composite, SVGDocument svgDocument) {
         Objects.requireNonNull(composite, "composite can't be null");
         Objects.requireNonNull(svgDocument, "svgDocument can't be null");
-        Objects.requireNonNull(namespaceURI, "namespaceURI can't be null");
 
-        Element filterCompositeElement = _createFilterElementAsDocumentElementChild(svgDocument, namespaceURI);
+        Element filterCompositeElement = _createFilterElementAsDocumentElementChild(svgDocument);
         _addFilterAttributes(composite, filterCompositeElement);
         _addFiltersOfComposite(composite, filterCompositeElement, svgDocument);
     }
@@ -66,17 +65,16 @@ public class FilterCompositeToSVGElementConverter {
         _addFiltersOfComposite(composite, filterCompositeElement, svgDocument);
     }
 
-    private static Element _createFilterElementAsDocumentElementChild(SVGDocument svgDocument, String namespaceURI) {
-        Element filterCompositeElement = svgDocument.createElementNS(namespaceURI, "filter");
+    private static Element _createFilterElementAsDocumentElementChild(SVGDocument svgDocument) {
+        Element filterCompositeElement = svgDocument.createElementNS(svgDocument.getNamespaceURI(), _FILTER_TAG);
         Element documentElement = svgDocument.getDocumentElement();
 
         documentElement.appendChild(filterCompositeElement);
-
         return filterCompositeElement;
     }
 
     private static Element _createFilterElementAsDefsElementChild(SVGDocument svgDocument, Element defsElement) {
-        Element filterCompositeElement = svgDocument.createElementNS(defsElement.getNamespaceURI(), "filter");
+        Element filterCompositeElement = svgDocument.createElementNS(defsElement.getNamespaceURI(), _FILTER_TAG);
         defsElement.appendChild(filterCompositeElement);
 
         return filterCompositeElement;
@@ -86,16 +84,15 @@ public class FilterCompositeToSVGElementConverter {
      * Adds the general attributes of the filter composite to the filter element.
      */
     private static void _addFilterAttributes(FilterComposite composite, Element filterCompositeElement) {
-        String namespaceURI = filterCompositeElement.getNamespaceURI();
-        filterCompositeElement.setAttributeNS(namespaceURI, _ID_ATTR, composite.id());
+        filterCompositeElement.setAttributeNS(null, _ID_ATTR, composite.id());
         composite.xStart()
-                .ifPresent(xStart -> filterCompositeElement.setAttributeNS(namespaceURI, _X_START_ATTR, xStart));
+                .ifPresent(xStart -> filterCompositeElement.setAttributeNS(null, _X_START_ATTR, xStart));
         composite.yStart()
-                .ifPresent(yStart -> filterCompositeElement.setAttributeNS(namespaceURI, _Y_START_ATTR, yStart));
+                .ifPresent(yStart -> filterCompositeElement.setAttributeNS(null, _Y_START_ATTR, yStart));
         composite.widthPercent()
-                .ifPresent(width -> filterCompositeElement.setAttributeNS(namespaceURI, _WIDTH_ATTR, width));
+                .ifPresent(width -> filterCompositeElement.setAttributeNS(null, _WIDTH_ATTR, width));
         composite.heightPercent()
-                .ifPresent(height -> filterCompositeElement.setAttributeNS(namespaceURI, _HEIGHT_ATTR, height));
+                .ifPresent(height -> filterCompositeElement.setAttributeNS(null, _HEIGHT_ATTR, height));
 
     }
 

@@ -25,21 +25,20 @@ class BoxShapeToSVGElementConverter {
      * are used to create the rectangle element.
      * 
      * @param svgDocument  is the source svg document
-     * @param namespaceURI is the name space of the document
      * @param boxShape     is the box shape.
      * 
      * @return an svg element that is a rectangle.
      */
-    public static Element convert(IBoxShape boxShape, SVGDocument svgDocument, String namespaceURI) {
-        Element rectangleElement = svgDocument.createElementNS(namespaceURI, _ELEMENT_TAG);
+    public static Element convert(IBoxShape boxShape, SVGDocument svgDocument) {
+        Element rectangleElement = svgDocument.createElementNS(svgDocument.getNamespaceURI(), _ELEMENT_TAG);
 
         long[] rectangleMin = boxShape.min();
         long[] rectangleMax = boxShape.max();
 
-        rectangleElement.setAttributeNS(namespaceURI, _X_ATTR, String.valueOf(rectangleMin[0]));
-        rectangleElement.setAttributeNS(namespaceURI, _Y_ATTR, String.valueOf(rectangleMin[1]));
-        rectangleElement.setAttributeNS(namespaceURI, _WIDTH_ATTR, String.valueOf(rectangleMax[0] - rectangleMin[0]));
-        rectangleElement.setAttributeNS(namespaceURI, _HEIGHT_ATTR, String.valueOf(rectangleMax[1] - rectangleMin[1]));
+        rectangleElement.setAttributeNS(null, _X_ATTR, String.valueOf(rectangleMin[0]));
+        rectangleElement.setAttributeNS(null, _Y_ATTR, String.valueOf(rectangleMin[1]));
+        rectangleElement.setAttributeNS(null, _WIDTH_ATTR, String.valueOf(rectangleMax[0] - rectangleMin[0]));
+        rectangleElement.setAttributeNS(null, _HEIGHT_ATTR, String.valueOf(rectangleMax[1] - rectangleMin[1]));
 
         return rectangleElement;
     }

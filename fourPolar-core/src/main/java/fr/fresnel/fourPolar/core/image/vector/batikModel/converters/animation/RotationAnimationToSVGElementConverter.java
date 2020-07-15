@@ -32,10 +32,8 @@ class RotationAnimationToSVGElementConverter {
      * @param svgDocument       is the document.
      */
     public static void convert(RotationAnimation rotationAnimation, Element vectorElement, SVGDocument svgDocument) {
-        String nameSpaceURI = vectorElement.getNamespaceURI();
-
-        Element animationElement = _createChildAnimationElement(svgDocument, vectorElement.getNamespaceURI());
-        _setAnimationElementAttributes(rotationAnimation, nameSpaceURI, animationElement);
+        Element animationElement = _createChildAnimationElement(svgDocument, svgDocument.getNamespaceURI());
+        _setAnimationElementAttributes(rotationAnimation, animationElement);
         _appendAnimationElementToVectorElement(vectorElement, animationElement);
     }
 
@@ -43,16 +41,16 @@ class RotationAnimationToSVGElementConverter {
         vectorElement.appendChild(animationElement);
     }
 
-    private static void _setAnimationElementAttributes(RotationAnimation rotationAnimation, String nameSpaceURI,
+    private static void _setAnimationElementAttributes(RotationAnimation rotationAnimation,
             Element animationElement) {
-        animationElement.setAttributeNS(nameSpaceURI, _ATTRIBUTE_NAME_ATTR, rotationAnimation.attributeName());
-        animationElement.setAttributeNS(nameSpaceURI, _TYPE_ATTR, rotationAnimation.type());
-        animationElement.setAttributeNS(nameSpaceURI, _VALUES_ATTR, rotationAnimation.values());
-        animationElement.setAttributeNS(nameSpaceURI, _BEGIN_ATTR, rotationAnimation.begin());
-        animationElement.setAttributeNS(nameSpaceURI, _DUR_ATTR, rotationAnimation.dur());
+        animationElement.setAttributeNS(null, _ATTRIBUTE_NAME_ATTR, rotationAnimation.attributeName());
+        animationElement.setAttributeNS(null, _TYPE_ATTR, rotationAnimation.type());
+        animationElement.setAttributeNS(null, _VALUES_ATTR, rotationAnimation.values());
+        animationElement.setAttributeNS(null, _BEGIN_ATTR, rotationAnimation.begin());
+        animationElement.setAttributeNS(null, _DUR_ATTR, rotationAnimation.dur());
         rotationAnimation.repeatCount()
-                .ifPresent(attr -> animationElement.setAttributeNS(nameSpaceURI, _REPEAT_COUNT_ATTR, attr));
-        rotationAnimation.end().ifPresent(attr -> animationElement.setAttributeNS(nameSpaceURI, _END_ATTR, attr));
+                .ifPresent(attr -> animationElement.setAttributeNS(null, _REPEAT_COUNT_ATTR, attr));
+        rotationAnimation.end().ifPresent(attr -> animationElement.setAttributeNS(null, _END_ATTR, attr));
     }
 
     /**

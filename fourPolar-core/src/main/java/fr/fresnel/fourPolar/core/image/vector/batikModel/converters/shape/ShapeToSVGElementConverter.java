@@ -23,18 +23,17 @@ public class ShapeToSVGElementConverter {
      * this vector
      * 
      * @param svgDocument  is the source svg document
-     * @param namespaceURI is the name space of the document
      * @param vectorShape  is the backend shape of this vector
      * @return an SVG element corresponding to this shape.
      * 
      * @throws IllegalArgumentException in case no converter is found for the shape
      *                                  of the vector.
      */
-    public static Element convert(IShape shape, SVGDocument svgDocument, String namespaceURI) {
+    public static Element convert(IShape shape, SVGDocument svgDocument) {
         if (shape instanceof ILineShape) {
-            return LineShapeToSVGElementConverter.convert((ILineShape) shape, svgDocument, namespaceURI);
+            return LineShapeToSVGElementConverter.convert((ILineShape) shape, svgDocument);
         } else if (shape instanceof IBoxShape) {
-            return BoxShapeToSVGElementConverter.convert((IBoxShape) shape, svgDocument, namespaceURI);
+            return BoxShapeToSVGElementConverter.convert((IBoxShape) shape, svgDocument);
         } else {
             throw new IllegalArgumentException(
                     "Can't convert the given shape because no suitable shape converter is found.");
