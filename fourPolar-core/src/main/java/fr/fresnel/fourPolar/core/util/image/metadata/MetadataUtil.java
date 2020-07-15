@@ -92,11 +92,37 @@ public class MetadataUtil {
 	}
 
 	/**
-	 * @return true if number of axis in the given {@link AxisOrder} equals the given dimension 
-	 * vector, otherwise return false.
+	 * @return true if number of axis in the given {@link AxisOrder} equals the
+	 *         given dimension vector, otherwise return false.
 	 */
-	public static boolean isNumAxisEqualDimension(AxisOrder axisOrder, long[] dimension){
+	public static boolean isNumAxisEqualDimension(AxisOrder axisOrder, long[] dimension) {
 		return axisOrder.numAxis == dimension.length;
+	}
+
+	/**
+	 * Returns an array equal in size to image dimension, indicating how many planes
+	 * are present per dimension. For example, if dim = [2, 2, 3, 4], and given the
+	 * first two axis indicate the plane, 3 planes are present for the 3rd and 12
+	 * for the fourth. So the method returns [0, 0, 3, 12]. Note that the first two
+	 * elements are always set to zero for convenience. Hence if the image is two
+	 * dimensional, the method returns [0, 0], and for 1D images it returns [0].
+	 * 
+	 * @return an array indicating number of planes per dimension.
+	 */
+	public static long[] numPlanesPerDimension(IMetadata metadata) {
+		long[] imageDim = metadata.getDim();
+		if (imageDim.length <= 2) {
+			return new long[imageDim.length];
+		}
+
+		long[] nPlanesPerDim = new long[imageDim.length];
+		nPlanesPerDim[2] = imageDim[2];
+		for (int dim = 3; dim < nPlanesPerDim.length; dim++) {
+			nPlanesPerDim[dim] = nPlanesPerDim[dim - 1] * imageDim[dim];
+		}
+
+		return nPlanesPerDim;
+
 	}
 
 }
