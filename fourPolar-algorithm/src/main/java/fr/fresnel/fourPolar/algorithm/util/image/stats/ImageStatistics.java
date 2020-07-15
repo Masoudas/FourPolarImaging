@@ -1,10 +1,11 @@
 package fr.fresnel.fourPolar.algorithm.util.image.stats;
 
+import org.apache.commons.math3.stat.descriptive.rank.Percentile;
+
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RealType;
 import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
-import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 
 public class ImageStatistics {
 
@@ -18,8 +19,8 @@ public class ImageStatistics {
         int nPlanes = MetadataUtil.getNPlanes(image.getMetadata());
         double[][] minMax = new double[2][nPlanes];
 
-        IPointShape planeDim = MetadataUtil.getPlaneDim(image.getMetadata());
-        long planeSize = planeDim.point()[0] * planeDim.point()[1];
+        long[] planeDim = MetadataUtil.getPlaneDim(image.getMetadata());
+        long planeSize = planeDim[0] * planeDim[1];
 
         IPixelCursor<T> cursor = image.getCursor();
         for (int plane = 0; plane < nPlanes; plane++) {

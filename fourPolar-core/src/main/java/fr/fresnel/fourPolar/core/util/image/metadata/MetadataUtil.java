@@ -61,11 +61,17 @@ public class MetadataUtil {
 		return nPlanes;
 	}
 
-	public static IPointShape getPlaneDim(IMetadata metadata) {
+	/**
+	 * Returns dimension of plane (first two coordinates).
+	 * 
+	 * @param metadata is the metadata.
+	 * @return an array containing plane dimension.
+	 */
+	public static long[] getPlaneDim(IMetadata metadata) {
 		Objects.requireNonNull(metadata, "metadata cannot be null.");
 
 		long[] dims = metadata.getDim();
-		return new ShapeFactory().point(new long[] { dims[0], dims[1] }, AxisOrder.XY);
+		return new long[] { dims[0], dims[1] };
 	}
 
 	/**
@@ -74,7 +80,7 @@ public class MetadataUtil {
 	 * @return
 	 */
 	public static long getPlaneSize(IMetadata metadata) {
-		long[] planeDim = getPlaneDim(metadata).point();
+		long[] planeDim = getPlaneDim(metadata);
 		return planeDim[0] * planeDim[1];
 	}
 
@@ -144,8 +150,8 @@ public class MetadataUtil {
 	 * @return the coordinates of the plane as a 2*n matrix.
 	 * 
 	 * @throws IndexOutOfBoundsException if the plane index is less than 1, or
-	 *                                  exceeds the number of planes, or if the
-	 *                                  image is less than 2D.
+	 *                                   exceeds the number of planes, or if the
+	 *                                   image is less than 2D.
 	 */
 	public static long[][] getPlaneCoordinates(IMetadata metadata, long planeIndex) {
 		if (planeIndex < 1 || planeIndex > getNPlanes(metadata)) {
