@@ -108,9 +108,15 @@ public class MetadataUtil {
 	 * dimensional, the method returns [0, 0], and for 1D images it returns [0].
 	 * 
 	 * @return an array indicating number of planes per dimension.
+	 * @throws IllegalArgumentException if image is not at least 2D.
 	 */
 	public static long[] numPlanesPerDimension(IMetadata metadata) {
 		long[] imageDim = metadata.getDim();
+
+		if (imageDim.length <= 1) {
+			throw new IllegalArgumentException("Image must be at least 2D to have a plane.");
+		}
+
 		if (imageDim.length <= 2) {
 			return new long[imageDim.length];
 		}
@@ -123,6 +129,53 @@ public class MetadataUtil {
 
 		return nPlanesPerDim;
 
+	}
+
+	/**
+	 * Returns the coordinates of particular images as a matrix, where the first row
+	 * indicates the starting coordinates and the second indicates the end
+	 * coordinate.
+	 * <p>
+	 * Example: Imaging image is [2, 2, 2]. Then the method returns [[0, 0, 1], [1,
+	 * 1, 1]] for the second plane of the image.
+	 * 
+	 * @param metadata   is the metadata of the image.
+	 * @param planeIndex is the desired plane index, starting from one.
+	 * @return the coordinates of the plane as a 2*n matrix.
+	 * 
+	 * @throws IllegalArgumentException if the plane index is less than 1, or
+	 *                                  exceeds the number of planes, or if the
+	 *                                  image is less than 2D.
+	 */
+	public static long[][] getPlaneCoordinates(IMetadata metadata, long planeIndex) {
+		if (planeIndex < 1 || planeIndex > getNPlanes(metadata)) {
+			throw new IllegalArgumentException("Image plane does not exist.");
+		}
+
+		long[] imgDim = metadata.getDim();
+		if (imgDim.length == 2) {
+			return new long[][] { { 0, 0 }, { imgDim[0] - 1, imgDim[1] - 1 } };
+		}
+
+		planeIndex = planeIndex - 1; // To compensate for index starting from 1.
+		long[] planesPerDim = numPlanesPerDimension(metadata);
+		long[] start = new long[planesPerDim.length];
+		start[planesPerDim.length - 1] = planesPerDim[planesPerDim.length - 2] > 0
+				? planeIndex / planesPerDim[planesPerDim.length - 2]
+				: planeIndex;
+		long planeIndexRemainder = planeIndex % planesPerDim[planesPerDim.length - 2];
+		
+		for (int dim = planesPerDim.length - 2; dim >= 3; dim--) {
+			start[dim] = planeIndexRemainder / planesPerDim[dim - 1];
+			planeIndexRemainder = planeIndexRemainder % planesPerDim[dim - 1];
+		}
+		start[2] = planeIndexRemainder;
+
+		long[] end = start.clone();
+		end[0] = imgDim[0] - 1;
+		end[1] = imgDim[1] - 1;
+
+		return new long[][] { start, end };
 	}
 
 }
