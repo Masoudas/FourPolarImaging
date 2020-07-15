@@ -143,13 +143,13 @@ public class MetadataUtil {
 	 * @param planeIndex is the desired plane index, starting from one.
 	 * @return the coordinates of the plane as a 2*n matrix.
 	 * 
-	 * @throws IllegalArgumentException if the plane index is less than 1, or
+	 * @throws IndexOutOfBoundsException if the plane index is less than 1, or
 	 *                                  exceeds the number of planes, or if the
 	 *                                  image is less than 2D.
 	 */
 	public static long[][] getPlaneCoordinates(IMetadata metadata, long planeIndex) {
 		if (planeIndex < 1 || planeIndex > getNPlanes(metadata)) {
-			throw new IllegalArgumentException("Image plane does not exist.");
+			throw new IndexOutOfBoundsException("Image plane does not exist.");
 		}
 
 		long[] imgDim = metadata.getDim();
