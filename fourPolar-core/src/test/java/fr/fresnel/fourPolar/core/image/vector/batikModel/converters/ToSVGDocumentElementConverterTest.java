@@ -22,12 +22,12 @@ public class ToSVGDocumentElementConverterTest {
         
         ToSVGDocumentElementConverter converter = new ToSVGDocumentElementConverter();
         converter.setImageDim(xdim, ydim);
-        converter.convert(document, _NAME_SPACE);
+        converter.convert(document);
 
         Element documentElement = document.getDocumentElement();
 
-        assertTrue(documentElement.getAttributeNS(_NAME_SPACE, _WIDTH_ATTR).equals(String.valueOf(xdim)));
-        assertTrue(documentElement.getAttributeNS(_NAME_SPACE, _HEIGHT_ATTR).equals(String.valueOf(ydim)));
+        assertTrue(documentElement.getAttributeNS(null, _WIDTH_ATTR).equals(String.valueOf(xdim)));
+        assertTrue(documentElement.getAttributeNS(null, _HEIGHT_ATTR).equals(String.valueOf(ydim)));
     }
 
     private SVGDocument _createDocument() {

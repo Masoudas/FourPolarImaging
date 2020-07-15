@@ -36,22 +36,19 @@ public class BlenderFilterToSVGElementConverterTest {
 
         Element blender = (Element) nodes.item(0);
         assertTrue(blender.getTagName().equals(_FILTER_TAG));
-        assertTrue(blender.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _IN_ATTR).equals("SourceGraphic"));
-        assertTrue(blender.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _MODE_ATTR)
-                .equals(BlenderFilter.Mode.MULTIPLY.modeAsString()));
+        assertTrue(blender.getAttributeNS(null, _IN_ATTR).equals("SourceGraphic"));
+        assertTrue(blender.getAttributeNS(null, _MODE_ATTR).equals(BlenderFilter.Mode.MULTIPLY.modeAsString()));
 
         // These attributes don't exist
-        assertTrue(blender.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _IN2_ATTR)
-        .equals(""));
-        assertTrue(blender.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _RESULT_ATTR)
-        .equals(""));
+        assertTrue(blender.getAttributeNS(null, _IN2_ATTR).equals(""));
+        assertTrue(blender.getAttributeNS(null, _RESULT_ATTR).equals(""));
 
     }
 
     @Test
     public void convert_INSourceGraphicsIN2BackGroundImageModeMultiplyResultR_CreatesBlenderFilterElementWithCorrectAttrs() {
-        BlenderFilter blenderFilter = new BlenderFilter(
-            Filter.IN.SOURCE_GRAPHIC, Filter.IN.BACKGROUND_IMAGE, BlenderFilter.Mode.MULTIPLY, "R");
+        BlenderFilter blenderFilter = new BlenderFilter(Filter.IN.SOURCE_GRAPHIC, Filter.IN.BACKGROUND_IMAGE,
+                BlenderFilter.Mode.MULTIPLY, "R");
 
         SVGDocument document = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
@@ -66,13 +63,10 @@ public class BlenderFilterToSVGElementConverterTest {
 
         Element blender = (Element) nodes.item(0);
         assertTrue(blender.getTagName().equals(_FILTER_TAG));
-        assertTrue(blender.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _IN_ATTR).equals("SourceGraphic"));
-        assertTrue(blender.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _MODE_ATTR)
-                .equals(BlenderFilter.Mode.MULTIPLY.modeAsString()));
-        assertTrue(blender.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _IN2_ATTR)
-        .equals("BackgroundImage"));
-        assertTrue(blender.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _RESULT_ATTR)
-        .equals("R"));
+        assertTrue(blender.getAttributeNS(null, _IN_ATTR).equals("SourceGraphic"));
+        assertTrue(blender.getAttributeNS(null, _MODE_ATTR).equals(BlenderFilter.Mode.MULTIPLY.modeAsString()));
+        assertTrue(blender.getAttributeNS(null, _IN2_ATTR).equals("BackgroundImage"));
+        assertTrue(blender.getAttributeNS(null, _RESULT_ATTR).equals("R"));
 
     }
 }

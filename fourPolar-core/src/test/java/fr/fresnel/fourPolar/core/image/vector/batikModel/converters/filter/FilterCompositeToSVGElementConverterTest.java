@@ -28,7 +28,7 @@ public class FilterCompositeToSVGElementConverterTest {
         SVGDocument document = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
 
-        FilterCompositeToSVGElementConverter.convert(composite, document, SVGDOMImplementation.SVG_NAMESPACE_URI);
+        FilterCompositeToSVGElementConverter.convert(composite, document);
 
         Element documentElement = document.getDocumentElement();
         NodeList nodes = documentElement.getChildNodes();
@@ -37,18 +37,13 @@ public class FilterCompositeToSVGElementConverterTest {
         Element filterCompositeElement = (Element) nodes.item(0);
 
         assertTrue(filterCompositeElement.getTagName().equals("filter"));
-        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _ID_ATTR)
-                .equals(filterID));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _ID_ATTR).equals(filterID));
 
         // The following attributes don't exist
-        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _X_START_ATTR)
-                .equals(""));
-        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _Y_START_ATTR)
-                .equals(""));
-        assertTrue(
-                filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _WIDTH_ATTR).equals(""));
-        assertTrue(
-                filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _HEIGHT_ATTR).equals(""));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _X_START_ATTR).equals(""));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _Y_START_ATTR).equals(""));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _WIDTH_ATTR).equals(""));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _HEIGHT_ATTR).equals(""));
 
         // Check that the child dummy blend filter has been added as well.
         NodeList compositeChildNodes = filterCompositeElement.getChildNodes();
@@ -68,7 +63,7 @@ public class FilterCompositeToSVGElementConverterTest {
         SVGDocument document = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
 
-        FilterCompositeToSVGElementConverter.convert(composite, document, SVGDOMImplementation.SVG_NAMESPACE_URI);
+        FilterCompositeToSVGElementConverter.convert(composite, document);
 
         Element documentElement = document.getDocumentElement();
         NodeList nodes = documentElement.getChildNodes();
@@ -95,7 +90,7 @@ public class FilterCompositeToSVGElementConverterTest {
         SVGDocument document = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
 
-        FilterCompositeToSVGElementConverter.convert(composite, document, SVGDOMImplementation.SVG_NAMESPACE_URI);
+        FilterCompositeToSVGElementConverter.convert(composite, document);
 
         Element documentElement = document.getDocumentElement();
         NodeList nodes = documentElement.getChildNodes();
@@ -104,16 +99,11 @@ public class FilterCompositeToSVGElementConverterTest {
         Element filterCompositeElement = (Element) nodes.item(0);
 
         assertTrue(filterCompositeElement.getTagName().equals("filter"));
-        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _ID_ATTR)
-                .equals(filterID));
-        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _X_START_ATTR)
-                .equals(String.valueOf(x)));
-        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _Y_START_ATTR)
-                .equals(String.valueOf(y)));
-        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _WIDTH_ATTR)
-                .equals(String.valueOf(width) + "%"));
-        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _HEIGHT_ATTR)
-                .equals(String.valueOf(height) + "%"));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _ID_ATTR).equals(filterID));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _X_START_ATTR).equals(String.valueOf(x)));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _Y_START_ATTR).equals(String.valueOf(y)));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _WIDTH_ATTR).equals(String.valueOf(width) + "%"));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _HEIGHT_ATTR).equals(String.valueOf(height) + "%"));
 
         // Check that the child dummy blend filter has been added as well.
         NodeList compositeChildNodes = filterCompositeElement.getChildNodes();
@@ -141,18 +131,13 @@ public class FilterCompositeToSVGElementConverterTest {
         Element filterCompositeElement = (Element) nodes.item(0);
 
         assertTrue(filterCompositeElement.getTagName().equals("filter"));
-        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _ID_ATTR)
-                .equals(filterID));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _ID_ATTR).equals(filterID));
 
         // The following attributes don't exist
-        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _X_START_ATTR)
-                .equals(""));
-        assertTrue(filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _Y_START_ATTR)
-                .equals(""));
-        assertTrue(
-                filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _WIDTH_ATTR).equals(""));
-        assertTrue(
-                filterCompositeElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _HEIGHT_ATTR).equals(""));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _X_START_ATTR).equals(""));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _Y_START_ATTR).equals(""));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _WIDTH_ATTR).equals(""));
+        assertTrue(filterCompositeElement.getAttributeNS(null, _HEIGHT_ATTR).equals(""));
 
         // Check that the child dummy blend filter has been added as well.
         NodeList compositeChildNodes = filterCompositeElement.getChildNodes();

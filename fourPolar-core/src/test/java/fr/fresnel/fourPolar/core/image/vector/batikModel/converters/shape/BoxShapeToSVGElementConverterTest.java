@@ -19,14 +19,13 @@ public class BoxShapeToSVGElementConverterTest {
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
 
-        Element box = BoxShapeToSVGElementConverter.convert(shape, svgDocument, SVGDOMImplementation.SVG_NAMESPACE_URI);
+        Element box = BoxShapeToSVGElementConverter.convert(shape, svgDocument);
 
         assertTrue(box.getTagName().equals("rect"));
-        assertTrue(box.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "x").equals(String.valueOf(0)));
-        assertTrue(box.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "y").equals(String.valueOf(0)));
-        assertTrue(box.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "width").equals(String.valueOf(1)));
-        assertTrue(box.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "height").equals(String.valueOf(1)));
-
+        assertTrue(box.getAttributeNS(null, "x").equals(String.valueOf(0)));
+        assertTrue(box.getAttributeNS(null, "y").equals(String.valueOf(0)));
+        assertTrue(box.getAttributeNS(null, "width").equals(String.valueOf(1)));
+        assertTrue(box.getAttributeNS(null, "height").equals(String.valueOf(1)));
     }
 
     @Test
@@ -37,13 +36,13 @@ public class BoxShapeToSVGElementConverterTest {
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
 
-        Element box = BoxShapeToSVGElementConverter.convert(shape, svgDocument, SVGDOMImplementation.SVG_NAMESPACE_URI);
+        Element box = BoxShapeToSVGElementConverter.convert(shape, svgDocument);
 
         assertTrue(box.getTagName().equals("rect"));
-        assertTrue(box.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "x").equals(String.valueOf(0)));
-        assertTrue(box.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "y").equals(String.valueOf(0)));
-        assertTrue(box.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "width").equals(String.valueOf(1)));
-        assertTrue(box.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "height").equals(String.valueOf(1)));
+        assertTrue(box.getAttributeNS(null, "x").equals(String.valueOf(0)));
+        assertTrue(box.getAttributeNS(null, "y").equals(String.valueOf(0)));
+        assertTrue(box.getAttributeNS(null, "width").equals(String.valueOf(1)));
+        assertTrue(box.getAttributeNS(null, "height").equals(String.valueOf(1)));
 
     }
 }

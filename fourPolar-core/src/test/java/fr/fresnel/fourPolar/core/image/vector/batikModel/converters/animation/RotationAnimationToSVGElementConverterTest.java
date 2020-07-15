@@ -31,8 +31,8 @@ public class RotationAnimationToSVGElementConverterTest {
         int[] rot_angles = { 10, 0 };
         int[] center = { 0, 0 };
         double dur = 0.8;
-        RotationAnimation rotationAnimation = _createAnimation(AnimationEvents.MOUSE_CLICK, null,
-                0.8, rot_angles, center, null);
+        RotationAnimation rotationAnimation = _createAnimation(AnimationEvents.MOUSE_CLICK, null, 0.8, rot_angles,
+                center, null);
 
         SVGDocument document = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
@@ -48,17 +48,17 @@ public class RotationAnimationToSVGElementConverterTest {
 
         // check all animation fields are set properly
         assertTrue(animationElement.getTagName().equals(_ANIMATION_TAG));
-        assertTrue(animationElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _ATTRIBUTE_NAME_ATTR)
+        assertTrue(animationElement.getAttributeNS(null, _ATTRIBUTE_NAME_ATTR)
                 .equals("transform"));
         assertTrue(
-                animationElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _TYPE_ATTR).equals("rotate"));
-        assertTrue(animationElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _DUR_ATTR)
+                animationElement.getAttributeNS(null, _TYPE_ATTR).equals("rotate"));
+        assertTrue(animationElement.getAttributeNS(null, _DUR_ATTR)
                 .equals(String.valueOf(dur) + "s"));
-        assertTrue(animationElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _VALUES_ATTR)
+        assertTrue(animationElement.getAttributeNS(null, _VALUES_ATTR)
                 .equals(String.valueOf(rot_angles[0] + " " + center[0] + " " + center[1] + ";" + rot_angles[1] + " "
                         + center[0] + " " + center[1] + ";")));
         assertTrue(
-                animationElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _BEGIN_ATTR).equals("click"));
+                animationElement.getAttributeNS(null, _BEGIN_ATTR).equals("click"));
     }
 
     @Test
@@ -83,23 +83,24 @@ public class RotationAnimationToSVGElementConverterTest {
 
         // check all animation fields are set properly
         assertTrue(animationElement.getTagName().equals(_ANIMATION_TAG));
-        assertTrue(animationElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _ATTRIBUTE_NAME_ATTR)
+        assertTrue(animationElement.getAttributeNS(null, _ATTRIBUTE_NAME_ATTR)
                 .equals("transform"));
         assertTrue(
-                animationElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _TYPE_ATTR).equals("rotate"));
-        assertTrue(animationElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _DUR_ATTR)
+                animationElement.getAttributeNS(null, _TYPE_ATTR).equals("rotate"));
+        assertTrue(animationElement.getAttributeNS(null, _DUR_ATTR)
                 .equals(String.valueOf(dur) + "s"));
-        assertTrue(animationElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _VALUES_ATTR)
+        assertTrue(animationElement.getAttributeNS(null, _VALUES_ATTR)
                 .equals(String.valueOf(rot_angles[0] + " " + center[0] + " " + center[1] + ";" + rot_angles[1] + " "
                         + center[0] + " " + center[1] + ";")));
         assertTrue(
-                animationElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _BEGIN_ATTR).equals("click"));
+                animationElement.getAttributeNS(null, _BEGIN_ATTR).equals("click"));
         assertTrue(
-                animationElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _END_ATTR).equals("mouseover"));
-        assertTrue(animationElement.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, _REPEAT_COUNT_ATTR)
+                animationElement.getAttributeNS(null, _END_ATTR).equals("mouseover"));
+        assertTrue(animationElement.getAttributeNS(null, _REPEAT_COUNT_ATTR)
                 .equals("indefinite"));
 
     }
+
     private RotationAnimation _createAnimation(AnimationEvents begin, AnimationEvents end, double dur, int[] rot_angles,
             int[] center, AnimationRepeatCount count) {
         RotationAnimation animation = new RotationAnimation();

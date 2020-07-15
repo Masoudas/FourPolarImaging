@@ -19,29 +19,30 @@ public class LineShapeToSVGElementConverterTest {
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
 
-        Element line = LineShapeToSVGElementConverter.convert(lineShape, svgDocument, SVGDOMImplementation.SVG_NAMESPACE_URI);
+        Element line = LineShapeToSVGElementConverter.convert(lineShape, svgDocument);
 
         assertTrue(line.getTagName().equals("line"));
-        assertTrue(line.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "x1").equals(String.valueOf(0)));
-        assertTrue(line.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "y1").equals(String.valueOf(0)));
-        assertTrue(line.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "x2").equals(String.valueOf(1)));
-        assertTrue(line.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "y2").equals(String.valueOf(1)));
+        assertTrue(line.getAttributeNS(null, "x1").equals(String.valueOf(0)));
+        assertTrue(line.getAttributeNS(null, "y1").equals(String.valueOf(0)));
+        assertTrue(line.getAttributeNS(null, "x2").equals(String.valueOf(1)));
+        assertTrue(line.getAttributeNS(null, "y2").equals(String.valueOf(1)));
     }
 
     @Test
     public void convert_lineFrom0000to1100_createsLineElementWithX1Y1X2Y2Attrs() {
-        ILineShape lineShape = new ShapeFactory().line2DShape(new long[] { 1, 1, 0, 0 }, Math.PI / 4, 2, 1, AxisOrder.XYCT);
+        ILineShape lineShape = new ShapeFactory().line2DShape(new long[] { 1, 1, 0, 0 }, Math.PI / 4, 2, 1,
+                AxisOrder.XYCT);
 
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
 
-        Element line = LineShapeToSVGElementConverter.convert(lineShape, svgDocument, SVGDOMImplementation.SVG_NAMESPACE_URI);
+        Element line = LineShapeToSVGElementConverter.convert(lineShape, svgDocument);
 
         assertTrue(line.getTagName().equals("line"));
-        assertTrue(line.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "x1").equals(String.valueOf(0)));
-        assertTrue(line.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "y1").equals(String.valueOf(0)));
-        assertTrue(line.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "x2").equals(String.valueOf(1)));
-        assertTrue(line.getAttributeNS(SVGDOMImplementation.SVG_NAMESPACE_URI, "y2").equals(String.valueOf(1)));
+        assertTrue(line.getAttributeNS(null, "x1").equals(String.valueOf(0)));
+        assertTrue(line.getAttributeNS(null, "y1").equals(String.valueOf(0)));
+        assertTrue(line.getAttributeNS(null, "x2").equals(String.valueOf(1)));
+        assertTrue(line.getAttributeNS(null, "y2").equals(String.valueOf(1)));
     }
 
 }
