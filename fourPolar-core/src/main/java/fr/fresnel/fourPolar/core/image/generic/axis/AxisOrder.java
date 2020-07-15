@@ -3,9 +3,10 @@ package fr.fresnel.fourPolar.core.image.generic.axis;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 
 /**
- * Defines the order of axis associated with a data set. NO FURTHER ORDERS
- * SHOULD BE ADDED WITHOUT CAREFUL CONSIDERATION BY CHECKING THE ENTIRE CODE
- * STRUCTURE, WHERE AXIS ORDER CONTRIBUTES.
+ * Defines the order of axis associated with a data set.
+ * <p>
+ * Note: Every axis-order should start with XY. @see {@link #planeAxisOrder()}.
+ * 
  */
 public enum AxisOrder {
     NoOrder(-1, -1, -1, -1), XY(-1, -1, -1, 2), XYC(2, -1, -1, 3), XYCT(2, -1, 3, 4), XYCZT(2, 3, 4, 5),
@@ -18,6 +19,22 @@ public enum AxisOrder {
         } catch (IllegalArgumentException e) {
             throw new UnsupportedAxisOrder();
         }
+    }
+
+    /**
+     * Returns the axis order in the plane (i.e, first two dimensions). This method
+     * always returns XY (because all axis-order start with XY), and for
+     * {@link #NoOrder} returns {@value #NoOrder}
+     * 
+     * @param axisOrder is the axis order.
+     * @return axis order of plane.
+     */
+    public static AxisOrder planeAxisOrder(AxisOrder axisOrder) {
+        if (axisOrder == NoOrder) {
+            return NoOrder;
+        }
+
+        return XY;
     }
 
     public final int z_axis;
