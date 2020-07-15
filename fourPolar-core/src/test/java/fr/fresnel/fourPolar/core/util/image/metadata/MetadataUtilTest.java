@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.core.util.image.metadata;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +14,8 @@ public class MetadataUtilTest {
     public void numPlanesPerDimension_1DImage_returns0() {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2 }).build();
 
-        long[] nPlanes = MetadataUtil.numPlanesPerDimension(metadata);
-        assertArrayEquals(new long[] { 0 }, nPlanes);
+        assertThrows(IllegalArgumentException.class,
+                () -> MetadataUtil.numPlanesPerDimension(metadata));
     }
 
     @Test
