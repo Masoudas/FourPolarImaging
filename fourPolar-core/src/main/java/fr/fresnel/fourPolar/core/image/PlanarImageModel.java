@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
  */
 public abstract class PlanarImageModel<T> implements ImagePlaneAccesser<T> {
     private static final int _FIRST_PLANE_INDEX = 1;
-   
+
     private final long[] _nPlanesPerDim;
     private final int _totalNumPlanes;
     private final long[] _imageDim;
@@ -35,7 +35,7 @@ public abstract class PlanarImageModel<T> implements ImagePlaneAccesser<T> {
 
         _totalNumPlanes = _getNumPlanesFromMetadata(metadata);
         _imageDim = metadata.getDim();
-        _nPlanesPerDim = _nPlanesPerDim();
+        _nPlanesPerDim = getNumPlanesPerDimension(metadata);
 
         _planes = _createImageArray(metadata, planeSupplier);
     }
@@ -64,26 +64,10 @@ public abstract class PlanarImageModel<T> implements ImagePlaneAccesser<T> {
     }
 
     /**
-     * A helper vector indicating how many planes are present per dimension. For
-     * example, if dim = [2, 2, 3, 4], and given the first two axis indicate the the
-     * xy plane, we conclude that 3 planes are present for the 3rd dim and 12 for
-     * the fourth. Note that the first two elements are always set to zero for
-     * convenience.
+     * @return number of planes per dimension.
      */
-    private long[] _nPlanesPerDim() {
-        if (_imageDim.length <= 2) {
-            return new long[] { 1 };
-        }
-
-        // Create the same vector size. Note that by default, the first two dims
-        // have zero planes.
-        long[] nPlanesPerDim = new long[_imageDim.length];
-        nPlanesPerDim[2] = _imageDim[2];
-        for (int dim = 3; dim < nPlanesPerDim.length; dim++) {
-            nPlanesPerDim[dim] = nPlanesPerDim[dim - 1] * _imageDim[dim];
-        }
-
-        return nPlanesPerDim;
+    private long[] getNumPlanesPerDimension(IMetadata metadata) {
+        return MetadataUtil.numPlanesPerDimension(metadata);
     }
 
     /**
