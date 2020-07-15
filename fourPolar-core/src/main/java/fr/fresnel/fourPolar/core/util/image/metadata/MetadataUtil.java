@@ -163,11 +163,11 @@ public class MetadataUtil {
 		start[planesPerDim.length - 1] = planesPerDim[planesPerDim.length - 2] > 0
 				? planeIndex / planesPerDim[planesPerDim.length - 2]
 				: planeIndex;
-		long planeIndexRemainder = planeIndex % planesPerDim[planesPerDim.length - 2];
-		
+
+		long planeIndexRemainder = planeIndex - start[planesPerDim.length - 1] * planesPerDim[planesPerDim.length - 2];
 		for (int dim = planesPerDim.length - 2; dim >= 3; dim--) {
 			start[dim] = planeIndexRemainder / planesPerDim[dim - 1];
-			planeIndexRemainder = planeIndexRemainder % planesPerDim[dim - 1];
+			planeIndexRemainder = planeIndexRemainder - start[dim] * planesPerDim[dim - 1];
 		}
 		start[2] = planeIndexRemainder;
 
