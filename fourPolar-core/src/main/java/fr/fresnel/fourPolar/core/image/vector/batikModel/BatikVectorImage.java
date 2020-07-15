@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.core.image.vector.batikModel;
 
-import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.Element;
 import org.w3c.dom.svg.SVGDocument;
 
@@ -9,7 +8,6 @@ import fr.fresnel.fourPolar.core.image.ImagePlaneSupplier;
 import fr.fresnel.fourPolar.core.image.PlanarImageModel;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.vector.VectorImage;
 import fr.fresnel.fourPolar.core.image.vector.VectorImageFactory;
@@ -57,21 +55,16 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
         return null;
     }
 
-    @Override
-    public void setBackground(ARGB8 color) {
-
-    }
 
     @Override
     public void addFilterComposite(FilterComposite composite) {
         _toDefsElementConverter.setFilterComposite(new FilterComposite[]{composite});
-        for (int planeIndex = 0; planeIndex < numPlanes(); planeIndex++) {
-            ??? Chetori def ro begiram ke agar lazeme create beshe, va ella na!
-            Element defsElement = ToSVGDefsElementConverter.createDefsElement(svgDocument, namespaceURI);
+        for (ImagePlane<SVGDocument> imagePlane : _planes) {
+            SVGDocument svgDocument = imagePlane.getPlane();
+
+            Element defsElement = ToSVGDefsElementConverter.createDefsElement(svgDocument, svgDocument.getNamespaceURI());
             _toDefsElementConverter.convert(svgDocument, defsElement);    
         }
-        
-
     }
 
     @Override

@@ -2,7 +2,6 @@ package fr.fresnel.fourPolar.core.image.vector;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 
@@ -24,16 +23,6 @@ public interface VectorImage {
      * @return the random access associated with this image.
      */
     public VectorRandomAccess randomAccess();
-
-    /**
-     * Sets the background color of the image. i.e, all pixels are set to the given
-     * color.
-     * <p>
-     * To set the background, we simply draw a rectangle that is equivalent to
-     * dimension of the image. Hence, it's recommneded that this method would be
-     * called as one of the first methods when drawing the image
-     */
-    public void setBackground(ARGB8 color);
 
     /**
      * Adds the given composite filter as a child of svg defs element.
