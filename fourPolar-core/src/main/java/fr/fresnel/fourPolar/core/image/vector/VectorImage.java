@@ -36,8 +36,7 @@ public interface VectorImage {
      * method, the pixels are set as is (i.e as bytes).
      * 
      * @throws IllegalArgumentException in case the given image does not have same
-     *                                  axis order and dimension as this vector
-     *                                  image.
+     *                                  dimension as this image.
      */
     public <T extends PixelType> void setImage(Image<T> image, T pixelType);
 
