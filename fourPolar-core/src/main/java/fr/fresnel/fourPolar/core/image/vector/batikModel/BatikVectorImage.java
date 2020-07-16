@@ -15,6 +15,7 @@ import fr.fresnel.fourPolar.core.image.vector.VectorImage;
 import fr.fresnel.fourPolar.core.image.vector.VectorImageFactory;
 import fr.fresnel.fourPolar.core.image.vector.VectorRandomAccess;
 import fr.fresnel.fourPolar.core.image.vector.batikModel.converters.ToSVGDefsElementConverter;
+import fr.fresnel.fourPolar.core.image.vector.batikModel.converters.image.ImageToSVGElementConverter;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
 
@@ -83,7 +84,7 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
 
             String planeWidth = docElement.getAttributeNS(null, _SVG_WIDTH_ATTR);
             String planeHeight = docElement.getAttributeNS(null, _SVG_HEIGHT_ATTR);
-            if (!planeWidth.equals(widthAsString) || !planeHeight.equals(heightAsString)){
+            if (!planeWidth.equals(widthAsString) || !planeHeight.equals(heightAsString)) {
                 throw new IllegalArgumentException("plane dimension is not equal to metadata plane size.");
             }
         }
@@ -119,6 +120,13 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
 
     @Override
     public <T extends PixelType> void setImage(Image<T> image, T pixelType) {
+        if (!MetadataUtil.isDimensionEqual(this.metadata(), image.getMetadata())) {
+            throw new IllegalArgumentException("The given image does not have same dimension as this image");
+        }
+
+        for (int planeIndex = 1; planeIndex <= _planes.length; planeIndex++) {
+            ImageToSVGElementConverter.convert(image, pixelType, planeIndex, getImagePlane(planeIndex).getPlane());
+        }
 
     }
 
