@@ -9,7 +9,9 @@ import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
+import fr.fresnel.fourPolar.core.image.generic.AWTModel.type.BufferedImageTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
+import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
 
 /**
  * An abstract class for implementing the image interface using
@@ -31,13 +33,62 @@ public abstract class AWTBufferedImage<T extends PixelType> extends PlanarImageM
         super(metadata, _createBuffreredImageArray(metadata, pixelType));
         Objects.requireNonNull(metadata, "Metadata can't be null");
         Objects.requireNonNull(factory, "factory can't be null");
+        Objects.requireNonNull(pixelType, "pixelType can't be null");
 
         _metadata = metadata;
         _factory = factory;
     }
 
     /**
-     * @return an instance of supplier of buffered image that can be used to create planes of required size.
+     * Construct by directly providing the image planes.
+     * 
+     * @param metadata    is the metadata of the image.
+     * @param factory     is the factory instance.
+     * @param pixelType   is the pixel type associated with the image.
+     * @param imagePlanes are the image planes.
+     * 
+     * @throws IllegalArgumentException if a plane does not have the same dimension
+     *                                  as given by the metadata.
+     */
+    protected AWTBufferedImage(IMetadata metadata, ImageFactory factory, T pixelType, BufferedImage[] imagePlanes) {
+        super(metadata, imagePlanes);
+
+        Objects.requireNonNull(metadata, "Metadata can't be null");
+        Objects.requireNonNull(factory, "factory can't be null");
+        Objects.requireNonNull(pixelType, "pixelType can't be null");
+
+        _metadata = metadata;
+        _factory = factory;
+    }
+
+    @Override
+    public void _checkPlanesHaveSameDimensionAsMetadata(IMetadata metadata, BufferedImage[] imagePlanes) {
+        long[] planeSize = MetadataUtil.getPlaneDim(metadata);
+
+        for (int i = 0; i < imagePlanes.length; i++) {
+            BufferedImage imagePlane = imagePlanes[i];
+            if (imagePlane.getWidth() != planeSize[0] || imagePlane.getHeight() != planeSize[1]) {
+                throw new IllegalArgumentException(
+                        "Image plane" + i + "does not have the same dimension as the metadata.");
+            }
+        }
+    }
+
+    public void _checkPlanesHaveSamePixelTypeAsInputType(T pixelType, BufferedImage[] imagePlanes) {
+        BufferedImageTypes bufferedType = BufferedImageTypes.convertPixelTypes(pixelType.getType());
+
+        for (int i = 0; i < imagePlanes.length; i++) {
+            BufferedImage imagePlane = imagePlanes[i];
+            if (imagePlane.getType() != bufferedType.getBufferedType()) {
+                throw new IllegalArgumentException("Image plane" + i + "does not have the same type as input type.");
+            }
+        }
+
+    }
+
+    /**
+     * @return an instance of supplier of buffered image that can be used to create
+     *         planes of required size.
      */
     private static AWTBufferedImagePlaneSupplier _createBuffreredImageArray(IMetadata metadata, PixelType pixelType) {
         int xdim = (int) metadata.getDim()[0];
