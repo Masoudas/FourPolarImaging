@@ -74,8 +74,8 @@ public class ImageToSVGElementConverter {
         Element imgElement = svgDocument.createElementNS(svgDocument.getNamespaceURI(), _IMG_TAG);
         imgElement.setAttributeNS(null, _X_ATTR, _START_X_PIXEL);
         imgElement.setAttributeNS(null, _Y_ATTR, _START_Y_PIXEL);
-        imgElement.setAttributeNS(null, _WIDTH_ATTR, String.valueOf(dim[0]));
-        imgElement.setAttributeNS(null, _HEIGHT_ATTR, String.valueOf(dim[1]));
+        imgElement.setAttributeNS(null, _WIDTH_ATTR, String.valueOf(dim[0] - 1));
+        imgElement.setAttributeNS(null, _HEIGHT_ATTR, String.valueOf(dim[1] - 1));
         imgElement.setAttributeNS(null, _ASPECT_RATIO_ATTR, _ASPECT_RATIO);
 
         return imgElement;
