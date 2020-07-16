@@ -99,7 +99,7 @@ public class MetadataUtil {
 	 * @return true if number of axis in the given {@link AxisOrder} equals the
 	 *         given dimension vector, otherwise return false.
 	 */
-	public static boolean isNumAxisEqualDimension(AxisOrder axisOrder, long[] dimension) {
+	public static boolean numAxisEqualsDimension(AxisOrder axisOrder, long[] dimension) {
 		return axisOrder.numAxis == dimension.length;
 	}
 
