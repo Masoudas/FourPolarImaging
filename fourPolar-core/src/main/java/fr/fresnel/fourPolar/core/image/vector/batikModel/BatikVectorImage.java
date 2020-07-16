@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.core.image.vector.batikModel;
 
+import java.util.Objects;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.svg.SVGDocument;
 
@@ -14,12 +16,16 @@ import fr.fresnel.fourPolar.core.image.vector.VectorImageFactory;
 import fr.fresnel.fourPolar.core.image.vector.VectorRandomAccess;
 import fr.fresnel.fourPolar.core.image.vector.batikModel.converters.ToSVGDefsElementConverter;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
+import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
 
 /**
  * A vector image that has an {@link SVGDocument} as backend for each plane, and
  * extends {@link PlanarImageModel} to manage access to each plane.
  */
 class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorImage {
+    private static final String _SVG_WIDTH_ATTR = "width";
+    private static final String _SVG_HEIGHT_ATTR = "height";
+
     private final ToSVGDefsElementConverter _toDefsElementConverter = new ToSVGDefsElementConverter();
 
     private final VectorImageFactory _factory;
@@ -32,11 +38,55 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
         return new BatikVectorImagePlaneSupplier(xdim, ydim);
     }
 
-    public BatikVectorImage(IMetadata metadata, VectorImageFactory factory){
+    /**
+     * Create an empty image instance.
+     * 
+     * @param metadata
+     * @param factory
+     */
+    public BatikVectorImage(IMetadata metadata, VectorImageFactory factory) {
         super(metadata, _createPlaneSupplier(metadata));
+        Objects.requireNonNull(factory, "factory can't be null");
 
         _factory = factory;
         _metadata = metadata;
+    }
+
+    /**
+     * Create an image by directly providing each plane. Note that the planes are
+     * indexed in the order they'are provided.
+     * 
+     * @param metadata is the metadata of the image.
+     * @param factory  is the factory for creating such images.
+     * @param planes   are the image planes.
+     * 
+     * @throws IllegalArgumentException if number of planes in metadata does not
+     *                                  match the number of planes, or a plane size
+     *                                  is not equal to the metadata size.
+     */
+    public BatikVectorImage(IMetadata metadata, VectorImageFactory factory, SVGDocument[] planes) {
+        super(metadata, planes);
+
+        _metadata = metadata;
+        _factory = factory;
+    }
+
+    @Override
+    protected void _checkPlanesHaveSameDimensionAsMetadata(IMetadata metadata, SVGDocument[] planes)
+            throws IllegalArgumentException {
+        long[] planeSize = MetadataUtil.getPlaneDim(metadata);
+        String widthAsString = String.valueOf(planeSize[0]);
+        String heightAsString = String.valueOf(planeSize[1]);
+
+        for (SVGDocument svgDocument : planes) {
+            Element docElement = svgDocument.getDocumentElement();
+
+            String planeWidth = docElement.getAttributeNS(null, _SVG_WIDTH_ATTR);
+            String planeHeight = docElement.getAttributeNS(null, _SVG_HEIGHT_ATTR);
+            if (!planeWidth.equals(widthAsString) || !planeHeight.equals(heightAsString)){
+                throw new IllegalArgumentException("plane dimension is not equal to metadata plane size.");
+            }
+        }
     }
 
     @Override
@@ -55,23 +105,22 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
         return null;
     }
 
-
     @Override
     public void addFilterComposite(FilterComposite composite) {
-        _toDefsElementConverter.setFilterComposite(new FilterComposite[]{composite});
+        _toDefsElementConverter.setFilterComposite(new FilterComposite[] { composite });
         for (ImagePlane<SVGDocument> imagePlane : _planes) {
             SVGDocument svgDocument = imagePlane.getPlane();
 
-            Element defsElement = ToSVGDefsElementConverter.createDefsElement(svgDocument, svgDocument.getNamespaceURI());
-            _toDefsElementConverter.convert(svgDocument, defsElement);    
+            Element defsElement = ToSVGDefsElementConverter.createDefsElement(svgDocument,
+                    svgDocument.getNamespaceURI());
+            _toDefsElementConverter.convert(svgDocument, defsElement);
         }
     }
 
     @Override
     public <T extends PixelType> void setImage(Image<T> image, T pixelType) {
-        
-    }
 
+    }
 
     @Override
     public ImagePlane<SVGDocument> getImagePlane(int planeNumber) {
@@ -87,5 +136,5 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
     public int numPlanes() {
         return super.numPlanes();
     }
-    
+
 }
