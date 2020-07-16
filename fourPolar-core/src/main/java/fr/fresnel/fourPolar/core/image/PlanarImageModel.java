@@ -45,14 +45,13 @@ public abstract class PlanarImageModel<T> implements ImagePlaneAccesser<T> {
      * array.
      * 
      * @param metadata is the metadata of the image.
-     * @param planes   is the array of plane images.
+     * @param planes   is the array of planes.
      * 
      * @throws IllegalArgumentException if number of planes in metadata does not
-     *                                  match the number of planes, or if the plane
-     *                                  index does not correspond to its position in
-     *                                  the array.
+     *                                  match the number of planes, or a plane size
+     *                                  is not equal to the metadata size.
      */
-    protected PlanarImageModel(IMetadata metadata, ImagePlane<T>[] planes) {
+    protected PlanarImageModel(IMetadata metadata, T[] planes) {
         Objects.requireNonNull(metadata, "metadata can't be null");
         Objects.requireNonNull(planes, "planes can't be null");
 
@@ -60,18 +59,34 @@ public abstract class PlanarImageModel<T> implements ImagePlaneAccesser<T> {
             throw new IllegalArgumentException(
                     "number of planes in metadata does not correspond to the length of planes array.");
         }
-
-        for (int index = 0; index < planes.length; index++) {
-            if (planes[index].planeIndex() != index + 1) {
-                throw new IllegalArgumentException("plane index does not correspond to position in the array.");
-            }
-        }
+        _checkPlanesHaveSameDimensionAsMetadata(metadata, planes);
 
         _totalNumPlanes = _getNumPlanesFromMetadata(metadata);
         _imageDim = metadata.getDim();
         _nPlanesPerDim = getNumPlanesPerDimension(metadata);
 
-        _planes = planes;
+        _planes = _wrapPlanesToImagePlane(planes);
+    }
+
+    /**
+     * A method that checks all the planes provided by the caller have the same
+     * dimension as the plane dimension provided by the metadata, and throw an
+     * IllegalArgumentException otherwise. This method is used inside the
+     * {@link #PlanarImageModel()} constructor.
+     * 
+     * @param metadata is the metadata of the image.
+     * @param planes   are the planes provided for construction of the object.
+     */
+    protected abstract void _checkPlanesHaveSameDimensionAsMetadata(IMetadata metadata, T[] planes)
+            throws IllegalArgumentException;
+
+    @SuppressWarnings("unchecked")
+    private ImagePlane<T>[] _wrapPlanesToImagePlane(T[] planes) {
+        ImagePlane<T>[] wrappedPlanes = new ImagePlane[planes.length];
+        for (int i = 0; i < planes.length; i++) {
+            wrappedPlanes[i] = new DefaultImagePlane<T>(planes[i], i + 1);
+        }
+        return wrappedPlanes;
     }
 
     private int _getNumPlanesFromMetadata(IMetadata metadata) {
