@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 
 /**
  * A set of utility methods on metadata information.
@@ -31,7 +32,7 @@ public class MetadataUtil {
 	 */
 	public static boolean isImageQuasiPlanar(IMetadata metadata) {
 		long[] dim = metadata.getDim();
-		if (dim.length < 2){
+		if (dim.length < 2) {
 			return false;
 		}
 
@@ -58,34 +59,55 @@ public class MetadataUtil {
 	 * 
 	 * @param metadata is the metadata.
 	 * @return an array containing plane dimension.
+	 * 
+	 * @throws IllegalArgumentException if the image is not at least 2D.
 	 */
 	public static long[] getPlaneDim(IMetadata metadata) {
 		Objects.requireNonNull(metadata, "metadata cannot be null.");
 
 		long[] dims = metadata.getDim();
+		if (dims.length < 2) {
+			throw new IllegalArgumentException("Image must be at least 2D to have a plane.");
+		}
+
 		return new long[] { dims[0], dims[1] };
 	}
 
 	/**
-	 * Returns the plane size of the metadata.
 	 * 
-	 * @return
+	 * @param metadata is the metadata.
+	 * @return the number of pixels in a plane.
+	 * @throws IllegalArgumentException if the image is not at least 2D.
 	 */
 	public static long getPlaneSize(IMetadata metadata) {
+		Objects.requireNonNull(metadata, "metadata cannot be null.");
+
+		long[] dims = metadata.getDim();
+		if (dims.length < 2) {
+			throw new IllegalArgumentException("Image must be at least 2D to have a plane.");
+		}
+
 		long[] planeDim = getPlaneDim(metadata);
 		return planeDim[0] * planeDim[1];
 	}
 
 	public static boolean isDimensionEqual(IMetadata metadata1, IMetadata metadata2) {
+		Objects.requireNonNull(metadata1, "metadata1 cannot be null.");
+		Objects.requireNonNull(metadata2, "metadata2 cannot be null.");
+
 		return Arrays.equals(metadata1.getDim(), metadata2.getDim());
 	}
 
 	public static boolean isAxisOrderEqual(IMetadata metadata1, IMetadata metadata2) {
+		Objects.requireNonNull(metadata1, "metadata1 cannot be null.");
+		Objects.requireNonNull(metadata2, "metadata2 cannot be null.");
+
 		return metadata1.axisOrder() == metadata2.axisOrder();
 
 	}
 
 	public static long[] getImageLastPixel(IMetadata metadata) {
+		Objects.requireNonNull(metadata, "metadata cannot be null.");
 		return Arrays.stream(metadata.getDim()).map((t) -> t - 1).toArray();
 	}
 
@@ -94,6 +116,8 @@ public class MetadataUtil {
 	 *         given dimension vector, otherwise return false.
 	 */
 	public static boolean numAxisEqualsDimension(AxisOrder axisOrder, long[] dimension) {
+		Objects.requireNonNull(axisOrder, "axisOrder cannot be null.");
+		Objects.requireNonNull(dimension, "dimension cannot be null.");
 		return axisOrder.numAxis == dimension.length;
 	}
 
@@ -109,6 +133,8 @@ public class MetadataUtil {
 	 * @throws IllegalArgumentException if image is not at least 2D.
 	 */
 	public static long[] numPlanesPerDimension(IMetadata metadata) {
+		Objects.requireNonNull(metadata, "metadata cannot be null.");
+
 		long[] imageDim = metadata.getDim();
 
 		if (imageDim.length <= 1) {
@@ -146,6 +172,8 @@ public class MetadataUtil {
 	 *                                   image is less than 2D.
 	 */
 	public static long[][] getPlaneCoordinates(IMetadata metadata, long planeIndex) {
+		Objects.requireNonNull(metadata, "metadata cannot be null.");
+		
 		if (planeIndex < 1 || planeIndex > getNPlanes(metadata)) {
 			throw new IndexOutOfBoundsException("Image plane does not exist.");
 		}
@@ -174,6 +202,27 @@ public class MetadataUtil {
 		end[1] = imgDim[1] - 1;
 
 		return new long[][] { start, end };
+	}
+
+	/**
+	 * Create a metadata instance, which replicates the source metadata, but would
+	 * correspond to only a plane of this image. For example, if AxisOrder is XYZ
+	 * and dimension is [2, 3, 3], the new metadata would have AxisOrder XY and
+	 * dimension [2, 3].
+	 * 
+	 * @param srcMetadata is the source metadata whose plane metadata we wish to
+	 *                    extract.
+	 * @throws IllegalArgumentException if the source metadata does is not at least
+	 *                                  2D.
+	 */
+	public static IMetadata createPlaneMetadata(IMetadata srcMetadata) {
+		Objects.requireNonNull(srcMetadata, "srcMetadata cannot be null.");
+
+		long[] planeDim = MetadataUtil.getPlaneDim(srcMetadata);
+		AxisOrder planeAxisOrder = AxisOrder.planeAxisOrder(srcMetadata.axisOrder());
+
+		return new Metadata.MetadataBuilder(planeDim).axisOrder(planeAxisOrder)
+				.bitPerPixel(srcMetadata.bitPerPixel()).build();
 	}
 
 }
