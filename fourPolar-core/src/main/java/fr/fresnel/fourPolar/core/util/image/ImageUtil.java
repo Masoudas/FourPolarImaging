@@ -36,6 +36,23 @@ public class ImageUtil {
     }
 
     /**
+     * Copies the content of the source cursor into the destination randomaccess.
+     * It's the responsibility of the caller to ensure that both the cursor and ra
+     * correpond in size.
+     * 
+     * @param <T>       is the pixel type.
+     * @param srcCursor is the source (image) cursor.
+     * @param destRA    is the destination (image) ra.
+     */
+    public static <T extends PixelType> void copy(IPixelCursor<T> srcCursor, IPixelRandomAccess<T> destRA) {
+        for (; srcCursor.hasNext();) {
+            IPixel<T> pixel = srcCursor.next();
+            destRA.setPosition(srcCursor.localize());
+            destRA.setPixel(pixel);
+        }
+    }
+
+    /**
      * Creates a cursor over the demaned plane.
      * 
      * @param <T>        is the pixel type of the image.
