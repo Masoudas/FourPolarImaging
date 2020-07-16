@@ -65,7 +65,7 @@ public class ImageUtil {
      *                                   less than one or greater than number of
      *                                   planes.
      */
-    public static <T extends PixelType> IPixelCursor<T> getPlaneCursor(Image<T> image, int planeIndex) {
+    public static <T extends PixelType> IPixelCursor<T> getPlaneCursor(Image<T> image, long planeIndex) {
         long[][] planeCoords = MetadataUtil.getPlaneCoordinates(image.getMetadata(), planeIndex);
 
         long[] len = IntStream.range(0, planeCoords[0].length).mapToLong(i -> planeCoords[1][i] - planeCoords[0][i] + 1)
