@@ -3,6 +3,8 @@ package fr.fresnel.fourPolar.core.image;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
@@ -17,6 +19,47 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
  * types.
  */
 public class PlanarImageModelTest {
+    @Test
+    public void init_PlanesDontHaveSameDimensionAsMetadata_ThrowsIllegalArgumentException() {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1 }).axisOrder(AxisOrder.XY)
+                .bitPerPixel(PixelTypes.UINT_16).build();
+
+        DummyPlaneModel dummyPlaneModel = new DummyPlaneModel(new long[] { 2, 2 });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            new DummyPlanarWithPlanesConstructor(metadata, new DummyPlaneModel[] { dummyPlaneModel });
+        });
+    }
+
+    @Test
+    public void init_NumPlanesNotEqualToMetadataNumPlanes_ThrowsIllegalArgumentException() {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 2 }).axisOrder(AxisOrder.XYZ)
+                .bitPerPixel(PixelTypes.UINT_16).build();
+
+        DummyPlaneModel dummyPlaneModel = new DummyPlaneModel(new long[] { 1, 1 });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            new DummyPlanarWithPlanesConstructor(metadata, new DummyPlaneModel[] { dummyPlaneModel });
+        });
+    }
+
+    @Test
+    public void init_TwoPlaneImage_CreatesCorrectPlanarImage() {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1, 2 }).axisOrder(AxisOrder.XYZ)
+                .bitPerPixel(PixelTypes.UINT_16).build();
+
+        DummyPlaneModel plane_1 = new DummyPlaneModel(new long[] { 1, 1 });
+        DummyPlaneModel plane_2 = new DummyPlaneModel(new long[] { 1, 1 });
+
+        PlanarImageModel<DummyPlaneModel> pModel = new DummyPlanarWithPlanesConstructor(metadata,
+                new DummyPlaneModel[] { plane_1, plane_2 });
+
+        for (int planeIndex = 1; planeIndex <= 2; planeIndex++) {
+            assertTrue(pModel.getImagePlane(planeIndex).planeIndex() == planeIndex);
+        }
+
+    }
+
     @Test
     public void getPlaneIndex_11XYImage_Return1ForPosition00() {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1 }).axisOrder(AxisOrder.XY)
@@ -73,7 +116,7 @@ public class PlanarImageModelTest {
         DummyPlanarImage image = new DummyPlanarImage(metadata);
 
         int planeNo = image.getPlaneIndex(new long[] { 0, 0, 0, 0, 2 });
-        
+
         assertTrue(planeNo == 3);
     }
 
@@ -85,7 +128,7 @@ public class PlanarImageModelTest {
         DummyPlanarImage image = new DummyPlanarImage(metadata);
 
         assertTrue(image.getImagePlane(1).planeIndex() == 1);
-        assertThrows(IllegalArgumentException.class, ()->image.getImagePlane(2));
+        assertThrows(IllegalArgumentException.class, () -> image.getImagePlane(2));
 
     }
 
@@ -97,7 +140,7 @@ public class PlanarImageModelTest {
         DummyPlanarImage image = new DummyPlanarImage(metadata);
 
         for (int planeIndex = 1; planeIndex <= 3; planeIndex++) {
-            assertTrue(image.getImagePlane(planeIndex).planeIndex() == planeIndex);    
+            assertTrue(image.getImagePlane(planeIndex).planeIndex() == planeIndex);
         }
     }
 
@@ -108,8 +151,7 @@ public class PlanarImageModelTest {
 
         DummyPlanarImage image = new DummyPlanarImage(metadata);
 
-        assertThrows(IllegalArgumentException.class, ()->image.getImagePlane(10).planeIndex());
-        
+        assertThrows(IllegalArgumentException.class, () -> image.getImagePlane(10).planeIndex());
 
     }
 
@@ -121,22 +163,29 @@ public class PlanarImageModelTest {
         DummyPlanarImage image = new DummyPlanarImage(metadata);
 
         for (int planeIndex = 1; planeIndex <= 9; planeIndex++) {
-            assertTrue(image.getImagePlane(planeIndex).planeIndex() == planeIndex);    
+            assertTrue(image.getImagePlane(planeIndex).planeIndex() == planeIndex);
         }
-        
 
     }
 
 }
 
-class DummyPlaneModel{
+class DummyPlaneModel {
+    private long[] dim;
 
+    public DummyPlaneModel(long[] dim) {
+        this.dim = dim;
+    }
+
+    public long[] getDim() {
+        return dim;
+    }
 }
 
-class DummyPlaneSupplier implements ImagePlaneSupplier<DummyPlaneModel>{
+class DummyPlaneSupplier implements ImagePlaneSupplier<DummyPlaneModel> {
     @Override
     public DummyPlaneModel get() {
-        return new DummyPlaneModel();
+        return new DummyPlaneModel(new long[] { 1, 1 });
     }
 
 }
@@ -152,3 +201,21 @@ class DummyPlanarImage extends PlanarImageModel<DummyPlaneModel> {
     }
 }
 
+class DummyPlanarWithPlanesConstructor extends PlanarImageModel<DummyPlaneModel> {
+
+    protected DummyPlanarWithPlanesConstructor(IMetadata metadata, DummyPlaneModel[] planes) {
+        super(metadata, planes);
+    }
+
+    @Override
+    protected void _checkPlanesHaveSameDimensionAsMetadata(IMetadata metadata, DummyPlaneModel[] planes)
+            throws IllegalArgumentException {
+        for (DummyPlaneModel dummyPlaneModel : planes) {
+            long[] planeSize = metadata.getDim();
+            if (!Arrays.equals(new long[] { planeSize[0], planeSize[1] }, dummyPlaneModel.getDim())) {
+                throw new IllegalArgumentException();
+            }
+        }
+    }
+
+}
