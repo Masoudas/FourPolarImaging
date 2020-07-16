@@ -145,5 +145,10 @@ class DummyPlanarImage extends PlanarImageModel<DummyPlaneModel> {
     public DummyPlanarImage(IMetadata metadata) {
         super(metadata, new DummyPlaneSupplier());
     }
+
+    @Override
+    protected void _checkPlanesHaveSameDimensionAsMetadata(IMetadata metadata, DummyPlaneModel[] planes)
+            throws IllegalArgumentException {
+    }
 }
 
