@@ -5,8 +5,6 @@ import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.util.shape.IPointShape;
-import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
 /**
  * A set of utility methods on metadata information.
