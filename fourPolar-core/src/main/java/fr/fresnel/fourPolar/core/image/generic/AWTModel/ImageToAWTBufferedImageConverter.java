@@ -2,13 +2,10 @@ package fr.fresnel.fourPolar.core.image.generic.AWTModel;
 
 import java.util.Objects;
 
+import java.awt.image.BufferedImage;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
-import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
-import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.util.image.ImageUtil;
@@ -60,21 +57,20 @@ public class ImageToAWTBufferedImageConverter {
      *                          number of planes.
      */
     public static AWTBufferedImage<UINT16> convertPlane(Image<UINT16> image, UINT16 pixelType, int planeIndex) {
-        long[] planeDim = MetadataUtil.getPlaneDim(image.getMetadata());
-        AxisOrder planeAxisOrder = AxisOrder.planeAxisOrder(image.getMetadata().axisOrder());
+        IMetadata planeMetadata = MetadataUtil.createPlaneMetadata(image.getMetadata());
 
-        IMetadata metadata = new Metadata.MetadataBuilder(planeDim).axisOrder(planeAxisOrder)
-                .bitPerPixel(pixelType.getType()).build();
-        Image<UINT16> bufferedImg = _BUFFERED_IMAGE_FACTORY.create(metadata, pixelType);
-
-        IPixelRandomAccess<UINT16> bufferedImgRA = bufferedImg.getRandomAccess();
-        for (IPixelCursor<UINT16> planeCursor = ImageUtil.getPlaneCursor(image, planeIndex); planeCursor.hasNext();) {
-            IPixel<UINT16> pixel = planeCursor.next();
-            bufferedImgRA.setPosition(planeCursor.localize());
-            bufferedImgRA.setPixel(pixel);
+        Image<UINT16> imagePlane = null;
+        if (image instanceof AWTBufferedImage<?>) {
+            AWTBufferedImage<UINT16> imageAsBuffImg = (AWTBufferedImage<UINT16>) image;
+            imagePlane = (AWTBufferedImage<UINT16>) _BUFFERED_IMAGE_FACTORY.createFromPlanes(planeMetadata, pixelType,
+                    new BufferedImage[] { imageAsBuffImg.getImagePlane(planeIndex).getPlane() });
+        } else {
+            imagePlane = _BUFFERED_IMAGE_FACTORY.create(planeMetadata, pixelType);
+            IPixelCursor<UINT16> pixelCursor = ImageUtil.getPlaneCursor(image, planeIndex);
+            ImageUtil.copy(pixelCursor, imagePlane.getRandomAccess());
         }
 
-        return (AWTBufferedImage<UINT16>)bufferedImg;
+        return (AWTBufferedImage<UINT16>) imagePlane;
 
     }
 
