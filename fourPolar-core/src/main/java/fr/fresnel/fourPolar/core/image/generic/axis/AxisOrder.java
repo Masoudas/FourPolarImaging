@@ -22,9 +22,9 @@ public enum AxisOrder {
     }
 
     /**
-     * Returns the axis order in the plane (i.e, first two dimensions). This method
+     * Returns the axis order of the plane (i.e, first two dimensions). This method
      * always returns XY (because all axis-order start with XY), and for
-     * {@link #NoOrder} returns {@value #NoOrder}
+     * {@link #NoOrder} returns {@link #NoOrder}
      * 
      * @param axisOrder is the axis order.
      * @return axis order of plane.
