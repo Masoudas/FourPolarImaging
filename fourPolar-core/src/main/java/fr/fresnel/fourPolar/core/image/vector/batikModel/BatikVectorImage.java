@@ -125,7 +125,9 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
         }
 
         for (int planeIndex = 1; planeIndex <= _planes.length; planeIndex++) {
-            ImageToSVGElementConverter.convert(image, pixelType, planeIndex, getImagePlane(planeIndex).getPlane());
+            SVGDocument vectorPlane = getImagePlane(planeIndex).getPlane();
+            Element imgElement = ImageToSVGElementConverter.convert(image, pixelType, planeIndex, vectorPlane);
+            vectorPlane.getDocumentElement().appendChild(imgElement);
         }
 
     }
