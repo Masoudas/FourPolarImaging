@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.core.util.image.metadata;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
@@ -15,17 +16,11 @@ public class MetadataUtil {
 	}
 
 	/**
-	 * Returns true if image is planer (has at most one z point, and time point, and
-	 * channel or a combination of them).
+	 * Returns true if image is planer (i.e, it has only two dimensions).
 	 */
 	public static boolean isImagePlanar(IMetadata metadata) {
 		long[] dim = metadata.getDim();
-
-		long nChannels = metadata.axisOrder().c_axis > 0 ? dim[metadata.axisOrder().c_axis] : 0;
-		long nZpoints = metadata.axisOrder().z_axis > 0 ? dim[metadata.axisOrder().z_axis] : 0;
-		long nTimepoints = metadata.axisOrder().t_axis > 0 ? dim[metadata.axisOrder().t_axis] : 0;
-
-		return nChannels <= 1 && nZpoints <= 1 && nTimepoints <= 1;
+		return dim.length == 2;
 	}
 
 	/**
@@ -36,12 +31,11 @@ public class MetadataUtil {
 	 */
 	public static boolean isImageQuasiPlanar(IMetadata metadata) {
 		long[] dim = metadata.getDim();
+		if (dim.length < 2){
+			return false;
+		}
 
-		long nChannels = metadata.axisOrder().c_axis > 0 ? dim[metadata.axisOrder().c_axis] : 0;
-		long nZpoints = metadata.axisOrder().z_axis > 0 ? dim[metadata.axisOrder().z_axis] : 0;
-		long nTimepoints = metadata.axisOrder().t_axis > 0 ? dim[metadata.axisOrder().t_axis] : 0;
-
-		return nChannels <= 1 && nZpoints <= 1 && nTimepoints <= 1;
+		return isImagePlanar(metadata) || IntStream.range(2, dim.length).allMatch(i -> dim[i] == 1);
 	}
 
 	/**
