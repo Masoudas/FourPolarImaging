@@ -31,7 +31,7 @@ class BatikVectorImagePlaneSupplier implements ImagePlaneSupplier<SVGDocument> {
     @Override
     public SVGDocument get() {
         SVGDocument svgDocument = _createSVGDocument();
-        _setDocumentElementAttributes(svgDocument, _NAMESPACE_URI);
+        _setDocumentElementAttributes(svgDocument);
 
         return svgDocument;
     }
@@ -43,8 +43,8 @@ class BatikVectorImagePlaneSupplier implements ImagePlaneSupplier<SVGDocument> {
     /**
      * Set the properties that should be written as attributes of svg document.
      */
-    private void _setDocumentElementAttributes(SVGDocument svgDocument, String namespaceURI) {
-        _toDocsElementConverter.convert(svgDocument, namespaceURI);
+    private void _setDocumentElementAttributes(SVGDocument svgDocument) {
+        _toDocsElementConverter.convert(svgDocument);
     }
 
 }
