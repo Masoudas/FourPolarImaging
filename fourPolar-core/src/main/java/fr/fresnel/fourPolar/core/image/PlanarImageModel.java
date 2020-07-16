@@ -30,7 +30,7 @@ public abstract class PlanarImageModel<T> implements ImagePlaneAccesser<T> {
      * @param planeSupplier is the supplier for creating new instances of plane.
      */
     protected PlanarImageModel(IMetadata metadata, ImagePlaneSupplier<T> planeSupplier) {
-        Objects.requireNonNull(metadata, "Metadata can't be null");
+        Objects.requireNonNull(metadata, "metadata can't be null");
         Objects.requireNonNull(planeSupplier, "supplier can't be null");
 
         _totalNumPlanes = _getNumPlanesFromMetadata(metadata);
@@ -38,6 +38,40 @@ public abstract class PlanarImageModel<T> implements ImagePlaneAccesser<T> {
         _nPlanesPerDim = getNumPlanesPerDimension(metadata);
 
         _planes = _createImageArray(metadata, planeSupplier);
+    }
+
+    /**
+     * Instantiates the planar model, by directly providing the image planes as an
+     * array.
+     * 
+     * @param metadata is the metadata of the image.
+     * @param planes   is the array of plane images.
+     * 
+     * @throws IllegalArgumentException if number of planes in metadata does not
+     *                                  match the number of planes, or if the plane
+     *                                  index does not correspond to its position in
+     *                                  the array.
+     */
+    protected PlanarImageModel(IMetadata metadata, ImagePlane<T>[] planes) {
+        Objects.requireNonNull(metadata, "metadata can't be null");
+        Objects.requireNonNull(planes, "planes can't be null");
+
+        if (MetadataUtil.getNPlanes(metadata) != planes.length) {
+            throw new IllegalArgumentException(
+                    "number of planes in metadata does not correspond to the length of planes array.");
+        }
+
+        for (int index = 0; index < planes.length; index++) {
+            if (planes[index].planeIndex() != index + 1) {
+                throw new IllegalArgumentException("plane index does not correspond to position in the array.");
+            }
+        }
+
+        _totalNumPlanes = _getNumPlanesFromMetadata(metadata);
+        _imageDim = metadata.getDim();
+        _nPlanesPerDim = getNumPlanesPerDimension(metadata);
+
+        _planes = planes;
     }
 
     private int _getNumPlanesFromMetadata(IMetadata metadata) {
