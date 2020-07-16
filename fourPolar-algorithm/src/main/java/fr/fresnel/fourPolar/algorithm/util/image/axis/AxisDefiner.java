@@ -65,7 +65,7 @@ class AxisDefiner {
 
     private static <T extends PixelType> void _checkNewAxisOrderMatchesImageDimension(Image<T> image,
             AxisOrder newAxisOrder) {
-        if (!MetadataUtil.isNumAxisEqualDimension(newAxisOrder, image.getMetadata().getDim())) {
+        if (!MetadataUtil.numAxisEqualsDimension(newAxisOrder, image.getMetadata().getDim())) {
             throw new IllegalArgumentException("The new axis order does not equal image dimension.");
         }
     }

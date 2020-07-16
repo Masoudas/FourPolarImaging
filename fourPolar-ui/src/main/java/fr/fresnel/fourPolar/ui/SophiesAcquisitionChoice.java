@@ -13,6 +13,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOUINT16TiffReader;
@@ -86,7 +87,7 @@ public class SophiesAcquisitionChoice {
 
             if (newAxisOrder == AxisOrder.NoOrder) {
                 System.out.println("Axis order is not from the list of choices.");
-            } else if (newAxisOrder.numAxis != imageDim.length) {
+            } else if (!MetadataUtil.numAxisEqualsDimension(newAxisOrder, imageDim)) {
                 System.out.println("Number of axis does not equal image dimension.");
                 newAxisOrder = AxisOrder.NoOrder;
             } else {

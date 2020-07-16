@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
 import net.imglib2.roi.geom.GeomMasks;
 import net.imglib2.roi.geom.real.PointMask;
 
@@ -14,7 +15,7 @@ public class ImgLib2PointShape extends ImgLib2Shape implements IPointShape {
         Objects.requireNonNull(point, "point cannot be null.");
         Objects.requireNonNull(axisOrder, "axisOrder cannot be null.");
 
-        if (axisOrder != AxisOrder.NoOrder && axisOrder.numAxis != point.length) {
+        if (axisOrder != AxisOrder.NoOrder && !MetadataUtil.numAxisEqualsDimension(axisOrder, point)) {
             throw new IllegalArgumentException("Number of axis must correspond to point dimension.");
         }
 

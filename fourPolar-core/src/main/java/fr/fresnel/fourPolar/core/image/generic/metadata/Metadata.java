@@ -5,6 +5,7 @@ import java.util.Objects;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
+import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
 
 /**
  * Implements the metadata. Note that all current and future metadata info are
@@ -46,7 +47,7 @@ public class Metadata implements IMetadata {
         }
 
         public MetadataBuilder axisOrder(AxisOrder axisOrder) {
-            if (axisOrder != AxisOrder.NoOrder && axisOrder.numAxis != this._dim.length) {
+            if (axisOrder != AxisOrder.NoOrder && !MetadataUtil.numAxisEqualsDimension(axisOrder, this._dim)) {
                 throw new IllegalArgumentException("Number of axis does not equal image dimension.");
             }
 

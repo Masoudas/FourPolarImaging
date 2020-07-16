@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
+import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
 import net.imglib2.roi.geom.GeomMasks;
 import net.imglib2.roi.geom.real.WritableBox;
 
@@ -29,7 +30,7 @@ class ImgLib2BoxShape extends ImgLib2Shape implements IBoxShape {
     }
 
     private static void _checkMinDimensionEqualsNumAxis(long[] min, AxisOrder axisOrder) {
-        if (axisOrder != AxisOrder.NoOrder && axisOrder.numAxis != min.length) {
+        if (axisOrder != AxisOrder.NoOrder && !MetadataUtil.numAxisEqualsDimension(axisOrder, min)) {
             throw new IllegalArgumentException("Number of axis must correspond to shape min and max");
         }
     }
