@@ -11,13 +11,17 @@ import fr.fresnel.fourPolar.core.image.PlanarImageModel;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
+import fr.fresnel.fourPolar.core.image.vector.Vector;
 import fr.fresnel.fourPolar.core.image.vector.VectorImage;
 import fr.fresnel.fourPolar.core.image.vector.VectorImageFactory;
-import fr.fresnel.fourPolar.core.image.vector.VectorRandomAccess;
 import fr.fresnel.fourPolar.core.image.vector.batikModel.converters.ToSVGDefsElementConverter;
+import fr.fresnel.fourPolar.core.image.vector.batikModel.converters.VectorToSVGElementConverter;
 import fr.fresnel.fourPolar.core.image.vector.batikModel.converters.image.ImageToSVGElementConverter;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
+import fr.fresnel.fourPolar.core.util.shape.ILineShape;
+import fr.fresnel.fourPolar.core.util.shape.IShape;
 
 /**
  * A vector image that has an {@link SVGDocument} as backend for each plane, and
@@ -32,9 +36,11 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
     private final VectorImageFactory _factory;
     private final IMetadata _metadata;
 
+    private final int _imageDimension;
+
     private static ImagePlaneSupplier<SVGDocument> _createPlaneSupplier(IMetadata metadata) {
         long[] dim = metadata.getDim();
-        if (dim.length < 2){
+        if (dim.length < 2) {
             throw new IllegalArgumentException("Can't create buffered image plane with 1D metadata.");
         }
 
@@ -59,6 +65,7 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
 
         _factory = factory;
         _metadata = metadata;
+        _imageDimension = metadata.getDim().length;
     }
 
     /**
@@ -78,6 +85,7 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
 
         _metadata = metadata;
         _factory = factory;
+        _imageDimension = metadata.getDim().length;
     }
 
     @Override
@@ -147,6 +155,29 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
     @Override
     public int numPlanes() {
         return super.numPlanes();
+    }
+
+    @Override
+    public void addVector(Vector vector) {
+        if (vector.shape().spaceDim() != this._imageDimension) {
+            throw new IllegalArgumentException("vector and image don't have the same axis order");
+        }
+        int planeIndexOfVector = _getVectorPlane(vector);
+        VectorToSVGElementConverter.convert(vector, getImagePlane(planeIndexOfVector).getPlane());
+    }
+
+    /**
+     * @return the plane where this vector should be put.
+     */
+    private int _getVectorPlane(Vector vector) {
+        IShape shape = vector.shape();
+        if (shape instanceof IBoxShape) {
+            return getPlaneIndex(((IBoxShape) shape).min());
+        } else if (shape instanceof ILineShape) {
+            return getPlaneIndex(((ILineShape) shape).lineStart());
+        } else {
+            throw new IllegalArgumentException("Can't compute the plane where shape should be set.");
+        }
     }
 
 }
