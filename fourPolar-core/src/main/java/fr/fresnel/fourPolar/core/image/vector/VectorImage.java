@@ -20,11 +20,6 @@ public interface VectorImage {
     public VectorImageFactory getFactory();
 
     /**
-     * @return the random access associated with this image.
-     */
-    public VectorRandomAccess randomAccess();
-
-    /**
      * Adds the given composite filter as a child of svg defs element.
      * 
      * @param composite is the composite filter.

@@ -109,12 +109,6 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
     }
 
     @Override
-    public VectorRandomAccess randomAccess() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public void addFilterComposite(FilterComposite composite) {
         _toDefsElementConverter.setFilterComposite(new FilterComposite[] { composite });
         for (ImagePlane<SVGDocument> imagePlane : _planes) {
