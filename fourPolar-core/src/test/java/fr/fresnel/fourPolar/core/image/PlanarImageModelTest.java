@@ -61,6 +61,14 @@ public class PlanarImageModelTest {
     }
 
     @Test
+    public void init_1DMetadata_ThrowsIllegalArgumentException() {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1 }).axisOrder(AxisOrder.NoOrder)
+                .bitPerPixel(PixelTypes.UINT_16).build();
+
+        assertThrows(IllegalArgumentException.class, () -> new DummyPlanarImage(metadata));
+    }
+
+    @Test
     public void getPlaneIndex_11XYImage_Return1ForPosition00() {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1 }).axisOrder(AxisOrder.XY)
                 .bitPerPixel(PixelTypes.UINT_16).build();

@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.image.generic.AWTModel;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
@@ -16,6 +17,16 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 public class UINT16BufferedImageTest {
+    @Test
+    public void init_1DMetadata_ThrowsIllegalArgumentException() {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1 }).axisOrder(AxisOrder.NoOrder)
+                .bitPerPixel(PixelTypes.UINT_16).build();
+
+        assertThrows(IllegalArgumentException.class,
+                () -> new UINT16BufferedImage(metadata, new U16BIDummyImageFactory(), UINT16.zero()));
+
+    }
+
     @Test
     public void init_UINT16ImageType_Creates_TYPE_USHORT_GRAY_BufferedImageForEachPlane() {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 1, 1 }).axisOrder(AxisOrder.XY)
