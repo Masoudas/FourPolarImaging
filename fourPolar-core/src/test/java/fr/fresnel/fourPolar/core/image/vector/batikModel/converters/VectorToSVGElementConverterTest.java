@@ -37,7 +37,7 @@ public class VectorToSVGElementConverterTest {
 
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation().createDocument(namespaceURI,
                 "svg", null);
-        VectorToSVGElementConverter.convert(vector, svgDocument, namespaceURI);
+        VectorToSVGElementConverter.convert(vector, svgDocument);
 
         Element documentElement = svgDocument.getDocumentElement();
         NodeList lineNodes = documentElement.getElementsByTagName("line");
@@ -55,7 +55,7 @@ public class VectorToSVGElementConverterTest {
 
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation().createDocument(namespaceURI,
                 "svg", null);
-        VectorToSVGElementConverter.convert(vector, svgDocument, namespaceURI);
+        VectorToSVGElementConverter.convert(vector, svgDocument);
 
         Element documentElement = svgDocument.getDocumentElement();
         NodeList lineNodes = documentElement.getElementsByTagName("line");
@@ -76,7 +76,7 @@ public class VectorToSVGElementConverterTest {
 
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation().createDocument(namespaceURI,
                 "svg", null);
-        VectorToSVGElementConverter.convert(vector, svgDocument, namespaceURI);
+        VectorToSVGElementConverter.convert(vector, svgDocument);
 
         Element documentElement = svgDocument.getDocumentElement();
         NodeList lineNodes = documentElement.getElementsByTagName("line");
@@ -97,7 +97,7 @@ public class VectorToSVGElementConverterTest {
 
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation().createDocument(namespaceURI,
                 "svg", null);
-        VectorToSVGElementConverter.convert(vector, svgDocument, namespaceURI);
+        VectorToSVGElementConverter.convert(vector, svgDocument);
 
         Element documentElement = svgDocument.getDocumentElement();
         NodeList lineNodes = documentElement.getElementsByTagName("line");
@@ -118,7 +118,7 @@ public class VectorToSVGElementConverterTest {
 
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation().createDocument(namespaceURI,
                 "svg", null);
-        VectorToSVGElementConverter.convert(vector, svgDocument, namespaceURI);
+        VectorToSVGElementConverter.convert(vector, svgDocument);
 
         Element documentElement = svgDocument.getDocumentElement();
         NodeList lineNodes = documentElement.getElementsByTagName("line");
@@ -141,7 +141,7 @@ public class VectorToSVGElementConverterTest {
 
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation().createDocument(namespaceURI,
                 "svg", null);
-        VectorToSVGElementConverter.convert(vector, svgDocument, namespaceURI);
+        VectorToSVGElementConverter.convert(vector, svgDocument);
 
         Element documentElement = svgDocument.getDocumentElement();
         NodeList lineNodes = documentElement.getElementsByTagName("line");
@@ -213,6 +213,11 @@ class Dummy2DLineShape implements ILineShape {
     @Override
     public long[] lineEnd() {
         return new long[] { 1, 1 };
+    }
+
+    @Override
+    public int spaceDim() {
+        return 2;
     }
 }
 
