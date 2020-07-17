@@ -42,8 +42,11 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
     /**
      * Create an empty image instance.
      * 
-     * @param metadata
-     * @param factory
+     * @param metadata is the metadata associated with the image.
+     * @param factory  is the factory that creates said image.
+     * 
+     * @throws IllegalArgumentException if the dimension vector in metadata not have
+     *                                  at least two dimensions
      */
     public BatikVectorImage(IMetadata metadata, VectorImageFactory factory) {
         super(metadata, _createPlaneSupplier(metadata));

@@ -29,6 +29,16 @@ public abstract class AWTBufferedImage<T extends PixelType> extends PlanarImageM
     protected final IMetadata _metadata;
     private final ImageFactory _factory;
 
+    /**
+     * Creates an empty image of the given type.
+     * 
+     * @param metadata  is the metadata of the image.
+     * @param factory   is the factory that creates such image.
+     * @param pixelType is the pixel type of this image.
+     * 
+     * @throws IllegalArgumentException if the dimension vector in metadata not have
+     *                                  at least two dimensions
+     */
     protected AWTBufferedImage(IMetadata metadata, ImageFactory factory, T pixelType) {
         super(metadata, _createBuffreredImageArray(metadata, pixelType));
         Objects.requireNonNull(metadata, "Metadata can't be null");

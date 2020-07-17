@@ -28,10 +28,17 @@ public abstract class PlanarImageModel<T> implements ImagePlaneAccesser<T> {
      * 
      * @param metadata      is the metadata of the image.
      * @param planeSupplier is the supplier for creating new instances of plane.
+     * 
+     * @throws IllegalArgumentException if the dimension vector in metadata not have
+     *                                  at least two dimensions
      */
     protected PlanarImageModel(IMetadata metadata, ImagePlaneSupplier<T> planeSupplier) {
         Objects.requireNonNull(metadata, "metadata can't be null");
         Objects.requireNonNull(planeSupplier, "supplier can't be null");
+
+        if (metadata.getDim().length < 2) {
+            throw new IllegalArgumentException("Can't create a planar image with less than two dimensions.");
+        }
 
         _totalNumPlanes = _getNumPlanesFromMetadata(metadata);
         _imageDim = metadata.getDim();

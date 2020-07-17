@@ -9,6 +9,16 @@ import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 class UINT16BufferedImage extends AWTBufferedImage<UINT16> {
+    /**
+     * Creates an empty image of {@link UINT16} type.
+     * 
+     * @param metadata  is the metadata of the image.
+     * @param factory   is the factory that creates such image.
+     * @param pixelType is the pixel type of this image.
+     * 
+     * @throws IllegalArgumentException if the dimension vector in metadata not have
+     *                                  at least two dimensions
+     */
     protected UINT16BufferedImage(IMetadata metadata, ImageFactory factory, UINT16 pixelType) {
         super(metadata, factory, pixelType);
     }
