@@ -30,8 +30,8 @@ import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadata
  * 
  */
 public class SophiesAcquisitionChoice {
-    static String rootFolder = "/home/masoud";
-    static String fileName = "UnknownAxis.tif";
+    static String rootFolder = "D:\\4PolarBackendTest\\Masoud";
+    static String fileName = "AF488_3D_noSAF_2-wf.tif";
 
     public static void main(String[] args) throws IOException, MetadataParseError {
         // -------------------------------------------------------------------
@@ -63,6 +63,11 @@ public class SophiesAcquisitionChoice {
     private static long[] _printImageDimension() throws IOException, MetadataParseError {
         IMetadataReader metadataReader = new SCIFIOMetadataReader();
         IMetadata metadata = metadataReader.read(new File(rootFolder, fileName));
+
+        if (metadata.axisOrder() != AxisOrder.NoOrder) {
+            throw new IllegalArgumentException("The given image already have an axis order, which is "
+                    + metadata.axisOrder() + ". There's no need to define axis-order.");
+        }
 
         System.out.println("\n \n \n");
         System.out.println("The dimension of the image is "
