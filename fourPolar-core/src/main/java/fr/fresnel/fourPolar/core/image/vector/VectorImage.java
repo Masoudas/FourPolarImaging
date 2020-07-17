@@ -40,4 +40,22 @@ public interface VectorImage {
      */
     public <T extends PixelType> void setImage(Image<T> image, T pixelType);
 
+    /**
+     * Adds a vector to a plane of this image.
+     * <p>
+     * Note that the vector will be written in the coordinate specified by its
+     * underlying shape. for example, if the underlying shape is a line form [0,0,0]
+     * to [1,1,0], then this vector will be added to the [x,x,0] plane, as a line
+     * from [0,0] to [1,1].
+     * <p>
+     * It's the responsibility of the caller to ensure that the underlying vector is
+     * a sensible vector presentation in a plane (for example, a box from [0,0,0] to
+     * [0,1,1]) would be written as a box from [0,0] to [0,1] in the first plane).
+     * 
+     * @param vector is the vector to be added to this image.
+     * @throws IllegalArgumentException if the shape dimension is not equal to image
+     *                                  dimension.
+     */
+    public void addVector(Vector vector);
+
 }
