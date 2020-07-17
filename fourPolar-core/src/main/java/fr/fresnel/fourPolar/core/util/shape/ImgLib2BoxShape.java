@@ -18,7 +18,9 @@ class ImgLib2BoxShape extends ImgLib2Shape implements IBoxShape {
         Objects.requireNonNull(max, "max should not be null");
 
         _checkMinAndMaxHaveEqualDimension(min, max);
-        _checkBoxIsAtLeastTwoDimensional(min, max);
+
+        int dim = _calculateBoxDimension(min, max);
+        _checkBoxIsAtLeastTwoDimensional(dim);
         _checkMaxIsGreaterThanEqualMin(min, max);
         _checkMinDimensionEqualsNumAxis(min, axisOrder);
 
@@ -26,7 +28,7 @@ class ImgLib2BoxShape extends ImgLib2Shape implements IBoxShape {
         double[] maxCopy = Arrays.stream(max).asDoubleStream().toArray();
         WritableBox box = GeomMasks.closedBox(minCopy, maxCopy);
 
-        return new ImgLib2BoxShape(box, axisOrder, min, max);
+        return new ImgLib2BoxShape(box, axisOrder, min, max, dim);
     }
 
     private static void _checkMinDimensionEqualsNumAxis(long[] min, AxisOrder axisOrder) {
@@ -43,16 +45,14 @@ class ImgLib2BoxShape extends ImgLib2Shape implements IBoxShape {
         }
     }
 
-    private static void _checkBoxIsAtLeastTwoDimensional(long[] min, long[] max) {
-        if (min.length <= 1) {
+    private static void _checkBoxIsAtLeastTwoDimensional(int dim) {
+        if (dim < 2) {
             throw new IllegalArgumentException("Box dimension must be at least two");
         }
+    }
 
-        long dim = IntStream.range(0, min.length).filter((i)->(min[i] < max[i])).count();
-        
-        if (dim < 2 ){
-            throw new IllegalArgumentException("Box dimension must be at least two");
-        }
+    private static int _calculateBoxDimension(long[] min, long[] max) {
+        return (int) IntStream.range(0, min.length).filter((i) -> (min[i] < max[i])).count();
     }
 
     private static void _checkMinAndMaxHaveEqualDimension(long[] min, long[] max) {
@@ -61,8 +61,8 @@ class ImgLib2BoxShape extends ImgLib2Shape implements IBoxShape {
         }
     }
 
-    private ImgLib2BoxShape(WritableBox shape, final AxisOrder axisOrder, long[] min, long[] max) {
-        super(shape, axisOrder);
+    private ImgLib2BoxShape(WritableBox shape, final AxisOrder axisOrder, long[] min, long[] max, int shapeDim) {
+        super(shape, axisOrder, shapeDim);
         this._min = min;
         this._max = max;
     }

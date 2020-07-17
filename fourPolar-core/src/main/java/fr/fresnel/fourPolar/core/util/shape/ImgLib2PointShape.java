@@ -24,7 +24,7 @@ public class ImgLib2PointShape extends ImgLib2Shape implements IPointShape {
     }
 
     private ImgLib2PointShape(PointMask shape, AxisOrder axisOrder, long[] point) {
-        super(shape, axisOrder);
+        super(shape, axisOrder, point.length);
         this._point = point;
     }
 

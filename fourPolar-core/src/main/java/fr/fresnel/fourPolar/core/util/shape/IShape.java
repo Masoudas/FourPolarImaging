@@ -27,6 +27,11 @@ public interface IShape {
     public int shapeDim();
 
     /**
+     * @return the dimension of the space in which the shape is defined. 
+     */
+    public int spaceDim();
+
+    /**
      * Apply a 3d rotation with the given rotation order.
      * 
      * @param angle1        is the rotation over the first axis in radian.

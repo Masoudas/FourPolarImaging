@@ -12,6 +12,7 @@ import ij.gui.Line;
  * the position, and positive line starts from position to the end.
  */
 public class ImageJ1LineShape implements ILineShape {
+    private final int _spaceDim;
     private final AxisOrder _axisOrder;
     private final double _slopeAngle;
     private final long _length;
@@ -43,6 +44,7 @@ public class ImageJ1LineShape implements ILineShape {
         this._checkThicknessIsPositive(thickness);
         this._checkNumAxisEqualsPositionDim(position.length, axisOrder);
 
+        this._spaceDim = position.length;
         this._axisOrder = axisOrder;
         this._position = position;
         this._slopeAngle = slopeAngle;
@@ -122,7 +124,7 @@ public class ImageJ1LineShape implements ILineShape {
 
     @Override
     public int shapeDim() {
-        return _position.length;
+        return 2;
     }
 
     @Override
@@ -177,5 +179,10 @@ public class ImageJ1LineShape implements ILineShape {
         end[0] = _line.x2;
         end[1] = _line.y2;
         return end;
+    }
+
+    @Override
+    public int spaceDim() {
+        return this._spaceDim;
     }
 }

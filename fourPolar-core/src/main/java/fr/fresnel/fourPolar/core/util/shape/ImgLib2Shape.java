@@ -24,8 +24,8 @@ import net.imglib2.view.Views;
 class ImgLib2Shape implements IShape {
     protected RealMaskRealInterval _shape;
 
-    protected final int _shapeDim;
     protected final AxisOrder _axisOrder;
+    private final int _shapeDim;
 
     /**
      * A point mask instance to check whether a point is inside the shape.
@@ -35,23 +35,22 @@ class ImgLib2Shape implements IShape {
     /**
      * Construct the shape, using ImgLib2 ROI. @See RealMaskRealInterval.
      * 
-     * @param shapeType is the associated shape type.
+     * @param shape     is the associated shape type.
+     * @param axisOrder is the axis order of the shape.
      * @param shapeDim  is the dimension of the shape (two for a 2DBox for example).
-     * @param spaceDim  This is the dimension of the space over which the shape is
-     *                  defined.
      * 
      */
-    protected ImgLib2Shape(RealMaskRealInterval shape, final AxisOrder axisOrder) {
+    protected ImgLib2Shape(RealMaskRealInterval shape, final AxisOrder axisOrder, int shapeDim) {
         Objects.requireNonNull(shape);
         Objects.requireNonNull(axisOrder);
 
         this._checkShapeDimAndNumAxisEqual(shape.numDimensions(), axisOrder);
         this._checkShapeDimNonzero(shape.numDimensions());
 
-        this._shapeDim = shape.numDimensions();
         this._pointMask = GeomMasks.pointMask(new double[shape.numDimensions()]);
         this._axisOrder = axisOrder;
         this._shape = shape;
+        this._shapeDim = shapeDim;
     }
 
     private void _checkShapeDimAndNumAxisEqual(int shapeDim, AxisOrder axisOrder) {
@@ -68,13 +67,13 @@ class ImgLib2Shape implements IShape {
                 .iterable(Views.interval(Views.raster(Masks.toRealRandomAccessible(this._shape)),
                         Intervals.largestContainedInterval(this._shape)));
 
-        return new ImgLib2ShapeIterator(iterableRegion, this._shapeDim);
+        return new ImgLib2ShapeIterator(iterableRegion, this.spaceDim());
     }
 
     @Override
     public int shapeDim() {
-        return this._shapeDim;
-    }
+        return _shapeDim;
+    };
 
     @Override
     public AxisOrder axisOrder() {
@@ -87,7 +86,7 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public boolean isInside(long[] point) {
-        if (point.length != this._shapeDim) {
+        if (point.length != this.spaceDim()) {
             return false;
         }
 
@@ -115,7 +114,7 @@ class ImgLib2Shape implements IShape {
 
     @Override
     public IShape translate(long[] translation) {
-        if (translation.length != this._shapeDim) {
+        if (translation.length != this.spaceDim()) {
             throw new IllegalArgumentException(
                     "Translation must occur over all axis. Consider using zero for undesired axis.");
         }
@@ -136,7 +135,7 @@ class ImgLib2Shape implements IShape {
      */
     protected IShape _transformShape(AffineGet appliedAffineTransform) {
         RealMaskRealInterval transformedShape = this._shape.transform(appliedAffineTransform);
-        return new ImgLib2Shape(transformedShape, this._axisOrder);
+        return new ImgLib2Shape(transformedShape, this._axisOrder, this._shapeDim);
     }
 
     private AffineGet _createAffine2DRotation(double angle) {
@@ -179,6 +178,11 @@ class ImgLib2Shape implements IShape {
             fTransform.set(-translation[row], row, numAxis);
         }
         return fTransform;
+    }
+
+    @Override
+    public int spaceDim() {
+        return _shape.numDimensions();
     }
 
 }

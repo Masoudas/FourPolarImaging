@@ -76,4 +76,9 @@ class ScaledShape implements IShape {
 
     }
 
+    @Override
+    public int spaceDim() {
+        return this._originalShape.spaceDim() + _max.length;
+    }
+
 }

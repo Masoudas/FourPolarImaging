@@ -22,11 +22,11 @@ public class ImgLib2LogicalShape extends ImgLib2Shape {
 
         RealMaskRealInterval andedShape = shape1Ref.getImgLib2Shape().and(shape2Ref.getImgLib2Shape());
 
-        return new ImgLib2LogicalShape(andedShape, shape1.axisOrder());
+        return new ImgLib2LogicalShape(andedShape, shape1.axisOrder(), shape1.shapeDim());
     }
 
-    private ImgLib2LogicalShape(RealMaskRealInterval shape, AxisOrder axisOrder) {
-        super(shape, axisOrder);
+    private ImgLib2LogicalShape(RealMaskRealInterval shape, AxisOrder axisOrder, int shapeDim) {
+        super(shape, axisOrder, shapeDim);
     }
 
 }

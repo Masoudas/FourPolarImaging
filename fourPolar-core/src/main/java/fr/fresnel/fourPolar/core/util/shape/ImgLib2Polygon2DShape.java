@@ -53,7 +53,8 @@ public class ImgLib2Polygon2DShape extends ImgLib2Shape implements IPolygon2DSha
     }
 
     private ImgLib2Polygon2DShape(WritablePolygon2D shape, long[] x_vertices, long[] y_vertices) {
-        super(shape, AxisOrder.XY);
+        // TODO this 2D is not correct. It could be not 2D! 
+        super(shape, AxisOrder.XY, 2);
         _x_vertices = x_vertices;
         _y_vertices = y_vertices;
     }
