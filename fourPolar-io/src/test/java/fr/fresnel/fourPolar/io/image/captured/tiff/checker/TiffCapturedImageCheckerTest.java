@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadataReader;
+import fr.fresnel.fourPolar.io.image.generic.metadata.scifio.SCIFIOMetadataReader;
 
 public class TiffCapturedImageCheckerTest {
     private static File _root;

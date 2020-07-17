@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata;
+package fr.fresnel.fourPolar.io.image.generic.metadata.scifio;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

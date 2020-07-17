@@ -17,7 +17,7 @@ import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadataReader;
+import fr.fresnel.fourPolar.io.image.generic.metadata.scifio.SCIFIOMetadataReader;
 
 public class SCIFIOUINT16TiffWriterTest {
     private static File _root;

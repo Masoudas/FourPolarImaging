@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.image.generic.metadata;
+package fr.fresnel.fourPolar.io.image.generic.metadata.json;
 
 import java.io.IOException;
 
@@ -9,7 +9,6 @@ import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOr
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
-import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata.MetadataBuilder;
 import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
 
 /**

@@ -10,7 +10,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
-import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOTiffMetadataConverter;
+import fr.fresnel.fourPolar.io.image.generic.metadata.scifio.SCIFIOTiffMetadataConverter;
 import io.scif.FormatException;
 import io.scif.Reader;
 import io.scif.config.SCIFIOConfig;
