@@ -19,7 +19,7 @@ public interface IMetadataWriter {
      * @param metadata is the metadata to be written to disk.
      * @param root     is the root folder of where the image should be written (must
      *                 not contain file name).
-     * @param name     is the name underwhich metadata is written (must not contain
+     * @param name     is the name under which metadata is written (must not contain
      *                 file extension).
      * 
      * @throws MetadataIOIssues in case the metadata can't be written to disk.
