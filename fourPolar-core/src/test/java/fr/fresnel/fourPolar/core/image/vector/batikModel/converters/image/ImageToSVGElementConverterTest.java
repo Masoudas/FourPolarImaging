@@ -97,7 +97,7 @@ public class ImageToSVGElementConverterTest {
         attrsEqual &= imageElement.getAttributeNS(null, _HEIGHT_ATTR).equals(String.valueOf(dim[1] - 1));
         attrsEqual &= imageElement.getAttributeNS(null, _ASPECT_RATIO_ATTR).equals("none");
 
-        String hrefAsString = imageElement.getAttributeNS(null, _HREF_ATTR).replace("\n", "");
+        String hrefAsString = imageElement.getAttributeNS(null, _HREF_ATTR).replace(System.getProperty("line.separator"), "");
         attrsEqual &= hrefAsString.equals(imgAsString);
 
         return attrsEqual;
