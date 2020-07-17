@@ -16,7 +16,7 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
  * As we can't create an element without the presence of a document, the convert
  * method directly asks for the svg document.
  */
-class VectorToSVGElementConverter {
+public class VectorToSVGElementConverter {
     private static final String _FILL_ATTR = "fill";
     private static final String _STROKE_ATTR = "stroke";
     private static final String _STROKE_WIDTH_ATTR = "stroke-width";
