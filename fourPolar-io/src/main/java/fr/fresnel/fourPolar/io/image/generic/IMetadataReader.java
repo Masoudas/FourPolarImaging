@@ -8,20 +8,20 @@ import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseEr
 
 /**
  * An interface for reading the metadata of an image, without actually opening
- * the entire image.
+ * the entire image. Depending on the implementation, metadata can be read from
+ * an image file (like png), or from a separate file (like text, yaml).
  */
 public interface IMetadataReader {
     /**
-     * Read metadata of the image file.
+     * Read metadata from the given path
      * 
-     * @param imageFile
+     * @param path is the path to metadata source.
      * 
-     * @throws MetadataParseError in case the metadata of the image can't be parsed.
-     *                            Note that undefined axis does not raise this
-     *                            exception.
+     * @throws MetadataParseError in case the metadata can't be parsed. Note that
+     *                            undefined axis does not raise this exception.
      * @return the metadata of the image.
      */
-    public IMetadata read(File imageFile) throws MetadataParseError;
+    public IMetadata read(File path) throws MetadataParseError;
 
     /**
      * Close all resources associated with this reader.
