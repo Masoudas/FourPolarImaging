@@ -33,8 +33,13 @@ class BatikVectorImage extends PlanarImageModel<SVGDocument> implements VectorIm
     private final IMetadata _metadata;
 
     private static ImagePlaneSupplier<SVGDocument> _createPlaneSupplier(IMetadata metadata) {
-        int xdim = (int) metadata.getDim()[0];
-        int ydim = (int) metadata.getDim()[1];
+        long[] dim = metadata.getDim();
+        if (dim.length < 2){
+            throw new IllegalArgumentException("Can't create buffered image plane with 1D metadata.");
+        }
+
+        int xdim = (int) dim[0];
+        int ydim = (int) dim[1];
 
         return new BatikVectorImagePlaneSupplier(xdim, ydim);
     }
