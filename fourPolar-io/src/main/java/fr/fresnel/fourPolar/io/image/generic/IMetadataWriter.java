@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 
 /**
  * An interface for writing {@link IMetadata}. This interface is intended for
@@ -22,9 +22,9 @@ public interface IMetadataWriter {
      * @param name     is the name underwhich metadata is written (must not contain
      *                 file extension).
      * 
-     * @throws MetadataParseError in case the metadata can't be written to disk.
+     * @throws MetadataIOIssues in case the metadata can't be written to disk.
      */
-    public void write(IMetadata metadata, File root, String name) throws MetadataParseError;
+    public void write(IMetadata metadata, File root, String name) throws MetadataIOIssues;
 
     /**
      * Closes all resources associated with this writer.

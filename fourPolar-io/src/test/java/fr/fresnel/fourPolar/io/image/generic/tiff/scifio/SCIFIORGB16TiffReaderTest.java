@@ -15,13 +15,13 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 
 public class SCIFIORGB16TiffReaderTest {
 
     @Test
-    public void read_SCIFIORGBImage_ReadPixelsAreEqual() throws IOException, MetadataParseError {
+    public void read_SCIFIORGBImage_ReadPixelsAreEqual() throws IOException, MetadataIOIssues {
         // File path = new File(SCIFIORGB16TiffReaderTest.class.getResource("Readers").getFile(), "RGB16Image.tif");
 
         // ImgLib2ImageFactory factory = new ImgLib2ImageFactory();
@@ -46,7 +46,7 @@ public class SCIFIORGB16TiffReaderTest {
 
     @Test
     public void read_ImageJ1RGB2DImage_ReadPixelsAreEqual()
-            throws IOException, MetadataParseError, ConverterToImgLib2NotFound {
+            throws IOException, MetadataIOIssues, ConverterToImgLib2NotFound {
         // File path = new File(SCIFIORGB16TiffReaderTest.class.getResource("Readers").getFile(), "RGB16ImageJ1.tif");
 
         // ImgLib2ImageFactory factory = new ImgLib2ImageFactory();
@@ -71,7 +71,7 @@ public class SCIFIORGB16TiffReaderTest {
 
     @Test
     public void read_ImageJ1RGB5DImage_ReadPixelsAreEqual()
-            throws IOException, MetadataParseError, ConverterToImgLib2NotFound {
+            throws IOException, MetadataIOIssues, ConverterToImgLib2NotFound {
         // File path = new File(SCIFIORGB16TiffReaderTest.class.getResource("Readers").getFile(), "RGB16ImageJ1.tif");
 
         // ImgLib2ImageFactory factory = new ImgLib2ImageFactory();

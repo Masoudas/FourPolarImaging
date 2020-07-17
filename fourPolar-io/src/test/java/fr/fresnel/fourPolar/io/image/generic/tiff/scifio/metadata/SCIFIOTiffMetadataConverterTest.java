@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Test;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import io.scif.ImageMetadata;
 import net.imagej.axis.Axes;
 import net.imagej.axis.DefaultAxisType;
 
 public class SCIFIOTiffMetadataConverterTest {
     @Test
-    public void convertImageMetadata_fiveAxisMetadata_ReturnsCorrectMetadata() throws MetadataParseError {
+    public void convertImageMetadata_fiveAxisMetadata_ReturnsCorrectMetadata() throws MetadataIOIssues {
         io.scif.formats.TIFFFormat.Metadata tiffMetadata = new io.scif.formats.TIFFFormat.Metadata();
         tiffMetadata.createImageMetadata(1);
         ImageMetadata imageMetadata = tiffMetadata.get(0);

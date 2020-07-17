@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOUINT16TiffReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOUINT16TiffWriter;
@@ -33,14 +33,14 @@ public class SophiesAcquisitionChoice {
     static String rootFolder = "D:\\4PolarBackendTest\\Masoud";
     static String fileName = "AF488_3D_noSAF_2-wf.tif";
 
-    public static void main(String[] args) throws IOException, MetadataParseError {
+    public static void main(String[] args) throws IOException, MetadataIOIssues {
         // -------------------------------------------------------------------
         // YOU DON'T NEED TO TOUCH ANYTHING FROM HERE ON!
         // -------------------------------------------------------------------
         _defineAxisOrderForAcquiredImage();
     }
 
-    private static void _defineAxisOrderForAcquiredImage() throws IOException, MetadataParseError {
+    private static void _defineAxisOrderForAcquiredImage() throws IOException, MetadataIOIssues {
         long[] imageDim = _printImageDimension();
         _printAxisOrders();
 
@@ -60,7 +60,7 @@ public class SophiesAcquisitionChoice {
         System.out.println(set);
     }
 
-    private static long[] _printImageDimension() throws IOException, MetadataParseError {
+    private static long[] _printImageDimension() throws IOException, MetadataIOIssues {
         IMetadataReader metadataReader = new SCIFIOMetadataReader();
         IMetadata metadata = metadataReader.read(new File(rootFolder, fileName));
 

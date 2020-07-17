@@ -45,7 +45,7 @@ import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.RegistrationSetProcessResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
 import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizationImageSetComposites;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetIOIssue;
 import fr.fresnel.fourPolar.io.image.captured.tiff.checker.TiffCapturedImageChecker;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
@@ -238,7 +238,7 @@ public class SophiesPreChoice {
         IMetadata metadata = null;
         try {
             metadata = metadataReader.read(beadImage);
-        } catch (MetadataParseError e) {
+        } catch (MetadataIOIssues e) {
             // Caught before.
         }
 

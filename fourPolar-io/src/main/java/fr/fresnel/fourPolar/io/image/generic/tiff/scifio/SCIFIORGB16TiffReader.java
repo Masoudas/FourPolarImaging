@@ -8,7 +8,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOTiffMetadataConverter;
 import io.scif.FormatException;
@@ -103,9 +103,9 @@ public class SCIFIORGB16TiffReader implements ImageReader<ARGB8> {
     /**
      * Read metadata independently of the underlying image.
      * 
-     * @throws MetadataParseError if there are problems parsing the metadata.
+     * @throws MetadataIOIssues if there are problems parsing the metadata.
      */
-    private IMetadata _readMetadata() throws IOException, MetadataParseError {
+    private IMetadata _readMetadata() throws IOException, MetadataIOIssues {
         return SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
     }
 

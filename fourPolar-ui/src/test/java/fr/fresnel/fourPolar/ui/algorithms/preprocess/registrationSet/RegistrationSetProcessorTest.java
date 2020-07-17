@@ -39,7 +39,7 @@ import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.physics.channel.IChannel;
 import fr.fresnel.fourPolar.core.physics.na.INumericalAperture;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.image.captured.ICapturedImageSetReader;
 import fr.fresnel.fourPolar.io.image.captured.tiff.TiffCapturedImageSetReader;
 import fr.fresnel.fourPolar.ui.exceptions.algorithms.preprocess.registrationSet.RegistrationSetProcessFailure;

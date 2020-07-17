@@ -16,7 +16,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.metadata.SCIFIOMetadataReader;
 
 public class SCIFIOFloat32TiffWriterTest {
@@ -29,7 +29,7 @@ public class SCIFIOFloat32TiffWriterTest {
     }
 
     @Test
-    public void write_Float32XYImage_DiskImageHasSameMetadata() throws IOException, MetadataParseError {
+    public void write_Float32XYImage_DiskImageHasSameMetadata() throws IOException, MetadataIOIssues {
         long[] dim = { 10, 10 };
 
         File destination = new File(_root, "Float32XYImage.tif");
@@ -50,7 +50,7 @@ public class SCIFIOFloat32TiffWriterTest {
     }
 
     @Test
-    public void write_Float32XYCZTImage_DiskImageHasSameMetadata() throws IOException, MetadataParseError {
+    public void write_Float32XYCZTImage_DiskImageHasSameMetadata() throws IOException, MetadataIOIssues {
         long[] dim = { 10, 10, 1, 2, 2 };
 
         File destination = new File(_root, "Float32XYCZTImage.tif");
@@ -94,7 +94,7 @@ public class SCIFIOFloat32TiffWriterTest {
     // }
 
     @Test
-    public void write_WriteMultipleFiles_DiskImageHasSameMetadata() throws IOException, MetadataParseError {
+    public void write_WriteMultipleFiles_DiskImageHasSameMetadata() throws IOException, MetadataIOIssues {
         long[] dim = { 10, 10, 1, 2, 2 };
 
         IMetadata metadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT)

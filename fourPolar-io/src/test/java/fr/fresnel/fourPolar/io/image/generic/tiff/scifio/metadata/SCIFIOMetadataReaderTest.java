@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
 
 public class SCIFIOMetadataReaderTest {
     @Test
-    public void reader_XYZT16BitImageJ1Image_ReturnsCorrectMetadata() throws IOException, MetadataParseError {
+    public void reader_XYZT16BitImageJ1Image_ReturnsCorrectMetadata() throws IOException, MetadataIOIssues {
         File image = new File(SCIFIOMetadataReaderTest.class.getResource("").getPath(), "XYZT.tif");
 
         IMetadataReader reader = new SCIFIOMetadataReader();
@@ -25,7 +25,7 @@ public class SCIFIOMetadataReaderTest {
     }
 
     @Test
-    public void reader_UnknownAxis_ReturnsNoOrderAxis() throws IOException, MetadataParseError {
+    public void reader_UnknownAxis_ReturnsNoOrderAxis() throws IOException, MetadataIOIssues {
         File image = new File(SCIFIOMetadataReaderTest.class.getResource("").getPath(), "UnknownAxis.tif");
 
         IMetadataReader reader = new SCIFIOMetadataReader();
@@ -37,7 +37,7 @@ public class SCIFIOMetadataReaderTest {
 
     @Test
     public void reader_XYZT16BitImageJ1ImageRepeatedUse_ReturnsCorrectMetadata()
-            throws IOException, MetadataParseError {
+            throws IOException, MetadataIOIssues {
         File image = new File(SCIFIOMetadataReaderTest.class.getResource("").getPath(), "XYZT.tif");
 
         IMetadataReader reader = new SCIFIOMetadataReader();

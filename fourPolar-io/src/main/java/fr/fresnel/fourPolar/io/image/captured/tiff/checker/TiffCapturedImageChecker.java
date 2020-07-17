@@ -6,7 +6,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.RejectedCapturedImage;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
 
 /**
@@ -59,7 +59,7 @@ public class TiffCapturedImageChecker implements ICapturedImageChecker {
         IMetadata metadata = null;
         try {
             metadata = this._metaDataReader.read(image.file());
-        } catch (MetadataParseError e) {
+        } catch (MetadataIOIssues e) {
             throw new IncompatibleCapturedImage(new RejectedCapturedImage(image.file(), CONTENT_CORRUPT));
         }
 

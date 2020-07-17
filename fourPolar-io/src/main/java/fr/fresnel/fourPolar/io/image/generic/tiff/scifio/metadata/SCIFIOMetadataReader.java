@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
-import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataParseError;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
 import io.scif.SCIFIO;
 import io.scif.config.SCIFIOConfig;
@@ -25,11 +25,11 @@ public class SCIFIOMetadataReader implements IMetadataReader {
     }
 
     @Override
-    public IMetadata read(File imageFile) throws MetadataParseError {
+    public IMetadata read(File imageFile) throws MetadataIOIssues {
         try {
             this._reader.setSource(imageFile.getAbsolutePath(), this._config);
         } catch (IOException e) {
-            throw new MetadataParseError(MetadataParseError.IO_ISSUES);
+            throw new MetadataIOIssues(MetadataIOIssues.IO_ISSUES);
         }
 
         return SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
