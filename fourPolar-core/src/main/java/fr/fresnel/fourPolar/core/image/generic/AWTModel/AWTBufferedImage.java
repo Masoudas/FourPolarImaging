@@ -101,8 +101,13 @@ public abstract class AWTBufferedImage<T extends PixelType> extends PlanarImageM
      *         planes of required size.
      */
     private static AWTBufferedImagePlaneSupplier _createBuffreredImageArray(IMetadata metadata, PixelType pixelType) {
-        int xdim = (int) metadata.getDim()[0];
-        int ydim = (int) metadata.getDim()[1];
+        long[] dim = metadata.getDim();
+        if (dim.length < 2){
+            throw new IllegalArgumentException("Can't create buffered image plane with 1D metadata.");
+        }
+
+        int xdim = (int)dim[0];
+        int ydim = (int)dim[1];
 
         return new AWTBufferedImagePlaneSupplier(xdim, ydim, pixelType);
     }
