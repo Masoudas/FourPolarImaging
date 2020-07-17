@@ -29,7 +29,7 @@ public class SCIFIOMetadataReader implements IMetadataReader {
         try {
             this._reader.setSource(imageFile.getAbsolutePath(), this._config);
         } catch (IOException e) {
-            throw new MetadataIOIssues(MetadataIOIssues.IO_ISSUES);
+            throw new MetadataIOIssues(MetadataIOIssues.READ_ISSUES);
         }
 
         return SCIFIOTiffMetadataConverter.convertFrom(this._reader.getMetadata().get(0));
