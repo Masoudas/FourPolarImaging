@@ -45,7 +45,6 @@ public class OrientationImageTest {
 
         Image<Float32> rho = new ImgLib2ImageFactory().create(metadata, Float32.zero());
         Image<Float32> delta = new ImgLib2ImageFactory().create(metadata, Float32.zero());
-        Image<Float32> eta = new ImgLib2ImageFactory().create(metadata, Float32.zero());
 
         assertThrows(CannotFormOrientationImage.class, () -> {
             new OrientationImage(new DummyPolFileSet(), 1, new AngleImage(OrientationAngle.rho, rho),

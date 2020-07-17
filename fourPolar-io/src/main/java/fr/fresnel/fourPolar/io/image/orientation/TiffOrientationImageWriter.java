@@ -7,7 +7,6 @@ import fr.fresnel.fourPolar.algorithm.postprocess.orientation.OrientationAngleCo
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
-import fr.fresnel.fourPolar.core.image.orientation.IAngleImage;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;

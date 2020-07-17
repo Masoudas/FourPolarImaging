@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.algorithm.postprocess.orientation;
 
-import java.util.EnumSet;
-
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;

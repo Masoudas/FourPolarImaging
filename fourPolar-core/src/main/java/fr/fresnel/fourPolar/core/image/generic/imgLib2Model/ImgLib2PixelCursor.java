@@ -5,6 +5,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import net.imglib2.Cursor;
 import net.imglib2.type.NativeType;
 
@@ -33,12 +34,13 @@ class ImgLib2PixelCursor<U extends PixelType, T extends NativeType<T>> implement
      * @param imageDim   is the dimension of the underlying image.
      * @param converter is the appropriate converter (@see TypeConverter).
      */
+    @SuppressWarnings("unchecked")
     public ImgLib2PixelCursor(final Cursor<T> cursor, final long[] imageDim, final TypeConverter<U, T> converter) {
         this._cursor = cursor;
         this._position = new long[imageDim.length];
         this._tConverter = converter;
         this._size = _computeSizeOfCursor(imageDim);
-        U pixelValue = (U)converter.getPixelType().create(converter.getPixelType());
+        U pixelValue = (U)PixelTypes.create(converter.getPixelType());
         this._pixel = new Pixel<U>(pixelValue);
 
     }

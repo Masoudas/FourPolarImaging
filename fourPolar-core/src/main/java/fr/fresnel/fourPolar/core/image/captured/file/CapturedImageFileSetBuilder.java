@@ -32,6 +32,7 @@ public class CapturedImageFileSetBuilder implements ICapturedImageFileSetBuilder
      * @param checker      is the set of constraints we put to accepted or reject a
      *                     given file as proper captured image.
      */
+    @SuppressWarnings("unchecked")
     public CapturedImageFileSetBuilder(IFourPolarImagingSetup imagingSetup, ICapturedImageChecker checker) {
         this._checker = Objects.requireNonNull(checker, "checker cannot be null");
         Objects.requireNonNull(imagingSetup, "imaging setup cannot be null.");

@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.io.imageSet.acquisition;
 
 import java.io.File;
-import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.imageSet.acquisition.AcquisitionSetType;
 import fr.fresnel.fourPolar.io.PathFactoryOfProject;

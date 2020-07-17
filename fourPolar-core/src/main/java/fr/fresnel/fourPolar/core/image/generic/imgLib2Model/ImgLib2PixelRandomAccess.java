@@ -5,6 +5,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.types.TypeConverter;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import net.imglib2.RandomAccess;
 import net.imglib2.type.NativeType;
 
@@ -29,11 +30,12 @@ class ImgLib2PixelRandomAccess<U extends PixelType, T extends NativeType<T>> imp
      * @param converter    is the converter between ImgLib2 data types and our data
      *                     types.
      */
+    @SuppressWarnings("unchecked")
     public ImgLib2PixelRandomAccess(final RandomAccess<T> randomAccess, final TypeConverter<U, T> converter) {
         _rAccess = randomAccess;
         _tConverter = converter;
         _numDim = _rAccess.numDimensions();
-        _pixel = new Pixel<U>((U)converter.getPixelType().create(converter.getPixelType()));
+        _pixel = new Pixel<U>((U)PixelTypes.create(converter.getPixelType()));
     }
 
     @Override

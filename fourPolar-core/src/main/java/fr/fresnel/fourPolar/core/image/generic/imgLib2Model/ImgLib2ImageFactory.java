@@ -90,6 +90,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends PixelType> Image<T> create(IMetadata metadata, T pixelType) {
         IMetadata metadataCP = new Metadata.MetadataBuilder(metadata).build();
         Image<T> _image = null;
