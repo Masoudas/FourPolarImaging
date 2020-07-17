@@ -15,13 +15,13 @@ public class ImgLib2LogicalShapeTest {
         PointMask point1 = GeomMasks.pointMask(new double[] { 1, 1 });
         PointMask point2 = GeomMasks.pointMask(new double[] { 1, 2 });
 
-        IShape anded1 = ImgLib2LogicalShape.createAndedShape(new ImgLib2Shape(point1, AxisOrder.XY),
-                new ImgLib2Shape(point1, AxisOrder.XY));
+        IShape anded1 = ImgLib2LogicalShape.createAndedShape(new ImgLib2Shape(point1, AxisOrder.XY, 2),
+                new ImgLib2Shape(point1, AxisOrder.XY, 2));
 
         assertArrayEquals(anded1.getIterator().next(), new long[] { 1, 1 });
 
-        IShape anded2 = ImgLib2LogicalShape.createAndedShape(new ImgLib2Shape(point1, AxisOrder.XY),
-        new ImgLib2Shape(point2, AxisOrder.XY));
+        IShape anded2 = ImgLib2LogicalShape.createAndedShape(new ImgLib2Shape(point1, AxisOrder.XY, 2),
+        new ImgLib2Shape(point2, AxisOrder.XY, 2));
 
         assertTrue(!anded2.getIterator().hasNext());
 

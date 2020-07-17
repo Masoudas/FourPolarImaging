@@ -19,7 +19,7 @@ public class ImgLib2ShapeTest {
         PointMask point = GeomMasks.pointMask(new double[] { 1 });
 
         assertThrows(IllegalArgumentException.class, () -> {
-            new ImgLib2Shape(point, AxisOrder.XY);
+            new ImgLib2Shape(point, AxisOrder.XY, 1);
         });
     }
 
@@ -27,7 +27,7 @@ public class ImgLib2ShapeTest {
     public void isInside_PointsWithSameAndDifferentDimAsShape_ReturnsTrueAndFalseRespectively() {
         WritableBox box = GeomMasks.closedBox(new double[] { 0, 0 }, new double[] { 1, 1 });
 
-        ImgLib2Shape shape = new ImgLib2Shape(box, AxisOrder.XY);
+        ImgLib2Shape shape = new ImgLib2Shape(box, AxisOrder.XY, 1);
 
         assertTrue(shape.isInside(new long[] { 0, 0 }));
         assertTrue(!shape.isInside(new long[] { 2, 2 }));
@@ -41,7 +41,7 @@ public class ImgLib2ShapeTest {
     public void getIterator_ReturnsImgLi2ShapeIterator() {
         WritableBox box = GeomMasks.closedBox(new double[] { 0, 0 }, new double[] { 1, 1 });
 
-        ImgLib2Shape shape = new ImgLib2Shape(box, AxisOrder.XY);
+        ImgLib2Shape shape = new ImgLib2Shape(box, AxisOrder.XY, 2);
 
         assertTrue(shape.getIterator() instanceof ImgLib2ShapeIterator);
     }
