@@ -3,6 +3,7 @@ package fr.fresnel.fourPolar.core.image.vector.batikModel;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Optional;
 import java.util.TreeSet;
 import java.util.stream.IntStream;
 
@@ -18,14 +19,21 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.image.vector.Vector;
 import fr.fresnel.fourPolar.core.image.vector.VectorImage;
 import fr.fresnel.fourPolar.core.image.vector.VectorImageFactory;
+import fr.fresnel.fourPolar.core.image.vector.animation.Animation;
 import fr.fresnel.fourPolar.core.image.vector.filter.BlenderFilter;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterCompositeBuilder;
 import fr.fresnel.fourPolar.core.util.image.ImageUtil;
+import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
+import fr.fresnel.fourPolar.core.util.shape.ILineShape;
+import fr.fresnel.fourPolar.core.util.shape.IShape;
+import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
 public class BatikVectorImageTest {
     /**
@@ -177,7 +185,8 @@ public class BatikVectorImageTest {
         assertTrue(defsElement.getLength() == 1);
 
         Element imageElement = (Element) defsElement.item(0);
-        String hrefAsString = imageElement.getAttributeNS(null, "xlink:href").replace(System.getProperty("line.separator"), "");
+        String hrefAsString = imageElement.getAttributeNS(null, "xlink:href")
+                .replace(System.getProperty("line.separator"), "");
         assertTrue(hrefAsString.equals(img_UINT16_1111_asPNGString));
     }
 
@@ -199,9 +208,64 @@ public class BatikVectorImageTest {
             assertTrue(defsElement.getLength() == 1);
 
             Element imageElement = (Element) defsElement.item(0);
-            String hrefAsString = imageElement.getAttributeNS(null, "xlink:href").replace(System.getProperty("line.separator"), "");
+            String hrefAsString = imageElement.getAttributeNS(null, "xlink:href")
+                    .replace(System.getProperty("line.separator"), "");
             hrefAsString.equals(planesAsString[planeIndex - 1]);
         }
+    }
+
+    @Test
+    public void setVector_ShapeWithUnequalSpaceDim_ThrowsIllegalArgumentException() {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2 }).build();
+        BatikVectorImage vectorImage = new BatikVectorImage(metadata, new DummyBatikFactory());
+
+        DummyVector vector = new DummyVector();
+        vector.setShape(
+                new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 1, 1 }, AxisOrder.NoOrder));
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            vectorImage.addVector(vector);
+        });
+    }
+
+    @Test
+    public void setVector_2DVectorIn2DImage_AddsVectorElement() {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2 }).build();
+        BatikVectorImage vectorImage = new BatikVectorImage(metadata, new DummyBatikFactory());
+
+        DummyVector vector = new DummyVector();
+        vector.setShape(
+                new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 1 }, AxisOrder.NoOrder));
+
+        vectorImage.addVector(vector);
+
+        SVGDocument plane = vectorImage.getImagePlane(1).getPlane();
+        NodeList vectElement = plane.getDocumentElement().getElementsByTagNameNS(plane.getNamespaceURI(), "rect");
+
+        assertTrue(vectElement.getLength() == 1);
+    }
+
+    @Test
+    public void setVector_A2DVectorPerPlaneIn3DImage_AddsVectorElement() {
+        IMetadata metadata = new Metadata.MetadataBuilder(new long[] { 2, 2, 3 }).build();
+        BatikVectorImage vectorImage = new BatikVectorImage(metadata, new DummyBatikFactory());
+
+        for (int thirdDim = 0; thirdDim < 3; thirdDim++) {
+            DummyVector vector = new DummyVector();
+            vector.setShape(
+                    new ShapeFactory().closedBox(new long[] { thirdDim, 0, thirdDim }, new long[] { 4, 4, thirdDim }, AxisOrder.NoOrder));
+            vectorImage.addVector(vector);        
+        }
+
+        for (int planeIndex = 1; planeIndex <= 3; planeIndex++){
+            SVGDocument plane = vectorImage.getImagePlane(planeIndex).getPlane();
+            NodeList vectElement = plane.getDocumentElement().getElementsByTagNameNS(plane.getNamespaceURI(), "rect");
+    
+            assertTrue(vectElement.getLength() == 1);
+            Element rectElement = (Element)(vectElement.item(0));
+            assertTrue(rectElement.getAttributeNS(null, "x").equals(String.valueOf(planeIndex - 1)));
+        }
+
     }
 
     private void _setPlaneToValue(Image<UINT16> image, long planeIndex, int value) {
@@ -237,6 +301,77 @@ class DummyFilter extends BlenderFilter {
 
     public DummyFilter() {
         super(IN.SOURCE_GRAPHIC, Mode.MULTIPLY, null);
+    }
+
+}
+
+class DummyVector implements Vector {
+    private IBoxShape _shape;
+
+    @Override
+    public Optional<FilterComposite> filter() {
+        return Optional.ofNullable(null);
+    }
+
+    @Override
+    public IShape shape() {
+        return _shape;
+    }
+
+    @Override
+    public Optional<ARGB8> color() {
+        return Optional.ofNullable(null);
+    }
+
+    @Override
+    public Optional<ARGB8> fill() {
+        return Optional.ofNullable(null);
+    }
+
+    @Override
+    public Optional<Integer> strokeWidth() {
+        return Optional.ofNullable(null);
+    }
+
+    @Override
+    public Optional<Animation> animation() {
+        return Optional.ofNullable(null);
+    }
+
+    @Override
+    public void setShape(IBoxShape shape) {
+        _shape = shape;
+    }
+
+    @Override
+    public void setShape(ILineShape shape) {
+        throw new NoSuchMethodError();
+
+    }
+
+    @Override
+    public void setColor(ARGB8 color) {
+        throw new NoSuchMethodError();
+    }
+
+    @Override
+    public void setFill(ARGB8 color) {
+        throw new NoSuchMethodError();
+    }
+
+    @Override
+    public void setStrokeWidth(int width) {
+        throw new NoSuchMethodError();
+    }
+
+    @Override
+    public void setFilter(FilterComposite composite) {
+        throw new NoSuchMethodError();
+    }
+
+    @Override
+    public void setAnimation(Animation animation) {
+        throw new NoSuchMethodError();
     }
 
 }
