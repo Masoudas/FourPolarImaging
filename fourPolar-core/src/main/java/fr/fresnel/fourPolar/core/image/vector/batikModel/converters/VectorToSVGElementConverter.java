@@ -34,13 +34,11 @@ public class VectorToSVGElementConverter {
      * @param vector       is the vector to be converted.
      * @param svgDocument  is the instance of the document to which this document
      *                     should be added.
-     * @param namespaceURI is the name space inside the document to which the
-     *                     element equivalent of vector must be added.
      * 
      * @throws IllegalArgumentException if at least one component of the vector
      *                                  can't be converted to an svg element.
      */
-    public static void convert(Vector vector, SVGDocument svgDocument, String namespaceURI) {
+    public static void convert(Vector vector, SVGDocument svgDocument) {
         Element vectorElement = _createElementBasedOnVectorShape(vector.shape(), svgDocument);
 
         _setVectorAttributes(vectorElement, vector);
