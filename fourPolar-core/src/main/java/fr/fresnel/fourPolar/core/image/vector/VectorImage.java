@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.image.vector;
 
+import fr.fresnel.fourPolar.core.image.ImagePlaneAccessor;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
@@ -7,6 +8,7 @@ import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 
 /**
  * An interface for defining a vector image, that can be stored as an SVG image.
+ * 
  */
 public interface VectorImage {
     /**
@@ -20,7 +22,8 @@ public interface VectorImage {
     public VectorImageFactory getFactory();
 
     /**
-     * Adds the given composite filter as a child of svg defs element.
+     * Adds the given composite filter as a child of svg defs element of all the
+     * planes in this image.
      * 
      * @param composite is the composite filter.
      */
