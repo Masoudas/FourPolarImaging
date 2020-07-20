@@ -48,6 +48,7 @@ public class BatikSVGVectorImageWriter implements VectorImageWriter {
             throw new VectorImageIOIssues("Can't write a vector image with no axis-order.");
         }
 
+        _createRootFolder(root);
         BatikSVGVectorImagePathCreator pathCreator = new BatikSVGVectorImagePathCreator(vectorImage.metadata(), root,
                 imageName);
         ImagePlaneAccessor<SVGDocument> planeAccesser = (ImagePlaneAccessor<SVGDocument>) vectorImage;
@@ -59,9 +60,13 @@ public class BatikSVGVectorImageWriter implements VectorImageWriter {
     }
 
     /**
-     * Write the given batik svg document to the specified path.
+     * Write the given batik svg document to the specified path. Note that 
      */
     private void _writeBatikSVG(SVGDocument svgDocument, File path) throws VectorImageIOIssues {
+        if (path.exists()){
+            path.delete();
+        }
+
         try (FileWriter writer = new FileWriter(path)) {
             PrintWriter printWriter = new PrintWriter(writer);
 
@@ -74,8 +79,10 @@ public class BatikSVGVectorImageWriter implements VectorImageWriter {
         }
     }
 
-    private void _deleteAndCreateImageNameFolder(File ) {
-        
+    private void _createRootFolder(File root) {
+        if (!root.exists()){
+            root.mkdirs();
+        }
     }
 
     @Override
