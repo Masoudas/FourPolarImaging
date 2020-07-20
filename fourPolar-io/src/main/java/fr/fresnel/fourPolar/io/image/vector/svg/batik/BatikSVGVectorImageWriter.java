@@ -62,7 +62,7 @@ public class BatikSVGVectorImageWriter implements VectorImageWriter {
         BatikSVGVectorImagePathCreator pathCreator = new BatikSVGVectorImagePathCreator(vectorImage.metadata(), root,
                 imageName);
         ImagePlaneAccessor<SVGDocument> planeAccesser = (ImagePlaneAccessor<SVGDocument>) vectorImage;
-        for (int planeIndex = 0; planeIndex < planeAccesser.numPlanes(); planeIndex++) {
+        for (int planeIndex = 1; planeIndex <= planeAccesser.numPlanes(); planeIndex++) {
             File imagePath = pathCreator.createPlaneImageFile(planeIndex);
             _writeBatikSVG(planeAccesser.getImagePlane(planeIndex).getPlane(), imagePath);
         }
@@ -106,7 +106,11 @@ public class BatikSVGVectorImageWriter implements VectorImageWriter {
 
     @Override
     public void close() throws VectorImageIOIssues {
-
+        try {
+            _metadataToYaml.close();
+        } catch (MetadataIOIssues e) {
+            new VectorImageIOIssues("Can't close writer resources.");
+        }
     }
 
 }
