@@ -1,6 +1,7 @@
 package fr.fresnel.fourPolar.io.image.generic.metadata.json;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -17,13 +18,13 @@ import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssue
  * {@link IMetadata#bitPerPixel()} is not adapted with this class, as this
  * parameter is a property of the image this metadata is associated with.
  */
-@JsonPropertyOrder({})
+@JsonPropertyOrder({"Axis-Order", "Dimension"})
 public class IMetadataJSONAdaptor {
     @JsonProperty("Axis-Order")
     private String _axisOrder = null;
 
-    @JsonProperty("Axis-Order")
-    private long[] _dimension = null;
+    @JsonProperty("Dimension")
+    private String _dimension = null;
 
     /**
      * Adapts the given metadata to JSON.
@@ -67,7 +68,8 @@ public class IMetadataJSONAdaptor {
             throw new MetadataIOIssues(MetadataIOIssues.INCOMPLETE_METADATA);
         }
 
-        this._dimension = dimension;
+        this._dimension = Arrays.toString(dimension);
+        
     }
 
     private AxisOrder _getAxisOrder() throws MetadataIOIssues {
@@ -88,6 +90,7 @@ public class IMetadataJSONAdaptor {
             throw new MetadataIOIssues("No dimension is found.");
         }
 
-        return _dimension;
+        String[] dimsAsString = _dimension.substring(1, _dimension.length() - 1).split(",");
+        return Arrays.stream(dimsAsString).mapToLong(Long::parseLong).toArray();
     }
 }
