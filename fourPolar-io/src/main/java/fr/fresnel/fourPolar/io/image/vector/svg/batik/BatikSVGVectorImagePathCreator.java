@@ -19,38 +19,42 @@ class BatikSVGVectorImagePathCreator {
 
     private final String[] _axisOrderAsString;
     private final IMetadata _metadata;
+    private final File _root;
+    private final String _imageName;
 
     /**
-     * Initialize by passing metadata of the image.
+     * Initialize by passing metadata of the image, together with desired root and
+     * image name.
      * 
-     * @param metadata is the metadata of the image.
+     * @param metadata  is the metadata of the image.
+     * @param root      is the root of where the images are stored.
+     * @param imageName is the common name of all image planes.
      */
-    public BatikSVGVectorImagePathCreator(IMetadata metadata) {
+    public BatikSVGVectorImagePathCreator(IMetadata metadata, File root, String imageName) {
         _axisOrderAsString = AxisOrder.mapAxisOrdersToLowerCaseChars().get(metadata.axisOrder());
         _metadata = metadata;
+        _root = root;
+        _imageName = imageName;
     }
 
     /**
      * Create path for the given plane index.
      * 
-     * @param root       is the root of images.
-     * @param imageName  is the image name for this svg set.
-     * @param metadata   is the metadata of the image.
-     * @param coordinate is the coordinate of this plane.
+     * @param planeIndex is the index of the plane.
      * @return the path to the image file for this coordinate.
      * 
      * @throws IndexOutOfBounds if the given metadata does not have the requested
      *                          plane.
      */
-    public File createPlaneImageFile(File root, String imageName, int planeIndex) {
+    public File createPlaneImageFile(int planeIndex) {
         long[] plane_coords = _getPlaneCoodinates(_metadata, planeIndex);
 
-        String name_with_coordinates = imageName;
+        String name_with_coordinates = _imageName;
         for (int dim = _XY_AXIS_OFFSET; dim < plane_coords.length; dim++) {
             name_with_coordinates += "_" + _axisOrderAsString[dim] + _DECIMAL_FORMATTER.format(plane_coords[dim]);
         }
 
-        return new File(root, name_with_coordinates + ".svg");
+        return new File(_root, name_with_coordinates + ".svg");
     }
 
     /**
