@@ -40,7 +40,7 @@ public class BatikSVGVectorImageWriter implements VectorImageWriter {
     @SuppressWarnings("unchecked")
     @Override
     public void write(File root, String imageName, VectorImage vectorImage) throws VectorImageIOIssues {
-        if (!VectorImageUtil.hasBackEndPlanes(vectorImage, SVGDocument.class)){
+        if (!VectorImageUtil.hasBackEndPlanes(vectorImage, SVGDocument.class)) {
             throw new IllegalArgumentException("The given vector image does not have batik implementation.");
         }
 
@@ -48,10 +48,11 @@ public class BatikSVGVectorImageWriter implements VectorImageWriter {
             throw new VectorImageIOIssues("Can't write a vector image with no axis-order.");
         }
 
-        BatikSVGVectorImagePathCreator pathCreator = new BatikSVGVectorImagePathCreator(vectorImage.metadata());
-        ImagePlaneAccessor<SVGDocument> planeAccesser = (ImagePlaneAccessor<SVGDocument>)vectorImage;
-        for (int planeIndex = 0; planeIndex < planeAccesser.numPlanes(); planeIndex++) {    
-            File imagePath = pathCreator.createPlaneImageFile(root, imageName, planeIndex);
+        BatikSVGVectorImagePathCreator pathCreator = new BatikSVGVectorImagePathCreator(vectorImage.metadata(), root,
+                imageName);
+        ImagePlaneAccessor<SVGDocument> planeAccesser = (ImagePlaneAccessor<SVGDocument>) vectorImage;
+        for (int planeIndex = 0; planeIndex < planeAccesser.numPlanes(); planeIndex++) {
+            File imagePath = pathCreator.createPlaneImageFile(planeIndex);
             _writeBatikSVG(planeAccesser.getImagePlane(planeIndex).getPlane(), imagePath);
         }
 
@@ -71,6 +72,10 @@ public class BatikSVGVectorImageWriter implements VectorImageWriter {
         } catch (IOException | TranscoderException e) {
             throw new VectorImageIOIssues("Can't write svg document to disk.");
         }
+    }
+
+    private void _deleteAndCreateImageNameFolder(File ) {
+        
     }
 
     @Override
