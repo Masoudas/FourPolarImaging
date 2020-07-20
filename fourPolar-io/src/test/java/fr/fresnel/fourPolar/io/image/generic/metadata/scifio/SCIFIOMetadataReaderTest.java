@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
-import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
+import fr.fresnel.fourPolar.io.image.generic.metadata.IMetadataReader;
 
 public class SCIFIOMetadataReaderTest {
     @Test

@@ -48,7 +48,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.polarization.IPolarizatio
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetIOIssue;
 import fr.fresnel.fourPolar.io.image.captured.tiff.checker.TiffCapturedImageChecker;
-import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
+import fr.fresnel.fourPolar.io.image.generic.metadata.IMetadataReader;
 import fr.fresnel.fourPolar.io.image.generic.metadata.scifio.SCIFIOMetadataReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.scifio.SCIFIOUINT16TiffReader;
 import fr.fresnel.fourPolar.io.image.polarization.TiffPolarizationImageSetWriter;

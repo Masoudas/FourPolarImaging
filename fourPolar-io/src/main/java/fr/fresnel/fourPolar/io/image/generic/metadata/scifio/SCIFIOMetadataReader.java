@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
-import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
+import fr.fresnel.fourPolar.io.image.generic.metadata.IMetadataReader;
 import io.scif.SCIFIO;
 import io.scif.config.SCIFIOConfig;
 import io.scif.formats.TIFFFormat.Metadata;

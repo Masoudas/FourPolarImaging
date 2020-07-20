@@ -9,8 +9,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
+import fr.fresnel.fourPolar.core.image.generic.metadata.IMetadataWriter;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
-import fr.fresnel.fourPolar.io.image.generic.IMetadataWriter;
 
 /**
  * A class for writing {@link IMetadata} as a YAML file.

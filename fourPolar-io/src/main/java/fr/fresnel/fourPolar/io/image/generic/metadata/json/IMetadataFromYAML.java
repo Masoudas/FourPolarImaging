@@ -8,7 +8,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
-import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
+import fr.fresnel.fourPolar.io.image.generic.metadata.IMetadataReader;
 
 /**
  * A class for reading metadata, as written by {@link IMetadataToYAML}

@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.io.image.generic;
+package fr.fresnel.fourPolar.io.image.generic.metadata;
 
 import java.io.File;
 import java.io.IOException;

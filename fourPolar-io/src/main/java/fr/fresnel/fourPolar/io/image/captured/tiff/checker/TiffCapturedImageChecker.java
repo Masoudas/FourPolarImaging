@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.RejectedCapturedImage;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
-import fr.fresnel.fourPolar.io.image.generic.IMetadataReader;
+import fr.fresnel.fourPolar.io.image.generic.metadata.IMetadataReader;
 
 /**
  * A class for checking the compatibility of a tiff image with the software
