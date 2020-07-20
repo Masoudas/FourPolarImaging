@@ -31,6 +31,6 @@ public interface IMetadataWriter {
      * 
      * @throws IOException in case of io issues when closing resources.
      */
-    public void close() throws IOException;
+    public void close() throws MetadataIOIssues;
 
 }

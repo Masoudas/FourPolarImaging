@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.io.image.generic.metadata;
 
 import java.io.File;
-import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
@@ -26,6 +25,6 @@ public interface IMetadataReader {
     /**
      * Close all resources associated with this reader.
      */
-    public void close() throws IOException;
+    public void close() throws MetadataIOIssues;
 
 }
