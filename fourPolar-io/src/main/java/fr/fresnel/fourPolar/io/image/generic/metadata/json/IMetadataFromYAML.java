@@ -28,7 +28,7 @@ public class IMetadataFromYAML implements IMetadataReader {
         try {
             return _mapper.readValue(path, IMetadataJSONAdaptor.class).fromJSON();
         } catch (IOException e) {
-            throw new MetadataIOIssues(MetadataIOIssues.Write_ISSUES);
+            throw new MetadataIOIssues(MetadataIOIssues.READ_ISSUES);
         }
     }
 
