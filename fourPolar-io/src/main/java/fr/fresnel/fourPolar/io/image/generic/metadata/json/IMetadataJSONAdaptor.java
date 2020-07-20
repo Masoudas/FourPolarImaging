@@ -38,7 +38,7 @@ public class IMetadataJSONAdaptor {
      * Creates a concrete metadata instance form the json properties.
      * 
      * @return a metadata instance from JSON information.
-     * @throws IOException in case at least one parameter can't be serialized from
+     * @throws IOException in case at least one parameter can't be read from
      *                     JSON.
      */
     public IMetadata fromJSON() throws IOException {
