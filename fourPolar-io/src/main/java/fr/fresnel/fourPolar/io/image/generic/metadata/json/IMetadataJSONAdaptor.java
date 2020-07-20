@@ -18,7 +18,7 @@ import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssue
  * {@link IMetadata#bitPerPixel()} is not adapted with this class, as this
  * parameter is a property of the image this metadata is associated with.
  */
-@JsonPropertyOrder({"Axis-Order", "Dimension"})
+@JsonPropertyOrder({ "Axis-Order", "Dimension" })
 public class IMetadataJSONAdaptor {
     @JsonProperty("Axis-Order")
     private String _axisOrder = null;
@@ -42,7 +42,7 @@ public class IMetadataJSONAdaptor {
      * 
      * @return a metadata instance from JSON information.
      * @throws MetadataIOIssues in case at least one parameter can't be read from
-     *                     JSON.
+     *                          JSON.
      */
     public IMetadata fromJSON() throws MetadataIOIssues {
         AxisOrder axisOrder = _getAxisOrder();
@@ -56,20 +56,20 @@ public class IMetadataJSONAdaptor {
     }
 
     private void _setAxisOrder(AxisOrder axisOrder) throws MetadataIOIssues {
-        if (axisOrder == null){
+        if (axisOrder == null) {
             throw new MetadataIOIssues(MetadataIOIssues.INCOMPLETE_METADATA);
         }
 
         this._axisOrder = axisOrder.toString();
     }
 
-    private void _setDimension(long[] dimension) throws MetadataIOIssues{
-        if (dimension == null){
+    private void _setDimension(long[] dimension) throws MetadataIOIssues {
+        if (dimension == null) {
             throw new MetadataIOIssues(MetadataIOIssues.INCOMPLETE_METADATA);
         }
 
         this._dimension = Arrays.toString(dimension);
-        
+
     }
 
     private AxisOrder _getAxisOrder() throws MetadataIOIssues {
@@ -90,7 +90,12 @@ public class IMetadataJSONAdaptor {
             throw new MetadataIOIssues("No dimension is found.");
         }
 
-        String[] dimsAsString = _dimension.substring(1, _dimension.length() - 1).split(",");
-        return Arrays.stream(dimsAsString).mapToLong(Long::parseLong).toArray();
+        String[] dimsAsString = _dimension.substring(1, _dimension.length() - 1).split(", ");
+        try {
+            return Arrays.stream(dimsAsString).mapToLong(Long::parseLong).toArray();
+        } catch (NumberFormatException e) {
+            throw new MetadataIOIssues("Dimension vector can't be parsed.");
+        }
+
     }
 }
