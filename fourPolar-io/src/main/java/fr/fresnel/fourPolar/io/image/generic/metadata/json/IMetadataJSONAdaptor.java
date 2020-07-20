@@ -10,6 +10,7 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 
 /**
  * This class works as an adaptor from/to JSON. Note that
@@ -27,9 +28,10 @@ public class IMetadataJSONAdaptor {
     /**
      * Adapts the given metadata to JSON.
      * 
-     * @param metadata
+     * @param metadata is the metadata instance to be adapted to JSON.
+     * @throws MetadataIOIssues in case the metadata is incomplete.
      */
-    public void toJSON(IMetadata metadata) {
+    public void toJSON(IMetadata metadata) throws MetadataIOIssues {
         _setAxisOrder(metadata.axisOrder());
         _setDimension(metadata.getDim());
     }
@@ -38,44 +40,52 @@ public class IMetadataJSONAdaptor {
      * Creates a concrete metadata instance form the json properties.
      * 
      * @return a metadata instance from JSON information.
-     * @throws IOException in case at least one parameter can't be read from
+     * @throws MetadataIOIssues in case at least one parameter can't be read from
      *                     JSON.
      */
-    public IMetadata fromJSON() throws IOException {
+    public IMetadata fromJSON() throws MetadataIOIssues {
         AxisOrder axisOrder = _getAxisOrder();
         long[] dimension = _getDimension();
 
         if (!MetadataUtil.numAxisEqualsDimension(axisOrder, dimension)) {
-            throw new IOException("Metadata and dimension don't match");
+            throw new MetadataIOIssues("Metadata and dimension don't match");
         }
 
         return new Metadata.MetadataBuilder(dimension).axisOrder(axisOrder).build();
     }
 
-    private void _setAxisOrder(AxisOrder axisOrder) {
+    private void _setAxisOrder(AxisOrder axisOrder) throws MetadataIOIssues {
+        if (axisOrder == null){
+            throw new MetadataIOIssues(MetadataIOIssues.INCOMPLETE_METADATA);
+        }
+
         this._axisOrder = axisOrder.toString();
     }
 
-    private void _setDimension(long[] dimension) {
+    private void _setDimension(long[] dimension) throws MetadataIOIssues{
+        if (dimension == null){
+            throw new MetadataIOIssues(MetadataIOIssues.INCOMPLETE_METADATA);
+        }
+
         this._dimension = dimension;
     }
 
-    private AxisOrder _getAxisOrder() throws IOException {
+    private AxisOrder _getAxisOrder() throws MetadataIOIssues {
         if (_axisOrder == null) {
-            throw new IOException("No axis order is found.");
+            throw new MetadataIOIssues("No axis order is found from JSON.");
         }
 
         try {
             return AxisOrder.fromString(_axisOrder);
         } catch (UnsupportedAxisOrder e) {
-            throw new IOException("Axis order can't be read from JSON.");
+            throw new MetadataIOIssues("Axis order can't be read from JSON.");
         }
 
     }
 
-    private long[] _getDimension() throws IOException {
+    private long[] _getDimension() throws MetadataIOIssues {
         if (_dimension == null) {
-            throw new IOException("No dimension is found.");
+            throw new MetadataIOIssues("No dimension is found.");
         }
 
         return _dimension;
