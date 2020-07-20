@@ -1,5 +1,9 @@
 package fr.fresnel.fourPolar.core.image.generic.axis;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import fr.fresnel.fourPolar.core.exceptions.image.generic.axis.UnsupportedAxisOrder;
 
 /**
@@ -35,6 +39,14 @@ public enum AxisOrder {
         }
 
         return XY;
+    }
+
+    /**
+     * @return a map between each axis order and its individual axis as an array of string.
+     */
+    public static Map<AxisOrder, String[]> mapAxisOrdersToLowerCaseChars() {
+        return Stream.of(AxisOrder.values())
+                .collect(Collectors.toMap(t -> t, t -> t.toString().toLowerCase().split("")));
     }
 
     public final int z_axis;

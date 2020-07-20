@@ -1,6 +1,10 @@
 package fr.fresnel.fourPolar.core.image.generic.axis;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Arrays;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +28,16 @@ public class AxisOrderTest {
         assertTrue(AxisOrder.NoOrder.numAxis == -1 && AxisOrder.XYC.numAxis == 3 && AxisOrder.XYTC.numAxis == 4
                 && AxisOrder.XYZTC.numAxis == 5 && AxisOrder.XYTZC.numAxis == 5);
 
+    }
+
+    @Test
+    public void mapAxisOrdersToLowerCaseChars_ReturnsCorrectAxisForEachAxisOrder() {
+        Map<AxisOrder, String[]> ordersAsString = AxisOrder.mapAxisOrdersToLowerCaseChars();
+
+        Arrays.deepEquals(ordersAsString.get(AxisOrder.XY), new String[]{"x", "y"});
+        Arrays.deepEquals(ordersAsString.get(AxisOrder.XYZT), new String[]{"x", "y", "z", "t"});
+        Arrays.deepEquals(ordersAsString.get(AxisOrder.XYCZT), new String[]{"x", "y", "c", "z", "t"});
+        
     }
 
 }
