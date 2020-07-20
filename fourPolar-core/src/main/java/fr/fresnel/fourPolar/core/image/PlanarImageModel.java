@@ -8,11 +8,11 @@ import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
 
 /**
  * An interface that models image as instances of {@link ImagePlane} and allows
- * access through image plane index using the {@link ImagePlaneAccesser}.
+ * access through image plane index using the {@link ImagePlaneAccessor}.
  * 
  * @param <T> is the backend for image each plane.
  */
-public abstract class PlanarImageModel<T> implements ImagePlaneAccesser<T> {
+public abstract class PlanarImageModel<T> implements ImagePlaneAccessor<T> {
     private static final int _FIRST_PLANE_INDEX = 1;
 
     private final long[] _nPlanesPerDim;
@@ -157,9 +157,7 @@ public abstract class PlanarImageModel<T> implements ImagePlaneAccesser<T> {
 
     }
 
-    /**
-     * Returns the total number of planes.
-     */
+    @Override
     public int numPlanes() {
         return _totalNumPlanes;
     }
