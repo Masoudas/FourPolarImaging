@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.io.image.generic.metadata.json;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
