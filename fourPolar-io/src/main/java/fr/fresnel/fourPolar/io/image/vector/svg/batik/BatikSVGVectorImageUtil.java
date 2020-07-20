@@ -24,6 +24,8 @@ class BatikSVGVectorImageUtil {
      * @param metadata   is the metadata of the image.
      * @param coordinate is the coordinate of this plane.
      * @return the path to the image file for this coordinate.
+     * 
+     * @throws IndexOutOfBounds if the given metadata does not have the requested plane.
      */
     static File createPlaneImageFile(File root, String imageName, IMetadata metadata, int planeIndex) {
         String[] axisOrderAsString = _axisOrdersAsString.get(metadata.axisOrder());
