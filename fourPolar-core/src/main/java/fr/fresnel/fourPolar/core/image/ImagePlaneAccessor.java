@@ -5,7 +5,7 @@ package fr.fresnel.fourPolar.core.image;
  * 
  * @param <T>
  */
-public interface ImagePlaneAccesser<T> {
+public interface ImagePlaneAccessor<T> {
     /**
      * Returns the image plane this particular position belongs to. It's the
      * responsibilty of the caller to ensure that this position is consistent with
