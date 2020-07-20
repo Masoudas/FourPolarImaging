@@ -36,8 +36,13 @@ public class SCIFIOMetadataReader implements IMetadataReader {
     }
 
     @Override
-    public void close() throws IOException {
-        this._reader.close();
+    public void close() throws MetadataIOIssues {
+        try {
+            this._reader.close();
+        } catch (IOException e) {
+            throw new MetadataIOIssues("Can't close metadata reader issues.");
+        }
+
     }
 
     /**

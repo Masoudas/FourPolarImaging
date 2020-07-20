@@ -30,9 +30,7 @@ public class IMetadataFromYAML implements IMetadataReader {
     }
 
     @Override
-    public void close() throws IOException {
-        throw new NoSuchMethodException("No need to call this method.")
-
+    public void close() throws MetadataIOIssues {
     }
 
 }
