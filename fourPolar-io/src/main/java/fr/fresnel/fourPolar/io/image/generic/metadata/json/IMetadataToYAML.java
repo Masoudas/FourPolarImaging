@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.io.image.generic.metadata.json;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -27,6 +28,10 @@ public class IMetadataToYAML implements IMetadataWriter {
 
     @Override
     public void write(IMetadata metadata, File root, String name) throws MetadataIOIssues {
+        Objects.requireNonNull(metadata, "metadata can't be null");
+        Objects.requireNonNull(root, "root can't be null");
+        Objects.requireNonNull(name, "name can't be null");
+
         _jsonAdaptor.toJSON(metadata);
         try {
             _mapper.writeValue(_createPathFile(root, name), _jsonAdaptor);

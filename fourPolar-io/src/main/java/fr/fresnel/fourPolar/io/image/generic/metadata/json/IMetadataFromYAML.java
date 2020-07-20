@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.io.image.generic.metadata.json;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -22,6 +23,8 @@ public class IMetadataFromYAML implements IMetadataReader {
 
     @Override
     public IMetadata read(File path) throws MetadataIOIssues {
+        Objects.requireNonNull(path, "path can't be null.");
+        
         try {
             return _mapper.readValue(path, IMetadataJSONAdaptor.class).fromJSON();
         } catch (IOException e) {
