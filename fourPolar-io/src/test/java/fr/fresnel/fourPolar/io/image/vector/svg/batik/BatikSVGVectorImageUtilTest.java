@@ -19,7 +19,7 @@ public class BatikSVGVectorImageUtilTest {
         String imageName = "XYImage";
         File expectedFile = new File(root, imageName + ".svg");
 
-        File image_path = BatikSVGVectorImageUtil.createPlaneImageFile(root, imageName, metadata, 1);
+        File image_path = BatikSVGVectorImagePathCreator.createPlaneImageFile(root, imageName, metadata, 1);
         
         assertTrue(image_path.equals(expectedFile));
     }
@@ -32,7 +32,7 @@ public class BatikSVGVectorImageUtilTest {
         String imageName = "XYZImage";
         File expectedFile = new File(root, imageName + "_z002" + ".svg");
 
-        File image_path = BatikSVGVectorImageUtil.createPlaneImageFile(root, imageName, metadata, 3);
+        File image_path = BatikSVGVectorImagePathCreator.createPlaneImageFile(root, imageName, metadata, 3);
         assertTrue(image_path.equals(expectedFile));
     }
 
@@ -44,7 +44,7 @@ public class BatikSVGVectorImageUtilTest {
         String imageName = "XYZTImage";
         File expectedFile = new File(root, imageName + "_z000" + "_t001" + ".svg");
 
-        File image_path = BatikSVGVectorImageUtil.createPlaneImageFile(root, imageName, metadata, 4);
+        File image_path = BatikSVGVectorImagePathCreator.createPlaneImageFile(root, imageName, metadata, 4);
         assertTrue(image_path.equals(expectedFile));
     }
 
@@ -56,7 +56,7 @@ public class BatikSVGVectorImageUtilTest {
         String imageName = "XYCZTImage";
         File expectedFile = new File(root, imageName + "_c000" + "_z000" + "_t001" + ".svg");
 
-        File image_path = BatikSVGVectorImageUtil.createPlaneImageFile(root, imageName, metadata, 13);
+        File image_path = BatikSVGVectorImagePathCreator.createPlaneImageFile(root, imageName, metadata, 13);
         assertTrue(image_path.equals(expectedFile));
     }
 }
