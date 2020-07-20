@@ -26,4 +26,9 @@ public interface ImagePlaneAccesser<T> {
      *                                   does not exist.
      */
     public ImagePlane<T> getImagePlane(int planeIndex);
+
+    /**
+     * @return the total number of planes.
+     */
+    public int numPlanes();
 }
