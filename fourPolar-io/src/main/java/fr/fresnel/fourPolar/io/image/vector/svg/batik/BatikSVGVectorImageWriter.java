@@ -16,6 +16,7 @@ import fr.fresnel.fourPolar.core.image.ImagePlaneAccessor;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.vector.VectorImage;
+import fr.fresnel.fourPolar.core.image.vector.batikModel.accessors.BatikImagePlaneAccessor;
 import fr.fresnel.fourPolar.core.util.vectorImage.VectorImageUtil;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.exceptions.image.vector.VectorImageIOIssues;
@@ -57,26 +58,27 @@ public class BatikSVGVectorImageWriter implements VectorImageWriter {
         _metadataToYaml = metadataWriter;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void write(File root, String imageName, VectorImage vectorImage) throws VectorImageIOIssues {
         Objects.requireNonNull(root, "root can't be null");
         Objects.requireNonNull(imageName, "imageName can't be null");
         Objects.requireNonNull(vectorImage, "vectorImage can't be null");
 
-        if (!VectorImageUtil.hasBackEndPlanes(vectorImage, SVGDocument.class)) {
-            throw new VectorImageIOIssues("The given vector image does not have batik implementation.");
-        }
-
         if (vectorImage.metadata().axisOrder() == AxisOrder.NoOrder) {
             throw new VectorImageIOIssues("Can't write a vector image with no axis-order.");
         }
+
+        ImagePlaneAccessor<SVGDocument> planeAccesser;
+        try {
+            planeAccesser = BatikImagePlaneAccessor.get(vectorImage);  
+        } catch (ClassCastException e) {
+            throw new VectorImageIOIssues("The given vector image does not have batik implementation.");
+        } 
 
         _createRootFolder(root);
 
         BatikSVGVectorImagePathCreator pathCreator = new BatikSVGVectorImagePathCreator(vectorImage.metadata(), root,
                 imageName);
-        ImagePlaneAccessor<SVGDocument> planeAccesser = (ImagePlaneAccessor<SVGDocument>) vectorImage;
         for (int planeIndex = 1; planeIndex <= planeAccesser.numPlanes(); planeIndex++) {
             File imagePath = pathCreator.createPlaneImageFile(planeIndex);
             _writeBatikSVGDocument(planeAccesser.getImagePlane(planeIndex).getPlane(), imagePath);
