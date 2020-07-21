@@ -14,13 +14,15 @@ public interface IMetadataReader {
     /**
      * Read metadata from the given path
      * 
-     * @param path is the path to metadata source.
+     * @param root     is the folder where this metadata will be written (excluding
+     *                 file name)
+     * @param fileName is the name of the file containing the metadata (without extension).
      * 
      * @throws MetadataIOIssues in case the metadata can't be parsed. Note that
-     *                            undefined axis does not raise this exception.
-     * @return the metadata of the image.
+     *                          undefined axis does not raise this exception.
+     * @return the metadata instance read from the file.
      */
-    public IMetadata read(File path) throws MetadataIOIssues;
+    public IMetadata read(File root, String fileName) throws MetadataIOIssues;
 
     /**
      * Close all resources associated with this reader.
