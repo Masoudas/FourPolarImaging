@@ -10,22 +10,39 @@ import org.w3c.dom.svg.SVGDocument;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.vector.VectorImage;
+import fr.fresnel.fourPolar.core.image.vector.batikModel.BatikVectorImageFactory;
 import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.exceptions.image.vector.VectorImageIOIssues;
+import fr.fresnel.fourPolar.io.image.generic.metadata.IMetadataReader;
 import fr.fresnel.fourPolar.io.image.generic.metadata.json.IMetadataFromYAML;
 import fr.fresnel.fourPolar.io.image.vector.VectorImageReader;
 
 /**
- * 
+ * Reads a {@link VectorImage} as written by {@link BatikSVGVectorImageWriter}
+ * from the disk.
  */
 public class BatikSVGVectorImageReader implements VectorImageReader {
-    private final IMetadataFromYAML _metadataReader;
-    private final BatikImageFactory _batikFactory;
+    private final IMetadataReader _metadataReader;
+    private final BatikVectorImageFactory _batikFactory;
 
+    /**
+     * Instantiate the reader, setting its metadata reader to
+     * {@link IMetadataToYaml}.
+     */
     public BatikSVGVectorImageReader() {
         _metadataReader = new IMetadataFromYAML();
-        _batikFactory = new BatikImageFactory();
+        _batikFactory = new BatikVectorImageFactory();
+    }
+
+    /**
+     * Instantiate class by providing a metadata reader.
+     * 
+     * @param metadataWriter is the metadata reader interface.
+     */
+    public BatikSVGVectorImageReader(IMetadataReader metadataReader) {
+        _metadataReader = metadataReader;
+        _batikFactory = new BatikVectorImageFactory();
     }
 
     @Override
@@ -38,9 +55,14 @@ public class BatikSVGVectorImageReader implements VectorImageReader {
         }
 
         IMetadata metadata = _readMetadata(root, imageName);
-        _readVectorImagePlanes(metadata, root, imageName);
+        SVGDocument[] planes = _readVectorImagePlanes(metadata, root, imageName);
 
-        return _batikFactory.;
+        try {
+            return _batikFactory.createFromPlanes(metadata, planes);
+        } catch (IllegalArgumentException e) {
+            throw new VectorImageIOIssues("Can't read vector image due to inconsistency between metadata and planes.");
+        }
+
     }
 
     private SVGDocument[] _readVectorImagePlanes(IMetadata metadata, File root, String imageName)
@@ -49,7 +71,6 @@ public class BatikSVGVectorImageReader implements VectorImageReader {
         SVGDocument[] planes = new SVGDocument[numPlanes];
 
         BatikSVGVectorImagePathCreator pathCreator = new BatikSVGVectorImagePathCreator(metadata, root, imageName);
-
         for (int planeIndex = 1; planeIndex <= numPlanes; planeIndex++) {
             planes[planeIndex - 1] = _readBatikImage(pathCreator.createPlaneImageFile(planeIndex));
         }
@@ -72,7 +93,7 @@ public class BatikSVGVectorImageReader implements VectorImageReader {
         try {
             return _metadataReader.read(new File(root, imageName));
         } catch (MetadataIOIssues e) {
-            throw new VectorImageIOIssues("Can't vector read image because metadata can't be read.");
+            throw new VectorImageIOIssues("Can't read vector image because metadata can't be read.");
         }
     }
 

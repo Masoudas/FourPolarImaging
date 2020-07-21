@@ -19,6 +19,7 @@ import fr.fresnel.fourPolar.core.image.vector.VectorImage;
 import fr.fresnel.fourPolar.core.util.vectorImage.VectorImageUtil;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.exceptions.image.vector.VectorImageIOIssues;
+import fr.fresnel.fourPolar.io.image.generic.metadata.IMetadataWriter;
 import fr.fresnel.fourPolar.io.image.generic.metadata.json.IMetadataToYAML;
 import fr.fresnel.fourPolar.io.image.vector.VectorImageWriter;
 
@@ -36,11 +37,24 @@ import fr.fresnel.fourPolar.io.image.vector.VectorImageWriter;
  */
 public class BatikSVGVectorImageWriter implements VectorImageWriter {
     private final SVGTranscoder _transcoder;
-    private final IMetadataToYAML _metadataToYaml;
+    private final IMetadataWriter _metadataToYaml;
 
+    /**
+     * Instantiate writer, setting its metadata writer to {@link IMetadataToYaml}.
+     */
     public BatikSVGVectorImageWriter() {
         _transcoder = new SVGTranscoder();
         _metadataToYaml = new IMetadataToYAML();
+    }
+
+    /**
+     * Instantiate class by providing a metadata writer.
+     * 
+     * @param metadataWriter is the metadata writer interface.
+     */
+    public BatikSVGVectorImageWriter(IMetadataWriter metadataWriter) {
+        _transcoder = new SVGTranscoder();
+        _metadataToYaml = metadataWriter;
     }
 
     @SuppressWarnings("unchecked")
@@ -59,12 +73,13 @@ public class BatikSVGVectorImageWriter implements VectorImageWriter {
         }
 
         _createRootFolder(root);
+
         BatikSVGVectorImagePathCreator pathCreator = new BatikSVGVectorImagePathCreator(vectorImage.metadata(), root,
                 imageName);
         ImagePlaneAccessor<SVGDocument> planeAccesser = (ImagePlaneAccessor<SVGDocument>) vectorImage;
         for (int planeIndex = 1; planeIndex <= planeAccesser.numPlanes(); planeIndex++) {
             File imagePath = pathCreator.createPlaneImageFile(planeIndex);
-            _writeBatikSVG(planeAccesser.getImagePlane(planeIndex).getPlane(), imagePath);
+            _writeBatikSVGDocument(planeAccesser.getImagePlane(planeIndex).getPlane(), imagePath);
         }
 
         _writeMetadataAsYaml(vectorImage.metadata(), root, imageName);
@@ -73,7 +88,7 @@ public class BatikSVGVectorImageWriter implements VectorImageWriter {
     /**
      * Write the given batik svg document to the specified path. Note that
      */
-    private void _writeBatikSVG(SVGDocument svgDocument, File path) throws VectorImageIOIssues {
+    private void _writeBatikSVGDocument(SVGDocument svgDocument, File path) throws VectorImageIOIssues {
         if (path.exists()) {
             path.delete();
         }
@@ -99,7 +114,7 @@ public class BatikSVGVectorImageWriter implements VectorImageWriter {
     }
 
     private void _createRootFolder(File root) {
-        if (!root.exists()){
+        if (!root.exists()) {
             root.mkdirs();
         }
     }
