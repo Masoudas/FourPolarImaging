@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.core.util.vectorImage;
 
+import fr.fresnel.fourPolar.core.image.ImagePlaneAccessor;
 import fr.fresnel.fourPolar.core.image.PlanarImageModel;
 import fr.fresnel.fourPolar.core.image.vector.VectorImage;
 
@@ -19,8 +20,8 @@ public class VectorImageUtil {
      * @param t is the class of T.
      */
     public static <T> boolean hasBackEndPlanes(VectorImage vectorImage, Class<T> t){
-        boolean implementsPlaneAccessor = vectorImage instanceof PlanarImageModel<?>;
-        boolean hasTAsBackend = ((PlanarImageModel<?>)vectorImage).getImagePlane(1).getClass() == t;
+        boolean implementsPlaneAccessor = vectorImage instanceof ImagePlaneAccessor<?>;
+        boolean hasTAsBackend = ((ImagePlaneAccessor<?>)vectorImage).getImagePlane(1).getClass() == t;
         
         return implementsPlaneAccessor && hasTAsBackend;
     }
