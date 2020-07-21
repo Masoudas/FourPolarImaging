@@ -50,7 +50,7 @@ public class BatikSVGVectorImageReader implements VectorImageReader {
         Objects.requireNonNull(root, "root can't be null");
         Objects.requireNonNull(imageName, "imageName can't be null");
 
-        if (root.exists()) {
+        if (!root.exists()) {
             throw new VectorImageIOIssues("The root folder does not exist");
         }
 
