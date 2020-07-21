@@ -65,7 +65,7 @@ public class BatikSVGVectorImageWriter implements VectorImageWriter {
         Objects.requireNonNull(vectorImage, "vectorImage can't be null");
 
         if (!VectorImageUtil.hasBackEndPlanes(vectorImage, SVGDocument.class)) {
-            throw new IllegalArgumentException("The given vector image does not have batik implementation.");
+            throw new VectorImageIOIssues("The given vector image does not have batik implementation.");
         }
 
         if (vectorImage.metadata().axisOrder() == AxisOrder.NoOrder) {
