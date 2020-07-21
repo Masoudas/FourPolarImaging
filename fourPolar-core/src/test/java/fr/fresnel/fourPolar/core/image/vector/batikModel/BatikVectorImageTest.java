@@ -285,12 +285,6 @@ class DummyBatikFactory implements VectorImageFactory {
     public VectorImage create(IMetadata metadata) {
         return null;
     }
-
-    @Override
-    public <T extends PixelType> VectorImage create(Image<T> image, T pixelType) {
-        return null;
-    }
-
 }
 
 /**
