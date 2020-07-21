@@ -12,17 +12,29 @@ import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssue
  */
 public interface IMetadataReader {
     /**
-     * Read metadata from the given path
+     * Read metadata from the given root and file.
      * 
      * @param root     is the folder where this metadata will be written (excluding
      *                 file name)
-     * @param fileName is the name of the file containing the metadata (without extension).
+     * @param fileName is the name of the file containing the metadata (without
+     *                 extension).
      * 
      * @throws MetadataIOIssues in case the metadata can't be parsed. Note that
      *                          undefined axis does not raise this exception.
      * @return the metadata instance read from the file.
      */
     public IMetadata read(File root, String fileName) throws MetadataIOIssues;
+
+    /**
+     * Read metadata from the given path. 
+     * 
+     * @param path     is the path to the file that contains the metadata.
+     * 
+     * @throws MetadataIOIssues in case the metadata file can't be found or parsed. Note that
+     *                          undefined axis does not raise this exception.
+     * @return the metadata instance read from the file.
+     */
+    public IMetadata read(File path) throws MetadataIOIssues;
 
     /**
      * Close all resources associated with this reader.
