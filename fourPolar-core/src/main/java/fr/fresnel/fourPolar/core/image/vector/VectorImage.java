@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.core.image.vector;
 
-import fr.fresnel.fourPolar.core.image.ImagePlaneAccessor;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
@@ -31,10 +30,12 @@ public interface VectorImage {
 
     /**
      * Puts the given image inside the given vector image. Note that with this
-     * method, the pixels are set as is (i.e as bytes).
+     * method, the pixels are set as is (i.e as bytes). Note that the vector
+     * image will be independent of the image interface. That is, later changes in
+     * the image interface does not affect the background image.
      * 
      * @throws IllegalArgumentException in case the given image does not have same
-     *                                  dimension as this image.
+     *                                  dimension as this vector image.
      */
     public <T extends PixelType> void setImage(Image<T> image, T pixelType);
 
