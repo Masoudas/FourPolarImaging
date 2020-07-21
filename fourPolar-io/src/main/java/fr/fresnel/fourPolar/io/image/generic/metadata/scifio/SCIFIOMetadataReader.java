@@ -15,6 +15,9 @@ import io.scif.formats.TIFFFormat.Reader;
  * Reads metadata of a tiff image using SCIFIO library.
  */
 public class SCIFIOMetadataReader implements IMetadataReader {
+    private static final String _EXTENSION_TIF = ".tif";
+    private static final String _EXTENSION_TIFF = ".tiff";
+    
     final protected SCIFIOConfig _config;
     final protected Reader<Metadata> _reader;
 
@@ -55,6 +58,16 @@ public class SCIFIOMetadataReader implements IMetadataReader {
         SCIFIOConfig config = new SCIFIOConfig();
         config.imgOpenerSetImgModes(SCIFIOConfig.ImgMode.AUTO);
         return config;
+    }
+
+    @Override
+    public IMetadata read(File root, String fileName) throws MetadataIOIssues {
+        File tif_File = new File(root, fileName + _EXTENSION_TIF);
+        if (tif_File.exists()){
+            return read(tif_File);
+        }else{
+            return read(new File(root, fileName + _EXTENSION_TIFF));
+        }
     }
 
 }

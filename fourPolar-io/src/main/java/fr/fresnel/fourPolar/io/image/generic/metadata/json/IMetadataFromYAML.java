@@ -15,6 +15,7 @@ import fr.fresnel.fourPolar.io.image.generic.metadata.IMetadataReader;
  * A class for reading metadata, as written by {@link IMetadataToYAML}
  */
 public class IMetadataFromYAML implements IMetadataReader {
+    private final static String _FILE_EXTENSION = ".yaml";
     private final ObjectMapper _mapper;
 
     public IMetadataFromYAML() {
@@ -34,6 +35,15 @@ public class IMetadataFromYAML implements IMetadataReader {
 
     @Override
     public void close() throws MetadataIOIssues {
+    }
+
+    @Override
+    public IMetadata read(File root, String fileName) throws MetadataIOIssues {
+        return read(_createPathFromRootAndFileName(root, fileName));
+    }
+
+    private File _createPathFromRootAndFileName(File root, String fileName) {
+        return new File(root, fileName + _FILE_EXTENSION);
     }
 
 }
