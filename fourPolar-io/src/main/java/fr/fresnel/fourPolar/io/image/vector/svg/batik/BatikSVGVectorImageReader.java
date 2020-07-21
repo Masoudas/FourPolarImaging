@@ -38,7 +38,7 @@ public class BatikSVGVectorImageReader implements VectorImageReader {
     /**
      * Instantiate class by providing a metadata reader.
      * 
-     * @param metadataWriter is the metadata reader interface.
+     * @param metadataReader is the metadata reader interface.
      */
     public BatikSVGVectorImageReader(IMetadataReader metadataReader) {
         _metadataReader = metadataReader;
@@ -89,9 +89,9 @@ public class BatikSVGVectorImageReader implements VectorImageReader {
         }
     }
 
-    private IMetadata _readMetadata(File root, String imageName) throws VectorImageIOIssues {
+    private IMetadata _readMetadata(File root, String name) throws VectorImageIOIssues {
         try {
-            return _metadataReader.read(new File(root, imageName));
+            return _metadataReader.read(root, name);
         } catch (MetadataIOIssues e) {
             throw new VectorImageIOIssues("Can't read vector image because metadata can't be read.");
         }
