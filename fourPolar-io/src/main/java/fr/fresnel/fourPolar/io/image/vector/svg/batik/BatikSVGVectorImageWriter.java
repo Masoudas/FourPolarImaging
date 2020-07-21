@@ -17,7 +17,6 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.vector.VectorImage;
 import fr.fresnel.fourPolar.core.image.vector.batikModel.accessors.BatikImagePlaneAccessor;
-import fr.fresnel.fourPolar.core.util.vectorImage.VectorImageUtil;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.exceptions.image.vector.VectorImageIOIssues;
 import fr.fresnel.fourPolar.io.image.generic.metadata.IMetadataWriter;
