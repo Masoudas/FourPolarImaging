@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Optional;
 import java.util.TreeSet;
-import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Element;
@@ -20,7 +19,6 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.vector.Vector;
 import fr.fresnel.fourPolar.core.image.vector.VectorImage;
@@ -285,12 +283,6 @@ class DummyBatikFactory implements VectorImageFactory {
     public VectorImage create(IMetadata metadata) {
         return null;
     }
-
-    @Override
-    public <T extends PixelType> VectorImage create(Image<T> image, T pixelType) {
-        return null;
-    }
-
 }
 
 /**
