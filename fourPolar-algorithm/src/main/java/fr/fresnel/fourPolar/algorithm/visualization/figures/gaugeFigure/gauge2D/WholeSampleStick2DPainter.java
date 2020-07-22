@@ -21,7 +21,7 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
@@ -83,7 +83,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
             // We expect this exception to have been caught before the program arrives here!
         }
 
-        return GaugeFigureFactory.create(GaugeFigureType.WholeSample, gaugeType, gaugeImage, soiImage.getFileSet(),
+        return GaugeFigureFactory.create(GaugeFigureLocalization.WHOLE_SAMPLE, gaugeType, gaugeImage, soiImage.getFileSet(),
                 channel);
     }
 

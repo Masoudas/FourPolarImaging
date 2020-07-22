@@ -12,7 +12,7 @@ class GaugeFigure implements IGaugeFigure {
     private final Image<ARGB8> _image;
     private final AngleGaugeType _type;
     private final ICapturedImageFileSet _fileSet;
-    private final GaugeFigureType _figureType;
+    private final GaugeFigureLocalization _figureType;
     private final int _channel;
 
     /**
@@ -22,7 +22,7 @@ class GaugeFigure implements IGaugeFigure {
      * @param image   is the colored SoI image.
      * @param fileSet is the captured file set this stick image corresponds to.
      */
-    public GaugeFigure(GaugeFigureType figureType, AngleGaugeType type, Image<ARGB8> image,
+    public GaugeFigure(GaugeFigureLocalization figureType, AngleGaugeType type, Image<ARGB8> image,
             ICapturedImageFileSet fileSet, int channel) {
         this._image = image;
         this._type = type;
@@ -47,7 +47,7 @@ class GaugeFigure implements IGaugeFigure {
     }
 
     @Override
-    public GaugeFigureType getFigureType() {
+    public GaugeFigureLocalization getFigureType() {
         return this._figureType;
     }
 

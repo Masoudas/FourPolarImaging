@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
@@ -19,7 +19,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * depict 2D stick angle gauge over the entire orientation image. The user may
  * provide one or several regions over which to draw the sticks, but the output
  * {@link IGaugeFigure} will have the same size as the orientation (or soi)
- * image. The {@link GaugeFigureType} associated with this builder would be
+ * image. The {@link GaugeFigureLocalization} associated with this builder would be
  * WholeSample. Note finally that the background of the gauge figure will be
  * filled with {@link ISoIImage}.
  * <p>

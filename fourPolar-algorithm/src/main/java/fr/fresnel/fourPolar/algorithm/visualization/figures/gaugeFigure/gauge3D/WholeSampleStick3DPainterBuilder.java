@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
 /**
@@ -18,7 +18,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * (eta) as a 3D stick, where the stick color is the wobbling (delta). To
  * generate the gauge figure, the orientation figure is interleaved in the
  * z-dimension to accommodate for the stick length (interleave factor =
- * stick_length). The {@link GaugeFigureType} associated with this builder would
+ * stick_length). The {@link GaugeFigureLocalization} associated with this builder would
  * be WholeSample.
  * <p>
  * For the region provided for the painter built by this class, if a pixel of

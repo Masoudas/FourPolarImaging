@@ -8,7 +8,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
@@ -21,7 +21,7 @@ import fr.fresnel.fourPolar.io.visualization.figures.gaugeFigure.IGaugeFigureRea
  */
 public class TiffGaugeFigureReader implements IGaugeFigureReader {
     private final AngleGaugeType _angleGaugeType;
-    private final GaugeFigureType _gaugeFigureType;
+    private final GaugeFigureLocalization _gaugeFigureType;
 
     private ImageReader<ARGB8> _reader;
 
@@ -33,7 +33,7 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
      * @param angleGaugeType  is the type of angle gauge associated with the gauge
      *                        figure.
      */
-    public TiffGaugeFigureReader(ImageFactory imageFactory, GaugeFigureType gaugeFigureType,
+    public TiffGaugeFigureReader(ImageFactory imageFactory, GaugeFigureLocalization gaugeFigureType,
             AngleGaugeType angleGaugeType) {
         this._reader = TiffImageReaderFactory.getReader(imageFactory, ARGB8.zero());
         this._gaugeFigureType = gaugeFigureType;

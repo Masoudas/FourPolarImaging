@@ -27,7 +27,7 @@ public class GaugeFigureFactory {
      *                                  given image is not the same as that of
      *                                  {@link ISoIImage.AXIS_ORDER}.
      */
-    public static IGaugeFigure create(GaugeFigureType figureType, AngleGaugeType angleGaugeType, Image<ARGB8> image,
+    public static IGaugeFigure create(GaugeFigureLocalization figureType, AngleGaugeType angleGaugeType, Image<ARGB8> image,
             ICapturedImageFileSet fileSet, int channel) {
         Objects.requireNonNull(angleGaugeType, "angleGaugeType cannot be null.");
         Objects.requireNonNull(image, "image cannot be null");

@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.io.PathFactoryOfProject;
@@ -34,7 +34,7 @@ class TiffGaugeFigureIOUtil {
      * gaugeFigureType_AngleGaugeType.tif
      */
     public static File createGaugeFigurePath(File root4PProject, String visualizationSession, int channel,
-            ICapturedImageFileSet capturedImageFileSet, GaugeFigureType figureFigureType,
+            ICapturedImageFileSet capturedImageFileSet, GaugeFigureLocalization figureFigureType,
             AngleGaugeType angleGaugeType) {
         String setName = capturedImageFileSet.getSetName();
 
@@ -47,7 +47,7 @@ class TiffGaugeFigureIOUtil {
 
     }
 
-    private static String _getGaugeFigureName(GaugeFigureType figureType, AngleGaugeType gaugeType) {
+    private static String _getGaugeFigureName(GaugeFigureLocalization figureType, AngleGaugeType gaugeType) {
         return figureType + "_" + gaugeType + ".tif";
     }
 }

@@ -24,7 +24,7 @@ public interface IGaugeFigure {
     /**
      * Returns the type of the gauge figure.
      */
-    public GaugeFigureType getFigureType();
+    public GaugeFigureLocalization getFigureType();
 
     /**
      * Returns the underlying {@link Image}.

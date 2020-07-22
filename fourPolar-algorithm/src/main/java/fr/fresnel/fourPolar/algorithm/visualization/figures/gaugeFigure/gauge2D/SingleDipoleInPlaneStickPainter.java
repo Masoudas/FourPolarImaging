@@ -22,7 +22,7 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
@@ -95,7 +95,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
         IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
         Image<ARGB8> gaugeImage = soiImage.getImage().getFactory().create(gaugeFigMetadata, ARGB8.zero());
-        return GaugeFigureFactory.create(GaugeFigureType.SingleDipole, angleGaugeType, gaugeImage,
+        return GaugeFigureFactory.create(GaugeFigureLocalization.SINGLE_DIPOLE, angleGaugeType, gaugeImage,
                 soiImage.getFileSet(), channel);
     }
 

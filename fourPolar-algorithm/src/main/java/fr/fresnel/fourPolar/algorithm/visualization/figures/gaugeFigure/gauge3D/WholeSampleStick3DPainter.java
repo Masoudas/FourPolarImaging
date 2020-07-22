@@ -23,7 +23,7 @@ import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.Rotation3DOrder;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureType;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
@@ -83,7 +83,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
         IMetadata gaugeMetadata = new Metadata.MetadataBuilder(dimGaugeIm).axisOrder(IGaugeFigure.AXIS_ORDER).build();
 
         Image<ARGB8> gaugeImage = soiImage.getImage().getFactory().create(gaugeMetadata, ARGB8.zero());
-        return GaugeFigureFactory.create(GaugeFigureType.WholeSample, AngleGaugeType.Stick3D, gaugeImage,
+        return GaugeFigureFactory.create(GaugeFigureLocalization.WHOLE_SAMPLE, AngleGaugeType.Stick3D, gaugeImage,
                 soiImage.getFileSet(), channel);
     }
 
