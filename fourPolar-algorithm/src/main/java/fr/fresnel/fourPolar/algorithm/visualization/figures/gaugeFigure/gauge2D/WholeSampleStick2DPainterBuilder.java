@@ -2,16 +2,16 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D
 
 import java.util.Objects;
 
-import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.ColorBlender;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.SoftLightColorBlender;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
+import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
 /**
@@ -19,8 +19,8 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * depict 2D stick angle gauge over the entire orientation image. The user may
  * provide one or several regions over which to draw the sticks, but the output
  * {@link IGaugeFigure} will have the same size as the orientation (or soi)
- * image. The {@link GaugeFigureLocalization} associated with this builder would be
- * WholeSample. Note finally that the background of the gauge figure will be
+ * image. The {@link GaugeFigureLocalization} associated with this builder would
+ * be WholeSample. Note finally that the background of the gauge figure will be
  * filled with {@link ISoIImage}.
  * <p>
  * For the region provided for the painter built by this class, if a pixel of
@@ -29,49 +29,39 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * automatically scaled to all higher dimensions. For example, the same 2D box
  * in region would be used for z = 0, 1, ... .
  * <p>
- * Note that the generated gauge figure is an XYZT image.
  */
 public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainterBuilder {
-    private final IOrientationImage _orientationImage;
-    private final ISoIImage _soiImage;
-    private final AngleGaugeType _gaugeType;
+    private IOrientationImage _orientationImage;
+    private ISoIImage _soiImage;
 
+    private GaugeFigure _gaugeFigure = null;
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
     private int _length = 50;
+
+    /**
+     * The orientation angle that would be represented as slope of sticks,
+     */
+    private OrientationAngle _slopeAngle = null;
+
+    /**
+     * The orientation angle that would be used as the color of sticks.
+     */
+    private OrientationAngle _colorAngle = null;
 
     /**
      * Color blender that is used for mixing overlapping pixel colors.
      */
     private ColorBlender _colorBlender = new SoftLightColorBlender();
 
-    /**
-     * Initialize the painter with the given orientation and soi image, for the
-     * given angle gauge type.
-     * 
-     * @param orientationImage         is the orientation image
-     * @param soiImage                 is the corresponding soi Image of @param
-     *                                 orientationImage.
-     * @param angleGaugeType           is the angle gauge type to be painted.
-     * 
-     * @param IllegalArgumentException is thrown in case soi and orientation image
-     *                                 are not from the same set, or that soi or
-     *                                 orientation image have channels.
-     */
-    public WholeSampleStick2DPainterBuilder(IOrientationImage orientationImage, ISoIImage soiImage,
-            AngleGaugeType angleGaugeType) {
-        Objects.requireNonNull(soiImage, "soiImage cannot be null");
-        Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
-        Objects.requireNonNull(angleGaugeType, "gaugeType cannot be null");
+    public WholeSampleStick2DPainterBuilder() {
+    }
 
+    private void _checkSoIAndOrientationImageBelongToSameSet(IOrientationImage orientationImage, ISoIImage soiImage) {
         if (!orientationImage.getCapturedSet().getSetName().equals(soiImage.getFileSet().getSetName())
                 || orientationImage.channel() != soiImage.channel()) {
             throw new IllegalArgumentException("orientation and soi images don't belong to the same set or channel.");
         }
-
-        this._gaugeType = angleGaugeType;
-        this._soiImage = soiImage;
-        this._orientationImage = orientationImage;
     }
 
     /**
@@ -123,15 +113,127 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
         return this;
     }
 
+    private void _setColorAngle(OrientationAngle colorAngle) {
+        _colorAngle = colorAngle;
+    }
+
+    private void _setSlopeAngle(OrientationAngle slopeAngle) {
+        _slopeAngle = slopeAngle;
+    }
+
+    private void _setSoIImage(ISoIImage soiImage) {
+        this._soiImage = soiImage;
+    }
+
+    private void _setOrientationImage(IOrientationImage orientationImage) {
+        this._orientationImage = orientationImage;
+    }
+
     /**
      * Build the Painter from the provided constraints.
      * 
      * @return the interface for the painter of sticks.
-     * @throws ConverterToImgLib2NotFound in case the Image interface of SoIImage
-     *                                    cannot be converted to ImgLib2 image type.
      */
-    public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
+    public IAngleGaugePainter build() {
         return new WholeSampleStick2DPainter(this);
+    }
+
+    /**
+     * Create a painter for drawing rho 2D sticks.
+     * 
+     * @param orientationImage is the orientation image
+     * @param soiImage         is the corresponding soi Image
+     * @return a painter for drawing the rho 2D sticks.
+     * 
+     * @throws IllegalArgumentException is thrown in case soi and orientation image
+     *                                  don't belong together.
+     */
+    public IAngleGaugePainter buildRhoStickPainter(IOrientationImage orientationImage, ISoIImage soiImage) {
+        Objects.requireNonNull(soiImage, "soiImage cannot be null");
+        Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
+
+        _checkSoIAndOrientationImageBelongToSameSet(orientationImage, soiImage);
+
+        _setSlopeAngle(OrientationAngle.rho);
+        _setColorAngle(OrientationAngle.rho);
+        _setGaugeFigureAsRho2D();
+        _setSoIImage(soiImage);
+        _setOrientationImage(orientationImage);
+
+        return new WholeSampleStick2DPainter(this);
+    }
+
+    /**
+     * Create a painter for drawing delta 2D sticks.
+     * 
+     * @param orientationImage is the orientation image
+     * @param soiImage         is the corresponding soi Image of
+     * 
+     * @return a painter for drawing the delta 2D sticks.
+     * 
+     * @throws IllegalArgumentException is thrown in case soi and orientation image
+     *                                  don't belong together.
+     */
+    public IAngleGaugePainter buildDeltaStickPainter(IOrientationImage orientationImage, ISoIImage soiImage) {
+        Objects.requireNonNull(soiImage, "soiImage cannot be null");
+        Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
+
+        _checkSoIAndOrientationImageBelongToSameSet(orientationImage, soiImage);
+
+        _setSlopeAngle(OrientationAngle.rho);
+        _setColorAngle(OrientationAngle.delta);
+        _setGaugeFigureAsDelta2D();
+        _setSoIImage(soiImage);
+        _setOrientationImage(orientationImage);
+
+        return new WholeSampleStick2DPainter(this);
+    }
+
+    /**
+     * Create a painter for drawing eta 2D sticks.
+     * 
+     * @param orientationImage is the orientation image
+     * @param soiImage         is the corresponding soi Image of
+     * 
+     * @return a painter for drawing the eta 2D sticks.
+     * 
+     * @throws IllegalArgumentException is thrown in case soi and orientation image
+     *                                  don't belong together.
+     */
+    public IAngleGaugePainter buildEtaStickPainter(IOrientationImage orientationImage, ISoIImage soiImage) {
+        Objects.requireNonNull(soiImage, "soiImage cannot be null");
+        Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
+
+        _checkSoIAndOrientationImageBelongToSameSet(orientationImage, soiImage);
+
+        _setSlopeAngle(OrientationAngle.rho);
+        _setColorAngle(OrientationAngle.eta);
+        _setGaugeFigureAsEta2D();
+        _setSoIImage(soiImage);
+        _setOrientationImage(orientationImage);
+
+        return new WholeSampleStick2DPainter(this);
+    }
+
+    /**
+     * Create the appropriate empty gauge figure.
+     */
+    private void _setGaugeFigureAsRho2D() {
+        _gaugeFigure = GaugeFigure.wholeSampleRho2DStick(_soiImage);
+    }
+
+    /**
+     * Create the appropriate empty gauge figure.
+     */
+    private void _setGaugeFigureAsDelta2D() {
+        _gaugeFigure = GaugeFigure.wholeSampleDelta2DStick(_soiImage);
+    }
+
+    /**
+     * Create the appropriate empty gauge figure.
+     */
+    private void _setGaugeFigureAsEta2D() {
+        _gaugeFigure = GaugeFigure.wholeSampleEta2DStick(_soiImage);
     }
 
     @Override
@@ -160,13 +262,23 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
     }
 
     @Override
-    AngleGaugeType getAngleGaugeType() {
-        return this._gaugeType;
+    ColorBlender getColorBlender() {
+        return _colorBlender;
     }
 
     @Override
-    ColorBlender getColorBlender() {
-        return _colorBlender;
+    IGaugeFigure getGauageFigure() {
+        return this._gaugeFigure;
+    }
+
+    @Override
+    OrientationAngle getSlopeAngle() {
+        return this._slopeAngle;
+    }
+
+    @Override
+    OrientationAngle getColorAngle() {
+        return this._colorAngle;
     }
 
 }
