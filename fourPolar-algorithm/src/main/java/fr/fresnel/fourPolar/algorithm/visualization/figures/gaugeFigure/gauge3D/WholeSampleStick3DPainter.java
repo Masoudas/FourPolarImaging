@@ -1,12 +1,8 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge3D;
 
-import java.util.Arrays;
-
-import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
@@ -23,10 +19,7 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.Rotation3DOrder;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
 /**
@@ -57,7 +50,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
         this._soiImageBoundary = _defineImageBoundaryAsBox(builder.getSoIImage().getImage());
 
-        this._stick3DFigure = this._createGaugeFigure(builder.getSoIImage(), builder.getSticklength());
+        this._stick3DFigure = builder.getGaugeFigure();
         this._stick3DFigureRA = this._stick3DFigure.getImage().getRandomAccess();
         this._stick3DFigureBoundary = _defineImageBoundaryAsBox(this._stick3DFigure.getImage());
 
@@ -69,23 +62,6 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
 
         this._baseStick = _defineBaseStick(this._stickLength, builder.getStickThickness(),
                 this._stick3DFigure.getImage().getMetadata().axisOrder());
-    }
-
-    /**
-     * The gauge figure is interleaved in the z-direction by the length of sticks.
-     */
-    private IGaugeFigure _createGaugeFigure(ISoIImage soiImage, int stickLength) {
-        int channel = soiImage.channel();
-
-        IMetadata soiMetadata = soiImage.getImage().getMetadata();
-        long[] soiImgDim = soiMetadata.getDim();
-
-        long[] dimGaugeIm = { soiImgDim[0], soiImgDim[1], 1, soiImgDim[3] * stickLength, soiImgDim[4] };
-        IMetadata gaugeMetadata = new Metadata.MetadataBuilder(dimGaugeIm).axisOrder(IGaugeFigure.AXIS_ORDER).build();
-
-        Image<ARGB8> gaugeImage = soiImage.getImage().getFactory().create(gaugeMetadata, ARGB8.zero());
-        return GaugeFigureFactory.create(GaugeFigureLocalization.WHOLE_SAMPLE, AngleGaugeType.Stick3D, gaugeImage,
-                soiImage.getFileSet(), channel);
     }
 
     /**
