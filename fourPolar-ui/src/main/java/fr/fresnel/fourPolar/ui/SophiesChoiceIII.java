@@ -110,7 +110,7 @@ public class SophiesChoiceIII {
 
         try {
             gaugePainters = new SingleDipoleStick2DPainterBuilder(orientationImage, soiImage, angleGaugeType)
-                    .colorMap(cMap).stickThickness(thickness).stickLen(length).build();
+                    .colorMap(cMap).stickThickness(thickness).stickLen(length).buildDeltaStickPainter();
         } catch (ConverterToImgLib2NotFound e) {
 
         }
