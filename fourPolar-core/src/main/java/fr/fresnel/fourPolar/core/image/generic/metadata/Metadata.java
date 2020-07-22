@@ -74,7 +74,7 @@ public class Metadata implements IMetadata {
                 this._bitPerPixel = 16;
             } else if (pixelType == PixelTypes.FLOAT_32) {
                 this._bitPerPixel = 32;
-            } else if (pixelType == PixelTypes.RGB_16) {
+            } else if (pixelType == PixelTypes.ARGB_8) {
                 this._bitPerPixel = 8;
             }
 

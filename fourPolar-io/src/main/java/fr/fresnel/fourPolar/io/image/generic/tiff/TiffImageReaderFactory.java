@@ -33,7 +33,7 @@ public class TiffImageReaderFactory {
             reader = (ImageReader<T>) new SCIFIOUINT16TiffReader((ImgLib2ImageFactory) factory);
         } else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.FLOAT_32) {
             reader = (ImageReader<T>) new SCIFIOFloat32TiffReader((ImgLib2ImageFactory) factory);
-        } else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.RGB_16) {
+        } else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.ARGB_8) {
             // TODO: Which reader here?
             reader = (ImageReader<T>) new SCIFIORGB16TiffReader((ImgLib2ImageFactory) factory);
         } else {

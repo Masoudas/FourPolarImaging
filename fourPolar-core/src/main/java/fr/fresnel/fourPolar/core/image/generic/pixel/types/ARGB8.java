@@ -142,7 +142,7 @@ public class ARGB8 implements PixelType {
 
     @Override
     public PixelTypes getType() {
-        return PixelTypes.RGB_16;
+        return PixelTypes.ARGB_8;
     }
 
     @Override

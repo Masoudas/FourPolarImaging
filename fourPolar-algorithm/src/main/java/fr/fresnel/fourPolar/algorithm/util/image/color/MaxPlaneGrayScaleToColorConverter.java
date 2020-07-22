@@ -98,6 +98,6 @@ class MaxPlaneGrayScaleToColorConverter {
      * for color.
      */
     private static IMetadata _copyGaryMetadataForColorImage(IMetadata grayMetadata) {
-        return new Metadata.MetadataBuilder(grayMetadata).bitPerPixel(PixelTypes.RGB_16).build();
+        return new Metadata.MetadataBuilder(grayMetadata).bitPerPixel(PixelTypes.ARGB_8).build();
     }
 }

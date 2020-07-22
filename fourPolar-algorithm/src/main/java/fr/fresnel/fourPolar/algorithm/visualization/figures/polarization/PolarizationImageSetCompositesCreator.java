@@ -104,7 +104,7 @@ public class PolarizationImageSetCompositesCreator implements IPolarizationImage
 
     private Image<ARGB8> _createImageForRuleCompositeFromBasePolarizationImage(IPolarizationImage imageBase) {
         IMetadata metadata = new Metadata.MetadataBuilder(imageBase.getImage().getMetadata())
-                .bitPerPixel(PixelTypes.RGB_16).build();
+                .bitPerPixel(PixelTypes.ARGB_8).build();
         return imageBase.getImage().getFactory().create(metadata, ARGB8.zero());
     }
 

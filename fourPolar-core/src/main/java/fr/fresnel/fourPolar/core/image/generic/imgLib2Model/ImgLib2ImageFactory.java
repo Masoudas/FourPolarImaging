@@ -123,7 +123,7 @@ public class ImgLib2ImageFactory implements ImageFactory {
                 }
                 break;
 
-            case RGB_16:
+            case ARGB_8:
                 try {
                     ARGBType type = new ARGBType();
                     Img<ARGBType> img = _chooseImgFactory(metadataCP.getDim(), type);

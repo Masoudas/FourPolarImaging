@@ -28,7 +28,7 @@ public class TiffImageWriterFactory {
             writer = (ImageWriter<T>) new SCIFIOUINT16TiffWriter();
         } else if (image instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.FLOAT_32) {
             writer = (ImageWriter<T>) new SCIFIOFloat32TiffWriter();
-        } else if (image instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.RGB_16) {
+        } else if (image instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.ARGB_8) {
             writer = (ImageWriter<T>) new ImageJ1RGB16TiffWriter();
         } else {
             throw new IllegalArgumentException("No writer was found for the given image type.");
@@ -50,7 +50,7 @@ public class TiffImageWriterFactory {
             writer = (ImageWriter<T>) new SCIFIOUINT16TiffWriter();
         } else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.FLOAT_32) {
             writer = (ImageWriter<T>) new SCIFIOFloat32TiffWriter();
-        } else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.RGB_16) {
+        } else if (factory instanceof ImgLib2ImageFactory && pixelType.getType() == PixelTypes.ARGB_8) {
             writer = (ImageWriter<T>) new ImageJ1RGB16TiffWriter();
         } else {
             throw new IllegalArgumentException("No writer was found for the given image type.");

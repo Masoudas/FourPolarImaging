@@ -31,6 +31,6 @@ class ARGBConverter implements TypeConverter<ARGB8, ARGBType> {
 
     @Override
     public PixelTypes getPixelType() {
-        return PixelTypes.RGB_16;
+        return PixelTypes.ARGB_8;
     }
 }
