@@ -2,11 +2,12 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D
 
 import java.util.Objects;
 
-import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
+import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
@@ -27,9 +28,9 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * {@link IGaugeFigure#AXIS_ORDER}.
  */
 public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPainterBuilder {
-    private final IOrientationImage _orientationImage;
-    private final ISoIImage _soiImage;
-    private final AngleGaugeType _angleGaugeType;
+    private GaugeFigure _gaugeFigure;
+    private IOrientationImage _orientationImage;
+    private ISoIImage _soiImage;
 
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
@@ -41,6 +42,16 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
      * _length)
      */
     private int _figSizeToStickLenRatio = 8;
+
+    /**
+     * The orientation angle that would be represented as slope of sticks,
+     */
+    private OrientationAngle _slopeAngle = null;
+
+    /**
+     * The orientation angle that would be used as the color of sticks.
+     */
+    private OrientationAngle _colorAngle = null;
 
     /**
      * Initialize the painter with the given orientation and soi image, for the
@@ -69,7 +80,6 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
 
         this._soiImage = soiImage;
         this._orientationImage = orientationImage;
-        this._angleGaugeType = gaugeType;
     }
 
     /**
@@ -126,14 +136,54 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
         return this;
     }
 
+    private void _setColorAngle(OrientationAngle colorAngle) {
+        _colorAngle = colorAngle;
+    }
+
+    private void _setSlopeAngle(OrientationAngle slopeAngle) {
+        _slopeAngle = slopeAngle;
+    }
+
+    private void _setSoIImage(ISoIImage soiImage) {
+        this._soiImage = soiImage;
+    }
+
+    private void _setOrientationImage(IOrientationImage orientationImage) {
+        this._orientationImage = orientationImage;
+    }
+
+    private void _setGaugeFigureAsDelta2D() {
+        _gaugeFigure = GaugeFigure.singleDipoleDelta2DStick(this._length * this._figSizeToStickLenRatio,
+                _soiImage.channel(), _soiImage.getFileSet(), _soiImage.getImage().getFactory());
+    }
+
+    private void _checkSoIAndOrientationImageBelongToSameSet(IOrientationImage orientationImage, ISoIImage soiImage) {
+        if (!soiImage.belongsTo(orientationImage)) {
+            throw new IllegalArgumentException("orientation and soi images don't belong to the same set or channel.");
+        }
+    }
+
     /**
-     * Build the Painter from the provided constraints.
+     * Build the Painter from the provided constraints for drawing delta sticks.
      * 
-     * @return the interface for the painter of sticks.
-     * @throws ConverterToImgLib2NotFound in case the Image interface of SoIImage
-     *                                    cannot be converted to ImgLib2 image type.
+     * @param orientationImage is the orientation image
+     * @param soiImage         is the corresponding soi Image
+     * @return a painter for drawing the rho 2D sticks.
+     * 
+     * @throws IllegalArgumentException is thrown in case soi and orientation image
+     *                                  don't belong together.
+     * 
      */
-    public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
+    public IAngleGaugePainter buildDeltaStickPainter(IOrientationImage orientationImage, ISoIImage soiImage) {
+        Objects.requireNonNull(soiImage, "soiImage cannot be null");
+        Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
+        _checkSoIAndOrientationImageBelongToSameSet(orientationImage, soiImage);
+
+        this._setSlopeAngle(OrientationAngle.rho);
+        this._setColorAngle(OrientationAngle.delta);
+        this._setOrientationImage(orientationImage);
+        this._setSoIImage(soiImage);
+        this._setGaugeFigureAsDelta2D();
         return new SingleDipoleInPlaneStickPainter(this);
 
     }
@@ -164,13 +214,23 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
     }
 
     @Override
-    AngleGaugeType getAngleGaugeType() {
-        return this._angleGaugeType;
+    int figSizeToStickLenRatio() {
+        return this._figSizeToStickLenRatio;
     }
 
     @Override
-    int figSizeToStickLenRatio() {
-        return this._figSizeToStickLenRatio;
+    IGaugeFigure getGaugeFigure() {
+        return this._gaugeFigure;
+    }
+
+    @Override
+    OrientationAngle getSlopeAngle() {
+        return this._slopeAngle;
+    }
+
+    @Override
+    OrientationAngle getColorAngle() {
+        return this._colorAngle;
     }
 
 }
