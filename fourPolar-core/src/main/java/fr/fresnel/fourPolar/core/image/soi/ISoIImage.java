@@ -4,6 +4,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 
 /**
@@ -33,5 +34,13 @@ public interface ISoIImage {
      * @return
      */
     public int channel();
+
+    /**
+     * Returns true if this SoI image belongs to the given orientation image.
+     * 
+     * @param orientationImage is the orientation image
+     * @return true if corresponds to the given image.
+     */
+    public boolean belongsTo(IOrientationImage orientationImage);
 
 }

@@ -9,6 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
@@ -107,5 +108,15 @@ public class SoIImage implements ISoIImage {
     @Override
     public int channel() {
         return this._channel;
+    }
+
+    @Override
+    public boolean belongsTo(IOrientationImage orientationImage) {
+        if (!orientationImage.getCapturedSet().getSetName().equals(this.getFileSet().getSetName())
+                || orientationImage.channel() != this.channel()) {
+            return false;
+        }
+
+        return true;
     }
 }
