@@ -32,7 +32,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
     // separate image for it!
     private static final int FIGURE_DIM = IGaugeFigure.AXIS_ORDER.numAxis;
 
-    final private IGaugeFigure _dipoleFigure;
+    final private GaugeFigure _dipoleFigure;
     final private IOrientationImageRandomAccess _orientationRA;
 
     final private ColorMap _colormap;
@@ -50,19 +50,16 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
     private final IShape _orientationImageBoundary;
 
     private final long[] _stickTranslation;
-    private final int _figSizeToStickLenRatio;
 
     public SingleDipoleInPlaneStickPainter(ISingleDipoleStick2DPainterBuilder builder) {
-        this._figSizeToStickLenRatio = builder.figSizeToStickLenRatio();
-        this._dipoleFigure = this._createDipoleFigure(builder.getSticklength(), builder.getSoIImage(),
-                builder.getAngleGaugeType());
+        this._dipoleFigure = (GaugeFigure)builder.getGaugeFigure();
 
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
 
         this._colormap = builder.getColorMap();
 
-        this._slopeAngle = WholeSampleStick2DPainter.getSlopeAngle(this._dipoleFigure.getGaugeType());
-        this._colorAngle = WholeSampleStick2DPainter.getColorAngle(this._dipoleFigure.getGaugeType());
+        this._slopeAngle = builder.getSlopeAngle();
+        this._colorAngle = builder.getColorAngle();
         this._maxColorAngle = OrientationVector.maxAngle(_colorAngle);
 
         this._baseStick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness());
@@ -70,18 +67,6 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
         this._orientationImageBoundary = this._getOrientationImageBoundary(builder.getOrientationImage());
 
         this._stickTranslation = this._setStickTranslationToDipoleCenterPosition();
-    }
-
-    /**
-     * Create a XYCZT gauge figure, where (X,Y) = (lenStick, lenStick) and (C,Z,T) =
-     * (1,1,1). This is to make the gauge figure consistent with all the other gauge
-     * figures. We give the figure a 10 percent margin to make sure that the stick
-     * falls inside after translation and rotation
-     * 
-     */
-    private IGaugeFigure _createDipoleFigure(int stickLength, ISoIImage soiImage, AngleGaugeType angleGaugeType) {
-        return GaugeFigure.singleDipoleDelta2DStick(stickLength * this._figSizeToStickLenRatio, soiImage.channel(),
-                soiImage.getFileSet(), soiImage.getImage().getFactory());
     }
 
     /**
