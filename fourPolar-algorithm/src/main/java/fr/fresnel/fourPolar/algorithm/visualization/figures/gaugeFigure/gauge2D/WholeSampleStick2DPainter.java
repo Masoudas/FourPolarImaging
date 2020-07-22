@@ -1,7 +1,5 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D;
 
-import java.util.Arrays;
-
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
@@ -16,18 +14,18 @@ import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
+import fr.fresnel.fourPolar.core.util.image.ImageUtil;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
 class WholeSampleStick2DPainter implements IAngleGaugePainter {
-    final private IGaugeFigure _stick2DFigure;
+    final private GaugeFigure _stick2DFigure;
 
     final private IOrientationImageRandomAccess _orientationRA;
     final private IPixelRandomAccess<UINT16> _soiRA;
@@ -48,53 +46,37 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
 
     private final ColorBlender _colorBlender;
 
-    public WholeSampleStick2DPainter(IWholeSampleStick2DPainterBuilder builder) throws ConverterToImgLib2NotFound {
+    public WholeSampleStick2DPainter(IWholeSampleStick2DPainterBuilder builder) {
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
 
-        this._stick2DFigure = this._createGaugeFigure(builder.getSoIImage(), builder.getAngleGaugeType());
+        this._stick2DFigure = (GaugeFigure) builder.getGauageFigure();
+        _addSoIToFigureBackground(builder.getSoIImage());
 
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
 
         this._colormap = builder.getColorMap();
         this._colorBlender = builder.getColorBlender();
 
-        this._slopeAngle = getSlopeAngle(this._stick2DFigure.getGaugeType());
-        this._colorAngle = getColorAngle(this._stick2DFigure.getGaugeType());
+        this._slopeAngle = builder.getSlopeAngle();
+        this._colorAngle = builder.getColorAngle();
         this._maxColorAngle = OrientationVector.maxAngle(_colorAngle);
 
         this._baseStick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness());
 
-        this._stickFigureRegion = this._getImageBoundaryAsShape(this._stick2DFigure.getImage().getMetadata().getDim(),
-                this._stick2DFigure.getImage().getMetadata().axisOrder());
-
-        this._soiImageRegion = this._getImageBoundaryAsShape(builder.getSoIImage().getImage().getMetadata().getDim(),
-                builder.getSoIImage().getImage().getMetadata().axisOrder());
+        this._stickFigureRegion = this._getImageBoundaryAsShape(this._stick2DFigure.getImage());
+        this._soiImageRegion = this._getImageBoundaryAsShape(builder.getSoIImage().getImage());
     }
 
-    /**
-     * Create the gauge figure by creating a color version of SoI.
-     */
-    private IGaugeFigure _createGaugeFigure(ISoIImage soiImage, AngleGaugeType gaugeType) {
-        int channel = soiImage.channel();
-        Image<ARGB8> gaugeImage = null;
+    private void _addSoIToFigureBackground(ISoIImage soiImage) {
         try {
-            gaugeImage = GrayScaleToColorConverter.colorUsingMaxEachPlane(soiImage.getImage());
+            GrayScaleToColorConverter.colorUsingMaxEachPlane(soiImage.getImage(), this._stick2DFigure.getImage());
         } catch (ConverterToImgLib2NotFound e) {
-            // We expect this exception to have been caught before the program arrives here!
+            // This exception will be removed.
         }
-
-        return GaugeFigureFactory.create(GaugeFigureLocalization.WHOLE_SAMPLE, gaugeType, gaugeImage, soiImage.getFileSet(),
-                channel);
     }
 
-    /**
-     * Define the image region from pixel zero to dim - 1;
-     */
-    private IShape _getImageBoundaryAsShape(long[] imDimension, AxisOrder axisOrder) {
-        long[] imageMax = Arrays.stream(imDimension).map((x) -> x - 1).toArray();
-        long[] imageMin = new long[imDimension.length];
-
-        return new ShapeFactory().closedBox(imageMin, imageMax, axisOrder);
+    private IShape _getImageBoundaryAsShape(Image<?> image) {
+        return ImageUtil.getBoundaryAsBox(image);
     }
 
     /**
