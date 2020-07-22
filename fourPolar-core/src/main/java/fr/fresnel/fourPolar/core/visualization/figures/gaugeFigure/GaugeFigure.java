@@ -6,9 +6,10 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 
 /**
- * A concrete implementation of the {@link IGaugeFigure}.
+ * A concrete implementation of the {@link IGaugeFigure} that uses {@link Image}
+ * as its backend.
  */
-class GaugeFigure implements IGaugeFigure {
+public class GaugeFigure implements IGaugeFigure {
     private final Image<ARGB8> _image;
     private final AngleGaugeType _type;
     private final ICapturedImageFileSet _fileSet;
