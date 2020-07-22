@@ -8,6 +8,8 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
+import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
 /**
  * A set of static utility methods for {@link Image}.
@@ -73,4 +75,18 @@ public class ImageUtil {
         return image.getCursor(planeCoords[0], len);
     }
 
+    /**
+     * Converts the image boundary to a box shape, starting from all zero, to image
+     * dimension minus one. The axis order of the box shape is the same as the
+     * image.
+     * 
+     * @param is the image.
+     * @return the boundary of this image as a box shape.
+     */
+    public static <T extends PixelType> IBoxShape getBoundaryAsBox(Image<T> image) {
+        long[] imageMax = MetadataUtil.getImageLastPixel(image.getMetadata());
+        long[] imageMin = new long[imageMax.length];
+
+        return new ShapeFactory().closedBox(imageMin, imageMax, image.getMetadata().axisOrder());
+    }
 }
