@@ -106,6 +106,13 @@ public class MetadataUtil {
 
 	}
 
+	/**
+	 * Returns the coordinates of the last pixel of the image, which is dim - 1 for
+	 * each dimension.
+	 * 
+	 * @param metadata is the metadata of the image.
+	 * @return an array containing the last position.
+	 */
 	public static long[] getImageLastPixel(IMetadata metadata) {
 		Objects.requireNonNull(metadata, "metadata cannot be null.");
 		return Arrays.stream(metadata.getDim()).map((t) -> t - 1).toArray();
@@ -173,7 +180,7 @@ public class MetadataUtil {
 	 */
 	public static long[][] getPlaneCoordinates(IMetadata metadata, long planeIndex) {
 		Objects.requireNonNull(metadata, "metadata cannot be null.");
-		
+
 		if (planeIndex < 1 || planeIndex > getNPlanes(metadata)) {
 			throw new IndexOutOfBoundsException("Image plane does not exist.");
 		}
@@ -221,8 +228,8 @@ public class MetadataUtil {
 		long[] planeDim = MetadataUtil.getPlaneDim(srcMetadata);
 		AxisOrder planeAxisOrder = AxisOrder.planeAxisOrder(srcMetadata.axisOrder());
 
-		return new Metadata.MetadataBuilder(planeDim).axisOrder(planeAxisOrder)
-				.bitPerPixel(srcMetadata.bitPerPixel()).build();
+		return new Metadata.MetadataBuilder(planeDim).axisOrder(planeAxisOrder).bitPerPixel(srcMetadata.bitPerPixel())
+				.build();
 	}
 
 }
