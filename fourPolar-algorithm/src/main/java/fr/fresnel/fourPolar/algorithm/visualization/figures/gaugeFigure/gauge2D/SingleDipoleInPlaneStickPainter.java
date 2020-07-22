@@ -19,7 +19,6 @@ import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
 /**
@@ -52,7 +51,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
     private final long[] _stickTranslation;
 
     public SingleDipoleInPlaneStickPainter(ISingleDipoleStick2DPainterBuilder builder) {
-        this._dipoleFigure = (GaugeFigure)builder.getGaugeFigure();
+        this._dipoleFigure = (GaugeFigure) builder.getGaugeFigure();
 
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
 
@@ -160,7 +159,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
     /**
      * Set all pixels of the stick figure black, to ensure that in repetitive use of
-     * the painter, the background remains
+     * the painter, the background remains constant.
      */
     private void _paintStickFigureBlack() {
         IPixelCursor<ARGB8> cursor = this._dipoleFigure.getImage().getCursor();

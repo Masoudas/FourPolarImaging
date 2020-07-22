@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.algorithm.util.image.color;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.algorithm.util.image.stats.ImageStatistics;
