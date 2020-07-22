@@ -4,6 +4,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
+import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 
 /**
@@ -14,7 +15,7 @@ public interface IGaugeFigure {
     /**
      * Axis order of the image.
      */
-    public static final AxisOrder AXIS_ORDER = AxisOrder.XYCZT;
+    public static final AxisOrder AXIS_ORDER = ISoIImage.AXIS_ORDER;
 
     /**
      * Returns the type of the gauge figure.
