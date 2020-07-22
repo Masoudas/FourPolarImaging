@@ -9,6 +9,7 @@ import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
@@ -18,8 +19,8 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * (eta) as a 3D stick, where the stick color is the wobbling (delta). To
  * generate the gauge figure, the orientation figure is interleaved in the
  * z-dimension to accommodate for the stick length (interleave factor =
- * stick_length). The {@link GaugeFigureLocalization} associated with this builder would
- * be WholeSample.
+ * stick_length). The {@link GaugeFigureLocalization} associated with this
+ * builder would be WholeSample.
  * <p>
  * For the region provided for the painter built by this class, if a pixel of
  * the region is out of image dimension, no sticks are drawn. If the region's
@@ -29,8 +30,9 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * <p>
  */
 public class WholeSampleStick3DPainterBuilder extends IWholeSampleStick3DPainterBuilder {
-    private final IOrientationImage _orientationImage;
-    private final ISoIImage _soiImage;
+    private GaugeFigure _gaugeFigure;
+    private IOrientationImage _orientationImage;
+    private ISoIImage _soiImage;
 
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
@@ -115,13 +117,30 @@ public class WholeSampleStick3DPainterBuilder extends IWholeSampleStick3DPainter
     }
 
     /**
+     * Create the appropriate empty gauge figure.
+     */
+    private void _setGaugeFigureAs3DStickFigure(ISoIImage soiImage) {
+        _gaugeFigure = GaugeFigure.wholeSample3DStick(soiImage, this._length);
+    }
+
+    private void _checkSoIAndOrientationImageBelongToSameSet(IOrientationImage orientationImage, ISoIImage soiImage) {
+        if (!soiImage.belongsTo(orientationImage)) {
+            throw new IllegalArgumentException("orientation and soi images don't belong to the same set or channel.");
+        }
+    }
+
+    /**
      * Build the Painter from the provided constraints.
      * 
      * @return the interface for the painter of sticks.
-     * @throws ConverterToImgLib2NotFound in case the Image interface of SoIImage
-     *                                    cannot be converted to ImgLib2 image type.
      */
-    public IAngleGaugePainter build() throws ConverterToImgLib2NotFound {
+    public IAngleGaugePainter build(ISoIImage soiImage, IOrientationImage orientationImage) {    
+        Objects.requireNonNull(soiImage, "soiImage cannot be null");
+        Objects.requireNonNull(orientationImage, "orientationImage cannot be null");
+
+        _checkSoIAndOrientationImageBelongToSameSet(orientationImage, soiImage);
+        _setGaugeFigureAs3DStickFigure(soiImage);
+
         return new WholeSampleStick3DPainter(this);
     }
 
@@ -153,6 +172,11 @@ public class WholeSampleStick3DPainterBuilder extends IWholeSampleStick3DPainter
     @Override
     ColorBlender getColorBlender() {
         return this._colorBlender;
+    }
+
+    @Override
+    GaugeFigure getGaugeFigure() {
+        return this._gaugeFigure;
     }
 
 }
