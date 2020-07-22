@@ -33,6 +33,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * dimensions of the said axis order, even though only the xy direction is used.
  */
 class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
+    // TODO : We should show the stick on the original rather creating a separate one!
     private static final int FIGURE_DIM = IGaugeFigure.AXIS_ORDER.numAxis;
 
     final private IGaugeFigure _dipoleFigure;
