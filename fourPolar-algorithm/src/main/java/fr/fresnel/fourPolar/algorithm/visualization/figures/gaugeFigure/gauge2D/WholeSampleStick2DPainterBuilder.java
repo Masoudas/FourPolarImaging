@@ -129,12 +129,24 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
     }
 
     /**
-     * Build the Painter from the provided constraints.
-     * 
-     * @return the interface for the painter of sticks.
+     * Create the appropriate empty gauge figure.
      */
-    public IAngleGaugePainter build() {
-        return new WholeSampleStick2DPainter(this);
+    private void _setGaugeFigureAsRho2D() {
+        _gaugeFigure = GaugeFigure.wholeSampleRho2DStick(_soiImage);
+    }
+
+    /**
+     * Create the appropriate empty gauge figure.
+     */
+    private void _setGaugeFigureAsDelta2D() {
+        _gaugeFigure = GaugeFigure.wholeSampleDelta2DStick(_soiImage);
+    }
+
+    /**
+     * Create the appropriate empty gauge figure.
+     */
+    private void _setGaugeFigureAsEta2D() {
+        _gaugeFigure = GaugeFigure.wholeSampleEta2DStick(_soiImage);
     }
 
     /**
@@ -212,27 +224,6 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
         _setOrientationImage(orientationImage);
 
         return new WholeSampleStick2DPainter(this);
-    }
-
-    /**
-     * Create the appropriate empty gauge figure.
-     */
-    private void _setGaugeFigureAsRho2D() {
-        _gaugeFigure = GaugeFigure.wholeSampleRho2DStick(_soiImage);
-    }
-
-    /**
-     * Create the appropriate empty gauge figure.
-     */
-    private void _setGaugeFigureAsDelta2D() {
-        _gaugeFigure = GaugeFigure.wholeSampleDelta2DStick(_soiImage);
-    }
-
-    /**
-     * Create the appropriate empty gauge figure.
-     */
-    private void _setGaugeFigureAsEta2D() {
-        _gaugeFigure = GaugeFigure.wholeSampleEta2DStick(_soiImage);
     }
 
     @Override
