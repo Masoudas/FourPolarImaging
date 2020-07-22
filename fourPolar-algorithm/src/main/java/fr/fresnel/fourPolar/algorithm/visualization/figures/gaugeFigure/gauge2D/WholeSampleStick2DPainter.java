@@ -21,7 +21,6 @@ import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
 class WholeSampleStick2DPainter implements IAngleGaugePainter {
@@ -197,39 +196,5 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     @Override
     public IGaugeFigure getFigure() {
         return _stick2DFigure;
-    }
-
-    public static OrientationAngle getSlopeAngle(AngleGaugeType type) {
-        switch (type) {
-            case Rho2D:
-                return OrientationAngle.rho;
-
-            case Delta2D:
-                return OrientationAngle.rho;
-
-            case Eta2D:
-                return OrientationAngle.rho;
-
-            default:
-                return null;
-        }
-
-    }
-
-    public static OrientationAngle getColorAngle(AngleGaugeType type) {
-        switch (type) {
-            case Rho2D:
-                return OrientationAngle.rho;
-
-            case Delta2D:
-                return OrientationAngle.delta;
-
-            case Eta2D:
-                return OrientationAngle.eta;
-
-            default:
-                return null;
-        }
-
     }
 }
