@@ -58,8 +58,7 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
     }
 
     private void _checkSoIAndOrientationImageBelongToSameSet(IOrientationImage orientationImage, ISoIImage soiImage) {
-        if (!orientationImage.getCapturedSet().getSetName().equals(soiImage.getFileSet().getSetName())
-                || orientationImage.channel() != soiImage.channel()) {
+        if (!soiImage.belongsTo(orientationImage)) {
             throw new IllegalArgumentException("orientation and soi images don't belong to the same set or channel.");
         }
     }
@@ -75,7 +74,7 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
      * the spectrum, so that 0 and 180 degree have the same color.
      */
     public WholeSampleStick2DPainterBuilder colorMap(ColorMap colorMap) {
-        Objects.requireNonNull(colorMap, "colorMap cannot be null;");
+        Objects.requireNonNull(colorMap, "colorMap cannot be null.");
         return this;
     }
 
@@ -139,7 +138,7 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
     }
 
     /**
-     * Create a painter for drawing rho 2D sticks.
+     * Build the painter from the provided constraints for drawing rho 2D sticks.
      * 
      * @param orientationImage is the orientation image
      * @param soiImage         is the corresponding soi Image
@@ -164,7 +163,7 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
     }
 
     /**
-     * Create a painter for drawing delta 2D sticks.
+     * Build the painter from the provided constraints for drawing delta 2D sticks.
      * 
      * @param orientationImage is the orientation image
      * @param soiImage         is the corresponding soi Image of
@@ -190,7 +189,7 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
     }
 
     /**
-     * Create a painter for drawing eta 2D sticks.
+     * Build the painter from the provided constraints for drawing eta 2D sticks.
      * 
      * @param orientationImage is the orientation image
      * @param soiImage         is the corresponding soi Image of
