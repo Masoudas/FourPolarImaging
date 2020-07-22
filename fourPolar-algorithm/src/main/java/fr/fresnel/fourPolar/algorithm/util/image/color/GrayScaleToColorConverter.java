@@ -17,13 +17,13 @@ public class GrayScaleToColorConverter {
     };
 
     /**
-     * Convertes the given channel of {@link UINT16} image to an {@link ARGB8}
-     * image. Note that an 8 bit lookup table is used for the conversion, hence
-     * there are only 256 white pixels. Note that each image plane is scaled with
-     * respect to it's minimum and maximum (not the maximum of the entire image.).
-     * If a plane has no maximum, all pixels will be black.
+     * Convertes the gray image to an {@link ARGB8} a new color image. Note that an
+     * 8 bit lookup table is used for the conversion, hence there are only 256 white
+     * pixels. Note that each image plane is scaled with respect to it's minimum and
+     * maximum (not the maximum of the entire image.). If a plane has no maximum,
+     * all pixels will be black.
      * 
-     * 
+     * @param grayImage is the gray scale image.
      * @throws ConverterToImgLib2NotFound if the image model can't be converted to
      *                                    ImgLib2 model.
      * 
@@ -31,6 +31,24 @@ public class GrayScaleToColorConverter {
     public static <T extends RealType> Image<ARGB8> colorUsingMaxEachPlane(final Image<T> grayImage)
             throws ConverterToImgLib2NotFound {
         return MaxPlaneGrayScaleToColorConverter.convert(grayImage);
+    }
+
+    /**
+     * Convertes the given source gray image to an {@link ARGB8} and puts in the
+     * destination image. Note that an 8 bit lookup table is used for the
+     * conversion, hence there are only 256 white pixels. Note that each image plane
+     * is scaled with respect to it's minimum and maximum (not the maximum of the
+     * entire image). If a plane has no maximum, all pixels will be black.
+     * 
+     * @param srcImg  is the source gray scale image.
+     * @param destImg is the destination color image.
+     * @throws ConverterToImgLib2NotFound if the image model can't be converted to
+     *                                    ImgLib2 model.
+     * 
+     */
+    public static <T extends RealType> void colorUsingMaxEachPlane(Image<T> srcImg, Image<ARGB8> destImg)
+            throws ConverterToImgLib2NotFound {
+        MaxPlaneGrayScaleToColorConverter.convert(srcImg, destImg);
     }
 
     /**

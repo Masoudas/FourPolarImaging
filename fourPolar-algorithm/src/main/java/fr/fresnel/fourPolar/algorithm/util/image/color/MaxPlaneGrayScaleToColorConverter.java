@@ -1,5 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.util.image.color;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.algorithm.util.image.stats.ImageStatistics;
@@ -46,18 +47,44 @@ class MaxPlaneGrayScaleToColorConverter {
         IMetadata colorMetadata = _copyGaryMetadataForColorImage(grayImage.getMetadata());
         Image<ARGB8> colorImage = grayImage.getFactory().create(colorMetadata, ARGB8.zero());
 
+        convert(grayImage, colorImage);
+
+        return colorImage;
+    }
+
+    /**
+     * 
+     * @param <T>     is a gray type.
+     * @param srcImg  is the source gray scale image.
+     * @param destImg is the destination color image to be filled.
+     * 
+     * @throws IllegalArgumentException of the images don't have the same dimension.
+     */
+    public static <T extends RealType> void convert(final Image<T> srcImg, Image<ARGB8> destImg) {
+        Objects.requireNonNull(srcImg, "grayImage cannot be null");
+        Objects.requireNonNull(destImg, "colorImage cannot be null");
+
+        IMetadata src_metadata = srcImg.getMetadata();
+        IMetadata dest_metadata = destImg.getMetadata();
+
+        if (!MetadataUtil.isAxisOrderEqual(src_metadata, dest_metadata)
+                || !MetadataUtil.isDimensionEqual(src_metadata, dest_metadata)) {
+            throw new IllegalArgumentException(
+                    "The source and destination images must have the same size and axis-order");
+        }
+
         // We use ImgLib2 classes, i.e, we convert to Img. Then we convert the Image.
         // Finaly, we create a new Image instance and fill it, and return it.
         final ColorTable8 cTable8 = new ColorTable8();
-        final IPixelCursor<T> grayCursor = grayImage.getCursor();
-        final IPixelCursor<ARGB8> colorCursor = colorImage.getCursor();
+        final IPixelCursor<T> grayCursor = srcImg.getCursor();
+        final IPixelCursor<ARGB8> colorCursor = destImg.getCursor();
 
         final DoubleType doubleType = new DoubleType();
         final ARGBType argbType = new ARGBType();
 
-        final double[][] minMax = _getPlaneMinMax(grayImage);
+        final double[][] minMax = _getPlaneMinMax(srcImg);
 
-        final long planeSize = MetadataUtil.getPlaneSize(grayImage.getMetadata());
+        final long planeSize = MetadataUtil.getPlaneSize(srcImg.getMetadata());
 
         int planeNo = 1;
         int planePixelCounter = 0;
@@ -79,8 +106,6 @@ class MaxPlaneGrayScaleToColorConverter {
             pixel.value().set(ARGBType.red(color), ARGBType.green(color), ARGBType.blue(color), ARGBType.alpha(color));
             colorCursor.setPixel(pixel);
         }
-
-        return colorImage;
     }
 
     private static <T extends RealType> double[][] _getPlaneMinMax(final Image<T> grayImage) {
