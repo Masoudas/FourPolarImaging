@@ -1,28 +1,23 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D;
 
-import java.util.Arrays;
-
-import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
-import fr.fresnel.fourPolar.core.image.generic.Image;
-import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImageRandomAccess;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
+import fr.fresnel.fourPolar.core.util.image.ImageUtil;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.shape.IPointShape;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
@@ -33,7 +28,8 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * dimensions of the said axis order, even though only the xy direction is used.
  */
 class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
-    // TODO : We should show the stick on the original rather creating a separate one!
+    // TODO : We should show the stick on the original image rather creating a
+    // separate image for it!
     private static final int FIGURE_DIM = IGaugeFigure.AXIS_ORDER.numAxis;
 
     final private IGaugeFigure _dipoleFigure;
@@ -60,7 +56,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
         this._figSizeToStickLenRatio = builder.figSizeToStickLenRatio();
         this._dipoleFigure = this._createDipoleFigure(builder.getSticklength(), builder.getSoIImage(),
                 builder.getAngleGaugeType());
-        
+
         this._orientationRA = builder.getOrientationImage().getRandomAccess();
 
         this._colormap = builder.getColorMap();
@@ -71,9 +67,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
         this._baseStick = this._defineBaseStick(builder.getSticklength(), builder.getStickThickness());
 
-        this._orientationImageBoundary = this._defineOrientationImageBoundaryAsBoxShape(
-                builder.getOrientationImage().getAngleImage(OrientationAngle.rho).getImage().getMetadata().getDim(),
-                builder.getOrientationImage().getAngleImage(OrientationAngle.rho).getImage().getMetadata().axisOrder());
+        this._orientationImageBoundary = this._getOrientationImageBoundary(builder.getOrientationImage());
 
         this._stickTranslation = this._setStickTranslationToDipoleCenterPosition();
     }
@@ -86,37 +80,22 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
      * 
      */
     private IGaugeFigure _createDipoleFigure(int stickLength, ISoIImage soiImage, AngleGaugeType angleGaugeType) {
-        int channel = soiImage.channel();
-
-        long[] dim = new long[IGaugeFigure.AXIS_ORDER.numAxis];
-        Arrays.setAll(dim, (i) -> 1);
-        dim[0] = (long) (stickLength * this._figSizeToStickLenRatio);
-        dim[1] = dim[0];
-
-        IMetadata gaugeFigMetadata = new Metadata.MetadataBuilder(dim).axisOrder(AxisOrder.XYCZT).build();
-        Image<ARGB8> gaugeImage = soiImage.getImage().getFactory().create(gaugeFigMetadata, ARGB8.zero());
-        return GaugeFigureFactory.create(GaugeFigureLocalization.SINGLE_DIPOLE, angleGaugeType, gaugeImage,
-                soiImage.getFileSet(), channel);
+        return GaugeFigure.singleDipoleDelta2DStick(stickLength * this._figSizeToStickLenRatio, soiImage.channel(),
+                soiImage.getFileSet(), soiImage.getImage().getFactory());
     }
 
     /**
      * Base stick complies with the {@link FIGURE_DIM}
      */
     private IShape _defineBaseStick(int len, int thickness) {
-        return new ShapeFactory().line2DShape(new long[FIGURE_DIM], 0, len, thickness, AxisOrder.XYCZT);
+        return new ShapeFactory().line2DShape(new long[FIGURE_DIM], 0, len, thickness, GaugeFigure.AXIS_ORDER);
     }
 
     /**
      * Define the image region from pixel zero to dim - 1;
      */
-    private IShape _defineOrientationImageBoundaryAsBoxShape(long[] imDimension, AxisOrder axisOrder) {
-        long[] imageMax = null;
-        long[] imageMin = null;
-
-        imageMax = Arrays.stream(imDimension).map((x) -> x - 1).toArray();
-        imageMin = new long[imDimension.length];
-
-        return new ShapeFactory().closedBox(imageMin, imageMax, axisOrder);
+    private IShape _getOrientationImageBoundary(IOrientationImage orientationImage) {
+        return ImageUtil.getBoundaryAsBox(orientationImage.getAngleImage(OrientationAngle.rho).getImage());
     }
 
     /**
