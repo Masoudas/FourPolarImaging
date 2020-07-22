@@ -214,11 +214,6 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
     }
 
     @Override
-    int figSizeToStickLenRatio() {
-        return this._figSizeToStickLenRatio;
-    }
-
-    @Override
     IGaugeFigure getGaugeFigure() {
         return this._gaugeFigure;
     }

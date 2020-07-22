@@ -21,9 +21,7 @@ abstract class ISingleDipoleStick2DPainterBuilder {
     abstract int getStickThickness();
 
     abstract IGaugeFigure getGaugeFigure();
-
-    abstract int figSizeToStickLenRatio();
-
+    
     abstract OrientationAngle getSlopeAngle();
 
     abstract OrientationAngle getColorAngle();
