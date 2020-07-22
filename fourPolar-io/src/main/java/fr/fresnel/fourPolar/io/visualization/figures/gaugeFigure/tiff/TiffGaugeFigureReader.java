@@ -7,6 +7,7 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
@@ -47,7 +48,7 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
 
         Image<ARGB8> gaugeFigure = this._readGaugeFigure(pathToFigure);
 
-        return GaugeFigureFactory.create(this._gaugeFigureType, this._angleGaugeType, gaugeFigure, capturedImageFileSet,
+        return GaugeFigure.create(this._gaugeFigureType, this._angleGaugeType, gaugeFigure, capturedImageFileSet,
                 channel);
     }
 
