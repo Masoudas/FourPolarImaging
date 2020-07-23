@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 
-
 import org.junit.jupiter.api.Test;
 import org.scijava.ui.behaviour.ClickBehaviour;
 import org.scijava.ui.behaviour.io.InputTriggerConfig;
@@ -28,20 +27,21 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.image.soi.SoIImage;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 import ij.ImagePlus;
 import ij.io.FileSaver;
@@ -86,7 +86,7 @@ public class SingleDipoleInPlaneStickPainterTest {
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
         ISingleDipoleStick2DPainterBuilder builder = new DummySingleDipoleBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D, cMap, 8, 100, 10);
+                cMap, 8, 100, 2, OrientationAngle.rho, OrientationAngle.delta);
 
         SingleDipoleInPlaneStickPainter painter = new SingleDipoleInPlaneStickPainter(builder);
 
@@ -130,7 +130,7 @@ public class SingleDipoleInPlaneStickPainterTest {
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
         ISingleDipoleStick2DPainterBuilder builder = new DummySingleDipoleBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D, cMap, 8, 50, 10);
+                cMap, 8, 50, 10, OrientationAngle.rho, OrientationAngle.delta);
         SingleDipoleInPlaneStickPainter painter = new SingleDipoleInPlaneStickPainter(builder);
 
         // Viewer to show the soi.
@@ -238,7 +238,7 @@ class DummyFileSet implements ICapturedImageFileSet {
 
     @Override
     public int[] getChannels() {
-        return new int[]{1};
+        return new int[] { 1 };
     }
 
 }
@@ -246,7 +246,8 @@ class DummyFileSet implements ICapturedImageFileSet {
 class DummySingleDipoleBuilder extends ISingleDipoleStick2DPainterBuilder {
     private final IOrientationImage _orientationImage;
     private final ISoIImage _soiImage;
-    private final AngleGaugeType _gaugeType;
+    OrientationAngle _slopeAngle;
+    OrientationAngle _colorAngle;
 
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
@@ -278,25 +279,33 @@ class DummySingleDipoleBuilder extends ISingleDipoleStick2DPainterBuilder {
         return this._thickness;
     }
 
-    public DummySingleDipoleBuilder(IOrientationImage _orientationImage, ISoIImage _soiImage, AngleGaugeType _gaugeType,
-            ColorMap _colorMap, int _thickness, int _length, int ratio) {
+    public DummySingleDipoleBuilder(IOrientationImage _orientationImage, ISoIImage _soiImage,
+            ColorMap _colorMap, int _thickness, int _length, int ratio, OrientationAngle slopeAngle,
+            OrientationAngle colorAngle) {
         this._orientationImage = _orientationImage;
         this._soiImage = _soiImage;
-        this._gaugeType = _gaugeType;
         this._colorMap = _colorMap;
         this._thickness = _thickness;
         this._length = _length;
         this._ratio = ratio;
+        this._slopeAngle = slopeAngle;
+        this._colorAngle = colorAngle;
     }
 
     @Override
-    AngleGaugeType getAngleGaugeType() {
-        return this._gaugeType;
+    IGaugeFigure getGaugeFigure() {
+        return GaugeFigure.singleDipoleDelta2DStick(_ratio * _length, _soiImage.channel(), _soiImage.getFileSet(),
+                _soiImage.getImage().getFactory());
     }
 
     @Override
-    int figSizeToStickLenRatio() {
-        return this._ratio;
+    OrientationAngle getSlopeAngle() {
+        return _slopeAngle;
+    }
+
+    @Override
+    OrientationAngle getColorAngle() {
+        return _colorAngle;
     }
 
 }
