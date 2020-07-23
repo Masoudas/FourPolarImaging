@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.core.util.shape;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -73,7 +72,7 @@ public class ImageJ1LineShapeTest {
     }
 
     @Test
-    public void create_3DLineFrom0000Slope0Length2_ReturnsCorrectStartAndEndPoint() {
+    public void create_2DLineFrom0000Slope0Length2_ReturnsCorrectStartAndEndPoint() {
         double[] pose = { 0, 0, 0 };
         double slope = 0;
         long length = 2;
@@ -107,7 +106,7 @@ public class ImageJ1LineShapeTest {
     }
 
     @Test
-    public void rotate_3DLineFrom00Slope0Length2By90_ReturnsCorrectStartAndEndPoint() {
+    public void rotate_2DLineFrom000Slope0Length2By90_ReturnsCorrectStartAndEndPoint() {
         double[] pose = { 0, 0, 0 };
         double slope = 0;
         long length = 2;
@@ -143,7 +142,7 @@ public class ImageJ1LineShapeTest {
     }
 
     @Test
-    public void translate_3DLineFrom00Slope0Length2by111_ReturnsCorrectStartAndEndPoint() {
+    public void translate_2DLineFrom000Slope0Length2by111_ReturnsCorrectStartAndEndPoint() {
         double[] pose = { 0, 0, 0 };
         double slope = 0;
         long length = 2;
