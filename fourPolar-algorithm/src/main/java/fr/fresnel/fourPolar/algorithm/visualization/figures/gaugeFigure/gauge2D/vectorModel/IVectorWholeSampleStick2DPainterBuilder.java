@@ -1,0 +1,36 @@
+package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D.vectorModel;
+
+import java.util.Optional;
+
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.ColorBlender;
+import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
+import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
+import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
+import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.vectorFigure.animation.OrientationAnimationCreator;
+
+/**
+ * A simple private interface for accessing the parameters of the builder.
+ */
+abstract class IVectorWholeSampleStick2DPainterBuilder {
+    abstract ColorMap getColorMap();
+
+    abstract int getSticklength();
+
+    abstract IOrientationImage getOrientationImage();
+
+    abstract ISoIImage getSoIImage();
+
+    abstract int getStickThickness();
+
+    abstract IGaugeFigure getGauageFigure();
+
+    abstract ColorBlender getColorBlender();
+
+    abstract OrientationAngle getSlopeAngle();
+
+    abstract OrientationAngle getColorAngle();
+
+    abstract Optional<OrientationAnimationCreator> getAnimationCreator();
+}
