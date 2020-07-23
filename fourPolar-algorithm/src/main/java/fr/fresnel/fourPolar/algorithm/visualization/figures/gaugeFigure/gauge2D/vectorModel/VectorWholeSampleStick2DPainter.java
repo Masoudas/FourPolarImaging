@@ -10,6 +10,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImageRandomAccess;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.image.vector.Vector;
+import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 import fr.fresnel.fourPolar.core.physics.dipole.IOrientationVector;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationVector;
@@ -38,6 +39,7 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
     private final Optional<OrientationAnimationCreator> _animCreator;
     private final ColorMap _colormap;
     private final long _stick_len;
+    private final FilterComposite _colorBlender;
 
     private final Vector _cachedVector;
 
@@ -56,6 +58,7 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
         this._slopeAngle = builder.getSlopeAngle();
         this._colorAngle = builder.getColorAngle();
         this._maxColorAngle = OrientationVector.maxAngle(_colorAngle);
+        this._colorBlender = builder.getColorBlender();
 
         this._stick_len = builder.getSticklength();
         this._cachedVector = _createCachedVector(builder.getStickThickness());
@@ -145,9 +148,12 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
         // The thickness parameter is set by vector stroke with, hence irrelevant here.
         ILineShape stickShape = ShapeFactory.line2DShape(position, orientationVector.getAngle(_slopeAngle), _stick_len,
                 1, IGaugeFigure.AXIS_ORDER);
+        
         _cachedVector.setShape(stickShape);
         _cachedVector.setColor(stickColor);
         _cachedVector.setFill(stickColor);
+        _cachedVector.setFilter(_colorBlender);
+
         _animCreator.ifPresent(animCreator -> _cachedVector.setAnimation(animCreator.create(orientationVector)));
         return _cachedVector;
     }
