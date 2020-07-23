@@ -42,12 +42,9 @@ public class GrayScaleToColorConverter {
      * 
      * @param srcImg  is the source gray scale image.
      * @param destImg is the destination color image.
-     * @throws ConverterToImgLib2NotFound if the image model can't be converted to
-     *                                    ImgLib2 model.
      * 
      */
-    public static <T extends RealType> void colorUsingMaxEachPlane(Image<T> srcImg, Image<ARGB8> destImg)
-            throws ConverterToImgLib2NotFound {
+    public static <T extends RealType> void colorUsingMaxEachPlane(Image<T> srcImg, Image<ARGB8> destImg) {
         MaxPlaneGrayScaleToColorConverter.convert(srcImg, destImg);
     }
 
