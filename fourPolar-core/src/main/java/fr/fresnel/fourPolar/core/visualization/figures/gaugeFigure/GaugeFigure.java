@@ -7,7 +7,6 @@ import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
@@ -202,7 +201,6 @@ public class GaugeFigure implements IGaugeFigure {
         return _type;
     }
 
-    @Override
     public Image<ARGB8> getImage() {
         return _image;
     }
