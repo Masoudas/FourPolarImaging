@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 public class BoxShapeToSVGElementConverterTest {
     @Test
     public void conver_boxFrom00to11_createsRectangleElementWithX_Y_Width_Height_Attrs() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 1 }, AxisOrder.XY);
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0 }, new long[] { 1, 1 }, AxisOrder.XY);
 
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
@@ -30,7 +30,7 @@ public class BoxShapeToSVGElementConverterTest {
 
     @Test
     public void conver_boxFrom0000to1100_createsRectangleElementWithX_Y_Width_Height_Attrs() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0 }, new long[] { 1, 1, 0, 0 },
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0 }, new long[] { 1, 1, 0, 0 },
                 AxisOrder.XYCT);
 
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation()

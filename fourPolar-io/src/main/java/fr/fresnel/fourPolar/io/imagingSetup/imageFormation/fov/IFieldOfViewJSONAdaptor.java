@@ -103,7 +103,7 @@ public class IFieldOfViewJSONAdaptor {
         long[] shiftedMin = Arrays.stream(fov.min()).map((t) -> t + shift).toArray();
         long[] shiftedMax = Arrays.stream(fov.max()).map((t) -> t + shift).toArray();
 
-        return new ShapeFactory().closedBox(shiftedMin, shiftedMax, fov.axisOrder());
+        return ShapeFactory.closedBox(shiftedMin, shiftedMax, fov.axisOrder());
     }
 
 

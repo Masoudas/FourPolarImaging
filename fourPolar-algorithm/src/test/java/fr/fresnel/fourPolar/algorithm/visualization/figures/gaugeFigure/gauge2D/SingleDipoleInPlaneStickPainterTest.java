@@ -91,7 +91,7 @@ public class SingleDipoleInPlaneStickPainterTest {
         SingleDipoleInPlaneStickPainter painter = new SingleDipoleInPlaneStickPainter(builder);
 
         for (int i = 0; i < 4; i++) {
-            IShape point = new ShapeFactory().point(new long[] { i, i, 0, 0, 0 }, AxisOrder.XYCZT);
+            IShape point = ShapeFactory.point(new long[] { i, i, 0, 0, 0 }, AxisOrder.XYCZT);
             painter.draw(point, UINT16.zero());
             _saveStickFigure(painter.getFigure(), "rho" + rhoAngles[i] + ".tif");
         }
@@ -195,7 +195,7 @@ class ShowDipoleUponClick implements ClickBehaviour {
         double[] pos1 = new double[5];
         pos.localize(pos1);
         long[] pos2 = Arrays.stream(pos1).mapToLong((t) -> (long) t).limit(5).toArray();
-        IShape shape = new ShapeFactory().point(pos2, AxisOrder.XYCZT);
+        IShape shape = ShapeFactory.point(pos2, AxisOrder.XYCZT);
 
         painter.draw(shape, UINT16.zero());
         bdv.getBdvHandle().getViewerPanel().requestRepaint();

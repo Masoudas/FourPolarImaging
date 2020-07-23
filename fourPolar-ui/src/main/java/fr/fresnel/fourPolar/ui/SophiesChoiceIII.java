@@ -172,7 +172,7 @@ class ShowDipoleUponClick implements ClickBehaviour {
         double[] pos1 = new double[5];
         pos.localize(pos1);
         long[] pos2 = Arrays.stream(pos1).mapToLong((t) -> (long) t).toArray();
-        IShape shape = new ShapeFactory().point(pos2, AxisOrder.XYCZT);
+        IShape shape = ShapeFactory.point(pos2, AxisOrder.XYCZT);
 
         painter.draw(shape, this.soiThreshold);
         bdv_dipole.getBdvHandle().getViewerPanel().requestRepaint();

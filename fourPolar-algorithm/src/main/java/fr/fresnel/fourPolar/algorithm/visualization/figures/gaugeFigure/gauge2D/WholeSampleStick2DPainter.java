@@ -87,7 +87,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
         stickMax[0] = len / 2;
         stickMax[1] = thickness / 2;
 
-        return new ShapeFactory().closedBox(stickMin, stickMax, AxisOrder.XYCZT);
+        return ShapeFactory.closedBox(stickMin, stickMax, AxisOrder.XYCZT);
     }
 
     @Override

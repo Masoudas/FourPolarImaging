@@ -179,7 +179,7 @@ public class RegistrationSetProcessorTest {
     // TwoCameraPolarizationConstellation.Position.Left,
     // TwoCameraPolarizationConstellation.Position.Right,
     // TwoCameraPolarizationConstellation.Position.Right);
-    // IPointShape intersection = new ShapeFactory().point(new long[] { 490, 250 },
+    // IPointShape intersection = ShapeFactory.point(new long[] { 490, 250 },
     // AxisOrder.XY);
 
     // FoVCalculatorTwoCamera fovCalculator = new
@@ -231,7 +231,7 @@ public class RegistrationSetProcessorTest {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { image_x, image_y }).build();
 
         return new FoVCalculatorByIntersectionPointOneCamera(metadata,
-                new ShapeFactory().point(new long[] { x_intersecion, y_intersection }, AxisOrder.XY),
+                ShapeFactory.point(new long[] { x_intersecion, y_intersection }, AxisOrder.XY),
                 new OneCameraPolarizationConstellation(OneCameraPolarizationConstellation.Position.TopLeft,
                         OneCameraPolarizationConstellation.Position.TopRight,
                         OneCameraPolarizationConstellation.Position.BottomLeft,
@@ -246,8 +246,8 @@ public class RegistrationSetProcessorTest {
         IMetadata metadata = new Metadata.MetadataBuilder(new long[] { image_x, image_y }).build();
 
         return new FoVCalculatorByIntersectionPointTwoCamera(metadata,
-                new ShapeFactory().point(new long[] { x_intersecion, y_intersection }, AxisOrder.XY), metadata,
-                new ShapeFactory().point(new long[] { x_intersecion, y_intersection }, AxisOrder.XY),
+                ShapeFactory.point(new long[] { x_intersecion, y_intersection }, AxisOrder.XY), metadata,
+                ShapeFactory.point(new long[] { x_intersecion, y_intersection }, AxisOrder.XY),
                 new TwoCameraPolarizationConstellation(TwoCameraPolarizationConstellation.Position.Left,
                         TwoCameraPolarizationConstellation.Position.Left,
                         TwoCameraPolarizationConstellation.Position.Right,

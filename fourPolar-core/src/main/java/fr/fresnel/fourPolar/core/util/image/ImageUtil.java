@@ -87,6 +87,6 @@ public class ImageUtil {
         long[] imageMax = MetadataUtil.getImageLastPixel(image.getMetadata());
         long[] imageMin = new long[imageMax.length];
 
-        return new ShapeFactory().closedBox(imageMin, imageMax, image.getMetadata().axisOrder());
+        return ShapeFactory.closedBox(imageMin, imageMax, image.getMetadata().axisOrder());
     }
 }

@@ -91,7 +91,7 @@ public class WholeSampleStick2DPainterTest {
                 OrientationAngle.rho);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
+        IShape entireImageRegion = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1024, 512, 0, 3, 80 }, axisOrder);
 
         painter.draw(entireImageRegion, new UINT16(0));
@@ -152,7 +152,7 @@ public class WholeSampleStick2DPainterTest {
                 thickness, length, new SoftLightColorBlender(), OrientationAngle.rho, OrientationAngle.delta);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
+        IShape entireImageRegion = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1024, 512, 0, 0, 0 }, axisOrder);
 
         painter.draw(entireImageRegion, UINT16.zero());
@@ -218,7 +218,7 @@ public class WholeSampleStick2DPainterTest {
                 OrientationAngle.eta);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
+        IShape entireImageRegion = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1024, 512, 0, 0, 0 }, axisOrder);
 
         painter.draw(entireImageRegion, new UINT16(0));
@@ -270,7 +270,7 @@ public class WholeSampleStick2DPainterTest {
                 OrientationAngle.rho);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
+        IShape entireImageRegion = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1024, 512, 0, 0, 0 }, axisOrder);
 
         painter.draw(entireImageRegion, new UINT16(0));
@@ -325,10 +325,10 @@ public class WholeSampleStick2DPainterTest {
                 OrientationAngle.eta);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
-        IShape smallerRegionOfImage1 = new ShapeFactory().closedPolygon2D(new long[] { 100, 500, 400, 300, 200 },
+        IShape smallerRegionOfImage1 = ShapeFactory.closedPolygon2D(new long[] { 100, 500, 400, 300, 200 },
                 new long[] { 100, 100, 500, 200, 500 });
 
-        IShape smallerRegionOfImage2 = new ShapeFactory().closedBox(new long[] { 600, 300 }, new long[] { 800, 500 },
+        IShape smallerRegionOfImage2 = ShapeFactory.closedBox(new long[] { 600, 300 }, new long[] { 800, 500 },
                 AxisOrder.XY);
 
         IShape scaledRegion1 = ShapeUtils.addNewDimension(smallerRegionOfImage1, axisOrder, new long[] { 1, 3, 1 });

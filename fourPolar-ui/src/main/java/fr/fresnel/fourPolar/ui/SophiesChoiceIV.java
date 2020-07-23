@@ -57,7 +57,7 @@ public class SophiesChoiceIV {
      */
     static long[] min = { 0, 0, 0, 0, 0 };
     static long[] max = { 1024, 512, 0, 0, 0 };
-    static IShape roi = new ShapeFactory().closedBox(min, max, AxisOrder.XYCZT);
+    static IShape roi = ShapeFactory.closedBox(min, max, AxisOrder.XYCZT);
 
     /**
      * If a polygon RoI is desired, comment the previous three lines and uncomment
@@ -69,7 +69,7 @@ public class SophiesChoiceIV {
      */
     // long[] xCoordinates = new long[]{1, 2, 3};
     // long[] yCoordinates = new long[]{1, 2, 3};
-    // IShape roi = new ShapeFactory().closedPolygon2D(xCoordinates, yCoordinates);
+    // IShape roi = ShapeFactory.closedPolygon2D(xCoordinates, yCoordinates);
 
     public static void main(final String[] args) throws IOException, CannotCreateException, IncompatibleCapturedImage {
         // -------------------------------------------------------------------

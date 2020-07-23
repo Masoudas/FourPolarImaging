@@ -91,7 +91,7 @@ class WholeSampleStick3DPainter implements IAngleGaugePainter {
         stickMax[IGaugeFigure.AXIS_ORDER.t_axis] = 0;
         stickMax[IGaugeFigure.AXIS_ORDER.c_axis] = 0;
 
-        return new ShapeFactory().closedBox(stickMin, stickMax, axisOrder);
+        return ShapeFactory.closedBox(stickMin, stickMax, axisOrder);
     }
 
     @Override

@@ -40,7 +40,7 @@ public class ImgLib2BoxShapeTest {
 
     @Test
     public void rotate2D_closed2DBox_ReturnsCorrectCoordinates() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
 
         IShape transformedShape1 = shape.rotate2D(Math.PI / 2);
         WritableBox box1 = GeomMasks.closedBox(new double[] { -2, 0 }, new double[] { 0, 1 });
@@ -53,7 +53,7 @@ public class ImgLib2BoxShapeTest {
 
     @Test
     public void translate_closed2DBox__ReturnsCorrectCoordinates() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
 
         IShape transformedShape1 = shape.translate(new long[] { 50, 50 });
         WritableBox box1 = GeomMasks.closedBox(new double[] { 50, 50 }, new double[] { 50 + 1, 50 + 2 });
@@ -66,7 +66,7 @@ public class ImgLib2BoxShapeTest {
 
     @Test
     public void translateAndRotate_closed2DBox_ReturnsCorrectCoordinates() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
 
         IShape transformedShape1 = shape.rotate2D(Math.PI / 2);
         IShape transformedShape2 = transformedShape1.translate(new long[] { 50, 50 });
@@ -81,7 +81,7 @@ public class ImgLib2BoxShapeTest {
 
     @Test
     public void translateAndRotate_HigherDimensionClosed2DBox_ReturnsCorrectCoordinates() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 2, 2, 2 }, new long[] { 1, 2, 2, 2, 2 },
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0, 2, 2, 2 }, new long[] { 1, 2, 2, 2, 2 },
                 AxisOrder.XYCZT);
 
         IShape transformedShape1 = shape.rotate2D(Math.PI / 2);
@@ -99,7 +99,7 @@ public class ImgLib2BoxShapeTest {
 
     @Test
     public void rotate3d_closed3DBoxZAxis_ReturnsCorrectCoordinates() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 }, AxisOrder.XYZ);
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 }, AxisOrder.XYZ);
 
         IShape transformedShape1 = shape.rotate3D(Math.PI / 2, 0, 0, Rotation3DOrder.ZXY);
         WritableBox box1 = GeomMasks.closedBox(new double[] { -2, 0, 0 }, new double[] { 0, 1, 3 });
@@ -113,7 +113,7 @@ public class ImgLib2BoxShapeTest {
 
     @Test
     public void rotate3D_closed3DBoxZAxisRotateAxisOrderXYCZT_ReturnsCorrectCoordinates() {
-        IBoxShape shapeNewOrder = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
+        IBoxShape shapeNewOrder = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1, 2, 0, 3, 0 }, AxisOrder.XYCZT);
 
         IShape transformedShape1 = shapeNewOrder.rotate3D(Math.PI / 2, 0, 0, Rotation3DOrder.ZXY);
@@ -128,7 +128,7 @@ public class ImgLib2BoxShapeTest {
 
     @Test
     public void rotate3d_closed3DBoxXAxis_ReturnsCorrectCoordinates() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 }, AxisOrder.XYZ);
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 }, AxisOrder.XYZ);
 
         IShape transformedShape1 = shape.rotate3D(Math.PI / 2, 0, 0, Rotation3DOrder.XZY);
         WritableBox box1 = GeomMasks.closedBox(new double[] { 0, -3, 0 }, new double[] { 1, 0, 2 });
@@ -141,7 +141,7 @@ public class ImgLib2BoxShapeTest {
 
     @Test
     public void rotate3D_closed3DBoxXRotateAxisOrderXYCZT_ReturnsCorrectCoordinates() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 }, new long[] { 1, 2, 0, 3, 0 },
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 }, new long[] { 1, 2, 0, 3, 0 },
                 AxisOrder.XYCZT);
 
         IShape transformedShape1 = shape.rotate3D(Math.PI / 2, 0, 0, Rotation3DOrder.XZY);
@@ -155,7 +155,7 @@ public class ImgLib2BoxShapeTest {
 
     @Test
     public void rotate3D_closed3DBoxXRotation90zrotation90_ReturnsCorrectCoordinates() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 }, AxisOrder.XYZ);
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 }, AxisOrder.XYZ);
 
         IShape transformedShape1 = shape.rotate3D(Math.PI / 2, Math.PI / 2, 0, Rotation3DOrder.XZY);
         WritableBox box1 = GeomMasks.closedBox(new double[] { 0, 0, 0 }, new double[] { 3, 1, 2 });
@@ -176,7 +176,7 @@ public class ImgLib2BoxShapeTest {
 
     @Test
     public void rotate3D_closed3DBoxXRotation90zrotation90AxisOrderXYCZT_ReturnsCorrectCoordinates() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 }, new long[] { 1, 2, 1, 3, 1 },
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 }, new long[] { 1, 2, 1, 3, 1 },
                 AxisOrder.XYCZT);
 
         IShape transformedShape1 = shape.rotate3D(Math.PI / 2, Math.PI / 2, 0, Rotation3DOrder.XZY);
@@ -199,7 +199,7 @@ public class ImgLib2BoxShapeTest {
 
     @Test
     public void translate_Closed3DBox_ReturnsCorrectCoordinates() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 }, AxisOrder.XYZ);
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 }, AxisOrder.XYZ);
 
         IShape transformedShape1 = shape.translate(new long[] { 50, 50, 50 });
         WritableBox box1 = GeomMasks.closedBox(new double[] { 50, 50, 50 }, new double[] { 50 + 1, 50 + 2, 50 + 3 });
@@ -214,7 +214,7 @@ public class ImgLib2BoxShapeTest {
 
     @Test
     public void rotateAndTranslate_ClosedBox3D_ReturnsCorrectCoordinates() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 }, AxisOrder.XYZ);
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 3 }, AxisOrder.XYZ);
 
         IShape transformedShape1 = shape.rotate3D(Math.PI / 2, Math.PI / 2, 0, Rotation3DOrder.XZY);
         IShape transformedShape2 = transformedShape1.translate(new long[] { 50, 50, 50 });
@@ -242,7 +242,7 @@ public class ImgLib2BoxShapeTest {
 
     @Test
     public void rotateAndTranslate_closed3DBoxAxisOrderXYCZT_ReturnsCorrectCoordinates() {
-        IBoxShape shape = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 }, new long[] { 1, 2, 1, 3, 1 },
+        IBoxShape shape = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 }, new long[] { 1, 2, 1, 3, 1 },
                 AxisOrder.XYCZT);
 
         IShape transformedShape1 = shape.rotate3D(Math.PI / 2, Math.PI / 2, 0, Rotation3DOrder.XZY);

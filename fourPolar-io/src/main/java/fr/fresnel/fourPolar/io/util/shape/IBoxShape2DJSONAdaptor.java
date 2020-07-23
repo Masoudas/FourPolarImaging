@@ -41,7 +41,7 @@ public class IBoxShape2DJSONAdaptor {
     public IBoxShape fromYaml() {
         long[] top = _stringToLong(this._top);
         long[] bottom = _stringToLong(this._bottom);
-        return new ShapeFactory().closedBox(bottom, top, AxisOrder.XY);
+        return ShapeFactory.closedBox(bottom, top, AxisOrder.XY);
     }
 
     private long[] _stringToLong(String arr) {

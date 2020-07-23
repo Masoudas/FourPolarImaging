@@ -143,12 +143,12 @@ public class RegistrationImageSegmenterTest {
     }
 
     private FieldOfView _createFoV(long[] intersectionPoint, long[] capImage_dimension) {
-        IBoxShape fov_pol0 = new ShapeFactory().closedBox(new long[] { 0, 0 }, intersectionPoint, AxisOrder.XY);
-        IBoxShape fov_pol45 = new ShapeFactory().closedBox(new long[] { intersectionPoint[0] + 1, 0 },
+        IBoxShape fov_pol0 = ShapeFactory.closedBox(new long[] { 0, 0 }, intersectionPoint, AxisOrder.XY);
+        IBoxShape fov_pol45 = ShapeFactory.closedBox(new long[] { intersectionPoint[0] + 1, 0 },
                 new long[] { capImage_dimension[0] - 1, intersectionPoint[1] }, AxisOrder.XY);
-        IBoxShape fov_pol90 = new ShapeFactory().closedBox(new long[] { 0, intersectionPoint[1] + 1 },
+        IBoxShape fov_pol90 = ShapeFactory.closedBox(new long[] { 0, intersectionPoint[1] + 1 },
                 new long[] { intersectionPoint[0], capImage_dimension[1] - 1 }, AxisOrder.XY);
-        IBoxShape fov_pol135 = new ShapeFactory().closedBox(
+        IBoxShape fov_pol135 = ShapeFactory.closedBox(
                 new long[] { intersectionPoint[0] + 1, intersectionPoint[1] + 1 },
                 new long[] { capImage_dimension[0] - 1, capImage_dimension[1] - 1 }, AxisOrder.XY);
 

@@ -32,7 +32,6 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
     private final OrientationAngle _colorAngle;
     private final double _maxColorAngle;
 
-    private final ShapeFactory _cachedShapeFactroy = new ShapeFactory();
     private final ColorMap _colormap;
     private final long _stick_len;
 
@@ -64,7 +63,7 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
      */
     private Vector _createCachedVector(int stick_thickness) {
         Vector cachedVector = Vector
-                .createLineVector(_cachedShapeFactroy.line2DShape(new long[] { 0, 0 }, 0, 0, 0, AxisOrder.NoOrder));
+                .createLineVector(ShapeFactory.line2DShape(new long[] { 0, 0 }, 0, 0, 0, AxisOrder.NoOrder));
         cachedVector.setStrokeWidth(stick_thickness);
 
         return cachedVector;

@@ -72,7 +72,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
      * Base stick complies with the {@link FIGURE_DIM}
      */
     private IShape _defineBaseStick(int len, int thickness) {
-        return new ShapeFactory().line2DShape(new long[FIGURE_DIM], 0, len, thickness, GaugeFigure.AXIS_ORDER);
+        return ShapeFactory.line2DShape(new long[FIGURE_DIM], 0, len, thickness, GaugeFigure.AXIS_ORDER);
     }
 
     /**

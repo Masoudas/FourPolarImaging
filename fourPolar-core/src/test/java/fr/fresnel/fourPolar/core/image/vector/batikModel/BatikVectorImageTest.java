@@ -219,7 +219,7 @@ public class BatikVectorImageTest {
 
         DummyVector vector = new DummyVector();
         vector.setShape(
-                new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 1, 1 }, AxisOrder.NoOrder));
+                ShapeFactory.closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 1, 1 }, AxisOrder.NoOrder));
 
         assertThrows(IllegalArgumentException.class, () -> {
             vectorImage.addVector(vector);
@@ -233,7 +233,7 @@ public class BatikVectorImageTest {
 
         DummyVector vector = new DummyVector();
         vector.setShape(
-                new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 1 }, AxisOrder.NoOrder));
+                ShapeFactory.closedBox(new long[] { 0, 0 }, new long[] { 1, 1 }, AxisOrder.NoOrder));
 
         vectorImage.addVector(vector);
 
@@ -251,7 +251,7 @@ public class BatikVectorImageTest {
         for (int thirdDim = 0; thirdDim < 3; thirdDim++) {
             DummyVector vector = new DummyVector();
             vector.setShape(
-                    new ShapeFactory().closedBox(new long[] { thirdDim, 0, thirdDim }, new long[] { 4, 4, thirdDim }, AxisOrder.NoOrder));
+                    ShapeFactory.closedBox(new long[] { thirdDim, 0, thirdDim }, new long[] { 4, 4, thirdDim }, AxisOrder.NoOrder));
             vectorImage.addVector(vector);        
         }
 

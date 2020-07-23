@@ -26,7 +26,7 @@ public class ShapeFactoryTest {
     public void closedBox_RectangularBox_ReturnsCorrectPoints() {
         long[] min = { 1, 1, 1 };
         long[] max = { 2, 2, 2 };
-        IShape shape = new ShapeFactory().closedBox(min, max, AxisOrder.XYZ);
+        IShape shape = ShapeFactory.closedBox(min, max, AxisOrder.XYZ);
 
         WritableBox box = GeomMasks.closedBox(new double[] { 1, 1, 1 }, new double[] { 2, 2, 2 });
         IShapeIterator iterator = shape.getIterator();
@@ -41,7 +41,7 @@ public class ShapeFactoryTest {
         long[] x = { 0, 2, 2 };
         long[] y = { 0, 0, 2 };
 
-        IShape shape = new ShapeFactory().closedPolygon2D(x, y);
+        IShape shape = ShapeFactory.closedPolygon2D(x, y);
         Polygon2D polygon2d = GeomMasks.closedPolygon2D(new double[] { 0, 2, 2 }, new double[] { 0, 0, 2 });
 
         IShapeIterator iterator = shape.getIterator();
@@ -50,7 +50,7 @@ public class ShapeFactoryTest {
 
     @Test
     public void isInside_CheckForShapeAndRotatedShape_ReturnsCorrectResult() {
-        IShape shape = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
+        IShape shape = ShapeFactory.closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
         shape.rotate2D(Math.PI / 2);
 
         assertTrue(!shape.isInside(new long[] { 1, 1 }));
@@ -59,8 +59,8 @@ public class ShapeFactoryTest {
 
     @Test
     public void and_AndTwoRectangles_ReturnsAndedShape() {
-        IShape shapeWithin = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 2 }, AxisOrder.XYZ);
-        IShape shapeOutside = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 4, 4, 4 }, AxisOrder.XYZ);
+        IShape shapeWithin = ShapeFactory.closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 2 }, AxisOrder.XYZ);
+        IShape shapeOutside = ShapeFactory.closedBox(new long[] { 0, 0, 0 }, new long[] { 4, 4, 4 }, AxisOrder.XYZ);
 
         shapeWithin.and(shapeOutside);
 
@@ -71,8 +71,8 @@ public class ShapeFactoryTest {
 
     @Test
     public void and_AndBoxWithRectangle_ReturnsRectangle() {
-        IShape box = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 2 }, AxisOrder.XYZ);
-        IShape rectangle = new ShapeFactory().closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 1, 0 }, AxisOrder.XYZ);
+        IShape box = ShapeFactory.closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 2, 2 }, AxisOrder.XYZ);
+        IShape rectangle = ShapeFactory.closedBox(new long[] { 0, 0, 0 }, new long[] { 1, 1, 0 }, AxisOrder.XYZ);
 
         rectangle.and(box);
 
@@ -83,8 +83,8 @@ public class ShapeFactoryTest {
 
     @Test
     public void and_AndTwoNonOverlappingRectangles_IteratorHasNoElements() {
-        IShape shapeWithin = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
-        IShape shapeOutside = new ShapeFactory().closedBox(new long[] { 2, 2 }, new long[] { 4, 4 }, AxisOrder.XY);
+        IShape shapeWithin = ShapeFactory.closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
+        IShape shapeOutside = ShapeFactory.closedBox(new long[] { 2, 2 }, new long[] { 4, 4 }, AxisOrder.XY);
 
         IShape andedShape = shapeWithin.and(shapeOutside);
 
@@ -94,7 +94,7 @@ public class ShapeFactoryTest {
 
     @Test
     public void isInside_LesserDimensionPointThanShapeDim_FalseIsReturned() {
-        IShape shape2D = new ShapeFactory().closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
+        IShape shape2D = ShapeFactory.closedBox(new long[] { 0, 0 }, new long[] { 1, 2 }, AxisOrder.XY);
         assertThrows(IllegalArgumentException.class, ()->{shape2D.isInside(new long[] { 1 });});
     }
 

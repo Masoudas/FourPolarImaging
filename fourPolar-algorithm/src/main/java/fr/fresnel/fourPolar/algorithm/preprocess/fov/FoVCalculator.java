@@ -108,7 +108,7 @@ public class FoVCalculator implements IFoVCalculator {
             long[] pol_fov_min = _minPoints.get(polarization);
             long[] pol_fov_max = _maxPoints.get(polarization);
 
-            IBoxShape pol_fovBox = new ShapeFactory().closedBox(pol_fov_min, pol_fov_max, AxisOrder.XY);
+            IBoxShape pol_fovBox = ShapeFactory.closedBox(pol_fov_min, pol_fov_max, AxisOrder.XY);
             fovBoxes.put(polarization, pol_fovBox);
         }
 

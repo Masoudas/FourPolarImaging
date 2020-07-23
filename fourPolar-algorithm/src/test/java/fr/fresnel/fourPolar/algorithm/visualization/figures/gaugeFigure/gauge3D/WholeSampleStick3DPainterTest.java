@@ -110,7 +110,7 @@ public class WholeSampleStick3DPainterTest {
         int length = 20;
         int thickness = 4;
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
+        IShape entireImageRegion = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1024, 512, 0, 0, 0 }, axisOrder);
 
         IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
@@ -186,7 +186,7 @@ public class WholeSampleStick3DPainterTest {
         int length = 20;
         int thickness = 4;
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
+        IShape entireImageRegion = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1021, 511, 0, 0, 2 }, axisOrder);
 
         IWholeSampleStick3DPainterBuilder builder = new DummyWholeSampleStick3DBuilder(orientationImage, soiImage, cMap,
@@ -273,7 +273,7 @@ public class WholeSampleStick3DPainterTest {
                 thickness, length, new SoftLightColorBlender());
         IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
+        IShape entireImageRegion = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1024, 512, 0, 3, 2 }, axisOrder);
         painter.draw(entireImageRegion, new UINT16(0));
         IGaugeFigure stickFigure = painter.getFigure();
@@ -346,7 +346,7 @@ public class WholeSampleStick3DPainterTest {
                 thickness, length, new SoftLightColorBlender());
         IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
+        IShape entireImageRegion = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1023, 511, 0, 2, 0 }, AxisOrder.XYCZT);
         painter.draw(entireImageRegion, new UINT16(0));
 
@@ -418,7 +418,7 @@ public class WholeSampleStick3DPainterTest {
         IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
 
         // Notice the region is out of image dimensions.
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
+        IShape entireImageRegion = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 2000, 2000, 0, 0, 0 }, axisOrder);
         painter.draw(entireImageRegion, new UINT16(0));
         IGaugeFigure stickFigure = painter.getFigure();
@@ -489,7 +489,7 @@ public class WholeSampleStick3DPainterTest {
                 thickness, length, new SoftLightColorBlender());
         IAngleGaugePainter painter = new WholeSampleStick3DPainter(builder);
 
-        IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
+        IShape entireImageRegion = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
                 new long[] { 1023, 511, 0, 0, 0 }, axisOrder);
         painter.draw(entireImageRegion, new UINT16(0));
         IGaugeFigure stickFigure = painter.getFigure();

@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 public class LineShapeToSVGElementConverterTest {
     @Test
     public void convert_lineFrom00to11_createsLineElementWithX1Y1X2Y2Attrs() {
-        ILineShape lineShape = new ShapeFactory().line2DShape(new long[] { 1, 1 }, Math.PI / 4, 2, 1, AxisOrder.XY);
+        ILineShape lineShape = ShapeFactory.line2DShape(new long[] { 1, 1 }, Math.PI / 4, 2, 1, AxisOrder.XY);
 
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
                 .createDocument(SVGDOMImplementation.SVG_NAMESPACE_URI, "svg", null);
@@ -30,7 +30,7 @@ public class LineShapeToSVGElementConverterTest {
 
     @Test
     public void convert_lineFrom0000to1100_createsLineElementWithX1Y1X2Y2Attrs() {
-        ILineShape lineShape = new ShapeFactory().line2DShape(new long[] { 1, 1, 0, 0 }, Math.PI / 4, 2, 1,
+        ILineShape lineShape = ShapeFactory.line2DShape(new long[] { 1, 1, 0, 0 }, Math.PI / 4, 2, 1,
                 AxisOrder.XYCT);
 
         SVGDocument svgDocument = (SVGDocument) SVGDOMImplementation.getDOMImplementation()
