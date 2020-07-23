@@ -83,23 +83,23 @@ public class ImageJ1LineShape implements ILineShape {
     }
 
     private double[] _calculateStartPoint(double[] position, double slopeAngle, long length) {
-        double slope = Math.tan(slopeAngle);
+        double sinSlopeAngle = Math.sin(slopeAngle);
         double cosSlopeAngle = Math.cos(slopeAngle);
 
         double[] xyStart = new double[2];
-        xyStart[0] = position[0] - cosSlopeAngle * (length / 2d);
-        xyStart[1] = position[1] + (xyStart[0] - position[0]) * slope;
+        xyStart[0] = position[0] - cosSlopeAngle * length / 2d;
+        xyStart[1] = position[1] - sinSlopeAngle * length / 2d;
 
         return xyStart;
     }
 
     private double[] _calculateEndPoint(double[] position, double slopeAngle, long length) {
-        double slope = Math.tan(slopeAngle);
+        double sinSlopeAngle = Math.sin(slopeAngle);
         double cosSlopeAngle = Math.cos(slopeAngle);
 
         double[] xyEnd = new double[2];
-        xyEnd[0] = position[0] + cosSlopeAngle * (length / 2d);
-        xyEnd[1] = position[1] + (xyEnd[0] - position[0]) * slope;
+        xyEnd[0] = position[0] + cosSlopeAngle * length / 2d;
+        xyEnd[1] = position[1] + sinSlopeAngle * length / 2d;
 
         return xyEnd;
     }
