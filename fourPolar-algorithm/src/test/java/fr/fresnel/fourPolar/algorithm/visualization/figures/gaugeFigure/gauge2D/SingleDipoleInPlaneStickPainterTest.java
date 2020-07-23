@@ -139,7 +139,7 @@ public class SingleDipoleInPlaneStickPainterTest {
                 BdvOptions.options().is2D());
 
         // Viewer to show the stick.
-        Bdv bdv1 = BdvFunctions.show(ImageToImgLib2Converter.getImg(painter.getFigure().getImage(), ARGB8.zero()),
+        Bdv bdv1 = BdvFunctions.show(ImageToImgLib2Converter.getImg(((GaugeFigure)painter.getFigure()).getImage(), ARGB8.zero()),
                 "Dipole", BdvOptions.options().is2D());
 
         Behaviours behaviours = new Behaviours(new InputTriggerConfig());
@@ -165,7 +165,7 @@ public class SingleDipoleInPlaneStickPainterTest {
 
         File path = new File(root, stickImageName);
 
-        ImagePlus imp = ImageJFunctions.wrapRGB(ImageToImgLib2Converter.getImg(stickFigure.getImage(), ARGB8.zero()),
+        ImagePlus imp = ImageJFunctions.wrapRGB(ImageToImgLib2Converter.getImg(((GaugeFigure)stickFigure).getImage(), ARGB8.zero()),
                 "RGB");
         FileSaver impSaver = new FileSaver(imp);
         impSaver.saveAsTiff(path.getAbsolutePath());
@@ -293,7 +293,7 @@ class DummySingleDipoleBuilder extends ISingleDipoleStick2DPainterBuilder {
     }
 
     @Override
-    IGaugeFigure getGaugeFigure() {
+    GaugeFigure getGaugeFigure() {
         return GaugeFigure.singleDipoleDelta2DStick(_ratio * _length, _soiImage.channel(), _soiImage.getFileSet(),
                 _soiImage.getImage().getFactory());
     }

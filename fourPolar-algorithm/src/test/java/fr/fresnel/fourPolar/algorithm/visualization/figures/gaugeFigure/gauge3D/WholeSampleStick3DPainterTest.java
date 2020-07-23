@@ -507,8 +507,8 @@ public class WholeSampleStick3DPainterTest {
 
     private void _saveStickFigure(IGaugeFigure stickFigure, String stickImageName) throws ConverterToImgLib2NotFound {
         String root = WholeSampleStick3DPainterTest.class.getResource("").getPath();
-        ImagePlus imp = ImageJFunctions.wrapRGB(ImageToImgLib2Converter.getImg(stickFigure.getImage(), ARGB8.zero()),
-                "RGB");
+        ImagePlus imp = ImageJFunctions
+                .wrapRGB(ImageToImgLib2Converter.getImg(((GaugeFigure) stickFigure).getImage(), ARGB8.zero()), "RGB");
         FileSaver impSaver = new FileSaver(imp);
         File path = new File(root, stickImageName);
         impSaver.saveAsTiff(path.getAbsolutePath());

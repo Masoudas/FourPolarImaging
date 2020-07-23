@@ -86,9 +86,8 @@ public class WholeSampleStick2DPainterTest {
         int thickness = 4;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
-                cMap, thickness, length, new SoftLightColorBlender(), OrientationAngle.rho,
-                OrientationAngle.rho);
+        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage, cMap,
+                thickness, length, new SoftLightColorBlender(), OrientationAngle.rho, OrientationAngle.rho);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape entireImageRegion = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
@@ -213,9 +212,8 @@ public class WholeSampleStick2DPainterTest {
         int thickness = 5;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
-        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
-                cMap, thickness, length, new SoftLightColorBlender(), OrientationAngle.rho,
-                OrientationAngle.eta);
+        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage, cMap,
+                thickness, length, new SoftLightColorBlender(), OrientationAngle.rho, OrientationAngle.eta);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape entireImageRegion = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
@@ -265,9 +263,8 @@ public class WholeSampleStick2DPainterTest {
         int length = 20;
         int thickness = 5;
 
-        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
-                cMap, thickness, length, new SoftLightColorBlender(), OrientationAngle.rho,
-                OrientationAngle.rho);
+        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage, cMap,
+                thickness, length, new SoftLightColorBlender(), OrientationAngle.rho, OrientationAngle.rho);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape entireImageRegion = ShapeFactory.closedBox(new long[] { 0, 0, 0, 0, 0 },
@@ -320,9 +317,8 @@ public class WholeSampleStick2DPainterTest {
         int length = 20;
         int thickness = 5;
 
-        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
-                cMap, thickness, length, new SoftLightColorBlender(), OrientationAngle.rho,
-                OrientationAngle.eta);
+        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage, cMap,
+                thickness, length, new SoftLightColorBlender(), OrientationAngle.rho, OrientationAngle.eta);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape smallerRegionOfImage1 = ShapeFactory.closedPolygon2D(new long[] { 100, 500, 400, 300, 200 },
@@ -363,8 +359,8 @@ public class WholeSampleStick2DPainterTest {
         File root = new File(WholeSampleStick2DPainterTest.class.getResource("").getPath(), "/WholeSample");
         root.mkdir();
 
-        ImagePlus imp = ImageJFunctions.wrapRGB(ImageToImgLib2Converter.getImg(stickFigure.getImage(), ARGB8.zero()),
-                "RGB");
+        ImagePlus imp = ImageJFunctions
+                .wrapRGB(ImageToImgLib2Converter.getImg(((GaugeFigure) stickFigure).getImage(), ARGB8.zero()), "RGB");
         FileSaver impSaver = new FileSaver(imp);
         impSaver.saveAsTiff(new File(root, stickImageName).getAbsolutePath());
     }
@@ -478,7 +474,7 @@ class DummyWholeSampleBuilder extends IWholeSampleStick2DPainterBuilder {
     }
 
     @Override
-    IGaugeFigure getGauageFigure() {
+    GaugeFigure getGauageFigure() {
         if (slopeAngle == OrientationAngle.rho && colorAngle == OrientationAngle.rho) {
             return GaugeFigure.wholeSampleRho2DStick(_soiImage);
         } else if (slopeAngle == OrientationAngle.rho && colorAngle == OrientationAngle.delta) {
