@@ -67,11 +67,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     }
 
     private void _addSoIToFigureBackground(ISoIImage soiImage) {
-        try {
-            GrayScaleToColorConverter.colorUsingMaxEachPlane(soiImage.getImage(), this._stick2DFigure.getImage());
-        } catch (ConverterToImgLib2NotFound e) {
-            // This exception will be removed.
-        }
+        GrayScaleToColorConverter.colorUsingMaxEachPlane(soiImage.getImage(), this._stick2DFigure.getImage());
     }
 
     private IShape _getImageBoundaryAsShape(Image<?> image) {
@@ -169,7 +165,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
      * @param orientationVector is the orientation vector at the position
      */
     private IShape _transformStick(long[] position, IOrientationVector orientationVector) {
-        IShape transformedStick = this._baseStick.rotate2D(-orientationVector.getAngle(_slopeAngle));
+        IShape transformedStick = this._baseStick.rotate2D(Math.PI - orientationVector.getAngle(_slopeAngle));
         return transformedStick.translate(position.clone());
     }
 
