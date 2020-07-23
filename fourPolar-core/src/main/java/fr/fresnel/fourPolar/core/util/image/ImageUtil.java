@@ -80,7 +80,7 @@ public class ImageUtil {
      * dimension minus one. The axis order of the box shape is the same as the
      * image.
      * 
-     * @param is the image.
+     * @param image is the image.
      * @return the boundary of this image as a box shape.
      */
     public static <T extends PixelType> IBoxShape getBoundaryAsBox(Image<T> image) {
