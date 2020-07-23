@@ -149,13 +149,18 @@ public class ImageJ1LineShape implements ILineShape {
 
     @Override
     public boolean isInside(long[] point) {
-        if (point.length != this._position.length) {
-            return false;
-        }
-
-        boolean containsXyPoint = _line.containsPoint(point[0], point[0]);
-        boolean higherDimensionsEqual = IntStream.range(2, point.length).allMatch(dim -> point[dim] == _position[dim]);
-        return containsXyPoint && higherDimensionsEqual;
+        /**
+         * If needed to implement this in the future, think about the case where line has a thickness too.
+         * The contains method of Line does not work at all!
+         */
+        // if (point.length != this._position.length) {
+        //     return false;
+        // }
+        //  x>=this.x && y>=this.y && x<this.x+width && y<this.y+height;
+        // boolean containsXyPoint = _line.containsPoint(point[0], point[0]);
+        // boolean higherDimensionsEqual = IntStream.range(2, point.length).allMatch(dim -> point[dim] == _position[dim]);
+        // return containsXyPoint && higherDimensionsEqual;
+        throw new UnsupportedOperationException("This operation is not supported for this shape");
     }
 
     @Override
