@@ -214,7 +214,7 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
     }
 
     @Override
-    IGaugeFigure getGaugeFigure() {
+    GaugeFigure getGaugeFigure() {
         return this._gaugeFigure;
     }
 

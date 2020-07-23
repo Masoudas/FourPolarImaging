@@ -1,7 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D;
 
 import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter;
-import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
@@ -48,7 +47,7 @@ class WholeSampleStick2DPainter implements IAngleGaugePainter {
     public WholeSampleStick2DPainter(IWholeSampleStick2DPainterBuilder builder) {
         this._soiRA = builder.getSoIImage().getImage().getRandomAccess();
 
-        this._stick2DFigure = (GaugeFigure) builder.getGauageFigure();
+        this._stick2DFigure = builder.getGauageFigure();
         _addSoIToFigureBackground(builder.getSoIImage());
 
         this._orientationRA = builder.getOrientationImage().getRandomAccess();

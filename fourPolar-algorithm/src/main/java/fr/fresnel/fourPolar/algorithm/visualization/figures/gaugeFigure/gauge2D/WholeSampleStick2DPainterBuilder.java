@@ -257,7 +257,7 @@ public class WholeSampleStick2DPainterBuilder extends IWholeSampleStick2DPainter
     }
 
     @Override
-    IGaugeFigure getGauageFigure() {
+    GaugeFigure getGauageFigure() {
         return this._gaugeFigure;
     }
 

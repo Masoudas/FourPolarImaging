@@ -5,7 +5,7 @@ import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 
 /**
  * A simple private interface for accessing the parameters of the builder.
@@ -21,7 +21,7 @@ abstract class IWholeSampleStick2DPainterBuilder {
 
     abstract int getStickThickness();
 
-    abstract IGaugeFigure getGauageFigure();
+    abstract GaugeFigure getGauageFigure();
 
     abstract ColorBlender getColorBlender();
 
