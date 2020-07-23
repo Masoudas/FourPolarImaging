@@ -19,6 +19,7 @@ import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.util.shape.Rotation3DOrder;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 
@@ -27,7 +28,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleG
  * {@link WholeSampleStick3DPainterBuilder}.
  */
 class WholeSampleStick3DPainter implements IAngleGaugePainter {
-    final private IGaugeFigure _stick3DFigure;
+    final private GaugeFigure _stick3DFigure;
     final private IPixelRandomAccess<ARGB8> _stick3DFigureRA;
     final private IOrientationImageRandomAccess _orientationRA;
     final private IPixelRandomAccess<UINT16> _soiRA;
