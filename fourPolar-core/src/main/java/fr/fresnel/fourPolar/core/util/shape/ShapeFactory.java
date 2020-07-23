@@ -5,6 +5,10 @@ import java.util.Arrays;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 
 public class ShapeFactory {
+    private ShapeFactory() {
+        throw new AssertionError();
+    }
+
     /**
      * Generates a box from min to max. The box is closed in the sense that it
      * contains the boundary. Note min and max and axisOrder must have the same
@@ -18,7 +22,7 @@ public class ShapeFactory {
      * @throws IllegalArgumentException for any violation of conditions mentioned
      *                                  above.
      */
-    public IBoxShape closedBox(long[] min, long[] max, AxisOrder axisOrder) {
+    public static IBoxShape closedBox(long[] min, long[] max, AxisOrder axisOrder) {
         return ImgLib2BoxShape.create(min, max, axisOrder);
     }
 
@@ -33,11 +37,11 @@ public class ShapeFactory {
      * @throws IllegalArgument exception if at least three points are not supplied.
      * @return
      */
-    public IPolygon2DShape closedPolygon2D(long[] x, long[] y) {
+    public static IPolygon2DShape closedPolygon2D(long[] x, long[] y) {
         return ImgLib2Polygon2DShape.create(x, y);
     }
 
-    public IPointShape point(long[] point, AxisOrder axisOrder) {
+    public static IPointShape point(long[] point, AxisOrder axisOrder) {
         return ImgLib2PointShape.create(point, axisOrder);
     }
 
@@ -55,7 +59,7 @@ public class ShapeFactory {
      * @param axisOrder  is the axis order associated with position.
      * 
      */
-    public ILineShape line2DShape(long[] position, double slopeAngle, long length, int thickness, AxisOrder axisOrder) {
+    public static ILineShape line2DShape(long[] position, double slopeAngle, long length, int thickness, AxisOrder axisOrder) {
         double[] positionAsDouble = Arrays.stream(position).mapToDouble(t -> t).toArray();
         return ImageJ1LineShape.create(positionAsDouble, slopeAngle, length, thickness, axisOrder);
     }
