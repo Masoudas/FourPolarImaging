@@ -35,6 +35,7 @@ import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 import ij.ImagePlus;
@@ -284,7 +285,8 @@ public class WholeSampleStick3DPainterTest {
     }
 
     /**
-     * The figure generated is a straight line regardless of rho and delta values for all z values.
+     * The figure generated is a straight line regardless of rho and delta values
+     * for all z values.
      * 
      * @throws InterruptedException
      */
@@ -548,7 +550,7 @@ class DummyWholeSample3DFileSet implements ICapturedImageFileSet {
 
     @Override
     public int[] getChannels() {
-        return new int[]{1};
+        return new int[] { 1 };
     }
 
 }
@@ -600,6 +602,11 @@ class DummyWholeSampleStick3DBuilder extends IWholeSampleStick3DPainterBuilder {
     @Override
     ColorBlender getColorBlender() {
         return this._blender;
+    }
+
+    @Override
+    GaugeFigure getGaugeFigure() {
+        return GaugeFigure.wholeSample3DStick(_soiImage, _length);
     }
 
 }
