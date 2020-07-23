@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D.vectorModel;
 
+import java.util.Optional;
+
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
@@ -20,6 +22,7 @@ import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.vectorFigure.VectorGaugeFigure;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.vectorFigure.animation.OrientationAnimationCreator;
 
 class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
     private final VectorGaugeFigure _figure;
@@ -32,6 +35,7 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
     private final OrientationAngle _colorAngle;
     private final double _maxColorAngle;
 
+    private final Optional<OrientationAnimationCreator> _animCreator;
     private final ColorMap _colormap;
     private final long _stick_len;
 
@@ -47,6 +51,7 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
         this._soiImageRegion = this._getImageBoundaryAsShape(builder.getSoIImage().getImage());
 
         this._colormap = builder.getColorMap();
+        this._animCreator = builder.getAnimationCreator();
 
         this._slopeAngle = builder.getSlopeAngle();
         this._colorAngle = builder.getColorAngle();
@@ -62,8 +67,8 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
      *         stick.
      */
     private Vector _createCachedVector(int stick_thickness) {
-        Vector cachedVector = Vector
-                .createLineVector(ShapeFactory.line2DShape(new long[] { 0, 0 }, 0, 0, 0, AxisOrder.NoOrder));
+        ILineShape cachedDummyShape = ShapeFactory.line2DShape(new long[] { 0, 0 }, 0, 0, 0, AxisOrder.NoOrder);
+        Vector cachedVector = Vector.createLineVector(cachedDummyShape);
         cachedVector.setStrokeWidth(stick_thickness);
 
         return cachedVector;
@@ -102,15 +107,6 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
         return this._soiImageRegion.isInside(regionPosition);
     }
 
-    /**
-     * Draw the stick for the given orientation vector on the corresponding
-     * position.
-     */
-    private void _drawStick(IOrientationVector orientationVector, long[] dipolePosition) {
-        Vector dipoleStick = _generateDipoleStickUsingCachedVector(dipolePosition, orientationVector);
-        _figure.getVectorImage().addVector(dipoleStick);
-    }
-
     private IOrientationVector _getOrientationVector(long[] stickCenterPosition) {
         this._orientationRA.setPosition(stickCenterPosition);
         return this._orientationRA.getOrientation();
@@ -127,6 +123,15 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
     }
 
     /**
+     * Draw the stick for the given orientation vector on the corresponding
+     * position.
+     */
+    private void _drawStick(IOrientationVector orientationVector, long[] dipolePosition) {
+        Vector dipoleStick = _generateDipoleStickUsingCachedVector(dipolePosition, orientationVector);
+        _figure.getVectorImage().addVector(dipoleStick);
+    }
+
+    /**
      * Generate a stick that corresponds to the dipole position and the slope angle
      * using the cached vector.
      * 
@@ -138,12 +143,12 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
         ARGB8 stickColor = _getStickColor(orientationVector);
 
         // The thickness parameter is set by vector stroke with, hence irrelevant here.
-        ILineShape lineShape = _cachedShapeFactroy.line2DShape(position, orientationVector.getAngle(_slopeAngle),
-                _stick_len, 1, IGaugeFigure.AXIS_ORDER);
-        _cachedVector.setShape(lineShape);
+        ILineShape stickShape = ShapeFactory.line2DShape(position, orientationVector.getAngle(_slopeAngle), _stick_len,
+                1, IGaugeFigure.AXIS_ORDER);
+        _cachedVector.setShape(stickShape);
         _cachedVector.setColor(stickColor);
         _cachedVector.setFill(stickColor);
-
+        _animCreator.ifPresent(animCreator -> _cachedVector.setAnimation(animCreator.create(orientationVector)));
         return _cachedVector;
     }
 
