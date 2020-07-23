@@ -21,8 +21,8 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.ColorBlender;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.SoftLightColorBlender;
@@ -31,20 +31,21 @@ import fr.fresnel.fourPolar.core.image.orientation.OrientationImageFactory;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.image.soi.SoIImage;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
+import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMapFactory;
 import fr.fresnel.fourPolar.core.util.shape.IShape;
 import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.util.shape.util.ShapeUtils;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 import ij.ImagePlus;
 import ij.io.FileSaver;
 import io.scif.img.ImgSaver;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 
-public class WholeSampleStick2DPainterBuilderTest {
+public class WholeSampleStick2DPainterTest {
     @Test
     public void rho2DStick_5DImageRhoChangesFrom0to180_GeneratesProperImage()
             throws CannotFormOrientationImage, ConverterToImgLib2NotFound, InterruptedException {
@@ -79,15 +80,15 @@ public class WholeSampleStick2DPainterBuilderTest {
         }
 
         IOrientationImage orientationImage = OrientationImageFactory.create(fileSet, 1, rhoImage, deltaImage, etaImage);
-        Image<UINT16> soi = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
-        ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
+        ISoIImage soiImage = _createSoIImage(metadata, fileSet);
 
         int length = 40;
         int thickness = 4;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
         IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D, cMap, thickness, length, new SoftLightColorBlender());
+                cMap, thickness, length, new SoftLightColorBlender(), OrientationAngle.rho,
+                OrientationAngle.rho);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
@@ -141,15 +142,14 @@ public class WholeSampleStick2DPainterBuilderTest {
         }
 
         IOrientationImage orientationImage = OrientationImageFactory.create(fileSet, 1, rhoImage, deltaImage, etaImage);
-        Image<UINT16> soi = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
-        ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
+        ISoIImage soiImage = _createSoIImage(metadata, fileSet);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
         int length = 20;
         int thickness = 2;
 
-        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
-                AngleGaugeType.Delta2D, cMap, thickness, length, new SoftLightColorBlender());
+        IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage, cMap,
+                thickness, length, new SoftLightColorBlender(), OrientationAngle.rho, OrientationAngle.delta);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
@@ -207,15 +207,15 @@ public class WholeSampleStick2DPainterBuilderTest {
 
         IOrientationImage orientationImage = OrientationImageFactory.create(fileSet, 1, rhoImage, deltaImage, etaImage);
 
-        Image<UINT16> soi = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
-        ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
+        ISoIImage soiImage = _createSoIImage(metadata, fileSet);
 
         int length = 20;
         int thickness = 5;
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
 
         IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D, cMap, thickness, length, new SoftLightColorBlender());
+                cMap, thickness, length, new SoftLightColorBlender(), OrientationAngle.rho,
+                OrientationAngle.eta);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
@@ -259,15 +259,15 @@ public class WholeSampleStick2DPainterBuilderTest {
         setPixel(ra, new long[] { 5, 295, 0, 0, 0 }, new Float32((float) Math.toRadians(0)));
 
         IOrientationImage orientationImage = OrientationImageFactory.create(fileSet, 1, rhoImage, deltaImage, etaImage);
-        Image<UINT16> soi = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
-        ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
+        ISoIImage soiImage = _createSoIImage(metadata, fileSet);
 
         ColorMap cMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_PHASE);
         int length = 20;
         int thickness = 5;
 
         IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D, cMap, thickness, length, new SoftLightColorBlender());
+                cMap, thickness, length, new SoftLightColorBlender(), OrientationAngle.rho,
+                OrientationAngle.rho);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape entireImageRegion = new ShapeFactory().closedBox(new long[] { 0, 0, 0, 0, 0 },
@@ -321,7 +321,8 @@ public class WholeSampleStick2DPainterBuilderTest {
         int thickness = 5;
 
         IWholeSampleStick2DPainterBuilder builder = new DummyWholeSampleBuilder(orientationImage, soiImage,
-                AngleGaugeType.Rho2D, cMap, thickness, length, new SoftLightColorBlender());
+                cMap, thickness, length, new SoftLightColorBlender(), OrientationAngle.rho,
+                OrientationAngle.eta);
         IAngleGaugePainter painter = new WholeSampleStick2DPainter(builder);
 
         IShape smallerRegionOfImage1 = new ShapeFactory().closedPolygon2D(new long[] { 100, 500, 400, 300, 200 },
@@ -352,20 +353,32 @@ public class WholeSampleStick2DPainterBuilderTest {
 
     private void _saveAngleFigure(Image<Float32> angleImage, String angleImageName) throws ConverterToImgLib2NotFound {
         ImgSaver saver = new ImgSaver();
-        String root = WholeSampleStick2DPainterBuilderTest.class.getResource("").getPath();
+        String root = WholeSampleStick2DPainterTest.class.getResource("").getPath();
         saver.saveImg(new File(root, angleImageName).getPath(),
                 ImageToImgLib2Converter.getImg(angleImage, Float32.zero()));
 
     }
 
     private void _saveStickFigure(IGaugeFigure stickFigure, String stickImageName) throws ConverterToImgLib2NotFound {
-        File root = new File(WholeSampleStick2DPainterBuilderTest.class.getResource("").getPath(), "/WholeSample");
+        File root = new File(WholeSampleStick2DPainterTest.class.getResource("").getPath(), "/WholeSample");
         root.mkdir();
 
         ImagePlus imp = ImageJFunctions.wrapRGB(ImageToImgLib2Converter.getImg(stickFigure.getImage(), ARGB8.zero()),
                 "RGB");
         FileSaver impSaver = new FileSaver(imp);
         impSaver.saveAsTiff(new File(root, stickImageName).getAbsolutePath());
+    }
+
+    private ISoIImage _createSoIImage(IMetadata metadata, ICapturedImageFileSet fileSet) {
+        Image<UINT16> soi = new ImgLib2ImageFactory().create(metadata, UINT16.zero());
+        for (IPixelCursor<UINT16> cursor = soi.getCursor(); cursor.hasNext();) {
+            IPixel<UINT16> pixel = cursor.next();
+            pixel.value().set((int) cursor.localize()[0]);
+            cursor.setPixel(pixel);
+        }
+
+        ISoIImage soiImage = SoIImage.create(fileSet, soi, 1);
+        return soiImage;
     }
 
 }
@@ -412,7 +425,9 @@ class DummyWholeSampleFileSet implements ICapturedImageFileSet {
 class DummyWholeSampleBuilder extends IWholeSampleStick2DPainterBuilder {
     private final IOrientationImage _orientationImage;
     private final ISoIImage _soiImage;
-    private final AngleGaugeType _gaugeType;
+
+    OrientationAngle slopeAngle;
+    OrientationAngle colorAngle;
 
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
@@ -444,25 +459,45 @@ class DummyWholeSampleBuilder extends IWholeSampleStick2DPainterBuilder {
         return this._thickness;
     }
 
-    public DummyWholeSampleBuilder(IOrientationImage _orientationImage, ISoIImage _soiImage, AngleGaugeType _gaugeType,
-            ColorMap _colorMap, int _thickness, int _length, ColorBlender blender) {
+    public DummyWholeSampleBuilder(IOrientationImage _orientationImage, ISoIImage _soiImage, ColorMap _colorMap,
+            int _thickness, int _length, ColorBlender blender, OrientationAngle slopeAngle,
+            OrientationAngle colorAngle) {
         this._orientationImage = _orientationImage;
         this._soiImage = _soiImage;
-        this._gaugeType = _gaugeType;
         this._colorMap = _colorMap;
         this._thickness = _thickness;
         this._length = _length;
         this._blender = blender;
-    }
-
-    @Override
-    AngleGaugeType getAngleGaugeType() {
-        return this._gaugeType;
+        this.slopeAngle = slopeAngle;
+        this.colorAngle = colorAngle;
     }
 
     @Override
     ColorBlender getColorBlender() {
         return this._blender;
+    }
+
+    @Override
+    IGaugeFigure getGauageFigure() {
+        if (slopeAngle == OrientationAngle.rho && colorAngle == OrientationAngle.rho) {
+            return GaugeFigure.wholeSampleRho2DStick(_soiImage);
+        } else if (slopeAngle == OrientationAngle.rho && colorAngle == OrientationAngle.delta) {
+            return GaugeFigure.wholeSampleDelta2DStick(_soiImage);
+        } else if (slopeAngle == OrientationAngle.rho && colorAngle == OrientationAngle.eta) {
+            return GaugeFigure.wholeSampleEta2DStick(_soiImage);
+        }
+
+        return null;
+    }
+
+    @Override
+    OrientationAngle getSlopeAngle() {
+        return slopeAngle;
+    }
+
+    @Override
+    OrientationAngle getColorAngle() {
+        return colorAngle;
     }
 
 }
