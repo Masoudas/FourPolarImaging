@@ -57,7 +57,7 @@ class MaxPlaneGrayScaleToColorConverter {
      * @param srcImg  is the source gray scale image.
      * @param destImg is the destination color image to be filled.
      * 
-     * @throws IllegalArgumentException of the images don't have the same dimension.
+     * @throws IllegalArgumentException if the images don't have the same dimension.
      */
     public static <T extends RealType> void convert(final Image<T> srcImg, Image<ARGB8> destImg) {
         Objects.requireNonNull(srcImg, "grayImage cannot be null");
