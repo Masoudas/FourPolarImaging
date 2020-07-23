@@ -50,7 +50,7 @@ public class Float32 implements RealType {
      * 
      * @param pixel
      */
-    public void subtract(UINT16 pixel) {
+    public void subtract(Float32 pixel) {
         this.set(this.get() - pixel.get());
     }
 
