@@ -119,7 +119,7 @@ class ImgLib2Shape implements IShape {
                     "Translation must occur over all axis. Consider using zero for undesired axis.");
         }
 
-        return this._transformShape(this._createAffineTranslation(translation, this._shapeDim));
+        return this._transformShape(this._createAffineTranslation(translation));
     }
 
     @Override
@@ -142,7 +142,7 @@ class ImgLib2Shape implements IShape {
         AffineTransform2D affine2D = new AffineTransform2D();
         affine2D.rotate(-angle);
 
-        AffineTransform fTransform = new AffineTransform(this._shapeDim);
+        AffineTransform fTransform = new AffineTransform(this.spaceDim());
         for (int row = 0; row < 2; row++) {
             for (int column = 0; column < 2; column++) {
                 fTransform.set(affine2D.get(row, column), row, column);
@@ -162,7 +162,7 @@ class ImgLib2Shape implements IShape {
         affine3D.rotate(axis[0], -angle1);
 
         int[] rowsToFill = { 0, 1, z_axis }; // Row, columns to be filled in the affine transform.
-        AffineTransform fTransform = new AffineTransform(this._shapeDim);
+        AffineTransform fTransform = new AffineTransform(this.spaceDim());
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
                 fTransform.set(affine3D.get(row, column), rowsToFill[row], rowsToFill[column]);
@@ -171,11 +171,13 @@ class ImgLib2Shape implements IShape {
         return fTransform;
     }
 
-    private AffineTransform _createAffineTranslation(long[] translation, int numAxis) {
-        AffineTransform fTransform = new AffineTransform(numAxis);
+    private AffineTransform _createAffineTranslation(long[] translation) {
+        int spaceDim = spaceDim();
+
+        AffineTransform fTransform = new AffineTransform(spaceDim);
         // Set translation
-        for (int row = 0; row < numAxis; row++) {
-            fTransform.set(-translation[row], row, numAxis);
+        for (int row = 0; row < spaceDim; row++) {
+            fTransform.set(-translation[row], row, spaceDim);
         }
         return fTransform;
     }
