@@ -28,13 +28,6 @@ public interface IGaugeFigure {
     public GaugeFigureLocalization getFigureType();
 
     /**
-     * Returns the underlying {@link Image}.
-     * 
-     * @return
-     */
-    public Image<ARGB8> getImage();
-
-    /**
      * Returns the {@link ICapturedImageFileSet} this figure corresponds to.
      */
     public ICapturedImageFileSet getFileSet();
