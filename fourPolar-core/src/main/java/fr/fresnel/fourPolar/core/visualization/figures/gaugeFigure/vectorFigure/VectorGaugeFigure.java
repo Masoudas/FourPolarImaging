@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure;
+package fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.vectorFigure;
 
 import java.util.Objects;
 
@@ -9,8 +9,17 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.image.vector.VectorImage;
 import fr.fresnel.fourPolar.core.image.vector.VectorImageFactory;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 
+/**
+ * A concrete implementation of {@link IGaugeFigure} that uses
+ * {@link VectorImage} as its backend.
+ * <p>
+ * Note that regardless of the form of gauge figure, the underlying image is
+ * always equivalent to {@link ISoIImage#AXIS_ORDER}.
+ */
 public class VectorGaugeFigure implements IGaugeFigure {
     private final VectorImage _image;
     private final AngleGaugeType _type;
@@ -43,7 +52,7 @@ public class VectorGaugeFigure implements IGaugeFigure {
     }
 
     /**
-     * Creates a figure instance for representing {@link AngleGaugeType#Eta2D}. 
+     * Creates a figure instance for representing {@link AngleGaugeType#Eta2D}.
      * 
      * @param soiImage is the soi image for which we want to create this gauge
      *                 figure.
