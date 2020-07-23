@@ -2,7 +2,6 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge3D
 
 import java.util.Objects;
 
-import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.ColorBlender;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.color.SoftLightColorBlender;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
