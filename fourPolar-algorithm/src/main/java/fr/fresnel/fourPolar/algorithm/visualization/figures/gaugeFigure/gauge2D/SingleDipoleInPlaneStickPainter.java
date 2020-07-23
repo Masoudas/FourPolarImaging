@@ -48,7 +48,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
     private final IShape _orientationImageBoundary;
 
-    private final long[] _stickTranslation;
+    private final long[] _centerOfFigure;
 
     public SingleDipoleInPlaneStickPainter(ISingleDipoleStick2DPainterBuilder builder) {
         this._dipoleFigure = (GaugeFigure) builder.getGaugeFigure();
@@ -65,7 +65,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
 
         this._orientationImageBoundary = this._getOrientationImageBoundary(builder.getOrientationImage());
 
-        this._stickTranslation = this._setStickTranslationToDipoleCenterPosition();
+        this._centerOfFigure = this._getCenterOfGaugeFigure();
     }
 
     /**
@@ -88,7 +88,7 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
      * 
      * @return
      */
-    private long[] _setStickTranslationToDipoleCenterPosition() {
+    private long[] _getCenterOfGaugeFigure() {
         long[] centerOfDipoleFigure = new long[FIGURE_DIM];
         centerOfDipoleFigure[0] = this._dipoleFigure.getImage().getMetadata().getDim()[0] / 2;
         centerOfDipoleFigure[1] = this._dipoleFigure.getImage().getMetadata().getDim()[1] / 2;
@@ -120,20 +120,13 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
             final Pixel<ARGB8> pixelColor = this._getStickColor(orientationVector);
             IPixelRandomAccess<ARGB8> stickFigureRA = this._dipoleFigure.getImage().getRandomAccess();
 
-            IShapeIterator stickIterator = _createStickIteratorForThisDipole(dipolePosition, orientationVector);
-            for (; stickIterator.hasNext();) {
+            IShape transformedStick = _transformBaseStick(orientationVector);
+            for (IShapeIterator stickIterator = transformedStick.getIterator(); stickIterator.hasNext();) {
                 long[] stickPosition = stickIterator.next();
                 stickFigureRA.setPosition(stickPosition);
                 stickFigureRA.setPixel(pixelColor);
             }
         }
-    }
-
-    private IShapeIterator _createStickIteratorForThisDipole(long[] dipolePosition,
-            final IOrientationVector orientationVector) {
-        IShape transformedShape = _transformStick(dipolePosition, orientationVector);
-        IShapeIterator stickIterator = transformedShape.getIterator();
-        return stickIterator;
     }
 
     @Override
@@ -152,9 +145,9 @@ class SingleDipoleInPlaneStickPainter implements IAngleGaugePainter {
                 && !Double.isNaN(orientationVector.getAngle(_colorAngle));
     }
 
-    private IShape _transformStick(long[] position, IOrientationVector orientationVector) {
-        IShape transformedShape = this._baseStick.rotate2D(Math.PI / 2 + orientationVector.getAngle(_slopeAngle));
-        return transformedShape.translate(this._stickTranslation);
+    private IShape _transformBaseStick(IOrientationVector orientationVector) {
+        IShape transformedShape = this._baseStick.rotate2D(Math.PI - orientationVector.getAngle(_slopeAngle));
+        return transformedShape.translate(this._centerOfFigure);
     }
 
     /**
