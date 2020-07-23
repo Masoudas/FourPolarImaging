@@ -37,13 +37,6 @@
       <version>${project.version}</version>
     </dependency>
 
-    <!-- Dependency on algorithm module -->
-    <dependency>
-      <groupId>fr.fresnel.fourPolar</groupId>
-      <artifactId>fourPolar-algorithm</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
     <!-- Yaml IO-->
     <dependency>
       <groupId>com.fasterxml.jackson.dataformat</groupId>
