@@ -28,7 +28,7 @@ public interface Vector {
      * Creates a concrete vector that has a box shape, with all other properties
      * set to null.
      * 
-     * @param boxShape is the line shape.
+     * @param boxShape is the box shape.
      * @return a concrete vector.
      */
     public static Vector createBoxVector(IBoxShape boxShape) {
