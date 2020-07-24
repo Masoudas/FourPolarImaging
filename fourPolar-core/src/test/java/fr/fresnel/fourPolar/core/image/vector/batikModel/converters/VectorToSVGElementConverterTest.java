@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.core.image.vector.batikModel.converters;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -64,7 +65,7 @@ public class VectorToSVGElementConverterTest {
         assertTrue(lineNodes.getLength() == 1);
 
         Element vectorElement = (Element) lineNodes.item(0);
-        assertTrue(vectorElement.getAttributeNS(namespaceURI, _STROKE_ATTR).equals(_getRGBColorAsString(color)));
+        assertTrue(vectorElement.getAttributeNS(null, _STROKE_ATTR).equals(_getRGBColorAsString(color)));
     }
 
     @Test
@@ -85,7 +86,7 @@ public class VectorToSVGElementConverterTest {
         assertTrue(lineNodes.getLength() == 1);
 
         Element vectorElement = (Element) lineNodes.item(0);
-        assertTrue(vectorElement.getAttributeNS(namespaceURI, _FILL_ATTR).equals(_getRGBColorAsString(fillColor)));
+        assertTrue(vectorElement.getAttributeNS(null, _FILL_ATTR).equals(_getRGBColorAsString(fillColor)));
     }
 
     @Test
@@ -106,7 +107,7 @@ public class VectorToSVGElementConverterTest {
         assertTrue(lineNodes.getLength() == 1);
 
         Element vectorElement = (Element) lineNodes.item(0);
-        assertTrue(vectorElement.getAttributeNS(namespaceURI, _OPACITY_ATTR).equals(String.valueOf(4 / 255f)));
+        assertTrue(vectorElement.getAttributeNS(null, _OPACITY_ATTR).equals(new DecimalFormat("#.##").format(4 / 255f)));
     }
 
     @Test
@@ -127,7 +128,7 @@ public class VectorToSVGElementConverterTest {
         assertTrue(lineNodes.getLength() == 1);
 
         Element vectorElement = (Element) lineNodes.item(0);
-        assertTrue(vectorElement.getAttributeNS(namespaceURI, _STROKE_WIDTH_ATTR).equals(String.valueOf(strokeWidth)));
+        assertTrue(vectorElement.getAttributeNS(null, _STROKE_WIDTH_ATTR).equals(String.valueOf(strokeWidth)));
     }
 
     @Test
@@ -150,7 +151,7 @@ public class VectorToSVGElementConverterTest {
         assertTrue(lineNodes.getLength() == 1);
 
         Element vectorElement = (Element) lineNodes.item(0);
-        assertTrue(vectorElement.getAttributeNS(namespaceURI, _FILTER_ATTR).equals(_getFilterURL(id)));
+        assertTrue(vectorElement.getAttributeNS(null, _FILTER_ATTR).equals(_getFilterURL(id)));
     }
 
     private String _getRGBColorAsString(ARGB8 color) {
@@ -218,6 +219,16 @@ class Dummy2DLineShape implements ILineShape {
     @Override
     public int spaceDim() {
         return 2;
+    }
+
+    @Override
+    public double[] lineStartAsDouble() {
+        return new double[] { 0, 0 };
+    }
+
+    @Override
+    public double[] lineEndAsDouble() {
+        return new double[] { 1, 1 };
     }
 }
 
