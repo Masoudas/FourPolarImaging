@@ -40,6 +40,7 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
     private final ColorMap _colormap;
     private final long _stick_len;
     private final Optional<FilterComposite> _colorBlender;
+    private final ARGB8 _stickTransparency;
 
     private final Vector _cachedVector;
 
@@ -59,6 +60,7 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
         this._colorAngle = builder.getColorAngle();
         this._maxColorAngle = OrientationVector.maxAngle(_colorAngle);
         this._colorBlender = builder.getColorBlender();
+        this._stickTransparency = builder.getStickTransparency();
 
         this._stick_len = builder.getSticklength();
         this._cachedVector = _createCachedVector(builder.getStickThickness());
@@ -159,7 +161,7 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
 
     private ARGB8 _getStickColor(IOrientationVector orientationVector) {
         ARGB8 stickColor = this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
-        stickColor.setAlpha(125);
+        stickColor.setAlpha(_stickTransparency.getAlpha());
         return stickColor;
     }
 

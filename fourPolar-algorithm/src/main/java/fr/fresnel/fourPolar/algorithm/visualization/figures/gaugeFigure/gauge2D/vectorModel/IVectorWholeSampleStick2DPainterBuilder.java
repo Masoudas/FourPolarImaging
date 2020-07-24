@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D
 
 import java.util.Optional;
 
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
@@ -27,6 +28,8 @@ abstract class IVectorWholeSampleStick2DPainterBuilder {
     abstract VectorGaugeFigure getGauageFigure();
 
     abstract Optional<FilterComposite> getColorBlender();
+
+    abstract ARGB8 getStickTransparency();
 
     abstract OrientationAngle getSlopeAngle();
 
