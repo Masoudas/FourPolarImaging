@@ -40,6 +40,7 @@ public class ColorMapFactory {
     public static final String IMAGEJ_UNIONJACK = "NCSA PalEdit/unionjack.lut";
     public static final String IMAGEJ_GREEN_FIRE_BLUE = "WCIF/Green Fire Blue.lut";
     public static final String IMAGEJ_RED = "Red.lut";
+    public static final String DISK_STRONG_RED = "strong_red.lut";
     public static final String IMAGEJ_6_SHADES = "NCSA PalEdit/6_shades.lut";
     public static final String IMAGEJ_YELLOW_HOT = "WCIF/Yellow Hot.lut";
     public static final String IMAGEJ_JET = "jet.lut";
@@ -198,9 +199,13 @@ public class ColorMapFactory {
             case (IMAGEJ_YELLOW_HOT):
                 cMap = ImageJColorMap.getDefaultColorMaps(IMAGEJ_YELLOW_HOT);
                 break;
-            
+
             case (IMAGEJ_JET):
                 cMap = ImageJColorMap.getDiskColorMap(IMAGEJ_JET);
+                break;
+
+            case (DISK_STRONG_RED):
+                cMap = ImageJColorMap.getDiskColorMap(DISK_STRONG_RED);
                 break;
 
             default:
