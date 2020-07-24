@@ -7,13 +7,13 @@ import java.util.EnumSet;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import fr.fresnel.fourPolar.algorithm.util.image.axis.AxisReassigner;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.metadata.axis.AxisReassigner;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.image.generic.metadata.IMetadataReader;
 import fr.fresnel.fourPolar.io.image.generic.metadata.scifio.SCIFIOMetadataReader;

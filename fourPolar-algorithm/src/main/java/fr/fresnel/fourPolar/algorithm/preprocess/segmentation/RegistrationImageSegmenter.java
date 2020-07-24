@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import fr.fresnel.fourPolar.algorithm.util.image.axis.AxisReassigner;
 import fr.fresnel.fourPolar.core.exceptions.image.polarization.CannotFormPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.captured.ICapturedImageSet;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
@@ -16,6 +15,7 @@ import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSetBuilder;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
+import fr.fresnel.fourPolar.core.util.image.metadata.axis.AxisReassigner;
 
 /**
  * An interface for segmenting a registration captured image. To segment a

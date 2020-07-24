@@ -15,6 +15,7 @@ import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.util.image.metadata.axis.ReassingerToXYCZT;
 
 public class ReassignerToXYCZTTest {
     @Test

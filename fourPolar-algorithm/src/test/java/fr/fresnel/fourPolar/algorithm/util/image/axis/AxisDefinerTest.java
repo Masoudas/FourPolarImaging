@@ -13,6 +13,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Conver
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
+import fr.fresnel.fourPolar.core.util.image.metadata.axis.AxisDefiner;
 
 public class AxisDefinerTest {
     @Test
