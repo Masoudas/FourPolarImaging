@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.core.image.vector.batikModel.converters;
 
+import java.text.DecimalFormat;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.svg.SVGDocument;
 
@@ -22,6 +24,8 @@ public class VectorToSVGElementConverter {
     private static final String _STROKE_WIDTH_ATTR = "stroke-width";
     private static final String _OPACITY_ATTR = "opacity";
     private static final String _FILTER_ATTR = "filter";
+
+    private static final DecimalFormat _OPACITY_FORMATTER = new DecimalFormat("#.##");
 
     private VectorToSVGElementConverter() {
         throw new AssertionError();
@@ -158,6 +162,6 @@ public class VectorToSVGElementConverter {
      *         The returned string has a value between zero and one.
      */
     private static String _getOpacityAsString(ARGB8 color) {
-        return String.valueOf(color.getAlpha() / 255f);
+        return _OPACITY_FORMATTER.format(color.getAlpha() / 255f);
     }
 }
