@@ -17,6 +17,20 @@
 
 
   <dependencies>
+    <!-- Dependency on core module -->
+    <dependency>
+      <groupId>fr.fresnel.fourPolar</groupId>
+      <artifactId>fourPolar-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Dependency on algorithm module -->
+    <dependency>
+      <groupId>fr.fresnel.fourPolar</groupId>
+      <artifactId>fourPolar-algorithm</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>
@@ -28,13 +42,6 @@
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
       <version>4.1.1</version>
-    </dependency>
-
-    <!-- Dependency on core module -->
-    <dependency>
-      <groupId>fr.fresnel.fourPolar</groupId>
-      <artifactId>fourPolar-core</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
     <!-- Yaml IO-->
