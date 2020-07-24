@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D.vectorModel;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.svg2svg.SVGTranscoder;
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.Element;
 import org.w3c.dom.svg.SVGDocument;
 
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
@@ -27,6 +30,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
@@ -44,12 +48,14 @@ import fr.fresnel.fourPolar.core.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.util.image.generic.ImageUtil;
 import fr.fresnel.fourPolar.core.util.image.generic.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.generic.colorMap.ColorMapFactory;
-import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.vectorFigure.VectorGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.vectorFigure.animation.OrientationAnimationCreator;
 
 /**
+ * Most of the tests below are visual test. Hence, we need to read the
+ * description of the image and look at the resulting image.
+ * 
  * Through out all the tests, we (naturally) assume that we have only one
  * channel.
  * 
@@ -61,7 +67,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.vectorFigure.
  */
 public class VectorWholeSampleStick2DPainterTest {
     private static int default_thickness = 5;
-    private static int default_len = 20;
+    private static int default_len = 30;
     private static File root = _getRoot();
 
     private static File _getRoot() {
@@ -89,11 +95,6 @@ public class VectorWholeSampleStick2DPainterTest {
     /**
      * Four images are generated, and with increasing z and t, the background
      * becomes whiter, where increase in z is greater than t.
-     * 
-     * @throws TranscoderException
-     * @throws IOException
-     * 
-     * @throws VectorImageIOIssues
      */
     @Test
     public void draw_Only4DSoIImage_PutsSoIInTheBackgroundGaugeFigure() throws IOException, TranscoderException {
@@ -111,19 +112,46 @@ public class VectorWholeSampleStick2DPainterTest {
     }
 
     /**
+     * With this test, we set the stick length to one and check whether they're
+     * drawn on the right location. The sticks are all horizontal and they're on the
+     * same location in each plane.
+     */
+    @Test
+    public void draw_CheckSticksAreDrawnOnCorrectPosition_DrawsCorrectStick() throws IOException, TranscoderException {
+        long[] dimOrientationImg = { 256, 256, 1, 2, 2 };
+
+        float angleShiftPerPlane = 0;
+        Hashtable<long[], Float> rho_angles = AngleCreator.create(dimOrientationImg, new float[] { 0 },
+                angleShiftPerPlane);
+        IOrientationImage orientationImage = OrientationImageCreator.create(dimOrientationImg, Float.NaN);
+        OrientationImageCreator.setPixels(orientationImage, OrientationAngle.rho, rho_angles);
+
+        ISoIImage soiImage = SoIImageCreator.createWithIncreasingIntensity(orientationImage);
+
+        VectorWholeSampleStick2DPainter painter = new VectorWholeSampleStick2DPainter(new DummyWholeSampleBuilder(
+                orientationImage, soiImage, 1, 1, OrientationAngle.rho, OrientationAngle.rho, null));
+        painter.draw(_getWholeSoIImageRoI(soiImage), UINT16.zero());
+
+        ImagePlaneAccessor<SVGDocument> planes = BatikImagePlaneAccessor
+                .get(((VectorGaugeFigure) painter.getFigure()).getVectorImage());
+        for (long[] position : rho_angles.keySet()) {
+            int planeIndex = planes.getPlaneIndex(position);
+            assertTrue(_checkHorizontalStickInCorrectPosition(planes.getImagePlane(planeIndex).getPlane(), position[0],
+                    position[1]));
+        }
+    }
+
+    /**
      * With this test, we expect to see four sticks in a single 2D plane, one with
-     * angle zero at top left, moving to bottom right at 135. The colors would be
-     * 
-     * @throws TranscoderException
-     * @throws IOException
+     * angle zero at top left, moving to bottom right at 135. The colors start from
+     * darker red to lighter red from top to bottom.
      */
     @Test
     public void draw_RhoSticksOn2DImage_DrawsCorrectStick() throws IOException, TranscoderException {
         String testName = "RhoSticksOn2DImage";
         long[] dimOrientationImg = { 256, 256, 1, 1, 1 };
 
-        Hashtable<long[], Float> rho_angles = _createAngle(dimOrientationImg, new long[] { 256, 256, 0, 0, 0 },
-                new float[] { 0, 45, 90, 135 });
+        Hashtable<long[], Float> rho_angles = AngleCreator.create(dimOrientationImg, new float[] { 0, 45, 90, 135 }, 0);
         IOrientationImage orientationImage = OrientationImageCreator.create(dimOrientationImg, Float.NaN);
         OrientationImageCreator.setPixels(orientationImage, OrientationAngle.rho, rho_angles);
 
@@ -136,16 +164,145 @@ public class VectorWholeSampleStick2DPainterTest {
         GaugeFigureWriter.write(root, testName, painter.getFigure());
     }
 
-    private static Hashtable<long[], Float> _createAngle(long[] dim, long[] plane, float[] angles) {
-        Hashtable<long[], Float> position_angle = new Hashtable<>();
+    /**
+     * With this test, we expect to see four sticks in a single 2D plane, one with
+     * angle zero at top left, moving to bottom right at 135. The colors start from
+     * darker red to lighter red from top to bottom. For plane z=1,t=0, rho is
+     * augmented by angleShiftPerPlane, for z=0,t=1, by twice and for z=1,t=1 by
+     * three times.
+     */
+    @Test
+    public void draw_RhoSticksOn4DImage_DrawsCorrectStick() throws IOException, TranscoderException {
+        String testName = "RhoSticksOn4DImage";
+        long[] dimOrientationImg = { 256, 256, 1, 2, 2 };
 
-        for (int i = 0; i < angles.length; i++) {
-            position_angle.put(new long[] { (i + 1) * dim[0] / (angles.length + 1),
-                    dim[1] / (angles.length + 1) * (i + 1), plane[2], plane[3], plane[4] },
-                    new Float(Math.toRadians(angles[i])));
-        }
+        float angleShiftPerPlane = 15;
+        Hashtable<long[], Float> rho_angles = AngleCreator.create(dimOrientationImg, new float[] { 0, 45, 90, 135 },
+                angleShiftPerPlane);
+        IOrientationImage orientationImage = OrientationImageCreator.create(dimOrientationImg, Float.NaN);
+        OrientationImageCreator.setPixels(orientationImage, OrientationAngle.rho, rho_angles);
 
-        return position_angle;
+        ISoIImage soiImage = SoIImageCreator.createWithIncreasingIntensity(orientationImage);
+
+        VectorWholeSampleStick2DPainter painter = new VectorWholeSampleStick2DPainter(
+                getDefaultRhoStickBuilder(orientationImage, soiImage));
+
+        painter.draw(_getWholeSoIImageRoI(soiImage), UINT16.zero());
+        GaugeFigureWriter.write(root, testName, painter.getFigure());
+    }
+
+    /**
+     * With this test, we expect to see four sticks in a single 2D plane, all
+     * horizontal, The colors start from darker red to lighter red from top to
+     * bottom for increasing delta.
+     */
+    @Test
+    public void draw_DeltaSticksOn2DImage_DrawsCorrectStick() throws IOException, TranscoderException {
+        String testName = "DeltaSticksOn2DImage";
+        long[] dimOrientationImg = { 256, 256, 1, 1, 1 };
+
+        Hashtable<long[], Float> rho_angles = AngleCreator.create(dimOrientationImg, new float[] { 0, 0, 0, 0 }, 0);
+        Hashtable<long[], Float> delta_angles = AngleCreator.create(dimOrientationImg, new float[] { 0, 60, 120, 179 },
+                0);
+
+        IOrientationImage orientationImage = OrientationImageCreator.create(dimOrientationImg, Float.NaN);
+        OrientationImageCreator.setPixels(orientationImage, OrientationAngle.rho, rho_angles);
+        OrientationImageCreator.setPixels(orientationImage, OrientationAngle.delta, delta_angles);
+
+        ISoIImage soiImage = SoIImageCreator.createWithIncreasingIntensity(orientationImage);
+
+        VectorWholeSampleStick2DPainter painter = new VectorWholeSampleStick2DPainter(
+                getDefaultDeltaStickBuilder(orientationImage, soiImage));
+
+        painter.draw(_getWholeSoIImageRoI(soiImage), UINT16.zero());
+        GaugeFigureWriter.write(root, testName, painter.getFigure());
+    }
+
+    /**
+     * With this test, we expect to see four sticks in a single 2D plane, all
+     * horizontal, The colors start from darker red to lighter red from top to
+     * bottom. For plane z=1,t=0, delta is augmented by angleShiftPerPlane, for
+     * z=0,t=1, by twice and for z=1,t=1 by three times, hence sticks become brigher
+     * for increasing delta
+     * 
+     */
+    @Test
+    public void draw_DeltaSticksOn4DImage_DrawsCorrectStick() throws IOException, TranscoderException {
+        String testName = "DeltaSticksOn4DImage";
+        long[] dimOrientationImg = { 256, 256, 1, 2, 2 };
+
+        float angleShiftPerPlane = 15;
+        Hashtable<long[], Float> rho_angles = AngleCreator.create(dimOrientationImg, new float[] { 0, 0, 0, 0 }, 0);
+        Hashtable<long[], Float> delta_angles = AngleCreator.create(dimOrientationImg, new float[] { 0, 45, 90, 135 },
+                angleShiftPerPlane);
+
+        IOrientationImage orientationImage = OrientationImageCreator.create(dimOrientationImg, Float.NaN);
+        OrientationImageCreator.setPixels(orientationImage, OrientationAngle.rho, rho_angles);
+        OrientationImageCreator.setPixels(orientationImage, OrientationAngle.delta, delta_angles);
+
+        ISoIImage soiImage = SoIImageCreator.createWithIncreasingIntensity(orientationImage);
+
+        VectorWholeSampleStick2DPainter painter = new VectorWholeSampleStick2DPainter(
+                getDefaultDeltaStickBuilder(orientationImage, soiImage));
+
+        painter.draw(_getWholeSoIImageRoI(soiImage), UINT16.zero());
+        GaugeFigureWriter.write(root, testName, painter.getFigure());
+    }
+
+    /**
+     * With this test, we expect to see four sticks in a single 2D plane, all
+     * horizontal, The colors start from darker red to lighter red from top to
+     * bottom for increasing eta.
+     */
+    @Test
+    public void draw_EtaSticksOn2DImage_DrawsCorrectStick() throws IOException, TranscoderException {
+        String testName = "EtaSticksOn2DImage";
+        long[] dimOrientationImg = { 256, 256, 1, 1, 1 };
+
+        Hashtable<long[], Float> rho_angles = AngleCreator.create(dimOrientationImg, new float[] { 0, 0, 0, 0 }, 0);
+        Hashtable<long[], Float> eta_angles = AngleCreator.create(dimOrientationImg, new float[] { 0, 30, 45, 89 }, 0);
+
+        IOrientationImage orientationImage = OrientationImageCreator.create(dimOrientationImg, Float.NaN);
+        OrientationImageCreator.setPixels(orientationImage, OrientationAngle.rho, rho_angles);
+        OrientationImageCreator.setPixels(orientationImage, OrientationAngle.eta, eta_angles);
+
+        ISoIImage soiImage = SoIImageCreator.createWithIncreasingIntensity(orientationImage);
+
+        VectorWholeSampleStick2DPainter painter = new VectorWholeSampleStick2DPainter(
+                getDefaultEtaStickBuilder(orientationImage, soiImage));
+
+        painter.draw(_getWholeSoIImageRoI(soiImage), UINT16.zero());
+        GaugeFigureWriter.write(root, testName, painter.getFigure());
+    }
+
+    /**
+     * With this test, we expect to see four sticks in a single 2D plane, all
+     * horizontal, The colors start from darker red to lighter red from top to
+     * bottom. For plane z=1,t=0, eta is augmented by angleShiftPerPlane, for
+     * z=0,t=1, by twice and for z=1,t=1 by three times, hence sticks become brigher
+     * for increasing delta
+     */
+    @Test
+    public void draw_EtaSticksOn4DImage_DrawsCorrectStick() throws IOException, TranscoderException {
+        String testName = "EtaSticksOn4DImage";
+        long[] dimOrientationImg = { 256, 256, 1, 2, 2 };
+
+        float angleShiftPerPlane = 5;
+        Hashtable<long[], Float> rho_angles = AngleCreator.create(dimOrientationImg, new float[] { 0, 0, 0, 0 }, 0);
+        Hashtable<long[], Float> eta_angles = AngleCreator.create(dimOrientationImg, new float[] { 0, 30, 45, 60 },
+                angleShiftPerPlane);
+
+        IOrientationImage orientationImage = OrientationImageCreator.create(dimOrientationImg, Float.NaN);
+        OrientationImageCreator.setPixels(orientationImage, OrientationAngle.rho, rho_angles);
+        OrientationImageCreator.setPixels(orientationImage, OrientationAngle.eta, eta_angles);
+
+        ISoIImage soiImage = SoIImageCreator.createWithIncreasingIntensity(orientationImage);
+
+        VectorWholeSampleStick2DPainter painter = new VectorWholeSampleStick2DPainter(
+                getDefaultEtaStickBuilder(orientationImage, soiImage));
+
+        painter.draw(_getWholeSoIImageRoI(soiImage), UINT16.zero());
+        GaugeFigureWriter.write(root, testName, painter.getFigure());
     }
 
     private static IBoxShape _getWholeSoIImageRoI(ISoIImage soiImage) {
@@ -168,6 +325,90 @@ public class VectorWholeSampleStick2DPainterTest {
             ISoIImage soiImage) {
         return new DummyWholeSampleBuilder(orientationImage, soiImage, default_thickness, default_len,
                 OrientationAngle.rho, OrientationAngle.eta, null);
+    }
+
+    /**
+     * For a single horizontal stick of type line in the plane, checks whether the
+     * center of the line
+     */
+    private static boolean _checkHorizontalStickInCorrectPosition(SVGDocument document, long x_center, long y_center) {
+        Element stick = (Element) document.getDocumentElement().getElementsByTagNameNS(null, "line").item(0);
+
+        double x1 = Double.parseDouble(stick.getAttributeNS(null, "x1"));
+        double y1 = Double.parseDouble(stick.getAttributeNS(null, "y1"));
+
+        double x2 = Double.parseDouble(stick.getAttributeNS(null, "x2"));
+        double y2 = Double.parseDouble(stick.getAttributeNS(null, "y2"));
+
+        return Math.abs((x1 + x2) / 2 - x_center) < 0.5 && Math.abs((y1 + y2) / 2 - y_center) < 0.5;
+    }
+
+}
+
+class AngleCreator {
+    /**
+     * Sets angles in each plane, and for each plane applies offset * planeIndex
+     */
+    static Hashtable<long[], Float> create(long[] dim, float[] angles, float plane_offset) {
+        Hashtable<long[], Float> position_angle = new Hashtable<>();
+
+        for (int planeIndex = 0; planeIndex < getNPlanes(dim); planeIndex++) {
+            long[] planeDim = getPlaneCoordinates(dim, planeIndex + 1);
+            for (int i = 0; i < angles.length; i++) {
+                position_angle.put(
+                        new long[] { (i + 1) * dim[0] / (angles.length + 1), dim[1] / (angles.length + 1) * (i + 1),
+                                planeDim[2], planeDim[3], planeDim[4] },
+                        new Float(Math.toRadians(angles[i] + plane_offset * planeIndex)));
+            }
+        }
+
+        return position_angle;
+    }
+
+    public static long[] getPlaneCoordinates(long[] imgDim, long planeIndex) {
+        if (imgDim.length == 2) {
+            return new long[] { imgDim[0], imgDim[1] };
+        }
+
+        planeIndex = planeIndex - 1; // To compensate for index starting from 1.
+        long[] planesPerDim = numPlanesPerDimension(imgDim);
+        long[] start = new long[planesPerDim.length];
+        start[planesPerDim.length - 1] = planesPerDim[planesPerDim.length - 2] > 0
+                ? planeIndex / planesPerDim[planesPerDim.length - 2]
+                : planeIndex;
+
+        long planeIndexRemainder = planeIndex - start[planesPerDim.length - 1] * planesPerDim[planesPerDim.length - 2];
+        for (int dim = planesPerDim.length - 2; dim >= 3; dim--) {
+            start[dim] = planeIndexRemainder / planesPerDim[dim - 1];
+            planeIndexRemainder = planeIndexRemainder - start[dim] * planesPerDim[dim - 1];
+        }
+        start[2] = planeIndexRemainder;
+
+        return start;
+    }
+
+    public static long[] numPlanesPerDimension(long[] imageDim) {
+        if (imageDim.length <= 2) {
+            return new long[imageDim.length];
+        }
+
+        long[] nPlanesPerDim = new long[imageDim.length];
+        nPlanesPerDim[2] = imageDim[2];
+        for (int dim = 3; dim < nPlanesPerDim.length; dim++) {
+            nPlanesPerDim[dim] = nPlanesPerDim[dim - 1] * imageDim[dim];
+        }
+
+        return nPlanesPerDim;
+
+    }
+
+    private static int getNPlanes(long[] dims) {
+        int nPlanes = 1;
+        for (int dim = 2; dim < dims.length; dim++) {
+            nPlanes *= dims[dim];
+        }
+
+        return nPlanes;
     }
 
 }
@@ -231,7 +472,7 @@ class SoIImageCreator {
 
         for (IPixelCursor<UINT16> cursor = image.getCursor(); cursor.hasNext();) {
             IPixel<UINT16> pixel = cursor.next();
-            pixel.value().set((int) cursor.localize()[0] * 100 + (int) cursor.localize()[t_axis] * 4000
+            pixel.value().set((int) cursor.localize()[0] * 500 + (int) cursor.localize()[t_axis] * 4000
                     + (int) cursor.localize()[z_axis] * 8000);
             cursor.setPixel(pixel);
         }
@@ -329,9 +570,9 @@ class GaugeFigureWriter {
     }
 
     private static File createPlaneImageFile(int planeIndex, File root, String imageName, IMetadata metadata) {
-        long[] plane_coords = MetadataUtil.getPlaneCoordinates(metadata, planeIndex)[1];
+        long[] plane_coords = AngleCreator.getPlaneCoordinates(metadata.getDim(), planeIndex);
 
-        String name_with_coordinates = imageName;
+        String name_with_coordinates = "plane_" + planeIndex;
         for (int dim = 2; dim < plane_coords.length; dim++) {
             name_with_coordinates += "_" + axis_order_string[dim] + plane_coords[dim];
         }
@@ -348,7 +589,7 @@ class DummyWholeSampleBuilder extends IVectorWholeSampleStick2DPainterBuilder {
     OrientationAngle slopeAngle;
     OrientationAngle colorAngle;
 
-    private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_JET);
+    private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.DISK_STRONG_RED);
     private int _thickness = 4;
     private int _length = 50;
 
@@ -423,6 +664,11 @@ class DummyWholeSampleBuilder extends IVectorWholeSampleStick2DPainterBuilder {
     @Override
     Optional<FilterComposite> getColorBlender() {
         return Optional.ofNullable(null);
+    }
+
+    @Override
+    ARGB8 getStickTransparency() {
+        return new ARGB8(0, 0, 0, 255);
     }
 
 }
