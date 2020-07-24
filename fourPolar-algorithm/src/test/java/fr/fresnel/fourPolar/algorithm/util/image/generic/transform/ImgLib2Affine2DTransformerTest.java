@@ -1,10 +1,9 @@
-package fr.fresnel.fourPolar.algorithm.util.image.transform;
+package fr.fresnel.fourPolar.algorithm.util.image.generic.transform;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.algorithm.util.image.generic.transform.ImgLib2Affine2DTransformer;
 import fr.fresnel.fourPolar.core.util.transform.Affine2D;
 import javassist.tools.reflect.CannotCreateException;
 import net.imglib2.RandomAccess;

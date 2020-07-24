@@ -1,11 +1,10 @@
-package fr.fresnel.fourPolar.algorithm.util.image.color;
+package fr.fresnel.fourPolar.algorithm.util.image.generic.color;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.algorithm.util.image.generic.color.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;

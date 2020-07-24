@@ -1,19 +1,18 @@
-package fr.fresnel.fourPolar.algorithm.util.image.color;
+package fr.fresnel.fourPolar.algorithm.util.image.generic.color;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter.Color;
-import fr.fresnel.fourPolar.algorithm.util.image.generic.color.GrayImagesToMonoColorConverter;
+import fr.fresnel.fourPolar.algorithm.util.image.generic.color.GrayScaleToColorConverter.Color;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
+import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 
 public class GrayImagesToMonoColorMergerTest {
