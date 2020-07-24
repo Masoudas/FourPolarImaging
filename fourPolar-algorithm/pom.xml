@@ -34,14 +34,6 @@
       <version>2.1.5-SNAPSHOT</version>
     </dependency>
 
-    <!-- IO module for test only -->
-    <dependency>
-      <scope>test</scope>
-      <groupId>fr.fresnel.fourPolar</groupId>
-      <artifactId>fourPolar-io</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
   </dependencies>
 
 </project>
