@@ -26,7 +26,7 @@ abstract class IVectorWholeSampleStick2DPainterBuilder {
 
     abstract VectorGaugeFigure getGauageFigure();
 
-    abstract FilterComposite getColorBlender();
+    abstract Optional<FilterComposite> getColorBlender();
 
     abstract OrientationAngle getSlopeAngle();
 

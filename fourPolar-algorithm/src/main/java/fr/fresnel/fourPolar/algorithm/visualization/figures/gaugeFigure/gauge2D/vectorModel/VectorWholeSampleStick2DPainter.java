@@ -39,7 +39,7 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
     private final Optional<OrientationAnimationCreator> _animCreator;
     private final ColorMap _colormap;
     private final long _stick_len;
-    private final FilterComposite _colorBlender;
+    private final Optional<FilterComposite> _colorBlender;
 
     private final Vector _cachedVector;
 
@@ -146,21 +146,20 @@ class VectorWholeSampleStick2DPainter implements IAngleGaugePainter {
         ARGB8 stickColor = _getStickColor(orientationVector);
 
         // The thickness parameter is set by vector stroke with, hence irrelevant here.
-        ILineShape stickShape = ShapeFactory.line2DShape(position, orientationVector.getAngle(_slopeAngle), _stick_len,
-                1, IGaugeFigure.AXIS_ORDER);
-        
+        ILineShape stickShape = ShapeFactory.line2DShape(position, Math.PI - orientationVector.getAngle(_slopeAngle),
+                _stick_len, 1, IGaugeFigure.AXIS_ORDER);
+
         _cachedVector.setShape(stickShape);
         _cachedVector.setColor(stickColor);
-        _cachedVector.setFill(stickColor);
-        _cachedVector.setFilter(_colorBlender);
 
+        _colorBlender.ifPresent(blender -> _cachedVector.setFilter(blender));
         _animCreator.ifPresent(animCreator -> _cachedVector.setAnimation(animCreator.create(orientationVector)));
         return _cachedVector;
     }
 
     private ARGB8 _getStickColor(IOrientationVector orientationVector) {
         ARGB8 stickColor = this._colormap.getColor(0, this._maxColorAngle, orientationVector.getAngle(_colorAngle));
-        stickColor.setAlpha(255);
+        stickColor.setAlpha(125);
         return stickColor;
     }
 
