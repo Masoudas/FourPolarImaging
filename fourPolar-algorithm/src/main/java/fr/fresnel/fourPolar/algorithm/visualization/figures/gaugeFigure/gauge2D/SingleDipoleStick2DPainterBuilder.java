@@ -154,7 +154,7 @@ public class SingleDipoleStick2DPainterBuilder extends ISingleDipoleStick2DPaint
 
     private void _setGaugeFigureAsDelta2D() {
         _gaugeFigure = GaugeFigure.singleDipoleDelta2DStick(this._length * this._figSizeToStickLenRatio,
-                _soiImage.channel(), _soiImage.getFileSet(), _soiImage.getImage().getFactory());
+                _soiImage);
     }
 
     private void _checkSoIAndOrientationImageBelongToSameSet(IOrientationImage orientationImage, ISoIImage soiImage) {

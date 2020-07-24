@@ -294,8 +294,7 @@ class DummySingleDipoleBuilder extends ISingleDipoleStick2DPainterBuilder {
 
     @Override
     GaugeFigure getGaugeFigure() {
-        return GaugeFigure.singleDipoleDelta2DStick(_ratio * _length, _soiImage.channel(), _soiImage.getFileSet(),
-                _soiImage.getImage().getFactory());
+        return GaugeFigure.singleDipoleDelta2DStick(_ratio * _length, _soiImage);
     }
 
     @Override
