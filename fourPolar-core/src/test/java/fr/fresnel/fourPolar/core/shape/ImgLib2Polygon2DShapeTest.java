@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.shape;
+package fr.fresnel.fourPolar.core.shape;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,9 +9,6 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
-
-import fr.fresnel.fourPolar.core.shape.IShapeIterator;
-import fr.fresnel.fourPolar.core.shape.ImgLib2Polygon2DShape;
 
 public class ImgLib2Polygon2DShapeTest {
     @Test

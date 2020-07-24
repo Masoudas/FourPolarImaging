@@ -1,12 +1,10 @@
-package fr.fresnel.fourPolar.core.util.shape;
+package fr.fresnel.fourPolar.core.shape;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.shape.ILineShape;
-import fr.fresnel.fourPolar.core.shape.ImageJ1LineShape;
 
 public class ImageJ1LineShapeTest {
     @Test

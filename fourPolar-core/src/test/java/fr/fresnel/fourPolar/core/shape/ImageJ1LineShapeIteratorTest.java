@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.shape;
+package fr.fresnel.fourPolar.core.shape;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -7,9 +7,6 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.shape.ILineShape;
-import fr.fresnel.fourPolar.core.shape.IShapeIterator;
-import fr.fresnel.fourPolar.core.shape.ImageJ1LineShape;
 import net.imglib2.roi.geom.GeomMasks;
 import net.imglib2.roi.geom.real.PointMask;
 import net.imglib2.roi.geom.real.WritableBox;

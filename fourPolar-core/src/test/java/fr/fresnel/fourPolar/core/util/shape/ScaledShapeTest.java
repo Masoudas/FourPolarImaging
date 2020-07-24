@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.shape.util;
+package fr.fresnel.fourPolar.core.util.shape;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,7 +9,6 @@ import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.shape.IShape;
 import fr.fresnel.fourPolar.core.shape.IShapeIterator;
 import fr.fresnel.fourPolar.core.shape.ShapeFactory;
-import fr.fresnel.fourPolar.core.util.shape.ScaledShape;
 
 public class ScaledShapeTest {
     @Test

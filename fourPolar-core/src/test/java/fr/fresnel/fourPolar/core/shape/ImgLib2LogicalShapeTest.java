@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.shape;
+package fr.fresnel.fourPolar.core.shape;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -6,9 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.shape.IShape;
-import fr.fresnel.fourPolar.core.shape.ImgLib2LogicalShape;
-import fr.fresnel.fourPolar.core.shape.ImgLib2Shape;
 import net.imglib2.roi.geom.GeomMasks;
 import net.imglib2.roi.geom.real.PointMask;
 
