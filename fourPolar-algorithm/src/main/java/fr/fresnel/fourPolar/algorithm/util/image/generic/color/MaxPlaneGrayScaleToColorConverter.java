@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.util.image.color;
+package fr.fresnel.fourPolar.algorithm.util.image.generic.color;
 
 import java.util.Objects;
 

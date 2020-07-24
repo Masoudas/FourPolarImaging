@@ -20,20 +20,22 @@ public class OrientationAngleConverter {
     }
 
     /**
-     * Converts each {@link OrientationAngle} to degrees in place.
+     * Converts the given {@link OrientationAngle} to degrees and returns a new
+     * image from that.
      */
     public static Image<Float32> convertToDegree(IOrientationImage orientationImage, OrientationAngle angle) {
         Image<Float32> degreeImage = _duplicateAngleImage(orientationImage.getAngleImage(angle));
 
         IPixelRandomAccess<Float32> ra_degreeImage = degreeImage.getRandomAccess();
-        for (IPixelCursor<Float32> angleCursor = orientationImage.getAngleImage(angle).getImage().getCursor(); angleCursor.hasNext(); ){
-                IPixel<Float32> angleInRadian = angleCursor.next();
-                double angleInDegree = Math.toDegrees(angleInRadian.value().get());
+        for (IPixelCursor<Float32> angleCursor = orientationImage.getAngleImage(angle).getImage()
+                .getCursor(); angleCursor.hasNext();) {
+            IPixel<Float32> angleInRadian = angleCursor.next();
+            double angleInDegree = Math.toDegrees(angleInRadian.value().get());
 
-                ra_degreeImage.setPosition(angleCursor.localize());
-                IPixel<Float32> pixelInRadian = ra_degreeImage.getPixel();
-                pixelInRadian.value().set((float)angleInDegree);
-                ra_degreeImage.setPixel(pixelInRadian);
+            ra_degreeImage.setPosition(angleCursor.localize());
+            IPixel<Float32> pixelInRadian = ra_degreeImage.getPixel();
+            pixelInRadian.value().set((float) angleInDegree);
+            ra_degreeImage.setPixel(pixelInRadian);
         }
 
         return degreeImage;
@@ -44,10 +46,10 @@ public class OrientationAngleConverter {
      * Converts an image interface that has angle in degrees to radian in place.
      */
     public static void convertToRadian(Image<Float32> angleImageInDegree) {
-        for (IPixelCursor<Float32> angleCursor = angleImageInDegree.getCursor(); angleCursor.hasNext();){
+        for (IPixelCursor<Float32> angleCursor = angleImageInDegree.getCursor(); angleCursor.hasNext();) {
             IPixel<Float32> angle = angleCursor.next();
             double angleInRadian = Math.toRadians(angle.value().get());
-    
+
             angle.value().set((float) angleInRadian);
             angleCursor.setPixel(angle);
         }
@@ -55,7 +57,8 @@ public class OrientationAngleConverter {
     }
 
     /**
-     * @return an empty image that has the same metadata as the given orientation image
+     * @return an empty image that has the same metadata as the given orientation
+     *         image
      */
     private static Image<Float32> _duplicateAngleImage(IAngleImage angleImage) {
         IMetadata metadata_angleImage = new Metadata.MetadataBuilder(angleImage.getImage().getMetadata()).build();

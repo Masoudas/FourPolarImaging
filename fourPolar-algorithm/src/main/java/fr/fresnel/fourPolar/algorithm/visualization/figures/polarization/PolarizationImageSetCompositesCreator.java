@@ -2,8 +2,8 @@ package fr.fresnel.fourPolar.algorithm.visualization.figures.polarization;
 
 import java.util.HashMap;
 
-import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter;
-import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter.Color;
+import fr.fresnel.fourPolar.algorithm.util.image.generic.color.GrayScaleToColorConverter;
+import fr.fresnel.fourPolar.algorithm.util.image.generic.color.GrayScaleToColorConverter.Color;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;

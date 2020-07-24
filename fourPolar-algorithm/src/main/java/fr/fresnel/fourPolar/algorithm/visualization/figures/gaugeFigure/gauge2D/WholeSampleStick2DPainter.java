@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D;
 
-import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter;
+import fr.fresnel.fourPolar.algorithm.util.image.generic.color.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;

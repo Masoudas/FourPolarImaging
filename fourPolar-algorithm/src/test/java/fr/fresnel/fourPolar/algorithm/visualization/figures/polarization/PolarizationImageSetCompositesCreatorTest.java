@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 import org.junit.jupiter.api.Test;
 
-import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter.Color;
+import fr.fresnel.fourPolar.algorithm.util.image.generic.color.GrayScaleToColorConverter.Color;
 import fr.fresnel.fourPolar.core.fourPolar.IIntensityVectorIterator;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;

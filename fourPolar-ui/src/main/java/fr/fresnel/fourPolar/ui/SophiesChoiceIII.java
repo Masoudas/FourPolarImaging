@@ -11,7 +11,7 @@ import org.scijava.ui.behaviour.util.Behaviours;
 import bdv.util.Bdv;
 import bdv.util.BdvFunctions;
 import bdv.util.BdvOptions;
-import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter;
+import fr.fresnel.fourPolar.algorithm.util.image.generic.color.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D.SingleDipoleStick2DPainterBuilder;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;

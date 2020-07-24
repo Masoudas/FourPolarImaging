@@ -22,7 +22,7 @@ import fr.fresnel.fourPolar.algorithm.preprocess.registration.IChannelRegistrato
 import fr.fresnel.fourPolar.algorithm.preprocess.registration.descriptorBased.DescriptorBasedRegistration;
 import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.ICapturedImageSetSegmenter;
 import fr.fresnel.fourPolar.algorithm.preprocess.segmentation.RegistrationCapturedImageSetSegmenter;
-import fr.fresnel.fourPolar.algorithm.util.image.color.GrayScaleToColorConverter.Color;
+import fr.fresnel.fourPolar.algorithm.util.image.generic.color.GrayScaleToColorConverter.Color;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.IPolarizationImageSetCompositesCreater;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.PolarizationImageSetCompositesCreator;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;

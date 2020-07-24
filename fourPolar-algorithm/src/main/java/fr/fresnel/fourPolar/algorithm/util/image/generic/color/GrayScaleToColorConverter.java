@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.util.image.color;
+package fr.fresnel.fourPolar.algorithm.util.image.generic.color;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
