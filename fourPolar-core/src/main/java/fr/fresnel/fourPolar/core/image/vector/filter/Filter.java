@@ -8,7 +8,7 @@ import java.util.Optional;
  */
 public interface Filter {
     /**
-     * Indicates a list of most famous in tags for filter.
+     * The list of most famous "in" tags for filter.
      */
     public enum IN {
         SOURCE_GRAPHIC {
