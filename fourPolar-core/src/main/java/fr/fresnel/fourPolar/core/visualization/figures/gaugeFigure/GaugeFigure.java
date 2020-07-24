@@ -39,13 +39,10 @@ public class GaugeFigure implements IGaugeFigure {
      * 
      * @return an empty 2D gauge figure.
      */
-    public static GaugeFigure singleDipoleDelta2DStick(long figDim, int channel, ICapturedImageFileSet fileSet,
-            ImageFactory factory) {
-        Objects.requireNonNull(fileSet, "fileSet can't be null");
-        Objects.requireNonNull(factory, "factory can't be null");
-        ChannelUtils.checkChannelNumberIsNonZero(channel);
-        
-        if (figDim < 0){
+    public static GaugeFigure singleDipoleDelta2DStick(long figDim, ISoIImage soiImage) {
+        Objects.requireNonNull(soiImage, "soiImage can't be null");
+
+        if (figDim < 0) {
             throw new IllegalArgumentException("figure dimension can't be negative");
         }
 
@@ -53,12 +50,13 @@ public class GaugeFigure implements IGaugeFigure {
         Arrays.setAll(fig_dim, (i) -> 1);
         fig_dim[0] = figDim;
         fig_dim[1] = figDim;
-          
+
         IMetadata fig_metadata = new Metadata.MetadataBuilder(fig_dim).axisOrder(AXIS_ORDER)
                 .bitPerPixel(PixelTypes.ARGB_8).build();
-        Image<ARGB8> figure = factory.create(fig_metadata, ARGB8.zero());
+        Image<ARGB8> figure = soiImage.getImage().getFactory().create(fig_metadata, ARGB8.zero());
 
-        return new GaugeFigure(GaugeFigureLocalization.SINGLE_DIPOLE, AngleGaugeType.Delta2D, figure, fileSet, channel);
+        return new GaugeFigure(GaugeFigureLocalization.SINGLE_DIPOLE, AngleGaugeType.Delta2D, figure,
+                soiImage.getFileSet(), soiImage.channel());
     }
 
     /**
