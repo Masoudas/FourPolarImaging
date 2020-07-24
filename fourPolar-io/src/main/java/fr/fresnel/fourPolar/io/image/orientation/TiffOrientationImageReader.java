@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-import fr.fresnel.fourPolar.algorithm.postprocess.orientation.OrientationAngleConverter;
+import fr.fresnel.fourPolar.algorithm.util.image.orientation.OrientationAngleConverter;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.Image;
