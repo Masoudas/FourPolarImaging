@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.algorithm.util.image.generic.color;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.algorithm.util.image.generic.color.GrayScaleToColorConverter.Color;
-import fr.fresnel.fourPolar.algorithm.util.image.stats.ImageStatistics;
+import fr.fresnel.fourPolar.algorithm.util.image.generic.stats.ImageStatistics;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;

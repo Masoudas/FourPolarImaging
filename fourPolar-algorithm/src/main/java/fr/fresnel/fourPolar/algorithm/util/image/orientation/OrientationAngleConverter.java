@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.postprocess.orientation;
+package fr.fresnel.fourPolar.algorithm.util.image.orientation;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;

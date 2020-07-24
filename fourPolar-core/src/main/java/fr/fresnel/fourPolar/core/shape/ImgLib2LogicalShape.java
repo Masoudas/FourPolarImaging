@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.shape;
+package fr.fresnel.fourPolar.core.shape;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import net.imglib2.roi.RealMaskRealInterval;

@@ -1,7 +1,7 @@
 package fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.util.shape.IShape;
+import fr.fresnel.fourPolar.core.shape.IShape;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 
 /**

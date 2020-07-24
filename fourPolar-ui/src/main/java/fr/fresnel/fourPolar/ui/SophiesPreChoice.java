@@ -16,7 +16,7 @@ import fr.fresnel.fourPolar.algorithm.preprocess.fov.FoVCalculator;
 import fr.fresnel.fourPolar.algorithm.preprocess.fov.IFoVCalculator;
 import fr.fresnel.fourPolar.algorithm.util.image.generic.color.GrayScaleToColorConverter;
 import fr.fresnel.fourPolar.algorithm.util.image.generic.color.GrayScaleToColorConverter.Color;
-import fr.fresnel.fourPolar.algorithm.util.image.stats.ImageStatistics;
+import fr.fresnel.fourPolar.algorithm.util.image.generic.stats.ImageStatistics;
 import fr.fresnel.fourPolar.algorithm.visualization.figures.polarization.PolarizationImageSetCompositesCreator;
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;

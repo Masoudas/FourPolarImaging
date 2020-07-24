@@ -5,9 +5,9 @@ import java.util.Optional;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.vector.animation.Animation;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
-import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
-import fr.fresnel.fourPolar.core.util.shape.ILineShape;
-import fr.fresnel.fourPolar.core.util.shape.IShape;
+import fr.fresnel.fourPolar.core.shape.IBoxShape;
+import fr.fresnel.fourPolar.core.shape.ILineShape;
+import fr.fresnel.fourPolar.core.shape.IShape;
 
 /**
  * An interface that defines a vector as is conventional of vector images.

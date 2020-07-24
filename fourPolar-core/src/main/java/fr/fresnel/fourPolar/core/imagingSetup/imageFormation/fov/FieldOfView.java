@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Hashtable;
 
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
+import fr.fresnel.fourPolar.core.shape.IBoxShape;
 
 /**
  * Models the field of view of the bead images of a particular channel.

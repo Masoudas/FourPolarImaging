@@ -16,10 +16,10 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.vector.Vector;
 import fr.fresnel.fourPolar.core.image.vector.filter.Filter;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
-import fr.fresnel.fourPolar.core.util.shape.ILineShape;
-import fr.fresnel.fourPolar.core.util.shape.IShape;
-import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
-import fr.fresnel.fourPolar.core.util.shape.Rotation3DOrder;
+import fr.fresnel.fourPolar.core.shape.ILineShape;
+import fr.fresnel.fourPolar.core.shape.IShape;
+import fr.fresnel.fourPolar.core.shape.IShapeIterator;
+import fr.fresnel.fourPolar.core.shape.Rotation3DOrder;
 
 public class VectorToSVGElementConverterTest {
     private static final String _FILL_ATTR = "fill";

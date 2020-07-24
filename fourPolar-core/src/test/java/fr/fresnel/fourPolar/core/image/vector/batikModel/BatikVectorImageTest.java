@@ -27,11 +27,11 @@ import fr.fresnel.fourPolar.core.image.vector.animation.Animation;
 import fr.fresnel.fourPolar.core.image.vector.filter.BlenderFilter;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterCompositeBuilder;
+import fr.fresnel.fourPolar.core.shape.IBoxShape;
+import fr.fresnel.fourPolar.core.shape.ILineShape;
+import fr.fresnel.fourPolar.core.shape.IShape;
+import fr.fresnel.fourPolar.core.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.util.image.ImageUtil;
-import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
-import fr.fresnel.fourPolar.core.util.shape.ILineShape;
-import fr.fresnel.fourPolar.core.util.shape.IShape;
-import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
 public class BatikVectorImageTest {
     /**

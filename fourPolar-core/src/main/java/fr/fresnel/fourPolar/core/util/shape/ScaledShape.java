@@ -1,12 +1,12 @@
-package fr.fresnel.fourPolar.core.util.shape.util;
+package fr.fresnel.fourPolar.core.util.shape;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.util.shape.IShape;
-import fr.fresnel.fourPolar.core.util.shape.IShapeIterator;
-import fr.fresnel.fourPolar.core.util.shape.Rotation3DOrder;
+import fr.fresnel.fourPolar.core.shape.IShape;
+import fr.fresnel.fourPolar.core.shape.IShapeIterator;
+import fr.fresnel.fourPolar.core.shape.Rotation3DOrder;
 
 /**
  * WARNING: When the time is right, this class should be rewritten using methods

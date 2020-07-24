@@ -3,7 +3,7 @@ package fr.fresnel.fourPolar.core.image.vector.batikModel.converters.shape;
 import org.w3c.dom.Element;
 import org.w3c.dom.svg.SVGDocument;
 
-import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
+import fr.fresnel.fourPolar.core.shape.IBoxShape;
 
 /**
  * Converts a box shape to a "rect" svg element.

@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.util.image.stats;
+package fr.fresnel.fourPolar.algorithm.util.image.generic.stats;
 
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 

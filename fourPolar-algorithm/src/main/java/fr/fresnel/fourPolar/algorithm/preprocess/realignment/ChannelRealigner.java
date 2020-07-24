@@ -1,6 +1,6 @@
 package fr.fresnel.fourPolar.algorithm.preprocess.realignment;
 
-import fr.fresnel.fourPolar.algorithm.util.image.transform.ImageAffineTransformer;
+import fr.fresnel.fourPolar.algorithm.util.image.generic.transform.ImageAffineTransformer;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;

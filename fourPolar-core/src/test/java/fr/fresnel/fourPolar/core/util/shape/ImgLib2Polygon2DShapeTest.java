@@ -10,6 +10,9 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import fr.fresnel.fourPolar.core.shape.IShapeIterator;
+import fr.fresnel.fourPolar.core.shape.ImgLib2Polygon2DShape;
+
 public class ImgLib2Polygon2DShapeTest {
     @Test
     public void init_SingleOrTwoPointPolygon_ThrowsIllegalArgumentException() {

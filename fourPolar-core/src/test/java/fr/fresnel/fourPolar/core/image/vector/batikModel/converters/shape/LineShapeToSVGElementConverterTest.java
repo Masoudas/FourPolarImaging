@@ -8,8 +8,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.svg.SVGDocument;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.util.shape.ILineShape;
-import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
+import fr.fresnel.fourPolar.core.shape.ILineShape;
+import fr.fresnel.fourPolar.core.shape.ShapeFactory;
 
 public class LineShapeToSVGElementConverterTest {
     @Test

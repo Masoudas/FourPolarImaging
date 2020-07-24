@@ -7,9 +7,9 @@ import fr.fresnel.fourPolar.core.image.generic.IPixelRandomAccess;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
+import fr.fresnel.fourPolar.core.shape.IBoxShape;
+import fr.fresnel.fourPolar.core.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
-import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
-import fr.fresnel.fourPolar.core.util.shape.ShapeFactory;
 
 /**
  * A set of static utility methods for {@link Image}.

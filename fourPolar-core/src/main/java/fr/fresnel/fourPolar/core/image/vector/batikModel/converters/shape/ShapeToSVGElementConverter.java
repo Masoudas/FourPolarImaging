@@ -3,9 +3,9 @@ package fr.fresnel.fourPolar.core.image.vector.batikModel.converters.shape;
 import org.w3c.dom.Element;
 import org.w3c.dom.svg.SVGDocument;
 
-import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
-import fr.fresnel.fourPolar.core.util.shape.ILineShape;
-import fr.fresnel.fourPolar.core.util.shape.IShape;
+import fr.fresnel.fourPolar.core.shape.IBoxShape;
+import fr.fresnel.fourPolar.core.shape.ILineShape;
+import fr.fresnel.fourPolar.core.shape.IShape;
 
 /**
  * A class for converting {@link IShape} interfaces to a proper SVG

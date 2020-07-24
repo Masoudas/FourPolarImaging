@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.util.image.transform;
+package fr.fresnel.fourPolar.algorithm.util.image.generic.transform;
 
 import java.util.Objects;
 import java.util.stream.IntStream;

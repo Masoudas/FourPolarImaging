@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.util.image.transform;
+package fr.fresnel.fourPolar.algorithm.util.image.generic.transform;
 
 import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
 import fr.fresnel.fourPolar.core.image.generic.Image;

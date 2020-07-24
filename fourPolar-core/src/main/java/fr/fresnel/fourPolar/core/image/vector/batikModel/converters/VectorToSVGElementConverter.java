@@ -7,7 +7,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.vector.Vector;
 import fr.fresnel.fourPolar.core.image.vector.batikModel.converters.animation.AnimationToSVGElementConverter;
 import fr.fresnel.fourPolar.core.image.vector.batikModel.converters.shape.ShapeToSVGElementConverter;
-import fr.fresnel.fourPolar.core.util.shape.IShape;
+import fr.fresnel.fourPolar.core.shape.IShape;
 
 /**
  * Using this class, we can convert an {@link Vector} to an {@link Element} of

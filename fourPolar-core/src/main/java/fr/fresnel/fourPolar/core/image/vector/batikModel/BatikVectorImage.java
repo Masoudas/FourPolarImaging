@@ -18,10 +18,10 @@ import fr.fresnel.fourPolar.core.image.vector.batikModel.converters.ToSVGDefsEle
 import fr.fresnel.fourPolar.core.image.vector.batikModel.converters.VectorToSVGElementConverter;
 import fr.fresnel.fourPolar.core.image.vector.batikModel.converters.image.ImageToSVGElementConverter;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
+import fr.fresnel.fourPolar.core.shape.IBoxShape;
+import fr.fresnel.fourPolar.core.shape.ILineShape;
+import fr.fresnel.fourPolar.core.shape.IShape;
 import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
-import fr.fresnel.fourPolar.core.util.shape.IBoxShape;
-import fr.fresnel.fourPolar.core.util.shape.ILineShape;
-import fr.fresnel.fourPolar.core.util.shape.IShape;
 
 /**
  * A vector image that has an {@link SVGDocument} as backend for each plane, and
