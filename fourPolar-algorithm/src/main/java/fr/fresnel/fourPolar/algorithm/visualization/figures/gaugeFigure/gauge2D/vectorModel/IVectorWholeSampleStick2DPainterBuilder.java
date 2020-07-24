@@ -6,7 +6,7 @@ import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
 import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
-import fr.fresnel.fourPolar.core.util.image.colorMap.ColorMap;
+import fr.fresnel.fourPolar.core.util.image.generic.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.vectorFigure.VectorGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.vectorFigure.animation.OrientationAnimationCreator;
 

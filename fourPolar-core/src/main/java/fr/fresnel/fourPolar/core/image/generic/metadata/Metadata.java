@@ -5,7 +5,7 @@ import java.util.Objects;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 
 /**
  * Implements the metadata. Note that all current and future metadata info are

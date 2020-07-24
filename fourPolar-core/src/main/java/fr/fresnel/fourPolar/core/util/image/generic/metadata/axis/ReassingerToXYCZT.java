@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.image.metadata.axis;
+package fr.fresnel.fourPolar.core.util.image.generic.metadata.axis;
 
 import java.util.Objects;
 

@@ -15,7 +15,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.Pixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.util.image.ImageUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.ImageUtil;
 
 public class ImageToAWTBufferedImageConverterTest {
     @Test

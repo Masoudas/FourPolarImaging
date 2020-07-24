@@ -6,7 +6,7 @@ import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.IPixelCursor;
 import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 
 /**
  * Utility methods used for estimating dark background.

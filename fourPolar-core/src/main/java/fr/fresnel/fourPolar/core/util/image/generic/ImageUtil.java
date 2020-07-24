@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.image;
+package fr.fresnel.fourPolar.core.util.image.generic;
 
 import java.util.stream.IntStream;
 
@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.IPixel;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.shape.ShapeFactory;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 
 /**
  * A set of static utility methods for {@link Image}.

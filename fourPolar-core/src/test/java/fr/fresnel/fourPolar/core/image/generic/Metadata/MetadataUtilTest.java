@@ -9,7 +9,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 
 public class MetadataUtilTest {
     @Test

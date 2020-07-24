@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Conver
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2RandomAccessConverter;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 import net.imglib2.Cursor;
 import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessible;

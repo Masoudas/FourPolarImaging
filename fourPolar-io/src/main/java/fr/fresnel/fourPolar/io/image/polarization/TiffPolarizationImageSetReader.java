@@ -13,7 +13,7 @@ import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImage;
 import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSetBuilder;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.core.util.image.metadata.axis.AxisReassigner;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.axis.AxisReassigner;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
 import fr.fresnel.fourPolar.io.image.orientation.IOrientationImageReader;

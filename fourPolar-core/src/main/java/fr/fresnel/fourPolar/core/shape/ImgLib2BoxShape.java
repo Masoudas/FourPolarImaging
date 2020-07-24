@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 import net.imglib2.roi.geom.GeomMasks;
 import net.imglib2.roi.geom.real.WritableBox;
 

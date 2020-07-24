@@ -11,7 +11,7 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.AWTModel.type.BufferedImageTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 
 /**
  * An abstract class for implementing the image interface using

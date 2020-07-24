@@ -31,7 +31,7 @@ import fr.fresnel.fourPolar.core.shape.IBoxShape;
 import fr.fresnel.fourPolar.core.shape.ILineShape;
 import fr.fresnel.fourPolar.core.shape.IShape;
 import fr.fresnel.fourPolar.core.shape.ShapeFactory;
-import fr.fresnel.fourPolar.core.util.image.ImageUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.ImageUtil;
 
 public class BatikVectorImageTest {
     /**

@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.image;
+package fr.fresnel.fourPolar.core.util.image.generic;
 
 import org.junit.jupiter.api.Test;
 

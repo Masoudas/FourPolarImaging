@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 
 /**
  * An interface that models image as instances of {@link ImagePlane} and allows

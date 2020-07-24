@@ -12,7 +12,7 @@ import fr.fresnel.fourPolar.core.image.polarization.IPolarizationImageSet;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
 import fr.fresnel.fourPolar.core.preprocess.registration.IChannelRegistrationResult;
 import fr.fresnel.fourPolar.core.preprocess.registration.RegistrationRule;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 import ij.ImagePlus;
 import registration.descriptorBased.headless.HeadLess_Descriptor_based_registration;
 import registration.descriptorBased.headless.RegistrationParams;

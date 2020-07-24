@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.image.colorMap;
+package fr.fresnel.fourPolar.core.util.image.generic.colorMap;
 
 /**
  * Creates a colormap from the available list of colormaps.

@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.image.metadata;
+package fr.fresnel.fourPolar.core.util.image.generic.metadata;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

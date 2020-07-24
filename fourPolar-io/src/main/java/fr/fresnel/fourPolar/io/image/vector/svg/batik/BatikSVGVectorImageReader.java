@@ -11,7 +11,7 @@ import org.w3c.dom.svg.SVGDocument;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.vector.VectorImage;
 import fr.fresnel.fourPolar.core.image.vector.batikModel.BatikVectorImageFactory;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 import fr.fresnel.fourPolar.io.exceptions.image.generic.metadata.MetadataIOIssues;
 import fr.fresnel.fourPolar.io.exceptions.image.vector.VectorImageIOIssues;
 import fr.fresnel.fourPolar.io.image.generic.metadata.IMetadataReader;

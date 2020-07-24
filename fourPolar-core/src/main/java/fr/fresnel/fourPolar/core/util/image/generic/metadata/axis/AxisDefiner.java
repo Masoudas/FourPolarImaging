@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.image.metadata.axis;
+package fr.fresnel.fourPolar.core.util.image.generic.metadata.axis;
 
 import java.util.Objects;
 
@@ -14,8 +14,8 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.Float32;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
-import fr.fresnel.fourPolar.core.util.image.pixel.PixelTypeUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.pixel.PixelTypeUtil;
 import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedShortType;
 import net.imglib2.type.numeric.real.FloatType;

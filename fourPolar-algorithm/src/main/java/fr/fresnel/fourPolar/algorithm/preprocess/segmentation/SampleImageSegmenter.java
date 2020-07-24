@@ -15,7 +15,7 @@ import fr.fresnel.fourPolar.core.image.polarization.PolarizationImageSetBuilder;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.fov.IFieldOfView;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
 import fr.fresnel.fourPolar.core.physics.polarization.Polarization;
-import fr.fresnel.fourPolar.core.util.image.metadata.axis.AxisReassigner;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.axis.AxisReassigner;
 
 /**
  * An interface for segmenting a sample captured image. To segment a sample

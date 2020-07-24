@@ -14,7 +14,7 @@ import fr.fresnel.fourPolar.core.image.generic.AWTModel.AWTBufferedImage;
 import fr.fresnel.fourPolar.core.image.generic.AWTModel.ImageToAWTBufferedImageConverter;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 
 /**
  * Using this class, we can convert a particular plane of a {@link Image} to an

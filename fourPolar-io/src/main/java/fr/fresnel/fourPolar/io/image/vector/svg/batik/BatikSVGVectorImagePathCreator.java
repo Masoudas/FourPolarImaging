@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 
 /**
  * Creates the path file to a coordinate of the image. If image is 2D, the file

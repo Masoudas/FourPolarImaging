@@ -13,7 +13,7 @@ import fr.fresnel.fourPolar.core.image.generic.pixel.types.PixelTypes;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.RealType;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.util.image.metadata.MetadataUtil;
+import fr.fresnel.fourPolar.core.util.image.generic.metadata.MetadataUtil;
 import net.imglib2.converter.Converter;
 import net.imglib2.converter.RealLUTConverter;
 import net.imglib2.display.ColorTable8;

@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.core.util.image.colorMap;
+package fr.fresnel.fourPolar.core.util.image.generic.colorMap;
 
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 
