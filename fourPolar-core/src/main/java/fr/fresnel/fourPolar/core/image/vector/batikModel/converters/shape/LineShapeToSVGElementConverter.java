@@ -1,5 +1,7 @@
 package fr.fresnel.fourPolar.core.image.vector.batikModel.converters.shape;
 
+import java.text.DecimalFormat;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.svg.SVGDocument;
 
@@ -12,6 +14,8 @@ public class LineShapeToSVGElementConverter {
     private final static String _Y1_ATTR = "y1";
     private final static String _X2_ATTR = "x2";
     private final static String _Y2_ATTR = "y2";
+
+    private final static DecimalFormat _COORDINATE_FORMATTER = new DecimalFormat("#.#");
     
     /**
      * Converts a line shape to a {@link Line2D}. Only the first two coordinates *
@@ -24,13 +28,13 @@ public class LineShapeToSVGElementConverter {
     public static Element convert(ILineShape lineShape, SVGDocument svgDocument) {
         Element lineElement = svgDocument.createElementNS(svgDocument.getNamespaceURI(), _ELEMENT_TAG);
 
-        long[] start = lineShape.lineStart();
-        long[] end = lineShape.lineEnd();
+        double[] start = lineShape.lineStartAsDouble();
+        double[] end = lineShape.lineEndAsDouble();
 
-        lineElement.setAttributeNS(null, _X1_ATTR, String.valueOf(start[0]));
-        lineElement.setAttributeNS(null, _Y1_ATTR, String.valueOf(start[1]));
-        lineElement.setAttributeNS(null, _X2_ATTR, String.valueOf(end[0]));
-        lineElement.setAttributeNS(null, _Y2_ATTR, String.valueOf(end[1]));
+        lineElement.setAttributeNS(null, _X1_ATTR, _COORDINATE_FORMATTER.format(start[0]));
+        lineElement.setAttributeNS(null, _Y1_ATTR, _COORDINATE_FORMATTER.format(start[1]));
+        lineElement.setAttributeNS(null, _X2_ATTR, _COORDINATE_FORMATTER.format(end[0]));
+        lineElement.setAttributeNS(null, _Y2_ATTR, _COORDINATE_FORMATTER.format(end[1]));
 
         return lineElement;
     }
