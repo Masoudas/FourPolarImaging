@@ -1,4 +1,4 @@
-package fr.fresnel.fourPolar.algorithm.util.image.axis;
+package fr.fresnel.fourPolar.core.util.image.metadata.axis;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -13,7 +13,6 @@ import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Conver
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
-import fr.fresnel.fourPolar.core.util.image.metadata.axis.AxisDefiner;
 
 public class AxisDefinerTest {
     @Test
