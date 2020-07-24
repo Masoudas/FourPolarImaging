@@ -20,6 +20,9 @@ public class ImageJ1LineShape implements ILineShape {
     private final double[] _position;
     private final Line _line;
 
+    private final double[] _lineStart;
+    private final double[] _lineEnd;
+
     /**
      * Create a line with the given slope, length, thickness from the position. Note
      * that eventhough the line is created in the xy plane, it can be merged in
@@ -55,6 +58,17 @@ public class ImageJ1LineShape implements ILineShape {
         double[] lineEndPoint = _calculateEndPoint(position, slopeAngle, length);
 
         _line = _createLine(lineStartPoint, lineEndPoint, thickness);
+
+        _lineStart = _mergePointInSpace(lineStartPoint, position);
+        _lineEnd = _mergePointInSpace(lineEndPoint, position);
+    }
+
+    private double[] _mergePointInSpace(double[] point, double[] position) {
+        double[] pointInSpace = position.clone();
+        pointInSpace[0] = point[0];
+        pointInSpace[1] = point[1];
+
+        return pointInSpace;
     }
 
     private void _checkThicknessIsPositive(int thickness) {
@@ -189,5 +203,15 @@ public class ImageJ1LineShape implements ILineShape {
     @Override
     public int spaceDim() {
         return this._spaceDim;
+    }
+
+    @Override
+    public double[] lineStartAsDouble() {
+        return _lineStart.clone();
+    }
+
+    @Override
+    public double[] lineEndAsDouble() {
+        return _lineEnd.clone();
     }
 }
