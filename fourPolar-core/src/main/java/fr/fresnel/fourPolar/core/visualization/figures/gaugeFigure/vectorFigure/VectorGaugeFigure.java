@@ -87,6 +87,29 @@ public class VectorGaugeFigure implements IGaugeFigure {
      * @param image          is the vector image instance.
      * @param fileSet        is the file set this figure is associated with.
      * @param channel        is the channel this figure is associated with.
+     * 
+     * @throws IllegalArgumentException if vector image axis order is not equal to
+     *                                  IGaugeFigure default order, or if channel is
+     *                                  less than one.
+     */
+    public static VectorGaugeFigure create(GaugeFigureLocalization localization, AngleGaugeType angleGaugeType,
+            VectorImage image, ICapturedImageFileSet fileSet, int channel) {
+        if (image.metadata().axisOrder() != AXIS_ORDER) {
+            throw new IllegalArgumentException(
+                    "The given image does not have the same axis-order as default gauge figure.");
+        }
+
+        return new VectorGaugeFigure(localization, angleGaugeType, image, fileSet, channel);
+    }
+
+    /**
+     * Create an stick figure using the provided vector image.
+     * 
+     * @param localization   is the localization level of this figure
+     * @param angleGaugeType is the type of gauge.
+     * @param image          is the vector image instance.
+     * @param fileSet        is the file set this figure is associated with.
+     * @param channel        is the channel this figure is associated with.
      */
     private VectorGaugeFigure(GaugeFigureLocalization localization, AngleGaugeType angleGaugeType, VectorImage image,
             ICapturedImageFileSet fileSet, int channel) {
