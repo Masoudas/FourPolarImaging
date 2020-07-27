@@ -16,6 +16,10 @@ import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 public class GaugeFigurePathUtil {
     public static String _GAUGE_FIGURE_FOLDER = "GaugeFigures";
 
+    private GaugeFigurePathUtil(){
+        throw new AssertionError();
+    }
+
     /**
      * Create the root folder in which this figure would be written. The formula is:
      * visualizationSession + {@link #_GAUGE_FIGURE_FOLDER} + captured image set
