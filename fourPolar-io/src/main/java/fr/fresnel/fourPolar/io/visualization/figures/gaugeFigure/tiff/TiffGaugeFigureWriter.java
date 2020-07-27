@@ -3,7 +3,6 @@ package fr.fresnel.fourPolar.io.visualization.figures.gaugeFigure.tiff;
 import java.io.File;
 import java.io.IOException;
 
-import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
