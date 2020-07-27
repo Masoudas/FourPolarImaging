@@ -66,8 +66,7 @@ public class SVGVectorGaugeFigureReader implements IGaugeFigureReader {
      */
     private File _getPathToRoot(File root4PProject, String visualizationSession, int channel,
             ICapturedImageFileSet capturedImageFileSet) {
-        return GaugeFigurePathUtil.createRoot(root4PProject, visualizationSession, channel, capturedImageFileSet,
-                _gaugeFigureLocalization, _angleGaugeType);
+        return GaugeFigurePathUtil.createRoot(root4PProject, visualizationSession, channel, capturedImageFileSet);
     }
 
     private String _getImageName() {

@@ -32,8 +32,7 @@ class TiffGaugeFigurePathUtil {
             ICapturedImageFileSet capturedImageFileSet, GaugeFigureLocalization localization,
             AngleGaugeType angleGaugeType) {
         return new File(
-                GaugeFigurePathUtil.createRoot(root4PProject, visualizationSession, channel,
-                        capturedImageFileSet, localization, angleGaugeType),
+                GaugeFigurePathUtil.createRoot(root4PProject, visualizationSession, channel, capturedImageFileSet),
                 _getGaugeFigureName(localization, angleGaugeType));
 
     }

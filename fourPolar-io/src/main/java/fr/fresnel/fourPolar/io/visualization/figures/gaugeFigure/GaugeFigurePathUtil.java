@@ -15,19 +15,17 @@ import fr.fresnel.fourPolar.io.PathFactoryOfProject;
  * A set of utility methods for creating the path to gauge figures.
  */
 public class GaugeFigurePathUtil {
-    public static String _GAUGE_FIGURE_FOLDER = "GaugeFigures";
-
     private GaugeFigurePathUtil() {
         throw new AssertionError();
-    }
+    } 
 
     /**
-     * @see #createRoot(File, String, int, ICapturedImageFileSet, GaugeFigureLocalization, AngleGaugeType)
+     * @see #createRoot(File, String, int, ICapturedImageFileSet,
+     *      GaugeFigureLocalization, AngleGaugeType)
      */
     public static File createRoot(File root4PProject, String visualizationSession, IGaugeFigure gaugeFigure) {
         Objects.requireNonNull(gaugeFigure, "gaugeFigure can't be null.");
-        return createRoot(root4PProject, visualizationSession, gaugeFigure.getChannel(), gaugeFigure.getFileSet(),
-                gaugeFigure.getLocalization(), gaugeFigure.getGaugeType());
+        return createRoot(root4PProject, visualizationSession, gaugeFigure.getChannel(), gaugeFigure.getFileSet());
     }
 
     /**
@@ -36,13 +34,10 @@ public class GaugeFigurePathUtil {
      * {@link #_GAUGE_FIGURE_FOLDER} + captured image set name + channel.
      */
     public static File createRoot(File root4PProject, String visualizationSession, int channel,
-            ICapturedImageFileSet capturedImageFileSet, GaugeFigureLocalization figureFigureType,
-            AngleGaugeType angleGaugeType) {
+            ICapturedImageFileSet capturedImageFileSet) {
         Objects.requireNonNull(root4PProject, "root4PProject can't be null");
         Objects.requireNonNull(visualizationSession, "visualizationSession can't be null");
         Objects.requireNonNull(capturedImageFileSet, "capturedImageFileSet can't be null");
-        Objects.requireNonNull(figureFigureType, "figureFigureType can't be null");
-        Objects.requireNonNull(angleGaugeType, "angleGaugeType can't be null");
 
         ChannelUtils.checkChannelNumberIsNonZero(channel);
 
@@ -50,8 +45,7 @@ public class GaugeFigurePathUtil {
         File visualizationRoot = PathFactoryOfProject.getFolder_Visualization(root4PProject);
         String channelAsString = ChannelUtils.channelAsString(channel);
 
-        return Paths.get(visualizationRoot.getAbsolutePath(), visualizationSession, _GAUGE_FIGURE_FOLDER, setName,
-                channelAsString).toFile();
+        return Paths.get(visualizationRoot.getAbsolutePath(), visualizationSession, setName, channelAsString).toFile();
 
     }
 
