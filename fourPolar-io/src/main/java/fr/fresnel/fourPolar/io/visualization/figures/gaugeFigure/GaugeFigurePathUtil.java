@@ -22,7 +22,7 @@ public class GaugeFigurePathUtil {
     }
 
     /**
-     * @see {@link createRoot}
+     * @see #createRoot(File, String, int, ICapturedImageFileSet, GaugeFigureLocalization, AngleGaugeType)
      */
     public static File createRoot(File root4PProject, String visualizationSession, IGaugeFigure gaugeFigure) {
         Objects.requireNonNull(gaugeFigure, "gaugeFigure can't be null.");
@@ -53,6 +53,13 @@ public class GaugeFigurePathUtil {
         return Paths.get(visualizationRoot.getAbsolutePath(), visualizationSession, _GAUGE_FIGURE_FOLDER, setName,
                 channelAsString).toFile();
 
+    }
+
+    /**
+     * @see #getGaugeFigureName(GaugeFigureLocalization, AngleGaugeType);
+     */
+    public static String getGaugeFigureName(IGaugeFigure gaugeFigure) {
+        return getGaugeFigureName(gaugeFigure.getLocalization(), gaugeFigure.getGaugeType());
     }
 
     /**
