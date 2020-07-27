@@ -42,7 +42,7 @@ public class SVGVectorGaugeFigureWriter implements IGaugeFigureWriter {
         try {
             _writeGaugeFigure((VectorGaugeFigure) gaugeFigure, rootFolder);
         } catch (VectorImageIOIssues e) {
-            throw _buildException(visualizationSession, gaugeFigure);
+            throw _buildGaugeFigureIOException(visualizationSession, gaugeFigure);
         }
     }
 
@@ -82,7 +82,7 @@ public class SVGVectorGaugeFigureWriter implements IGaugeFigureWriter {
         }
     }
 
-    private GaugeFigureIOException _buildException(String visualizationSession, IGaugeFigure figure) {
+    private GaugeFigureIOException _buildGaugeFigureIOException(String visualizationSession, IGaugeFigure figure) {
         return new GaugeFigureIOException.Builder(GaugeFigureIOException._WRITE_ERR)
                 .visualizationSession(visualizationSession).channel(figure.getChannel()).fileSet(figure.getFileSet())
                 .angleGaugeType(figure.getGaugeType()).localization(figure.getLocalization()).build();

@@ -56,7 +56,7 @@ public class SVGVectorGaugeFigureReader implements IGaugeFigureReader {
                     capturedImageFileSet);
             return _createGaugeFigure(gaugeImage, capturedImageFileSet, channel);
         } catch (IOException e) {
-            throw _buildException(visualizationSession, channel, capturedImageFileSet);
+            throw _buildGaugeFigureIOException(visualizationSession, channel, capturedImageFileSet);
         }
 
     }
@@ -90,7 +90,7 @@ public class SVGVectorGaugeFigureReader implements IGaugeFigureReader {
         _reader.close();
     }
 
-    private GaugeFigureIOException _buildException(String visualizationSession, int channel,
+    private GaugeFigureIOException _buildGaugeFigureIOException(String visualizationSession, int channel,
             ICapturedImageFileSet capturedImageFileSet) {
         return new GaugeFigureIOException.Builder(GaugeFigureIOException._READ_ERR)
                 .visualizationSession(visualizationSession).channel(channel).fileSet(capturedImageFileSet)
