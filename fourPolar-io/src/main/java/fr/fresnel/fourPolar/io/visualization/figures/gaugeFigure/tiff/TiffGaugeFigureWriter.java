@@ -79,7 +79,7 @@ public class TiffGaugeFigureWriter implements IGaugeFigureWriter {
 
     private GaugeFigureIOException _createGaugeFigureIOException(String visualizationSession, IGaugeFigure gaugeFigure,
             String message) {
-        return new GaugeFigureIOException(message, gaugeFigure, visualizationSession);
+        return new GaugeFigureIOException.Builder(message, gaugeFigure, visualizationSession).build();
     }
 
 }

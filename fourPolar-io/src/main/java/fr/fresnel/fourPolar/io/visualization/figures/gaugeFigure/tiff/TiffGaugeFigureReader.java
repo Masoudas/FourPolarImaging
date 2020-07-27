@@ -51,21 +51,17 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
             return GaugeFigure.create(this._gaugeFigureLocalization, this._angleGaugeType, gaugeFigure,
                     capturedImageFileSet, channel);
         } catch (IOException e) {
-            throw _createGaugeFigureIOException(visualizationSession, channel, capturedImageFileSet,
+            throw _buildGaugeFigureIOException(visualizationSession, channel, capturedImageFileSet,
                     GaugeFigureIOException._READ_ERR);
         }
 
     }
 
-    private GaugeFigureIOException _createGaugeFigureIOException(String visualizationSession, int channel,
+    private GaugeFigureIOException _buildGaugeFigureIOException(String visualizationSession, int channel,
             ICapturedImageFileSet capturedImageFileSet, String message) {
-        GaugeFigureIOException ioException = new GaugeFigureIOException(message);
-        ioException.setAngleGaugeType(_angleGaugeType);
-        ioException.setChannel(channel);
-        ioException.setFileSet(capturedImageFileSet);
-        ioException.setLocalization(_gaugeFigureLocalization);
-        ioException.setVisualizationSession(visualizationSession);
-        return ioException;
+        return new GaugeFigureIOException.Builder(GaugeFigureIOException._READ_ERR)
+                .visualizationSession(visualizationSession).channel(channel).fileSet(capturedImageFileSet)
+                .angleGaugeType(_angleGaugeType).localization(_gaugeFigureLocalization).build();
     }
 
     @Override
