@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
+import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.io.image.generic.ImageWriter;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
@@ -25,16 +26,21 @@ public class TiffGaugeFigureWriter implements IGaugeFigureWriter {
 
     @Override
     public void write(File root4PProject, String visualizationSession, IGaugeFigure gaugeFigure) throws IOException {
+        if (!(gaugeFigure instanceof GaugeFigure)) {
+            throw new IllegalArgumentException(
+                    "The given gauge figure is not a pixel figure, and can't be saved with this writer.");
+        }
+
         this._createWriter(gaugeFigure);
 
         File pathToFigure = this._getPathToFigure(root4PProject, visualizationSession, gaugeFigure);
         this._createParentFolder(pathToFigure);
-        
-        this._writer.write(pathToFigure, gaugeFigure.getImage());
+
+        this._writer.write(pathToFigure, ((GaugeFigure) gaugeFigure).getImage());
     }
 
     private File _getPathToFigure(File root4PProject, String visualizationSession, IGaugeFigure gaugeFigure) {
-        return TiffGaugeFigureIOUtil.createGaugeFigurePath(root4PProject, visualizationSession, gaugeFigure);
+        return TiffGaugeFigurePathUtil.createGaugeFigurePath(root4PProject, visualizationSession, gaugeFigure);
     }
 
     private void _createParentFolder(File pathToFigure) {
@@ -53,7 +59,7 @@ public class TiffGaugeFigureWriter implements IGaugeFigureWriter {
      * create a new one.
      */
     private void _createWriter(IGaugeFigure gaugeFigure) {
-        ImageFactory factoryType = gaugeFigure.getImage().getFactory();
+        ImageFactory factoryType = ((GaugeFigure) gaugeFigure).getImage().getFactory();
 
         if (factoryType != this._cachedImageType) {
             _writer = TiffImageWriterFactory.getWriter(factoryType, ARGB8.zero());
