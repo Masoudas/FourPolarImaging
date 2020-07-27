@@ -8,7 +8,6 @@ import fr.fresnel.fourPolar.core.image.generic.Image;
 import fr.fresnel.fourPolar.core.image.generic.ImageFactory;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureFactory;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
@@ -60,7 +59,7 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
 
     private File _getPathToFigure(File root4PProject, String visualizationSession, int channel,
             ICapturedImageFileSet capturedImageFileSet) {
-        return TiffGaugeFigureIOUtil.createGaugeFigurePath(root4PProject, visualizationSession, channel,
+        return TiffGaugeFigurePathUtil.createGaugeFigurePath(root4PProject, visualizationSession, channel,
                 capturedImageFileSet, this._gaugeFigureType, this._angleGaugeType);
     }
 
