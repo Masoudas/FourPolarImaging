@@ -19,7 +19,7 @@ class TiffGaugeFigurePathUtil {
      */
     public static File createGaugeFigurePath(File root4PProject, String visualizationSession,
             IGaugeFigure gaugeFigure) {
-        return new File(GaugeFigurePathUtil.createGaugeFigurePath(root4PProject, visualizationSession, gaugeFigure),
+        return new File(GaugeFigurePathUtil.createRoot(root4PProject, visualizationSession, gaugeFigure),
                 _getGaugeFigureName(gaugeFigure.getLocalization(), gaugeFigure.getGaugeType()));
     }
 
@@ -32,7 +32,7 @@ class TiffGaugeFigurePathUtil {
             ICapturedImageFileSet capturedImageFileSet, GaugeFigureLocalization localization,
             AngleGaugeType angleGaugeType) {
         return new File(
-                GaugeFigurePathUtil.createGaugeFigurePath(root4PProject, visualizationSession, channel,
+                GaugeFigurePathUtil.createRoot(root4PProject, visualizationSession, channel,
                         capturedImageFileSet, localization, angleGaugeType),
                 _getGaugeFigureName(localization, angleGaugeType));
 
