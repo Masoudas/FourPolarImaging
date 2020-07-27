@@ -21,9 +21,6 @@ import fr.fresnel.fourPolar.io.visualization.figures.gaugeFigure.IGaugeFigureRea
  * as tif.
  */
 public class TiffGaugeFigureReader implements IGaugeFigureReader {
-    private static final String _LOW_LEVEL_IO_MESSAGE = "Can't read the gauge figure due to low-level IO issues";
-    private static final String _FILE_NOT_FOUND_MESSAGE = "The given gauge figure does not exist.";
-
     private AngleGaugeType _angleGaugeType;
     private GaugeFigureLocalization _gaugeFigureLocalization;
 
@@ -48,7 +45,6 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
     public IGaugeFigure read(File root4PProject, String visualizationSession, int channel,
             ICapturedImageFileSet capturedImageFileSet) throws GaugeFigureIOException {
         File pathToFigure = this._getPathToFigure(root4PProject, visualizationSession, channel, capturedImageFileSet);
-        _checkGaugeFigureExists(pathToFigure, visualizationSession, channel, capturedImageFileSet);
 
         try {
             Image<ARGB8> gaugeFigure = this._readGaugeFigure(pathToFigure);
@@ -56,17 +52,9 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
                     capturedImageFileSet, channel);
         } catch (IOException e) {
             throw _createGaugeFigureIOException(visualizationSession, channel, capturedImageFileSet,
-                    _LOW_LEVEL_IO_MESSAGE);
+                    GaugeFigureIOException._READ_ERR);
         }
 
-    }
-
-    private void _checkGaugeFigureExists(File pathToFigure, String visualizationSession, int channel,
-    ICapturedImageFileSet capturedImageFileSet) throws GaugeFigureIOException {
-        if (pathToFigure.exists()){
-            throw _createGaugeFigureIOException(visualizationSession, channel, capturedImageFileSet,
-            _FILE_NOT_FOUND_MESSAGE);
-        }
     }
 
     private GaugeFigureIOException _createGaugeFigureIOException(String visualizationSession, int channel,

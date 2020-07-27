@@ -13,8 +13,6 @@ import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageWriterFactory;
 import fr.fresnel.fourPolar.io.visualization.figures.gaugeFigure.IGaugeFigureWriter;
 
 public class TiffGaugeFigureWriter implements IGaugeFigureWriter {
-    private static final String _LOW_LEVEL_IO_MESSAGE = "Can't write the gauge figure due to low-level IO issues";
-
     private ImageWriter<ARGB8> _writer;
 
     /**
@@ -42,7 +40,7 @@ public class TiffGaugeFigureWriter implements IGaugeFigureWriter {
         try {
             _writeGaugeFigure(pathToFigure, (GaugeFigure) gaugeFigure);
         } catch (IOException e) {
-            throw _createGaugeFigureIOException(visualizationSession, gaugeFigure, _LOW_LEVEL_IO_MESSAGE);
+            throw _createGaugeFigureIOException(visualizationSession, gaugeFigure, GaugeFigureIOException._WRITE_ERR);
         }
 
     }
