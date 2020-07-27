@@ -23,7 +23,7 @@ public class GaugeFigure implements IGaugeFigure {
     private final Image<ARGB8> _image;
     private final AngleGaugeType _type;
     private final ICapturedImageFileSet _fileSet;
-    private final GaugeFigureLocalization _figureType;
+    private final GaugeFigureLocalization _localization;
     private final int _channel;
 
     /**
@@ -148,7 +148,7 @@ public class GaugeFigure implements IGaugeFigure {
     /**
      * Create a gauge figure with the provided image interface.
      * 
-     * @param figureType     is the type of figure (representation) meant by this
+     * @param localization     is the type of figure (representation) meant by this
      *                       figure.
      * @param angleGaugeType is the angle gauge type of this gauge figure.
      * @param image          is the {@link Image} interface of the figure.
@@ -160,7 +160,7 @@ public class GaugeFigure implements IGaugeFigure {
      *                                  given image is not the same as that of
      *                                  {@link ISoIImage.AXIS_ORDER}.
      */
-    public static IGaugeFigure create(GaugeFigureLocalization figureType, AngleGaugeType angleGaugeType,
+    public static IGaugeFigure create(GaugeFigureLocalization localization, AngleGaugeType angleGaugeType,
             Image<ARGB8> image, ICapturedImageFileSet fileSet, int channel) {
         Objects.requireNonNull(angleGaugeType, "angleGaugeType cannot be null.");
         Objects.requireNonNull(image, "image cannot be null");
@@ -171,7 +171,7 @@ public class GaugeFigure implements IGaugeFigure {
                     "The given image does not have the same axis-order as default gauge figure.");
         }
 
-        return new GaugeFigure(figureType, angleGaugeType, image, fileSet, channel);
+        return new GaugeFigure(localization, angleGaugeType, image, fileSet, channel);
     }
 
     /**
@@ -188,7 +188,7 @@ public class GaugeFigure implements IGaugeFigure {
         this._image = image;
         this._type = angleGaugeType;
         this._fileSet = fileSet;
-        this._figureType = localization;
+        this._localization = localization;
         this._channel = channel;
     }
 
@@ -208,7 +208,7 @@ public class GaugeFigure implements IGaugeFigure {
 
     @Override
     public GaugeFigureLocalization getLocalization() {
-        return this._figureType;
+        return this._localization;
     }
 
     @Override

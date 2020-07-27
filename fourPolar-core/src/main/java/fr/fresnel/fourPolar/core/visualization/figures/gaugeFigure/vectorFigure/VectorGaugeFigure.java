@@ -24,7 +24,7 @@ public class VectorGaugeFigure implements IGaugeFigure {
     private final VectorImage _image;
     private final AngleGaugeType _type;
     private final ICapturedImageFileSet _fileSet;
-    private final GaugeFigureLocalization _figureType;
+    private final GaugeFigureLocalization _localization;
     private final int _channel;
 
     /**
@@ -116,7 +116,7 @@ public class VectorGaugeFigure implements IGaugeFigure {
         this._image = image;
         this._type = angleGaugeType;
         this._fileSet = fileSet;
-        this._figureType = localization;
+        this._localization = localization;
         this._channel = channel;
     }
 
@@ -136,7 +136,7 @@ public class VectorGaugeFigure implements IGaugeFigure {
 
     @Override
     public GaugeFigureLocalization getLocalization() {
-        return this._figureType;
+        return this._localization;
     }
 
     @Override

@@ -29,10 +29,10 @@ public class SVGVectorGaugeFigureReader implements IGaugeFigureReader {
 
     private final VectorImageReader _reader;
 
-    public SVGVectorGaugeFigureReader(VectorImageFactory factory, GaugeFigureLocalization gaugeFigureType,
+    public SVGVectorGaugeFigureReader(VectorImageFactory factory, GaugeFigureLocalization localization,
             AngleGaugeType angleGaugeType) {
         this._reader = SVGVectorImageReaderFactory.getReader(factory);
-        this._gaugeFigureLocalization = gaugeFigureType;
+        this._gaugeFigureLocalization = localization;
         this._angleGaugeType = angleGaugeType;
     }
 

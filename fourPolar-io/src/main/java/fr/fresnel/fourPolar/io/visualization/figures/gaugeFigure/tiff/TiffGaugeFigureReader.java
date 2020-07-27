@@ -30,14 +30,14 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
      * Initializes the reader to read a particular form of gauge figure.
      * 
      * @param imageFactory    is the desired image model to be used.
-     * @param gaugeFigureType is the type of gauge figure to be read.
+     * @param localization is the type of gauge figure to be read.
      * @param angleGaugeType  is the type of angle gauge associated with the gauge
      *                        figure.
      */
-    public TiffGaugeFigureReader(ImageFactory imageFactory, GaugeFigureLocalization gaugeFigureType,
+    public TiffGaugeFigureReader(ImageFactory imageFactory, GaugeFigureLocalization localization,
             AngleGaugeType angleGaugeType) {
         this._reader = TiffImageReaderFactory.getReader(imageFactory, ARGB8.zero());
-        this._gaugeFigureLocalization = gaugeFigureType;
+        this._gaugeFigureLocalization = localization;
         this._angleGaugeType = angleGaugeType;
     }
 
