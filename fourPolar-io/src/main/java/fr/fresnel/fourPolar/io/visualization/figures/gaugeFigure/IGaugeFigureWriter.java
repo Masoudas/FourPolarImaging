@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
+import fr.fresnel.fourPolar.io.exceptions.visualization.gaugeFigure.GaugeFigureIOException;
 
 public interface IGaugeFigureWriter {
     /**
@@ -17,11 +18,11 @@ public interface IGaugeFigureWriter {
      *                             this gauge figure belong.
      * @param capturedImageFileSet is the captured image set to which this gauge
      *                             figure belong.
-     * @throws IOException thrown in case of low-level IO problems.
+     * @throws GaugeFigureIOException thrown in case of IO issues.
      * 
      * @return the composites for the given channel number.
      */
-    public void write(File root4PProject, String visualizationSession, IGaugeFigure gaugeFigure) throws IOException;
+    public void write(File root4PProject, String visualizationSession, IGaugeFigure gaugeFigure) throws GaugeFigureIOException;
 
     /**
      * Close all resources associated with this writer.

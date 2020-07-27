@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
+import fr.fresnel.fourPolar.io.exceptions.visualization.gaugeFigure.GaugeFigureIOException;
 
 /**
  * An interface for reading a {@link IGaugeFigure} from the disk.
@@ -22,12 +23,12 @@ public interface IGaugeFigureReader {
      * @param channel              is the channel number of this image.
      * @param capturedImageFileSet is the captured image set to which this gauge
      *                             figure belong.
-     * @throws IOException thrown in case of low-level problems.
+     * @throws GaugeFigureIOException thrown in case of IO issues.
      * 
      * @return the composites for the given channel number.
      */
     public IGaugeFigure read(File root4PProject, String visualizationSession, int channel,
-            ICapturedImageFileSet capturedImageFileSet) throws IOException;
+            ICapturedImageFileSet capturedImageFileSet) throws GaugeFigureIOException;
 
     /**
      * Close all resources associated with the reader.
