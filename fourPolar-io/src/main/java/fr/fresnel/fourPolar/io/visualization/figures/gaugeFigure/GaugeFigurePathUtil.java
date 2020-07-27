@@ -14,7 +14,6 @@ import fr.fresnel.fourPolar.io.PathFactoryOfProject;
  * A set of utility methods for creating the path to gauge figures.
  */
 public class GaugeFigurePathUtil {
-
     public static String _GAUGE_FIGURE_FOLDER = "GaugeFigures";
 
     /**
@@ -26,7 +25,7 @@ public class GaugeFigurePathUtil {
             IGaugeFigure gaugeFigure) {
         int channel = gaugeFigure.getChannel();
         return createGaugeFigurePath(root4PProject, visualizationSession, channel, gaugeFigure.getFileSet(),
-                gaugeFigure.getFigureType(), gaugeFigure.getGaugeType());
+                gaugeFigure.getLocalization(), gaugeFigure.getGaugeType());
     }
 
     /**
