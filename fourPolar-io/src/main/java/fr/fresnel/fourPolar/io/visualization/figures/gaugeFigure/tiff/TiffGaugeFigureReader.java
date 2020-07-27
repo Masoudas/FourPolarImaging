@@ -11,6 +11,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLocalization;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
+import fr.fresnel.fourPolar.io.exceptions.visualization.gaugeFigure.GaugeFigureIOException;
 import fr.fresnel.fourPolar.io.image.generic.ImageReader;
 import fr.fresnel.fourPolar.io.image.generic.tiff.TiffImageReaderFactory;
 import fr.fresnel.fourPolar.io.visualization.figures.gaugeFigure.IGaugeFigureReader;
@@ -20,8 +21,11 @@ import fr.fresnel.fourPolar.io.visualization.figures.gaugeFigure.IGaugeFigureRea
  * as tif.
  */
 public class TiffGaugeFigureReader implements IGaugeFigureReader {
-    private final AngleGaugeType _angleGaugeType;
-    private final GaugeFigureLocalization _gaugeFigureType;
+    private static final String _LOW_LEVEL_IO_MESSAGE = "Can't read the gauge figure due to low-level IO issues";
+    private static final String _FILE_NOT_FOUND_MESSAGE = "The given gauge figure does not exist.";
+
+    private AngleGaugeType _angleGaugeType;
+    private GaugeFigureLocalization _gaugeFigureLocalization;
 
     private ImageReader<ARGB8> _reader;
 
@@ -36,19 +40,44 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
     public TiffGaugeFigureReader(ImageFactory imageFactory, GaugeFigureLocalization gaugeFigureType,
             AngleGaugeType angleGaugeType) {
         this._reader = TiffImageReaderFactory.getReader(imageFactory, ARGB8.zero());
-        this._gaugeFigureType = gaugeFigureType;
+        this._gaugeFigureLocalization = gaugeFigureType;
         this._angleGaugeType = angleGaugeType;
     }
 
     @Override
     public IGaugeFigure read(File root4PProject, String visualizationSession, int channel,
-            ICapturedImageFileSet capturedImageFileSet) throws IOException {
+            ICapturedImageFileSet capturedImageFileSet) throws GaugeFigureIOException {
         File pathToFigure = this._getPathToFigure(root4PProject, visualizationSession, channel, capturedImageFileSet);
+        _checkGaugeFigureExists(pathToFigure, visualizationSession, channel, capturedImageFileSet);
 
-        Image<ARGB8> gaugeFigure = this._readGaugeFigure(pathToFigure);
+        try {
+            Image<ARGB8> gaugeFigure = this._readGaugeFigure(pathToFigure);
+            return GaugeFigure.create(this._gaugeFigureLocalization, this._angleGaugeType, gaugeFigure,
+                    capturedImageFileSet, channel);
+        } catch (IOException e) {
+            throw _createGaugeFigureIOException(visualizationSession, channel, capturedImageFileSet,
+                    _LOW_LEVEL_IO_MESSAGE);
+        }
 
-        return GaugeFigure.create(this._gaugeFigureType, this._angleGaugeType, gaugeFigure, capturedImageFileSet,
-                channel);
+    }
+
+    private void _checkGaugeFigureExists(File pathToFigure, String visualizationSession, int channel,
+    ICapturedImageFileSet capturedImageFileSet) throws GaugeFigureIOException {
+        if (pathToFigure.exists()){
+            throw _createGaugeFigureIOException(visualizationSession, channel, capturedImageFileSet,
+            _FILE_NOT_FOUND_MESSAGE);
+        }
+    }
+
+    private GaugeFigureIOException _createGaugeFigureIOException(String visualizationSession, int channel,
+            ICapturedImageFileSet capturedImageFileSet, String message) {
+        GaugeFigureIOException ioException = new GaugeFigureIOException(message);
+        ioException.setAngleGaugeType(_angleGaugeType);
+        ioException.setChannel(channel);
+        ioException.setFileSet(capturedImageFileSet);
+        ioException.setLocalization(_gaugeFigureLocalization);
+        ioException.setVisualizationSession(visualizationSession);
+        return ioException;
     }
 
     @Override
@@ -60,16 +89,20 @@ public class TiffGaugeFigureReader implements IGaugeFigureReader {
     private File _getPathToFigure(File root4PProject, String visualizationSession, int channel,
             ICapturedImageFileSet capturedImageFileSet) {
         return TiffGaugeFigurePathUtil.createGaugeFigurePath(root4PProject, visualizationSession, channel,
-                capturedImageFileSet, this._gaugeFigureType, this._angleGaugeType);
+                capturedImageFileSet, this._gaugeFigureLocalization, this._angleGaugeType);
     }
 
     private Image<ARGB8> _readGaugeFigure(File pathToFigure) throws IOException {
-        Image<ARGB8> diskImage = null;
-        try {
-            this._reader.read(pathToFigure);
-        } catch (IOException e) {
-            throw new IOException("Polarization images don't exist or are corrupted");
-        }
-        return diskImage;
+        return this._reader.read(pathToFigure);
+    }
+
+    @Override
+    public void setLocalization(GaugeFigureLocalization localization) {
+        _gaugeFigureLocalization = localization;
+    }
+
+    @Override
+    public void setAngleGaugeType(AngleGaugeType gaugeType) {
+        _angleGaugeType = gaugeType;
     }
 }
