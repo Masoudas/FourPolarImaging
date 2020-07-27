@@ -9,13 +9,12 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.GaugeFigureLo
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.IGaugeFigure;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.io.PathFactoryOfProject;
+import fr.fresnel.fourPolar.io.visualization.figures.gaugeFigure.GaugeFigurePathUtil;
 
 /**
  * A set of utility methods.
  */
-class TiffGaugeFigureIOUtil {
-    private static String _GAUGE_FIGURE_FOLDER = "GaugeFigures";
-
+class TiffGaugeFigurePathUtil {
     /**
      * Create the path to which this figure would be written. The formula is:
      * visualizationSession + _GAUGE_FIGURE_FOLDER + captured image set + channel +
@@ -23,9 +22,8 @@ class TiffGaugeFigureIOUtil {
      */
     public static File createGaugeFigurePath(File root4PProject, String visualizationSession,
             IGaugeFigure gaugeFigure) {
-        int channel = gaugeFigure.getChannel();
-        return createGaugeFigurePath(root4PProject, visualizationSession, channel, gaugeFigure.getFileSet(),
-                gaugeFigure.getFigureType(), gaugeFigure.getGaugeType());
+        return new File(GaugeFigurePathUtil.createGaugeFigurePath(root4PProject, visualizationSession, gaugeFigure),
+                _getGaugeFigureName(gaugeFigure.getLocalization(), gaugeFigure.getGaugeType()));
     }
 
     /**
@@ -34,20 +32,16 @@ class TiffGaugeFigureIOUtil {
      * gaugeFigureType_AngleGaugeType.tif
      */
     public static File createGaugeFigurePath(File root4PProject, String visualizationSession, int channel,
-            ICapturedImageFileSet capturedImageFileSet, GaugeFigureLocalization figureFigureType,
+            ICapturedImageFileSet capturedImageFileSet, GaugeFigureLocalization localization,
             AngleGaugeType angleGaugeType) {
-        String setName = capturedImageFileSet.getSetName();
-
-        File visualizationRoot = PathFactoryOfProject.getFolder_Visualization(root4PProject);
-        String channelAsString = ChannelUtils.channelAsString(channel);
-        String gaugeFigureName = _getGaugeFigureName(figureFigureType, angleGaugeType);
-
-        return Paths.get(visualizationRoot.getAbsolutePath(), visualizationSession, _GAUGE_FIGURE_FOLDER, setName,
-                channelAsString, gaugeFigureName).toFile();
+        return new File(
+                GaugeFigurePathUtil.createGaugeFigurePath(root4PProject, visualizationSession, channel,
+                        capturedImageFileSet, localization, angleGaugeType),
+                _getGaugeFigureName(localization, angleGaugeType));
 
     }
 
-    private static String _getGaugeFigureName(GaugeFigureLocalization figureType, AngleGaugeType gaugeType) {
-        return figureType + "_" + gaugeType + ".tif";
+    private static String _getGaugeFigureName(GaugeFigureLocalization localization, AngleGaugeType gaugeType) {
+        return GaugeFigurePathUtil.getGaugeFigureName(localization, gaugeType) + ".tif";
     }
 }
