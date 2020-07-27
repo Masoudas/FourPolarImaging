@@ -21,9 +21,9 @@ public interface IGaugeFigure {
     public AngleGaugeType getGaugeType();
 
     /**
-     * Returns the type of the gauge figure.
+     * Returns the localization level of the figure.
      */
-    public GaugeFigureLocalization getFigureType();
+    public GaugeFigureLocalization getLocalization();
 
     /**
      * Returns the {@link ICapturedImageFileSet} this figure corresponds to.

@@ -112,7 +112,7 @@ public class VectorGaugeFigure implements IGaugeFigure {
     }
 
     @Override
-    public GaugeFigureLocalization getFigureType() {
+    public GaugeFigureLocalization getLocalization() {
         return this._figureType;
     }
 
