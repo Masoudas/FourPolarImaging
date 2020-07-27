@@ -79,7 +79,7 @@ public class TiffOrientationImageWriter implements IOrientationImageWriter {
 
         if (factoryType != this._cachedImageType) {
             _writer = TiffImageWriterFactory.getWriter(factoryType, Float32.zero());
-
+            _cachedImageType = factoryType;
         }
     }
 

@@ -75,7 +75,7 @@ public class TiffGaugeFigureWriter implements IGaugeFigureWriter {
 
         if (factoryType != this._cachedImageType) {
             _writer = TiffImageWriterFactory.getWriter(factoryType, ARGB8.zero());
-
+            this._cachedImageType = factoryType;
         }
     }
 

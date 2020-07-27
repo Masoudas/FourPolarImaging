@@ -84,7 +84,7 @@ public class TiffPolarizationImageSetWriter implements IPolarizationImageSetWrit
 
         if (factoryType != this._cachedImageType) {
             _writer = TiffImageWriterFactory.getWriter(factoryType, UINT16.zero());
-
+            _cachedImageType = factoryType;
         }
     }
 

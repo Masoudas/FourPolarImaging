@@ -97,7 +97,7 @@ public class TiffPolarizationImageSetCompositesWriter implements IPolarizationIm
 
         if (factoryType != this._cachedImageType) {
             _writer = TiffImageWriterFactory.getWriter(factoryType, ARGB8.zero());
-
+            _cachedImageType = factoryType;
         }
     }
 

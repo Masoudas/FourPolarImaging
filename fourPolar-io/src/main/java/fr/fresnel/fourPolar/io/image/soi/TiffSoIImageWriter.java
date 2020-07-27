@@ -49,7 +49,7 @@ public class TiffSoIImageWriter implements ISoIImageWriter {
 
         if (factoryType != this._cachedImageType) {
             _writer = TiffImageWriterFactory.getWriter(factoryType, UINT16.zero());
-
+            _cachedImageType = factoryType;
         }
     }
 
