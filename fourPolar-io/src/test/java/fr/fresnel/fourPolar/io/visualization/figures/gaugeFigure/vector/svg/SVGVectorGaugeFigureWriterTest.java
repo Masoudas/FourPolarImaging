@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFile;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.IMetadata;
-import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
 import fr.fresnel.fourPolar.core.image.generic.metadata.Metadata;
 import fr.fresnel.fourPolar.core.image.vector.VectorImage;
 import fr.fresnel.fourPolar.core.image.vector.VectorImageFactory;
