@@ -22,7 +22,7 @@ public class SVGVectorImageReaderFactory {
      * @throws IllegalArgumentException in case no reader implementation is found
      *                                  for the given type.
      */
-    public static VectorImageReader create(VectorImageFactory factory) {
+    public static VectorImageReader getReader(VectorImageFactory factory) {
         if (factory instanceof BatikVectorImageFactory) {
             return new BatikSVGVectorImageReader();
         } else {

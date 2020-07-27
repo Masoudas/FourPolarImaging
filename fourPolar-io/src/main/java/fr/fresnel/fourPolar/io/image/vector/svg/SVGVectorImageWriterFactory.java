@@ -22,7 +22,7 @@ public class SVGVectorImageWriterFactory {
      * @throws IllegalArgumentException in case no writer implementation is found
      *                                  for the given type.
      */
-    public static VectorImageWriter create(VectorImageFactory factory) {
+    public static VectorImageWriter getWriter(VectorImageFactory factory) {
         if (factory instanceof BatikVectorImageFactory) {
             return new BatikSVGVectorImageWriter();
         } else {
