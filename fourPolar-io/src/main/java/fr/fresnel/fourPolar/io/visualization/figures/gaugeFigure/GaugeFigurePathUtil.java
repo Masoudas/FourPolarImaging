@@ -2,6 +2,7 @@ package fr.fresnel.fourPolar.io.visualization.figures.gaugeFigure;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.physics.channel.ChannelUtils;
@@ -16,32 +17,36 @@ import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 public class GaugeFigurePathUtil {
     public static String _GAUGE_FIGURE_FOLDER = "GaugeFigures";
 
-    private GaugeFigurePathUtil(){
+    private GaugeFigurePathUtil() {
         throw new AssertionError();
     }
 
     /**
-     * Create the root folder in which this figure would be written. The formula is:
-     * visualizationSession + {@link #_GAUGE_FIGURE_FOLDER} + captured image set
-     * name + channel.
+     * @see {@link createRoot}
      */
-    public static File createGaugeFigurePath(File root4PProject, String visualizationSession,
-            IGaugeFigure gaugeFigure) {
-        int channel = gaugeFigure.getChannel();
-        return createGaugeFigurePath(root4PProject, visualizationSession, channel, gaugeFigure.getFileSet(),
+    public static File createRoot(File root4PProject, String visualizationSession, IGaugeFigure gaugeFigure) {
+        Objects.requireNonNull(gaugeFigure, "gaugeFigure can't be null.");
+        return createRoot(root4PProject, visualizationSession, gaugeFigure.getChannel(), gaugeFigure.getFileSet(),
                 gaugeFigure.getLocalization(), gaugeFigure.getGaugeType());
     }
 
     /**
-     * Create the root folder in which this figure would be written. The formula is:
-     * visualizationSession + {@link #_GAUGE_FIGURE_FOLDER} + captured image set
-     * name + channel +
+     * Create the root folder in which the figures correspondong to this channel and
+     * file set will be written. The formula is: visualizationSession +
+     * {@link #_GAUGE_FIGURE_FOLDER} + captured image set name + channel.
      */
-    public static File createGaugeFigurePath(File root4PProject, String visualizationSession, int channel,
+    public static File createRoot(File root4PProject, String visualizationSession, int channel,
             ICapturedImageFileSet capturedImageFileSet, GaugeFigureLocalization figureFigureType,
             AngleGaugeType angleGaugeType) {
-        String setName = capturedImageFileSet.getSetName();
+        Objects.requireNonNull(root4PProject, "root4PProject can't be null");
+        Objects.requireNonNull(visualizationSession, "visualizationSession can't be null");
+        Objects.requireNonNull(capturedImageFileSet, "capturedImageFileSet can't be null");
+        Objects.requireNonNull(figureFigureType, "figureFigureType can't be null");
+        Objects.requireNonNull(angleGaugeType, "angleGaugeType can't be null");
 
+        ChannelUtils.checkChannelNumberIsNonZero(channel);
+
+        String setName = capturedImageFileSet.getSetName();
         File visualizationRoot = PathFactoryOfProject.getFolder_Visualization(root4PProject);
         String channelAsString = ChannelUtils.channelAsString(channel);
 
