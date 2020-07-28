@@ -17,11 +17,39 @@ import fr.fresnel.fourPolar.io.PathFactoryOfProject;
 
 public class GaugeFigurePathUtilTest {
     @Test
+    public void getGaugeFigureName_WholeSampleRho2D_Returns_localization_gaugeType() {
+        GaugeFigureLocalization localization = GaugeFigureLocalization.WHOLE_SAMPLE;
+        AngleGaugeType type = AngleGaugeType.Rho2D;
+
+        String expectedName = localization + "_" + type;
+        String figureName = GaugeFigurePathUtil.getGaugeFigureName(localization, type);
+
+        assertEquals(expectedName, figureName);
+    }
+
+    @Test
+    public void getGaugeFigureName_UsingGaugeFigure_Returns_localization_gaugeType() {
+        GaugeFigureLocalization localization = GaugeFigureLocalization.WHOLE_SAMPLE;
+        AngleGaugeType type = AngleGaugeType.Rho2D;
+        int dummyChannel = -1;
+
+        GFPUTDummyGaugeFigure gaugeFigure = new GFPUTDummyGaugeFigure(type, null, localization, dummyChannel);
+
+        String expectedName = localization + "_" + type;
+        String figureName = GaugeFigurePathUtil.getGaugeFigureName(gaugeFigure);
+
+        assertEquals(expectedName, figureName);
+    }
+
+    @Test
     public void createRoot_UsingSessionNameAndChannelAndFileSet_ReturnsCorrectRoot() {
         File root4PProject = new File("/");
         String visualizationSession = "TestSession";
         String setName = "TestSet";
         int channel = 1;
+
+        GaugeFigureLocalization localization = GaugeFigureLocalization.WHOLE_SAMPLE;
+        AngleGaugeType type = AngleGaugeType.Rho2D;
 
         GFPUTDummyFileSet fileSet = new GFPUTDummyFileSet(setName);
 
@@ -54,31 +82,6 @@ public class GaugeFigurePathUtilTest {
         File calculatedRoot = GaugeFigurePathUtil.createRoot(root4PProject, visualizationSession, gaugeFigure);
 
         assertEquals(expectedRoot, calculatedRoot);
-    }
-
-    @Test
-    public void getGaugeFigureName_WholeSampleRho2D_Returns_localization_gaugeType() {
-        GaugeFigureLocalization localization = GaugeFigureLocalization.WHOLE_SAMPLE;
-        AngleGaugeType type = AngleGaugeType.Rho2D;
-
-        String expectedName = localization + "_" + type;
-        String figureName = GaugeFigurePathUtil.getGaugeFigureName(localization, type);
-
-        assertEquals(expectedName, figureName);
-    }
-
-    @Test
-    public void getGaugeFigureName_UsingGaugeFigure_Returns_localization_gaugeType() {
-        GaugeFigureLocalization localization = GaugeFigureLocalization.WHOLE_SAMPLE;
-        AngleGaugeType type = AngleGaugeType.Rho2D;
-        int dummyChannel = -1;
-
-        GFPUTDummyGaugeFigure gaugeFigure = new GFPUTDummyGaugeFigure(type, null, localization, dummyChannel);
-
-        String expectedName = localization + "_" + type;
-        String figureName = GaugeFigurePathUtil.getGaugeFigureName(gaugeFigure);
-
-        assertEquals(expectedName, figureName);
     }
 }
 
