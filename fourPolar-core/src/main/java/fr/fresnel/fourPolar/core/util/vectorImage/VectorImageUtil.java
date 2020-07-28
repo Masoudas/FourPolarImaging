@@ -1,6 +1,5 @@
 package fr.fresnel.fourPolar.core.util.vectorImage;
 
-import fr.fresnel.fourPolar.core.image.ImagePlaneAccessor;
 import fr.fresnel.fourPolar.core.image.vector.VectorImage;
 
 /**
