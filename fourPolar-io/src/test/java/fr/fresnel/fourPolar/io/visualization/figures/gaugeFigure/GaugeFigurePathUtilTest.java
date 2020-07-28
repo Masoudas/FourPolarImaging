@@ -54,9 +54,10 @@ public class GaugeFigurePathUtilTest {
         GFPUTDummyFileSet fileSet = new GFPUTDummyFileSet(setName);
 
         File expectedRoot = new File(PathFactoryOfProject.getFolder_Visualization(root4PProject),
-                visualizationSession + "/TestSet/Channel " + channel);
+                visualizationSession + "/TestSet/Channel " + channel + "/" + localization + "_" + type);
 
-        File calculatedRoot = GaugeFigurePathUtil.createRoot(root4PProject, visualizationSession, channel, fileSet);
+        File calculatedRoot = GaugeFigurePathUtil.createRoot(root4PProject, visualizationSession, channel, fileSet,
+                localization, type);
 
         assertEquals(expectedRoot, calculatedRoot);
     }
@@ -68,16 +69,14 @@ public class GaugeFigurePathUtilTest {
         String setName = "TestSet";
         int channel = 1;
 
-        // Result is independent of gauge type and localization
-        AngleGaugeType dummyGaugeType = AngleGaugeType.Rho2D;
-        GaugeFigureLocalization dummyLocalization = GaugeFigureLocalization.SINGLE_DIPOLE;
+        AngleGaugeType type = AngleGaugeType.Rho2D;
+        GaugeFigureLocalization localization = GaugeFigureLocalization.SINGLE_DIPOLE;
 
         GFPUTDummyFileSet fileSet = new GFPUTDummyFileSet(setName);
-        GFPUTDummyGaugeFigure gaugeFigure = new GFPUTDummyGaugeFigure(dummyGaugeType, fileSet, dummyLocalization,
-                channel);
+        GFPUTDummyGaugeFigure gaugeFigure = new GFPUTDummyGaugeFigure(type, fileSet, localization, channel);
 
         File expectedRoot = new File(PathFactoryOfProject.getFolder_Visualization(root4PProject),
-                visualizationSession + "/TestSet/Channel " + channel);
+                visualizationSession + "/TestSet/Channel " + channel + "/" + localization + "_" + type);
 
         File calculatedRoot = GaugeFigurePathUtil.createRoot(root4PProject, visualizationSession, gaugeFigure);
 
