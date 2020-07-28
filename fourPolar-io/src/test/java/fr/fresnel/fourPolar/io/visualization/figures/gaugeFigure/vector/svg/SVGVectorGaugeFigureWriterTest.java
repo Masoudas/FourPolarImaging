@@ -56,22 +56,21 @@ public class SVGVectorGaugeFigureWriterTest {
     }
 
     @Test
-    public void _write_TwoGaugeFigures_WritesBothFiguresInPath()
-            throws GaugeFigureIOException {
+    public void _write_TwoGaugeFigures_WritesBothFiguresInPath() throws GaugeFigureIOException {
         String visualizationSession = "TestSession";
 
         String setName1 = "TestSet1";
         AngleGaugeType gaugeType1 = AngleGaugeType.Rho2D;
         GaugeFigureLocalization localization1 = GaugeFigureLocalization.SINGLE_DIPOLE;
         VectorGaugeFigure gaugeFigure1 = _createDefaultBatikGaugeImage(localization1, gaugeType1, setName1);
-        
+
         String setName2 = "TestSet2";
         AngleGaugeType gaugeType2 = AngleGaugeType.Delta2D;
         GaugeFigureLocalization localization2 = GaugeFigureLocalization.WHOLE_SAMPLE;
         VectorGaugeFigure gaugeFigure2 = _createDefaultBatikGaugeImage(localization2, gaugeType2, setName2);
-        
+
         SVGVectorGaugeFigureWriter writer = new SVGVectorGaugeFigureWriter();
-        
+
         writer.write(_root, visualizationSession, gaugeFigure1);
         writer.write(_root, visualizationSession, gaugeFigure2);
 
@@ -98,7 +97,8 @@ public class SVGVectorGaugeFigureWriterTest {
     private boolean _isDefaultGaugeImageOnDisk(String visualizationSession, String setName, AngleGaugeType gaugeType,
             GaugeFigureLocalization localization) {
         File root = new File(PathFactoryOfProject.getFolder_Visualization(_root),
-                visualizationSession + "/" + setName + "/" + "Channel " + _defaultDim[IGaugeFigure.AXIS_ORDER.c_axis]);
+                visualizationSession + "/" + setName + "/" + "Channel " + _defaultDim[IGaugeFigure.AXIS_ORDER.c_axis]
+                        + "/" + localization + "_" + gaugeType);
 
         return root.exists() && root.listFiles().length == 2;
     }
