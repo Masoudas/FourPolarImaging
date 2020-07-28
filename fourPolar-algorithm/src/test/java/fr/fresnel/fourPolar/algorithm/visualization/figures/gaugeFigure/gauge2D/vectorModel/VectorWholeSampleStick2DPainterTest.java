@@ -45,6 +45,7 @@ import fr.fresnel.fourPolar.core.image.vector.filter.FilterComposite;
 import fr.fresnel.fourPolar.core.imagingSetup.imageFormation.Cameras;
 import fr.fresnel.fourPolar.core.physics.dipole.OrientationAngle;
 import fr.fresnel.fourPolar.core.shape.IBoxShape;
+import fr.fresnel.fourPolar.core.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.util.image.generic.ImageUtil;
 import fr.fresnel.fourPolar.core.util.image.generic.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.generic.colorMap.ColorMapFactory;
@@ -305,8 +306,63 @@ public class VectorWholeSampleStick2DPainterTest {
         GaugeFigureWriter.write(root, testName, painter.getFigure());
     }
 
+    /**
+     * With this test, we expect to see two sticks in each 2D plane, all horizontal,
+     * with same color. One stick would be at top left, and the other at bottom
+     * right. This must happen for each plane.
+     */
+    @Test
+    public void draw_RhoSticks4DImageTwoPartialROIs_DrawsSticksInsideRoIs() throws IOException, TranscoderException {
+        String testName = "RhoSticks4DImageTwoPartialROIs";
+        long[] dimOrientationImg = { 256, 256, 1, 2, 2 };
+
+        Hashtable<long[], Float> rho_angles = AngleCreator.create(dimOrientationImg, new float[] { 0, 0, 0, 0 }, 0);
+        IOrientationImage orientationImage = OrientationImageCreator.create(dimOrientationImg, Float.NaN);
+        OrientationImageCreator.setPixels(orientationImage, OrientationAngle.rho, rho_angles);
+
+        ISoIImage soiImage = SoIImageCreator.createWithIncreasingIntensity(orientationImage);
+
+        IBoxShape roi1 = _createRoI(new long[] { 0, 0, 0, 0, 0 }, new long[] { 63, 63, 0, 1, 1 });
+        IBoxShape roi2 = _createRoI(new long[] { 189, 189, 0, 0, 0 }, new long[] { 256, 256, 0, 1, 1 });
+
+        VectorWholeSampleStick2DPainter painter = new VectorWholeSampleStick2DPainter(
+                getDefaultRhoStickBuilder(orientationImage, soiImage));
+        painter.draw(roi1, UINT16.zero());
+        painter.draw(roi2, UINT16.zero());
+
+        GaugeFigureWriter.write(root, testName, painter.getFigure());
+    }
+
+    /**
+     * With this test, we expect to see four sticks in each 2D plane, all
+     * horizontal, with same color.
+     */
+    @Test
+    public void draw_RhoSticks4DImageROIExceedsImageSize_DrawsSticksInsideRoIs()
+            throws IOException, TranscoderException {
+        String testName = "RhoSticks4DImageROIExceedsImageSize";
+        long[] dimOrientationImg = { 256, 256, 1, 2, 2 };
+
+        Hashtable<long[], Float> rho_angles = AngleCreator.create(dimOrientationImg, new float[] { 0, 0, 0, 0 }, 0);
+        IOrientationImage orientationImage = OrientationImageCreator.create(dimOrientationImg, Float.NaN);
+        OrientationImageCreator.setPixels(orientationImage, OrientationAngle.rho, rho_angles);
+        ISoIImage soiImage = SoIImageCreator.createWithIncreasingIntensity(orientationImage);
+
+        IBoxShape roi1 = _createRoI(new long[] { 0, 0, 0, 0, 0 }, new long[] { 300, 300, 2, 3, 3 });
+
+        VectorWholeSampleStick2DPainter painter = new VectorWholeSampleStick2DPainter(
+                getDefaultRhoStickBuilder(orientationImage, soiImage));
+        painter.draw(roi1, UINT16.zero());
+
+        GaugeFigureWriter.write(root, testName, painter.getFigure());
+    }
+
     private static IBoxShape _getWholeSoIImageRoI(ISoIImage soiImage) {
         return ImageUtil.getBoundaryAsBox(soiImage.getImage());
+    }
+
+    private static IBoxShape _createRoI(long[] min, long[] max) {
+        return ShapeFactory.closedBox(min, max, IGaugeFigure.AXIS_ORDER);
     }
 
     private static IVectorWholeSampleStick2DPainterBuilder getDefaultRhoStickBuilder(IOrientationImage orientationImage,
