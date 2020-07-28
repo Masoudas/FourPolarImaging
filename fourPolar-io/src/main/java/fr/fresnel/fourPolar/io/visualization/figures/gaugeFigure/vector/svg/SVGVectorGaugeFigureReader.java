@@ -64,9 +64,10 @@ public class SVGVectorGaugeFigureReader implements IGaugeFigureReader {
     /**
      * Create the root of gauge figures for this channel of the set.
      */
-    private File _getPathToRoot(File root4PProject, String visualizationSession, int channel,
+    private File _getPathToFigureBaseFolder(File root4PProject, String visualizationSession, int channel,
             ICapturedImageFileSet capturedImageFileSet) {
-        return GaugeFigurePathUtil.createRoot(root4PProject, visualizationSession, channel, capturedImageFileSet);
+        return GaugeFigurePathUtil.createRoot(root4PProject, visualizationSession, channel, capturedImageFileSet,
+                _gaugeFigureLocalization, _angleGaugeType);
     }
 
     private String _getImageName() {
@@ -75,7 +76,8 @@ public class SVGVectorGaugeFigureReader implements IGaugeFigureReader {
 
     private VectorImage _readGaugeFigure(File root4PProject, String visualizationSession, int channel,
             ICapturedImageFileSet capturedImageFileSet) throws IOException {
-        File rootFolder = _getPathToRoot(root4PProject, visualizationSession, channel, capturedImageFileSet);
+        File rootFolder = _getPathToFigureBaseFolder(root4PProject, visualizationSession, channel,
+                capturedImageFileSet);
         String imageName = _getImageName();
         return _reader.read(rootFolder, imageName);
     }
