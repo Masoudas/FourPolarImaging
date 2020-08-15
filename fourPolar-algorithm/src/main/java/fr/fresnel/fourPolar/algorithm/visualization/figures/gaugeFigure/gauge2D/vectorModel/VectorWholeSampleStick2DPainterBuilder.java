@@ -20,7 +20,7 @@ import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.vectorFigure.
  * to be put here. Also the
  */
 public class VectorWholeSampleStick2DPainterBuilder extends IVectorWholeSampleStick2DPainterBuilder {
-    private VectorImageFactory _factory;
+    private final VectorImageFactory _factory;
 
     private IOrientationImage _orientationImage;
     private ISoIImage _soiImage;
@@ -29,7 +29,7 @@ public class VectorWholeSampleStick2DPainterBuilder extends IVectorWholeSampleSt
 
     private VectorGaugeFigure _gaugeFigure = null;
 
-    private ARGB8 _transparency = null;
+    private ARGB8 _transparency = new ARGB8(0, 0, 0, 255);
     private ColorMap _colorMap = ColorMapFactory.create(ColorMapFactory.IMAGEJ_SPECTRUM);
     private int _thickness = 4;
     private int _length = 30;
@@ -50,6 +50,7 @@ public class VectorWholeSampleStick2DPainterBuilder extends IVectorWholeSampleSt
     private FilterComposite _colorBlender = null;
 
     public VectorWholeSampleStick2DPainterBuilder(VectorImageFactory factory) {
+        Objects.requireNonNull(factory, "factory can't be null.");
         _factory = factory;
     }
 
@@ -58,26 +59,40 @@ public class VectorWholeSampleStick2DPainterBuilder extends IVectorWholeSampleSt
      * 
      * @param colorMap is the desired color map.
      */
-    public void setColorMap(ColorMap colorMap) {
+    public VectorWholeSampleStick2DPainterBuilder colorMap(ColorMap colorMap) {
+        Objects.requireNonNull(colorMap, "colorMap can't be null.");
+
         this._colorMap = colorMap;
+        return this;
     }
 
     /**
      * Set the stick length for the painter.
      * 
      * @param len is the desired stick length.
+     * @throws IllegalArgumentException in case length is less than one.
      */
-    public void setSticklength(int len) {
+    public VectorWholeSampleStick2DPainterBuilder sticklength(int len) {
+        if (len < 1) {
+            throw new IllegalArgumentException("len can't be less than one.");
+        }
         this._length = len;
+        return this;
     }
 
     /**
      * Set the stick thickness associated with this builder.
      * 
      * @param thickness is the thickness of the stick.
+     * @throws IllegalArgumentException in case length is less than one.
      */
-    public void getStickThickness(int thickness) {
+    public VectorWholeSampleStick2DPainterBuilder stickThickness(int thickness) {
+        if (thickness < 1) {
+            throw new IllegalArgumentException("thickness can't be less than one.");
+        }
+
         this._thickness = thickness;
+        return this;
     }
 
     /**
@@ -87,8 +102,11 @@ public class VectorWholeSampleStick2DPainterBuilder extends IVectorWholeSampleSt
      * 
      * @param composite is the filter composite.
      */
-    public void setColorBlender(FilterComposite colorBlender) {
+    public VectorWholeSampleStick2DPainterBuilder colorBlender(FilterComposite colorBlender) {
+        Objects.requireNonNull(colorBlender, "colorBlender can't be null.");
+
         _colorBlender = colorBlender;
+        return this;
     }
 
     /**
@@ -98,8 +116,11 @@ public class VectorWholeSampleStick2DPainterBuilder extends IVectorWholeSampleSt
      * 
      * @param transparency contains the transparency as part of an argb color model.
      */
-    public void setStickTransparency(ARGB8 transparency) {
+    public VectorWholeSampleStick2DPainterBuilder stickTransparency(ARGB8 transparency) {
+        Objects.requireNonNull(transparency, "transparency can't be null.");
+
         _transparency = transparency;
+        return this;
     }
 
     /**
@@ -108,8 +129,12 @@ public class VectorWholeSampleStick2DPainterBuilder extends IVectorWholeSampleSt
      * 
      * @param animationCreator is the animation creater.
      */
-    public void getAnimationCreator(OrientationAnimationCreator animationCreator) {
+    public VectorWholeSampleStick2DPainterBuilder animationCreator(OrientationAnimationCreator animationCreator) {
+        Objects.requireNonNull(animationCreator, "animationCreator can't be null.");
+
         _animationCreator = animationCreator;
+        return this;
+
     }
 
     private void _setColorAngle(OrientationAngle colorAngle) {
@@ -154,7 +179,7 @@ public class VectorWholeSampleStick2DPainterBuilder extends IVectorWholeSampleSt
     }
 
     private void _setGaugeFigureColorBlender() {
-        if (_colorBlender == null) {
+        if (_colorBlender != null) {
             _gaugeFigure.getVectorImage().addFilterComposite(_colorBlender);
         }
     }
@@ -175,11 +200,11 @@ public class VectorWholeSampleStick2DPainterBuilder extends IVectorWholeSampleSt
 
         _checkSoIAndOrientationImageBelongToSameSet(orientationImage, soiImage);
 
+        _setSoIImage(soiImage);
+        _setOrientationImage(orientationImage);
         _setSlopeAngle(OrientationAngle.rho);
         _setColorAngle(OrientationAngle.rho);
         _setGaugeFigureAsRho2D();
-        _setSoIImage(soiImage);
-        _setOrientationImage(orientationImage);
 
         return new VectorWholeSampleStick2DPainter(this);
     }
@@ -201,11 +226,11 @@ public class VectorWholeSampleStick2DPainterBuilder extends IVectorWholeSampleSt
 
         _checkSoIAndOrientationImageBelongToSameSet(orientationImage, soiImage);
 
-        _setSlopeAngle(OrientationAngle.rho);
-        _setColorAngle(OrientationAngle.delta);
-        _setGaugeFigureAsDelta2D();
         _setSoIImage(soiImage);
         _setOrientationImage(orientationImage);
+        _setGaugeFigureAsDelta2D();
+        _setSlopeAngle(OrientationAngle.rho);
+        _setColorAngle(OrientationAngle.delta);
 
         return new VectorWholeSampleStick2DPainter(this);
     }
@@ -227,11 +252,11 @@ public class VectorWholeSampleStick2DPainterBuilder extends IVectorWholeSampleSt
 
         _checkSoIAndOrientationImageBelongToSameSet(orientationImage, soiImage);
 
-        _setSlopeAngle(OrientationAngle.rho);
-        _setColorAngle(OrientationAngle.eta);
-        _setGaugeFigureAsEta2D();
         _setSoIImage(soiImage);
         _setOrientationImage(orientationImage);
+        _setGaugeFigureAsEta2D();
+        _setSlopeAngle(OrientationAngle.rho);
+        _setColorAngle(OrientationAngle.eta);
 
         return new VectorWholeSampleStick2DPainter(this);
     }

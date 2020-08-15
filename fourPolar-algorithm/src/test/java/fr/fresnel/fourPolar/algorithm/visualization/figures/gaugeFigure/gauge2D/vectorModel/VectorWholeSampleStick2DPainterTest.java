@@ -143,6 +143,35 @@ public class VectorWholeSampleStick2DPainterTest {
     }
 
     /**
+     * Draws a 32*32 figure, with one very bright spot at the 16*16 pixel of the
+     * image. Then a stick is drawn at the same location. We expect the stick to be
+     * at the top of the soi point.
+     */
+    @Test
+    public void draw_ASingleSoIWithRhoStick_DrawsRhoStickOnTopOfItsSoI() throws IOException, TranscoderException {
+        String testName = "ASingleSoIWithRhoStick";
+
+        long[] dimOrientationImg = { 256, 256, 1, 1, 1 };
+        long[] pose_soi = { 128, 128, 0, 0, 0 };
+
+        Hashtable<long[], Float> rho_angles = new Hashtable<>();
+        rho_angles.put(pose_soi, new Float(0));
+        IOrientationImage orientationImage = OrientationImageCreator.create(dimOrientationImg, Float.NaN);
+        OrientationImageCreator.setPixels(orientationImage, OrientationAngle.rho, rho_angles);
+
+        Hashtable<long[], Integer> soi_vals = new Hashtable<>();
+        soi_vals.put(pose_soi, new Integer(Integer.MAX_VALUE));
+        ISoIImage soiImage = SoIImageCreator.createAndSetPixels(orientationImage, soi_vals);
+
+        VectorWholeSampleStick2DPainter painter = new VectorWholeSampleStick2DPainter(new DummyWholeSampleBuilder(
+                orientationImage, soiImage, 1, 1, OrientationAngle.rho, OrientationAngle.rho, null));
+        painter.draw(_getWholeSoIImageRoI(soiImage), UINT16.zero());
+
+        GaugeFigureWriter.write(root, testName, painter.getFigure());
+
+    }
+
+    /**
      * With this test, we expect to see four sticks in a single 2D plane, one with
      * angle zero at top left, moving to bottom right at 135. The colors start from
      * darker red to lighter red from top to bottom.
@@ -522,6 +551,13 @@ class SoIImageCreator {
         return SoIImage.create(orientationImage.getCapturedSet(), soi, 1);
     }
 
+    public static ISoIImage createAndSetPixels(IOrientationImage orientationImage, Hashtable<long[], Integer> values) {
+        Image<UINT16> soi = new ImgLib2ImageFactory()
+                .create(orientationImage.getAngleImage(OrientationAngle.rho).getImage().getMetadata(), UINT16.zero());
+        _setPixels(soi, values);
+        return SoIImage.create(orientationImage.getCapturedSet(), soi, 1);
+    }
+
     private static void _setPixels(Image<UINT16> image) {
         int t_axis = IGaugeFigure.AXIS_ORDER.t_axis;
         int z_axis = IGaugeFigure.AXIS_ORDER.z_axis;
@@ -531,6 +567,14 @@ class SoIImageCreator {
             pixel.value().set((int) cursor.localize()[0] * 500 + (int) cursor.localize()[t_axis] * 4000
                     + (int) cursor.localize()[z_axis] * 8000);
             cursor.setPixel(pixel);
+        }
+    }
+
+    private static void _setPixels(Image<UINT16> image, Hashtable<long[], Integer> values) {
+        IPixelRandomAccess<UINT16> ra = image.getRandomAccess();
+        for (long[] position : values.keySet()) {
+            ra.setPosition(position);
+            ra.setPixel(new Pixel<UINT16>(new UINT16(values.get(position))));
         }
     }
 }

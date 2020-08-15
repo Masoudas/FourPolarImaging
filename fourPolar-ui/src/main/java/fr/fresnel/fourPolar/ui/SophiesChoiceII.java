@@ -4,18 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
-import fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D.WholeSampleStick2DPainterBuilder;
-import fr.fresnel.fourPolar.core.exceptions.image.generic.imgLib2Model.ConverterToImgLib2NotFound;
+import fr.fresnel.fourPolar.algorithm.visualization.figures.gaugeFigure.gauge2D.vectorModel.VectorWholeSampleStick2DPainterBuilder;
 import fr.fresnel.fourPolar.core.exceptions.image.orientation.CannotFormOrientationImage;
 import fr.fresnel.fourPolar.core.exceptions.imageSet.acquisition.IncompatibleCapturedImage;
 import fr.fresnel.fourPolar.core.image.captured.file.ICapturedImageFileSet;
 import fr.fresnel.fourPolar.core.image.generic.axis.AxisOrder;
-import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImageToImgLib2Converter;
 import fr.fresnel.fourPolar.core.image.generic.imgLib2Model.ImgLib2ImageFactory;
-import fr.fresnel.fourPolar.core.image.generic.pixel.types.ARGB8;
 import fr.fresnel.fourPolar.core.image.generic.pixel.types.UINT16;
 import fr.fresnel.fourPolar.core.image.orientation.IOrientationImage;
 import fr.fresnel.fourPolar.core.image.soi.ISoIImage;
+import fr.fresnel.fourPolar.core.image.vector.VectorImageFactory;
+import fr.fresnel.fourPolar.core.image.vector.batikModel.BatikVectorImageFactory;
 import fr.fresnel.fourPolar.core.imageSet.acquisition.sample.SampleImageSet;
 import fr.fresnel.fourPolar.core.imagingSetup.FourPolarImagingSetup;
 import fr.fresnel.fourPolar.core.imagingSetup.IFourPolarImagingSetup;
@@ -23,7 +22,6 @@ import fr.fresnel.fourPolar.core.shape.IShape;
 import fr.fresnel.fourPolar.core.shape.ShapeFactory;
 import fr.fresnel.fourPolar.core.util.image.generic.colorMap.ColorMap;
 import fr.fresnel.fourPolar.core.util.image.generic.colorMap.ColorMapFactory;
-import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.AngleGaugeType;
 import fr.fresnel.fourPolar.core.visualization.figures.gaugeFigure.guage.IAngleGaugePainter;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetIOIssue;
 import fr.fresnel.fourPolar.io.exceptions.imageSet.acquisition.sample.AcquisitionSetNotFound;
@@ -31,9 +29,8 @@ import fr.fresnel.fourPolar.io.image.orientation.TiffOrientationImageReader;
 import fr.fresnel.fourPolar.io.image.soi.TiffSoIImageReader;
 import fr.fresnel.fourPolar.io.imageSet.acquisition.AcquisitionSetFromTextFileReader;
 import fr.fresnel.fourPolar.io.imagingSetup.FourPolarImagingSetupFromYaml;
-import fr.fresnel.fourPolar.io.visualization.figures.gaugeFigure.tiff.TiffGaugeFigureWriter;
+import fr.fresnel.fourPolar.io.visualization.figures.gaugeFigure.vector.svg.SVGVectorGaugeFigureWriter;
 import javassist.tools.reflect.CannotCreateException;
-import net.imglib2.img.display.imagej.ImageJFunctions;
 
 /**
  * Given this choice, Sophie (AKA boss) can draw gauge figures that contain 2D
@@ -56,7 +53,7 @@ public class SophiesChoiceII {
     static String etaAndDelta2DStickColorMap = ColorMapFactory.IMAGEJ_PHASE;
 
     // Threshold for SoI. Sticks will be drawn above this threshold.
-    static int soiThreshold = 500;
+    static int soiThreshold = 200;
 
     /**
      * A box RoI from min to max coordinates. The box can be 2d (in which case it
@@ -103,7 +100,7 @@ public class SophiesChoiceII {
                 }
 
                 saveGaugeFigures(gaugePainters, sampleImageSet.rootFolder());
-                showGaugeFigures(gaugePainters, fileSet, channel);
+                // showGaugeFigures(gaugePainters, fileSet, channel);
 
             }
         }
@@ -123,7 +120,7 @@ public class SophiesChoiceII {
     private static final TiffSoIImageReader _soiImageReader = new TiffSoIImageReader(new ImgLib2ImageFactory(),
             SophiesPreChoice.channels.length);
 
-    private static final TiffGaugeFigureWriter _gaugeFigureWriter = new TiffGaugeFigureWriter();
+    private static final SVGVectorGaugeFigureWriter _gaugeFigureWriter = new SVGVectorGaugeFigureWriter();
 
     private static IFourPolarImagingSetup _readImagingSetup() throws IOException {
         setup = FourPolarImagingSetup.instance();
@@ -145,18 +142,15 @@ public class SophiesChoiceII {
     private static IAngleGaugePainter[] _getGaugePainters(final int length, final int thickness,
             final ColorMap cMapRho2D, final ColorMap cMapEtaAndDelta, final IOrientationImage orientationImage,
             final ISoIImage soiImage) {
+        VectorImageFactory factory = new BatikVectorImageFactory();
+        VectorWholeSampleStick2DPainterBuilder builder = new VectorWholeSampleStick2DPainterBuilder(factory)
+                .colorMap(cMapRho2D).stickThickness(thickness).sticklength(length);
+
         final IAngleGaugePainter[] gaugePainters = new IAngleGaugePainter[3];
+        gaugePainters[0] = builder.buildRhoStickPainter(orientationImage, soiImage);
+        gaugePainters[1] = builder.buildDeltaStickPainter(orientationImage, soiImage);
+        gaugePainters[2] = builder.buildEtaStickPainter(orientationImage, soiImage);
 
-        try {
-            gaugePainters[0] = new WholeSampleStick2DPainterBuilder(orientationImage, soiImage, AngleGaugeType.Rho2D)
-                    .colorMap(cMapRho2D).stickThickness(thickness).stickLen(length).build();
-            gaugePainters[1] = new WholeSampleStick2DPainterBuilder(orientationImage, soiImage, AngleGaugeType.Delta2D)
-                    .colorMap(cMapEtaAndDelta).stickThickness(thickness).stickLen(length).build();
-            gaugePainters[2] = new WholeSampleStick2DPainterBuilder(orientationImage, soiImage, AngleGaugeType.Eta2D)
-                    .colorMap(cMapEtaAndDelta).stickThickness(thickness).stickLen(length).build();
-        } catch (ConverterToImgLib2NotFound e) {
-
-        }
         return gaugePainters;
     }
 
@@ -181,33 +175,32 @@ public class SophiesChoiceII {
 
     public static void saveGaugeFigures(IAngleGaugePainter[] gaugePainters, File root4PProject) {
         for (final IAngleGaugePainter iAngleGaugePainter : gaugePainters) {
-            saveGaugeFigure(root4PProject, iAngleGaugePainter);
-        }
-
-    }
-
-    public static void saveGaugeFigure(File root4PProject, final IAngleGaugePainter iAngleGaugePainter) {
-        try {
-            _gaugeFigureWriter.write(root4PProject, visualizationSessionName, iAngleGaugePainter.getFigure());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void showGaugeFigures(IAngleGaugePainter[] gaugePainters, ICapturedImageFileSet fileSet,
-            int channel) {
-        for (final IAngleGaugePainter iAngleGaugePainter : gaugePainters) {
             try {
-                ImageJFunctions.show(
-                        ImageToImgLib2Converter.getImg(iAngleGaugePainter.getFigure().getImage(), ARGB8.zero()),
-                        iAngleGaugePainter.getFigure().getGaugeType().name() + " of " + fileSet.getSetName()
-                                + " Channel " + channel);
-            } catch (ConverterToImgLib2NotFound e) {
+                _gaugeFigureWriter.write(root4PProject, visualizationSessionName, iAngleGaugePainter.getFigure());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
         }
 
     }
+
+    // private static void showGaugeFigures(IAngleGaugePainter[] gaugePainters,
+    // ICapturedImageFileSet fileSet,
+    // int channel) {
+    // for (final IAngleGaugePainter iAngleGaugePainter : gaugePainters) {
+    // try {
+    // ImageJFunctions.show(
+    // ImageToImgLib2Converter.getImg(iAngleGaugePainter.getFigure().getImage(),
+    // ARGB8.zero()),
+    // iAngleGaugePainter.getFigure().getGaugeType().name() + " of " +
+    // fileSet.getSetName()
+    // + " Channel " + channel);
+    // } catch (ConverterToImgLib2NotFound e) {
+    // }
+
+    // }
+
+    // }
 
     public static void closeAllResources() throws IOException {
         _gaugeFigureWriter.close();

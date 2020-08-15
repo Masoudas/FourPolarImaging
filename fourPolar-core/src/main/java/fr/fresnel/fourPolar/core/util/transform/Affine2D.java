@@ -88,4 +88,9 @@ public class Affine2D implements AffineTransform {
         return _matrix.get(0, 0) * _matrix.get(1, 1) - _matrix.get(1, 0) * _matrix.get(0, 1);
     }
 
+    public static void main(String[] args) {
+        AffineTransform2D transform = new AffineTransform2D();
+        transform.rotate(Math.PI/10);
+        System.out.println(transform);
+    }
 }
